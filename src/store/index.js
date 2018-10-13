@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 
 import example from './module-example/index'
 import glob from './modules/glob';
+import types from './mutation-types'
 
 Vue.use(Vuex);
 

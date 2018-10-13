@@ -1,4 +1,5 @@
 <template>
+
   <div class="layout-padding ">
     <div class="flex wrap gutter">
       <div class="width-1of3 sm-auto">
@@ -54,7 +55,8 @@
   import cardTotal from './cardTotal.vue'
   import cardTodo from './cardTodo.vue'
   import knobStatistics from './knobStatistics.vue'
-  import { mapMutations } from 'vuex'
+  import { mapActions } from 'vuex'
+  import * as types from '../../../../store/mutation-types'
   export default {
     name: 'Home',
     mounted () {
@@ -77,7 +79,7 @@
       }
     },
     methods: {
-      ...mapMutations(['setPosts'])
+      ...mapActions("glob", {'setPosts': types.SET_POSTS})
     },
     components: {
       cardTotal,

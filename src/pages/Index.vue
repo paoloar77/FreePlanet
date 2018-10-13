@@ -41,7 +41,7 @@
 
 <script>
 
-  import {mapGetters, mapMutations} from 'vuex'
+  import {mapGetters, mapActions} from 'vuex'
   import * as types from '../store/mutation-types'
 
   import { Notify } from 'quasar'
@@ -61,7 +61,7 @@
       deferredPrompt: function (){
         return deferredPrompt;
       },
-      ...mapGetters(['getConta']),
+      ...mapGetters("glob", ['getConta']),
       mystilecard: function () {
         return {
           visibility: this.cardvisible,
@@ -70,10 +70,14 @@
       }
     },
     methods: {
-      ...mapMutations(['setConta']),
       showNotification () {
         this.$q.notify('Some other message')
       },
+      ...mapActions("glob", {
+        impostaconta: types.SET_VALUE,
+        'setLayoutNeeded': types.SET_LAYOUT_NEEDED,
+        'setIsLoginPage': types.SET_LOGIN_PAGE
+      }),
       initprompt() {
         window.addEventListener('beforeinstallprompt', function (event) {
           console.log('********************************   beforeinstallprompt fired');
@@ -129,7 +133,7 @@
       openCreatePostModal() {
         console.log('APERTO ! openCreatePostModal');
 
-        this.setConta(this.getConta+1);
+        this.impostaconta(this.getConta+1);
 
         this.visibile = !this.visibile;
 

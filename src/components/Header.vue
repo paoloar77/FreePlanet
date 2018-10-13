@@ -5,6 +5,7 @@
                     color="primary"
                     :glossy="$q.theme === 'mat'"
                     :inverted="$q.theme === 'ios'"
+                    class="toolbar"
             >
                 <q-btn
                         flat
@@ -22,42 +23,26 @@
                     <div slot="subtitle">{{$t('msg.myDescriz')}}</div>
                 </q-toolbar-title>
 
-                <q-select
-                        stack-label=""
-                        :options="[
-      { label: 'Italian',              value: 'it' },
-      { label: 'English (US)',         value: 'en-us' },
-      { label: 'Spanish',              value: 'es' },
-      { label: 'German',               value: 'de' },
+                <q-select class="sel_lang" v-model="lang" stack-label="" :options="selectOpLang"/>
 
-    ]"
-                        v-model="lang"
-                />
+                <div class="right-itens">
+                    <!--<message-popover></message-popover>-->
+                    <label>{{ $t('msg.hello') }}</label>
+                </div>
 
-
-                <!--{{ $q.i18n.label.close }}-->
-
-                <p>{{ $t('msg.hello') }}</p>
 
             </q-toolbar>
 
         </q-layout-header>
 
-        <q-layout-drawer
-                v-model="leftDrawerOpen"
-                :content-class="$q.theme === 'mat' ? 'bg-grey-2' : null"
+
+        <q-layout-drawer side="left"
+                         v-model="leftDrawerOpen"
+                         :content-class="['bg-grey-3', 'q-pa-sm']"
+                         :content-style="{padding: '0px'}"
         >
-            <q-list
-                    no-border
-                    link
-                    inset-delimiter
-            >
-                <q-list-header>Essential Links</q-list-header>
-                <q-item @click.native="openURL('http://quasar-framework.org')">
-                    <q-item-side icon="school"/>
-                    <q-item-main label="Docs" sublabel="quasar-framework.org"/>
-                </q-item>
-            </q-list>
+            <drawer></drawer>
+
         </q-layout-drawer>
     </div>
 </template>
@@ -67,7 +52,16 @@
 
   import {Quasar} from 'quasar';
 
+  import drawer from '../components/layout/drawer/drawer.vue'
+  import messagePopover from '../components/layout/toolbar/messagePopover.vue'
+  import signup from '../components/views/auth/old_signup';
+
   export default {
+    components: {
+      drawer,
+      messagePopover,
+      appsignup: signup,
+    },
     created() {
       //this.$store.dispatch('initStocks');
     },
@@ -76,6 +70,12 @@
     },
     data: function () {
       return {
+        selectOpLang: [
+          {label: 'Italian', icon: 'fa-facebook', value: 'it'},
+          {label: 'English (US)', icon: 'fa-flag-us', value: 'en-us'},
+          {label: 'Spanish', icon: 'fa-flag-es', value: 'es'},
+          {label: 'German', icon: 'fa-flag-de', value: 'de'}
+        ],
         lang: this.$q.i18n.lang,
         leftDrawerOpen: this.$q.platform.is.desktop
       }
@@ -109,3 +109,193 @@
   }
 
 </script>
+
+<style>
+    .layout-padding {
+        padding: 1em 4em;
+    }
+
+    @media screen and (max-width: 600px) {
+        .layout-padding {
+            padding: 1.5em .5em;
+        }
+    }
+
+    @-webkit-keyframes moveFromLeftFade {
+        from {
+            opacity: 0.3;
+            -webkit-transform: translateX(-100%);
+        }
+    }
+
+    @keyframes moveFromLeftFade {
+        from {
+            opacity: 0.3;
+            -webkit-transform: translateX(-100%);
+            transform: translateX(-100%);
+        }
+    }
+
+    @-webkit-keyframes moveToRight {
+        from {
+        }
+        to {
+            -webkit-transform: translateX(100%);
+        }
+    }
+
+    @keyframes cartOut {
+        from {
+            transform: translate(0px, 0px);
+        }
+        to {
+            transform: translate(1200px, 0px);
+            animation-timing-function: ease-out;
+        }
+
+    }
+
+    @-webkit-keyframes moveToLeft {
+        from {
+        }
+        to {
+            opacity: .5;
+            -webkit-transform: translateX(-100%);
+        }
+    }
+
+    @keyframes moveToLeft {
+        from {
+        }
+        to {
+            opacity: .5;
+            -webkit-transform: translateX(-100%);
+            transform: translateX(-100%);
+        }
+    }
+
+    @-webkit-keyframes moveFromRight {
+        from {
+            opacity: .7;
+            -webkit-transform: translateX(100%);
+        }
+    }
+
+    @keyframes moveFromRight {
+        from {
+            opacity: .7;
+            -webkit-transform: translateX(100%);
+            transform: translateX(100%);
+        }
+    }
+
+    .drawer-closer .item-content {
+        margin-left: 50px !important;
+    }
+
+    .drawer-content .list-label {
+        line-height: 45px;
+    }
+
+    .drawer-content .item {
+        height: 45px;
+    }
+
+    .router-link-active .item-primary {
+        color: #027be3;
+    }
+
+    .q-picker-textfield .q-picker-textfield-label {
+        color: inherit !important;
+    }
+
+    .label-success .q-picker-textfield-label {
+        color: #4caf50 !important;
+    }
+
+    .label-error .q-picker-textfield-label {
+        color: #f44336 !important;
+    }
+
+    select {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        text-indent: 1px;
+        text-overflow: '';
+    }
+
+    .label-success .q-picker-textfield:after, .label-error .q-picker-textfield:after {
+        content: "" !important;
+    }
+
+    #android-preview iframe {
+        margin-top: 64px;
+        width: 357px;
+        height: 590px;
+        background: #fff;
+    }
+
+    #ios-preview iframe {
+        margin-top: 64px;
+        width: 320px;
+        height: 590px;
+        background: #fff;
+    }
+
+    canvas {
+        width: 270px !important;
+    }
+
+    @media only screen and (min-width: 601px) {
+        .adv-form-one .timeline-badge {
+            right: auto !important;
+            left: auto !important;
+        }
+
+        .adv-form-one .timeline-content {
+            margin-left: 3.9rem;
+        }
+
+        .adv-form-one .timeline-item {
+            width: 100% !important;
+        }
+
+        .adv-form-one .timeline-title {
+            text-align: inherit !important;
+            margin-left: 3.9rem;
+        }
+
+        .timeline:before {
+            left: 1.6rem;
+        }
+    }
+
+    .adv-form-one .timeline-content .group .primary {
+        display: none !important;
+    }
+
+    .underline {
+        text-decoration: underline;
+    }
+
+    .toolbar {
+        min-height: 40px;
+    }
+
+    .right-itens a, .right-itens button {
+        margin-right: 10px;
+    }
+
+    .sel_lang {
+        padding: 5px;
+        color: white;
+    }
+
+    .fa-facebook:before {
+        content: url('../statics/icons/flag_it.svg');
+    }
+
+    .fa-flag-it:before {
+        content: url('../statics/icons/flag_it.svg');
+    }
+</style>

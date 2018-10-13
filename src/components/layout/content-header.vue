@@ -27,16 +27,20 @@
   </div>
 </template>
 <script type="text/javascript">
-  import { mapMutations, mapGetters } from 'vuex'
+  import { mapActions, mapGetters } from 'vuex'
+  import * as types from '../../store/mutation-types'
   export default {
     computed: {
-      ...mapGetters(['getLayoutNeeded', 'getIsLoginPage']),
+      ...mapGetters("glob", ['getLayoutNeeded', 'getIsLoginPage']),
       routerTitle () {
         return this.$route.meta.name
       }
     },
     methods: {
-      ...mapMutations(['setLayoutNeeded', 'setMenuCollapse'])
+      ...mapActions("glob", {
+        setLayoutNeeded: types.SET_LAYOUT_NEEDED,
+        setMenuCollapse: types.SET_MENU_COLLAPSED
+      }),
     }
   }
 </script>

@@ -20,7 +20,7 @@
                 </div>
             </div>
             <div class="card-actions inline-block vertical-middle">
-                <button class="teal fit " :class="buttonClass" @click="login()">Login</button>
+                <button class="push" @click="login()">Login</button>
                 <button class="red fit" :class="buttonClass" @click="login()">Login Google</button>
                 <button class="blue fit" :class="buttonClass" @click="login()">Login Facebook</button>
             </div>
@@ -31,7 +31,8 @@
 
 <script type="text/javascript">
   /* eslint-disable */
-  import {mapMutations} from 'vuex'
+  import {mapActions} from 'vuex'
+  import * as types from '../../../store/mutation-types'
   import Vivus from 'vivus'
   import logoData from './logoData'
   import { Platform } from 'quasar'
@@ -75,7 +76,10 @@
       }
     },
     methods: {
-      ...mapMutations(['setLayoutNeeded', 'setIsLoginPage']),
+      ...mapActions("glob", {
+        'setLayoutNeeded': types.SET_LAYOUT_NEEDED,
+        'setIsLoginPage': types.SET_LOGIN_PAGE
+      }),
       login () {
         this.setLayoutNeeded(true)
         this.setIsLoginPage(false)

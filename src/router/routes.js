@@ -9,14 +9,13 @@ function load (component) {
 
 
 const routes = [
-  { path: '/', component: load('views/dashboard/one/dashboard'), meta: { name: 'Dashboard One' } },
-  { path: '/prec',  component: () => import('layouts/MyLayout.vue'),
-    children: [
-      { path: '', component: () => import('pages/Index.vue') }
-    ]
-  },
-  { path: '/login', component: () => load('views/login/login'), meta: { name: 'Login' } },
-]
+  { path: '/',  component: () => import('pages/Index.vue') },
+  { path: '/prec', component: load('views/dashboard/one/dashboard'), meta: { name: 'Dashboard One' } },
+  { path: '/signup', component: load('views/login/signup'), meta: { name: 'Registration' } },
+  { path: '/signin', component: load('views/login/signin'), meta: { name: 'Login' } },
+  { path: '/login', component: load('views/login/login'), meta: { name: 'Login' } },
+
+];
 
 // Always leave this as last one
 if (process.env.MODE !== 'ssr') {

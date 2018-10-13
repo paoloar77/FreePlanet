@@ -1,34 +1,52 @@
 // Configuration for your app
+const webpack = require('webpack');
+const path = require('path');
+
+// Get our env variables
+const envparser = require('./config/envparser');
 
 module.exports = function (ctx) {
   return {
     // app plugins (/src/plugins)
-    plugins: ['i18n', 'aggiuntivi'],
+    plugins: ['i18n', 'axios', 'aggiuntivi', 'vuelidate'],
     css: [
       'app.styl'
     ],
     extras: [
-      ctx.theme.mat ? 'roboto-font' : null,
-      'material-icons' // optional, you are not bound to it
-      // 'ionicons',
+      //ctx.theme.mat ?  : null,
+      'roboto-font',
+      'material-icons', // optional, you are not bound to it
+      'ionicons',
       // 'mdi',
-      // 'fontawesome'
+      'fontawesome'
     ],
     supportIE: false,
     build: {
       scopeHoisting: true,
+      env: envparser(),
       // vueRouterMode: 'history',
       // vueCompiler: true,
       // gzip: true,
       // analyze: true,
       // extractCSS: false,
       extendWebpack(cfg) {
+
+        // Create an alias for our helper
+        cfg.resolve.alias.env = path.resolve(__dirname, 'config/helpers/env.js')
+
+        // Make our helper function Global
+        cfg.plugins.push(
+          new webpack.ProvidePlugin({
+            'env': 'env' // this variable is our alias, it's not a string
+          })
+        )
+
       }
     },
     devServer: {
       // https: true,
       // port: 8080,
-      open: true // opens browser window automatically
+      open: false // opens browser window automatically
     },
     framework: {
       components: [
@@ -54,6 +72,15 @@ module.exports = function (ctx) {
         'QCardActions',
         'QField',
         'QSelect',
+        'QPopover',
+        'QToggle',
+        'QFab',
+        'QInfiniteScroll',
+        'QAjaxBar',
+        'QChip',
+        'QCollapsible',
+        'QInput',
+
       ],
       directives: [
         'Ripple'
@@ -62,10 +89,11 @@ module.exports = function (ctx) {
       plugins: [
         'Notify', 'ActionSheet'
       ],
-      // iconSet: ctx.theme.mat ? 'material-icons' : 'ionicons'
+      //iconSet: ctx.theme.mat ? 'material-icons' : 'ionicons',
+      iconSet: 'fontawesome',
+      //iconSet: 'roboto-font',
       i18n: 'it' // Quasar language
     },
-    framework: 'all', // --- includes everything; for dev only!
     // animations: 'all' --- includes all animations
     animations: [],
     ssr: {

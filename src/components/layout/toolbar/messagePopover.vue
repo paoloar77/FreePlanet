@@ -22,7 +22,8 @@
   </button>
 </template>
 <script>
-  import { mapGetters, mapMutations } from 'vuex'
+  import { mapGetters, mapActions } from 'vuex'
+  import * as types from '../../../store/mutation-types'
   export default {
     mounted () {
       if (this.getPosts.length < 1) {
@@ -30,13 +31,15 @@
       }
     },
     computed: {
-      ...mapGetters(['getPosts']),
+      ...mapGetters("glob", ['getPosts']),
       filteredPosts () {
         return this.getPosts.slice(0, 5)
       }
     },
     methods: {
-      ...mapMutations(['setPosts']),
+      ...mapActions("glob", {
+        'setPosts': types.SET_POSTS,
+      }),
       randomDate () {
         return new Date((new Date()) - Math.floor(Math.random() * 10000000000))
       },
