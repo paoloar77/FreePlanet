@@ -80,6 +80,7 @@ module.exports = function (ctx) {
         'QChip',
         'QCollapsible',
         'QInput',
+        'QCheckbox',
 
       ],
       directives: [

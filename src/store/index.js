@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 
 import example from './module-example/index'
 import glob from './modules/glob';
+import user from './modules/user';
 import types from './mutation-types'
 
 Vue.use(Vuex);
@@ -16,6 +17,7 @@ Vue.filter('time', timestamp => {
 export default new Vuex.Store({
   modules: {
     glob,
+    user,
     example
   },
 

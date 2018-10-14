@@ -14,6 +14,8 @@ export const USER_EMAIL = 'email';
 export const USER_PASSWORD = 'password';
 export const USER_DATEOFBIRTH = 'dateofbirth';
 
+export const USER_SIGNUP = 'signup';
+
 
 
 
