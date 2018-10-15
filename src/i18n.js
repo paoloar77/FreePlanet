@@ -10,7 +10,7 @@ const messages = {
       email: 'Email',
       username : 'Nome Utente',
       password: 'Password',
-      confirmpassword: 'Ripeti password',
+      repeatPassword: 'Ripeti password',
       terms: "Accetti i termini e le condizioni?",
       err: {
         required: 'è richiesto',
@@ -21,7 +21,8 @@ const messages = {
         char: 'caratteri',
         terms: 'Devi accettare le condizioni, per continuare.',
         duplicate_email: 'l\'Email è già stata registrata',
-        duplicate_username: 'L\'Username è stato già utilizzato'
+        duplicate_username: 'L\'Username è stato già utilizzato',
+        sameaspassword: 'Le password devono essere identiche',
       }
     },
   },
@@ -36,7 +37,7 @@ const messages = {
       email: 'Email',
       username : 'Username',
       password: 'Password',
-      confirmpassword: 'Repeat password',
+      repeatPassword: 'Repeat password',
       terms: "Do you agree with the terms & conditions?",
       err: {
         required: 'is required',
@@ -47,7 +48,8 @@ const messages = {
         char: 'characters long',
         terms: 'You need to agree with the terms & conditions.',
         duplicate_email: 'Email was already registered',
-        duplicate_username: 'Username is already taken'
+        duplicate_username: 'Username is already taken',
+        sameaspassword: 'Passwords must be identical',
       }
     },
   },
