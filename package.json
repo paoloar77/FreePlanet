@@ -16,6 +16,7 @@
     "chart": "^0.1.2",
     "chart.js": "^2.7.2",
     "countup.js": "^1.9.3",
+    "ladash": "^1.2.0",
     "quasar-extras": "^2.0.8",
     "roboto-font": "^0.1.0",
     "vivus": "^0.4.4",

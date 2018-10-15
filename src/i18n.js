@@ -20,7 +20,8 @@ const messages = {
         notmore: 'non dev\'essere lungo più di',
         char: 'caratteri',
         terms: 'Devi accettare le condizioni, per continuare.',
-        duplicate_email: 'l\'Email è già stata registrata'
+        duplicate_email: 'l\'Email è già stata registrata',
+        duplicate_username: 'L\'Username è stato già utilizzato'
       }
     },
   },
@@ -46,6 +47,7 @@ const messages = {
         char: 'characters long',
         terms: 'You need to agree with the terms & conditions.',
         duplicate_email: 'Email was already registered',
+        duplicate_username: 'Username is already taken'
       }
     },
   },

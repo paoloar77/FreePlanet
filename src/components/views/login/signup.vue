@@ -84,7 +84,7 @@
             </q-field>
 
 
-            <q-btn color="primary" @click="submit">Submit</q-btn>
+            <q-btn color="primary" @click="submit" :disable="$v.$error">Submit</q-btn>
         </q-page>
     </div>
 </template>
@@ -104,7 +104,11 @@
   import {mapGetters, mapActions} from 'vuex'
   import * as types from '../../../store/mutation-types'
 
-  import { Errori_MongoDb } from '../../../store/modules/user'
+  import {Errori_MongoDb} from '../../../store/modules/user'
+
+  import axios from 'axios';
+
+  import { debounce } from 'quasar'
 
 
   export default {
@@ -118,7 +122,9 @@
           confirmpassword: process.env.TEST_PASSWORD,
           dateOfBirth: '',
           terms: true,
-        }
+        },
+        duplicate_email: false,
+        duplicate_username: false,
       }
     },
     computed: {
@@ -144,21 +150,41 @@
     },
     validations: {
       form: {
-        email: {required, email},
+        email: {
+          required, email,
+        },
         password: {required, minLength: minLength(8), maxLength: maxLength(20)},
-        username: {required, minLength: minLength(6), maxLength: maxLength(20)},
+        username: {
+          required, minLength: minLength(6), maxLength: maxLength(20),
+          unique: value => {
+            if (value === '') return true;
+            debounce(function() {
+              return axios.get(process.env.MONGODB_HOST + '/users/' + value)
+                .then(res => {
+                  console.log("STATUS: ");
+                  console.log(res.status);
+                  if (res.status !== 200)
+                    return true;
+                  else
+                    return false;
+                }).then(ris => {
+                  setTimeout(() => {
+                    //
+                    return ris;
+                  }, 1000);
+                })
+                .catch((e) => {
+                  console.log(e);
+                  return true;
+                })
+            }, 2000);
+          }
+        },
         confirmpassword: {
           sameAsPassword: sameAs('password')
         },
         terms: {required},
 
-      }
-    },
-    watch: {
-      getscode(code) {
-        if (code === Errori_MongoDb.DUPLICATE_EMAIL_ID) {
-          this.$q.notify(this.$t('reg.err.duplicate_email'));
-        }
       }
     },
     methods: {
@@ -171,11 +197,26 @@
         if (!item.required) return this.$t('reg.err.required');
         if (!item.minLength) return this.$t('reg.err.atleast') + ` ${item.$params.minLength.min} ` + this.$t('reg.err.char');
         if (!item.maxLength) return this.$t('reg.err.notmore') + ` ${item.$params.maxLength.max} ` + this.$t('reg.err.char');
-        if (item.duplicated) return this.$t('reg.err.duplicate_email');
         return '';
+      },
+      checkErrors(riscode){
+        //console.log("RIS = " + riscode);
+        if (riscode === Errori_MongoDb.DUPLICATE_EMAIL_ID) {
+          this.$q.notify(this.$t('reg.err.duplicate_email'));
+        }else if (riscode === Errori_MongoDb.DUPLICATE_USERNAME_ID) {
+            this.$q.notify(this.$t('reg.err.duplicate_username'));
+        } else if (riscode === Errori_MongoDb.OK) {
+          this.$router.push('/');
+        } else {
+          this.$q.notify("Errore num " + riscode);
+        }
+
       },
       submit() {
         this.$v.form.$touch();
+
+        this.duplicate_email = false;
+        this.duplicate_username = false;
 
         if (!this.form.terms) {
           this.$q.notify(this.$t('reg.err.terms'));
@@ -192,12 +233,7 @@
         console.log(this.form);
         this.signup(this.form)
           .then((riscode) => {
-            //console.log("RIS = " + riscode);
-            if (riscode === Errori_MongoDb.DUPLICATE_EMAIL_ID) {
-              this.$q.notify(this.$t('reg.err.duplicate_email'));
-            } else {
-              this.$router.push('/');
-            }
+            this.checkErrors(riscode);
           }).catch(error => {
           console.log("ERROR = " + error);
         });
