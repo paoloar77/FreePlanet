@@ -19,7 +19,8 @@ const messages = {
         atleast: 'dev\'essere lungo almeno di',
         notmore: 'non dev\'essere lungo più di',
         char: 'caratteri',
-        terms: 'Devi accettare le condizioni, per continuare.'
+        terms: 'Devi accettare le condizioni, per continuare.',
+        duplicate_email: 'l\'Email è già stata registrata'
       }
     },
   },
@@ -43,7 +44,8 @@ const messages = {
         atleast: 'must be at least',
         notmore: 'must not be more than',
         char: 'characters long',
-        terms: 'You need to agree with the terms & conditions.'
+        terms: 'You need to agree with the terms & conditions.',
+        duplicate_email: 'Email was already registered',
       }
     },
   },

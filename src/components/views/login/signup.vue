@@ -104,6 +104,9 @@
   import {mapGetters, mapActions} from 'vuex'
   import * as types from '../../../store/mutation-types'
 
+  import { Errori_MongoDb } from '../../../store/modules/user'
+
+
   export default {
     data() {
       return {
@@ -125,9 +128,19 @@
         'getEmail',
         'getDateOfBirth',
       ]),
+      ...mapGetters("user", [
+        'getUserServer',
+        'getServerCode',
+      ]),
+      user() {
+        //return this.getUserServer();
+      },
       env() {
         return env
-      }
+      },
+      userIsAuthenticated() {
+        return this.getUsername() !== null;
+      },
     },
     validations: {
       form: {
@@ -137,8 +150,15 @@
         confirmpassword: {
           sameAsPassword: sameAs('password')
         },
-        terms: { required },
+        terms: {required},
 
+      }
+    },
+    watch: {
+      getscode(code) {
+        if (code === Errori_MongoDb.DUPLICATE_EMAIL_ID) {
+          this.$q.notify(this.$t('reg.err.duplicate_email'));
+        }
       }
     },
     methods: {
@@ -151,6 +171,7 @@
         if (!item.required) return this.$t('reg.err.required');
         if (!item.minLength) return this.$t('reg.err.atleast') + ` ${item.$params.minLength.min} ` + this.$t('reg.err.char');
         if (!item.maxLength) return this.$t('reg.err.notmore') + ` ${item.$params.maxLength.max} ` + this.$t('reg.err.char');
+        if (item.duplicated) return this.$t('reg.err.duplicate_email');
         return '';
       },
       submit() {
@@ -166,16 +187,20 @@
           return
         }
 
-        const formData = {
-          email: this.email,
-          username: this.username,
-          password: this.password,
-          dateOfBirth: this.dateOfBirth,
-          confirmPassword: this.confirmPassword,
-          terms: this.terms,
-        };
-        console.log(formData);
-        this.signup(formData);
+        var mythis = this;
+
+        console.log(this.form);
+        this.signup(this.form)
+          .then((riscode) => {
+            //console.log("RIS = " + riscode);
+            if (riscode === Errori_MongoDb.DUPLICATE_EMAIL_ID) {
+              this.$q.notify(this.$t('reg.err.duplicate_email'));
+            } else {
+              this.$router.push('/');
+            }
+          }).catch(error => {
+          console.log("ERROR = " + error);
+        });
 
         // ...
       }

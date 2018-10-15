@@ -8,6 +8,7 @@ import types from './mutation-types'
 
 Vue.use(Vuex);
 
+
 const debug = process.env.NODE_ENV !== 'production';
 
 Vue.filter('time', timestamp => {
