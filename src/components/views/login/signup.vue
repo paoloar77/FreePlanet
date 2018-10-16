@@ -11,7 +11,7 @@
             <!--Prova URL :  {{env('PROVA_PAOLO')}}-->
 
             <q-field
-                    :helper="$t('reg.richiesto')"
+                    :helper=""
                     :error="$v.form.email.$error"
                     :error-label="`${errorMsg('email', $v.form.email)}`"
             >
@@ -27,7 +27,7 @@
             </q-field>
 
             <q-field
-                    :helper="$t('reg.richiesto')"
+                    :helper=""
                     :error="$v.form.username.$error"
                     :error-label="`${errorMsg('username', $v.form.username)}`"
             >
@@ -42,7 +42,7 @@
             </q-field>
 
             <q-field
-                    :helper="$t('reg.richiesto')"
+                    :helper=""
                     :error="$v.form.password.$error"
                     :error-label="`${errorMsg('password', $v.form.password)}`"
             >
@@ -56,7 +56,7 @@
             </q-field>
 
             <q-field
-                    :helper="$t('reg.richiesto')"
+                    :helper=""
                     :error="$v.form.repeatPassword.$error"
                     :error-label="`${errorMsg('repeatpassword', $v.form.repeatPassword)}`"
             >
@@ -70,7 +70,7 @@
             </q-field>
 
             <q-field
-                    :helper="$t('reg.richiesto')"
+                    :helper=""
                     :error="$v.form.terms.$error"
                     :error-label="`${errorMsg('terms', $v.form.terms)}`"
             >
@@ -86,8 +86,10 @@
                 />
             </q-field>
 
-
-            <q-btn color="primary" @click="submit" :disable="$v.$error">Submit</q-btn>
+            <div align="center">
+                <q-btn rounded size="lg" color="primary" @click="submit" :disable="$v.$error">{{$t('reg.submit')}}
+                </q-btn>
+            </div>
         </q-page>
     </div>
 </template>
