@@ -6,7 +6,7 @@ const messages = {
       myDescriz: 'La prima App Libera e per Tutti'
     },
     reg: {
-      richiesto: '* Richiesto',
+      richiesto: 'Campo Richiesto',
       email: 'Email',
       username : 'Nome Utente',
       password: 'Password',
@@ -34,7 +34,7 @@ const messages = {
       myDescriz: 'The first Free app for Everyone'
     },
     reg: {
-      richiesto: '* Required',
+      richiesto: 'Field Required',
       email: 'Email',
       username : 'Username',
       password: 'Password',

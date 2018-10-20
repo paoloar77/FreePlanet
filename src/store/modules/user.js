@@ -4,7 +4,7 @@ import Vuex from 'vuex'
 Vue.use(Vuex);
 
 import * as types from '../mutation-types'
-import tools from '../../../tools/tools'
+//import tools from '../../../tools/tools'
 
 export const Errori_MongoDb = {
   CALLING: 10,
@@ -16,14 +16,17 @@ export const Errori_MongoDb = {
 
 export const state = {
   user: {
+    _id: '',
     email: '',
     username: null,
     password: '',
     ripetipassword: '',
     dateofbirth: '',
 
-    idToken: '',
-    userId: 0,
+    tokens: [{
+      access: '',
+      token: ''
+    }]
   },
   userServer: null,
   servercode: 0,
@@ -33,7 +36,7 @@ function sendRequest(url, method, mydata) {
   const options = {
     method: method,
     //mode: 'no-cors',
-    headers: new Headers({'content-type': 'application/json'}),
+    headers: new Headers({'content-type': 'application/json', 'x-auth': ''}),
     cache: "no-cache",
     body: JSON.stringify(mydata),
   };
@@ -72,11 +75,8 @@ export const mutations = {
     state.user.dateOfBirth = payload;
   },
 
-  authUser(state, userData) {
-    if (userData.email == state.user.email) {
-      state.user.idToken = userData.idToken;
-      state.user.userId = userData.email
-    }
+  authUser(state, email, mytoken) {
+    state.user.tokens.push({access: "auth", token: mytoken});
   },
   setUser(state, user) {
     state.userServer = user
@@ -86,8 +86,7 @@ export const mutations = {
     state.servercode = servercode;
   },
   clearAuthData(state) {
-    state.idToken = null
-    state.userId = null
+    state.tokens = [];
   }
 };
 
@@ -126,8 +125,17 @@ export const actions = {
 
     commit('setServerCode', Errori_MongoDb.CALLING);
 
+    var x_auth_token = null;
+
     return sendRequest(call, "POST", params)
       .then((res) => {
+        console.log("HEADERS:");
+
+        for (let header of res.headers) {
+          console.log(header);
+        }
+
+        x_auth_token = res.headers.get('x-auth');
         myres = res;
         return res.json();
       })
@@ -140,47 +148,43 @@ export const actions = {
         }
 
         commit('setServerCode', myres);
-
         commit('setUser', body);
 
         if (myres.status === 200) {
-          var idToken = body._id;
+          var iduser = body._id;
           var email = body.email;
           if (process.env.DEV) {
             console.log("EMAIL = " + body.email);
-            console.log("ID= " + idToken);
+            console.log("IDUSER= " + iduser);
+            commit('authUser', email, x_auth_token);
           }
-          commit('authUser', {
-            idToken: idToken,
-            email: email
-          });
+
           const now = new Date();
           //const expirationDate = new Date(now.getTime() + myres.data.expiresIn * 1000);
           const expirationDate = new Date(now.getTime() + 1000);
-          localStorage.setItem('token', idToken);
-          //localStorage.setItem('userId', myres.data.localId)
+          localStorage.setItem('token', x_auth_token);
+          localStorage.setItem('userId', iduser);
           localStorage.setItem('expirationDate', expirationDate);
           //dispatch('storeUser', authData);
           //dispatch('setLogoutTimer', myres.data.expiresIn);
-          console.log("2 - FINE SIGNUP....");
           return Errori_MongoDb.OK;
         } else if (myres.status === 404) {
           if (process.env.DEV) {
             console.log("CODE = " + body.code);
           }
-          console.log("2 - FINE SIGNUP....");
           return body.code;
         } else {
           if (process.env.DEV) {
             console.log("CODE = " + body.code);
           }
-          console.log("2 - FINE SIGNUP....");
           return body.code;
         }
       })
-      .catch( (error) => {
-        console.log("ERROREEEEEEEEE");
-        console.log(error);
+      .catch((error) => {
+        if (process.env.DEV) {
+          console.log("ERROREEEEEEEEE");
+          console.log(error);
+        }
         commit('setServerCode', Errori_MongoDb.ERR_GENERICO);
         return Errori_MongoDb.ERR_GENERICO;
       });

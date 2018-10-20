@@ -54,13 +54,11 @@
 
   import drawer from '../components/layout/drawer/drawer.vue'
   import messagePopover from '../components/layout/toolbar/messagePopover.vue'
-  import signup from '../components/views/auth/old_signup';
 
   export default {
     components: {
       drawer,
       messagePopover,
-      appsignup: signup,
     },
     created() {
       //this.$store.dispatch('initStocks');

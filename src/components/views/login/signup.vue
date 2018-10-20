@@ -11,7 +11,6 @@
             <!--Prova URL :  {{env('PROVA_PAOLO')}}-->
 
             <q-field
-                    :helper=""
                     :error="$v.form.email.$error"
                     :error-label="`${errorMsg('email', $v.form.email)}`"
             >
@@ -27,7 +26,6 @@
             </q-field>
 
             <q-field
-                    :helper=""
                     :error="$v.form.username.$error"
                     :error-label="`${errorMsg('username', $v.form.username)}`"
             >
@@ -42,7 +40,6 @@
             </q-field>
 
             <q-field
-                    :helper=""
                     :error="$v.form.password.$error"
                     :error-label="`${errorMsg('password', $v.form.password)}`"
             >
@@ -56,7 +53,6 @@
             </q-field>
 
             <q-field
-                    :helper=""
                     :error="$v.form.repeatPassword.$error"
                     :error-label="`${errorMsg('repeatpassword', $v.form.repeatPassword)}`"
             >
@@ -70,7 +66,6 @@
             </q-field>
 
             <q-field
-                    :helper=""
                     :error="$v.form.terms.$error"
                     :error-label="`${errorMsg('terms', $v.form.terms)}`"
             >
@@ -147,11 +142,9 @@
       env() {
         return env
       },
-      userIsAuthenticated() {
-        return this.getUsername() !== null;
-      },
     },
     validations: {
+      isAsync: true,
       form: {
         email: {
           required, email,

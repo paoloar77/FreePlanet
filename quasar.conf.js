@@ -7,8 +7,7 @@ const envparser = require('./config/envparser');
 
 module.exports = function (ctx) {
   return {
-    // app plugins (/src/plugins)
-    plugins: ['i18n', 'axios', 'aggiuntivi', 'vuelidate'],
+    plugins: ['i18n', 'axios', 'vuelidate'],
     css: [
       'app.styl'
     ],
@@ -45,8 +44,9 @@ module.exports = function (ctx) {
     },
     devServer: {
       // https: true,
-      // port: 8080,
-      open: false // opens browser window automatically
+      port: 8080,
+      host: 'localhost',
+      open: true // opens browser window automatically
     },
     framework: {
       components: [
@@ -71,6 +71,7 @@ module.exports = function (ctx) {
         'QCardSeparator',
         'QCardActions',
         'QField',
+        'QInput',
         'QSelect',
         'QPopover',
         'QToggle',
@@ -79,7 +80,6 @@ module.exports = function (ctx) {
         'QAjaxBar',
         'QChip',
         'QCollapsible',
-        'QInput',
         'QCheckbox',
 
       ],
