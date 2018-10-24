@@ -6,6 +6,13 @@ Vue.use(Vuex);
 import * as types from '../mutation-types'
 //import tools from '../../../tools/tools'
 
+function getlang(){
+  if (state.user.lang !== "")
+    return state.user.lang;
+  else
+    return process.env.LANG_DEFAULT
+}
+
 export const Errori_MongoDb = {
   CALLING: 10,
   OK: 20,
@@ -19,24 +26,29 @@ export const state = {
     _id: '',
     email: '',
     username: null,
+    idapp: process.env.APP_ID,
     password: '',
+    lang: '',
     ripetipassword: '',
     dateofbirth: '',
 
     tokens: [{
       access: '',
       token: ''
-    }]
+    }],
+
+    verified_email: false,
   },
   userServer: null,
   servercode: 0,
 };
 
 function sendRequest(url, method, mydata) {
+  console.log("LANG " + getlang());
   const options = {
     method: method,
     //mode: 'no-cors',
-    headers: new Headers({'content-type': 'application/json', 'x-auth': ''}),
+    headers: new Headers({'content-type': 'application/json', 'x-auth': '', 'accept-language': getlang()}),
     cache: "no-cache",
     body: JSON.stringify(mydata),
   };
@@ -55,6 +67,7 @@ export const getters = {
   getDateOfBirth: state => state.user.dateofbirth,
   getUserServer: state => state.user.userServer,
   getServerCode: state => state.servercode,
+  getLang: state => state.user.lang,
 };
 
 
@@ -70,6 +83,9 @@ export const mutations = {
   },
   [types.USER_EMAIL]: (state, payload) => {
     state.user.email = payload;
+  },
+  [types.USER_LANG]: (state, payload) => {
+    state.user.lang = payload;
   },
   [types.USER_DATEOFBIRTH]: (state, payload) => {
     state.user.dateOfBirth = payload;
@@ -104,8 +120,50 @@ export const actions = {
   [types.USER_EMAIL]: ({commit}, payload) => {
     commit(types.USER_EMAIL, payload)
   },
+  [types.USER_LANG]: ({commit}, payload) => {
+    commit(types.USER_LANG, payload)
+  },
   [types.USER_DATEOFBIRTH]: ({commit}, payload) => {
     commit(types.USER_DATEOFBIRTH, payload)
+  },
+
+  [types.USER_VREG]: ({commit}, paramquery) => {
+    var call = process.env.MONGODB_HOST + '/vreg';
+    console.log("CALL " + call);
+
+    let params = {
+      keyappid: process.env.PAO_APP_ID,
+      idapp: process.env.APP_ID,
+      idlink: paramquery.idlink,
+    };
+    console.log(params);
+
+    commit('setServerCode', Errori_MongoDb.CALLING);
+
+    var myres;
+
+    return sendRequest(call, "POST", params)
+      .then((res) => {
+        //console.log("RITORNO 1 ");
+        console.log(res);
+        //console.log(res.status);
+        myres = res;
+        if (myres.status === 200) {
+          return myres.json();
+        }
+        commit('setServerCode', Errori_MongoDb.ERR_GENERICO);
+        return {code: Errori_MongoDb.ERR_GENERICO, msg: 'Errore: ' + myres.status};
+
+      })
+      .then((body) => {
+        //console.log("RITORNO 2 ");
+        //commit('setServerCode', myres);
+        return {code: body.code, msg: body.msg};
+      }).catch((err) => {
+        console.log("ERROR: " + err);
+        commit('setServerCode', Errori_MongoDb.ERR_GENERICO);
+        return {code: Errori_MongoDb.ERR_GENERICO, msg: 'Errore'};
+      });
   },
 
   [types.USER_SIGNUP]: ({commit}, authData) => {
@@ -114,9 +172,11 @@ export const actions = {
 
     let params = {
       keyappid: process.env.PAO_APP_ID,
+      lang: state.user.lang,
       email: authData.email,
       password: authData.password,
       username: authData.username,
+      idapp: process.env.APP_ID,
     };
 
     console.log(params);

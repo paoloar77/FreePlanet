@@ -105,7 +105,6 @@
   import * as types from '../../../store/mutation-types'
 
   import {Errori_MongoDb} from '../../../store/modules/user'
-
   import axios from 'axios';
 
 
@@ -136,9 +135,6 @@
         'getUserServer',
         'getServerCode',
       ]),
-      user() {
-        //return this.getUserServer();
-      },
       env() {
         return env
       },
@@ -238,8 +234,6 @@
           this.$q.notify(this.$t('reg.err.errore_generico'));
           return
         }
-
-        var mythis = this;
 
         console.log(this.form);
         this.signup(this.form)

@@ -13,6 +13,7 @@ const messages = {
       repeatPassword: 'Ripeti password',
       terms: "Accetti i termini e le condizioni?",
       submit: "Registrati",
+      title_verif_reg: "Verifica Registrazione",
       err: {
         required: 'è richiesto',
         email: 'dev\'essere una email valida',
@@ -41,6 +42,7 @@ const messages = {
       repeatPassword: 'Repeat password',
       terms: "Do you agree with the terms & conditions?",
       submit: "Submit",
+      title_verif_reg: "Verify Registration",
       err: {
         required: 'is required',
         email: 'must be a valid email',

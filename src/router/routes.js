@@ -11,6 +11,7 @@ const routes = [
   { path: '/',  component: () => import('pages/Index.vue') },
   { path: '/signup', component: load('views/login/signup'), meta: { name: 'Registration' } },
   { path: '/login', component: load('views/login/login'), meta: { name: 'Login' } },
+  { path: '/vreg', component: load('views/login/vreg'), meta: { name: 'Verify Reg' } },
 
 ];
 

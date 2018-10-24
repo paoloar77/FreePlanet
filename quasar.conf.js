@@ -46,7 +46,7 @@ module.exports = function (ctx) {
       // https: true,
       port: 8080,
       host: 'localhost',
-      open: true // opens browser window automatically
+      open: false // opens browser window automatically
     },
     framework: {
       components: [
@@ -81,6 +81,7 @@ module.exports = function (ctx) {
         'QChip',
         'QCollapsible',
         'QCheckbox',
+        'QAlert',
 
       ],
       directives: [

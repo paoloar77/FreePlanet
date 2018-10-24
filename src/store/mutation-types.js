@@ -1,3 +1,4 @@
+
 export const SET_VALUE = 'SET_VALUE';
 export const SET_DEFFERED_PROMPT = 'defprompt';
 export const SET_LOGIN_PAGE = 'setloginpage';
@@ -11,11 +12,11 @@ export const SET_FORM_SIGNUP = 'formsignup';
 export const USER_REC = 'user_rec';
 export const USER_USERNAME = 'username';
 export const USER_EMAIL = 'email';
+export const USER_LANG = 'lang';
 export const USER_PASSWORD = 'password';
 export const USER_DATEOFBIRTH = 'dateofbirth';
 
 export const USER_SIGNUP = 'signup';
-
-
+export const USER_VREG = 'vreg';
 
 

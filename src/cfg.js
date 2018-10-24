@@ -5,7 +5,7 @@ Vue.use(Vuex);
 
 export const cfg = new Vue({
   state:{
-    lang: 'it'
+    lang: 'en'
   },
   data: {
     cost: {
