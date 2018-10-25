@@ -38,13 +38,13 @@
   import { Platform } from 'quasar'
   export default {
     mounted () {
-      this.setLayoutNeeded(false)
-      this.setIsLoginPage(true)
+      this.setLayoutNeeded(false);
+      this.setIsLoginPage(true);
       this.startAnimation()
     },
     beforeDestroy () {
-      this.setLayoutNeeded(true)
-      this.setIsLoginPage(false)
+      this.setLayoutNeeded(true);
+      this.setIsLoginPage(false);
     },
     computed: {
       heightSize (){

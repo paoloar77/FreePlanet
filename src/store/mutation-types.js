@@ -17,6 +17,9 @@ export const USER_PASSWORD = 'password';
 export const USER_DATEOFBIRTH = 'dateofbirth';
 
 export const USER_SIGNUP = 'signup';
+export const USER_SIGNIN = 'signin';
+export const USER_AUTOLOGIN = 'autologin';
+export const USER_LOGOUT = 'logout';
 export const USER_VREG = 'vreg';
 
 

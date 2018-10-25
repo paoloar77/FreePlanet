@@ -27,7 +27,7 @@
 
                 <div class="right-itens">
                     <!--<message-popover></message-popover>-->
-                    <label>{{ $t('msg.hello') }}</label>
+                    <label>{{ $t('msg.hello') }}</label> <span v-model="prova"></span> !
                 </div>
 
 
@@ -55,6 +55,10 @@
   import drawer from '../components/layout/drawer/drawer.vue'
   import messagePopover from '../components/layout/toolbar/messagePopover.vue'
 
+  import user from '../store/modules/user';
+
+  import {mapGetters} from 'vuex'
+
   export default {
     components: {
       drawer,
@@ -66,8 +70,14 @@
     methods: {
       openURL,
     },
+    computed: {
+      ...mapGetters("user", [
+        'getUsername',
+      ]),
+    },
     data: function () {
       return {
+        prova: 'AA',
         selectOpLang: [
           {label: 'Italian', icon: 'fa-facebook', value: 'it'},
           {label: 'English (US)', icon: 'fa-flag-us', value: 'en-us'},

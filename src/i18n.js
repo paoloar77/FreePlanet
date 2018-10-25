@@ -1,7 +1,7 @@
 const messages = {
   it: {
     msg: {
-      hello: 'Buongiorno!',
+      hello: 'Buongiorno',
       myAppName: 'FreePlanet',
       myDescriz: 'La prima App Libera e per Tutti'
     },
@@ -27,6 +27,10 @@ const messages = {
         sameaspassword: 'Le password devono essere identiche',
       }
     },
+    login:{
+      enter: 'Login',
+      errato: "Username o password errata. Riprovare",
+    }
   },
   enUs: {
     msg: {
@@ -56,6 +60,10 @@ const messages = {
         sameaspassword: 'Passwords must be identical',
       }
     },
+    login:{
+      enter: 'Login',
+      errato: "Username or password wrong. Please retry again",
+    }
   },
 };
 

@@ -4,7 +4,7 @@
             <img :src="photo" style='height: 80px' class="inline-block">
             <img src="../img/avatar-1.svg" id="avatar" class="inline-block">
             <div id="user-name">
-                <span class="text-white"> {{ name }} </span>
+                <span class="text-white"> Username: {{ getUsername }} </span>
                 <hr>
                 <span class="text-white"> {{ email }} </span>
                 <hr>
@@ -89,7 +89,8 @@
       }
     },
     computed: {
-      ...mapGetters("glob", ['getLayoutNeeded', 'getMenuCollapse'])
+      ...mapGetters("glob", ['getLayoutNeeded', 'getMenuCollapse']),
+      ...mapGetters("user", ['getUsername'])
     },
     components: {
       menuOne,

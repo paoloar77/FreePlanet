@@ -18,7 +18,9 @@
 <script type="text/javascript">
   import Header from './components/Header.vue';
 
-  import {mapGetters} from 'vuex'
+  import * as types from './store/mutation-types'
+
+  import {mapGetters, mapActions} from 'vuex'
 
   export default {
     name: 'app',
@@ -33,8 +35,14 @@
     components: {
       appHeader: Header,
     },
-    created(){
+    methods:{
+      ...mapActions("user", {
+        tryAutoLogin: types.USER_AUTOLOGIN,
+      }),
+    },
+    created() {
       console.info(process.env);
+      this.tryAutoLogin();
     }
   }
 </script>

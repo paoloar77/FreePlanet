@@ -125,7 +125,7 @@
       }
     },
     computed: {
-      ...mapGetters("glob", [
+      ...mapGetters("user", [
         'getUsername',
         'getPassword',
         'getEmail',

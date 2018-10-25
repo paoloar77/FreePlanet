@@ -13,9 +13,11 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
+    "bcryptjs": "^2.4.3",
     "chart": "^0.1.2",
     "chart.js": "^2.7.3",
     "countup.js": "^1.9.3",
+    "js-md5": "^0.7.3",
     "lodash": "^4.17.11",
     "quasar-extras": "^2.0.8",
     "roboto-font": "^0.1.0",
