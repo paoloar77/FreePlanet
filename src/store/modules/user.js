@@ -1,9 +1,8 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
-import md5 from 'js-md5';
 
-const bcrypt = require('bcryptjs');
+var bcrypt = require('bcryptjs');
 
 Vue.use(Vuex);
 
@@ -23,7 +22,6 @@ export const Errori_MongoDb = {
   CALLING: 10,
   OK: 20,
   ERR_GENERICO: -1,
-  ERR_LOGIN_ERRATO: -10,
   DUPLICATE_EMAIL_ID: 11000,
   DUPLICATE_USERNAME_ID: 11100
 };
@@ -50,6 +48,7 @@ export const state = {
   servercode: 0,
   idToken: 0,
   userId: 0,
+  username: '',
 };
 
 function sendRequest(url, method, mydata) {
@@ -71,21 +70,19 @@ function sendRequest(url, method, mydata) {
 
 export const getters = {
   getUser: state => state.user,
-  getUsername: state => state.user.username,
   getPassword: state => state.user.password,
   getDateOfBirth: state => state.user.dateofbirth,
   getUserServer: state => state.user.userServer,
   getServerCode: state => state.servercode,
   getLang: state => state.user.lang,
+
+  getUsername: state => state.username,
 };
 
 
 export const mutations = {
   [types.USER_REC]: (state, payload) => {
     state.user = payload;
-  },
-  [types.USER_USERNAME]: (state, payload) => {
-    state.user.username = payload;
   },
   [types.USER_PASSWORD]: (state, payload) => {
     state.user.password = payload;
@@ -100,10 +97,15 @@ export const mutations = {
     state.user.dateOfBirth = payload;
   },
 
-  authUser(state, email, userid, mytoken) {
-    state.user.tokens.push({access: "auth", token: mytoken});
-    state.idToken = mytoken;
+  [types.USER_USERNAME]: (state, payload) => {
+    state.username = payload;
+  },
+
+  authUser(state, username, userid, mytoken) {
+    state.username = username;
     state.userId = userid;
+    state.idToken = mytoken;
+    state.user.tokens.push({access: "auth", token: mytoken});
   },
   setUser(state, user) {
     state.userServer = user
@@ -183,94 +185,89 @@ export const actions = {
     var call = process.env.MONGODB_HOST + '/users';
     console.log("CALL " + call);
 
-    console.log("MYLANG = " + getlang());
+    console.log("PASSW: " + authData.password);
 
-    bcrypt.genSalt(10, (err, salt) => {
-      return bcrypt
-        .hash(authData.password, salt)
-        .then(hashedPassword => {
-          let usertosend = {
-            keyappid: process.env.PAO_APP_ID,
-            lang: getlang(),
-            email: authData.email,
-            password: hashedPassword,
-            username: authData.username,
-            idapp: process.env.APP_ID,
-          };
+    bcrypt
+      .hash(authData.password, bcrypt.genSaltSync(12))
+      .then(hashedPassword => {
+        console.log("NEW hashedPassword = " + hashedPassword);
+        let usertosend = {
+          keyappid: process.env.PAO_APP_ID,
+          lang: getlang(),
+          email: authData.email,
+          password: hashedPassword,
+          username: authData.username,
+          idapp: process.env.APP_ID,
+        };
 
-          console.log(usertosend);
+        console.log(usertosend);
 
-          var myres = null;
+        var myres = null;
 
-          commit('setServerCode', Errori_MongoDb.CALLING);
+        commit('setServerCode', Errori_MongoDb.CALLING);
 
-          var x_auth_token = null;
-
-          return sendRequest(call, "POST", usertosend)
-            .then((res) => {
-              console.log("HEADERS:");
-
-              for (let header of res.headers) {
-                console.log(header);
-              }
-
-              x_auth_token = res.headers.get('x-auth');
-              myres = res;
+        return sendRequest(call, "POST", usertosend)
+          .then((res) => {
+            myres = res;
+            var x_auth_token = res.headers.get('x-auth');
+            if (x_auth_token) {
               return res.json();
-            })
-            .then((body) => {
+            } else {
+              return {status: 400, code: Errori_MongoDb.ERR_GENERICO}
+            }
+          })
+          .then((body) => {
+            if (process.env.DEV) {
+              console.log("RISULTATO ");
+              console.log("STATUS " + myres.status + " " + (myres.statusText));
+              console.log("BODY:");
+              console.log(body);
+            }
+
+            commit('setServerCode', myres);
+            commit('setUser', body);
+
+            if (myres.status === 200) {
+              var iduser = body._id;
+              var username = authData.username;
               if (process.env.DEV) {
-                console.log("RISULTATO ");
-                console.log("STATUS " + myres.status + " " + (myres.statusText));
-                console.log("BODY:");
-                console.log(body);
+                console.log("USERNAME = " + username);
+                console.log("IDUSER= " + iduser);
+                commit('authUser', username, iduser, x_auth_token);
               }
 
-              commit('setServerCode', myres);
-              commit('setUser', body);
+              const now = new Date();
+              //const expirationDate = new Date(now.getTime() + myres.data.expiresIn * 1000);
+              const expirationDate = new Date(now.getTime() + 1000);
+              localStorage.setItem('username', username);
+              localStorage.setItem('token', x_auth_token);
+              localStorage.setItem('userId', iduser);
+              localStorage.setItem('expirationDate', expirationDate);
+              //dispatch('storeUser', authData);
+              //dispatch('setLogoutTimer', myres.data.expiresIn);
 
-              if (myres.status === 200) {
-                var iduser = body._id;
-                var email = body.email;
-                if (process.env.DEV) {
-                  console.log("EMAIL = " + body.email);
-                  console.log("IDUSER= " + iduser);
-                  commit('authUser', email, iduser, x_auth_token);
-                }
-
-                const now = new Date();
-                //const expirationDate = new Date(now.getTime() + myres.data.expiresIn * 1000);
-                const expirationDate = new Date(now.getTime() + 1000);
-                localStorage.setItem('username', authData.username);
-                localStorage.setItem('token', x_auth_token);
-                localStorage.setItem('userId', iduser);
-                localStorage.setItem('expirationDate', expirationDate);
-                //dispatch('storeUser', authData);
-                //dispatch('setLogoutTimer', myres.data.expiresIn);
-
-                return Errori_MongoDb.OK;
-              } else if (myres.status === 404) {
-                if (process.env.DEV) {
-                  console.log("CODE = " + body.code);
-                }
-                return body.code;
-              } else {
-                if (process.env.DEV) {
-                  console.log("CODE = " + body.code);
-                }
-                return body.code;
-              }
-            })
-            .catch((error) => {
+              return Errori_MongoDb.OK;
+            } else if (myres.status === 404) {
               if (process.env.DEV) {
-                console.log("ERROREEEEEEEEE");
-                console.log(error);
+                console.log("CODE = " + body.code);
               }
-              commit('setServerCode', Errori_MongoDb.ERR_GENERICO);
-              return Errori_MongoDb.ERR_GENERICO;
-            });
-        });
-    });
+              return body.code;
+            } else {
+              if (process.env.DEV) {
+                console.log("CODE = " + body.code);
+              }
+              return body.code;
+            }
+          })
+          .catch((error) => {
+            if (process.env.DEV) {
+              console.log("ERROREEEEEEEEE");
+              console.log(error);
+            }
+            commit('setServerCode', Errori_MongoDb.ERR_GENERICO);
+            return Errori_MongoDb.ERR_GENERICO;
+          });
+      });
 
   },
   [types.USER_SIGNIN]: ({commit}, authData) => {
@@ -279,92 +276,92 @@ export const actions = {
 
     console.log("MYLANG = " + getlang());
 
-    bcrypt.genSalt(10, (err, salt) => {
-      return bcrypt
-        .hash(authData.password, salt)
-        .then(hashedPassword => {
+    console.log("PASSW: " + authData.password);
 
-          const usertosend = {
-            username: authData.username,
-            password: hashedPassword,
-            idapp: process.env.APP_ID,
-            keyappid: process.env.PAO_APP_ID,
-            lang: getlang(),
-          };
+    const usertosend = {
+      username: authData.username,
+      password: authData.password,
+      idapp: process.env.APP_ID,
+      keyappid: process.env.PAO_APP_ID,
+      lang: getlang(),
+    };
 
-          console.log(usertosend);
+    console.log(usertosend);
 
-          var myres = null;
+    var myres = null;
 
-          commit('setServerCode', Errori_MongoDb.CALLING);
+    commit('setServerCode', Errori_MongoDb.CALLING);
 
-          var x_auth_token = null;
+    var x_auth_token = null;
 
-          return sendRequest(call, "POST", usertosend)
-            .then((res) => {
-              myres = res;
-              return res.json();
-            })
-            .then((body) => {
-              if (process.env.DEV) {
-                console.log("RISULTATO ");
-                console.log("STATUS " + myres.status + " " + (myres.statusText));
-                console.log("BODY:");
-                console.log(body);
-              }
+    return sendRequest(call, "POST", usertosend)
+      .then((res) => {
+        myres = res;
+        x_auth_token = res.headers.get('x-auth');
+        var injson = res.json();
 
-              if (body.code === serv_constants.RIS_CODE_LOGIN_ERR) {
-                commit('setServerCode', Errori_MongoDb.ERR_LOGIN_ERRATO);
-                return Errori_MongoDb.ERR_LOGIN_ERRATO;
-              }
+        if (x_auth_token || injson) {
+          return injson;
+        } else {
+          return {status: 400, code: Errori_MongoDb.ERR_GENERICO}
+        }
+      })
+      .then((body) => {
+        if (process.env.DEV) {
+          console.log("RISULTATO ");
+          console.log("STATUS " + myres.status + " " + (myres.statusText));
+          console.log("BODY:");
+          console.log(body);
+        }
 
-              x_auth_token = body.token;
+        if (body.code === serv_constants.RIS_CODE_LOGIN_ERR) {
+          commit('setServerCode', body.code);
+          return body.code;
+        }
 
-              commit('setServerCode', myres);
+        commit('setServerCode', myres);
 
-              if (myres.status === 200) {
-                var iduser = body._id;
-                var email = body.email;
-                if (process.env.DEV) {
-                  console.log("EMAIL = " + email);
-                  console.log("IDUSER= " + iduser);
-                  commit('authUser', '', iduser, x_auth_token);
-                }
+        if (myres.status === 200) {
+          var iduser = body._id;
+          var username = authData.username;
+          if (process.env.DEV) {
+            console.log("USERNAME = " + username);
+            console.log("IDUSER= " + iduser);
+            commit('authUser', username, iduser, x_auth_token);
+          }
 
-                const now = new Date();
-                //const expirationDate = new Date(now.getTime() + myres.data.expiresIn * 1000);
-                const expirationDate = new Date(now.getTime() + 1000);
-                localStorage.setItem('username', authData.username);
-                localStorage.setItem('token', x_auth_token);
-                localStorage.setItem('userId', iduser);
-                localStorage.setItem('expirationDate', expirationDate);
-                localStorage.setItem('isLoggedin', true);
+          const now = new Date();
+          //const expirationDate = new Date(now.getTime() + myres.data.expiresIn * 1000);
+          const expirationDate = new Date(now.getTime() + 1000);
+          localStorage.setItem('username', username);
+          localStorage.setItem('token', x_auth_token);
+          localStorage.setItem('userId', iduser);
+          localStorage.setItem('expirationDate', expirationDate);
+          localStorage.setItem('isLoggedin', true);
 
-                //dispatch('storeUser', authData);
-                //dispatch('setLogoutTimer', myres.data.expiresIn);
-                return Errori_MongoDb.OK;
-              } else if (myres.status === 404) {
-                if (process.env.DEV) {
-                  console.log("CODE = " + body.code);
-                }
-                return body.code;
-              } else {
-                if (process.env.DEV) {
-                  console.log("CODE = " + body.code);
-                }
-                return body.code;
-              }
-            })
-            .catch((error) => {
-              if (process.env.DEV) {
-                console.log("ERROREEEEEEEEE");
-                console.log(error);
-              }
-              commit('setServerCode', Errori_MongoDb.ERR_GENERICO);
-              return Errori_MongoDb.ERR_GENERICO;
-            });
-        });
-    });
+          //dispatch('storeUser', authData);
+          //dispatch('setLogoutTimer', myres.data.expiresIn);
+          return Errori_MongoDb.OK;
+        } else if (myres.status === 404) {
+          if (process.env.DEV) {
+            console.log("CODE = " + body.code);
+          }
+          return body.code;
+        } else {
+          if (process.env.DEV) {
+            console.log("CODE = " + body.code);
+          }
+          return body.code;
+        }
+      })
+      .catch((error) => {
+        if (process.env.DEV) {
+          console.log("ERROREEEEEEEEE");
+          console.log(error);
+        }
+        commit('setServerCode', Errori_MongoDb.ERR_GENERICO);
+        return Errori_MongoDb.ERR_GENERICO;
+      });
   },
   [types.USER_AUTOLOGIN]: ({commit}) => {
     const token = localStorage.getItem('token');
@@ -380,8 +377,8 @@ export const actions = {
     const username = localStorage.getItem('username');
     commit('authUser', {
       username: username,
+      userId: userId,
       token: token,
-      userId: userId
     })
   },
   [types.USER_LOGOUT]: ({commit}) => {

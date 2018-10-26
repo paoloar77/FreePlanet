@@ -60,6 +60,7 @@
   import * as types from '../../../store/mutation-types'
 
   import {Errori_MongoDb} from '../../../store/modules/user'
+  import {serv_constants} from "../../../store/modules/serv_constants";
   import axios from 'axios';
 
 
@@ -116,7 +117,7 @@
         //console.log("RIS = " + riscode);
         if (riscode === Errori_MongoDb.OK) {
           this.$router.push('/');
-        }else if (riscode === Errori_MongoDb.ERR_LOGIN_ERRATO) {
+        }else if (riscode === serv_constants.RIS_CODE_LOGIN_ERR) {
           this.$q.notify(this.$t('login.errato'));
           this.$router.push('/signin');
         } else {
@@ -136,11 +137,6 @@
         this.signin(this.form)
           .then((riscode) => {
             this.checkErrors(riscode);
-            if (riscode === Errori_MongoDb.OK){
-              this.$router.push('/');
-            }else{
-              this.$router.push('/signin');
-            }
           }).catch(error => {
           console.log("ERROR = " + error);
         });
