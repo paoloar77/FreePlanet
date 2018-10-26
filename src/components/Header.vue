@@ -25,10 +25,12 @@
 
                 <q-select class="sel_lang" v-model="lang" stack-label="" :options="selectOpLang"/>
 
+                <!--<message-popover></message-popover>-->
+
+                <!--
                 <div class="right-itens">
-                    <!--<message-popover></message-popover>-->
                     <label>{{ $t('msg.hello') }}</label> <span v-model="prova"></span> !
-                </div>
+                </div>-->
 
 
             </q-toolbar>
@@ -57,7 +59,9 @@
 
   import user from '../store/modules/user';
 
-  import {mapGetters} from 'vuex'
+  import * as types from '../store/mutation-types'
+
+  import {mapGetters, mapActions} from 'vuex'
 
   export default {
     components: {

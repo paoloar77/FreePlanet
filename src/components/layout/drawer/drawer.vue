@@ -1,18 +1,19 @@
 <template>
     <div>
-        <div id="profile">
+        <div id="profile" v-if="getUsername">
             <img :src="photo" style='height: 80px' class="inline-block">
             <img src="../img/avatar-1.svg" id="avatar" class="inline-block">
             <div id="user-name">
-                <span class="text-white"> Username: {{ getUsername }} </span>
+                <span class="text-white"> {{ getUsername }} </span>
                 <hr>
-                <span class="text-white"> {{ email }} </span>
-                <hr>
+                <span class="text-white" v-if="getVerificato"> {{$t('reg.verificato')}} </span>
+                <span class="text-white" v-else> {{$t('reg.non_verificato')}} </span>
+                <span class="text-white"> {{ getEmail }} </span>
             </div>
             <div id="user-actions">
-                <button class="bordered blue small"><i>person</i></button>
-                <button class="bordered blue small"><i>lock</i></button>
-                <button class="bordered blue small" @click='logOut'><i>exit_to_app</i></button>
+                <q-btn round color="primary" icon="person"></q-btn>
+                <q-btn round color="warning" icon="lock"></q-btn>
+                <q-btn round color="secondary" icon="exit_to_app" @click='logoutHandler'></q-btn>
             </div>
         </div>
 
@@ -20,27 +21,24 @@
         <menu-two v-else :links="links"></menu-two>
 
         <div class="fixed-bottom text-center light text-italic">
-            Powered by
-            <a href="https://vuejs.org/"><img src="../img/vue-logo.png" alt=""></a>
-            <a href="http://quasar-framework.org/"><img src="../img/quasar-logo.png" alt=""></a>
+            Powered by Perseo
         </div>
 
     </div>
 </template>
 <script type="text/javascript">
-  import {mapGetters} from 'vuex'
   import menuOne from './menuOne.vue'
   import menuTwo from './menuTwo.vue'
-  //import firebase from 'firebase'
+
+  import * as types from '../../../store/mutation-types'
+
+  import {mapGetters, mapActions} from 'vuex'
 
   export default {
     data() {
       return {
         photo: '',
-        userId: '',
-        name: '',
-        email: '',
-        user: {},
+        user: null,
         links: {
           Dashboard: {
             routes: [
@@ -71,7 +69,6 @@
       }
     },
     created() {
-      console.log("CREA DRAWER!!!!!!!!")
       var vm = this
       /*firebase.auth().onAuthStateChanged(function (user) {
         if (user) {
@@ -83,14 +80,16 @@
         }
       })*/
     },
-    methods: {
-      logOut() {
-        //firebase.auth().signOut()
+    methods:{
+      ...mapActions("user", ["logout"]),
+      logoutHandler() {
+        this.logout({router: this.$router});
+        this.$q.notify(this.$t('logout.uscito'));
       }
     },
     computed: {
       ...mapGetters("glob", ['getLayoutNeeded', 'getMenuCollapse']),
-      ...mapGetters("user", ['getUsername'])
+      ...mapGetters("user", ['getUsername', 'getVerificato', 'getEmail']),
     },
     components: {
       menuOne,

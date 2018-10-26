@@ -27,9 +27,5 @@
     created () {
 
     },
-    methods: {
-      logOut () {
-      }
-    }
   }
 </script>

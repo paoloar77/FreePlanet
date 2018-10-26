@@ -65,6 +65,13 @@
           this.risultato = ris.msg;
           console.log("RIS = ");
           console.log(ris);
+
+          if (this.verificatook) {
+            setTimeout(() => {
+              this.$router.replace('/');
+            }, 3000)
+          }
+
         }).catch((err) => {
           console.log("ERR = " + err);
         });

@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
-
 var bcrypt = require('bcryptjs');
 
 Vue.use(Vuex);
@@ -17,6 +16,14 @@ function getlang() {
   else
     return process.env.LANG_DEFAULT
 }
+
+function getTok(state) {
+  if (typeof state.user.tokens[0] !== 'undefined')
+    return state.user.tokens[0].token;
+  else
+    return '';
+}
+
 
 export const Errori_MongoDb = {
   CALLING: 10,
@@ -37,6 +44,9 @@ export const state = {
     ripetipassword: '',
     dateofbirth: '',
 
+    idToken: 0,
+    userId: 0,
+
     tokens: [{
       access: '',
       token: ''
@@ -46,24 +56,20 @@ export const state = {
   },
   userServer: null,
   servercode: 0,
-  idToken: 0,
-  userId: 0,
-  username: '',
 };
 
-function sendRequest(url, method, mydata) {
+function sendRequest(state, url, method, mydata) {
   console.log("LANG " + getlang());
+  var mytok = getTok(state);
   const options = {
     method: method,
     //mode: 'no-cors',
-    headers: new Headers({'content-type': 'application/json', 'x-auth': '', 'accept-language': getlang()}),
+    headers: new Headers({'content-type': 'application/json', 'x-auth': mytok, 'accept-language': getlang()}),
     cache: "no-cache",
     body: JSON.stringify(mydata),
   };
 
-  if (true) {
-    return fetch(url, options);
-  }
+  return fetch(url, options);
 
 };
 
@@ -76,7 +82,10 @@ export const getters = {
   getServerCode: state => state.servercode,
   getLang: state => state.user.lang,
 
-  getUsername: state => state.username,
+  getEmail: state => state.user.email,
+  getUsername: state => state.user.username,
+  getVerificato: state => state.user.verified_email,
+  getTok: state => getTok(state),
 };
 
 
@@ -101,11 +110,13 @@ export const mutations = {
     state.username = payload;
   },
 
-  authUser(state, username, userid, mytoken) {
-    state.username = username;
-    state.userId = userid;
-    state.idToken = mytoken;
-    state.user.tokens.push({access: "auth", token: mytoken});
+  authUser(state, data) {
+    state.user.username = data.username;
+    state.user.userId = data.userid;
+    state.user.idToken = data.mytoken;
+    state.user.verified_email = data.verified_email;
+    state.user.tokens = [];
+    state.user.tokens.push({access: "auth", token: data.mytoken});
   },
   setUser(state, user) {
     state.userServer = user
@@ -115,9 +126,11 @@ export const mutations = {
     state.servercode = servercode;
   },
   clearAuthData(state) {
-    state.tokens = [];
-    state.idToken = null;
-    state.userId = null;
+    state.user.username = null;
+    state.user.tokens = [];
+    state.user.idToken = null;
+    state.user.userId = null;
+    state.user.verified_email = false;
   }
 };
 
@@ -157,7 +170,7 @@ export const actions = {
 
     var myres;
 
-    return sendRequest(call, "POST", usertosend)
+    return sendRequest(state, call, "POST", usertosend)
       .then((res) => {
         //console.log("RITORNO 1 ");
         console.log(res);
@@ -173,6 +186,8 @@ export const actions = {
       .then((body) => {
         //console.log("RITORNO 2 ");
         //commit('setServerCode', myres);
+        if (body.code === serv_constants.RIS_CODE_EMAIL_VERIFIED)
+          localStorage.setItem('verificato', true);
         return {code: body.code, msg: body.msg};
       }).catch((err) => {
         console.log("ERROR: " + err);
@@ -185,12 +200,10 @@ export const actions = {
     var call = process.env.MONGODB_HOST + '/users';
     console.log("CALL " + call);
 
-    console.log("PASSW: " + authData.password);
+    //console.log("PASSW: " + authData.password);
 
-    bcrypt
-      .hash(authData.password, bcrypt.genSaltSync(12))
+    return bcrypt.hash(authData.password, bcrypt.genSaltSync(12))
       .then(hashedPassword => {
-        console.log("NEW hashedPassword = " + hashedPassword);
         let usertosend = {
           keyappid: process.env.PAO_APP_ID,
           lang: getlang(),
@@ -206,10 +219,12 @@ export const actions = {
 
         commit('setServerCode', Errori_MongoDb.CALLING);
 
-        return sendRequest(call, "POST", usertosend)
+        var x_auth_token = null;
+
+        return sendRequest(state, call, "POST", usertosend)
           .then((res) => {
             myres = res;
-            var x_auth_token = res.headers.get('x-auth');
+            x_auth_token = res.headers.get('x-auth');
             if (x_auth_token) {
               return res.json();
             } else {
@@ -224,7 +239,7 @@ export const actions = {
               console.log(body);
             }
 
-            commit('setServerCode', myres);
+            commit('setServerCode', myres.status);
             commit('setUser', body);
 
             if (myres.status === 200) {
@@ -233,8 +248,9 @@ export const actions = {
               if (process.env.DEV) {
                 console.log("USERNAME = " + username);
                 console.log("IDUSER= " + iduser);
-                commit('authUser', username, iduser, x_auth_token);
               }
+
+              commit('authUser', {username: username, userid: iduser, mytoken: x_auth_token, verified_email: false});
 
               const now = new Date();
               //const expirationDate = new Date(now.getTime() + myres.data.expiresIn * 1000);
@@ -243,6 +259,7 @@ export const actions = {
               localStorage.setItem('token', x_auth_token);
               localStorage.setItem('userId', iduser);
               localStorage.setItem('expirationDate', expirationDate);
+              localStorage.setItem('verificato', false);
               //dispatch('storeUser', authData);
               //dispatch('setLogoutTimer', myres.data.expiresIn);
 
@@ -268,15 +285,12 @@ export const actions = {
             return Errori_MongoDb.ERR_GENERICO;
           });
       });
-
   },
   [types.USER_SIGNIN]: ({commit}, authData) => {
     var call = process.env.MONGODB_HOST + '/users/login';
     console.log("LOGIN " + call);
 
     console.log("MYLANG = " + getlang());
-
-    console.log("PASSW: " + authData.password);
 
     const usertosend = {
       username: authData.username,
@@ -294,7 +308,7 @@ export const actions = {
 
     var x_auth_token = null;
 
-    return sendRequest(call, "POST", usertosend)
+    return sendRequest(state, call, "POST", usertosend)
       .then((res) => {
         myres = res;
         x_auth_token = res.headers.get('x-auth');
@@ -324,10 +338,16 @@ export const actions = {
         if (myres.status === 200) {
           var iduser = body._id;
           var username = authData.username;
+          var verified_email = body.verified_email === "true" || body.verified_email === true;
           if (process.env.DEV) {
             console.log("USERNAME = " + username);
             console.log("IDUSER= " + iduser);
-            commit('authUser', username, iduser, x_auth_token);
+            commit('authUser', {
+              username: username,
+              userid: iduser,
+              mytoken: x_auth_token,
+              verified_email: verified_email
+            });
           }
 
           const now = new Date();
@@ -338,6 +358,7 @@ export const actions = {
           localStorage.setItem('userId', iduser);
           localStorage.setItem('expirationDate', expirationDate);
           localStorage.setItem('isLoggedin', true);
+          localStorage.setItem('verificato', verified_email);
 
           //dispatch('storeUser', authData);
           //dispatch('setLogoutTimer', myres.data.expiresIn);
@@ -375,20 +396,43 @@ export const actions = {
     }
     const userId = localStorage.getItem('userId');
     const username = localStorage.getItem('username');
+    const verified_email = localStorage.getItem('verificato') === "true";
     commit('authUser', {
       username: username,
       userId: userId,
       token: token,
+      verified_email: verified_email,
     })
   },
-  [types.USER_LOGOUT]: ({commit}) => {
-    commit('clearAuthData');
+  [types.USER_LOGOUT]: ({commit}, {router}) => {
+
+    var call = process.env.MONGODB_HOST + '/users/me/token';
+    console.log("CALL " + call);
+
+    let usertosend = {
+      keyappid: process.env.PAO_APP_ID,
+      idapp: process.env.APP_ID,
+    };
+    console.log(usertosend);
+
+    sendRequest(state, call, "DELETE", usertosend)
+      .then((res) => {
+        console.log(res);
+
+      }).catch((err) => {
+      console.log("ERROR: " + err);
+    }).then(() => {
+      commit('clearAuthData');
+    });
+
     localStorage.removeItem('expirationDate');
     localStorage.removeItem('token');
     localStorage.removeItem('userId');
     localStorage.removeItem('username');
     localStorage.removeItem('isLoggedin');
-    router.replace('/signin');
+    localStorage.removeItem('verified_email');
+
+    router.replace('/signin')
   },
 
 

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <q-page padding class="">
+        <q-page padding class="signin">
             <div class="text-center">
                 <p>
                     <!--<img src="../../../assets/quasar-logo-full.svg">-->
@@ -63,6 +63,8 @@
   import {serv_constants} from "../../../store/modules/serv_constants";
   import axios from 'axios';
 
+  import {Loading, QSpinnerFacebook, QSpinnerGears} from 'quasar'
+
 
   export default {
     data() {
@@ -100,6 +102,9 @@
       ...mapActions("user", {
         signin: types.USER_SIGNIN,
       }),
+      showNotif (msg) {
+        this.$q.notify(msg)
+      },
       errorMsg(cosa, item) {
         try {
           if (!item.$error) return '';
@@ -116,12 +121,13 @@
       checkErrors(riscode) {
         //console.log("RIS = " + riscode);
         if (riscode === Errori_MongoDb.OK) {
+          this.showNotif({type: 'positive', message: this.$t('login.completato')});
           this.$router.push('/');
-        }else if (riscode === serv_constants.RIS_CODE_LOGIN_ERR) {
-          this.$q.notify(this.$t('login.errato'));
+        } else if (riscode === serv_constants.RIS_CODE_LOGIN_ERR) {
+          this.showNotif(this.$t('login.errato'));
           this.$router.push('/signin');
         } else {
-          this.$q.notify("Errore num " + riscode);
+          this.showNotif("Errore num " + riscode);
         }
 
       },
@@ -129,17 +135,22 @@
         this.$v.form.$touch();
 
         if (this.$v.form.$error) {
-          this.$q.notify(this.$t('reg.err.errore_generico'));
+          this.showNotif(this.$t('reg.err.errore_generico'));
           return
         }
+
+        this.$q.loading.show({message: this.$t('login.incorso')});
 
         console.log(this.form);
         this.signin(this.form)
           .then((riscode) => {
             this.checkErrors(riscode);
+            this.$q.loading.hide();
           }).catch(error => {
           console.log("ERROR = " + error);
+          this.$q.loading.hide();
         });
+
 
         // ...
       }
@@ -147,3 +158,10 @@
   }
 </script>
 
+<style scoped>
+    .signin {
+        width: 100%;
+        margin: 0 auto;
+        max-width: 450px;
+    }
+</style>

@@ -82,6 +82,8 @@ module.exports = function (ctx) {
         'QCollapsible',
         'QCheckbox',
         'QAlert',
+        'QInnerLoading',
+        'QSpinnerGears',
 
       ],
       directives: [
@@ -89,8 +91,14 @@ module.exports = function (ctx) {
       ],
       // Quasar plugins
       plugins: [
-        'Notify', 'ActionSheet'
+        'Notify', 'ActionSheet', 'Loading'
       ],
+      config: {
+        // optional (v0.17+)
+        loading: {
+          // Loading defaults
+        }
+      },
       //iconSet: ctx.theme.mat ? 'material-icons' : 'ionicons',
       iconSet: 'fontawesome',
       //iconSet: 'roboto-font',

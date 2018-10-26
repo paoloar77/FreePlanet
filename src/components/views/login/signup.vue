@@ -1,6 +1,6 @@
 <template>
     <div>
-        <q-page padding class="">
+        <q-page padding class="signup">
             <div class="text-center">
                 <p>
                     <!--<img src="../../../assets/quasar-logo-full.svg">-->
@@ -81,10 +81,13 @@
                 />
             </q-field>
 
+            <br>
+
             <div align="center">
                 <q-btn rounded size="lg" color="primary" @click="submit" :disable="$v.$error">{{$t('reg.submit')}}
                 </q-btn>
             </div>
+
         </q-page>
     </div>
 </template>
@@ -106,6 +109,8 @@
 
   import {Errori_MongoDb} from '../../../store/modules/user'
   import axios from 'axios';
+
+  import {Loading, QSpinnerFacebook, QSpinnerGears} from 'quasar'
 
 
   export default {
@@ -178,6 +183,9 @@
       ...mapActions("user", {
         signup: types.USER_SIGNUP,
       }),
+      showNotif(msg) {
+        this.$q.notify(msg)
+      },
       errorMsg(cosa, item) {
         try {
           if (!item.$error) return '';
@@ -209,13 +217,13 @@
       checkErrors(riscode) {
         //console.log("RIS = " + riscode);
         if (riscode === Errori_MongoDb.DUPLICATE_EMAIL_ID) {
-          this.$q.notify(this.$t('reg.err.duplicate_email'));
+          this.showNotif(this.$t('reg.err.duplicate_email'));
         } else if (riscode === Errori_MongoDb.DUPLICATE_USERNAME_ID) {
-          this.$q.notify(this.$t('reg.err.duplicate_username'));
+          this.showNotif(this.$t('reg.err.duplicate_username'));
         } else if (riscode === Errori_MongoDb.OK) {
           this.$router.push('/');
         } else {
-          this.$q.notify("Errore num " + riscode);
+          this.showNotif("Errore num " + riscode);
         }
 
       },
@@ -226,25 +234,38 @@
         this.duplicate_username = false;
 
         if (!this.form.terms) {
-          this.$q.notify(this.$t('reg.err.terms'));
+          this.showNotif(this.$t('reg.err.terms'));
           return
         }
 
         if (this.$v.form.$error) {
-          this.$q.notify(this.$t('reg.err.errore_generico'));
+          this.showNotif(this.$t('reg.err.errore_generico'));
           return
         }
+
+        this.$q.loading.show({message: this.$t('reg.incorso')});
 
         console.log(this.form);
         this.signup(this.form)
           .then((riscode) => {
             this.checkErrors(riscode);
+            this.$q.loading.hide();
           }).catch(error => {
           console.log("ERROR = " + error);
+          this.$q.loading.hide();
         });
+
 
         // ...
       }
     },
   }
 </script>
+
+<style scoped>
+    .signup {
+        width: 100%;
+        margin: 0 auto;
+        max-width: 450px;
+    }
+</style>

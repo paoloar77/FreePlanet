@@ -6,14 +6,17 @@ const messages = {
       myDescriz: 'La prima App Libera e per Tutti'
     },
     reg: {
+      incorso: 'Registrazione in corso...',
       richiesto: 'Campo Richiesto',
       email: 'Email',
       username : 'Nome Utente',
       password: 'Password',
       repeatPassword: 'Ripeti password',
-      terms: "Accetti i termini e le condizioni?",
+      terms: "Accetto i termini e le condizioni",
       submit: "Registrati",
       title_verif_reg: "Verifica Registrazione",
+      verificato: "Verificato",
+      non_verificato: "Non Verificato",
       err: {
         required: 'è richiesto',
         email: 'dev\'essere una email valida',
@@ -28,9 +31,14 @@ const messages = {
       }
     },
     login:{
+      incorso: 'Login in corso',
       enter: 'Login',
       errato: "Username o password errata. Riprovare",
-    }
+      completato: 'Login effettuato!',
+    },
+    logout:{
+      uscito: 'Sei Uscito',
+    },
   },
   enUs: {
     msg: {
@@ -39,14 +47,17 @@ const messages = {
       myDescriz: 'The first Free app for Everyone'
     },
     reg: {
+      incorso: 'Registration please wait...',
       richiesto: 'Field Required',
       email: 'Email',
       username : 'Username',
       password: 'Password',
       repeatPassword: 'Repeat password',
-      terms: "Do you agree with the terms & conditions?",
+      terms: "I agree with the terms and conditions",
       submit: "Submit",
       title_verif_reg: "Verify Registration",
+      verificato: "Verified",
+      non_verificato: "Not Verified",
       err: {
         required: 'is required',
         email: 'must be a valid email',
@@ -61,9 +72,14 @@ const messages = {
       }
     },
     login:{
+      incorso: 'Login...',
       enter: 'Login',
       errato: "Username or password wrong. Please retry again",
-    }
+      completato: 'Login successfully!',
+    },
+    logout:{
+      uscito: 'Logout successfully',
+    },
   },
 };
 

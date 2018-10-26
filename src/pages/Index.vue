@@ -14,11 +14,11 @@
             <br>Conta = {{ getConta }}
         </q-field>
 
-        <q-btn
+        <!--<q-btn
                 @click="showNotification"
                 color="primary"
                 label="Mostra notifica"
-        />
+        />-->
 
         <q-card id="mycard" class="mycard" :style="mystilecard">
             <q-card-title>
@@ -171,7 +171,7 @@
       console.log('created...');
       this.initprompt();
       //this.test();
-      this.test_fetch();
+      //this.test_fetch();
     }
   }
 </script>
