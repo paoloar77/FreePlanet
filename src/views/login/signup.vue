@@ -110,9 +110,9 @@
   import { validationMixin } from 'vuelidate';
 
   import { mapGetters, mapActions } from 'vuex'
-  import * as types from '../../../store/mutation-types'
+  import * as types from '../../store/mutation-types'
 
-  import { Errori_MongoDb } from '../../../store/modules/user'
+  import { Errori_MongoDb } from '../../store/modules/user'
   import axios from 'axios';
 
   import { Loading, QSpinnerFacebook, QSpinnerGears } from 'quasar'
@@ -120,36 +120,6 @@
 
   @Component({
     mixins: [validationMixin],
-    data () {
-      return {
-        url: process.env.VUE_APP_URL,
-        form: {
-          email: process.env.TEST_EMAIL,
-          username: process.env.TEST_USERNAME,
-          password: process.env.TEST_PASSWORD,
-          repeatPassword: process.env.TEST_PASSWORD,
-          dateOfBirth: '',
-          terms: true,
-        },
-        duplicate_email: false,
-        duplicate_username: false,
-      }
-    },
-    computed: {
-      ...mapGetters("user", [
-        'getUsername',
-        'getPassword',
-        'getEmail',
-        'getDateOfBirth',
-      ]),
-      ...mapGetters("user", [
-        'getUserServer',
-        'getServerCode',
-      ]),
-      env () {
-        return env
-      },
-    },
     validations: {
       isAsync: true,
       form: {
@@ -184,6 +154,36 @@
         terms: { required },
 
       }
+    },
+    data () {
+      return {
+        url: process.env.VUE_APP_URL,
+        form: {
+          email: process.env.TEST_EMAIL,
+          username: process.env.TEST_USERNAME,
+          password: process.env.TEST_PASSWORD,
+          repeatPassword: process.env.TEST_PASSWORD,
+          dateOfBirth: '',
+          terms: true,
+        },
+        duplicate_email: false,
+        duplicate_username: false,
+      }
+    },
+    computed: {
+      ...mapGetters("user", [
+        'getUsername',
+        'getPassword',
+        'getEmail',
+        'getDateOfBirth',
+      ]),
+      ...mapGetters("user", [
+        'getUserServer',
+        'getServerCode',
+      ]),
+      env () {
+        return env
+      },
     },
     methods: {
       ...mapActions("user", {

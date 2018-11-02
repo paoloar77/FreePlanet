@@ -56,7 +56,7 @@
   import cardTodo from './cardTodo.vue'
   import knobStatistics from './knobStatistics.vue'
   import { mapActions } from 'vuex'
-  import * as types from '../../../../store/mutation-types'
+  import * as types from '../../../store/mutation-types'
   export default {
     name: 'Home',
     mounted () {

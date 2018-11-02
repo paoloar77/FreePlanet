@@ -32,7 +32,7 @@
 <script type="text/javascript">
   /* eslint-disable */
   import {mapActions} from 'vuex'
-  import * as types from '../../../store/mutation-types'
+  import * as types from '../../store/mutation-types'
   import Vivus from 'vivus'
   import logoData from './logoData'
   import { Platform } from 'quasar'

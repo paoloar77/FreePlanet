@@ -62,10 +62,10 @@
   } from 'vuelidate/lib/validators'
 
   import {mapGetters, mapActions} from 'vuex'
-  import * as types from '../../../store/mutation-types'
+  import * as types from '../../store/mutation-types'
 
-  import {Errori_MongoDb} from '../../../store/modules/user'
-  import {serv_constants} from "../../../store/modules/serv_constants";
+  import {Errori_MongoDb} from '../../store/modules/user'
+  import {serv_constants} from "../../store/modules/serv_constants";
   import axios from 'axios';
 
   import {Loading, QSpinnerFacebook, QSpinnerGears} from 'quasar'
