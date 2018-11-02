@@ -54,8 +54,8 @@
 
   import {Quasar} from 'quasar';
 
-  import drawer from '../components/layout/drawer/drawer.vue'
-  import messagePopover from '../components/layout/toolbar/messagePopover.vue'
+  import drawer from '../layouts/drawer/drawer.vue'
+  import messagePopover from '../layouts/toolbar/messagePopover.vue'
 
   import user from '../store/modules/user';
 

@@ -23,7 +23,7 @@
 </template>
 <script>
   import { mapGetters, mapActions } from 'vuex'
-  import * as types from '../../../store/mutation-types'
+  import * as types from '../../store/mutation-types'
   export default {
     mounted () {
       if (this.getPosts.length < 1) {

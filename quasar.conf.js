@@ -1,8 +1,6 @@
 // Configuration for your app
-const path = require('path');
 
-// Get our env variables
-const envparser = require('./config/envparser');
+const path = require('path');
 
 const extendTypescriptToWebpack = (config) => {
   config.resolve
@@ -25,6 +23,7 @@ module.exports = function (ctx) {
       router: 'src/router/index.ts',
       store: 'src/store/index.ts'
     },
+    // app plugins (/src/plugins)
     plugins: ['i18n', 'axios', 'vuelidate'],
     css: [
       'app.styl'
@@ -59,11 +58,11 @@ module.exports = function (ctx) {
       }
     },
     devServer: {
-      // https: true,
+      https: false,
       port: 8080,
-      host: 'localhost',
-      open: false // opens browser window automatically
+      open: true // opens browser window automatically
     },
+    // framework: 'all' --- includes everything; for dev only!
     framework: {
       components: [
         'QLayout',
@@ -101,30 +100,31 @@ module.exports = function (ctx) {
         'QInnerLoading',
         'QSpinnerGears',
         'QDatetime',
-
       ],
       directives: [
-        'Ripple'
+        'Ripple',
+        'CloseOverlay'
       ],
       // Quasar plugins
       plugins: [
-        'Notify', 'ActionSheet', 'Loading'
+        'Notify',
+        'Meta',
+        'Cookies',
+        'ActionSheet', 'Loading'
       ],
-      config: {
-        // optional (v0.17+)
-        loading: {
-          // Loading defaults
-        }
-      },
-      //iconSet: ctx.theme.mat ? 'material-icons' : 'ionicons',
       iconSet: 'fontawesome',
-      //iconSet: 'roboto-font',
-      i18n: 'it' // Quasar language
+      i18n: 'it', // Quasar language
     },
-    // animations: 'all' --- includes all animations
     animations: [],
     ssr: {
-      pwa: false
+      pwa: {
+        runtimeCaching: [
+          {
+            urlPattern: '/statics',
+            handler: 'networkFirst'
+          }
+        ]
+      }
     },
     pwa: {
       workboxPluginMode: 'InjectManifest',
@@ -166,31 +166,5 @@ module.exports = function (ctx) {
         ]
       }
     },
-    cordova: {
-      // id: 'org.cordova.quasar.app'
-    },
-    electron: {
-      // bundler: 'builder', // or 'packager'
-      extendWebpack(cfg) {
-        // do something with Electron process Webpack cfg
-      },
-      packager: {
-        // https://github.com/electron-userland/electron-packager/blob/master/docs/api.md#options
-
-        // OS X / Mac App Store
-        // appBundleId: '',
-        // appCategoryType: '',
-        // osxSign: '',
-        // protocol: 'myapp://path',
-
-        // Window only
-        // win32metadata: { ... }
-      },
-      builder: {
-        // https://www.electron.build/configuration/configuration
-
-        // appId: 'quasar-app'
-      }
-    }
   }
 };

@@ -92,7 +92,10 @@
     </div>
 </template>
 
-<script>
+<script lang="ts">
+  import Vue from 'vue'
+  import { Component, Prop, Watch } from 'vue-property-decorator'
+
   import {
     required,
     email,
@@ -104,17 +107,20 @@
     requiredUnless
   } from 'vuelidate/lib/validators'
 
-  import {mapGetters, mapActions} from 'vuex'
+  import { validationMixin } from 'vuelidate';
+
+  import { mapGetters, mapActions } from 'vuex'
   import * as types from '../../../store/mutation-types'
 
-  import {Errori_MongoDb} from '../../../store/modules/user'
+  import { Errori_MongoDb } from '../../../store/modules/user'
   import axios from 'axios';
 
-  import {Loading, QSpinnerFacebook, QSpinnerGears} from 'quasar'
+  import { Loading, QSpinnerFacebook, QSpinnerGears } from 'quasar'
 
 
-  export default {
-    data() {
+  @Component({
+    mixins: [validationMixin],
+    data () {
       return {
         url: process.env.VUE_APP_URL,
         form: {
@@ -140,7 +146,7 @@
         'getUserServer',
         'getServerCode',
       ]),
-      env() {
+      env () {
         return env
       },
     },
@@ -159,7 +165,7 @@
               })
           }
         },
-        password: {required, minLength: minLength(8), maxLength: maxLength(20)},
+        password: { required, minLength: minLength(8), maxLength: maxLength(20) },
         username: {
           required, minLength: minLength(6), maxLength: maxLength(20),
           isUnique: value => {
@@ -175,7 +181,7 @@
         repeatPassword: {
           sameAsPassword: sameAs('password')
         },
-        terms: {required},
+        terms: { required },
 
       }
     },
@@ -183,10 +189,10 @@
       ...mapActions("user", {
         signup: types.USER_SIGNUP,
       }),
-      showNotif(msg) {
+      showNotif (msg) {
         this.$q.notify(msg)
       },
-      errorMsg(cosa, item) {
+      errorMsg (cosa, item) {
         try {
           if (!item.$error) return '';
           if (item.$params.email && !item.email) return this.$t('reg.err.email');
@@ -214,7 +220,7 @@
           //console.log("ERR : " + error);
         }
       },
-      checkErrors(riscode) {
+      checkErrors (riscode) {
         //console.log("RIS = " + riscode);
         if (riscode === Errori_MongoDb.DUPLICATE_EMAIL_ID) {
           this.showNotif(this.$t('reg.err.duplicate_email'));
@@ -227,7 +233,7 @@
         }
 
       },
-      submit() {
+      submit () {
         this.$v.form.$touch();
 
         this.duplicate_email = false;
@@ -243,14 +249,14 @@
           return
         }
 
-        this.$q.loading.show({message: this.$t('reg.incorso')});
+        this.$q.loading.show({ message: this.$t('reg.incorso') });
 
         console.log(this.form);
         this.signup(this.form)
           .then((riscode) => {
             this.checkErrors(riscode);
             this.$q.loading.hide();
-          }).catch(error => {
+          }).catch((error: string) => {
           console.log("ERROR = " + error);
           this.$q.loading.hide();
         });
@@ -259,7 +265,11 @@
         // ...
       }
     },
+  })
+
+  export default class Signup extends Vue {
   }
+
 </script>
 
 <style scoped>
@@ -269,3 +279,5 @@
         max-width: 450px;
     }
 </style>
+
+

@@ -1,4 +1,3 @@
-
 export const SET_VALUE = 'SET_VALUE';
 export const SET_DEFFERED_PROMPT = 'defprompt';
 export const SET_LOGIN_PAGE = 'setloginpage';
@@ -23,5 +22,3 @@ export const USER_LOGOUT = 'logout';
 export const USER_VREG = 'vreg';
 export const USER_REQUESTRESETPWD = 'requestpwd';
 export const USER_UPDATEPWD = 'resetpwd';
-
-

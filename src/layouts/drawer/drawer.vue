@@ -30,7 +30,7 @@
   import menuOne from './menuOne.vue'
   import menuTwo from './menuTwo.vue'
 
-  import * as types from '../../../store/mutation-types'
+  import * as types from '../../store/mutation-types'
 
   import {mapGetters, mapActions} from 'vuex'
 
