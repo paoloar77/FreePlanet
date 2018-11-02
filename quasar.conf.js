@@ -1,12 +1,30 @@
 // Configuration for your app
-const webpack = require('webpack');
 const path = require('path');
 
 // Get our env variables
 const envparser = require('./config/envparser');
 
+const extendTypescriptToWebpack = (config) => {
+  config.resolve
+    .extensions
+    .add('.ts');
+  config.module
+    .rule('typescript')
+    .test(/\.tsx?$/)
+    .use('typescript')
+    .loader('ts-loader')
+    .options({
+      appendTsSuffixTo: [/\.vue$/],
+      onlyCompileBundledFiles: true
+    })
+};
+
 module.exports = function (ctx) {
   return {
+    sourceFiles: {
+      router: 'src/router/index.ts',
+      store: 'src/store/index.ts'
+    },
     plugins: ['i18n', 'axios', 'vuelidate'],
     css: [
       'app.styl'
@@ -22,24 +40,22 @@ module.exports = function (ctx) {
     supportIE: false,
     build: {
       scopeHoisting: true,
-      env: envparser(),
-      // vueRouterMode: 'history',
-      // vueCompiler: true,
-      // gzip: true,
-      // analyze: true,
+      vueRouterMode: 'history',
+      vueCompiler: true,
+      gzip: true,
+      analyze: true,
       // extractCSS: false,
-      extendWebpack(cfg) {
-
-        // Create an alias for our helper
-        cfg.resolve.alias.env = path.resolve(__dirname, 'config/helpers/env.js')
-
-        // Make our helper function Global
-        cfg.plugins.push(
-          new webpack.ProvidePlugin({
-            'env': 'env' // this variable is our alias, it's not a string
-          })
-        )
-
+      chainWebpack(config) {
+        extendTypescriptToWebpack(config);
+        config.resolve
+          .alias
+          .set('~', __dirname)
+          .set('@', path.resolve(__dirname, 'src'));
+        config.module
+          .rule('template-engine')
+          .test(/\.pug$/)
+          .use('pug')
+          .loader('pug-plain-loader')
       }
     },
     devServer: {
@@ -84,6 +100,7 @@ module.exports = function (ctx) {
         'QAlert',
         'QInnerLoading',
         'QSpinnerGears',
+        'QDatetime',
 
       ],
       directives: [

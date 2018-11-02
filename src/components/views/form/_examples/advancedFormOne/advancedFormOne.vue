@@ -50,7 +50,7 @@
 </template>
 <script type="text/javascript">
   import { required } from 'vuelidate/lib/validators'
-  import eInput from '../embeeded/eInput.vue'
+  import eInput from '../../embeeded/eInput.vue'
   import cardUserData from './cardUserData.vue'
   //import cardDataTable from './cardDataTable.vue'
   export default {

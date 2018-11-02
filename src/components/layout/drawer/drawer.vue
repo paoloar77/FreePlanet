@@ -51,6 +51,7 @@
           Forms: {
             routes: [
               {route: '/prec', faIcon: 'fa fa-search', materialIcon: 'search', name: 'Prec'},
+              {route: '/simpleform', faIcon: 'fa fa-search', materialIcon: 'search', name: 'Simpleform'},
               { route: '/embeeded', faIcon: 'fa fa-check', materialIcon: 'check', name: 'Embeeded validations' },
               //{ route: '/advanced-form-one', faIcon: 'fa fa-hdd-o', materialIcon: 'filter_1', name: 'Adv. Form One' }
             ],

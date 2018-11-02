@@ -17,6 +17,7 @@ const messages = {
       title_verif_reg: "Verifica Registrazione",
       verificato: "Verificato",
       non_verificato: "Non Verificato",
+      forgetpassword:"Password dimenticata?",
       err: {
         required: 'è richiesto',
         email: 'dev\'essere una email valida',
@@ -35,6 +36,15 @@ const messages = {
       enter: 'Login',
       errato: "Username o password errata. Riprovare",
       completato: 'Login effettuato!',
+    },
+    reset: {
+      title_reset_pwd: "Reimposta la tua Password",
+      send_reset_pwd: 'Invia Reimposta la password',
+      incorso: 'Richiesta Nuova Email...',
+      email_sent:'Email inviata',
+      check_email: 'Controlla la tua email, ti arriverà un messaggio con un link per reimpostare la tua password. Questo link, per sicurezza, scadrà dopo 4 ore.',
+      title_update_pwd: 'Aggiorna la tua password',
+      update_password: 'Aggiorna Password',
     },
     logout:{
       uscito: 'Sei Uscito',
@@ -58,6 +68,7 @@ const messages = {
       title_verif_reg: "Verify Registration",
       verificato: "Verified",
       non_verificato: "Not Verified",
+      forgetpassword:"Forget Password?",
       err: {
         required: 'is required',
         email: 'must be a valid email',
@@ -76,6 +87,15 @@ const messages = {
       enter: 'Login',
       errato: "Username or password wrong. Please retry again",
       completato: 'Login successfully!',
+    },
+    reset: {
+      title_reset_pwd: "Reset your Password",
+      send_reset_pwd: 'Send password request',
+      incorso: 'Request New Email...',
+      email_sent:'Email sent',
+      check_email: 'Check your email for a message with a link to update your password. This link will expire in 4 hours for security reasons.',
+      title_update_pwd: 'Update your password',
+      update_password: 'Update Password',
     },
     logout:{
       uscito: 'Logout successfully',

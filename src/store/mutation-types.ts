@@ -21,5 +21,7 @@ export const USER_SIGNIN = 'signin';
 export const USER_AUTOLOGIN = 'autologin';
 export const USER_LOGOUT = 'logout';
 export const USER_VREG = 'vreg';
+export const USER_REQUESTRESETPWD = 'requestpwd';
+export const USER_UPDATEPWD = 'resetpwd';
 
 

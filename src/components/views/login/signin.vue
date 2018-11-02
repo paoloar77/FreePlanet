@@ -16,6 +16,7 @@
             >
                 <q-input
                         :value="form.username"
+                        autocomplete="username"
                         @change="val => { form.username = val }"
                         :before="[{icon: 'person', handler () {}}]"
                         @blur="$v.form.username.$touch"
@@ -36,6 +37,10 @@
                         :float-label="$t('reg.password')"
                 />
             </q-field>
+
+            <div>
+                <a :href="getlinkforgetpwd">{{$t('reg.forgetpassword')}}</a>
+            </div>
 
             <br>
 
@@ -87,6 +92,9 @@
       ]),
       env() {
         return env
+      },
+      getlinkforgetpwd () {
+        return "/requestresetpwd";
       },
     },
     validations: {
