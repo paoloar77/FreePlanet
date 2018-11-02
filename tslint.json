@@ -4,10 +4,10 @@
       "tslint-config-standard"
   ],
   "rules": {
-    "semicolon": [
+    /*"semicolon": [
       true,
       "always",
       "ignore-bound-class-methods"
-    ]
+    ]*/
   }
 }

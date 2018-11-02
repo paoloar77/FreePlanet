@@ -2,6 +2,8 @@
 
 const path = require('path');
 
+//const envparser = require('./config/envparser');
+
 const extendTypescriptToWebpack = (config) => {
   config.resolve
     .extensions

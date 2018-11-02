@@ -1,8 +1,8 @@
-import { RouteConfig } from 'vue-router';
+import { RouteConfig } from 'vue-router'
 
 const routes: RouteConfig[] = [
   { path: '/', component: () => import('@/pages/Index.vue'), meta: { name: 'Home' } },
-  { path: '/signup', component: () => import('@/views/login/signup.vue'), meta: { name: 'Registration' } },
+/*  { path: '/signup', component: () => import('@/views/login/signup.vue'), meta: { name: 'Registration' } },
   { path: '/signin', component: () => import('@/views/login/signin.vue'), meta: { name: 'Login' } },
   { path: '/vreg', component: () => import('@/views/login/vreg.vue'), meta: { name: 'Verify Reg' } },
   {
@@ -24,8 +24,8 @@ const routes: RouteConfig[] = [
     path: '/embeeded',
     component: () => import('@/views/form/embeeded/embeeded.vue'),
     meta: { name: 'Embeeded' }
-  },
-];
+  }*/
+]
 
 // Always leave this as last one
 if (process.env.MODE !== 'ssr') {
@@ -33,7 +33,7 @@ if (process.env.MODE !== 'ssr') {
     name: 'pages.errors.e404',
     path: '*',
     component: () => import('@/pages/Error404.vue')
-  });
+  })
 }
 
-export default routes;
+export default routes
