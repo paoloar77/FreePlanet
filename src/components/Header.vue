@@ -57,7 +57,7 @@
   import drawer from '../layouts/drawer/drawer.vue'
   import messagePopover from '../layouts/toolbar/messagePopover.vue'
 
-  import user from '../store/modules/user';
+  // import user from '../store/modules/user';
 
   import * as types from '../store/mutation-types'
 

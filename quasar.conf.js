@@ -26,7 +26,7 @@ module.exports = function (ctx) {
       store: 'src/store/index.ts'
     },
     // app plugins (/src/plugins)
-    plugins: ['i18n', 'axios', 'vuelidate'],
+    plugins: ['i18n', 'axios', 'vee-validate'],
     css: [
       'app.styl'
     ],

@@ -93,6 +93,7 @@
 </template>
 
 <script>
+
   import {
     required,
     email,
@@ -107,7 +108,7 @@
   import {mapGetters, mapActions} from 'vuex'
   import * as types from '../../store/mutation-types'
 
-  import {ErroriMongoDb} from '../../store/modules/user'
+  //import {ErroriMongoDb} from '../../store/modules/user'
   import axios from 'axios';
 
   import {Loading, QSpinnerFacebook, QSpinnerGears} from 'quasar'

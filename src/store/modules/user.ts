@@ -3,7 +3,7 @@ import Vuex from 'vuex'
 
 import { Module, VuexModule, Mutation, MutationAction, Action, getModule } from 'vuex-module-decorators'
 
-let bcrypt = require('bcryptjs')
+const bcrypt = require('bcryptjs')
 
 import * as types from '@/store/mutation-types'
 import { serv_constants } from '@/store/modules/serv_constants'
@@ -22,8 +22,8 @@ export const ErroriMongoDb = {
 
 Vue.use(Vuex)
 
-@Module
-export default class User extends VuexModule implements IUserState {   // Non occorrono i getters, basta questi qui:
+@Module({ dynamic: true, store, name: 'user' })
+class User extends VuexModule {
   _id: IUserState['_id'] = ''
   email: IUserState['email'] = ''
   username: IUserState['username'] = ''
@@ -37,7 +37,7 @@ export default class User extends VuexModule implements IUserState {   // Non oc
   verifiedEmail: IUserState['verifiedEmail'] = false
   servercode: number = 0
 
-  getlang (): any {
+  getlang(): any {
     if (this.lang !== '') {
       return this.lang
     } else {
@@ -45,9 +45,9 @@ export default class User extends VuexModule implements IUserState {   // Non oc
     }
   }
 
-  sendRequest (url: string, method: string, mydata: any) {
+  sendRequest(url: string, method: string, mydata: any) {
     console.log('LANG ' + this.getlang())
-    let mytok: string = this.getTok()
+    const mytok: string = this.getTok()
 
     const authHeader = new Headers()
     authHeader.append('content-type', 'application/json')
@@ -65,7 +65,7 @@ export default class User extends VuexModule implements IUserState {   // Non oc
 
   }
 
-  getTok () {
+  getTok() {
     if (this.tokens) {
       if (typeof this.tokens[0] !== 'undefined') {
         return this.tokens[0].token
@@ -78,22 +78,22 @@ export default class User extends VuexModule implements IUserState {   // Non oc
   }
 
   @MutationAction({ mutate: [types.USER_PASSWORD] })
-  async setpassword (newstr: string) {
+  async setpassword(newstr: string) {
     return { password: newstr }
   }
 
   @MutationAction({ mutate: [types.USER_EMAIL] })
-  async setemail (newstr: string) {
+  async setemail(newstr: string) {
     return { email: newstr }
   }
 
   @MutationAction({ mutate: [types.USER_LANG] })
-  async setlang (newstr: string) {
+  async setlang(newstr: string) {
     return { lang: newstr }
   }
 
   @Mutation
-  authUser (data: IUserState) {
+  authUser(data: IUserState) {
     this.username = data.username
     this.userId = data.userId
     this.idToken = data.idToken
@@ -104,7 +104,7 @@ export default class User extends VuexModule implements IUserState {   // Non oc
   }
 
   @Mutation
-  UpdatePwd (data: IIdToken) {
+  UpdatePwd(data: IIdToken) {
     this.idToken = data.idToken
     if (!this.tokens) {
       this.tokens = []
@@ -113,12 +113,12 @@ export default class User extends VuexModule implements IUserState {   // Non oc
   }
 
   @Mutation
-  setServerCode (servercode: number) {
+  setServerCode(servercode: number) {
     this.servercode = servercode
   }
 
   @Mutation
-  clearAuthData (): void {
+  clearAuthData(): void {
     this.username = ''
     this.tokens = []
     this.idToken = ''
@@ -127,7 +127,7 @@ export default class User extends VuexModule implements IUserState {   // Non oc
   }
 
   @Action({ commit: types.USER_UPDATEPWD })
-  resetpwd (paramquery: IUserState) {
+  resetpwd(paramquery: IUserState) {
     let call = process.env.MONGODB_HOST + '/updatepwd'
     console.log('CALL ' + call)
 
@@ -172,7 +172,7 @@ export default class User extends VuexModule implements IUserState {   // Non oc
   }
 
   @Action({ commit: types.USER_REQUESTRESETPWD })
-  requestpwd (paramquery: IUserState) {
+  requestpwd(paramquery: IUserState) {
 
     let call = process.env.MONGODB_HOST + '/requestnewpwd'
     console.log('CALL ' + call)
@@ -210,7 +210,7 @@ export default class User extends VuexModule implements IUserState {   // Non oc
   }
 
   @Action({ commit: types.USER_VREG })
-  vreg (paramquery: ILinkReg) {
+  vreg(paramquery: ILinkReg) {
     let call = process.env.MONGODB_HOST + '/vreg'
     console.log('CALL ' + call)
 
@@ -251,7 +251,7 @@ export default class User extends VuexModule implements IUserState {   // Non oc
   }
 
   @Action({ commit: types.USER_VREG })
-  signup (authData: IUserState) {
+  signup(authData: IUserState) {
     let call = process.env.MONGODB_HOST + '/users'
     console.log('CALL ' + call)
 
@@ -347,7 +347,7 @@ export default class User extends VuexModule implements IUserState {   // Non oc
   }
 
   @Action({ commit: types.USER_SIGNIN })
-  signin (authData: IUserState) {
+  signin(authData: IUserState) {
     let call = process.env.MONGODB_HOST + '/users/login'
     console.log('LOGIN ' + call)
 
@@ -447,7 +447,7 @@ export default class User extends VuexModule implements IUserState {   // Non oc
   }
 
   @Action({ commit: types.USER_AUTOLOGIN })
-  autologin () {
+  autologin() {
     const token = localStorage.getItem('token')
     if (!token) {
       return
@@ -470,7 +470,7 @@ export default class User extends VuexModule implements IUserState {   // Non oc
   }
 
   @Action({ commit: types.USER_LOGOUT })
-  logout () {
+  logout() {
 
     let call = process.env.MONGODB_HOST + '/users/me/token'
     console.log('CALL ' + call)
@@ -503,3 +503,5 @@ export default class User extends VuexModule implements IUserState {   // Non oc
   }
 
 }
+
+export const UserModule = getModule(User.prototype)

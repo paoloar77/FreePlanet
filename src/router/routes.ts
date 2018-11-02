@@ -2,7 +2,9 @@ import { RouteConfig } from 'vue-router'
 
 const routes: RouteConfig[] = [
   { path: '/', component: () => import('@/pages/Index.vue'), meta: { name: 'Home' } },
-/*  { path: '/signup', component: () => import('@/views/login/signup.vue'), meta: { name: 'Registration' } },
+  { path: '/test', component: () => import('@/views/login/test.vue'), meta: { name: 'Test' } },
+  /*
+  { path: '/signup', component: () => import('@/views/login/signup.vue'), meta: { name: 'Registration' } },
   { path: '/signin', component: () => import('@/views/login/signin.vue'), meta: { name: 'Login' } },
   { path: '/vreg', component: () => import('@/views/login/vreg.vue'), meta: { name: 'Verify Reg' } },
   {
