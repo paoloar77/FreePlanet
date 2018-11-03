@@ -1,13 +1,13 @@
-import Vue from 'vue';
-import Vuex from 'vuex';
+import Vue from 'vue'
+import Vuex from 'vuex'
 
-import { IUserState } from '@/types';
+import { IUserState } from '@/types'
 
-Vue.use(Vuex);
+Vue.use(Vuex)
 
 export interface IRootState {
-  user: IUserState;
-  role: IRootState;
+  user: IUserState
+  role: IRootState
 }
 
-export default new Vuex.Store<IRootState>({});
+export default new Vuex.Store<IRootState>({})

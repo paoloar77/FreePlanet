@@ -23,7 +23,7 @@ export const ErroriMongoDb = {
 Vue.use(Vuex)
 
 @Module({ dynamic: true, store, name: 'user' })
-class User extends VuexModule {
+class User extends VuexModule implements IUserState {   // Non occorrono i getters, basta questi qui:
   _id: IUserState['_id'] = ''
   email: IUserState['email'] = ''
   username: IUserState['username'] = ''
@@ -37,7 +37,7 @@ class User extends VuexModule {
   verifiedEmail: IUserState['verifiedEmail'] = false
   servercode: number = 0
 
-  getlang(): any {
+  getlang (): any {
     if (this.lang !== '') {
       return this.lang
     } else {
@@ -45,9 +45,9 @@ class User extends VuexModule {
     }
   }
 
-  sendRequest(url: string, method: string, mydata: any) {
+  sendRequest (url: string, method: string, mydata: any) {
     console.log('LANG ' + this.getlang())
-    const mytok: string = this.getTok()
+    let mytok: string = this.getTok()
 
     const authHeader = new Headers()
     authHeader.append('content-type', 'application/json')
@@ -65,7 +65,7 @@ class User extends VuexModule {
 
   }
 
-  getTok() {
+  getTok () {
     if (this.tokens) {
       if (typeof this.tokens[0] !== 'undefined') {
         return this.tokens[0].token
@@ -78,22 +78,22 @@ class User extends VuexModule {
   }
 
   @MutationAction({ mutate: [types.USER_PASSWORD] })
-  async setpassword(newstr: string) {
+  async setpassword (newstr: string) {
     return { password: newstr }
   }
 
   @MutationAction({ mutate: [types.USER_EMAIL] })
-  async setemail(newstr: string) {
+  async setemail (newstr: string) {
     return { email: newstr }
   }
 
   @MutationAction({ mutate: [types.USER_LANG] })
-  async setlang(newstr: string) {
+  async setlang (newstr: string) {
     return { lang: newstr }
   }
 
   @Mutation
-  authUser(data: IUserState) {
+  authUser (data: IUserState) {
     this.username = data.username
     this.userId = data.userId
     this.idToken = data.idToken
@@ -104,7 +104,7 @@ class User extends VuexModule {
   }
 
   @Mutation
-  UpdatePwd(data: IIdToken) {
+  UpdatePwd (data: IIdToken) {
     this.idToken = data.idToken
     if (!this.tokens) {
       this.tokens = []
@@ -113,12 +113,12 @@ class User extends VuexModule {
   }
 
   @Mutation
-  setServerCode(servercode: number) {
+  setServerCode (servercode: number) {
     this.servercode = servercode
   }
 
   @Mutation
-  clearAuthData(): void {
+  clearAuthData (): void {
     this.username = ''
     this.tokens = []
     this.idToken = ''
@@ -127,7 +127,7 @@ class User extends VuexModule {
   }
 
   @Action({ commit: types.USER_UPDATEPWD })
-  resetpwd(paramquery: IUserState) {
+  resetpwd (paramquery: IUserState) {
     let call = process.env.MONGODB_HOST + '/updatepwd'
     console.log('CALL ' + call)
 
@@ -172,7 +172,7 @@ class User extends VuexModule {
   }
 
   @Action({ commit: types.USER_REQUESTRESETPWD })
-  requestpwd(paramquery: IUserState) {
+  requestpwd (paramquery: IUserState) {
 
     let call = process.env.MONGODB_HOST + '/requestnewpwd'
     console.log('CALL ' + call)
@@ -210,7 +210,7 @@ class User extends VuexModule {
   }
 
   @Action({ commit: types.USER_VREG })
-  vreg(paramquery: ILinkReg) {
+  vreg (paramquery: ILinkReg) {
     let call = process.env.MONGODB_HOST + '/vreg'
     console.log('CALL ' + call)
 
@@ -251,7 +251,7 @@ class User extends VuexModule {
   }
 
   @Action({ commit: types.USER_VREG })
-  signup(authData: IUserState) {
+  signup (authData: IUserState) {
     let call = process.env.MONGODB_HOST + '/users'
     console.log('CALL ' + call)
 
@@ -347,7 +347,7 @@ class User extends VuexModule {
   }
 
   @Action({ commit: types.USER_SIGNIN })
-  signin(authData: IUserState) {
+  signin (authData: IUserState) {
     let call = process.env.MONGODB_HOST + '/users/login'
     console.log('LOGIN ' + call)
 
@@ -447,7 +447,7 @@ class User extends VuexModule {
   }
 
   @Action({ commit: types.USER_AUTOLOGIN })
-  autologin() {
+  autologin () {
     const token = localStorage.getItem('token')
     if (!token) {
       return
@@ -470,7 +470,7 @@ class User extends VuexModule {
   }
 
   @Action({ commit: types.USER_LOGOUT })
-  logout() {
+  logout () {
 
     let call = process.env.MONGODB_HOST + '/users/me/token'
     console.log('CALL ' + call)

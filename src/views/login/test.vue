@@ -11,18 +11,11 @@
             <!--Prova URL :  {{env('PROVA_PAOLO')}}-->
 
             <q-field
-                    :error="$v.form.email.$error"
-                    :error-label="`${errorMsg('email', $v.form.email)}`"
             >
                 <q-input
                         v-validate="'required|email'"
                         v-model="form.email"
                         :value="form.email"
-                        @change="val => { form.email = val }"
-                        :before="[{icon: 'mail', handler () {}}]"
-                        @blur="$v.form.email.$touch"
-                        :error="$v.form.email.$error"
-                        :float-label="$t('reg.email')"
                 />
             </q-field>
         </q-page>
@@ -31,8 +24,7 @@
 
 <script lang="ts">
   import { Component, Vue, Watch } from 'vue-property-decorator';
-  import { UserModule } from '@/store/modules/user';
-
+  import { UserModule } from '@/store/modules/useraa';
 
 
   @Component({})
