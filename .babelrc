@@ -1,27 +1,31 @@
 {
   "env": {
     "test": {
-      "presets": [    [
-        "@babel/preset-env", {
-          "modules": "commonjs",
-          "targets": {
-            "node": "current"
+      "presets": [
+        [
+          "@babel/preset-env",
+          {
+            "modules": "commonjs",
+            "targets": {
+              "node": "current"
+            }
           }
-        }
-      ]
+        ]
       ]
     }
   },
   "presets": [
     [
-      "@babel/preset-env", {
+      "@babel/preset-env",
+      {
         "modules": false,
         "loose": false,
         "useBuiltIns": "usage"
       }
     ],
     [
-      "@babel/preset-stage-2", {
+      "@babel/preset-stage-2",
+      {
         "modules": false,
         "loose": false,
         "useBuiltIns": true,
@@ -31,9 +35,10 @@
   ],
   "plugins": [
     [
-      "@babel/plugin-transform-runtime", {
-        "polyfill": false,
-        "regenerator": false
+      "@babel/plugin-transform-runtime",
+      {
+        "regenerator": true,
+        "helpers": true
       }
     ]
   ],

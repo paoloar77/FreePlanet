@@ -2,7 +2,8 @@
 
 const path = require('path');
 
-//const envparser = require('./config/envparser');
+// Carica il file .env
+const envparser = require('./config/envparser');
 
 const extendTypescriptToWebpack = (config) => {
   config.resolve

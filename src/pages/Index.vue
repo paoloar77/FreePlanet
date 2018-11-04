@@ -43,8 +43,6 @@
   import { Component, Vue, Watch, Prop } from 'vue-property-decorator'
   import { GlobModule } from '@/store/modules/glob'
 
-  //import { Notify } from 'quasar'
-
   @Component({})
   export default class Login extends Vue {
     text = ''
@@ -71,15 +69,12 @@
 
     set conta(valore) {
       GlobModule.setConta(valore)
+      var my = process.env.LANG_DEFAULT;
+      this.showNotification(String(my));
     }
 
-    mounted() {
-      console.log("mounted")
-    }
-
-
-    showNotification() {
-      this.$q.notify('Some other message')
+    showNotification(msg:string) {
+      this.$q.notify(msg)
     }
 
     initprompt() {

@@ -10,8 +10,8 @@ declare module 'quasar' {
 
 declare module 'quasar/types' {
   import Vue, { VueConstructor, ComponentOptions } from 'vue'
-  import VueRouter from 'vue-router';
-  import { Store } from 'vuex';
+  import VueRouter from 'vue-router'
+  import { Store } from 'vuex'
 
   export interface QuasarSsrContext {
     req: {
