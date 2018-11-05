@@ -15,34 +15,26 @@
 
     </div>
 </template>
-<script type="text/javascript">
+<script type="ts">
+
+  import { Component, Vue} from 'vue-property-decorator'
+  import { UserModule } from './store/modules/user'
+
   import Header from './components/Header.vue';
 
-  import * as types from './store/mutation-types'
-
-  import {mapGetters, mapActions} from 'vuex'
-
-  export default {
-    name: 'app',
-    data() {
-      return {
-        backgroundColor: 'whitesmoke'
-      }
-    },
-    computed: {
-      ...mapGetters("glob", ['getLayoutNeeded', 'getMobileMode'])
-    },
+  @Component({
     components: {
       appHeader: Header,
-    },
-    methods:{
-      ...mapActions("user", {
-        tryAutoLogin: types.USER_AUTOLOGIN,
-      }),
-    },
-    created() {
+    }
+  })
+  export default class App extends Vue {
+    backgroundColor = 'whitesmoke'
+
+    constructor () {
+      super()
+      //this.title = 'My Vue and CosmosDB Heroes App'
       console.info(process.env);
-      this.tryAutoLogin();
+      UserModule.autologin()
     }
   }
 </script>

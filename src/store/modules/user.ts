@@ -2,6 +2,8 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 
 import { Module, VuexModule, Mutation, MutationAction, Action, getModule } from 'vuex-module-decorators'
+import {Route} from 'vue-router'
+import store from '@/store'
 
 const bcrypt = require('bcryptjs')
 
@@ -10,7 +12,6 @@ import { serv_constants } from '@/store/modules/serv_constants'
 
 import { IUserState, ILinkReg, IResult, IIdToken } from '@/types'
 
-import store from '@/store'
 
 export const ErroriMongoDb = {
   CALLING: 10,
@@ -30,7 +31,7 @@ class User extends VuexModule implements IUserState {   // Non occorrono i gette
   idapp: IUserState['idapp'] = process.env.APP_ID
   password: IUserState['password'] = ''
   lang: IUserState['lang'] = ''
-  ripetipassword: IUserState['ripetipassword'] = ''
+  repeatPassword: IUserState['repeatPassword'] = ''
   idToken: IUserState['idToken'] = ''
   userId: IUserState['userId'] = 0
   tokens: IUserState['tokens'] = []
@@ -98,6 +99,7 @@ class User extends VuexModule implements IUserState {   // Non occorrono i gette
     this.userId = data.userId
     this.idToken = data.idToken
     this.verifiedEmail = data.verifiedEmail
+    // @ts-ignore
     this.tokens = [
       { access: 'auth', token: data.idToken }
     ]

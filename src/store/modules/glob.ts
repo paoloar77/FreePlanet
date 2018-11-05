@@ -9,15 +9,6 @@ import store from '@/store'
 
 Vue.use(Vuex)
 
-export interface IGlob {
-  conta: number
-  isLoginPage: boolean
-  layoutNeeded: boolean
-  mobileMode: boolean
-  menuCollapse: boolean
-  posts: string[]
-}
-
 
 @Module({ dynamic: true, store, name: 'glob' })
 class Glob extends VuexModule {   // Non occorrono i getters, basta questi qui:

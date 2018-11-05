@@ -2,8 +2,9 @@
 
 const path = require('path');
 
-// Carica il file .env
-const envparser = require('./config/envparser');
+const webpack = require('webpack')
+const envparser = require('./config/envparser')
+
 
 const extendTypescriptToWebpack = (config) => {
   config.resolve
@@ -41,6 +42,7 @@ module.exports = function (ctx) {
     ],
     supportIE: false,
     build: {
+      env: envparser(),
       scopeHoisting: true,
       vueRouterMode: 'history',
       vueCompiler: true,

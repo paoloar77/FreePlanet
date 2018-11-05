@@ -1,5 +1,5 @@
 const DotEnv = require('dotenv')
-const parsedEnv = DotEnv.config({ debug: process.env.DEBUG }).parsed;
+const parsedEnv = DotEnv.config().parsed;
 
 module.exports = function () {
   // Let's stringify our variables

@@ -49,68 +49,49 @@
     </div>
 </template>
 
-<script>
-  import {openURL} from 'quasar';
+<script lang="ts">
+  import { Component, Vue, Watch } from 'vue-property-decorator'
 
-  import {Quasar} from 'quasar';
+  import { UserModule } from '../store/modules/user'
 
   import drawer from '../layouts/drawer/drawer.vue'
   import messagePopover from '../layouts/toolbar/messagePopover.vue'
 
-  // import user from '../store/modules/user';
-
-  import * as types from '../store/mutation-types'
-
-  import {mapGetters, mapActions} from 'vuex'
-
-  export default {
+  @Component({
     components: {
       drawer,
       messagePopover,
     },
-    created() {
-      //this.$store.dispatch('initStocks');
-    },
-    methods: {
-      openURL,
-    },
-    computed: {
-      ...mapGetters("user", [
-        'getUsername',
-      ]),
-    },
-    data: function () {
-      return {
-        prova: 'AA',
-        selectOpLang: [
-          {label: 'Italian', icon: 'fa-facebook', value: 'it'},
-          {label: 'English (US)', icon: 'fa-flag-us', value: 'en-us'},
-          {label: 'Spanish', icon: 'fa-flag-es', value: 'es'},
-          {label: 'German', icon: 'fa-flag-de', value: 'de'}
-        ],
-        lang: this.$q.i18n.lang,
-        leftDrawerOpen: this.$q.platform.is.desktop
-      }
-    },
-    watch: {
-      lang(lang) {
-        this.$i18n.locale = snakeToCamel(lang);
-        console.log("LANG LOCALE = " + this.$i18n.locale);
+  })
+  export default class Header extends Vue {
+    prova = 'AA'
+    selectOpLang = [
+      { label: 'Italian', icon: 'fa-facebook', value: 'it' },
+      { label: 'English (US)', icon: 'fa-flag-us', value: 'en-us' },
+      { label: 'Spanish', icon: 'fa-flag-es', value: 'es' },
+      { label: 'German', icon: 'fa-flag-de', value: 'de' }
+    ]
+    lang = this.$q.i18n.lang
+    leftDrawerOpen = this.$q.platform.is.desktop
 
-        // dynamic import, so loading on demand only
-        import(`quasar-framework/i18n/${lang}`).then(lang => {
-          //console.log("lang prima = " + this.$q.i18n.lang);
-          this.$q.i18n.set(lang.default);
-          var mylang = this.$q.i18n.lang;
-          console.log("lang = " + this.$q.i18n.lang);
-          //console.log("lang DOPO = " + this.$q.i18n.lang);
-          import(`src/i18n`).then(function () {
+    @Watch('lang')
+    lang(lang: string) {
+      this.$i18n.locale = snakeToCamel(lang)
+      console.log("LANG LOCALE = " + this.$i18n.locale)
 
-          });
-        });
+      // dynamic import, so loading on demand only
+      import(`quasar-framework/i18n/${lang}`).then(lang => {
+        //console.log("lang prima = " + this.$q.i18n.lang);
+        this.$q.i18n.set(lang.default)
+        var mylang = this.$q.i18n.lang
+        console.log("lang = " + this.$q.i18n.lang)
+        //console.log("lang DOPO = " + this.$q.i18n.lang);
+        import(`src/i18n`).then(function () {
 
-        // dynamic import, so loading on demand only
-      }
+        })
+      })
+
+      // dynamic import, so loading on demand only
     }
   }
 

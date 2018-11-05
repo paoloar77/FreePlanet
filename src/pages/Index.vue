@@ -41,7 +41,7 @@
 
 <script lang="ts">
   import { Component, Vue, Watch, Prop } from 'vue-property-decorator'
-  import { GlobModule } from '@/store/modules/glob'
+  import { GlobModule } from '../store/modules/glob'
 
   @Component({})
   export default class Login extends Vue {

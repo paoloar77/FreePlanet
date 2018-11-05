@@ -12,7 +12,8 @@ module.exports = {
     '<rootDir>/src/pages/**/*.vue',
     '<rootDir>/src/plugins/**/*.ts',
     '<rootDir>/src/mixins/**/*.ts',
-    '<rootDir>/src/directives/**/*.ts'
+    '<rootDir>/src/directives/**/*.ts',
+    '<rootDir>/src/utils/**/*.ts'
   ],
   coverageThreshold: {
     global: {

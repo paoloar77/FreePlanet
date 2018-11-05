@@ -8,8 +8,8 @@ export default ({ app, store, Vue }) => {
 
   console.log("PLUGINS INIT....");
 
-  console.log("LANG_DEFAULT: ")
-  console.log(process.env.LANG_DEFAULT)
+  //console.log("LANG_DEFAULT: ")
+  //console.log(process.env.LANG_DEFAULT)
 
   // Set i18n instance on app
   app.i18n = new VueI18n({

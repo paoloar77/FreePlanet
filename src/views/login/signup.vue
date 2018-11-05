@@ -11,71 +11,72 @@
             <!--Prova URL :  {{env('PROVA_PAOLO')}}-->
 
             <q-field
-                    :error="$v.form.email.$error"
-                    :error-label="`${errorMsg('email', $v.form.email)}`"
+                    :error="$v.user.email.$error"
+                    :error-label="`${errorMsg('email', $v.user.email)}`"
             >
                 <q-input
-                        v-model="form.email"
-                        :value="form.email"
-                        @change="val => { form.email = val }"
+                        v-model="user.email"
+                        v-validate="'required|email|truthy'"
+                        :value="user.email"
+                        @change="val => { user.email = val }"
                         :before="[{icon: 'mail', handler () {}}]"
-                        @blur="$v.form.email.$touch"
-                        :error="$v.form.email.$error"
+                        @blur="$v.user.email.$touch"
+                        :error="$v.user.email.$error"
                         :float-label="$t('reg.email')"
                 />
             </q-field>
 
             <q-field
-                    :error="$v.form.username.$error"
-                    :error-label="`${errorMsg('username', $v.form.username)}`"
+                    :error="$v.user.username.$error"
+                    :error-label="`${errorMsg('username', $v.user.username)}`"
             >
                 <q-input
-                        :value="form.username"
-                        @change="val => { form.username = val }"
+                        :value="user.username"
+                        @change="val => { user.username = val }"
                         :before="[{icon: 'person', handler () {}}]"
-                        @blur="$v.form.username.$touch"
-                        :error="$v.form.username.$error"
+                        @blur="$v.user.username.$touch"
+                        :error="$v.user.username.$error"
                         :float-label="$t('reg.username')"
                 />
             </q-field>
 
             <q-field
-                    :error="$v.form.password.$error"
-                    :error-label="`${errorMsg('password', $v.form.password)}`"
+                    :error="$v.user.password.$error"
+                    :error-label="`${errorMsg('password', $v.user.password)}`"
             >
                 <q-input
-                        v-model="form.password"
+                        v-model="user.password"
                         :before="[{icon: 'vpn_key', handler () {}}]"
-                        @blur="$v.form.password.$touch"
-                        :error="$v.form.password.$error"
+                        @blur="$v.user.password.$touch"
+                        :error="$v.user.password.$error"
                         :float-label="$t('reg.password')"
                 />
             </q-field>
 
             <q-field
-                    :error="$v.form.repeatPassword.$error"
-                    :error-label="`${errorMsg('repeatpassword', $v.form.repeatPassword)}`"
+                    :error="$v.user.repeatPassword.$error"
+                    :error-label="`${errorMsg('repeatpassword', $v.user.repeatPassword)}`"
             >
                 <q-input
-                        v-model="form.repeatPassword"
+                        v-model="user.repeatPassword"
                         :before="[{icon: 'vpn_key', handler () {}}]"
-                        @blur="$v.form.repeatPassword.$touch"
-                        :error="$v.form.repeatPassword.$error"
+                        @blur="$v.user.repeatPassword.$touch"
+                        :error="$v.user.repeatPassword.$error"
                         :float-label="$t('reg.repeatPassword')"
                 />
             </q-field>
 
             <q-field
-                    :error="$v.form.terms.$error"
-                    :error-label="`${errorMsg('terms', $v.form.terms)}`"
+                    :error="$v.user.terms.$error"
+                    :error-label="`${errorMsg('terms', $v.user.terms)}`"
             >
 
                 <q-checkbox
-                        v-model="form.terms"
+                        v-model="user.terms"
                         :before="[{icon: 'vpn_key', handler () {}}]"
                         color="secondary"
-                        @blur="$v.form.terms.$touch"
-                        :error="$v.form.terms.$error"
+                        @blur="$v.user.terms.$touch"
+                        :error="$v.user.terms.$error"
                         :float-label="$t('reg.terms')"
                         :label="$t('reg.terms')"
                 />
@@ -92,45 +93,42 @@
     </div>
 </template>
 
-<script>
+<script type="ts">
+  import Vue from 'vue'
+  import { Component, Prop } from 'vue-property-decorator'
+  import { UserModule } from '../../store/modules/user'
+  import { IUserState } from "../../types";
+  import {ErroriMongoDb} from '../../store/modules/user'
 
-  import {
-    required,
-    email,
-    numeric,
-    minValue,
-    minLength,
-    maxLength,
-    sameAs,
-    requiredUnless
-  } from 'vuelidate/lib/validators'
+  /*
+  import VeeValidate from 'vee-validate'
+  Vue.use(VeeValidate)
+  import { Validator } from 'vee-validate'
 
-  import {mapGetters, mapActions} from 'vuex'
-  import * as types from '../../store/mutation-types'
+  Validator.extend('truthy', {
+    getMessage: field => 'The ' + field + ' value is not truthy.',
+    validate: value => !!value
+  })
+  */
 
-  //import {ErroriMongoDb} from '../../store/modules/user'
-  import axios from 'axios';
+  //import {Loading, QSpinnerFacebook, QSpinnerGears} from 'quasar'
 
-  import {Loading, QSpinnerFacebook, QSpinnerGears} from 'quasar'
+  @Component({})
+  export default class Signup extends Vue {
+    accountId: number = 0
+    duplicate_email: boolean = false
+    duplicate_username: boolean = false
+    user: IUserState = {
+      email: process.env.TEST_EMAIL,
+      username: process.env.TEST_USERNAME,
+      password: process.env.TEST_PASSWORD,
+      repeatPassword: process.env.TEST_PASSWORD,
+      dateOfBirth: '',
+      terms: true,
+    }
 
 
-  export default {
-    data() {
-      return {
-        url: process.env.VUE_APP_URL,
-        form: {
-          email: process.env.TEST_EMAIL,
-          username: process.env.TEST_USERNAME,
-          password: process.env.TEST_PASSWORD,
-          repeatPassword: process.env.TEST_PASSWORD,
-          dateOfBirth: '',
-          terms: true,
-        },
-        duplicate_email: false,
-        duplicate_username: false,
-      }
-    },
-    computed: {
+    /*
       ...mapGetters("user", [
         'getUsername',
         'getPassword',
@@ -141,10 +139,9 @@
         'getUserServer',
         'getServerCode',
       ]),
-      env() {
-        return env
-      },
-    },
+      */
+
+    /*
     validations: {
       isAsync: true,
       form: {
@@ -179,88 +176,91 @@
         terms: {required},
 
       }
-    },
-    methods: {
-      ...mapActions("user", {
-        signup: types.USER_SIGNUP,
-      }),
-      showNotif(msg) {
-        this.$q.notify(msg)
-      },
-      errorMsg(cosa, item) {
-        try {
-          if (!item.$error) return '';
-          if (item.$params.email && !item.email) return this.$t('reg.err.email');
+    }, */
+    env() {
+      return env
+    }
 
-          if (cosa === 'repeatpassword') {
-            if (!item.sameAsPassword) {
-              return this.$t('reg.err.sameaspassword');
-            }
+    showNotif(msg) {
+      this.$q.notify(msg)
+    }
+
+    errorMsg(cosa, item) {
+      try {
+        if (!item.$error) return ''
+        if (item.$params.email && !item.email) return this.$t('reg.err.email')
+
+        if (cosa === 'repeatpassword') {
+          if (!item.sameAsPassword) {
+            return this.$t('reg.err.sameaspassword')
           }
-
-          if (cosa === 'email') {
-            //console.log("EMAIL " + item.isUnique);
-            //console.log(item);
-            if (!item.isUnique) return this.$t('reg.err.duplicate_email');
-          } else if (cosa === 'username') {
-            //console.log(item);
-            if (!item.isUnique) return this.$t('reg.err.duplicate_username');
-          }
-
-          if (!item.required) return this.$t('reg.err.required');
-          if (!item.minLength) return this.$t('reg.err.atleast') + ` ${item.$params.minLength.min} ` + this.$t('reg.err.char');
-          if (!item.maxLength) return this.$t('reg.err.notmore') + ` ${item.$params.maxLength.max} ` + this.$t('reg.err.char');
-          return '';
-        } catch (error) {
-          //console.log("ERR : " + error);
-        }
-      },
-      checkErrors(riscode) {
-        //console.log("RIS = " + riscode);
-        if (riscode === ErroriMongoDb.DUPLICATE_EMAIL_ID) {
-          this.showNotif(this.$t('reg.err.duplicate_email'));
-        } else if (riscode === ErroriMongoDb.DUPLICATE_USERNAME_ID) {
-          this.showNotif(this.$t('reg.err.duplicate_username'));
-        } else if (riscode === ErroriMongoDb.OK) {
-          this.$router.push('/');
-        } else {
-          this.showNotif("Errore num " + riscode);
         }
 
-      },
-      submit() {
-        this.$v.form.$touch();
-
-        this.duplicate_email = false;
-        this.duplicate_username = false;
-
-        if (!this.form.terms) {
-          this.showNotif(this.$t('reg.err.terms'));
-          return
+        if (cosa === 'email') {
+          //console.log("EMAIL " + item.isUnique);
+          //console.log(item);
+          if (!item.isUnique) return this.$t('reg.err.duplicate_email')
+        } else if (cosa === 'username') {
+          //console.log(item);
+          if (!item.isUnique) return this.$t('reg.err.duplicate_username')
         }
 
-        if (this.$v.form.$error) {
-          this.showNotif(this.$t('reg.err.errore_generico'));
-          return
-        }
-
-        this.$q.loading.show({message: this.$t('reg.incorso')});
-
-        console.log(this.form);
-        this.signup(this.form)
-          .then((riscode) => {
-            this.checkErrors(riscode);
-            this.$q.loading.hide();
-          }).catch(error => {
-          console.log("ERROR = " + error);
-          this.$q.loading.hide();
-        });
-
-
-        // ...
+        if (!item.required) return this.$t('reg.err.required')
+        if (!item.minLength) return this.$t('reg.err.atleast') + ` ${item.$params.minLength.min} ` + this.$t('reg.err.char')
+        if (!item.maxLength) return this.$t('reg.err.notmore') + ` ${item.$params.maxLength.max} ` + this.$t('reg.err.char')
+        return ''
+      } catch (error) {
+        //console.log("ERR : " + error);
       }
-    },
+    }
+
+    checkErrors(riscode) {
+      //console.log("RIS = " + riscode);
+      if (riscode === ErroriMongoDb.DUPLICATE_EMAIL_ID) {
+        this.showNotif(this.$t('reg.err.duplicate_email'))
+      } else if (riscode === ErroriMongoDb.DUPLICATE_USERNAME_ID) {
+        this.showNotif(this.$t('reg.err.duplicate_username'))
+      } else if (riscode === ErroriMongoDb.OK) {
+        this.$router.push('/')
+      } else {
+        this.showNotif("Errore num " + riscode)
+      }
+
+    }
+
+    submit() {
+      this.$v.user.$touch()
+
+      this.duplicate_email = false
+      this.duplicate_username = false
+
+      if (!this.user.terms) {
+        this.showNotif(this.$t('reg.err.terms'))
+        return
+      }
+
+      if (this.$v.user.$error) {
+        this.showNotif(this.$t('reg.err.errore_generico'))
+        return
+      }
+
+      this.$q.loading.show({ message: this.$t('reg.incorso') })
+
+      console.log(this.user)
+      UserModule.signup(this.user)
+        .then((riscode) => {
+          this.checkErrors(riscode)
+          this.$q.loading.hide()
+        }).catch(error => {
+        console.log("ERROR = " + error)
+        this.$q.loading.hide()
+      })
+
+
+      // ...
+    }
   }
+
 </script>
 
 <style scoped>
