@@ -69,7 +69,7 @@
 
     set conta(valore) {
       GlobModule.setConta(valore)
-      var my = process.env.LANG_DEFAULT;
+      var my = this.$q.i18n.lang;
       this.showNotification(String(my));
     }
 

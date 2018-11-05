@@ -448,7 +448,7 @@ class User extends VuexModule implements IUserState {   // Non occorrono i gette
       })
   }
 
-  @Action({ commit: types.USER_AUTOLOGIN })
+  @Mutation
   autologin () {
     const token = localStorage.getItem('token')
     if (!token) {

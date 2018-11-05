@@ -94,10 +94,9 @@
 </template>
 
 <script type="ts">
-  import Vue from 'vue'
-  import { Component, Prop } from 'vue-property-decorator'
+  import { Component, Vue, Prop } from 'vue-property-decorator'
   import { UserModule } from '../../store/modules/user'
-  import { IUserState } from "../../types";
+  //import { IUserState } from "../../types";
   import {ErroriMongoDb} from '../../store/modules/user'
 
   /*
@@ -114,11 +113,10 @@
   //import {Loading, QSpinnerFacebook, QSpinnerGears} from 'quasar'
 
   @Component({})
-  export default class Signup extends Vue {
-    accountId: number = 0
-    duplicate_email: boolean = false
-    duplicate_username: boolean = false
-    user: IUserState = {
+  export default class Signup extends Vue  {
+    duplicate_email = false
+    duplicate_username = false
+    user = {
       email: process.env.TEST_EMAIL,
       username: process.env.TEST_USERNAME,
       password: process.env.TEST_PASSWORD,
