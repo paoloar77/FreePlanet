@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
-import { IUserState, IGlobState } from '@/types'
+import { IUserState, IGlobState } from '@/model'
 
 Vue.use(Vuex)
 

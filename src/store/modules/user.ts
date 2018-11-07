@@ -10,7 +10,8 @@ const bcrypt = require('bcryptjs')
 import * as types from '@/store/mutation-types'
 import { serv_constants } from '@/store/modules/serv_constants'
 
-import { IUserState, ILinkReg, IResult, IIdToken } from '@/types'
+import { IUserState } from '@/model'
+import { ILinkReg, IResult, IIdToken } from '@/types'
 
 
 export const ErroriMongoDb = {

@@ -1,0 +1,100 @@
+<div>
+    <q-page padding class="signup">
+        <div class="text-center">
+            <p>
+                <!--<img src="../../../assets/quasar-logo-full.svg">-->
+                <img :src="`../../../assets/`+`${env('LOGO_REG')}`">
+            </p>
+        </div>
+
+        PROVAA
+
+        <!--Prova URL :  {{env('PROVA_PAOLO')}}-->
+        <!--
+
+        <q-field
+                :error="v.user.email.error"
+                error-label="{{ errors.first('email') }}"
+        >
+            <q-input
+                    v-model="user.email"
+                    v-validate="'required|email|truthy'"
+                    :value="user.email"
+                    @change="val => { user.email = val }"
+                    :before="[{icon: 'mail', handler () {}}]"
+                    @blur="v.user.email.touch"
+                    :error="v.user.email.error"
+                    :float-label="$t('reg.email')"
+            />
+        </q-field>
+
+        <q-field
+                :error="v.user.username.$error"
+                :error-label="`${errorMsg('username', v.user.username)}`"
+        >
+            <q-input
+                    :value="user.username"
+                    @change="val => { user.username = val }"
+                    :before="[{icon: 'person', handler () {}}]"
+                    @blur="v.user.username.$touch"
+                    :error="v.user.username.$error"
+                    :float-label="$t('reg.username')"
+            />
+        </q-field>
+
+        <q-field
+                :error="v.user.password.$error"
+                :error-label="`${errorMsg('password', v.user.password)}`"
+        >
+            <q-input
+                    v-model="user.password"
+                    :before="[{icon: 'vpn_key', handler () {}}]"
+                    @blur="v.user.password.$touch"
+                    :error="v.user.password.$error"
+                    :float-label="$t('reg.password')"
+            />
+        </q-field>
+
+        <q-field
+                :error="v.user.repeatPassword.$error"
+                :error-label="`${errorMsg('repeatpassword', v.user.repeatPassword)}`"
+        >
+            <q-input
+                    v-model="user.repeatPassword"
+                    :before="[{icon: 'vpn_key', handler () {}}]"
+                    @blur="v.user.repeatPassword.$touch"
+                    :error="v.user.repeatPassword.$error"
+                    :float-label="$t('reg.repeatPassword')"
+            />
+        </q-field>
+
+        <q-field
+                :error="v.user.terms.$error"
+                :error-label="`${errorMsg('terms', v.user.terms)}`"
+        >
+
+            <q-checkbox
+                    v-model="user.terms"
+                    :before="[{icon: 'vpn_key', handler () {}}]"
+                    color="secondary"
+                    @blur="v.user.terms.$touch"
+                    :error="v.user.terms.$error"
+                    :float-label="$t('reg.terms')"
+                    :label="$t('reg.terms')"
+            />
+        </q-field>
+
+        -->
+
+        <br>
+
+        <!--
+        <div align="center">
+            <q-btn rounded size="lg" color="primary" @click="submit" :disable="">{{$t('reg.submit')}}
+            </q-btn>
+        </div>
+
+        -->
+
+    </q-page>
+</div>
