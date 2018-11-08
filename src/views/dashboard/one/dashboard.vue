@@ -58,7 +58,6 @@
   import { mapActions } from 'vuex'
   import * as types from '../../../store/mutation-types'
   export default {
-    name: 'Home',
     mounted () {
       // Axios.all not working
     },

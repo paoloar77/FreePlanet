@@ -11,7 +11,7 @@ import * as types from '@/store/mutation-types'
 import { serv_constants } from '@/store/modules/serv_constants'
 
 import { IUserState } from '@/model'
-import { ILinkReg, IResult, IIdToken } from '@/types'
+import { ILinkReg, IResult, IIdToken } from '@/model/other'
 
 
 export const ErroriMongoDb = {

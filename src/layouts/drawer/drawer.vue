@@ -31,8 +31,6 @@
   import menuOne from './menuOne.vue'
   import menuTwo from './menuTwo.vue'
 
-  import * as types from '../../store/mutation-types'
-
   import { Component, Vue, Watch, Prop } from 'vue-property-decorator'
   import { GlobModule } from '../../store/modules/glob'
   import { UserModule } from '../../store/modules/user';

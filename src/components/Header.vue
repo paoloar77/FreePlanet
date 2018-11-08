@@ -59,8 +59,6 @@
 
   // import user from '../store/modules/user';
 
-  import * as types from '../store/mutation-types'
-
   export default {
     components: {
       drawer,

@@ -2,7 +2,7 @@
   "compilerOptions": {
     "allowSyntheticDefaultImports": true,
     "listEmittedFiles": false,
-    "module": "es2015",
+    "module": "esnext",
     "moduleResolution": "Node",
     "target": "es2015",
     "strict": true,
@@ -26,6 +26,7 @@
   },
   "include": [
     "src/**/*.ts",
+    "src/**/*.html",
     "src/**/*.vue",
     "test/**/*.ts"
   ],
@@ -33,5 +34,8 @@
     ".quasar",
     "dist",
     "node_modules"
+  ],
+  "files": [
+    "./shims-vue.d.ts"
   ]
 }

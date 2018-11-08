@@ -1,4 +1,4 @@
-import { IToken } from '@/types'
+import { IToken } from '@/model/other'
 
 export const DefaultUser = <IUserState>{
   email: '',

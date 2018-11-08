@@ -6,20 +6,18 @@ import { validationMixin } from 'vuelidate'
 import { required, minValue } from 'vuelidate/lib/validators'
 import { ISignupOptions, IUserState } from '@/model'
 import { validations, TSignup } from './signup-validate'
-// import './signup.scss'
+
+import './signup.scss'
 
 // import {Loading, QSpinnerFacebook, QSpinnerGears} from 'quasar'
 
 @Component({
   mixins: [validationMixin],
   name: 'Signup',
-  // template: require('./signup.html'),
   validations: validations
 })
 
 export default class Signup extends Vue {
-  myProperty: string = ''
-
   duplicate_email: boolean = false
   duplicate_username: boolean = false
   user: ISignupOptions = {
@@ -31,6 +29,7 @@ export default class Signup extends Vue {
   terms = true
 
   $v: any
+  $t: any
 
   constructor() {
     super()
@@ -96,8 +95,7 @@ export default class Signup extends Vue {
     this.$q.notify(msg)
   }
 
-  /*
-  errorMsg(cosa: string, item: string) {
+  errorMsg(cosa: string, item: any) {
     try {
       if (!item.$error) return ''
       if (item.$params.email && !item.email) return this.$t('reg.err.email')
@@ -109,11 +107,11 @@ export default class Signup extends Vue {
       }
 
       if (cosa === 'email') {
-        //console.log("EMAIL " + item.isUnique);
-        //console.log(item);
+        // console.log("EMAIL " + item.isUnique);
+        // console.log(item);
         if (!item.isUnique) return this.$t('reg.err.duplicate_email')
       } else if (cosa === 'username') {
-        //console.log(item);
+        // console.log(item);
         if (!item.isUnique) return this.$t('reg.err.duplicate_username')
       }
 
@@ -122,12 +120,12 @@ export default class Signup extends Vue {
       if (!item.maxLength) return this.$t('reg.err.notmore') + ` ${item.$params.maxLength.max} ` + this.$t('reg.err.char')
       return ''
     } catch (error) {
-      //console.log("ERR : " + error);
+      // console.log("ERR : " + error);
     }
   }
 
-  checkErrors(riscode) {
-    //console.log("RIS = " + riscode);
+  checkErrors(riscode: number) {
+    // console.log("RIS = " + riscode);
     if (riscode === ErroriMongoDb.DUPLICATE_EMAIL_ID) {
       this.showNotif(this.$t('reg.err.duplicate_email'))
     } else if (riscode === ErroriMongoDb.DUPLICATE_USERNAME_ID) {
@@ -135,10 +133,11 @@ export default class Signup extends Vue {
     } else if (riscode === ErroriMongoDb.OK) {
       this.$router.push('/')
     } else {
-      this.showNotif("Errore num " + riscode)
+      this.showNotif('Errore num ' + riscode)
     }
 
   }
+  /*
 
 
   submit() {

@@ -21,6 +21,17 @@ const extendTypescriptToWebpack = (config) => {
     })
 };
 
+const extendHTMLToWebpack = (config) => {
+  config.resolve
+    .extensions
+    .add('.html');
+  config.module
+    .rule('html')
+    .test(/\.html?$/)
+    .use('html')
+    .loader('vue-html-loader')
+};
+
 module.exports = function (ctx) {
   return {
     sourceFiles: {
@@ -42,6 +53,7 @@ module.exports = function (ctx) {
     ],
     supportIE: false,
     build: {
+      showProgress: true,
       env: envparser(),
       scopeHoisting: true,
       vueRouterMode: 'history',
@@ -51,6 +63,7 @@ module.exports = function (ctx) {
       // extractCSS: false,
       chainWebpack(config) {
         extendTypescriptToWebpack(config);
+        // extendHTMLToWebpack(config);
         config.resolve
           .alias
           .set('~', __dirname)

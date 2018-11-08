@@ -8,12 +8,17 @@ module.exports = {
   coverageDirectory: '<rootDir>/test/coverage',
   collectCoverageFrom: [
     '<rootDir>/src/components/**/*.vue',
+    '<rootDir>/src/common/**/*.ts',
+    '<rootDir>/src/directives/**/*.ts',
     '<rootDir>/src/layouts/**/*.vue',
+    '<rootDir>/src/mixins/**/*.ts',
+    '<rootDir>/src/model/**/*.ts',
     '<rootDir>/src/pages/**/*.vue',
     '<rootDir>/src/plugins/**/*.ts',
-    '<rootDir>/src/mixins/**/*.ts',
-    '<rootDir>/src/directives/**/*.ts',
-    '<rootDir>/src/utils/**/*.ts'
+    '<rootDir>/src/root/**/*.ts',
+    '<rootDir>/src/utils/**/*.ts',
+    '<rootDir>/src/views/**/*.ts',
+    '<rootDir>/src/views/**/*.vue',
   ],
   coverageThreshold: {
     global: {

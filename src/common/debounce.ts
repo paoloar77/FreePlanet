@@ -2,8 +2,8 @@
  * Returns a function, that, as long as it continues to be invoked, will not
  * be triggered. The function will be called after it stops being called for
  * N milliseconds. If `immediate` is passed, trigger the function on the
- * leading edge, instead of the trailing. The function also has a property 'clear' 
- * that is a function which will clear the timer to prevent previously scheduled executions. 
+ * leading edge, instead of the trailing. The function also has a property 'clear'
+ * that is a function which will clear the timer to prevent previously scheduled executions.
  *
  * @source underscore.js
  * @see http://unscriptable.com/2009/03/20/debouncing-javascript-methods/
@@ -14,13 +14,17 @@
  */
 
 export function Debounce(func: Function, wait?: number, immediate?: boolean) {
-  let timeout, args, context, timestamp, result
-  if (null == wait) wait = 100
+  // @ts-ignore
+  let timeout: any, args: any, context: any, timestamp: any, result: any
+  if (null == wait)
+    wait = 100
 
   function later() {
     let last = Date.now() - timestamp
 
+    // @ts-ignore
     if (last < wait && last > 0) {
+      // @ts-ignore
       timeout = setTimeout(later, wait - last)
     } else {
       timeout = null
@@ -33,6 +37,7 @@ export function Debounce(func: Function, wait?: number, immediate?: boolean) {
 
   let debounced = function () {
 
+    // @ts-ignore
     context = this
     args = arguments
     timestamp = Date.now()
