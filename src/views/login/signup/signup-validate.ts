@@ -5,24 +5,26 @@ import { complexity, registered } from '@/validation'
 
 export type TSignup = { signup: ISignupOptions, validationGroup: string[] }
 
-export const validations: ValidationRuleset<TSignup> = {
+export const validations = {
     signup: {
-        confirmPassword: {
+       repeatPassword: {
             required,
             sameAsPassword: sameAs('password')
-        },
-        displayName: {
-            required,
-            minLength: minLength(2)
         },
         password: {
             required,
             complexity
         },
-        userName: {
+        username: {
             required,
-            email,
             registered
+        },
+        email: {
+          required,
+          email
+        },
+        terms: {
+         required
         }
     }
 }

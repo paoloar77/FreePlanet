@@ -67,7 +67,8 @@ module.exports = function (ctx) {
         config.resolve
           .alias
           .set('~', __dirname)
-          .set('@', path.resolve(__dirname, 'src'));
+          .set('@', path.resolve(__dirname, 'src'))
+          .set('@classes', path.resolve(__dirname, 'src/classes/index.ts'));
         config.module
           .rule('template-engine')
           .test(/\.pug$/)

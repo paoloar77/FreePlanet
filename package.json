@@ -20,6 +20,7 @@
     "deploy:ssr": "now dist/ssr-mat"
   },
   "dependencies": {
+    "@types/vuelidate": "^0.7.0",
     "axios": "^0.18.0",
     "babel-runtime": "^6.0.0",
     "bcrypt": "^3.0.2",

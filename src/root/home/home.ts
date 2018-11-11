@@ -13,6 +13,8 @@ export default class Home extends Vue {
   cardvisible: string = 'hidden'
   displaycard: string = 'block'
 
+  public $q
+
   constructor() {
     super()
     console.log('created...')

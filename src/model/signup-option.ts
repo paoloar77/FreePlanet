@@ -5,4 +5,5 @@ export interface ISignupOptions {
   password?: string
   lang?: string
   repeatPassword?: string
+  terms?: boolean
 }

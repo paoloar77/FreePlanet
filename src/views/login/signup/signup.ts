@@ -1,42 +1,43 @@
-import { Component, Vue, Prop } from 'vue-property-decorator'
+import Vue from 'vue'
+import { Component, Prop, Watch } from 'vue-property-decorator'
 import { UserModule } from '@/store/modules/user'
 import { ErroriMongoDb } from '@/store/modules/user'
 
-import { validationMixin } from 'vuelidate'
-import { required, minValue } from 'vuelidate/lib/validators'
+import { required, email, numeric, maxLength, maxValue, minValue, sameAs, minLength } from 'vuelidate/lib/validators'
 import { ISignupOptions, IUserState } from '@/model'
 import { validations, TSignup } from './signup-validate'
 
+import { validationMixin } from 'vuelidate'
+
 import './signup.scss'
+import { complexity, registered } from '@/validation'
 
 // import {Loading, QSpinnerFacebook, QSpinnerGears} from 'quasar'
 
 @Component({
   mixins: [validationMixin],
-  name: 'Signup',
   validations: validations
 })
 
 export default class Signup extends Vue {
+  public $v
+  public $q
+  $t: any
+
   duplicate_email: boolean = false
   duplicate_username: boolean = false
-  user: ISignupOptions = {
+
+  public signup: ISignupOptions = {
     email: process.env.TEST_EMAIL,
     username: process.env.TEST_USERNAME || '',
     password: process.env.TEST_PASSWORD,
-    repeatPassword: process.env.TEST_PASSWORD
+    repeatPassword: process.env.TEST_PASSWORD,
+    terms: true
   }
-  terms = true
 
-  $v: any
-  $t: any
-
-  constructor() {
-    super()
-  }
 
   created() {
-
+    this.$v.$reset()
   }
 
   mounted() {
@@ -47,7 +48,7 @@ export default class Signup extends Vue {
 
   get allowSubmit() {
 
-    let error = this.$v.signup.$error || this.$v.signup.$invalid
+    let error = this.$v.$error || this.$v.$invalid
     return !error
   }
 
@@ -95,7 +96,7 @@ export default class Signup extends Vue {
     this.$q.notify(msg)
   }
 
-  errorMsg(cosa: string, item: any) {
+  public errorMsg(cosa: string, item: any) {
     try {
       if (!item.$error) return ''
       if (item.$params.email && !item.email) return this.$t('reg.err.email')
@@ -137,40 +138,38 @@ export default class Signup extends Vue {
     }
 
   }
-  /*
-
 
   submit() {
-    this.$v.user.$touch()
+    this.$v.signup.$touch()
 
     this.duplicate_email = false
     this.duplicate_username = false
 
-    if (!this.user.terms) {
+    if (!this.signup.terms) {
       this.showNotif(this.$t('reg.err.terms'))
       return
     }
 
-    if (this.v.user.$error) {
+    if (this.$v.signup.$error) {
       this.showNotif(this.$t('reg.err.errore_generico'))
       return
     }
 
     this.$q.loading.show({ message: this.$t('reg.incorso') })
 
-    console.log(this.user)
-    UserModule.signup(this.user)
+    console.log(this.signup)
+    UserModule.signup(this.signup)
       .then((riscode) => {
         this.checkErrors(riscode)
         this.$q.loading.hide()
       }).catch(error => {
-      console.log("ERROR = " + error)
+      console.log('ERROR = ' + error)
       this.$q.loading.hide()
     })
 
 
     // ...
   }
-  */
+
 }
 

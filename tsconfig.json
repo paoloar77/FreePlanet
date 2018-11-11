@@ -1,24 +1,38 @@
 {
   "compilerOptions": {
-    "allowSyntheticDefaultImports": true,
-    "listEmittedFiles": false,
     "module": "esnext",
-    "moduleResolution": "Node",
-    "target": "es2015",
-    "strict": true,
-    "esModuleInterop": true,
-    "sourceMap": true,
+    "target": "es2016",
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
+    "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "noImplicitAny": true,
+    "removeComments": true,
+    "noImplicitAny": false,
+    "noUnusedLocals": false,
+    // "noUnusedParameters": true,
+    "pretty": true,
+    "noImplicitThis": true,
     "lib": [
       "dom",
-      "es6"
+      "es5",
+      "es2015",
+      "es2015.promise",
+      "es2017",
+      "es2017.object",
+      "es7"
     ],
     "baseUrl": ".",
     "paths": {
       "~/*": ["./*"],
-      "@/*": ["src/*"]
+      "@/*": ["src/*"],
+      "@classes": ["./classes/index.ts"],
+      "@types": ["./typings/index.ts"],
+      "@utils/*": ["./utils/*"],
+      "@validators": ["./utils/validators.ts"]
     },
+    "sourceMap": true,
+    "allowJs": true,
+    "skipLibCheck": true,
     "types": [
       "node",
       "jest"
@@ -35,7 +49,5 @@
     "dist",
     "node_modules"
   ],
-  "files": [
-    "./shims-vue.d.ts"
-  ]
+  "compileOnSave": true
 }
