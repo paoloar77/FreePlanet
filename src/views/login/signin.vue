@@ -4,7 +4,7 @@
             <div class="text-center">
                 <p>
                     <!--<img src="../../../assets/quasar-logo-full.svg">-->
-                    <img :src="`../../../assets/`+`${env('LOGO_REG')}`">
+                    <img src="../../../assets/{{ logoimg }}">
                 </p>
             </div>
 

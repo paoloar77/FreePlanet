@@ -10,7 +10,7 @@ const bcrypt = require('bcryptjs')
 import * as types from '@/store/mutation-types'
 import { serv_constants } from '@/store/modules/serv_constants'
 
-import { IUserState } from '@/model'
+import { ISignupOptions, IUserState } from '@/model'
 import { ILinkReg, IResult, IIdToken } from '@/model/other'
 
 
@@ -39,7 +39,7 @@ class User extends VuexModule implements IUserState {   // Non occorrono i gette
   verifiedEmail: IUserState['verifiedEmail'] = false
   servercode: number = 0
 
-  getlang (): any {
+  getlang() {
     if (this.lang !== '') {
       return this.lang
     } else {
@@ -253,18 +253,21 @@ class User extends VuexModule implements IUserState {   // Non occorrono i gette
       })
   }
 
-  @Action({ commit: types.USER_VREG })
-  signup (authData: IUserState) {
+  @Action({ commit: types.USER_SIGNUP })
+  signup (authData: ISignupOptions) {
     let call = process.env.MONGODB_HOST + '/users'
     console.log('CALL ' + call)
 
     // console.log("PASSW: " + authData.password);
 
+    let mylang = this.getlang()
+    console.log('MYLANG: ' + mylang)
+
     return bcrypt.hash(authData.password, bcrypt.genSaltSync(12))
       .then((hashedPassword: string) => {
         let usertosend = {
           keyappid: process.env.PAO_APP_ID,
-          lang: this.getlang(),
+          lang: mylang,
           email: authData.email,
           password: String(hashedPassword),
           username: authData.username,
@@ -350,7 +353,7 @@ class User extends VuexModule implements IUserState {   // Non occorrono i gette
   }
 
   @Action({ commit: types.USER_SIGNIN })
-  signin (authData: IUserState) {
+  signin (authData: ISignupOptions) {
     let call = process.env.MONGODB_HOST + '/users/login'
     console.log('LOGIN ' + call)
 

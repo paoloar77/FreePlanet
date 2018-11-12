@@ -3,7 +3,7 @@
         <div class="text-center">
             <p>
                 <!--<img src="../../../assets/quasar-logo-full.svg">-->
-                <img :src="`../../../assets/`+`${env('LOGO_REG')}`">
+                <img :src="`../../../assets/${logoimg()}`">
             </p>
         </div>
 
@@ -76,13 +76,15 @@
                     :label="$t('reg.terms')"></q-checkbox>
         </q-field>
 
-
-
         <br>
 
+        <q-btn rounded size="lg" color="primary" @click="submitOk" :disabled='!allowSubmit'>{{$t('reg.submit')}}
+        </q-btn>
+
         <!--
-        <div align="center">
-            <q-btn rounded size="lg" color="primary" @click="submit" :disable="">{{$t('reg.submit')}}
+
+                <div align="center">
+            <q-btn rounded size="lg" color="primary" @click="submitOk" :disable="">{{$t('reg.submit')}}
             </q-btn>
         </div>
 

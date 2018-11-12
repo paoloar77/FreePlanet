@@ -1,7 +1,7 @@
 import { ISignupOptions } from '@/model'
 import { required, minLength, email, sameAs } from 'vuelidate/lib/validators'
 import { ValidationRuleset } from 'vuelidate'
-import { complexity, registered } from '@/validation'
+import { complexity, registereduser, registeredemail } from '@/validation'
 
 export type TSignup = { signup: ISignupOptions, validationGroup: string[] }
 
@@ -17,11 +17,12 @@ export const validations = {
         },
         username: {
             required,
-            registered
+            registereduser
         },
         email: {
           required,
-          email
+          email,
+          registeredemail
         },
         terms: {
          required

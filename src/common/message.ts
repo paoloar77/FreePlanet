@@ -3,5 +3,6 @@ export const PayloadMessageTypes = {
     info: 'Info',
     failure: 'Failure',
     success: 'Success',
-    warning: 'Warning'
+    warning: 'Warning',
+    statusfound: 200
 }

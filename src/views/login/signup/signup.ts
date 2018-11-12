@@ -10,7 +10,6 @@ import { validations, TSignup } from './signup-validate'
 import { validationMixin } from 'vuelidate'
 
 import './signup.scss'
-import { complexity, registered } from '@/validation'
 
 // import {Loading, QSpinnerFacebook, QSpinnerGears} from 'quasar'
 
@@ -44,6 +43,10 @@ export default class Signup extends Vue {
     if (this.$v) {
       this.$v.$touch()
     }
+  }
+
+  public logoimg() {
+    return process.env.LOGO_REG
   }
 
   get allowSubmit() {
@@ -88,7 +91,7 @@ export default class Signup extends Vue {
 
     }
   }, */
-  env() {
+  public env() {
     return process.env
   }
 
@@ -117,6 +120,7 @@ export default class Signup extends Vue {
       }
 
       if (!item.required) return this.$t('reg.err.required')
+      if (!item.complexity) return this.$t('reg.err.complexity')
       if (!item.minLength) return this.$t('reg.err.atleast') + ` ${item.$params.minLength.min} ` + this.$t('reg.err.char')
       if (!item.maxLength) return this.$t('reg.err.notmore') + ` ${item.$params.maxLength.max} ` + this.$t('reg.err.char')
       return ''
@@ -139,7 +143,7 @@ export default class Signup extends Vue {
 
   }
 
-  submit() {
+  public submitOk() {
     this.$v.signup.$touch()
 
     this.duplicate_email = false
@@ -167,8 +171,6 @@ export default class Signup extends Vue {
       this.$q.loading.hide()
     })
 
-
-    // ...
   }
 
 }

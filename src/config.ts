@@ -19,7 +19,7 @@ const addProp = (obj: {}, propName: string, value: string) => {
 
 addProp(uri, 'auth', '/auth/')
 addProp(uri, 'content', '/api/content/')
-addProp(uri, 'site', '')
+addProp(uri, 'site', process.env.MONGODB_HOST)
 addProp(uri, 'services', '/api/')
 
 const config = {

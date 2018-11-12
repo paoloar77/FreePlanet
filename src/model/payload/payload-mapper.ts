@@ -9,7 +9,6 @@ export class PayloadMapper {
     private fromError<T>(o: Error): IPayload<T> {
 
       return {
-        // @ts-ignore
             data: null,
             message: {
                 messageTypeId: PayloadMessageTypes.error,
@@ -21,7 +20,6 @@ export class PayloadMapper {
 
     private fromAxiosError<T>(o: AxiosError): IPayload<T> {
 
-        // @ts-ignore
         let data: T = null
 
         if (o.response && isAxiosResponse(o.response))
@@ -39,7 +37,6 @@ export class PayloadMapper {
 
     private fromAxiosResponse<T>(o: AxiosResponse): IPayload<T> {
 
-      // @ts-ignore
         let value: IPayload<T> = null
 
         if (isPayload<T>(o.data))
@@ -49,7 +46,6 @@ export class PayloadMapper {
                 data: <any>o.data,
                 message: {
                     messageTypeId: PayloadMessageTypes.success,
-                  // @ts-ignore
                     text: null
                 }
             }
@@ -67,7 +63,6 @@ export class PayloadMapper {
         if (isAxiosResponse(o))
             return this.fromAxiosResponse<T>(o)
 
-        // @ts-ignore
         return null
     }
 }
