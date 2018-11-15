@@ -21,14 +21,18 @@
       "es2017.object",
       "es7"
     ],
-    "baseUrl": ".",
+    "baseUrl": "./src",
     "paths": {
-      "~/*": ["./*"],
-      "@/*": ["src/*"],
+      "@src/*": ["./*"],
       "@classes": ["./classes/index.ts"],
-      "@types": ["./typings/index.ts"],
       "@utils/*": ["./utils/*"],
-      "@validators": ["./utils/validators.ts"]
+      "@validators": ["./utils/validators.ts"],
+      "@router": ["./router/index.ts"],
+      "@paths": ["./store/Api/ApiRoutes.ts"],
+      "@types": ["./typings/index.ts"],
+      "@store": ["./store/index.ts"],
+      "@api": ["./store/Api/index.ts"],
+      "@modules": ["./store/Modules/index.ts"]
     },
     "sourceMap": true,
     "allowJs": true,

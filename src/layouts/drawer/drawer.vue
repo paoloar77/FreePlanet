@@ -32,8 +32,8 @@
   import menuTwo from './menuTwo.vue'
 
   import { Component, Vue, Watch, Prop } from 'vue-property-decorator'
-  import { GlobModule } from '../../store/modules/glob'
-  import { UserModule } from '../../store/modules/user';
+  import { GlobModule } from '../../store/Modules/glob'
+  import { UserModule } from '../../store/Modules/user';
 
   @Component({
     components: {

@@ -1,10 +1,10 @@
 import Vue from 'vue'
 import { Component, Prop, Watch } from 'vue-property-decorator'
-import { UserModule } from '@/store/modules/user'
-import { ErroriMongoDb } from '@/store/modules/user'
+import { User } from '@store'
+import { ErroriMongoDb } from 'store/Modules/user'
 
 import { required, email, numeric, maxLength, maxValue, minValue, sameAs, minLength } from 'vuelidate/lib/validators'
-import { ISignupOptions, IUserState } from '@/model'
+import { ISignupOptions, IUserState } from 'model'
 import { validations, TSignup } from './signup-validate'
 
 import { validationMixin } from 'vuelidate'
@@ -162,7 +162,7 @@ export default class Signup extends Vue {
     this.$q.loading.show({ message: this.$t('reg.incorso') })
 
     console.log(this.signup)
-    UserModule.signup(this.signup)
+    User.actions.signup(this.signup)
       .then((riscode) => {
         this.checkErrors(riscode)
         this.$q.loading.hide()

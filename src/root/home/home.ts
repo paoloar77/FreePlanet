@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import { Component, Watch, Prop } from 'vue-property-decorator'
-import { GlobModule } from '@/store/modules/glob'
+import { GlobModule } from '@/store/Modules/glob'
 
 require('./home.scss')
 

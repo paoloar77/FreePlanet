@@ -18,7 +18,7 @@
 <script type="ts">
 
   import { Component, Vue} from 'vue-property-decorator'
-  import { UserModule } from './store/modules/user'
+  import { UserModule } from './store/Modules/user'
 
   import Header from './components/Header.vue';
 

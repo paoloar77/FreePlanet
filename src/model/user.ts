@@ -1,4 +1,4 @@
-import { IToken } from '@/model/other'
+import { IToken } from 'model/other'
 
 export const DefaultUser = <IUserState>{
   email: '',
@@ -25,4 +25,6 @@ export interface IUserState {
   verifiedEmail?: boolean
 
   tokenforgot?: string
+
+  servercode?: number
 }

@@ -50,9 +50,9 @@
 
   import {mapActions} from 'vuex'
   import * as types from '../../store/mutation-types'
-  //import {ErroriMongoDb} from '../../store/modules/user'
+  //import {ErroriMongoDb} from '../../store/Modules/user'
 
-  import {serv_constants} from '../../store/modules/serv_constants';
+  import {serv_constants} from '../../store/Modules/serv_constants';
 
 
   export default {

@@ -57,7 +57,7 @@
   import drawer from '../layouts/drawer/drawer.vue'
   import messagePopover from '../layouts/toolbar/messagePopover.vue'
 
-  // import user from '../store/modules/user';
+  // import user from '../store/Modules/user';
 
   export default {
     components: {

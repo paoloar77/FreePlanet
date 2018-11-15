@@ -6,5 +6,5 @@ export const serv_constants = {
 
   RIS_CODE_LOGIN_ERR_GENERIC: -20,
   RIS_CODE_LOGIN_ERR: -10,
-  RIS_CODE_LOGIN_OK: 1,
-};
+  RIS_CODE_LOGIN_OK: 1
+}

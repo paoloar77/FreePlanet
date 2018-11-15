@@ -1,5 +1,5 @@
 import { AxiosError, AxiosResponse } from 'axios'
-import { PayloadMessageTypes } from '@/common'
+import { PayloadMessageTypes } from 'common'
 import { IPayload } from './payload'
 
 export { PayloadMessageTypes } from '../../common/message'

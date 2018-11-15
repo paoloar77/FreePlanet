@@ -1,4 +1,7 @@
-//export * from './LoginState';
+// export * from './LoginState';
+
+export * from './GlobalState.d'
+
 
 
 export interface IResponse<T> {

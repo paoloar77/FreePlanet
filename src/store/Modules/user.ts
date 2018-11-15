@@ -3,15 +3,21 @@ import Vuex from 'vuex'
 
 import { Module, VuexModule, Mutation, MutationAction, Action, getModule } from 'vuex-module-decorators'
 import {Route} from 'vue-router'
-import store from '@/store'
+
+import Api from '@api'
 
 const bcrypt = require('bcryptjs')
 
-import * as types from '@/store/mutation-types'
-import { serv_constants } from '@/store/modules/serv_constants'
+import * as types from 'store/mutation-types'
+import { serv_constants } from 'store/Modules/serv_constants'
 
-import { ISignupOptions, IUserState } from '@/model'
-import { ILinkReg, IResult, IIdToken } from '@/model/other'
+import router from '@router'
+
+import { storeBuilder } from '@store'
+
+
+import { ISignupOptions, IUserState } from 'model'
+import { ILinkReg, IResult, IIdToken } from 'model/other'
 
 
 export const ErroriMongoDb = {
@@ -24,113 +30,154 @@ export const ErroriMongoDb = {
 
 Vue.use(Vuex)
 
-@Module({ dynamic: true, store, name: 'user' })
-class User extends VuexModule implements IUserState {   // Non occorrono i getters, basta questi qui:
-  _id: IUserState['_id'] = ''
-  email: IUserState['email'] = ''
-  username: IUserState['username'] = ''
-  idapp: IUserState['idapp'] = process.env.APP_ID
-  password: IUserState['password'] = ''
-  lang: IUserState['lang'] = ''
-  repeatPassword: IUserState['repeatPassword'] = ''
-  idToken: IUserState['idToken'] = ''
-  userId: IUserState['userId'] = 0
-  tokens: IUserState['tokens'] = []
-  verifiedEmail: IUserState['verifiedEmail'] = false
-  servercode: number = 0
+const initialState: IUserState = {
+  _id: '',
+  email:  '',
+  username: '',
+  idapp: process.env.APP_ID,
+  password: '',
+  lang: '',
+  repeatPassword: '',
+  idToken: '',
+  userId: 0,
+  tokens: [],
+  verifiedEmail: false
+}
 
-  getlang() {
-    if (this.lang !== '') {
-      return this.lang
+// State
+const state = {...initialState}
+
+const b = storeBuilder.module<IUserState>('UserModule', state)
+const stateGetter = b.state()
+
+namespace Getters {
+  const lang = b.read(function lang(state): string {
+    if (state.lang !== '') {
+      return state.lang
     } else {
       return process.env.LANG_DEFAULT
     }
-  }
+  })
 
-  sendRequest (url: string, method: string, mydata: any) {
-    console.log('LANG ' + this.getlang())
-    let mytok: string = this.getTok()
-
-    const authHeader = new Headers()
-    authHeader.append('content-type', 'application/json')
-    authHeader.append('x-auth', mytok)
-    authHeader.append('accept-language', this.getlang())
-    const configInit: RequestInit = {
-      method: method,
-      cache: 'no-cache',
-      body: JSON.stringify(mydata),
-      headers: authHeader
-    }
-
-    const request: Promise<Response> = fetch(url, configInit)
-    return request
-
-  }
-
-  getTok () {
-    if (this.tokens) {
-      if (typeof this.tokens[0] !== 'undefined') {
-        return this.tokens[0].token
+  const tok = b.read(function tok(state): string {
+    if (state.tokens) {
+      if (typeof state.tokens[0] !== 'undefined') {
+        return state.tokens[0].token
       } else {
         return ''
       }
     } else {
       return ''
     }
+  })
+
+  export const getters = {
+    get lang() {
+      return lang()
+    },
+    get tok() {
+      return tok()
+    }
   }
 
-  @MutationAction({ mutate: [types.USER_PASSWORD] })
-  async setpassword (newstr: string) {
-    return { password: newstr }
-  }
+}
 
-  @MutationAction({ mutate: [types.USER_EMAIL] })
-  async setemail (newstr: string) {
-    return { email: newstr }
-  }
 
-  @MutationAction({ mutate: [types.USER_LANG] })
-  async setlang (newstr: string) {
-    return { lang: newstr }
-  }
-
-  @Mutation
-  authUser (data: IUserState) {
-    this.username = data.username
-    this.userId = data.userId
-    this.idToken = data.idToken
-    this.verifiedEmail = data.verifiedEmail
+namespace Mutations {
+  function authUser(state, data: IUserState) {
+    state.username = data.username
+    state.userId = data.userId
+    state.idToken = data.idToken
+    state.verifiedEmail = data.verifiedEmail
     // @ts-ignore
-    this.tokens = [
+    state.tokens = [
       { access: 'auth', token: data.idToken }
     ]
   }
 
-  @Mutation
-  UpdatePwd (data: IIdToken) {
-    this.idToken = data.idToken
-    if (!this.tokens) {
-      this.tokens = []
+  function setpassword(state: IUserState, newstr: string) {
+    state.password = newstr
+  }
+
+  function setemail(state: IUserState, newstr: string) {
+    state.email = newstr
+  }
+
+  function setlang(state: IUserState, newstr: string) {
+    state.lang = newstr
+  }
+
+  function UpdatePwd(state: IUserState, data: IIdToken) {
+    state.idToken = data.idToken
+    if (!state.tokens) {
+      state.tokens = []
     }
-    this.tokens.push({ access: 'auth', token: data.idToken })
+    state.tokens.push({ access: 'auth', token: data.idToken })
   }
 
-  @Mutation
-  setServerCode (servercode: number) {
-    this.servercode = servercode
+  function setServerCode(state: IUserState, num: number) {
+    state.servercode = num
   }
 
-  @Mutation
-  clearAuthData (): void {
-    this.username = ''
-    this.tokens = []
-    this.idToken = ''
-    this.userId = 0
-    this.verifiedEmail = false
+  function clearAuthData(state: IUserState) {
+    state.username = ''
+    state.tokens = []
+    state.idToken = ''
+    state.userId = 0
+    state.verifiedEmail = false
   }
 
-  @Action({ commit: types.USER_UPDATEPWD })
-  resetpwd (paramquery: IUserState) {
+  function autologin (state: IUserState) {
+    const token = localStorage.getItem('token')
+    if (!token) {
+      return
+    }
+    const expirationDateStr = localStorage.getItem('expirationDate')
+    let expirationDate = new Date(String(expirationDateStr))
+    const now = new Date()
+    if (now >= expirationDate) {
+      return
+    }
+    const userId = Number(localStorage.getItem('userId'))
+    const username = String(localStorage.getItem('username'))
+    const verifiedEmail = localStorage.getItem('verificato') === '1'
+
+    mutations.authUser({
+      username: username,
+      userId: userId,
+      idToken: token,
+      verifiedEmail: verifiedEmail
+    })
+  }
+
+  export const mutations = {
+    authUser: b.commit(authUser),
+    setpassword: b.commit(setpassword),
+    setemail: b.commit(setemail),
+    setlang: b.commit(setlang),
+    UpdatePwd: b.commit(UpdatePwd),
+    setServerCode: b.commit(setServerCode),
+    clearAuthData: b.commit(clearAuthData),
+    autologin: b.commit(autologin)
+  }
+
+}
+
+namespace Actions {
+
+  async function sendUserEdit(context, form: Object) {
+    try {
+      const {data} = await Api.postFormData('profile/edit', form)
+      console.log(data)
+      // return new ApiSuccess({data})
+
+    } catch {
+      // return new ApiError()
+    }
+  }
+
+
+  async function resetpwd (paramquery: IUserState) {
     let call = process.env.MONGODB_HOST + '/updatepwd'
     console.log('CALL ' + call)
 
@@ -143,13 +190,13 @@ class User extends VuexModule implements IUserState {   // Non occorrono i gette
     }
     console.log(usertosend)
 
-    this.setServerCode(ErroriMongoDb.CALLING)
+    Mutations.mutations.setServerCode(ErroriMongoDb.CALLING)
 
     let myres
 
     let x_auth_token: string = ''
 
-    return this.sendRequest(call, 'POST', usertosend)
+    return Api.SendReq(call, state.lang, Getters.getters.tok, 'POST', usertosend)
       .then((res) => {
         console.log(res)
         myres = res
@@ -157,25 +204,24 @@ class User extends VuexModule implements IUserState {   // Non occorrono i gette
         if (myres.status === 200) {
           return myres.json()
         }
-        this.setServerCode(ErroriMongoDb.ERR_GENERICO)
+        Mutations.mutations.setServerCode(ErroriMongoDb.ERR_GENERICO)
         return { code: ErroriMongoDb.ERR_GENERICO, msg: 'Errore: ' + myres.status, resetpwd: true }
 
       })
       .then((body) => {
-        this.UpdatePwd({ idToken: x_auth_token })
+        Mutations.mutations.UpdatePwd({ idToken: x_auth_token })
         localStorage.setItem('token', x_auth_token)
 
         return { code: body.code, msg: body.msg }
       }).catch((err) => {
         console.log('ERROR: ' + err)
-        this.setServerCode(ErroriMongoDb.ERR_GENERICO)
+        Mutations.mutations.setServerCode(ErroriMongoDb.ERR_GENERICO)
         return { code: ErroriMongoDb.ERR_GENERICO, msg: 'Errore' }
       })
 
   }
 
-  @Action({ commit: types.USER_REQUESTRESETPWD })
-  requestpwd (paramquery: IUserState) {
+  async function requestpwd (paramquery: IUserState) {
 
     let call = process.env.MONGODB_HOST + '/requestnewpwd'
     console.log('CALL ' + call)
@@ -187,18 +233,18 @@ class User extends VuexModule implements IUserState {   // Non occorrono i gette
     }
     console.log(usertosend)
 
-    this.setServerCode(ErroriMongoDb.CALLING)
+    Mutations.mutations.setServerCode(ErroriMongoDb.CALLING)
 
     let myres
 
-    return this.sendRequest(call, 'POST', usertosend)
+    return Api.SendReq(call, state.lang, Getters.getters.tok, 'POST', usertosend)
       .then((res) => {
         console.log(res)
         myres = res
         if (myres.status === 200) {
           return myres.json()
         }
-        this.setServerCode(ErroriMongoDb.ERR_GENERICO)
+        Mutations.mutations.setServerCode(ErroriMongoDb.ERR_GENERICO)
         return { code: ErroriMongoDb.ERR_GENERICO, msg: 'Errore: ' + myres.status, resetpwd: true }
 
       })
@@ -206,14 +252,13 @@ class User extends VuexModule implements IUserState {   // Non occorrono i gette
         return { code: body.code, msg: body.msg }
       }).catch((err) => {
         console.log('ERROR: ' + err)
-        this.setServerCode(ErroriMongoDb.ERR_GENERICO)
+        Mutations.mutations.setServerCode(ErroriMongoDb.ERR_GENERICO)
         return { code: ErroriMongoDb.ERR_GENERICO, msg: 'Errore' }
       })
 
   }
 
-  @Action({ commit: types.USER_VREG })
-  vreg (paramquery: ILinkReg) {
+  async function vreg (paramquery: ILinkReg) {
     let call = process.env.MONGODB_HOST + '/vreg'
     console.log('CALL ' + call)
 
@@ -224,43 +269,42 @@ class User extends VuexModule implements IUserState {   // Non occorrono i gette
     }
     console.log(usertosend)
 
-    this.setServerCode(ErroriMongoDb.CALLING)
+    Mutations.mutations.setServerCode(ErroriMongoDb.CALLING)
 
     let myres
 
-    return this.sendRequest(call, 'POST', usertosend)
+    return Api.SendReq(call, state.lang, Getters.getters.tok, 'POST', usertosend)
       .then((res) => {
         console.log(res)
         myres = res
         if (myres.status === 200) {
           return myres.json()
         }
-        this.setServerCode(ErroriMongoDb.ERR_GENERICO)
+        Mutations.mutations.setServerCode(ErroriMongoDb.ERR_GENERICO)
         return { code: ErroriMongoDb.ERR_GENERICO, msg: 'Errore: ' + myres.status }
 
       })
       .then((body) => {
         // console.log("RITORNO 2 ");
-        // this.setServerCode(myres);
+        // mutations.setServerCode(myres);
         if (body.code === serv_constants.RIS_CODE_EMAIL_VERIFIED) {
           localStorage.setItem('verificato', '1')
         }
         return { code: body.code, msg: body.msg }
       }).catch((err) => {
         console.log('ERROR: ' + err)
-        this.setServerCode(ErroriMongoDb.ERR_GENERICO)
+        Mutations.mutations.setServerCode(ErroriMongoDb.ERR_GENERICO)
         return { code: ErroriMongoDb.ERR_GENERICO, msg: 'Errore' }
       })
   }
 
-  @Action({ commit: types.USER_SIGNUP })
-  signup (authData: ISignupOptions) {
+  async function signup (authData: ISignupOptions) {
     let call = process.env.MONGODB_HOST + '/users'
     console.log('CALL ' + call)
 
     // console.log("PASSW: " + authData.password);
 
-    let mylang = this.getlang()
+    let mylang = state.lang
     console.log('MYLANG: ' + mylang)
 
     return bcrypt.hash(authData.password, bcrypt.genSaltSync(12))
@@ -278,11 +322,11 @@ class User extends VuexModule implements IUserState {   // Non occorrono i gette
 
         let myres: IResult
 
-        this.setServerCode(ErroriMongoDb.CALLING)
+        Mutations.mutations.setServerCode(ErroriMongoDb.CALLING)
 
         let x_auth_token: string = ''
 
-        return this.sendRequest(call, 'POST', usertosend)
+        return Api.SendReq(call, state.lang, Getters.getters.tok, 'POST', usertosend)
           .then((res) => {
             myres = res
             x_auth_token = String(res.headers.get('x-auth'))
@@ -300,7 +344,7 @@ class User extends VuexModule implements IUserState {   // Non occorrono i gette
               console.log(body)
             }
 
-            this.setServerCode(myres.status)
+            Mutations.mutations.setServerCode(myres.status)
 
             if (myres.status === 200) {
               let iduser = body._id
@@ -310,7 +354,7 @@ class User extends VuexModule implements IUserState {   // Non occorrono i gette
                 console.log('IDUSER= ' + iduser)
               }
 
-              this.authUser({
+              Mutations.mutations.authUser({
                 username: username,
                 userId: iduser,
                 idToken: x_auth_token,
@@ -346,36 +390,35 @@ class User extends VuexModule implements IUserState {   // Non occorrono i gette
               console.log('ERROREEEEEEEEE')
               console.log(error)
             }
-            this.setServerCode(ErroriMongoDb.ERR_GENERICO)
+            Mutations.mutations.setServerCode(ErroriMongoDb.ERR_GENERICO)
             return ErroriMongoDb.ERR_GENERICO
           })
       })
   }
 
-  @Action({ commit: types.USER_SIGNIN })
-  signin (authData: ISignupOptions) {
+  async function signin (authData: ISignupOptions) {
     let call = process.env.MONGODB_HOST + '/users/login'
     console.log('LOGIN ' + call)
 
-    console.log('MYLANG = ' + this.getlang())
+    console.log('MYLANG = ' + state.lang)
 
     const usertosend = {
       username: authData.username,
       password: authData.password,
       idapp: process.env.APP_ID,
       keyappid: process.env.PAO_APP_ID,
-      lang: this.getlang()
+      lang: state.lang
     }
 
     console.log(usertosend)
 
     let myres: IResult
 
-    this.setServerCode(ErroriMongoDb.CALLING)
+    Mutations.mutations.setServerCode(ErroriMongoDb.CALLING)
 
     let x_auth_token: string = ''
 
-    return this.sendRequest(call, 'POST', usertosend)
+    return Api.SendReq(call, state.lang, Getters.getters.tok, 'POST', usertosend)
       .then((res) => {
         myres = res
         x_auth_token = String(res.headers.get('x-auth'))
@@ -396,11 +439,11 @@ class User extends VuexModule implements IUserState {   // Non occorrono i gette
         }
 
         if (body.code === serv_constants.RIS_CODE_LOGIN_ERR) {
-          this.setServerCode(body.code)
+          Mutations.mutations.setServerCode(body.code)
           return body.code
         }
 
-        this.setServerCode(myres.status)
+        Mutations.mutations.setServerCode(myres.status)
 
         if (myres.status === 200) {
           let iduser = body._id
@@ -409,7 +452,7 @@ class User extends VuexModule implements IUserState {   // Non occorrono i gette
           if (process.env.DEV) {
             console.log('USERNAME = ' + username)
             console.log('IDUSER= ' + iduser)
-            this.authUser({
+            Mutations.mutations.authUser({
               username: username,
               userId: iduser,
               idToken: x_auth_token,
@@ -447,36 +490,12 @@ class User extends VuexModule implements IUserState {   // Non occorrono i gette
           console.log('ERROREEEEEEEEE')
           console.log(error)
         }
-        this.setServerCode(ErroriMongoDb.ERR_GENERICO)
+        Mutations.mutations.setServerCode(ErroriMongoDb.ERR_GENERICO)
         return ErroriMongoDb.ERR_GENERICO
       })
   }
 
-  @Mutation
-  autologin () {
-    const token = localStorage.getItem('token')
-    if (!token) {
-      return
-    }
-    const expirationDateStr = localStorage.getItem('expirationDate')
-    let expirationDate = new Date(String(expirationDateStr))
-    const now = new Date()
-    if (now >= expirationDate) {
-      return
-    }
-    const userId = Number(localStorage.getItem('userId'))
-    const username = String(localStorage.getItem('username'))
-    const verifiedEmail = localStorage.getItem('verificato') === '1'
-    this.authUser({
-      username: username,
-      userId: userId,
-      idToken: token,
-      verifiedEmail: verifiedEmail
-    })
-  }
-
-  @Action({ commit: types.USER_LOGOUT })
-  logout () {
+  async function logout () {
 
     let call = process.env.MONGODB_HOST + '/users/me/token'
     console.log('CALL ' + call)
@@ -487,7 +506,7 @@ class User extends VuexModule implements IUserState {   // Non occorrono i gette
     }
 
     console.log(usertosend)
-    this.sendRequest(call, 'DELETE', usertosend)
+    Api.SendReq(call, state.lang, Getters.getters.tok, 'DELETE', usertosend)
       .then(
         (res) => {
           console.log(res)
@@ -495,7 +514,7 @@ class User extends VuexModule implements IUserState {   // Non occorrono i gette
       ).catch((err) => {
       console.log('ERROR: ' + err)
     }).then(() => {
-      this.clearAuthData()
+      Mutations.mutations.clearAuthData()
     })
 
     localStorage.removeItem('expirationDate')
@@ -505,9 +524,29 @@ class User extends VuexModule implements IUserState {   // Non occorrono i gette
     localStorage.removeItem('isLoggedin')
     localStorage.removeItem('verifiedEmail')
 
-    // router.replace('/signin')
+    router.push('/signin')
   }
 
+
+  export const actions = {
+    resetpwd: b.dispatch(resetpwd),
+    requestpwd: b.dispatch(requestpwd),
+    vreg: b.dispatch(vreg),
+    signup: b.dispatch(signup),
+    signin: b.dispatch(signin),
+    logout: b.dispatch(logout)
+
+  }
 }
 
-export const UserModule = getModule(User.prototype)
+// Module
+const UserModule = {
+  get state() {
+    return stateGetter()
+  },
+  getters: Getters.getters,
+  mutations: Mutations.mutations,
+  actions: Actions.actions
+}
+
+export default UserModule
