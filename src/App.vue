@@ -15,26 +15,38 @@
 
     </div>
 </template>
-<script type="ts">
+<script lang="ts">
+  import Vue from "vue"
+  import { Store } from "vuex"
+  import { sync } from 'vuex-router-sync'
+  import { Component } from 'vue-property-decorator'
+  import { EventBus, RootState, storeBuilder, DebugMode } from '@store'
+  import router from "./router"
+  import { UserStore } from '@store'
 
-  import { Component, Vue} from 'vue-property-decorator'
-  import { UserModule } from './store/Modules/user'
+  import $ from "jquery"
 
-  import Header from './components/Header.vue';
+  import Header from './components/Header.vue'
+
+  const store: Store<RootState> = storeBuilder.vuexStore({
+    strict: DebugMode
+  })
+  sync(store, router)
 
   @Component({
+    store: store,
     components: {
       appHeader: Header,
-    }
+    },
+    router
   })
   export default class App extends Vue {
     backgroundColor = 'whitesmoke'
 
-    constructor () {
-      super()
+    created() {
       //this.title = 'My Vue and CosmosDB Heroes App'
-      console.info(process.env);
-      UserModule.autologin()
+      console.info(process.env)
+      UserStore.mutations.autologin()
     }
   }
 </script>

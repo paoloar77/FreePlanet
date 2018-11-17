@@ -9,7 +9,27 @@ const envparser = require('./config/envparser')
 const extendTypescriptToWebpack = (config) => {
   config.resolve
     .extensions
-    .add('.ts');
+    .add('.ts', '.js', '.vue')
+  config.resolve
+    .alias
+    .set('@components', path.resolve(__dirname, 'src/components/index.ts'))
+    .set('@components', path.resolve(__dirname, 'src/components'))
+    .set('@views', path.resolve(__dirname, 'src/components/views/index.ts'))
+    .set('@views', path.resolve(__dirname, 'src/components/views'))
+    .set('@src', path.resolve(__dirname, 'src'))
+    .set('@icons', path.resolve(__dirname, 'src/assets/icons'))
+    .set('@images', path.resolve(__dirname, 'src/assets/images'))
+    .set('@classes', path.resolve(__dirname, 'src/classes/index.ts'))
+    .set('@utils', path.resolve(__dirname, 'src/utils/index.ts'))
+    .set('@utils', path.resolve(__dirname, 'src/utils/*'))
+    .set('@css', path.resolve(__dirname, 'src/styles/variables.scss'))
+    .set('@router', path.resolve(__dirname, 'src/router/index.ts'))
+    .set('@validators', path.resolve(__dirname, 'src/utils/validators.ts'))
+    .set('@api', path.resolve(__dirname, 'src/store/Api/index.ts'))
+    .set('@paths', path.resolve(__dirname, 'src/store/Api/ApiRoutes.ts'))
+    .set('@types', path.resolve(__dirname, 'src/typings/index.ts'))
+    .set('@store', path.resolve(__dirname, 'src/store/index.ts'))
+    .set('@modules', path.resolve(__dirname, 'src/store/Modules/index.ts'))
   config.module
     .rule('typescript')
     .test(/\.tsx?$/)
@@ -68,7 +88,6 @@ module.exports = function (ctx) {
           .alias
           .set('~', __dirname)
           .set('@', path.resolve(__dirname, 'src'))
-          .set('@classes', path.resolve(__dirname, 'src/classes/index.ts'));
         config.module
           .rule('template-engine')
           .test(/\.pug$/)

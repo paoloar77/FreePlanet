@@ -32,8 +32,8 @@
   import menuTwo from './menuTwo.vue'
 
   import { Component, Vue, Watch, Prop } from 'vue-property-decorator'
-  import { GlobModule } from '../../store/Modules/glob'
-  import { UserModule } from '../../store/Modules/user';
+  import { GlobalStore } from '@store'
+  import { UserStore } from '@store';
 
   @Component({
     components: {
@@ -74,14 +74,14 @@
     }
 
     get MenuCollapse () {
-      return GlobModule.menuCollapse
+      return GlobalStore.getters.menuCollapse
     }
     get Username () {
-      return UserModule.username
+      return UserStore.getters.username
     }
 
     get Verificato () {
-      return UserModule.verifiedEmail
+      return UserStore.getters.verifiedEmail
     }
 
     logoutHandler() {

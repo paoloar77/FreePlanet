@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import { Component, Prop, Watch } from 'vue-property-decorator'
-import { User } from '@store'
-import { ErroriMongoDb } from 'store/Modules/user'
+import { UserStore } from '@store'
+import { rescodes } from '../../../store/Modules/rescodes'
 
 import { required, email, numeric, maxLength, maxValue, minValue, sameAs, minLength } from 'vuelidate/lib/validators'
 import { ISignupOptions, IUserState } from 'model'
@@ -131,11 +131,11 @@ export default class Signup extends Vue {
 
   checkErrors(riscode: number) {
     // console.log("RIS = " + riscode);
-    if (riscode === ErroriMongoDb.DUPLICATE_EMAIL_ID) {
+    if (riscode === rescodes.DUPLICATE_EMAIL_ID) {
       this.showNotif(this.$t('reg.err.duplicate_email'))
-    } else if (riscode === ErroriMongoDb.DUPLICATE_USERNAME_ID) {
+    } else if (riscode === rescodes.DUPLICATE_USERNAME_ID) {
       this.showNotif(this.$t('reg.err.duplicate_username'))
-    } else if (riscode === ErroriMongoDb.OK) {
+    } else if (riscode === rescodes.OK) {
       this.$router.push('/')
     } else {
       this.showNotif('Errore num ' + riscode)
@@ -162,7 +162,7 @@ export default class Signup extends Vue {
     this.$q.loading.show({ message: this.$t('reg.incorso') })
 
     console.log(this.signup)
-    User.actions.signup(this.signup)
+    UserStore.actions.signup(this.signup)
       .then((riscode) => {
         this.checkErrors(riscode)
         this.$q.loading.hide()

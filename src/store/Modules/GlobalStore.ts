@@ -1,14 +1,5 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
-
-import { Module, VuexModule, Mutation, MutationAction, Action, getModule } from 'vuex-module-decorators'
-
 import { IGlobalState } from '@types'
-
 import { storeBuilder } from '@store'
-
-Vue.use(Vuex)
-
 
 const state: IGlobalState = {
   conta: 0,
@@ -73,7 +64,7 @@ namespace Mutations {
 }
 
 namespace Actions {
-  async function setConta(num: number) {
+  async function setConta(context, num: number) {
     Mutations.mutations.setConta(num)
   }
 

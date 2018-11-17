@@ -1,36 +1,20 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
-
-import { Module, VuexModule, Mutation, MutationAction, Action, getModule } from 'vuex-module-decorators'
-import {Route} from 'vue-router'
 
 import Api from '@api'
+import { ISignupOptions, IUserState } from 'model'
+import { ILinkReg, IResult, IIdToken } from 'model/other'
+import { storeBuilder } from '@store'
+import router from '@router'
+
+import { serv_constants } from '../Modules/serv_constants'
+import { rescodes } from '../Modules/rescodes'
+
+
 
 const bcrypt = require('bcryptjs')
 
-import * as types from 'store/mutation-types'
-import { serv_constants } from 'store/Modules/serv_constants'
 
-import router from '@router'
-
-import { storeBuilder } from '@store'
-
-
-import { ISignupOptions, IUserState } from 'model'
-import { ILinkReg, IResult, IIdToken } from 'model/other'
-
-
-export const ErroriMongoDb = {
-  CALLING: 10,
-  OK: 20,
-  ERR_GENERICO: -1,
-  DUPLICATE_EMAIL_ID: 11000,
-  DUPLICATE_USERNAME_ID: 11100
-}
-
-Vue.use(Vuex)
-
-const initialState: IUserState = {
+// State
+const state: IUserState = {
   _id: '',
   email:  '',
   username: '',
@@ -44,8 +28,6 @@ const initialState: IUserState = {
   verifiedEmail: false
 }
 
-// State
-const state = {...initialState}
 
 const b = storeBuilder.module<IUserState>('UserModule', state)
 const stateGetter = b.state()
@@ -177,7 +159,7 @@ namespace Actions {
   }
 
 
-  async function resetpwd (paramquery: IUserState) {
+  async function resetpwd (context, paramquery: IUserState) {
     let call = process.env.MONGODB_HOST + '/updatepwd'
     console.log('CALL ' + call)
 
@@ -190,7 +172,7 @@ namespace Actions {
     }
     console.log(usertosend)
 
-    Mutations.mutations.setServerCode(ErroriMongoDb.CALLING)
+    Mutations.mutations.setServerCode(rescodes.CALLING)
 
     let myres
 
@@ -204,8 +186,8 @@ namespace Actions {
         if (myres.status === 200) {
           return myres.json()
         }
-        Mutations.mutations.setServerCode(ErroriMongoDb.ERR_GENERICO)
-        return { code: ErroriMongoDb.ERR_GENERICO, msg: 'Errore: ' + myres.status, resetpwd: true }
+        Mutations.mutations.setServerCode(rescodes.ERR_GENERICO)
+        return { code: rescodes.ERR_GENERICO, msg: 'Errore: ' + myres.status, resetpwd: true }
 
       })
       .then((body) => {
@@ -215,13 +197,13 @@ namespace Actions {
         return { code: body.code, msg: body.msg }
       }).catch((err) => {
         console.log('ERROR: ' + err)
-        Mutations.mutations.setServerCode(ErroriMongoDb.ERR_GENERICO)
-        return { code: ErroriMongoDb.ERR_GENERICO, msg: 'Errore' }
+        Mutations.mutations.setServerCode(rescodes.ERR_GENERICO)
+        return { code: rescodes.ERR_GENERICO, msg: 'Errore' }
       })
 
   }
 
-  async function requestpwd (paramquery: IUserState) {
+  async function requestpwd (context, paramquery: IUserState) {
 
     let call = process.env.MONGODB_HOST + '/requestnewpwd'
     console.log('CALL ' + call)
@@ -233,7 +215,7 @@ namespace Actions {
     }
     console.log(usertosend)
 
-    Mutations.mutations.setServerCode(ErroriMongoDb.CALLING)
+    Mutations.mutations.setServerCode(rescodes.CALLING)
 
     let myres
 
@@ -244,21 +226,21 @@ namespace Actions {
         if (myres.status === 200) {
           return myres.json()
         }
-        Mutations.mutations.setServerCode(ErroriMongoDb.ERR_GENERICO)
-        return { code: ErroriMongoDb.ERR_GENERICO, msg: 'Errore: ' + myres.status, resetpwd: true }
+        Mutations.mutations.setServerCode(rescodes.ERR_GENERICO)
+        return { code: rescodes.ERR_GENERICO, msg: 'Errore: ' + myres.status, resetpwd: true }
 
       })
       .then((body) => {
         return { code: body.code, msg: body.msg }
       }).catch((err) => {
         console.log('ERROR: ' + err)
-        Mutations.mutations.setServerCode(ErroriMongoDb.ERR_GENERICO)
-        return { code: ErroriMongoDb.ERR_GENERICO, msg: 'Errore' }
+        Mutations.mutations.setServerCode(rescodes.ERR_GENERICO)
+        return { code: rescodes.ERR_GENERICO, msg: 'Errore' }
       })
 
   }
 
-  async function vreg (paramquery: ILinkReg) {
+  async function vreg (context, paramquery: ILinkReg) {
     let call = process.env.MONGODB_HOST + '/vreg'
     console.log('CALL ' + call)
 
@@ -269,7 +251,7 @@ namespace Actions {
     }
     console.log(usertosend)
 
-    Mutations.mutations.setServerCode(ErroriMongoDb.CALLING)
+    Mutations.mutations.setServerCode(rescodes.CALLING)
 
     let myres
 
@@ -280,8 +262,8 @@ namespace Actions {
         if (myres.status === 200) {
           return myres.json()
         }
-        Mutations.mutations.setServerCode(ErroriMongoDb.ERR_GENERICO)
-        return { code: ErroriMongoDb.ERR_GENERICO, msg: 'Errore: ' + myres.status }
+        Mutations.mutations.setServerCode(rescodes.ERR_GENERICO)
+        return { code: rescodes.ERR_GENERICO, msg: 'Errore: ' + myres.status }
 
       })
       .then((body) => {
@@ -293,12 +275,12 @@ namespace Actions {
         return { code: body.code, msg: body.msg }
       }).catch((err) => {
         console.log('ERROR: ' + err)
-        Mutations.mutations.setServerCode(ErroriMongoDb.ERR_GENERICO)
-        return { code: ErroriMongoDb.ERR_GENERICO, msg: 'Errore' }
+        Mutations.mutations.setServerCode(rescodes.ERR_GENERICO)
+        return { code: rescodes.ERR_GENERICO, msg: 'Errore' }
       })
   }
 
-  async function signup (authData: ISignupOptions) {
+  async function signup (context, authData: ISignupOptions) {
     let call = process.env.MONGODB_HOST + '/users'
     console.log('CALL ' + call)
 
@@ -322,7 +304,7 @@ namespace Actions {
 
         let myres: IResult
 
-        Mutations.mutations.setServerCode(ErroriMongoDb.CALLING)
+        Mutations.mutations.setServerCode(rescodes.CALLING)
 
         let x_auth_token: string = ''
 
@@ -333,7 +315,7 @@ namespace Actions {
             if (x_auth_token) {
               return res.json()
             } else {
-              return { status: 400, code: ErroriMongoDb.ERR_GENERICO }
+              return { status: 400, code: rescodes.ERR_GENERICO }
             }
           })
           .then((body) => {
@@ -372,7 +354,7 @@ namespace Actions {
               // dispatch('storeUser', authData);
               // dispatch('setLogoutTimer', myres.data.expiresIn);
 
-              return ErroriMongoDb.OK
+              return rescodes.OK
             } else if (myres.status === 404) {
               if (process.env.DEV) {
                 console.log('CODE = ' + body.code)
@@ -390,13 +372,13 @@ namespace Actions {
               console.log('ERROREEEEEEEEE')
               console.log(error)
             }
-            Mutations.mutations.setServerCode(ErroriMongoDb.ERR_GENERICO)
-            return ErroriMongoDb.ERR_GENERICO
+            Mutations.mutations.setServerCode(rescodes.ERR_GENERICO)
+            return rescodes.ERR_GENERICO
           })
       })
   }
 
-  async function signin (authData: ISignupOptions) {
+  async function signin (context, authData: ISignupOptions) {
     let call = process.env.MONGODB_HOST + '/users/login'
     console.log('LOGIN ' + call)
 
@@ -414,7 +396,7 @@ namespace Actions {
 
     let myres: IResult
 
-    Mutations.mutations.setServerCode(ErroriMongoDb.CALLING)
+    Mutations.mutations.setServerCode(rescodes.CALLING)
 
     let x_auth_token: string = ''
 
@@ -427,7 +409,7 @@ namespace Actions {
         if (x_auth_token || injson) {
           return injson
         } else {
-          return { status: 400, code: ErroriMongoDb.ERR_GENERICO }
+          return { status: 400, code: rescodes.ERR_GENERICO }
         }
       })
       .then((body) => {
@@ -472,7 +454,7 @@ namespace Actions {
 
           // dispatch('storeUser', authData);
           // dispatch('setLogoutTimer', myres.data.expiresIn);
-          return ErroriMongoDb.OK
+          return rescodes.OK
         } else if (myres.status === 404) {
           if (process.env.DEV) {
             console.log('CODE = ' + body.code)
@@ -490,12 +472,12 @@ namespace Actions {
           console.log('ERROREEEEEEEEE')
           console.log(error)
         }
-        Mutations.mutations.setServerCode(ErroriMongoDb.ERR_GENERICO)
-        return ErroriMongoDb.ERR_GENERICO
+        Mutations.mutations.setServerCode(rescodes.ERR_GENERICO)
+        return rescodes.ERR_GENERICO
       })
   }
 
-  async function logout () {
+  async function logout (context) {
 
     let call = process.env.MONGODB_HOST + '/users/me/token'
     console.log('CALL ' + call)

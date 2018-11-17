@@ -1,6 +1,6 @@
 import Vue from 'vue'
-import { Component, Watch, Prop } from 'vue-property-decorator'
-import { GlobModule } from '@/store/Modules/glob'
+import { Component } from 'vue-property-decorator'
+import { GlobalStore } from '@store'
 
 require('./home.scss')
 
@@ -29,12 +29,12 @@ export default class Home extends Vue {
   }
 
   get conta() {
-    return GlobModule.conta
+    return GlobalStore.getters.getConta
   }
 
   set conta(valore) {
-    GlobModule.setConta(valore)
-    var my = this.$q.i18n.lang
+    GlobalStore.actions.setConta(valore)
+    let my = this.$q.i18n.lang
     this.showNotification(String(my))
   }
 

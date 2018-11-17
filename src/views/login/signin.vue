@@ -64,7 +64,7 @@
   import {mapGetters, mapActions} from 'vuex'
   import * as types from '../../store/mutation-types'
 
-  //import {ErroriMongoDb} from '../../store/Modules/user'
+  import { rescodes } from '../../../store/Modules/rescodes'
   import {serv_constants} from "../../store/Modules/serv_constants";
   import axios from 'axios';
 
@@ -128,7 +128,7 @@
       },
       checkErrors(riscode) {
         //console.log("RIS = " + riscode);
-        if (riscode === ErroriMongoDb.OK) {
+        if (riscode === rescodes.OK) {
           this.showNotif({type: 'positive', message: this.$t('login.completato')});
           this.$router.push('/');
         } else if (riscode === serv_constants.RIS_CODE_LOGIN_ERR) {

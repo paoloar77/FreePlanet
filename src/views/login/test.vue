@@ -24,7 +24,7 @@
 
 <script lang="ts">
   import { Component, Vue, Watch } from 'vue-property-decorator';
-  import { UserModule } from '../../store/Modules/user';
+  import { UserStore } from '@store';
 
 
   @Component({})
