@@ -1,5 +1,5 @@
 import { default as Axios, AxiosResponse } from 'axios'
-import { IPayload } from '@/model'
+import { IPayload } from 'model'
 import { GlobalConfig, PayloadMessageTypes } from '../common'
 
 // const SITE_URL = GlobalConfig.uri.site

@@ -2,7 +2,7 @@
 import Api from '@api'
 import { ISignupOptions, IUserState } from 'model'
 import { ILinkReg, IResult, IIdToken } from 'model/other'
-import { storeBuilder } from '@store'
+import { storeBuilder } from './Store/Store'
 import router from '@router'
 
 import { serv_constants } from '../Modules/serv_constants'

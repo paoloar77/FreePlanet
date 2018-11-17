@@ -1,5 +1,6 @@
 import { IGlobalState } from '@types'
-import { storeBuilder } from '@store'
+import { storeBuilder } from './Store/Store'
+
 
 const state: IGlobalState = {
   conta: 0,

@@ -28,13 +28,7 @@
 
   import Header from './components/Header.vue'
 
-  const store: Store<RootState> = storeBuilder.vuexStore({
-    strict: DebugMode
-  })
-  sync(store, router)
-
   @Component({
-    store: store,
     components: {
       appHeader: Header,
     },
