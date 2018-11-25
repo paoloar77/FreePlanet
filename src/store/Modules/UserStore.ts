@@ -33,6 +33,7 @@ const b = storeBuilder.module<IUserState>('UserModule', state)
 const stateGetter = b.state()
 
 namespace Getters {
+
   const lang = b.read(function lang(state): string {
     if (state.lang !== '') {
       return state.lang

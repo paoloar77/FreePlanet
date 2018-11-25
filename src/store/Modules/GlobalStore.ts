@@ -1,4 +1,4 @@
-import { IGlobalState } from '@types'
+import { IGlobalState } from 'model'
 import { storeBuilder } from './Store/Store'
 
 
@@ -17,37 +17,7 @@ const stateGetter = b.state()
 // Getters
 namespace Getters {
 
-  const getConta = b.read(function getConta(state: IGlobalState): number {
-    return state.conta
-  })
-
-  const getIsLoginPage = b.read(function getIsLoginPage(state: IGlobalState): boolean {
-    return state.isLoginPage
-  })
-
-  const getLayoutNeeded = b.read(function getLayoutNeeded(state: IGlobalState): boolean {
-    return state.layoutNeeded
-  })
-
-  const getMobileMode = b.read(function getMobileMode(state: IGlobalState): boolean {
-    return state.mobileMode
-  })
-
-  const getMenuCollapse = b.read(function getMenuCollapse(state: IGlobalState): boolean {
-    return state.menuCollapse
-  })
-
-  const getPosts = b.read(function getPosts(state: IGlobalState): boolean {
-    return state.posts
-  })
-
   export const getters = {
-    get getConta() { return getConta() },
-    get getIsLoginPage() { return getIsLoginPage() },
-    get getLayoutNeeded() { return getLayoutNeeded() },
-    get getMobileMode() { return getMobileMode() },
-    get getMenuCollapse() { return getMenuCollapse() },
-    get getPosts() { return getPosts() }
   }
 
 }

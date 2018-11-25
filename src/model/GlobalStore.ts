@@ -1,4 +1,4 @@
-export interface IGlobState {
+export interface IGlobalState {
   conta: number
   isLoginPage: boolean
   layoutNeeded: boolean

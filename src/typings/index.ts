@@ -1,6 +1,6 @@
 // export * from './LoginState';
 
-export * from './GlobalState.d'
+// export * from './GlobalState.d'
 
 
 

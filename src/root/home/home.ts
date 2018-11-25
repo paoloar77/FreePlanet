@@ -29,9 +29,8 @@ export default class Home extends Vue {
   }
 
   get conta() {
-    return GlobalStore.getters.getConta
+    return GlobalStore.state.conta
   }
-
   set conta(valore) {
     GlobalStore.actions.setConta(valore)
     let my = this.$q.i18n.lang

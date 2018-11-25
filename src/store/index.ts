@@ -1,13 +1,13 @@
 import Vue from 'vue'
 import Vuex, { Store } from 'vuex'
 
-import { IGlobState } from 'model'
+import { IGlobalState } from 'model'
 import { Route } from 'vue-router'
 import { getStoreBuilder } from 'vuex-typex'
 
 
 export interface RootState {
-  GlobalModule: IGlobState
+  GlobalModule: IGlobalState
   route: Route
 }
 

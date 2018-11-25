@@ -27,13 +27,16 @@
     </div>
 </template>
 
-<script type="ts">
+<script lang="ts">
   import menuOne from './menuOne.vue'
   import menuTwo from './menuTwo.vue'
 
-  import { Component, Vue, Watch, Prop } from 'vue-property-decorator'
-  import { GlobalStore } from '@store'
-  import { UserStore } from '@store';
+  import Vue from 'vue'
+  import { Component, Watch, Prop } from 'vue-property-decorator'
+  import {Store} from 'vuex'
+  import { UserStore } from '@modules';
+  import { GlobalStore } from '@modules'
+
 
   @Component({
     components: {
@@ -42,6 +45,9 @@
     }
   })
   export default class Drawer extends Vue {
+    public $q
+    $t: any
+
     photo = ''
     user = null
     links = {
@@ -74,18 +80,19 @@
     }
 
     get MenuCollapse () {
-      return GlobalStore.getters.menuCollapse
+      return GlobalStore.state.menuCollapse
+      // return true
     }
     get Username () {
-      return UserStore.getters.username
+      return UserStore.state.username
     }
 
     get Verificato () {
-      return UserStore.getters.verifiedEmail
+      return UserStore.state.verifiedEmail
     }
 
     logoutHandler() {
-      this.logout({ router: this.$router })
+      UserStore.actions.logout()
       this.$q.notify(this.$t('logout.uscito'))
     }
   }
