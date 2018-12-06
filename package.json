@@ -8,6 +8,7 @@
     "dev": "NODE_OPTIONS=--max_old_space_size=4096 DEBUG=v8:* quasar dev",
     "dev:ssr": "NODE_OPTIONS=--max_old_space_size=4096 DEBUG=v8:* quasar dev -m ssr",
     "dev:pwa": "NODE_OPTIONS=--max_old_space_size=4096 DEBUG=v8:* quasar dev -m pwa",
+    "pwa": "NODE_OPTIONS=--max_old_space_size=4096 DEBUG=v8:* quasar dev -m pwa",
     "test:unit": "jest",
     "test:cover": "jest --coverage",
     "build": "quasar build",

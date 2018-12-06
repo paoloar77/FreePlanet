@@ -3,7 +3,6 @@ import { Component, Prop, Watch } from 'vue-property-decorator'
 import { UserStore } from '@store'
 import { rescodes } from '../../../store/Modules/rescodes'
 
-import { required, email, numeric, maxLength, maxValue, minValue, sameAs, minLength } from 'vuelidate/lib/validators'
 import { ISignupOptions, IUserState } from 'model'
 import { validations, TSignup } from './signup-validate'
 

@@ -11,9 +11,9 @@ export const RouteConfig: VueRouteConfig[] = [
     meta: { name: 'Home' }
   },
    { path: '/test', component: () => import('@/views/login/test.vue'), meta: { name: 'Test' } },
-  { path: '/signup', component: () => import('@/views/login/signup/signup.vue'), meta: { name: 'Registration' } }
+  { path: '/signup', component: () => import('@/views/login/signup/signup.vue'), meta: { name: 'Registration' } },
+  { path: '/signin', component: () => import('@/views/login/signin/signin.vue'), meta: { name: 'Login' } }
   /*
-  { path: '/signin', component: () => import('@/views/login/signin.vue'), meta: { name: 'Login' } },
   { path: '/vreg', component: () => import('@/views/login/vreg.vue'), meta: { name: 'Verify Reg' } },
   {
     path: '/requestresetpwd',

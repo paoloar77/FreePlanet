@@ -1,6 +1,6 @@
 
 import Api from '@api'
-import { ISignupOptions, IUserState } from 'model'
+import { ISignupOptions, ISigninOptions, IUserState } from 'model'
 import { ILinkReg, IResult, IIdToken } from 'model/other'
 import { storeBuilder } from './Store/Store'
 import router from '@router'
@@ -379,7 +379,7 @@ namespace Actions {
       })
   }
 
-  async function signin (context, authData: ISignupOptions) {
+  async function signin (context, authData: ISigninOptions) {
     let call = process.env.MONGODB_HOST + '/users/login'
     console.log('LOGIN ' + call)
 

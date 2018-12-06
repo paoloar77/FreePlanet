@@ -1,4 +1,4 @@
-import { ISignupOptions } from '@/model'
+import { ISignupOptions } from 'model'
 import { required, minLength, email, sameAs } from 'vuelidate/lib/validators'
 import { ValidationRuleset } from 'vuelidate'
 import { complexity, registereduser, registeredemail } from '@/validation'

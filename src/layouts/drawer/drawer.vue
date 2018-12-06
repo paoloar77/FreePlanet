@@ -1,5 +1,6 @@
 <template>
     <div>
+        User: {{ Username}}
         <div id="profile" v-if="Username">
             <img :src="photo" style='height: 80px' class="inline-block">
             <img src="../img/avatar-1.svg" id="avatar" class="inline-block">
@@ -8,7 +9,7 @@
                 <hr>
                 <span class="text-white" v-if="Verificato"> {{$t('reg.verificato')}} </span>
                 <span class="text-white" v-else> {{$t('reg.non_verificato')}} </span>
-                <span class="text-white"> {{ getEmail }} </span>
+                <span class="text-white"> {{ Email }} </span>
             </div>
             <div id="user-actions">
                 <q-btn round color="primary" icon="person"></q-btn>
@@ -89,6 +90,10 @@
 
     get Verificato () {
       return UserStore.state.verifiedEmail
+    }
+
+    get Email () {
+      return UserStore.state.email
     }
 
     logoutHandler() {

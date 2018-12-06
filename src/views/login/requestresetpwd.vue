@@ -13,7 +13,6 @@
             >
                 <q-input
                         v-model="form.email"
-                        :value="form.email"
                         autocomplete="email"
                         @change="val => { form.email = val }"
                         :before="[{icon: 'mail', handler () {}}]"
@@ -52,7 +51,7 @@
   import * as types from '../../store/mutation-types'
   import { rescodes } from '../../../store/Modules/rescodes'
 
-  import {serv_constants} from '../../store/Modules/serv_constants';
+  import {serv_constants} from '../../store/Modules/serv_constants'
 
 
   export default {
