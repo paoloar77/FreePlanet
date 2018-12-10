@@ -5,6 +5,7 @@
 A project made by Vue.js, Quasar Framework, Typescript, and Progressive Web App (PWA) amazing native-looking apps, thanks to the Quasar Framework and TypeScript
 
 
+
 </div>
 
 <div align="center">
