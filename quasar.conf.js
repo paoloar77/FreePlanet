@@ -168,8 +168,8 @@ module.exports = function (ctx) {
       workboxPluginMode: 'InjectManifest',
       // workboxOptions: {},
       manifest: {
-        name: 'My App',
-        short_name: 'myapp',
+        name: 'Free Planet',
+        short_name: 'freeplanet',
         description: 'Descrizione APP!',
         display: 'standalone',
         orientation: 'portrait',

@@ -1,8 +1,9 @@
 <div align="center">
 
-# Quasar TypeScript
+# FreePlanet
 
-A starter kit to build powerful and amazing native-looking apps, thanks to the Quasar Framework and TypeScript
+A project made by Vue.js, Quasar Framework, Typescript, and Progressive Web App (PWA) amazing native-looking apps, thanks to the Quasar Framework and TypeScript
+
 
 </div>
 
@@ -11,7 +12,7 @@ A starter kit to build powerful and amazing native-looking apps, thanks to the Q
 [![Made with Quasar](https://img.shields.io/badge/made%20with-Quasar-blue.svg?style=for-the-badge)](https://github.com/quasarframework/quasar)
 [![Uses TypeScript](https://img.shields.io/badge/uses-TypeScript-3F51B5.svg?style=for-the-badge)](https://github.com/Microsoft/TypeScript)
 
-[![License MIT](https://img.shields.io/github/license/kevinmarrec/quasar-typescript.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
+[![License MIT](https://img.shields.io/github/license/paoloar77/freeplanet-blue.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
 
 </div>
 
@@ -19,17 +20,15 @@ A starter kit to build powerful and amazing native-looking apps, thanks to the Q
 
 [![js-standard-style](https://cdn.rawgit.com/standard/standard/master/badge.svg)](https://github.com/standard/standard)
 
-[![Build](https://img.shields.io/circleci/project/github/kevinmarrec/quasar-typescript/master.svg?style=for-the-badge)](https://circleci.com/gh/kevinmarrec/quasar-typescript/tree/master)
-[![Coverage](https://img.shields.io/codecov/c/github/kevinmarrec/quasar-typescript/master.svg?style=for-the-badge)](https://codecov.io/gh/kevinmarrec/quasar-typescript/branch/master)
+[![Build](https://img.shields.io/circleci/project/github/paoloar77/freeplanet/master.svg?style=for-the-badge)](https://circleci.com/gh/paoloar77/freeplanet/tree/master)
+[![Coverage](https://img.shields.io/codecov/c/github/paoloar77/freeplanet/master.svg?style=for-the-badge)](https://codecov.io/gh/paoloar77/freeplanet/branch/master)
 
 </div>
 
 ## Features ⚡️(WIP)
 
 - [TypeScript](https://github.com/Microsoft/TypeScript) ✔
-- [Pug](https://github.com/pugjs/pug) Template Engine ✔
 - Internationalization (I18n) ✔
-- SSR compliant using Quasar SSR ✔
 - ...
 
 ## Built-in Tools 🔨
@@ -47,7 +46,7 @@ A starter kit to build powerful and amazing native-looking apps, thanks to the Q
 
 Clone this repository :
 ```bash
-$ git clone git@github.com:kevinmarrec/quasar-typescript example
+$ git clone git@github.com:paoloar77/freeplanet example
 $ cd example
 $ yarn
 ```
@@ -59,53 +58,13 @@ $ yarn dev # Start a SPA server
 $ yarn dev:ssr # Start a SSR + PWA server
 ```
 
-## Testing (WIP)
-
-## CI Pipeline (WIP)
-
 ## Building
 
 You can build your application for production using :
 
 ```bash
-$ yarn build # Build your SPA (it places the artifacts at /dist/spa-mat)
-$ yarn build:ssr # Build your SSR + PWA (it places the artifacts at /dist/ssr-mat)
+$ npm run dev:pwa # Build your PWA
 ```
-
-If you want then to clean build artifacts, just do :
-```bash
-$ yarn build:clean
-```
-
-## Serving
-
-You can serve your production ready application locally using :
-
-```bash
-$ yarn serve # Serve your SPA
-$ yarn serve:ssr # Serve your SSR + PWA
-```
-
-By default, SPA and SSR apps are respectively served on ports `4000` and `3000`
-
-You can override the port using an environment variable :
-```bash
-$ PORT=3210 yarn serve # Serve your SPA on port 3210
-$ PORT=3210 yarn serve:ssr # Serve your SSR + PWA on port 3210
-```
-
-## Deploy with Now.sh
-
-Deploying with [Now](https://zeit.co/now) is a breeze. The Now CLI is already shipped in the starter kit development dependencies so all you need to do is :
-
-```bash
-$ yarn deploy # Deploy your SPA on Now.sh
-$ yarn deploy:ssr # Deploy your SSR + PWA on Now.sh
-```
-
-> You might want to use a "now alias" or connect your domain to Now - or even look into automatic deployment with [their Github integration](https://zeit.co/blog/now-for-github).
-
-`Now.sh` will install the dependencies automatically then run `$ yarn start`. Your website will be up and running on an HTTPS connection in a matter of seconds !
 
 ## References
 * **Quasar 0.17.15** : [Website](https://quasar-framework.org) | [Documentation](https://quasar-framework.org/guide) | [Github](https://github.com/quasarframework/quasar)
@@ -115,4 +74,4 @@ $ yarn deploy:ssr # Deploy your SSR + PWA on Now.sh
 
 [MIT](https://opensource.org/licenses/MIT)
 
-Copyright (c) 2018-present, Kevin Marrec
+Copyright (c) 2018-present, Paolo Arena

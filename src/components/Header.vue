@@ -72,12 +72,11 @@
     },
     data: function () {
       return {
-        prova: 'AA',
         selectOpLang: [
-          {label: 'Italian', icon: 'fa-facebook', value: 'it'},
-          {label: 'English (US)', icon: 'fa-flag-us', value: 'en-us'},
+          {label: 'English (UK)', icon: 'fa-flag-us', value: 'en-uk'},
+          {label: 'German', icon: 'fa-flag-de', value: 'de'},
           {label: 'Spanish', icon: 'fa-flag-es', value: 'es'},
-          {label: 'German', icon: 'fa-flag-de', value: 'de'}
+          {label: 'Italian', icon: 'fa-facebook', value: 'it'}
         ],
         lang: this.$q.i18n.lang,
         leftDrawerOpen: this.$q.platform.is.desktop
