@@ -24,9 +24,6 @@ This app was made by Vue.js, Quasar Framework, Typescript, and Progressive Web A
 
 [![js-standard-style](https://cdn.rawgit.com/standard/standard/master/badge.svg)](https://github.com/standard/standard)
 
-[![Build](https://img.shields.io/circleci/project/github/paoloar77/freeplanet/master.svg?style=for-the-badge)](https://circleci.com/gh/paoloar77/freeplanet/tree/master)
-[![Coverage](https://img.shields.io/codecov/c/github/paoloar77/freeplanet/master.svg?style=for-the-badge)](https://codecov.io/gh/paoloar77/freeplanet/branch/master)
-
 </div>
 
 ## Features ⚡️(WIP)
@@ -38,15 +35,13 @@ This app was made by Vue.js, Quasar Framework, Typescript, and Progressive Web A
 ## Built-in Tools 🔨
 
 - [TSlint](https://github.com/palantir/tslint) TypeScript Linter configured with the [Standard](https://github.com/standard/standard) JavaScript Code Style
-- Testing Suite using [Jest](https://github.com/facebook/jest)  (See `Testing` section)
-- Configurable CI Pipeline using [CircleCI](https://circleci.com/) &  [Codecov](https://codecov.io)  (See `CI Pipeline` section)
 
 ## Installation 🔧 
 
 **System prerequisites :**
-- Pretested on Windows, Mac & Linux
 - Node.js 8 LTS or 10 latest
 - yarn > 1.9 (no guarantees if you prefer to use npm)
+
 
 Clone this repository :
 ```bash
