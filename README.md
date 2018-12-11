@@ -1,10 +1,13 @@
-<div align="center">
+<div>
 
 # FreePlanet
 
-A project made by Vue.js, Quasar Framework, Typescript, and Progressive Web App (PWA) amazing native-looking apps, thanks to the Quasar Framework and TypeScript
+I finally started my FreePlanet project !<br>
+I have a lot of ideas to which kind of features adding, to create an app in order to Help people to find and connect each others, using categories, filters and many profiling details about yourself.
+</div>
 
-
+<div>
+This app was made by Vue.js, Quasar Framework, Typescript, and Progressive Web App (PWA) amazing native-looking apps, thanks to the Quasar Framework and TypeScript
 
 </div>
 
