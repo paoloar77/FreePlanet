@@ -23,7 +23,7 @@
                     <div slot="subtitle">{{$t('msg.myDescriz')}}</div>
                 </q-toolbar-title>
 
-                <q-select class="sel_lang" v-model="lang" stack-label="" :options="selectOpLang"/>
+                <q-select class="sel_lang" v-model="setlang" stack-label="" :options="selectOpLang"/>
 
                 <!--<message-popover></message-popover>-->
 
@@ -49,66 +49,71 @@
     </div>
 </template>
 
-<script>
-  import {openURL} from 'quasar';
+<script lang="ts">
+  // import { openURL } from 'quasar'
 
   import {Quasar} from 'quasar';
+
+
+
+  import Vue from 'vue'
+  import Component from 'vue-class-component'
 
   import drawer from '../layouts/drawer/drawer.vue'
   import messagePopover from '../layouts/toolbar/messagePopover.vue'
 
-  // import user from '../store/Modules/user';
-
-  export default {
+  @Component({
     components: {
       drawer,
       messagePopover,
-    },
-    created() {
-      //this.$store.dispatch('initStocks');
-    },
-    methods: {
-      openURL,
-    },
-    data: function () {
-      return {
-        selectOpLang: [
-          {label: 'English (UK)', icon: 'fa-flag-us', value: 'en-uk'},
-          {label: 'German', icon: 'fa-flag-de', value: 'de'},
-          {label: 'Spanish', icon: 'fa-flag-es', value: 'es'},
-          {label: 'Italian', icon: 'fa-facebook', value: 'it'}
-        ],
-        lang: this.$q.i18n.lang,
-        leftDrawerOpen: this.$q.platform.is.desktop
-      }
-    },
-    watch: {
-      lang(lang) {
-        this.$i18n.locale = snakeToCamel(lang);
-        console.log("LANG LOCALE = " + this.$i18n.locale);
-
-        // dynamic import, so loading on demand only
-        import(`quasar-framework/i18n/${lang}`).then(lang => {
-          //console.log("lang prima = " + this.$q.i18n.lang);
-          this.$q.i18n.set(lang.default);
-          var mylang = this.$q.i18n.lang;
-          console.log("lang = " + this.$q.i18n.lang);
-          //console.log("lang DOPO = " + this.$q.i18n.lang);
-          import(`src/i18n`).then(function () {
-
-          });
-        });
-
-        // dynamic import, so loading on demand only
-      }
     }
+  })
+
+  export default class Header extends Vue {
+  /*
+    public $v
+    public $q
+
+
+
+    public selectOpLang = [
+      { label: 'English (UK)', icon: 'fa-flag-us', value: 'en-uk' },
+      { label: 'German', icon: 'fa-flag-de', value: 'de' },
+      { label: 'Spanish', icon: 'fa-flag-es', value: 'es' },
+      { label: 'Italian', icon: 'fa-facebook', value: 'it' }
+    ]
+    public lang = this.$q.i18n.lang
+    // public leftDrawerOpen = this.$q.platform.is.desktop
+
+    public setlang(lang) {
+      this.$i18n.locale = this.snakeToCamel(lang)
+      console.log("LANG LOCALE = " + this.$i18n.locale)
+
+
+      // dynamic import, so loading on demand only
+      import(`quasar-framework/i18n/${lang}`).then(lang => {
+        //console.log("lang prima = " + this.$q.i18n.lang);
+        this.$q.i18n.set(lang.default)
+        var mylang = this.$q.i18n.lang
+        console.log("lang = " + this.$q.i18n.lang)
+        //console.log("lang DOPO = " + this.$q.i18n.lang);
+        import(`src/i18n`).then(function () {
+
+        })
+      })
+
+      // dynamic import, so loading on demand only
+    }
+
+    public snakeToCamel(str) {
+      return str.replace(/(-\w)/g, m => {
+        return m[1].toUpperCase()
+      })
+    }
+  */
+
   }
 
-  function snakeToCamel(str) {
-    return str.replace(/(-\w)/g, m => {
-      return m[1].toUpperCase()
-    })
-  }
 
 </script>
 

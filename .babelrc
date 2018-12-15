@@ -37,8 +37,10 @@
     [
       "@babel/plugin-transform-runtime",
       {
-        "regenerator": true,
-        "helpers": true
+        "corejs": false,
+        "regenerator": false,
+        "helpers": true,
+        "useESModules": false
       }
     ]
   ],
