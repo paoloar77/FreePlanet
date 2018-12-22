@@ -12,8 +12,8 @@ This app was made mixing all this languages and tools:<br>
   <li>Quasar Framework</li>
   <li>Vue.js</li>
   <li>Typescript</li>
-  <li>Progressive Web App (PWA) amazing native-looking apps</li>
-  
+  <li>Progressive Web App (PWA) amazing native-looking apps</li>  
+</ul>
 Thanks to the Quasar Framework and TypeScript !
 
 </div>
@@ -36,7 +36,7 @@ Thanks to the Quasar Framework and TypeScript !
 
 </div>
 
-## Features ⚡️(WIP)
+## Features ⚡️
 
 - [TypeScript](https://github.com/Microsoft/TypeScript) ✔
 - Internationalization (I18n) ✔
