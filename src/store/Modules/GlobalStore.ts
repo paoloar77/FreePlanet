@@ -17,9 +17,15 @@ const stateGetter = b.state()
 // Getters
 namespace Getters {
 
-  export const getters = {
-  }
+  const conta = b.read(function conta(state): number {
+    return state.conta
+  })
 
+  export const getters = {
+    get conta() {
+      return conta()
+    }
+  }
 }
 
 namespace Mutations {
