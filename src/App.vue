@@ -39,7 +39,7 @@
 
     created() {
       //this.title = 'My Vue and CosmosDB Heroes App'
-      console.info(process.env)
+      // console.info(process.env)
       UserStore.mutations.autologin()
     }
   }

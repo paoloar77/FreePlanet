@@ -11,15 +11,11 @@
     "pwa": "NODE_OPTIONS=--max_old_space_size=4096 DEBUG=v8:* quasar dev -m pwa",
     "test:unit": "jest",
     "test:cover": "jest --coverage",
-    "build": "quasar build",
-    "build:pwa": "quasar build -m pwa",
-    "build:ssr": "quasar build -m ssr",
+    "build": "quasar build -m pwa",
     "build:clean": "quasar clean",
     "serve": "quasar serve ./dist/pwa-mat",
-    "serve:ssr": "quasar serve ./dist/ssr-mat",
     "serve:coverage": "quasar serve test/coverage/lcov-report/ --cache 0 --port 8788",
-    "deploy": "now dist/spa-mat",
-    "deploy:ssr": "now dist/ssr-mat"
+    "deploy": "now dist/pwa-mat"
   },
   "dependencies": {
     "quasar-extras": "^2.0.8",

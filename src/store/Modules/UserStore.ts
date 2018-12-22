@@ -1,4 +1,3 @@
-
 import Api from '@api'
 import { ISignupOptions, ISigninOptions, IUserState } from 'model'
 import { ILinkReg, IResult, IIdToken } from 'model/other'
@@ -7,8 +6,6 @@ import router from '@router'
 
 import { serv_constants } from '../Modules/serv_constants'
 import { rescodes } from '../Modules/rescodes'
-
-
 
 const bcrypt = require('bcryptjs')
 
@@ -34,15 +31,15 @@ const stateGetter = b.state()
 
 namespace Getters {
 
-  const lang = b.read(function lang(state): string {
+  const lang = b.read(state => {
     if (state.lang !== '') {
       return state.lang
     } else {
       return process.env.LANG_DEFAULT
     }
-  })
+  }, 'lang')
 
-  const tok = b.read(function tok(state): string {
+  const tok = b.read(state => {
     if (state.tokens) {
       if (typeof state.tokens[0] !== 'undefined') {
         return state.tokens[0].token
@@ -52,7 +49,7 @@ namespace Getters {
     } else {
       return ''
     }
-  })
+  }, 'tok')
 
   export const getters = {
     get lang() {
