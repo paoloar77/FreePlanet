@@ -7,7 +7,14 @@ I have a lot of ideas to which kind of features adding, to create an app in orde
 </div>
 
 <div>
-This app was made by Vue.js, Quasar Framework, Typescript, and Progressive Web App (PWA) amazing native-looking apps, thanks to the Quasar Framework and TypeScript
+This app was made mixing all this languages and tools:<br>
+<ul>
+  <li>Quasar Framework</li>
+  <li>Vue.js</li>
+  <li>Typescript</li>
+  <li>Progressive Web App (PWA) amazing native-looking apps</li>
+  
+Thanks to the Quasar Framework and TypeScript !
 
 </div>
 <br>
