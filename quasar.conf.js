@@ -170,7 +170,7 @@ module.exports = function (ctx) {
       manifest: {
         name: 'Free Planet',
         short_name: 'freeplanet',
-        description: 'Descrizione APP!',
+        description: 'Social project in order to connecting people each others (working in progress...)',
         display: 'standalone',
         orientation: 'portrait',
         background_color: '#ffffff',
