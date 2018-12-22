@@ -1,5 +1,8 @@
 const messages = {
   it: {
+    comp:{
+      Conta: "Conta",
+    },
     msg: {
       hello: 'Buongiorno',
       myAppName: 'FreePlanet',
@@ -51,7 +54,10 @@ const messages = {
       uscito: 'Sei Uscito',
     },
   },
-  enUs: {
+  enUk: {
+    comp:{
+      Conta: "Count",
+    },
     msg: {
       hello: 'Hello!',
       myAppName: 'FreePlanet',

@@ -29,7 +29,7 @@ export default class Home extends Vue {
   }
 
   get conta() {
-    return GlobalStore.state.conta
+    return GlobalStore.getters.conta
   }
   set conta(valore) {
     GlobalStore.actions.setConta(valore)

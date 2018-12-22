@@ -22,15 +22,3 @@ export { default as Api } from './Api'
 
 const store: Store<RootState> = getStoreBuilder<RootState>().vuexStore()
 export default store
-
-// export function createStore() {
-//   const store: Store<RootState> = storeBuilder.vuexStore({
-//     strict: DebugMode
-//   })
-//
-//   return store
-//
-// }
-// export default new Vuex.Store<RootState>({
-
-// })

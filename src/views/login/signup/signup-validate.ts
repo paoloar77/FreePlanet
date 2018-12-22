@@ -1,7 +1,7 @@
 import { ISignupOptions } from 'model'
 import { required, minLength, email, sameAs } from 'vuelidate/lib/validators'
-import { ValidationRuleset } from 'vuelidate'
-import { complexity, registereduser, registeredemail } from 'validation'
+// import { ValidationRuleset } from 'vuelidate'
+import { complexity, registereduser, registeredemail } from '../../../validation'
 
 export type TSignup = { signup: ISignupOptions, validationGroup: string[] }
 

@@ -8,10 +8,12 @@
 
         <q-field
                 icon="wifi"
-                :count="10"
                 helper="Some helper"
         >
-            <br>Conta = {{ conta }}
+            <q-input
+                    v-model="conta"
+            />
+            <br>{{$t('comp.Conta')}} = {{ conta }}
         </q-field>
 
         <!--<q-btn
