@@ -1,12 +1,13 @@
 <template>
     <div>
-        <q-layout-header>
+        <q-layout-header v-model="header" :reveal="headerReveal">
             <q-toolbar
                     color="primary"
                     :glossy="$q.theme === 'mat'"
                     :inverted="$q.theme === 'ios'"
                     class="toolbar"
             >
+
                 <q-btn
                         flat
                         dense
@@ -73,7 +74,7 @@
       { label: 'Spanish', icon: 'fa-flag-es', value: 'es' },
       { label: 'Italian', icon: 'fa-facebook', value: 'it' }
     ]
-    public leftDrawerOpen = this.$q.platform.is.desktop
+    public leftDrawerOpen = false;
 
     get lang() {
       return this.$q.i18n.lang
