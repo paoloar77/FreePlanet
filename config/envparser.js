@@ -1,5 +1,19 @@
 const DotEnv = require('dotenv')
-const parsedEnv = DotEnv.config().parsed;
+
+let path
+switch (process.env.NODE_ENV) {
+  case 'test':
+    path = `.env.test`
+    break
+  case 'development':
+    path = `.env.development`
+    break
+  default:
+    path = `.env`
+}
+
+console.log("PATH", path)
+const parsedEnv = DotEnv.config({ path }).parsed;
 
 module.exports = function () {
   // Let's stringify our variables

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <q-layout-header v-model="header" :reveal="headerReveal">
+        <q-layout-header>
             <q-toolbar
                     color="primary"
                     :glossy="$q.theme === 'mat'"
@@ -26,7 +26,9 @@
 
                 <q-select class="sel_lang" v-model="lang" stack-label="" :options="selectOpLang"/>
 
-                <!--<message-popover></message-popover>-->
+                <!--
+                <message-popover></message-popover>
+                -->
 
                 <!--
                 <div class="right-itens">
@@ -55,7 +57,7 @@
   import Component from 'vue-class-component'
 
   import drawer from '../layouts/drawer/drawer.vue'
-  import messagePopover from '../layouts/toolbar/messagePopover.vue'
+  import messagePopover from '../layouts/toolbar/messagePopover/messagePopover.vue'
 
   @Component({
     components: {

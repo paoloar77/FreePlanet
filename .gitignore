@@ -26,3 +26,6 @@ yarn-error.log*
 # Coverage
 coverage
 /_PROVE
+/_LOCALE
+deploy.sh
+deploy_production.sh

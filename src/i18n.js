@@ -6,7 +6,20 @@ const messages = {
     msg: {
       hello: 'Buongiorno',
       myAppName: 'FreePlanet',
-      myDescriz: 'La prima App Libera e per Tutti'
+      myDescriz: 'La prima App Libera'
+    },
+    pages: {
+      home: 'Principale',
+      SignUp: 'Registrazione',
+      SignIn: 'Login',
+      Test: 'Test',
+    },
+    components: {
+      authentication:{
+        login: {
+          facebook: 'Facebook'
+        }
+      }
     },
     reg: {
       incorso: 'Registrazione in corso...',
@@ -53,6 +66,11 @@ const messages = {
     logout:{
       uscito: 'Sei Uscito',
     },
+    errors: {
+      graphql: {
+        undefined: 'non definito'
+      }
+    },
   },
   enUk: {
     comp:{
@@ -61,7 +79,20 @@ const messages = {
     msg: {
       hello: 'Hello!',
       myAppName: 'FreePlanet',
-      myDescriz: 'The first Free app for Everyone'
+      myDescriz: 'The first Free app'
+    },
+    pages: {
+      home: 'Dashboard One',
+      SignUp: 'SignUp',
+      SignIn: 'SignIn',
+      Test: 'Test',
+    },
+    components: {
+      authentication:{
+        login: {
+          facebook: 'Facebook'
+        }
+      }
     },
     reg: {
       incorso: 'Registration please wait...',
@@ -107,6 +138,11 @@ const messages = {
     },
     logout:{
       uscito: 'Logout successfully',
+    },
+    errors: {
+      graphql: {
+        undefined: 'undefined'
+      }
     },
   },
 };

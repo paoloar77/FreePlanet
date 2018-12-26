@@ -1,0 +1,17 @@
+.list {
+  max-width: 400px;
+}
+
+.item > img.item-primary:not(.thumbnail) {
+  border-radius: 10px !important;
+}
+
+.item > img.item-primary {
+  width: 48px;
+  height: 46px;
+}
+
+.item > .item-secondary {
+  width: 57px;
+  font-size: 13px;
+}

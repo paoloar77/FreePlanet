@@ -11,7 +11,7 @@
                         <div v-show="parent.show">
                                 <q-item link :to="child.route" exact class="item item-link drawer-closer cursor-pointer">
                                     <i :class="child.faIcon" class="item-primary"></i>
-                                    <div class="item-content">{{child.name}}</div>
+                                    <div class="item-content">{{$t(child.name)}}</div>
                                 </q-item>
                         </div>
                     </transition>

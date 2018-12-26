@@ -18,8 +18,7 @@
             </div>
         </div>
 
-        <menu-one v-if="MenuCollapse" :links="links"></menu-one>
-        <menu-two v-else :links="links"></menu-two>
+        <menu-one :links="links"></menu-one>
 
         <div class="fixed-bottom text-center light text-italic">
             Powered by Perseo
@@ -30,7 +29,6 @@
 
 <script lang="ts">
   import menuOne from './menuOne.vue'
-  import menuTwo from './menuTwo.vue'
 
   import Vue from 'vue'
   import { Component, Watch, Prop } from 'vue-property-decorator'
@@ -42,42 +40,34 @@
   @Component({
     components: {
       menuOne,
-      menuTwo
     }
   })
   export default class Drawer extends Vue {
     public $q
-    $t: any
+    $t: any;
+
+    created () {
+      console.log('Drawer created...')
+    }
+
 
     photo = ''
     user = null
     links = {
       Dashboard: {
         routes: [
-          {route: '/', faIcon: 'fa fa-home', materialIcon: 'home', name: 'Dashboard One'},
-          {route: '/signup', faIcon: 'fa fa-signup', materialIcon: 'login', name: 'SignUp'},
-          {route: '/signin', faIcon: 'fa fa-login', materialIcon: 'login', name: 'Login'},
+          {route: '/', faIcon: 'fa fa-home', materialIcon: 'home', name: 'pages.home'},
+          {route: '/signup', faIcon: 'fa fa-signup', materialIcon: 'login', name: 'pages.SignUp'},
+          {route: '/signin', faIcon: 'fa fa-login', materialIcon: 'login', name: 'pages.SignIn'},
           ],
         show: true
       },
       Forms: {
         routes: [
-          {route: '/prec', faIcon: 'fa fa-search', materialIcon: 'search', name: 'Prec'},
-          {route: '/simpleform', faIcon: 'fa fa-search', materialIcon: 'search', name: 'Simpleform'},
-          {route: '/embeeded', faIcon: 'fa fa-check', materialIcon: 'check', name: 'Embeeded validations'},
-          //{ route: '/advanced-form-one', faIcon: 'fa fa-hdd-o', materialIcon: 'filter_1', name: 'Adv. Form One' }
+          {route: '/prec', faIcon: 'fa fa-search', materialIcon: 'search', name: 'pages.Test'},
           ],
         show: false
       },
-      Pages: {
-        routes: [
-          {route: '/login', faIcon: 'fa fa-unlock-alt', materialIcon: 'lock_open', name: 'Login'},
-          //{ route: '/pricing', faIcon: 'fa fa-money', materialIcon: 'attach_money', name: 'Pricing' },
-          //{ route: '/drag-and-drop', faIcon: 'fa fa-arrows', materialIcon: 'move_to_inbox', name: 'Drag and Drop' },
-          //{ route: '/server-side-data-table', faIcon: 'fa fa-list-alt', materialIcon: 'list_compact', name: 'Server Side Data Table' }
-          ],
-        show: false
-      }
     }
 
     get MenuCollapse () {

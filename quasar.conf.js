@@ -59,7 +59,7 @@ module.exports = function (ctx) {
       store: 'src/store/index.ts'
     },
     // app plugins (/src/plugins)
-    plugins: ['i18n', 'axios', 'vee-validate'],
+    plugins: ['i18n', 'axios', 'vee-validate', 'myconfig', 'local-storage', 'error-handler'],
     css: [
       'app.styl'
     ],
@@ -78,8 +78,8 @@ module.exports = function (ctx) {
       scopeHoisting: true,
       vueRouterMode: 'history',
       vueCompiler: true,
-      gzip: true,
-      analyze: true,
+      gzip: false,   // gzip true
+      analyze: false,  // true
       // extractCSS: false,
       chainWebpack(config) {
         extendTypescriptToWebpack(config);
@@ -93,7 +93,14 @@ module.exports = function (ctx) {
           .test(/\.pug$/)
           .use('pug')
           .loader('pug-plain-loader')
+        /*config.module
+          .rule('template-engine')
+          .test(/\.(gql|graphql)$/)
+          .loader('graphql-tag/loader') */
       }
+    },
+    dev: {
+      env: require('./.env.development'),
     },
     devServer: {
       https: false,

@@ -6,7 +6,7 @@ export default ({ app, store, Vue }) => {
   Vue.use(VueI18n);
   Vue.config.lang = process.env.LANG_DEFAULT;
 
-  console.log("PLUGINS INIT....");
+  // console.log("PLUGINS INIT....");
 
   //console.log("LANG_DEFAULT: ")
   //console.log(process.env.LANG_DEFAULT)

@@ -16,7 +16,7 @@ const b = storeBuilder.module<IGlobalState>('GlobalModule', state)
 // Getters
 namespace Getters {
 
-  const conta = b.read(state => state.conta , 'conta')
+  const conta = b.read(state => state.conta, 'conta')
 
   export const getters = {
     get conta() {
@@ -52,7 +52,9 @@ const stateGetter = b.state()
 
 // Module
 const GlobalModule = {
-  get state() { return stateGetter()},
+  get state() {
+    return stateGetter()
+  },
   getters: Getters.getters,
   mutations: Mutations.mutations,
   actions: Actions.actions

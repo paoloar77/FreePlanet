@@ -17,8 +17,12 @@ export default class Home extends Vue {
 
   constructor() {
     super()
-    console.log('created...')
+    console.log('Home constructor...')
     this.initprompt()
+  }
+
+  created() {
+    console.log('Home created...')
   }
 
   mystilecard() {
@@ -29,7 +33,7 @@ export default class Home extends Vue {
   }
 
   get conta() {
-    return GlobalStore.getters.conta
+    return GlobalStore.state.conta
   }
   set conta(valore) {
     GlobalStore.actions.setConta(valore)

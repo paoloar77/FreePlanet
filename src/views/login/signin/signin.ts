@@ -23,6 +23,7 @@ import './signin.scss'
 export default class Signin extends Vue {
   public $v
   public $q
+  loading: boolean
   $t: any
 
   public signin: ISigninOptions = {
@@ -33,6 +34,8 @@ export default class Signin extends Vue {
 
   created() {
     this.$v.$reset()
+    // this.$myconfig.socialLogin.facebook = true
+    // console.log('PROVA fb:', this.$myconfig.socialLogin.facebook)
   }
 
   public env() {
@@ -76,6 +79,27 @@ export default class Signin extends Vue {
     } else {
       this.showNotif('Errore num ' + riscode)
     }
+
+  }
+
+  redirect(response) {
+    this.loading = false
+    window.location.href = response.data.redirect
+  }
+
+  error(error) {
+    this.loading = false
+    this.$errorHandler(this, error)
+  }
+
+  facebook() {
+    this.loading = true
+    this.$axios.get('/backend/loginFacebook')
+      .then(response => this.redirect(response))
+      .catch(error => this.error(error))
+  }
+
+  google() {
 
   }
 
