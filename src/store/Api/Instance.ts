@@ -5,7 +5,6 @@ import {clone} from 'lodash'
 import * as Types from './ApiTypes'
 
 export const API_URL = process.env.API_URL
-export const APP_BASE = process.env.NODE_ENV === 'development' ? 'http://localhost:5000/' : 'http://myip:5000/'
 export const axiosInstance: AxiosInstance = axios.create({
   baseURL: API_URL,
   headers: {

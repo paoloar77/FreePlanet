@@ -2,7 +2,7 @@ import Request from './Instance'
 import sendRequest from './Inst-Pao'
 export * from './ApiTypes'
 import axios from 'axios'
-export {addAuthHeaders, removeAuthHeaders, API_URL, APP_BASE} from './Instance'
+export {addAuthHeaders, removeAuthHeaders, API_URL} from './Instance'
 // import {AlgoliaSearch} from './AlgoliaController'
 import Paths from '@paths'
 

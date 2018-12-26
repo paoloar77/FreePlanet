@@ -17,8 +17,6 @@
 </template>
 <script lang="ts">
   import Vue from "vue"
-  import { Store } from "vuex"
-  import { sync } from 'vuex-router-sync'
   import { Component } from 'vue-property-decorator'
   import { EventBus, RootState, storeBuilder, DebugMode } from '@store'
   import router from "./router"
@@ -35,11 +33,19 @@
     router
   })
   export default class App extends Vue {
-    backgroundColor = 'whitesmoke'
+    public backgroundColor = 'whitesmoke'
 
     created() {
       //this.title = 'My Vue and CosmosDB Heroes App'
-      // console.info(process.env)
+      if (process.env.DEV){
+        console.info("SESSIONE IN SVILUPPO ! (DEV)")
+        console.info(process.env)
+      }
+      if (process.env.PROD){
+        console.info("SESSIONE IN PRODUZIONE!")
+        console.info(process.env)
+      }
+
       UserStore.mutations.autologin()
     }
   }

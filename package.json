@@ -5,16 +5,16 @@
   "scripts": {
     "lint": "tslint --project tsconfig.json",
     "lint:fix": "tslint --project tsconfig.json --fix",
-    "dev": "NODE_OPTIONS=--max_old_space_size=4096 DEBUG=v8:* quasar dev -m pwa",
-    "dev:ssr": "NODE_OPTIONS=--max_old_space_size=4096 DEBUG=v8:* quasar dev -m ssr",
-    "pwa": "NODE_OPTIONS=--max_old_space_size=4096 DEBUG=v8:* quasar dev -m pwa",
+    "dev": "NODE_ENV=development NODE_OPTIONS=--max_old_space_size=4096 DEBUG=v8:* quasar dev -m pwa",
+    "dev:ssr": "NODE_ENV=development NODE_OPTIONS=--max_old_space_size=4096 DEBUG=v8:* quasar dev -m ssr",
+    "pwa": "NODE_ENV=development NODE_OPTIONS=--max_old_space_size=4096 DEBUG=v8:* quasar dev -m pwa",
     "test:unit": "jest",
     "test:cover": "jest --coverage",
     "build": "quasar build -m pwa",
     "build:clean": "quasar clean",
     "serve": "quasar serve ./dist/pwa-mat",
     "serve:coverage": "quasar serve test/coverage/lcov-report/ --cache 0 --port 8788",
-    "deploy": "now dist/pwa-mat"
+    "deploy": "deploy.sh"
   },
   "dependencies": {
     "quasar-extras": "^2.0.8",
@@ -26,6 +26,8 @@
     "bcrypt": "^3.0.2",
     "bcryptjs": "^2.4.3",
     "dotenv": "^6.1.0",
+    "graphql": "^0.13.2",
+    "graphql-tag": "^2.8.0",
     "element-ui": "^2.3.6",
     "google-translate-api": "^2.3.0",
     "js-cookie": "^2.2.0",

@@ -21,8 +21,7 @@
                         :before="[{icon: 'person', handler () {}}]"
                         @blur="$v.signin.username.$touch"
                         :error="$v.signin.username.$error"
-                        :float-label="$t('reg.username')"
-                />
+                        :float-label="$t('reg.username')"></q-input>
             </q-field>
 
             <q-field
@@ -34,8 +33,7 @@
                         :before="[{icon: 'vpn_key', handler () {}}]"
                         @blur="$v.signin.password.$touch"
                         :error="$v.signin.password.$error"
-                        :float-label="$t('reg.password')"
-                />
+                        :float-label="$t('reg.password')"></q-input>
             </q-field>
 
             <div>
@@ -43,6 +41,14 @@
             </div>
 
             <br>
+
+            <q-card-main class="flex flex-center">
+                <!--<q-btn v-if="$myconfig.socialLogin.facebook" :loading="loading" class="q-mb-md q-mr-md" rounded icon="fab fa-facebook-f" size="sm" color="blue-10" text-color="white" @click="facebook" :label="$t('components.authentication.login.facebook')"/>-->
+                <!--
+                <q-btn v-if="$myconfig.socialLogin.facebook" class="q-mb-md q-mr-md" rounded icon="fab fa-facebook-f" size="sm" color="blue-10" text-color="white" @click="facebook" :label="$t('components.authentication.login.facebook')"/>
+                <q-btn v-if="$myconfig.socialLogin.google" class="q-mb-md q-mr-md" rounded icon="fab fa-google" size="sm" color="deep-orange-14" text-color="white" @click="google" :label="$t('components.authentication.login.google')"/>
+                -->
+            </q-card-main>
 
             <div align="center">
                 <q-btn rounded size="lg" color="primary" @click="submit" :disable="$v.$error">{{$t('login.enter')}}

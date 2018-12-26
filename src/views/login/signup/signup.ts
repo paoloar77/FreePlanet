@@ -39,9 +39,6 @@ export default class Signup extends Vue {
   }
 
   mounted() {
-    if (this.$v) {
-      this.$v.$touch()
-    }
   }
 
   public logoimg() {
@@ -109,6 +106,7 @@ export default class Signup extends Vue {
         }
       }
 
+      if (!item.required) return this.$t('reg.err.required')
       if (cosa === 'email') {
         // console.log("EMAIL " + item.isUnique);
         // console.log(item);
@@ -118,7 +116,6 @@ export default class Signup extends Vue {
         if (!item.isUnique) return this.$t('reg.err.duplicate_username')
       }
 
-      if (!item.required) return this.$t('reg.err.required')
       if (!item.complexity) return this.$t('reg.err.complexity')
       if (!item.minLength) return this.$t('reg.err.atleast') + ` ${item.$params.minLength.min} ` + this.$t('reg.err.char')
       if (!item.maxLength) return this.$t('reg.err.notmore') + ` ${item.$params.maxLength.max} ` + this.$t('reg.err.char')
