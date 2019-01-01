@@ -11,6 +11,7 @@ import { validations, TSignin } from './signin-validate'
 import { validationMixin } from 'vuelidate'
 
 import './signin.scss'
+import router from '@router'
 
 // import {Loading, QSpinnerFacebook, QSpinnerGears} from 'quasar'
 
@@ -116,6 +117,9 @@ export default class Signin extends Vue {
     console.log(this.signin)
     UserStore.actions.signin(this.signin)
       .then((riscode) => {
+        if (riscode === rescodes.OK) {
+          router.push('/signin')
+        }
         this.checkErrors(riscode)
         this.$q.loading.hide()
       }).catch(error => {

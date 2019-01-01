@@ -12,7 +12,7 @@ switch (process.env.NODE_ENV) {
     path = `.env`
 }
 
-console.log("PATH", path)
+// console.log("PATH", path)
 const parsedEnv = DotEnv.config({ path }).parsed;
 
 module.exports = function () {

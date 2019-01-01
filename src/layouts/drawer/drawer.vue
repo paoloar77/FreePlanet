@@ -1,6 +1,5 @@
 <template>
     <div>
-        User: {{ Username}}
         <div id="profile" v-if="Username">
             <img :src="photo" style='height: 80px' class="inline-block">
             <img src="../img/avatar-1.svg" id="avatar" class="inline-block">

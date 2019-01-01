@@ -43,6 +43,7 @@
         >
             <q-input
                     v-model="signup.password"
+                    type="password"
                     :before="[{icon: 'vpn_key', handler () {}}]"
                     @blur="$v.signup.password.$touch"
                     :error="$v.signup.password.$error"
@@ -55,6 +56,7 @@
         >
             <q-input
                     v-model="signup.repeatPassword"
+                    type="password"
                     :before="[{icon: 'vpn_key', handler () {}}]"
                     @blur="$v.signup.repeatPassword.$touch"
                     :error="$v.signup.repeatPassword.$error"

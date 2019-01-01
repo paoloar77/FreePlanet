@@ -91,9 +91,10 @@ export default class Signup extends Vue {
     return process.env
   }
 
-  showNotif(msg: any) {
-    this.$q.notify(msg)
+  showNotif(params: any) {
+    this.$q.notify(params)
   }
+
 
   public errorMsg(cosa: string, item: any) {
     try {
@@ -132,7 +133,8 @@ export default class Signup extends Vue {
     } else if (riscode === rescodes.DUPLICATE_USERNAME_ID) {
       this.showNotif(this.$t('reg.err.duplicate_username'))
     } else if (riscode === rescodes.OK) {
-      this.$router.push('/')
+      this.$router.push('/signin')
+      this.showNotif({type: 'warning', textColor: 'black', message: this.$t('components.authentication.email_verification.link_sent')})
     } else {
       this.showNotif('Errore num ' + riscode)
     }
