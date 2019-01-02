@@ -51,7 +51,7 @@ export default class Vreg extends Vue {
 
       if (this.verificatook) {
         setTimeout(() => {
-          this.$router.replace('/')
+          this.$router.replace('/signin')
         }, 3000)
       }
 

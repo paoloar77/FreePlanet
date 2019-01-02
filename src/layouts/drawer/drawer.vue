@@ -7,8 +7,8 @@
                 <span class="text-white"> {{ Username }} </span>
                 <hr>
                 <span class="text-white" v-if="Verificato"> {{$t('reg.verificato')}} </span>
-                <span class="text-white" v-else> {{$t('reg.non_verificato')}} </span>
-                <span class="text-white"> {{ Email }} </span>
+                <span class="text-white background-red" v-else> {{$t('reg.non_verificato')}} </span>
+                <!-- <span class="text-white"> {{ Email }} </span>-->
             </div>
             <div id="user-actions">
                 <q-btn round color="primary" icon="person"></q-btn>
@@ -92,6 +92,11 @@
   }
 </script>
 <style scoped>
+    .background-red{
+        background-color: red;
+        padding: 2px;
+    }
+
     .fixed-bottom {
         margin-bottom: 1%;
     }

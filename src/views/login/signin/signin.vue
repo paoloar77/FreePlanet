@@ -30,6 +30,7 @@
             >
                 <q-input
                         v-model="signin.password"
+                        type="password"
                         :before="[{icon: 'vpn_key', handler () {}}]"
                         @blur="$v.signin.password.$touch"
                         :error="$v.signin.password.$error"

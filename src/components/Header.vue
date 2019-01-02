@@ -59,6 +59,8 @@
   import drawer from '../layouts/drawer/drawer.vue'
   import messagePopover from '../layouts/toolbar/messagePopover/messagePopover.vue'
 
+  import { GlobalStore } from '@modules'
+
   @Component({
     components: {
       drawer,
@@ -76,7 +78,13 @@
       { label: 'Spanish', icon: 'fa-flag-es', value: 'es' },
       { label: 'Italian', icon: 'fa-facebook', value: 'it' }
     ]
-    public leftDrawerOpen = false;
+    get leftDrawerOpen () {
+      return GlobalStore.state.leftDrawerOpen
+    }
+    set leftDrawerOpen (value) {
+      GlobalStore.state.leftDrawerOpen = value
+      localStorage.setItem('leftDrawerOpen', value.toString())
+    }
 
     get lang() {
       return this.$q.i18n.lang

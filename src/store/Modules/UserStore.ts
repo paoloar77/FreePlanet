@@ -6,7 +6,7 @@ import router from '@router'
 
 import { serv_constants } from '../Modules/serv_constants'
 import { rescodes } from '../Modules/rescodes'
-import { UserStore } from "@store"
+import { GlobalStore, UserStore } from '@store'
 
 const bcrypt = require('bcryptjs')
 
@@ -109,37 +109,6 @@ namespace Mutations {
     state.verifiedEmail = false
   }
 
-  function autologin (state: IUserState) {
-    // INIT
-    UserStore.mutations.setlang(process.env.LANG_DEFAULT)
-    // ++Todo: Estrai la Lang dal Localstorage
-    const lang = localStorage.getItem('lang')
-    if (lang) {
-      UserStore.mutations.setlang(lang)
-    }
-
-    const token = localStorage.getItem('token')
-    if (!token) {
-      return
-    }
-    const expirationDateStr = localStorage.getItem('expirationDate')
-    let expirationDate = new Date(String(expirationDateStr))
-    const now = new Date()
-    if (now >= expirationDate) {
-      return
-    }
-    const userId = Number(localStorage.getItem('userId'))
-    const username = String(localStorage.getItem('username'))
-    const verifiedEmail = localStorage.getItem('verificato') === '1'
-
-    mutations.authUser({
-      username: username,
-      userId: userId,
-      idToken: token,
-      verifiedEmail: verifiedEmail
-    })
-  }
-
   export const mutations = {
     authUser: b.commit(authUser),
     setpassword: b.commit(setpassword),
@@ -147,8 +116,7 @@ namespace Mutations {
     setlang: b.commit(setlang),
     UpdatePwd: b.commit(UpdatePwd),
     setServerCode: b.commit(setServerCode),
-    clearAuthData: b.commit(clearAuthData),
-    autologin: b.commit(autologin)
+    clearAuthData: b.commit(clearAuthData)
   }
 
 }
@@ -278,7 +246,10 @@ namespace Actions {
         // console.log("RITORNO 2 ");
         // mutations.setServerCode(myres);
         if (body.code === serv_constants.RIS_CODE_EMAIL_VERIFIED) {
+          console.log('VERIFICATO !!')
           localStorage.setItem('verificato', '1')
+        } else {
+          console.log('Risultato di vreg: ', body.code)
         }
         return { code: body.code, msg: body.msg }
       }).catch((err) => {
@@ -353,7 +324,7 @@ namespace Actions {
 
               const now = new Date()
               // const expirationDate = new Date(now.getTime() + myres.data.expiresIn * 1000);
-              const expirationDate = new Date(now.getTime() + 1000)
+              const expirationDate = new Date(now.getTime() * 1000)
               localStorage.setItem('username', username)
               localStorage.setItem('token', x_auth_token)
               localStorage.setItem('userId', iduser)
@@ -438,7 +409,7 @@ namespace Actions {
         if (myres.status === 200) {
           let iduser = body._id
           let username = authData.username
-          let verifiedEmail = body.verifiedEmail === 'true' || body.verifiedEmail === true
+          let verifiedEmail = body.verified_email === 'true' || body.verified_email === true
           if (process.env.DEV) {
             console.log('USERNAME = ' + username)
             console.log('IDUSER= ' + iduser)
@@ -452,13 +423,14 @@ namespace Actions {
 
           const now = new Date()
           // const expirationDate = new Date(now.getTime() + myres.data.expiresIn * 1000);
-          const expirationDate = new Date(now.getTime() + 1000)
+          const expirationDate = new Date(now.getTime() * 1000)
           localStorage.setItem('username', username)
           localStorage.setItem('token', x_auth_token)
           localStorage.setItem('userId', iduser)
           localStorage.setItem('expirationDate', expirationDate.toString())
           localStorage.setItem('isLoggedin', String(true))
-          localStorage.setItem('verificato', String(verifiedEmail))
+          localStorage.setItem('verificato', Number(verifiedEmail).toString())
+
 
           // dispatch('storeUser', authData);
           // dispatch('setLogoutTimer', myres.data.expiresIn);
@@ -517,6 +489,50 @@ namespace Actions {
     router.push('/signin')
   }
 
+  function setGlobal() {
+    GlobalStore.mutations.setleftDrawerOpen(localStorage.getItem('leftDrawerOpen') === 'true')
+
+  }
+
+  async function autologin (context) {
+    try {
+      // INIT
+      UserStore.mutations.setlang(process.env.LANG_DEFAULT)
+      // ++Todo: Estrai la Lang dal Localstorage
+      const lang = localStorage.getItem('lang')
+      if (lang) {
+        UserStore.mutations.setlang(lang)
+      }
+
+      const token = localStorage.getItem('token')
+      if (!token) {
+        return false
+      }
+      const expirationDateStr = localStorage.getItem('expirationDate')
+      let expirationDate = new Date(String(expirationDateStr))
+      const now = new Date()
+      if (now >= expirationDate) {
+        return false
+      }
+      const userId = Number(localStorage.getItem('userId'))
+      const username = String(localStorage.getItem('username'))
+      const verifiedEmail = localStorage.getItem('verificato') === '1'
+
+      setGlobal()
+
+      Mutations.mutations.authUser({
+        username: username,
+        userId: userId,
+        idToken: token,
+        verifiedEmail: verifiedEmail
+      })
+      return true
+    } catch (e) {
+      console.error('ERR autologin ', e.message)
+      return false
+    }
+  }
+
 
   export const actions = {
     resetpwd: b.dispatch(resetpwd),
@@ -524,7 +540,8 @@ namespace Actions {
     vreg: b.dispatch(vreg),
     signup: b.dispatch(signup),
     signin: b.dispatch(signin),
-    logout: b.dispatch(logout)
+    logout: b.dispatch(logout),
+    autologin: b.dispatch(autologin)
 
   }
 }
