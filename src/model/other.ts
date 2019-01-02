@@ -5,7 +5,7 @@ export interface IToken {
 
 
 export interface ILinkReg {
-  idLink: string
+  idlink: string
 }
 
 export interface IIdToken {

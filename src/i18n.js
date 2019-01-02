@@ -12,6 +12,7 @@ const messages = {
       home: 'Principale',
       SignUp: 'Registrazione',
       SignIn: 'Login',
+      vreg: 'Verifica Reg',
       Test: 'Test',
     },
     components: {
@@ -95,6 +96,7 @@ const messages = {
       home: 'Dashboard One',
       SignUp: 'SignUp',
       SignIn: 'SignIn',
+      vreg: 'Verify Reg',
       Test: 'Test',
     },
     components: {
