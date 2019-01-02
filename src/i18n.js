@@ -12,12 +12,23 @@ const messages = {
       home: 'Principale',
       SignUp: 'Registrazione',
       SignIn: 'Login',
+      vreg: 'Verifica Reg',
       Test: 'Test',
     },
     components: {
       authentication:{
         login: {
           facebook: 'Facebook'
+        },
+        email_verification: {
+          title: 'Inizia la tua registrazione',
+          introduce_email: 'inserisci la tua email',
+          email: 'Email',
+          invalid_email: 'La tua email è invalida',
+          verify_email: 'Verifica la tua email',
+          go_login: 'Torna al Login',
+          incorrect_input: 'Inserimento incorretto.',
+          link_sent: 'Per confermare la Registrazione, leggi la tua casella di posta e Clicca su "Verifica Email".\nSe non la trovi, cerca nella cartella Spam.'
         }
       }
     },
@@ -85,12 +96,23 @@ const messages = {
       home: 'Dashboard One',
       SignUp: 'SignUp',
       SignIn: 'SignIn',
+      vreg: 'Verify Reg',
       Test: 'Test',
     },
     components: {
       authentication:{
         login: {
           facebook: 'Facebook'
+        },
+        email_verification: {
+          title: 'Begin your registration',
+          introduce_email: 'Enter your email',
+          email: 'Email',
+          invalid_email: 'Your email is invalid',
+          verify_email: 'Verify your email',
+          go_login: 'Back to Login',
+          incorrect_input: 'Incorrect input.',
+          link_sent: 'To confirm the Registration, read your mailbox and click on "Verify email".\nIf you can not find it check your junk mail or spam.'
         }
       }
     },

@@ -1,6 +1,5 @@
 <template>
     <div>
-        User: {{ Username}}
         <div id="profile" v-if="Username">
             <img :src="photo" style='height: 80px' class="inline-block">
             <img src="../img/avatar-1.svg" id="avatar" class="inline-block">
@@ -50,7 +49,6 @@
       console.log('Drawer created...')
     }
 
-
     photo = ''
     user = null
     links = {
@@ -59,6 +57,7 @@
           {route: '/', faIcon: 'fa fa-home', materialIcon: 'home', name: 'pages.home'},
           {route: '/signup', faIcon: 'fa fa-signup', materialIcon: 'login', name: 'pages.SignUp'},
           {route: '/signin', faIcon: 'fa fa-login', materialIcon: 'login', name: 'pages.SignIn'},
+          /* {route: '/vreg?idlink=aaa', faIcon: 'fa fa-login', materialIcon: 'login', name: 'pages.vreg'},*/
           ],
         show: true
       },

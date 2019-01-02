@@ -12,6 +12,7 @@ export default class Home extends Vue {
   visibile: boolean = false
   cardvisible: string = 'hidden'
   displaycard: string = 'block'
+  $t: any
 
   public $q
 

@@ -6,6 +6,7 @@ import router from '@router'
 
 import { serv_constants } from '../Modules/serv_constants'
 import { rescodes } from '../Modules/rescodes'
+import { UserStore } from "@store"
 
 const bcrypt = require('bcryptjs')
 
@@ -85,6 +86,7 @@ namespace Mutations {
 
   function setlang(state: IUserState, newstr: string) {
     state.lang = newstr
+    localStorage.setItem('lang', state.lang)
   }
 
   function UpdatePwd(state: IUserState, data: IIdToken) {
@@ -108,6 +110,14 @@ namespace Mutations {
   }
 
   function autologin (state: IUserState) {
+    // INIT
+    UserStore.mutations.setlang(process.env.LANG_DEFAULT)
+    // ++Todo: Estrai la Lang dal Localstorage
+    const lang = localStorage.getItem('lang')
+    if (lang) {
+      UserStore.mutations.setlang(lang)
+    }
+
     const token = localStorage.getItem('token')
     if (!token) {
       return
@@ -245,7 +255,7 @@ namespace Actions {
     let usertosend = {
       keyappid: process.env.PAO_APP_ID,
       idapp: process.env.APP_ID,
-      idLink: paramquery.idLink
+      idlink: paramquery.idlink
     }
     console.log(usertosend)
 
@@ -253,7 +263,7 @@ namespace Actions {
 
     let myres
 
-    return Api.SendReq(call, state.lang, Getters.getters.tok, 'POST', usertosend)
+    return await Api.SendReq(call, state.lang, Getters.getters.tok, 'POST', usertosend)
       .then((res) => {
         console.log(res)
         myres = res
