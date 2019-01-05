@@ -1,5 +1,6 @@
 <template>
     <div>
+
         <q-layout-header>
             <q-toolbar
                     color="primary"
@@ -40,10 +41,9 @@
 
         </q-layout-header>
 
-
         <q-layout-drawer side="left"
                          v-model="leftDrawerOpen"
-                         :content-class="['bg-grey-3', 'q-pa-sm']"
+                         :content-class="['bg-grey-1', 'q-pa-sm']"
                          :content-style="{padding: '0px'}"
         >
             <drawer></drawer>
@@ -58,6 +58,9 @@
 
   import drawer from '../layouts/drawer/drawer.vue'
   import messagePopover from '../layouts/toolbar/messagePopover/messagePopover.vue'
+
+  import { GlobalStore } from '@modules'
+  import { rescodes } from '../store/Modules/rescodes'
 
   @Component({
     components: {
@@ -76,7 +79,15 @@
       { label: 'Spanish', icon: 'fa-flag-es', value: 'es' },
       { label: 'Italian', icon: 'fa-facebook', value: 'it' }
     ]
-    public leftDrawerOpen = false;
+
+    get leftDrawerOpen() {
+      return GlobalStore.state.leftDrawerOpen
+    }
+
+    set leftDrawerOpen(value) {
+      GlobalStore.state.leftDrawerOpen = value
+      localStorage.setItem(rescodes.localStorage.leftDrawerOpen, value.toString())
+    }
 
     get lang() {
       return this.$q.i18n.lang
@@ -103,9 +114,14 @@
 
 </script>
 
-<style>
+<style lang="scss">
     .layout-padding {
         padding: 1em 4em;
+    }
+
+    .item-content {
+        font-size: 0.8rem;
+        font-weight: 350;
     }
 
     @media screen and (max-width: 600px) {
@@ -114,6 +130,7 @@
         }
     }
 
+    /*
     @-webkit-keyframes moveFromLeftFade {
         from {
             opacity: 0.3;
@@ -128,6 +145,21 @@
             transform: translateX(-100%);
         }
     }
+
+    @-webkit-keyframes moveFromTopFade {
+        from {
+            opacity: 0.3;
+            -webkit-transform: translateY(0%);
+        }
+    }
+    @keyframes moveFromTopFade {
+        from {
+            opacity: 0.3;
+            -webkit-transform: translateY(0%);
+            transform: translateY(-50%);
+        }
+    }
+
 
     @-webkit-keyframes moveToRight {
         from {
@@ -167,6 +199,25 @@
         }
     }
 
+    @-webkit-keyframes moveToBottom {
+        from {
+        }
+        to {
+            opacity: .5;
+            -webkit-transform: translateY(-100%);
+        }
+    }
+
+    @keyframes moveToBottom {
+        from {
+        }
+        to {
+            opacity: .5;
+            -webkit-transform: translateY(-100%);
+            transform: translateY(-100%);
+        }
+    }
+
     @-webkit-keyframes moveFromRight {
         from {
             opacity: .7;
@@ -181,17 +232,18 @@
             transform: translateX(100%);
         }
     }
+    */
 
     .drawer-closer .item-content {
-        margin-left: 50px !important;
+        margin-left: 20px !important;
     }
 
     .drawer-content .list-label {
-        line-height: 45px;
+        line-height: 25px;
     }
 
     .drawer-content .item {
-        height: 45px;
+        height: 25px;
     }
 
     .router-link-active .item-primary {
@@ -272,7 +324,7 @@
     }
 
     .toolbar {
-        min-height: 40px;
+        min-height: 30px;
     }
 
     .right-itens a, .right-itens button {
@@ -291,4 +343,6 @@
     .fa-flag-it:before {
         content: url('../statics/icons/flag_it.svg');
     }
+
 </style>
+

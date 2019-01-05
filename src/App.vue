@@ -18,9 +18,9 @@
 <script lang="ts">
   import Vue from "vue"
   import { Component } from 'vue-property-decorator'
+  import { UserStore } from '@store'
   import { EventBus, RootState, storeBuilder, DebugMode } from '@store'
   import router from "./router"
-  import { UserStore } from '@store'
 
   import $ from "jquery"
 
@@ -37,16 +37,21 @@
 
     created() {
       //this.title = 'My Vue and CosmosDB Heroes App'
-      if (process.env.DEV){
+      if (process.env.DEV) {
         console.info("SESSIONE IN SVILUPPO ! (DEV)")
         console.info(process.env)
       }
-      if (process.env.PROD){
+      if (process.env.PROD) {
         console.info("SESSIONE IN PRODUZIONE!")
         console.info(process.env)
       }
 
-      UserStore.mutations.autologin()
+      UserStore.actions.autologin()
+        .then((loginEseguito) => {
+          if (loginEseguito) {
+            // this.$router.replace('/')
+          }
+        })
     }
   }
 </script>

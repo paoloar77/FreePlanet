@@ -34,6 +34,9 @@ Thanks to the Quasar Framework and TypeScript !
 
 [![js-standard-style](https://cdn.rawgit.com/standard/standard/master/badge.svg)](https://github.com/standard/standard)
 
+[![Build](https://img.shields.io/circleci/project/github/paoloar77/freeplanet/master.svg?style=for-the-badge)](https://circleci.com/gh/paoloar77/freeplanet/tree/master)
+[![Coverage](https://img.shields.io/codecov/c/github/paoloar77/freeplanet/master.svg?style=for-the-badge)](https://codecov.io/gh/paoloar77/freeplanet/branch/master)
+
 </div>
 
 ## Features ⚡️

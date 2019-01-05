@@ -85,7 +85,7 @@
     }
   }
 </script>
-<style>
+<style scoped>
   #map {
     height: 180px;
   }

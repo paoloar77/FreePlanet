@@ -8,6 +8,7 @@ const state: IGlobalState = {
   layoutNeeded: true,
   mobileMode: false,
   menuCollapse: true,
+  leftDrawerOpen: true,
   posts: []
 }
 
@@ -31,8 +32,13 @@ namespace Mutations {
     state.conta = num
   }
 
+  function setleftDrawerOpen(state: IGlobalState, bool: boolean) {
+    state.leftDrawerOpen = bool
+  }
+
   export const mutations = {
-    setConta: b.commit(setConta)
+    setConta: b.commit(setConta),
+    setleftDrawerOpen: b.commit(setleftDrawerOpen)
   }
 
 }

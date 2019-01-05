@@ -28,6 +28,11 @@ export const RouteConfig: VueRouteConfig[] = [
     path: '/vreg',
     component: () => import('@/views/login/vreg/vreg.vue'),
     meta: { name: 'Verify Reg' }
+  },
+  {
+    path: '/category',
+    component: () => import('@/components/categories/category/category.vue'),
+    meta: { name: 'Categories' }
   }
   /*
   {

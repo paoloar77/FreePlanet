@@ -8,6 +8,7 @@ export interface IGlobalState {
   layoutNeeded: boolean
   mobileMode: boolean
   menuCollapse: boolean
+  leftDrawerOpen: boolean
   posts: IPost[]
 }
 

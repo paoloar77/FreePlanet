@@ -72,7 +72,8 @@
         riscode: 0,
         emailsent: false,
         form: {
-          email: '',
+          password: '',
+          repeatPassword: '',
           tokenforgot: 0,
         },
       }
@@ -87,8 +88,12 @@
     },
     validations: {
       form: {
-        email: {
-          required, email,
+        password: {
+          required,
+        },
+        repeatPassword: {
+          required,
+          sameAsPassword: sameAs('password')
         },
       }
     },

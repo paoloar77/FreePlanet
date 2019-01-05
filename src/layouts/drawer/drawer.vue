@@ -7,8 +7,8 @@
                 <span class="text-white"> {{ Username }} </span>
                 <hr>
                 <span class="text-white" v-if="Verificato"> {{$t('reg.verificato')}} </span>
-                <span class="text-white" v-else> {{$t('reg.non_verificato')}} </span>
-                <span class="text-white"> {{ Email }} </span>
+                <span class="text-white background-red" v-else> {{$t('reg.non_verificato')}} </span>
+                <!-- <span class="text-white"> {{ Email }} </span>-->
             </div>
             <div id="user-actions">
                 <q-btn round color="primary" icon="person"></q-btn>
@@ -18,6 +18,10 @@
         </div>
 
         <menu-one :links="links"></menu-one>
+
+        <!--<footer>
+            <small>- Small</small>
+        </footer>-->
 
         <div class="fixed-bottom text-center light text-italic">
             Powered by Perseo
@@ -31,8 +35,8 @@
 
   import Vue from 'vue'
   import { Component, Watch, Prop } from 'vue-property-decorator'
-  import {Store} from 'vuex'
-  import { UserStore } from '@modules';
+  import { Store } from 'vuex'
+  import { UserStore } from '@modules'
   import { GlobalStore } from '@modules'
 
 
@@ -43,9 +47,9 @@
   })
   export default class Drawer extends Vue {
     public $q
-    $t: any;
+    $t: any
 
-    created () {
+    created() {
       console.log('Drawer created...')
     }
 
@@ -54,34 +58,36 @@
     links = {
       Dashboard: {
         routes: [
-          {route: '/', faIcon: 'fa fa-home', materialIcon: 'home', name: 'pages.home'},
-          {route: '/signup', faIcon: 'fa fa-signup', materialIcon: 'login', name: 'pages.SignUp'},
-          {route: '/signin', faIcon: 'fa fa-login', materialIcon: 'login', name: 'pages.SignIn'},
+          { route: '/', faIcon: 'fa fa-home', materialIcon: 'home', name: 'pages.home' },
+          { route: '/category', faIcon: 'fa fa-list-alt', materialIcon: 'category', name: 'pages.Category' },
+          { route: '/signup', faIcon: 'fa fa-registered', materialIcon: 'home', name: 'pages.SignUp' },
+          { route: '/signin', faIcon: 'fa fa-anchor', materialIcon: 'home', name: 'pages.SignIn' },
           /* {route: '/vreg?idlink=aaa', faIcon: 'fa fa-login', materialIcon: 'login', name: 'pages.vreg'},*/
-          ],
+        ],
         show: true
       },
       Forms: {
         routes: [
-          {route: '/prec', faIcon: 'fa fa-search', materialIcon: 'search', name: 'pages.Test'},
-          ],
+          { route: '/prec', faIcon: 'fa fa-search', materialIcon: 'search', name: 'pages.Test' },
+        ],
         show: false
       },
     }
 
-    get MenuCollapse () {
+    get MenuCollapse() {
       return GlobalStore.state.menuCollapse
       // return true
     }
-    get Username () {
+
+    get Username() {
       return UserStore.state.username
     }
 
-    get Verificato () {
+    get Verificato() {
       return UserStore.state.verifiedEmail
     }
 
-    get Email () {
+    get Email() {
       return UserStore.state.email
     }
 
@@ -91,7 +97,12 @@
     }
   }
 </script>
-<style scoped>
+<style scoped lang="scss">
+    .background-red {
+        background-color: red;
+        padding: 2px;
+    }
+
     .fixed-bottom {
         margin-bottom: 1%;
     }
@@ -126,5 +137,11 @@
 
     #menu-collapse {
         margin-top: 5%;
+    }
+
+    footer {
+        small {
+            color: red;
+        }
     }
 </style>
