@@ -35,6 +35,7 @@
       "@modules": ["./store/Modules/index.ts"]
     },
     "sourceMap": true,
+    // "usePostCSS": true,
     "allowJs": true,
     "skipLibCheck": true,
     "types": [

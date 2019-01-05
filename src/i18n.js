@@ -14,6 +14,7 @@ const messages = {
       SignIn: 'Login',
       vreg: 'Verifica Reg',
       Test: 'Test',
+      Category: 'Categorie',
     },
     components: {
       authentication:{
@@ -98,6 +99,7 @@ const messages = {
       SignIn: 'SignIn',
       vreg: 'Verify Reg',
       Test: 'Test',
+      Category: 'Category',
     },
     components: {
       authentication:{

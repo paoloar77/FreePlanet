@@ -168,7 +168,7 @@ namespace Actions {
       })
       .then((body) => {
         Mutations.mutations.UpdatePwd({ idToken: x_auth_token })
-        localStorage.setItem('token', x_auth_token)
+        localStorage.setItem(rescodes.localStorage.token, x_auth_token)
 
         return { code: body.code, msg: body.msg }
       }).catch((err) => {
@@ -247,7 +247,7 @@ namespace Actions {
         // mutations.setServerCode(myres);
         if (body.code === serv_constants.RIS_CODE_EMAIL_VERIFIED) {
           console.log('VERIFICATO !!')
-          localStorage.setItem('verificato', '1')
+          localStorage.setItem(rescodes.localStorage.verifiedEmail, '1')
         } else {
           console.log('Risultato di vreg: ', body.code)
         }
@@ -325,11 +325,11 @@ namespace Actions {
               const now = new Date()
               // const expirationDate = new Date(now.getTime() + myres.data.expiresIn * 1000);
               const expirationDate = new Date(now.getTime() * 1000)
-              localStorage.setItem('username', username)
-              localStorage.setItem('token', x_auth_token)
-              localStorage.setItem('userId', iduser)
-              localStorage.setItem('expirationDate', expirationDate.toString())
-              localStorage.setItem('verificato', '0')
+              localStorage.setItem(rescodes.localStorage.username, username)
+              localStorage.setItem(rescodes.localStorage.token, x_auth_token)
+              localStorage.setItem(rescodes.localStorage.userId, iduser)
+              localStorage.setItem(rescodes.localStorage.expirationDate, expirationDate.toString())
+              localStorage.setItem(rescodes.localStorage.verifiedEmail, '0')
               // dispatch('storeUser', authData);
               // dispatch('setLogoutTimer', myres.data.expiresIn);
 
@@ -424,13 +424,12 @@ namespace Actions {
           const now = new Date()
           // const expirationDate = new Date(now.getTime() + myres.data.expiresIn * 1000);
           const expirationDate = new Date(now.getTime() * 1000)
-          localStorage.setItem('username', username)
-          localStorage.setItem('token', x_auth_token)
-          localStorage.setItem('userId', iduser)
-          localStorage.setItem('expirationDate', expirationDate.toString())
-          localStorage.setItem('isLoggedin', String(true))
-          localStorage.setItem('verificato', Number(verifiedEmail).toString())
-
+          localStorage.setItem(rescodes.localStorage.username, username)
+          localStorage.setItem(rescodes.localStorage.token, x_auth_token)
+          localStorage.setItem(rescodes.localStorage.userId, iduser)
+          localStorage.setItem(rescodes.localStorage.expirationDate, expirationDate.toString())
+          localStorage.setItem(rescodes.localStorage.isLogged, String(true))
+          localStorage.setItem(rescodes.localStorage.verifiedEmail, Number(verifiedEmail).toString())
 
           // dispatch('storeUser', authData);
           // dispatch('setLogoutTimer', myres.data.expiresIn);
@@ -479,19 +478,19 @@ namespace Actions {
       Mutations.mutations.clearAuthData()
     })
 
-    localStorage.removeItem('expirationDate')
-    localStorage.removeItem('token')
-    localStorage.removeItem('userId')
-    localStorage.removeItem('username')
-    localStorage.removeItem('isLoggedin')
-    localStorage.removeItem('verifiedEmail')
+    localStorage.removeItem(rescodes.localStorage.expirationDate)
+    localStorage.removeItem(rescodes.localStorage.token)
+    localStorage.removeItem(rescodes.localStorage.userId)
+    localStorage.removeItem(rescodes.localStorage.username)
+    localStorage.removeItem(rescodes.localStorage.isLogged)
+    // localStorage.removeItem(rescodes.localStorage.leftDrawerOpen)
+    localStorage.removeItem(rescodes.localStorage.verifiedEmail)
 
     router.push('/signin')
   }
 
   function setGlobal() {
-    GlobalStore.mutations.setleftDrawerOpen(localStorage.getItem('leftDrawerOpen') === 'true')
-
+    GlobalStore.mutations.setleftDrawerOpen(localStorage.getItem(rescodes.localStorage.leftDrawerOpen) === 'true')
   }
 
   async function autologin (context) {
@@ -504,19 +503,19 @@ namespace Actions {
         UserStore.mutations.setlang(lang)
       }
 
-      const token = localStorage.getItem('token')
+      const token = localStorage.getItem(rescodes.localStorage.token)
       if (!token) {
         return false
       }
-      const expirationDateStr = localStorage.getItem('expirationDate')
+      const expirationDateStr = localStorage.getItem(rescodes.localStorage.expirationDate)
       let expirationDate = new Date(String(expirationDateStr))
       const now = new Date()
       if (now >= expirationDate) {
         return false
       }
-      const userId = Number(localStorage.getItem('userId'))
-      const username = String(localStorage.getItem('username'))
-      const verifiedEmail = localStorage.getItem('verificato') === '1'
+      const userId = Number(localStorage.getItem(rescodes.localStorage.userId))
+      const username = String(localStorage.getItem(rescodes.localStorage.username))
+      const verifiedEmail = localStorage.getItem(rescodes.localStorage.verifiedEmail) === '1'
 
       setGlobal()
 
