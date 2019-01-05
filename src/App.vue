@@ -49,7 +49,7 @@
       UserStore.actions.autologin()
         .then((loginEseguito) => {
           if (loginEseguito) {
-            this.$router.replace('/')
+            // this.$router.replace('/')
           }
         })
     }

@@ -8,7 +8,7 @@
                     {{replaceUnderlineToSpace(index)}} <div class="menu_freccina"><i aria-hidden="true" class="v-icon material-icons theme--light">keyboard_arrow_down</i></div>
                 </div>
                 <template v-for="child in parent.routes">
-                    <q-slide-transition duration="200">
+                    <q-slide-transition :duration=200>
                         <div v-show="parent.show">
                             <q-item link :to="child.route" exact
                                     class="item item-link drawer-closer cursor-pointer">

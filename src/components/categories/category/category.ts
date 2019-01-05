@@ -1,62 +1,67 @@
 import Vue from 'vue'
 import { Component } from 'vue-property-decorator'
-import { GlobalStore } from '@store'
-
-import VueIdb from 'vue-idb'
-
-Vue.use(VueIdb)
 
 require('./category.scss')
 
+
 @Component({})
 export default class Category extends Vue {
-  idb = null
+  filter: boolean = false
   category: string = ''
-  $t: any
+  categories_arr: any[] = null
 
   created() {
-    this.createdb()
-
-    this.caricaCat()
+    this.loadCat()
   }
 
-  createdb() {
-    // Inserisci la Categoria nel DB
-    this.idb = new VueIdb({
-      version: 1,
-      database: 'test',
-      schemas: [
-        { categories: '++id, sub_categ_id, descr_it' }
-      ]
+  async loadCat() {
+    await this.$db.categories.toArray().then(ris => this.categories_arr = ris)
+
+    this.updatetable()
+  }
+
+  async insertCategory() {
+
+    let myid = 0
+    const mycat = this.category
+    // Add to Indexdb
+    await this.$db.categories.add(
+      { descr_it: mycat }
+    ).then(ris => {
+      myid = ris
     })
 
+    // created_at: new Date(),
+
+    // Add into the memory
+    this.categories_arr.push({ descr_it: mycat, id: myid })
+
+    this.updatetable()
   }
 
+  updatetable() {
 
-  caricaCat() {
-    let mythis = this
-    this.idb.open().then(function () {
+    this.filterCategories()
 
-      return mythis.idb.categories
+  }
+
+  async filterCategories() {
+
+    if (this.filter) {
+      // #Todo If need to filter the output database ...
+      this.$db.categories
+        .where('descr_it').notEqual('nonlovedi')
         .toArray()
-
-    }).then(function () {
-
-      console.log('FINE LOAD')
-    })
-  }
-
-  insertCategory(): any {
-    let mythis = this
-
-    this.idb.open().then(function () {
-      console.log('Inserisci Cat: ', mythis.category)
-      return mythis.idb.categories.add({ descr_it: mythis.category })
-
-    }).then(function () {
-
-      console.log('FINE')
-    })
+        .then((response) => {
+          Promise.all(response.map(key => key))
+            .then((myarr) => {
+              this.categories_arr = [...myarr]
+              return this.categories_arr
+            })
+        })
+    } else {
+      return this.categories_arr
+    }
   }
 
 }
