@@ -4,3 +4,5 @@ export * from './signin-option'
 export * from './signup-option'
 export * from './key-value'
 export * from './payload'
+
+export * from './Categories'

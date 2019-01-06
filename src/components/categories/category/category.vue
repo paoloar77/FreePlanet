@@ -1,7 +1,7 @@
 <template>
     <q-page>
         <div class="panel">
-            <p class="caption">Category:</p>
+            <p class="caption">Singlecat:</p>
 
             <q-input v-model="category" inverted float-label="Inserisci la Categoria"
                      :after="[{icon: 'arrow_forward', content: true, handler () {}}]"
@@ -9,7 +9,8 @@
 
             <ul>
                 Lista:
-                <li v-for="item in categories_arr" :key="item.id"> {{ item.descr_it }} </li>
+
+                <SingleCat :itemcat='mycat' v-for="mycat of categories_arr" :key="mycat.id"/>
             </ul>
         </div>
     </q-page>
