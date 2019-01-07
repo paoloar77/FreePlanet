@@ -1,0 +1,6 @@
+xs	576px	Extra small sized window
+sm	768px	Small sized window
+md	992px	Medium-sized window
+lg	1200px	Large sized window
+xl	Infinite	Extra large sized window
+

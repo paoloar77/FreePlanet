@@ -11,7 +11,12 @@ import { ICategory } from '../../../model/index'
 export default class SingleCat extends Vue {
   @Prop({required: true}) itemcat: ICategory
 
+
   created() {
+
+  }
+
+  remove() {
 
   }
 

@@ -146,6 +146,7 @@ module.exports = function (ctx) {
         'QSpinnerGears',
         'QDatetime',
         'QSlideTransition',
+        'QTable',
       ],
       directives: [
         'Ripple',
