@@ -1,47 +1,145 @@
 import Vue from 'vue'
-import { Component } from 'vue-property-decorator'
+import { Component, Watch } from 'vue-property-decorator'
+
+import { SingleCat } from '@components'
+import { ICategory } from '@src/model'
 
 require('./category.scss')
 
 
-@Component({})
+@Component({
+  components: { SingleCat }
+})
 export default class Category extends Vue {
+  $q: any
+
   filter: boolean = false
+  title: string = ''
   category: string = ''
-  categories_arr: any[] = null
+  categories_loc: any[] = [{}]
+  categories_arr: any[] = [{}]
+  selected: any [] = []
+  selectedSecond: any [] = []
+
+  data: any [] = [{
+    id: 0,
+    descr_it: 'Frozen Yogurt',
+    descr_en: '',
+    descr_es: ''
+  },
+    {
+      id: 1,
+      descr_it: 'Secondo',
+      descr_en: '',
+      descr_es: ''
+    }]
+
+  columns: any [] = [
+    {
+      name: 'descr_it',
+      required: true,
+      label: 'IT',
+      align: 'left',
+      field: 'descr_it',
+      sortable: true,
+      classes: 'my-class',
+    },
+    {
+      name: 'descr_en',
+      label: 'EN',
+      align: 'left',
+      field: 'descr_en',
+      sortable: true,
+      classes: 'my-class',
+    },
+    {
+      name: 'descr_es',
+      label: 'ES',
+      align: 'left',
+      field: 'descr_es',
+      sortable: true,
+      classes: 'my-class',
+    }
+  ]
+
+  @Watch('categories_loc') valueChanged() {
+    this.updatetable()
+  }
+
 
   created() {
     this.loadCat()
   }
 
   async loadCat() {
-    await this.$db.categories.toArray().then(ris => this.categories_arr = ris)
+    await this.$db.categories.toArray().then(ris => this.categories_loc = ris)
 
     this.updatetable()
   }
 
+  initcat() {
+
+    const objcat: ICategory = {
+      descr_it: '',
+      descr_en: '',
+      descr_es: ''
+    }
+    return objcat
+
+  }
+
   async insertCategory() {
 
+    const objcat = this.initcat()
+
     let myid = 0
-    const mycat = this.category
+    objcat.descr_it = this.category
+
     // Add to Indexdb
-    await this.$db.categories.add(
-      { descr_it: mycat }
+    await this.$db.categories.add(objcat
     ).then(ris => {
       myid = ris
     })
 
-    // created_at: new Date(),
+    objcat.id = myid
 
     // Add into the memory
-    this.categories_arr.push({ descr_it: mycat, id: myid })
+    this.categories_loc.push(objcat)
 
-    this.updatetable()
+    // empty the field
+    this.category = ''
+  }
+
+  async deleteCategory(myarrobj) {
+
+    await myarrobj.forEach(myobj => {
+
+      if (myobj.id !== undefined) {
+        console.log('KEY = ', myobj.id)
+
+        // Delete item
+        let deleteCount = this.$db.categories
+          .where('id').equals(myobj.id)
+          .delete()
+
+        console.log('deleteCount = ', deleteCount)
+        if (deleteCount > 0) {
+          // Remove into the memory
+          this.categories_loc.slice(this.categories_loc.indexOf(myobj), 1)
+
+          this.updatetable()
+
+          return deleteCount
+        }
+      }
+    })
+
   }
 
   updatetable() {
 
     this.filterCategories()
+    this.categories_arr = [...this.categories_loc]
 
   }
 
@@ -55,13 +153,48 @@ export default class Category extends Vue {
         .then((response) => {
           Promise.all(response.map(key => key))
             .then((myarr) => {
-              this.categories_arr = [...myarr]
-              return this.categories_arr
+              this.categories_loc = [...myarr]
+              return this.categories_loc
             })
         })
     } else {
-      return this.categories_arr
+      return this.categories_loc
     }
   }
+
+  deleteRow() {
+    console.log('SEL = ', this.selectedSecond)
+
+    const seldel = [...this.selectedSecond]
+    if (this.deleteCategory(this.selectedSecond)) {
+      this.$q.notify({
+        color: 'primary',
+        icon: 'delete',
+        message: `Deleted ` + (seldel.length.toString()) + ' item'
+      })
+
+
+    }
+
+  }
+
+  /*
+  await db.transaction('rw', [db.friends], async () => {
+  const friend = await db.friends.get(1);
+  ++friend.age;
+  await db.friends.put(friend);
+  });
+   */
+
+  async modify() {
+    // esempio da sistemare
+    await this.$db.transaction('rw', [this.$db.categories], async () => {
+      const friend = await this.$db.get(1)
+      ++friend.age
+      await this.$db.put(friend)
+    })
+
+  }
+
 
 }
