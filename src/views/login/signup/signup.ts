@@ -8,13 +8,16 @@ import { validations, TSignup } from './signup-validate'
 
 import { validationMixin } from 'vuelidate'
 
+import { Logo } from '@components'
+
 import './signup.scss'
 
 // import {Loading, QSpinnerFacebook, QSpinnerGears} from 'quasar'
 
 @Component({
   mixins: [validationMixin],
-  validations: validations
+  validations: validations,
+  components: { Logo }
 })
 
 export default class Signup extends Vue {
@@ -39,10 +42,6 @@ export default class Signup extends Vue {
   }
 
   mounted() {
-  }
-
-  public logoimg() {
-    return process.env.LOGO_REG
   }
 
   get allowSubmit() {

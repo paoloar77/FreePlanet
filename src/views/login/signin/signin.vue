@@ -3,8 +3,7 @@
         <q-page padding class="signin">
             <div class="text-center">
                 <p>
-                    <!--<img src="../../../assets/quasar-logo-full.svg">-->
-                    <img :src="`../../../assets/${logoimg()}`">
+                    <logo></logo>
                 </p>
             </div>
 

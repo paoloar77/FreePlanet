@@ -2,16 +2,19 @@ import Vue from 'vue'
 import { Component } from 'vue-property-decorator'
 import { GlobalStore } from '@store'
 
+import { Logo } from '@components'
+
 require('./home.scss')
 
 @Component({
-
+  components: { Logo }
 })
 export default class Home extends Vue {
   text: string = ''
   visibile: boolean = false
   cardvisible: string = 'hidden'
   displaycard: string = 'block'
+  svgclass: string = 'svgclass'
   $t: any
 
   public $q

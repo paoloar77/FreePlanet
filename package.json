@@ -28,6 +28,7 @@
     "google-translate-api": "^2.3.0",
     "graphql": "^0.13.2",
     "graphql-tag": "^2.8.0",
+    "gsap": "^2.0.2",
     "js-cookie": "^2.2.0",
     "localforage": "^1.7.3",
     "normalize.css": "^8.0.0",
