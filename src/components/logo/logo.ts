@@ -9,8 +9,10 @@ import { TimelineLite, Back } from 'gsap'
 
 })
 export default class Logo extends Vue {
-  svgclass: string = 'svgclass'
+  logoimg: string = ''
+
   created() {
+    this.logoimg = 'statics/' + process.env.LOGO_REG
     this.animate()
   }
 
@@ -23,10 +25,6 @@ export default class Logo extends Vue {
       ease: Back.easeInOut // Specify an ease
     })
 
-  }
-
-  public logoimg() {
-    return process.env.LOGO_REG
   }
 
 }

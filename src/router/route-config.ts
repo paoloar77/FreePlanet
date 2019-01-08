@@ -10,11 +10,6 @@ export const RouteConfig: VueRouteConfig[] = [
     meta: { name: 'Home' }
   },
   {
-    path: '/test',
-    component: () => import('@/views/login/test.vue'),
-    meta: { name: 'Test' }
-  },
-  {
     path: '/signup',
     component: () => import('@/views/login/signup/signup.vue'),
     meta: { name: 'Registration' }

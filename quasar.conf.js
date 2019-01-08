@@ -182,31 +182,16 @@ module.exports = function (ctx) {
         description: 'Social project in order to connecting people each others (working in progress...)',
         display: 'standalone',
         orientation: 'portrait',
+        theme_color: '#ffffff',
         background_color: '#ffffff',
-        theme_color: '#027be3',
         icons: [
           {
-            'src': 'statics/icons/icon-128x128.png',
-            'sizes': '128x128',
-            'type': 'image/png'
-          },
-          {
-            'src': 'statics/icons/icon-192x192.png',
+            'src': 'statics/icons/android-chrome-192x192.png',
             'sizes': '192x192',
             'type': 'image/png'
           },
           {
-            'src': 'statics/icons/icon-256x256.png',
-            'sizes': '256x256',
-            'type': 'image/png'
-          },
-          {
-            'src': 'statics/icons/icon-384x384.png',
-            'sizes': '384x384',
-            'type': 'image/png'
-          },
-          {
-            'src': 'statics/icons/icon-512x512.png',
+            'src': 'statics/icons/android-chrome-512x512',
             'sizes': '512x512',
             'type': 'image/png'
           }

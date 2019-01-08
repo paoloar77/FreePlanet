@@ -10,7 +10,7 @@
 }
 
 #sun {
-  animation: around 5s infinite;
+  animation: gravity 5s infinite;
 
 }
 
@@ -23,26 +23,3 @@
   }
 }
 
-
-@keyframes around {
-  0% {
-    cx: 20;
-    cy: 22;
-  }
-  20% {
-    cx: 25;
-    cy: 24;
-  }
-  50% {
-    cx: 40;
-    cy: 26;
-  }
-  80% {
-    cx: 55;
-    cy: 24;
-  }
-  100% {
-    cx: 60;
-    cy: 22;
-  }
-}
