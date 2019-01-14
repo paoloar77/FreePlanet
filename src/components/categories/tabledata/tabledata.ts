@@ -57,6 +57,14 @@ export default class Tabledata extends Vue {
       field: 'descr_es',
       sortable: true,
       classes: 'my-class',
+    },
+    {
+      name: 'campo2bool',
+      label: 'campo2bool',
+      align: 'left',
+      field: 'campo2bool',
+      sortable: true,
+      classes: 'my-class',
     }
   ]
 
@@ -80,7 +88,8 @@ export default class Tabledata extends Vue {
     const objcat: ICategory = {
       descr_it: '',
       descr_en: '',
-      descr_es: ''
+      descr_es: '',
+      campo2bool: false
     }
     return objcat
 
@@ -123,7 +132,7 @@ export default class Tabledata extends Vue {
         console.log('deleteCount = ', deleteCount)
         if (deleteCount > 0) {
           // Remove into the memory
-          this.categories_loc.slice(this.categories_loc.indexOf(myobj), 1)
+          this.categories_loc.splice(this.categories_loc.indexOf(myobj), 1)
 
           this.updatetable()
 

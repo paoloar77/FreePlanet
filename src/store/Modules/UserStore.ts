@@ -13,7 +13,7 @@ const bcrypt = require('bcryptjs')
 
 // State
 const state: IUserState = {
-  _id: '',
+  userId: '',
   email:  '',
   username: '',
   idapp: process.env.APP_ID,
@@ -21,7 +21,6 @@ const state: IUserState = {
   lang: '',
   repeatPassword: '',
   idToken: '',
-  userId: 0,
   tokens: [],
   verifiedEmail: false
 }
@@ -66,8 +65,8 @@ namespace Getters {
 
 namespace Mutations {
   function authUser(state, data: IUserState) {
-    state.username = data.username
     state.userId = data.userId
+    state.username = data.username
     state.idToken = data.idToken
     state.verifiedEmail = data.verifiedEmail
     // @ts-ignore
@@ -102,10 +101,10 @@ namespace Mutations {
   }
 
   function clearAuthData(state: IUserState) {
+    state.userId = ''
     state.username = ''
     state.tokens = []
     state.idToken = ''
-    state.userId = 0
     state.verifiedEmail = false
   }
 
@@ -308,16 +307,16 @@ namespace Actions {
             Mutations.mutations.setServerCode(myres.status)
 
             if (myres.status === 200) {
-              let iduser = body._id
+              let userId = body.userId
               let username = authData.username
               if (process.env.DEV) {
                 console.log('USERNAME = ' + username)
-                console.log('IDUSER= ' + iduser)
+                console.log('IDUSER= ' + userId)
               }
 
               Mutations.mutations.authUser({
+                userId: userId,
                 username: username,
-                userId: iduser,
                 idToken: x_auth_token,
                 verifiedEmail: false
               })
@@ -325,9 +324,9 @@ namespace Actions {
               const now = new Date()
               // const expirationDate = new Date(now.getTime() + myres.data.expiresIn * 1000);
               const expirationDate = new Date(now.getTime() * 1000)
+              localStorage.setItem(rescodes.localStorage.userId, userId)
               localStorage.setItem(rescodes.localStorage.username, username)
               localStorage.setItem(rescodes.localStorage.token, x_auth_token)
-              localStorage.setItem(rescodes.localStorage.userId, iduser)
               localStorage.setItem(rescodes.localStorage.expirationDate, expirationDate.toString())
               localStorage.setItem(rescodes.localStorage.verifiedEmail, '0')
               // dispatch('storeUser', authData);
@@ -407,15 +406,15 @@ namespace Actions {
         Mutations.mutations.setServerCode(myres.status)
 
         if (myres.status === 200) {
-          let iduser = body._id
+          let userId = body.userId
           let username = authData.username
           let verifiedEmail = body.verified_email === 'true' || body.verified_email === true
           if (process.env.DEV) {
             console.log('USERNAME = ' + username)
-            console.log('IDUSER= ' + iduser)
+            console.log('IDUSER= ' + userId)
             Mutations.mutations.authUser({
+              userId: userId,
               username: username,
-              userId: iduser,
               idToken: x_auth_token,
               verifiedEmail: verifiedEmail
             })
@@ -424,9 +423,9 @@ namespace Actions {
           const now = new Date()
           // const expirationDate = new Date(now.getTime() + myres.data.expiresIn * 1000);
           const expirationDate = new Date(now.getTime() * 1000)
+          localStorage.setItem(rescodes.localStorage.userId, userId)
           localStorage.setItem(rescodes.localStorage.username, username)
           localStorage.setItem(rescodes.localStorage.token, x_auth_token)
-          localStorage.setItem(rescodes.localStorage.userId, iduser)
           localStorage.setItem(rescodes.localStorage.expirationDate, expirationDate.toString())
           localStorage.setItem(rescodes.localStorage.isLogged, String(true))
           localStorage.setItem(rescodes.localStorage.verifiedEmail, Number(verifiedEmail).toString())
@@ -513,15 +512,15 @@ namespace Actions {
       if (now >= expirationDate) {
         return false
       }
-      const userId = Number(localStorage.getItem(rescodes.localStorage.userId))
+      const userId = String(localStorage.getItem(rescodes.localStorage.userId))
       const username = String(localStorage.getItem(rescodes.localStorage.username))
       const verifiedEmail = localStorage.getItem(rescodes.localStorage.verifiedEmail) === '1'
 
       setGlobal()
 
       Mutations.mutations.authUser({
-        username: username,
         userId: userId,
+        username: username,
         idToken: token,
         verifiedEmail: verifiedEmail
       })

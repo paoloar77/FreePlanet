@@ -25,6 +25,11 @@ export const RouteConfig: VueRouteConfig[] = [
     meta: { name: 'Verify Reg' }
   },
   {
+    path: '/todo',
+    component: () => import('@/components/todos/todo/todo.vue'),
+    meta: { name: 'Todos' }
+  },
+  {
     path: '/category',
     component: () => import('@/components/categories/category/category.vue'),
     meta: { name: 'Categories' }

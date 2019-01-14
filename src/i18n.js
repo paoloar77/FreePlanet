@@ -15,6 +15,7 @@ const messages = {
       vreg: 'Verifica Reg',
       Test: 'Test',
       Category: 'Categorie',
+      Todo: 'Todo',
     },
     components: {
       authentication:{
@@ -100,6 +101,7 @@ const messages = {
       vreg: 'Verify Reg',
       Test: 'Test',
       Category: 'Category',
+      Todo: 'Todo',
     },
     components: {
       authentication:{

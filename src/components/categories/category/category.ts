@@ -25,13 +25,15 @@ export default class Category extends Vue {
     id: 0,
     descr_it: 'Frozen Yogurt',
     descr_en: '',
-    descr_es: ''
+    descr_es: '',
+    campo2bool: true
   },
     {
       id: 1,
       descr_it: 'Secondo',
       descr_en: '',
-      descr_es: ''
+      descr_es: '',
+      campo2bool: false
     }]
 
   columns: any [] = [
@@ -59,6 +61,14 @@ export default class Category extends Vue {
       field: 'descr_es',
       sortable: true,
       classes: 'my-class',
+    },
+    {
+      name: 'campo2bool',
+      label: 'campo2bool',
+      align: 'left',
+      field: 'campo2bool',
+      sortable: true,
+      classes: 'my-class',
     }
   ]
 
@@ -82,7 +92,8 @@ export default class Category extends Vue {
     const objcat: ICategory = {
       descr_it: '',
       descr_en: '',
-      descr_es: ''
+      descr_es: '',
+      campo2bool: true
     }
     return objcat
 

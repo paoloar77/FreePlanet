@@ -13,5 +13,44 @@ export const rescodes = {
     userId: 'uid',
     token: 'tk',
     username: 'uname'
+  },
+
+  Todos: {
+    PRIORITY_NORMAL: 0,
+    PRIORITY_HIGH: 10,
+    PRIORITY_LOW: -10
+  },
+
+
+  selectPriority: {
+    'it': [
+      {
+        label: 'Alta',
+        value: 1
+      },
+      {
+        label: 'Normale',
+        value: 0
+      },
+      {
+        label: 'Bassa',
+        value: -1
+      }],
+    'enUk': [
+      {
+        label: 'High',
+        value: 1
+      },
+      {
+        label: 'Normal',
+        value: 0
+      },
+      {
+        label: 'Low',
+        value: -1
+      }]
+
   }
+
+
 }

@@ -59,6 +59,7 @@
       Dashboard: {
         routes: [
           { route: '/', faIcon: 'fa fa-home', materialIcon: 'home', name: 'pages.home' },
+          { route: '/todo', faIcon: 'fa fa-list-alt', materialIcon: 'todo', name: 'pages.Todo' },
           { route: '/category', faIcon: 'fa fa-list-alt', materialIcon: 'category', name: 'pages.Category' },
           { route: '/signup', faIcon: 'fa fa-registered', materialIcon: 'home', name: 'pages.SignUp' },
           { route: '/signin', faIcon: 'fa fa-anchor', materialIcon: 'home', name: 'pages.SignIn' },

@@ -53,7 +53,7 @@
             </q-table>
 
 
-            <!-- <SingleCat :itemcat='mycat' v-for="mycat of categories_arr" :key="mycat.id"/> -->
+            <!-- <SingleTodo :itemcat='mycat' v-for="mycat of categories_arr" :key="mycat.id"/> -->
         </div>
     </q-page>
 
