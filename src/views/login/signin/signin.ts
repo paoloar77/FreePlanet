@@ -12,7 +12,6 @@ import { validationMixin } from 'vuelidate'
 
 import { Logo } from '@components'
 
-import './signin.scss'
 import router from '@router'
 
 // import {Loading, QSpinnerFacebook, QSpinnerGears} from 'quasar'

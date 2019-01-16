@@ -60,3 +60,7 @@
 
 <script lang="ts" src="./signin.ts">
 </script>
+
+<style lang="scss" scoped>
+    @import './signin.scss';
+</style>

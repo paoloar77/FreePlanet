@@ -59,3 +59,7 @@
 </template>
 <script lang="ts" src="./tabledata.ts">
 </script>
+
+<style lang="scss" scoped>
+    @import './tabledata.scss';
+</style>

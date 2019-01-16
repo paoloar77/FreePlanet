@@ -4,8 +4,6 @@ import { GlobalStore } from '@store'
 
 import { Logo } from '@components'
 
-require('./home.scss')
-
 @Component({
   components: { Logo }
 })

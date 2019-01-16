@@ -3,9 +3,6 @@ import { Component, Watch } from 'vue-property-decorator'
 
 import { ICategory } from '@src/model'
 
-require('./tabledata.scss')
-
-
 @Component({
 })
 export default class Tabledata extends Vue {

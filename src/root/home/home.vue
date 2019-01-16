@@ -8,3 +8,6 @@
 </template>
 <script lang="ts" src="./home.ts">
 </script>
+<style lang="scss" scoped>
+    @import './home.scss';
+</style>

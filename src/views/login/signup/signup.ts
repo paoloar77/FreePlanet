@@ -10,8 +10,6 @@ import { validationMixin } from 'vuelidate'
 
 import { Logo } from '@components'
 
-import './signup.scss'
-
 // import {Loading, QSpinnerFacebook, QSpinnerGears} from 'quasar'
 
 @Component({

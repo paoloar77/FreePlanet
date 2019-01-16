@@ -97,3 +97,6 @@
 
 <script lang="ts" src="./signup.ts">
 </script>
+<style lang="scss" scoped>
+    @import './signup.scss';
+</style>

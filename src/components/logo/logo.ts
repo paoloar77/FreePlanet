@@ -1,8 +1,6 @@
 import Vue from 'vue'
 import { Component } from 'vue-property-decorator'
 
-require('./logo.scss')
-
 import { TimelineLite, Back } from 'gsap'
 
 import $ from 'jquery'

@@ -17,3 +17,7 @@
 
 <script lang="ts" src="./SingleCat.ts">
 </script>
+
+<style lang="scss" scoped>
+    @import './SingleCat.scss';
+</style>

@@ -61,3 +61,7 @@
 </template>
 <script lang="ts" src="./category.ts">
 </script>
+
+<style lang="scss" scoped>
+    @import './category.scss';
+</style>

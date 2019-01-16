@@ -4,16 +4,16 @@ import { Component, Watch } from 'vue-property-decorator'
 import { SingleTodo } from '@components'
 import { ITodo } from '@src/model'
 
-require('./todo.scss')
-
 import { rescodes } from '../../../store/Modules/rescodes'
 
 import { UserStore } from '@modules'
 
 import _ from 'lodash'
 
+import draggable from 'vuedraggable'
+
 @Component({
-  components: { SingleTodo }
+  components: { SingleTodo, draggable }
 })
 export default class Todo extends Vue {
   $q: any
@@ -22,6 +22,50 @@ export default class Todo extends Vue {
   title: string = ''
   todo: string = ''
   todos_arr: any[] = [{}]
+  drag: boolean = true
+  startpos: number = 0
+  endpos: number = 0
+
+  @Watch('drag') changedrag() {
+    console.log('drag = ' + this.drag)
+  }
+
+  change(param) {
+    console.log('Change... ' + param)
+  }
+
+  onStart() {
+    this.startpos = 0
+  }
+
+  getpos(indelem) {
+    return this.todos_arr[indelem].pos
+  }
+
+  onEnd(myvar) {
+    let oldpos = this.getpos(myvar.oldIndex)
+    let newpos = this.getpos(myvar.newIndex)
+
+    console.log('onEnd old = ' + oldpos + ' new = ' + newpos)
+    if (myvar.oldIndex < myvar.newIndex) {
+      // c'è spazio
+      newpos = oldpos - 1
+      if (newpos <= 0)
+        newpos = 1
+    } else {
+      newpos = newpos + 1
+    }
+
+    console.log('newpos = ' + newpos)
+
+    if (newpos >= 0) {
+      let myobj = this.todos_arr[myvar.oldIndex]
+      console.log('posprec = ' + myobj.pos)
+      myobj.pos = newpos
+      this.modify(myobj)
+
+    }
+  }
 
 
   created() {
@@ -85,23 +129,24 @@ export default class Todo extends Vue {
       console.log('Errore: ' + err.message)
     })
 
-    // objtodo.id = myid
-
-    // Add into the memory
-    // this.todos_loc.push(objtodo)
-
     // empty the field
     this.todo = ''
   }
 
-  deleteitem(id) {
-    // console.log('deleteitem: KEY = ', id)
-
+  getobjbyid(id) {
     let myobjtrov = null
     this.todos_arr.forEach(myobj => {
       if (myobj.id === id)
         myobjtrov = myobj
     })
+
+    return myobjtrov
+  }
+
+  deleteitem(id) {
+    // console.log('deleteitem: KEY = ', id)
+
+    let myobjtrov = this.getobjbyid(id)
 
     if (myobjtrov !== null) {
       // Delete item
@@ -133,37 +178,21 @@ export default class Todo extends Vue {
         })
     } else {
 
-      // this.$db.dispatch('todosSetSort', { sort: 'pos' } )
-
-      let coll = this.$db.todos
-
       await this.$db.todos
         .where('userId').equals(UserStore.state.userId)
-        // .sortBy('descr')
 
         .toArray().then(ristodos => {
           this.todos_arr = ristodos
         })
 
-
-      let reverse = []
-      reverse['completed'] = true
-      reverse['priority'] = true
-      reverse['pos'] = true
-      console.log(reverse)
-
       this.todos_arr = _.orderBy(this.todos_arr, ['completed', 'priority', 'pos'], ['asc', 'desc', 'asc'])
     }
+
+    this.todos_arr.map((item, index) => {
+      item.pos = (index * 2) + 1
+    })
     return []
   }
-
-  /*
-  await db.transaction('rw', [db.friends], async () => {
-  const friend = await db.friends.get(1);
-  ++friend.age;
-  await db.friends.put(friend);
-  });
-   */
 
   updateitem(myobj) {
     console.log('updateitem')
@@ -179,6 +208,7 @@ export default class Todo extends Vue {
       miorec.completed = myobj.completed
       miorec.expiring_at = myobj.expiring_at
       miorec.priority = myobj.priority
+      miorec.pos = myobj.pos
 
       await this.$db.todos.put(miorec)
 

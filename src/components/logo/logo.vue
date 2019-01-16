@@ -5,3 +5,7 @@
 </template>
 <script lang="ts" src="./logo.ts">
 </script>
+
+<style lang="scss" scoped>
+    @import './logo.scss';
+</style>

@@ -4,8 +4,6 @@ import { Component, Watch } from 'vue-property-decorator'
 import { SingleCat } from '@components'
 import { ICategory } from '@src/model'
 
-require('./category.scss')
-
 
 @Component({
   components: { SingleCat }
