@@ -9,7 +9,7 @@ export const DefaultUser = <IUserState>{
 }
 
 export interface IUserState {
-  _id?: string
+  userId?: string
   email?: string
   username: string
   idapp?: any
@@ -18,7 +18,6 @@ export interface IUserState {
   repeatPassword?: string
 
   idToken?: string
-  userId?: number
 
   tokens?: IToken[]
 

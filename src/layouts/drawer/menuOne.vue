@@ -3,13 +3,15 @@
     <div class="list no-border platform-delimiter light-paragraph">
         <q-icon name="action"/>
         <template v-for="(parent, index) in links">
-            <q-list>
+                <!--
                 <div class="list-label cursor-pointer" @click="parent.show = !parent.show">
                     {{replaceUnderlineToSpace(index)}} <div class="menu_freccina"><i aria-hidden="true" class="v-icon material-icons theme--light">keyboard_arrow_down</i></div>
                 </div>
+                -->
+                <div class="q-list-header">{{replaceUnderlineToSpace(index)}}</div>
                 <template v-for="child in parent.routes">
                     <q-slide-transition :duration=200>
-                        <div v-show="parent.show">
+                        <div v-show="true">
                             <q-item link :to="child.route" exact
                                     class="item item-link drawer-closer cursor-pointer">
                                 <i :class="child.faIcon" class="item-primary"></i>
@@ -18,7 +20,6 @@
                         </div>
                     </q-slide-transition>
                 </template>
-            </q-list>
         </template>
     </div>
 </template>
@@ -60,6 +61,11 @@
   }
 </script>
 <style scoped>
+
+    .q-list-header {
+        min-height: 12px;
+        padding: 5px 8px;
+    }
 
     .menu-hr{
         border-color: #dedede;

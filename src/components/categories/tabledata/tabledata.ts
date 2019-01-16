@@ -1,14 +1,11 @@
 import Vue from 'vue'
 import { Component, Watch } from 'vue-property-decorator'
 
-import { SingleCat } from '@components'
 import { ICategory } from '@src/model'
 
-
 @Component({
-  components: { SingleCat }
 })
-export default class Category extends Vue {
+export default class Tabledata extends Vue {
   $q: any
 
   filter: boolean = false
@@ -23,15 +20,13 @@ export default class Category extends Vue {
     id: 0,
     descr_it: 'Frozen Yogurt',
     descr_en: '',
-    descr_es: '',
-    campo2bool: true
+    descr_es: ''
   },
     {
       id: 1,
       descr_it: 'Secondo',
       descr_en: '',
-      descr_es: '',
-      campo2bool: false
+      descr_es: ''
     }]
 
   columns: any [] = [
@@ -91,7 +86,7 @@ export default class Category extends Vue {
       descr_it: '',
       descr_en: '',
       descr_es: '',
-      campo2bool: true
+      campo2bool: false
     }
     return objcat
 
@@ -134,7 +129,7 @@ export default class Category extends Vue {
         console.log('deleteCount = ', deleteCount)
         if (deleteCount > 0) {
           // Remove into the memory
-          this.categories_loc.slice(this.categories_loc.indexOf(myobj), 1)
+          this.categories_loc.splice(this.categories_loc.indexOf(myobj), 1)
 
           this.updatetable()
 

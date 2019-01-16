@@ -1,0 +1,115 @@
+.flex-item{
+   background-color: #d5e2eb;
+  padding: 1px;
+  margin: 1px;
+  color: #000;
+  font-size: 0.85rem;
+  flex: 1 1 auto;
+}
+
+.flex-container2 {
+  flex-flow: row nowrap;
+  justify-content: space-between;
+}
+
+.btn-item {
+  max-width: 24px;
+}
+
+
+.pos-item {
+  max-width: 24px;
+  min-width: 24px;
+  margin: 0 auto;
+  height: 36px;
+  line-height: 36px;
+  text-align: center;
+}
+
+.priority-item-popover {
+  max-width: 24px;
+  min-width: 24px;
+  padding: 0px;
+}
+
+.priority-item {
+  max-width: 24px;
+  min-width: 24px;
+}
+
+.completed-item {
+  max-width: 24px;
+  min-width: 24px;
+}
+
+.myexpired {
+  padding-top: 0px;
+  padding-bottom: 0px;
+  font-size: 12px;
+}
+
+.data-item {
+  max-width: 100px;
+  min-width: 100px;
+  display: block;
+  visibility: initial;
+}
+
+@media screen and (max-width: 600px) {
+  .data-item {
+    display: none;
+    visibility: hidden;
+    content: "";
+  }
+}
+
+
+.div_descr {
+  // background-color: green;
+  flex: 2 1 auto;
+}
+
+
+.appsingletodo {
+  color: black;
+  font-size: 1.0rem;
+  // display: flex;
+  margin: 1px;
+  padding: 2px;
+  border: 1px;
+  background-color: #e1ebed;
+}
+
+.mycols{
+  margin: 1px;
+  padding: 2px;
+  //width: 40px;
+  // border-color: #8a8484;
+  // border-style: outset;
+  margin: auto;
+  // flex-grow: 1;
+}
+
+
+
+.mycols:hover{
+
+}
+
+.mybtn{
+  width: 18px;
+  height: 18px;
+}
+
+.icon_completed {
+  position: relative;
+  transform: translateY(0%);
+}
+
+.mydescr{
+}
+
+
+.icon_completed:hover {
+  color: darkgreen;
+}

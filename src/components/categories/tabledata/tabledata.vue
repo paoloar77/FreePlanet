@@ -1,7 +1,7 @@
 <template>
     <q-page>
         <div class="panel">
-            <p class="caption">Singlecat:</p>
+            <p class="caption">Table Data:</p>
 
             <q-input v-model="category" inverted float-label="Inserisci la Categoria"
                      :after="[{icon: 'arrow_forward', content: true, handler () {}}]"
@@ -52,16 +52,14 @@
                 </template>
             </q-table>
 
-
-            <!-- <SingleTodo :itemcat='mycat' v-for="mycat of categories_arr" :key="mycat.id"/> -->
         </div>
     </q-page>
 
 
 </template>
-<script lang="ts" src="./category.ts">
+<script lang="ts" src="./tabledata.ts">
 </script>
 
 <style lang="scss" scoped>
-    @import './category.scss';
+    @import './tabledata.scss';
 </style>

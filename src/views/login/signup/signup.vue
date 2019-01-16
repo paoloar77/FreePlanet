@@ -2,8 +2,7 @@
     <q-page padding class="signup">
         <div class="text-center">
             <p>
-                <!--<img src="../../../assets/quasar-logo-full.svg">-->
-                <img :src="`../../../assets/${logoimg()}`">
+                <logo></logo>
             </p>
         </div>
 
@@ -98,3 +97,6 @@
 
 <script lang="ts" src="./signup.ts">
 </script>
+<style lang="scss" scoped>
+    @import './signup.scss';
+</style>

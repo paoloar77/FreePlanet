@@ -10,7 +10,8 @@ import { validations, TSignin } from './signin-validate'
 
 import { validationMixin } from 'vuelidate'
 
-import './signin.scss'
+import { Logo } from '@components'
+
 import router from '@router'
 
 // import {Loading, QSpinnerFacebook, QSpinnerGears} from 'quasar'
@@ -18,7 +19,8 @@ import router from '@router'
 
 @Component({
   mixins: [validationMixin],
-  validations: validations
+  validations: validations,
+  components: { Logo }
 })
 
 export default class Signin extends Vue {
@@ -41,10 +43,6 @@ export default class Signin extends Vue {
 
   public env() {
     return process.env
-  }
-
-  public logoimg() {
-    return process.env.LOGO_REG
   }
 
   showNotif(msg: any) {

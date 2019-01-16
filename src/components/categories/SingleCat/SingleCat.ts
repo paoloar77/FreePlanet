@@ -1,8 +1,6 @@
 import Vue from 'vue'
 import { Component, Prop } from 'vue-property-decorator'
 
-require('./SingleCat.scss')
-
 import { ICategory } from '../../../model/index'
 
 @Component({
