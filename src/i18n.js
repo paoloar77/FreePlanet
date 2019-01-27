@@ -84,6 +84,9 @@ const messages = {
         undefined: 'non definito'
       }
     },
+    todo: {
+      completed: 'Completati'
+    }
   },
   enUk: {
     comp:{
@@ -170,6 +173,9 @@ const messages = {
         undefined: 'undefined'
       }
     },
+    todo: {
+      completed: 'Completed'
+    }
   },
 };
 

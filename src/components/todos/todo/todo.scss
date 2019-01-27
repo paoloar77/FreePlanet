@@ -15,9 +15,37 @@
 .myitemdrag {
   padding: 2px;
   margin-top: 4px;
-  border: solid 1px #ccc;
+  border-width: 1px 0px 0px 0px;
+  //border: solid 1px #ccc;
+  border-style: solid;
+  border-color: #ccc;
   transition: all .4s;
 }
+
+.titlePriority, .titleCompleted{
+  border-width: 0px 0px 1px 0px;
+  border-style: solid;
+  border-color: #ccc;
+  color:white;
+}
+
+.titleCompleted {
+  background-color: #ccc;
+}
+
+.high_priority {
+  background-color: #4caf50;
+}
+
+.medium_priority {
+  background-color: #3846af;
+}
+
+.low_priority {
+  background-color: #af2218;
+}
+
+
 
 .myitemdrag-enter, .myitemdrag-leave-active {
   opacity: 0;

@@ -22,6 +22,8 @@ export default class SingleTodo extends Vue {
   public popover_menu: boolean = false
   public classRow: string = ''
   public sel: boolean = false
+  public isover: boolean = false
+  public classPosItemPopup = 'pos-item-popover'
   $q: any
 
   @Prop({ required: true }) itemtodo: ITodo
@@ -42,7 +44,9 @@ export default class SingleTodo extends Vue {
   }
 
   updateClasses() {
-    this.classCompleted = 'priority-item-popover'
+    // this.classCompleted = 'completed-item'
+    this.classCompleted = 'completed-item-popover'
+
     this.classDescr = 'flex-item div_descr'
     this.classExpiring = 'flex-item data-item'
     this.classExpiringEx = ''
@@ -64,6 +68,14 @@ export default class SingleTodo extends Vue {
     this.menuPopupTodo = rescodes.menuPopupTodo[UserStore.state.lang]
 
 
+  }
+
+  setclassPosItemPopup() {
+
+    if (this.isover)
+      this.classPosItemPopup = 'pos-item-popover'
+    else
+      this.classPosItemPopup = 'pos-item-popover'
   }
 
   getClassRow() {

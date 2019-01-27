@@ -119,7 +119,7 @@ export default class Todo extends Vue {
     console.log(mystr, 'elem [', elem.id, '] ', elem.descr, ' Pr(', this.getPriorityByInd(elem.priority), ') [', elem.id_prev, '-', elem.id_next, '] modif=', elem.modified)
   }
 
-  haveSamePriority(ind1, ind2) {
+  getPriorityToSet(ind1, ind2) {
     let elem1 = this.getelem(ind1)
     let elem2 = this.getelem(ind2)
 
@@ -133,12 +133,42 @@ export default class Todo extends Vue {
     } else {
       return (elem1 != null) ? elem1.priority : ((elem2 != null) ? elem2.priority : null)
     }
+  }
 
-    return -1
+  getCompleted(ind1, ind2) {
+    let elem1 = this.getelem(ind1)
+    let elem2 = this.getelem(ind2)
+
+    if ((elem1 !== null) && (elem2 !== null)) {
+      if (elem1.completed === elem2.completed) {
+        return true
+      } else {
+        return elem1.completed
+      }
+    } else {
+      return (elem1 != null) ? elem1.completed : ((elem2 != null) ? elem2.completed : null)
+    }
+
+  }
+
+  getTitlePriority (priority) {
+    let cl = ''
+
+    if (priority === rescodes.Todos.PRIORITY_HIGH)
+      cl = 'high_priority'
+    else if (priority === rescodes.Todos.PRIORITY_NORMAL)
+      cl = 'medium_priority'
+    else if (priority === rescodes.Todos.PRIORITY_LOW)
+      cl = 'low_priority'
+
+    return cl + ' titlePriority'
   }
 
   async onEnd(itemdragend) {
     console.log('newindex=', itemdragend.newIndex, 'oldindex=', itemdragend.oldIndex)
+
+    if (itemdragend.newIndex === itemdragend.oldIndex)
+      return // If nothing change, exit
 
     let myobj = this.getelem(itemdragend.newIndex)
 
@@ -146,11 +176,24 @@ export default class Todo extends Vue {
     const indfine = itemdragend.newIndex + 1
     console.log('indini', indini, 'indfine', indfine)
     // If the newIndex is between another priority, then change priority
-    let newpriority = this.haveSamePriority(indini, indfine)
-    if (newpriority != null && newpriority >= 0) {
-      myobj.modified = (myobj.priority !== newpriority) ? true : myobj.modified
-      myobj.priority = newpriority
-      console.log('NewPriority: ', newpriority)
+
+    let completed = this.getCompleted(indini, indfine)
+    let changecompleted = false
+    if (completed) {
+      myobj.modified = (myobj.completed !== completed) ? true : myobj.modified
+      myobj.completed = completed
+      changecompleted = true
+      console.log('Newcompleted: ', completed)
+    }
+
+    if (!changecompleted) {
+      // if I changed the completed, I don't have to put in other list priority
+      let newpriority = this.getPriorityToSet(indini, indfine)
+      if (newpriority != null && newpriority >= 0) {
+        myobj.modified = (myobj.priority !== newpriority) ? true : myobj.modified
+        myobj.priority = newpriority
+        console.log('NewPriority: ', newpriority)
+      }
     }
 
     await this.updateLinkedList(false)

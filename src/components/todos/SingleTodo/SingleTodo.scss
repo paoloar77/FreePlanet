@@ -14,13 +14,22 @@
   justify-content: space-between;
 }
 
-.flex-container2:hover {
-  background-color: rgba(240, 240, 240, 0.7);
+// Set visibility: visible to the icon menu of pos-item-popover
+.flex-container2:hover .pos-item-popover, .flex-container2:hover .priority-item-popover{
+//.flex-container2:hover .pos-item-popover {
+  background-color: rgba(230, 230, 230, 0.8);
+  display: inline-block;
+}
+
+.flex-container2:hover{
+  background-color: rgba(230, 230, 230, 0.8);
 }
 
 .rowselected {
-  border: 1px solid rgba(255, 0, 0, 0.5);
-  background-color: rgba(49, 68, 240, 0.7) !important;
+  border-width: 1px 0px 1px 0px;
+  border-style: solid;
+  border-color: rgba(49, 68, 240, 0.6);
+  //background-color: rgba(166, 153, 240, 0.7) !important;
 }
 
 
@@ -44,15 +53,17 @@
 
 }
 
-.pos-item-popover {
+
+.pos-item-popover{
   max-width: 24px;
   min-width: 24px;
   padding: 0px;
   text-align: center;
   vertical-align: middle;
-  display: inline-block;
+  display: none;
+  color: #777;
   height: 100%;
-  color: #555;
+  //visibility: hidden;
 }
 
 
@@ -66,8 +77,20 @@
   padding: 0px;
   text-align: center;
   vertical-align: middle;
+  display: none;
+  height: 100%;
+  color: #777;
+}
+
+.completed-item-popover {
+  max-width: 24px;
+  min-width: 24px;
+  padding: 0px;
+  text-align: center;
+  vertical-align: middle;
   display: inline-block;
-  height: 100%
+  height: 100%;
+  color: #777;
 }
 
 .priority-item {
@@ -75,10 +98,8 @@
   min-width: 24px;
 }
 
-.completed-item {
-  max-width: 24px;
-  min-width: 24px;
-}
+
+
 
 .myexpired {
   padding-top: 0px;
@@ -111,7 +132,8 @@
 }
 
 .div_descr:hover {
-  border: 1px solid rgba(125, 255, 125, 0.5);
+  border-width: 1px 0px 1px 0px;
+  border-color: rgba(125, 255, 125, 0.5);
   padding: 1px;
 }
 

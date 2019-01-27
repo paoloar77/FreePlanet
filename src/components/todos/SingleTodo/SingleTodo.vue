@@ -1,31 +1,41 @@
 <template>
-    <div :class="getClassRow()" @mousedown="clickRiga" @mouseup="mouseUp">
+    <div :class="getClassRow()" @mousedown="clickRiga" @mouseup.left="mouseUp">
+        <q-context-menu>
+            <q-list link separator no-border class="todo-menu">
+                <q-item v-for="field in menuPopupTodo" :key="field.value"
+                        v-close-overlay
+                        @click.native="clickMenu(field.value), popover_menu = false">
+                    <q-item-side :icon="field.icon"/>
+                    <q-item-main>
+                        <q-item-tile label>{{field.label}}</q-item-tile>
+                    </q-item-main>
+                </q-item>
+            </q-list>
+        </q-context-menu>
         <div class="flex-item pos-item">
             <q-btn flat
                    class="pos-item-popover"
-                   icon="menu"
-            >
+                   icon="menu">
+
                 <q-popover
                         v-model="popover_menu"
                         self="top left">
-                    <q-context-menu>
-                        <q-list link separator no-border class="todo-menu">
-                            <q-item v-for="field in menuPopupTodo" :key="field.value"
-                                    v-close-overlay
-                                    @click.native="clickMenu(field.value), popover_menu = false">
-                                <q-item-side :icon="field.icon"/>
-                                <q-item-main>
-                                    <q-item-tile label>{{field.label}}</q-item-tile>
-                                </q-item-main>
-                            </q-item>
-                        </q-list>
-                    </q-context-menu>
+                    <q-list link separator no-border class="todo-menu">
+                        <q-item v-for="field in menuPopupTodo" :key="field.value"
+                                v-close-overlay
+                                @click.native="clickMenu(field.value), popover_menu = false">
+                            <q-item-side :icon="field.icon"/>
+                            <q-item-main>
+                                <q-item-tile label>{{field.label}}</q-item-tile>
+                            </q-item-main>
+                        </q-item>
+                    </q-list>
                 </q-popover>
             </q-btn>
         </div>
         <!--<div class="flex-item pos-item">[{{ itemtodo.pos }}]</div>-->
         <div class="flex-item priority-item">
-            <q-btn push
+            <q-btn push flat
                    class="priority-item-popover"
                    :icon="iconPriority">
                 <q-popover
@@ -46,7 +56,7 @@
             </q-btn>
         </div>
         <div class="flex-item completed-item">
-            <q-btn push
+            <q-btn push flat
                    :class="classCompleted"
                    :icon="iconCompleted"
                    @click.native="setCompleted">
@@ -64,6 +74,9 @@
                     v-model="itemtodo.expiring_at"
                     class="myexpired"/>
         </div>
+        <!--<div class="flex-item btn-item">-->
+            <!--{{classPosItemPopup}}-->
+        <!--</div>-->
         <!--<div class="flex-item btn-item">-->
         <!--<q-btn class="mybtn" round color="" icon="delete" @click.native="removeitem(itemtodo.id)"></q-btn>-->
         <!--</div>-->
