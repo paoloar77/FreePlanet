@@ -8,17 +8,27 @@
                      v-on:keyup.enter="insertTodo"/>
 
 
-            <div class="flex-container">
-                <draggable v-model="todos_arr" :options="{draggable:'.myitemdrag'}" @start="onStart" @end="onEnd">
-                    <transition-group>
-                        <SingleTodo @event="deleteitem" @eventupdate="updateitem" :itemtodo='mytodo'
-                                    v-for="mytodo of todos_arr" :key="mytodo.id" class="myitemdrag">
-                        </SingleTodo>
-                    </transition-group>
-                </draggable>
-            </div>
+            <div style="display: none">{{ prior = 0 }}</div>
+            <div class="drag">
+                <div class="flex-container">
+                    <draggable v-model="todos_arr" :options="{draggable:'.myitemdrag'}"
+                               @start="onStart" @end="onEnd" class="dragArea">
+                        <transition-group>
+                            <div :id="getmyid(mytodo.id)" :key="mytodo.id" v-for="mytodo in todos_arr" class="myitemdrag">
 
-            <!--<div v-for="element in todos_arr" :key="element.id">{{element.descr}}</div>-->
+                                <div v-if="prior !== mytodo.priority">
+                                    <label>{{getPriorityByInd(mytodo.priority)}}</label>
+                                </div>
+                                <SingleTodo ref="single" @deleteitem="deleteitem" @eventupdate="updateitem"
+                                            @click="clickRiga"
+                                            :itemtodo='mytodo' />
+
+                                <div style="display: none">{{ prior = mytodo.priority }}</div>
+                            </div>
+                        </transition-group>
+                    </draggable>
+                </div>
+            </div>
 
         </div>
     </q-page>

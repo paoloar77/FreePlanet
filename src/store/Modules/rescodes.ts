@@ -5,6 +5,9 @@ export const rescodes = {
   DUPLICATE_EMAIL_ID: 11000,
   DUPLICATE_USERNAME_ID: 11100,
 
+  LIST_END: 10000000,
+  LIST_START: 0,
+
   localStorage: {
     verifiedEmail: 'vf',
     isLogged: 'ilog',
@@ -16,9 +19,13 @@ export const rescodes = {
   },
 
   Todos: {
-    PRIORITY_NORMAL: 0,
-    PRIORITY_HIGH: 1,
-    PRIORITY_LOW: -1
+    PRIORITY_HIGH: 2,
+    PRIORITY_NORMAL: 1,
+    PRIORITY_LOW: 0
+  },
+
+  MenuAction: {
+    DELETE: 100
   },
 
 
@@ -27,41 +34,72 @@ export const rescodes = {
       {
         id: 1,
         label: 'Alta',
-        value: 1,
+        value: 2,
         icon: 'expand_less'
       },
       {
         id: 2,
         label: 'Normale',
-        value: 0,
+        value: 1,
         icon: 'remove'
       },
       {
         id: 3,
         label: 'Bassa',
-        value: -1,
+        value: 0,
         icon: 'expand_more'
       }],
     'enUk': [
       {
         id: 1,
         label: 'High',
-        value: 1,
+        value: 2,
         icon: 'expand_less'
       },
       {
         id: 2,
         label: 'Normal',
-        value: 0,
+        value: 1,
         icon: 'remove'
       },
       {
         id: 3,
         label: 'Low',
-        value: -1,
+        value: 0,
         icon: 'expand_more'
       }]
 
+  },
+
+  menuPopupTodo: {
+    'it': [
+      {
+        id: 1,
+        label: 'Cancella',
+        value: 100, // DELETE
+        icon: 'delete'
+      },
+      {
+        id: 2,
+        label: 'Attiva...',
+        value: 101, // ATTIVA
+        icon: 'expand_more'
+      }
+      ],
+    'enUk': [
+      {
+        id: 1,
+        label: 'Delete',
+        value: 100, // DELETE
+        icon: 'trash'
+      },
+      {
+        id: 2,
+        label: 'Attiva...',
+        value: 101, // ATTIVA
+        icon: 'sun'
+      }
+      ]
   }
 
 

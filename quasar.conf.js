@@ -149,6 +149,7 @@ module.exports = function (ctx) {
         'QDatetime',
         'QSlideTransition',
         'QTable',
+        'QContextMenu',
       ],
       directives: [
         'Ripple',

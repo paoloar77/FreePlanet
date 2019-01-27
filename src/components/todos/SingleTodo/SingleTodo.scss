@@ -1,16 +1,28 @@
+
 .flex-item{
-   background-color: #d5e2eb;
-  padding: 1px;
-  margin: 1px;
+   // background-color: #d5e2eb;
+  padding: 0px;
+  margin: 0px;
   color: #000;
   font-size: 0.85rem;
   flex: 1 1 auto;
 }
 
+
 .flex-container2 {
-  flex-flow: row nowrap;
+  flex-flow: row;
   justify-content: space-between;
 }
+
+.flex-container2:hover {
+  background-color: rgba(240, 240, 240, 0.7);
+}
+
+.rowselected {
+  border: 1px solid rgba(255, 0, 0, 0.5);
+  background-color: rgba(49, 68, 240, 0.7) !important;
+}
+
 
 .btn-item {
   max-width: 24px;
@@ -24,12 +36,38 @@
   height: 36px;
   line-height: 36px;
   text-align: center;
+  // background-color: #ff4081;
+  font-size: 0.75rem;
+}
+
+.todo-menu {
+
+}
+
+.pos-item-popover {
+  max-width: 24px;
+  min-width: 24px;
+  padding: 0px;
+  text-align: center;
+  vertical-align: middle;
+  display: inline-block;
+  height: 100%;
+  color: #555;
+}
+
+
+.pos-item:hover {
+  cursor: pointer;
 }
 
 .priority-item-popover {
   max-width: 24px;
   min-width: 24px;
   padding: 0px;
+  text-align: center;
+  vertical-align: middle;
+  display: inline-block;
+  height: 100%
 }
 
 .priority-item {
@@ -55,6 +93,7 @@
   visibility: initial;
 }
 
+/*
 @media screen and (max-width: 600px) {
   .data-item {
     display: none;
@@ -62,11 +101,18 @@
     content: "";
   }
 }
-
+*/
 
 .div_descr {
   // background-color: green;
+  margin: 2px;
+  padding: 2px;
   flex: 2 1 auto;
+}
+
+.div_descr:hover {
+  border: 1px solid rgba(125, 255, 125, 0.5);
+  padding: 1px;
 }
 
 
@@ -75,8 +121,8 @@
   font-size: 1.0rem;
   // display: flex;
   margin: 1px;
-  padding: 2px;
-  border: 1px;
+  padding: 1px;
+  border: 0px;
   background-color: #e1ebed;
 }
 
@@ -110,6 +156,11 @@
 }
 
 
-.icon_completed:hover {
-  color: darkgreen;
+.icon_completed {
+  color: rgb(178, 235, 225);
 }
+
+.status_completed {
+  color:rgba(49, 68, 240, 0.7);;
+}
+
