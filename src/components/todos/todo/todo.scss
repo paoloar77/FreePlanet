@@ -2,7 +2,7 @@
   background-color: rgb(250, 250, 250);
   padding: 5px;
   display: flex;
-  flex-flow: row;
+  flex-direction: row;
   justify-content: space-between;
 }
 
@@ -52,7 +52,7 @@
 }
 
 .drag {
-  background-color: green;
+  //background-color: green;
 }
 
 .dragArea {

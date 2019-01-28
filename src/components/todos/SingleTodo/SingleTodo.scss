@@ -5,12 +5,12 @@
   margin: 0px;
   color: #000;
   font-size: 0.85rem;
-  flex: 1 1 auto;
+  //flex: 0 0 100%;
 }
 
 
 .flex-container2 {
-  flex-flow: row;
+  flex-flow: row nowrap;
   justify-content: space-between;
 }
 
@@ -26,7 +26,7 @@
 }
 
 .rowselected {
-  border-width: 2px 0px 2px 0px;
+  border-width: 1px 0px 1px 0px;
   border-style: solid;
   border-color: rgba(49, 68, 240, 0.6);
   //background-color: rgba(166, 153, 240, 0.7) !important;
@@ -50,6 +50,12 @@
 }
 
 .todo-menu {
+  min-width: 202px;
+
+}
+
+.item-menu{
+  font-size: 1rem;
 
 }
 
@@ -79,8 +85,8 @@
 }
 
 
-.pos-item:hover {
-  cursor: pointer;
+.pos-item:hover, .pos-item-popover:hover {
+  cursor: col-resize;
 }
 
 .priority-item-popover {
@@ -148,13 +154,14 @@
 .div_descr, .div_descr_edit {
   margin: 2px;
   padding: 2px;
-  min-width: 100px;
-  flex: 2 1 auto;
+  min-width: 200px;
   vertical-align: middle;
   text-align: left;
 
-  height: 24px;
-  line-height: 24px; /* same as height! */
+  flex: 1;
+  order: 1;
+  //height: 24px;
+  //line-height: 24px; /* same as height! */
 
   &.hide {
     display: none !important;
@@ -237,3 +244,28 @@
     background-color: red;
   }
 }
+
+
+
+/*
+.container {
+  background-color: #ccc;
+  padding: 10px;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+
+}
+
+.item {
+  background-color: red;
+  padding: 10px;
+  color: white;
+
+}
+.i3{
+  order: 1;
+  flex: 1;
+}
+*/

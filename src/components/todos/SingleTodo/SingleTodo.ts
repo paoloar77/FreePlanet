@@ -26,7 +26,6 @@ export default class SingleTodo extends Vue {
   public classRow: string = ''
   public sel: boolean = false
   public inEdit: boolean = false
-  public descrtoEdit: string = ''
   $q: any
 
   @Prop({ required: true }) itemtodo: ITodo
@@ -48,10 +47,6 @@ export default class SingleTodo extends Vue {
     this.watchupdate()
   }
 
-  @Watch('itemtodo.descr') valueChanged5() {
-    this.descrtoEdit = this.itemtodo.descr
-  }
-
   isTodo () {
     return this.isTodoByElem(this.itemtodo)
   }
@@ -68,7 +63,7 @@ export default class SingleTodo extends Vue {
   updateClasses() {
     // this.classCompleted = 'completed-item'
     this.classCompleted = 'completed-item-popover'
-    this.classDescr = 'flex-item div_descr'
+    this.classDescr = 'flex-item div_descr show'
     this.classDescrEdit = 'flex-item div_descr_edit'
     if (!this.isTodo())
       this.classDescr += ' titleLista-item'
@@ -82,13 +77,13 @@ export default class SingleTodo extends Vue {
       this.classExpiringEx += ' status_completed'
     }
 
-    if (this.inEdit) {
-      this.classDescr += ' hide'
-      this.classDescrEdit += ' show'
-    } else {
-      this.classDescrEdit += ' hide'
-      this.classDescr += ' show'
-    }
+    // if (this.inEdit) {
+    //   this.classDescr += ' hide'
+    //   this.classDescrEdit += ' show'
+    // } else {
+    //   this.classDescrEdit += ' hide'
+    //   this.classDescr += ' show'
+    // }
 
     // this.getinputdescr = 'inputdescr' + this.itemtodo.id
 
@@ -171,31 +166,28 @@ export default class SingleTodo extends Vue {
     else
       this.updateClasses()
 
-    this.descrtoEdit = this.itemtodo.descr
-
     let mythis = this
     setTimeout(() => {
       let theField = <HTMLInputElement>mythis.$refs.inputdescr
       theField.focus()
       console.log('focus()')
-    }, 0)
+    }, 100)
 
     console.log('FINE - editTodo')
   }
 
-  exitEdit () {
+  exitEdit (singola: boolean = false) {
     if (this.inEdit) {
       console.log('exitEdit')
       this.inEdit = false
       this.updateClasses
-      this.$emit('deselectAllRows', this.itemtodo, false)
+      this.$emit('deselectAllRows', this.itemtodo, false, singola)
     }
   }
 
 
   updateTodo () {
     this.watchupdate()
-    this.itemtodo.descr = this.descrtoEdit
     this.inEdit = false
     this.updateClasses()
   }
@@ -248,6 +240,8 @@ export default class SingleTodo extends Vue {
       this.removeitem(this.itemtodo.id)
     } else if (action === rescodes.MenuAction.TOGGLE_EXPIRING) {
       this.enableExpiring()
+    } else if (action === rescodes.MenuAction.COMPLETED) {
+      this.setCompleted()
     }
 
   }

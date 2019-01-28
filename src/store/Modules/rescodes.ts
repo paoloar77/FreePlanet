@@ -26,7 +26,8 @@ export const rescodes = {
 
   MenuAction: {
     DELETE: 100,
-    TOGGLE_EXPIRING: 101
+    TOGGLE_EXPIRING: 101,
+    COMPLETED: 110
   },
 
 
@@ -76,29 +77,47 @@ export const rescodes = {
     'it': [
       {
         id: 1,
-        label: 'Cancella',
-        value: 100, // DELETE
-        icon: 'delete'
+        label: 'Completato',
+        value: 110, // COMPLETED
+        icon: 'check_circle',
+        checked: true
       },
       {
-        id: 2,
+        id: 3,
         label: 'Imposta Scadenza',
         value: 101, // TOGGLE_EXPIRING
-        icon: 'expand_more'
+        icon: 'date_range',
+        checked: true
+      },
+      {
+        id: 10,
+        label: 'Cancella',
+        value: 100, // DELETE
+        icon: 'delete',
+        checked: false
       }
       ],
     'enUk': [
       {
         id: 1,
-        label: 'Delete',
-        value: 100, // DELETE
-        icon: 'trash'
+        label: 'Completed',
+        value: 110, // COMPLETED
+        icon: 'check_circle',
+        checked: true
       },
       {
         id: 2,
         label: 'Set Expiring',
         value: 101, // TOGGLE_EXPIRING
-        icon: 'sun'
+        icon: 'date_range',
+        checked: true
+      },
+      {
+        id: 10,
+        label: 'Delete',
+        value: 100, // DELETE
+        icon: 'trash',
+        checked: false
       }
       ]
   }

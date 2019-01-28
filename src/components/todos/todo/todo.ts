@@ -493,7 +493,7 @@ export default class Todo extends Vue {
   // }
   //
 
-  deselectAllRows(item, check) {
+  deselectAllRows(item, check, onlythis:boolean = false) {
     console.log('deselectAllRows : ', item)
 
     for (let i = 0; i < this.$refs.single.length; i++) {
@@ -503,7 +503,13 @@ export default class Todo extends Vue {
       // @ts-ignore
       let id = contr.itemtodo.id
       // Don't deselect the actual clicked!
-      if ((check && (item.id !== id)) || (!check)) {
+      let des = false
+      if (onlythis) {
+        des = item.id === id
+      }else {
+        des = ((check && (item.id !== id)) || (!check))
+      }
+      if (des) {
         // @ts-ignore
         contr.deselectAndExitEdit()
       }

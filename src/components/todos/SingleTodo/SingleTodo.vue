@@ -7,11 +7,14 @@
                         @click.native="clickMenu(field.value), popover_menu = false">
                     <q-item-side :icon="field.icon"/>
                     <q-item-main>
-                        <q-item-tile label>{{field.label}}</q-item-tile>
+                        <q-item-tile label class="item-menu">{{field.label}}</q-item-tile>
                     </q-item-main>
 
                     <q-item-side v-if="field.value === 101">
                         <q-checkbox v-model="itemtodo.enableExpiring"/>
+                    </q-item-side>
+                    <q-item-side v-if="field.value === 110">
+                        <q-checkbox v-model="itemtodo.completed"/>
                     </q-item-side>
                 </q-item>
             </q-list>
@@ -34,6 +37,9 @@
                             </q-item-main>
                             <q-item-side v-if="field.value === 101">
                                 <q-checkbox v-model="itemtodo.enableExpiring"/>
+                            </q-item-side>
+                            <q-item-side v-if="field.value === 110">
+                                <q-checkbox v-model="itemtodo.completed"/>
                             </q-item-side>
                         </q-item>
                     </q-list>
@@ -74,14 +80,14 @@
                     @click.native="setCompleted"/>-->
         </div>
 
-        <q-input autofocus ref="inputdescr" :value="descrtoEdit" @change="val => descrtoEdit = val"
-                 :class="classDescrEdit"
-                 v-on:keyup.enter="updateTodo" v-on:keydown.esc="exitEdit"/>
+        <q-input type="textarea" autofocus ref="inputdescr" :value="itemtodo.descr" @change="val => itemtodo.descr = val"
+                 :class="classDescr" :max-height="50"
+                 v-on:keyup.enter="updateTodo" v-on:keydown.esc="exitEdit" @blur="exitEdit(true)" @mousedown.left="editTodo()"/>
 
 
-        <div :class="classDescr" @click="editTodo()">
-            {{ itemtodo.descr }}
-        </div>
+        <!--<div :class="classDescr" @mousedown.left="editTodo()">-->
+            <!--<q-field>{{ itemtodo.descr }}</q-field>-->
+        <!--</div>-->
 
 
         <div v-if="itemtodo.enableExpiring">
