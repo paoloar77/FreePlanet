@@ -173,9 +173,12 @@ export default class SingleTodo extends Vue {
 
     this.descrtoEdit = this.itemtodo.descr
 
-    let theField = <HTMLInputElement>this.$refs.inputdescr
-    theField.focus()
-    console.log('focus()')
+    let mythis = this
+    setTimeout(() => {
+      let theField = <HTMLInputElement>mythis.$refs.inputdescr
+      theField.focus()
+      console.log('focus()')
+    }, 0)
 
     console.log('FINE - editTodo')
   }
