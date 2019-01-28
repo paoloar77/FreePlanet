@@ -3,7 +3,7 @@
         <div class="panel">
             <p class="caption"></p>
 
-            <q-input v-model="todo" inverted :float-label="$t('todo.insert')"
+            <q-input ref="insertTask" v-model="todo" inverted :float-label="$t('todo.insert')"
                      :after="[{icon: 'arrow_forward', content: true, handler () {}}]"
                      v-on:keyup.enter="insertTodo"/>
 

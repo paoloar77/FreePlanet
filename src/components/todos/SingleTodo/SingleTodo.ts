@@ -17,7 +17,7 @@ export default class SingleTodo extends Vue {
   public iconCompleted: string = ''
   public classCompleted: string = ''
   public classDescr: string = ''
-  public classDescrEdit:string = ''
+  public classDescrEdit: string = ''
   public classExpiring: string = ''
   public classExpiringEx: string = ''
   public iconPriority: string = ''
@@ -26,6 +26,7 @@ export default class SingleTodo extends Vue {
   public classRow: string = ''
   public sel: boolean = false
   public inEdit: boolean = false
+  public precDescr: string = ''
   $q: any
 
   @Prop({ required: true }) itemtodo: ITodo
@@ -47,11 +48,15 @@ export default class SingleTodo extends Vue {
     this.watchupdate()
   }
 
-  isTodo () {
+  @Watch('itemtodo.descr') valueChanged5() {
+    this.precDescr = this.itemtodo.descr
+  }
+
+  isTodo() {
     return this.isTodoByElem(this.itemtodo)
   }
 
-  isTodoByElem (elem) {
+  isTodoByElem(elem) {
     return elem.descr.slice(-1) !== ':'
   }
 
@@ -87,8 +92,8 @@ export default class SingleTodo extends Vue {
 
     // this.getinputdescr = 'inputdescr' + this.itemtodo.id
 
-    console.log('classDescrEdit = ', this.classDescrEdit)
-    console.log('classDescr', this.classDescr)
+    // console.log('classDescrEdit = ', this.classDescrEdit)
+    // console.log('classDescr', this.classDescr)
 
     if (this.isTodo())
       this.menuPopupTodo = rescodes.menuPopupTodo[UserStore.state.lang]
@@ -100,6 +105,7 @@ export default class SingleTodo extends Vue {
   }
 
   created() {
+    this.precDescr = this.itemtodo.descr
     this.updateicon()
 
     this.updateClasses()
@@ -113,8 +119,8 @@ export default class SingleTodo extends Vue {
     return 'row flex-container2 ' + this.classRow
   }
 
-  clickRiga () {
-    console.log('CLICK RIGA ************')
+  clickRiga() {
+    // console.log('CLICK RIGA ************')
     if (!this.inEdit) {
       this.$emit('deselectAllRows', this.itemtodo, true)
 
@@ -127,22 +133,22 @@ export default class SingleTodo extends Vue {
   }
 
   selectRiga() {
-    console.log('selectRiga', this.itemtodo.descr)
+    // console.log('selectRiga', this.itemtodo.descr)
     this.sel = true
     this.classRow = 'rowselected'
     this.updateClasses()
-    console.log('FINE selectRiga', this.itemtodo.descr)
+    // console.log('FINE selectRiga', this.itemtodo.descr)
   }
 
   deselectRiga() {
-    console.log('DeselectRiga', this.itemtodo.descr)
+    // console.log('DeselectRiga', this.itemtodo.descr)
     this.sel = false
     this.classRow = ''
     this.inEdit = false
     this.updateClasses()
   }
 
-  deselectAndExitEdit () {
+  deselectAndExitEdit() {
     this.deselectRiga()
     this.exitEdit()
   }
@@ -157,28 +163,38 @@ export default class SingleTodo extends Vue {
     }
   }
 
-  editTodo () {
-    console.log('INIZIO - editTodo')
+  editTodo() {
+    // console.log('INIZIO - editTodo')
     this.$emit('click')
+    this.precDescr = this.itemtodo.descr
     this.inEdit = true
     if (!this.sel)
       this.selectRiga()
     else
       this.updateClasses()
 
-    let mythis = this
-    setTimeout(() => {
-      let theField = <HTMLInputElement>mythis.$refs.inputdescr
-      theField.focus()
-      console.log('focus()')
-    }, 100)
+    this.faiFocus('inputdescr')
 
-    console.log('FINE - editTodo')
+
+    // console.log('FINE - editTodo')
   }
 
-  exitEdit (singola: boolean = false) {
+  faiFocus(elem, isparent: boolean = false) {
+    let mythis = this
+    setTimeout(() => {
+      let theField = null
+      if (isparent)
+        theField = <HTMLInputElement>mythis.$parent.$parent.$parent.$parent.$refs[elem]
+      else
+        theField = <HTMLInputElement>mythis.$refs[elem]
+      theField.focus()
+      // console.log('focus()')
+    }, 100)
+  }
+
+  exitEdit(singola: boolean = false) {
     if (this.inEdit) {
-      console.log('exitEdit')
+      // console.log('exitEdit')
       this.inEdit = false
       this.updateClasses
       this.$emit('deselectAllRows', this.itemtodo, false, singola)
@@ -186,9 +202,30 @@ export default class SingleTodo extends Vue {
   }
 
 
-  updateTodo () {
+  keyDownArea(e) {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault()
+      this.updateTodo()
+      this.deselectRiga()
+      this.faiFocus('insertTask', true)
+    }
+
+    // console.log('keyDownArea', e)
+    if (e.key === 'Escape') {
+      this.deselectRiga()
+      this.faiFocus('insertTask', true)
+      console.log('LOAD this.precDescr', this.precDescr)
+      this.precDescr = this.itemtodo.descr
+    }
+
+  }
+
+  updateTodo() {
+    this.itemtodo.descr = this.precDescr
+    console.log('updateTodo', this.precDescr, this.itemtodo.descr)
     this.watchupdate()
     this.inEdit = false
+    // this.precDescr = this.itemtodo.descr
     this.updateClasses()
   }
 

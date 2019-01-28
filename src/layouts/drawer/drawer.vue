@@ -140,6 +140,10 @@
         margin-top: 5%;
     }
 
+    .fixed-left:hover{
+        cursor: ew-resize;
+    }
+
     footer {
         small {
             color: red;

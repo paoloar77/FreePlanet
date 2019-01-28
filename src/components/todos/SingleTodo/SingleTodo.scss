@@ -12,6 +12,7 @@
 .flex-container2 {
   flex-flow: row nowrap;
   justify-content: space-between;
+  margin: 2px 5px 2px 5px;  // top right bottom left
 }
 
 // Set visibility: visible to the icon menu of pos-item-popover
@@ -86,7 +87,7 @@
 
 
 .pos-item:hover, .pos-item-popover:hover {
-  cursor: col-resize;
+  cursor: grab;
 }
 
 .priority-item-popover {
@@ -128,11 +129,13 @@
 }
 
 .data-item {
-  max-width: 100px;
-  min-width: 100px;
-  display: block;
-  visibility: initial;
+  //max-width: 100px;
+  //min-width: 100px;
+  //display: flex;
+  //visibility: initial;
   color: #ccc;
+  order: 1;
+  flex: 1;
 }
 
 
@@ -159,7 +162,7 @@
   text-align: left;
 
   flex: 1;
-  order: 1;
+  //order: 2;
   //height: 24px;
   //line-height: 24px; /* same as height! */
 
@@ -245,6 +248,14 @@
   }
 }
 
+.after_textarea {
+  display: none;
+  visibility: hidden;
+}
+
+.after_textarea:hover {
+  visibility: visible;
+}
 
 
 /*
@@ -269,3 +280,5 @@
   flex: 1;
 }
 */
+
+

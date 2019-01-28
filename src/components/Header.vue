@@ -130,6 +130,10 @@
         }
     }
 
+    .fixed-left:hover{
+        cursor: ew-resize;
+    }
+
     /*
     @-webkit-keyframes moveFromLeftFade {
         from {

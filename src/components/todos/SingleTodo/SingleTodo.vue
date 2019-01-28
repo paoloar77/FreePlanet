@@ -1,5 +1,5 @@
 <template>
-    <div :class="getClassRow()" @mouseup.left="mouseUp" @mousedown="clickRiga">
+    <div :class="getClassRow()" >
         <q-context-menu>
             <q-list link separator no-border class="todo-menu">
                 <q-item v-for="field in menuPopupTodo" :key="field.value"
@@ -19,7 +19,7 @@
                 </q-item>
             </q-list>
         </q-context-menu>
-        <div v-if="isTodo()" class="flex-item pos-item" >
+        <div v-if="isTodo()" class="flex-item pos-item" @mouseup.left="mouseUp" @mousedown="clickRiga">
             <q-btn flat
                    class="pos-item-popover"
                    icon="menu">
@@ -80,10 +80,11 @@
                     @click.native="setCompleted"/>-->
         </div>
 
-        <q-input type="textarea" autofocus ref="inputdescr" :value="itemtodo.descr" @change="val => itemtodo.descr = val"
+        <q-input type="textarea" ref="inputdescr" v-model="precDescr"
                  :class="classDescr" :max-height="50"
-                 v-on:keyup.enter="updateTodo" v-on:keydown.esc="exitEdit" @blur="exitEdit(true)" @mousedown.left="editTodo()"/>
+                 @keydown="keyDownArea" v-on:keydown.esc="exitEdit" @blur="exitEdit(true)" @click="editTodo()"/>
 
+        <!--:after="[{icon: 'arrow_forward', content: true, handler () {}}]"-->
 
         <!--<div :class="classDescr" @mousedown.left="editTodo()">-->
             <!--<q-field>{{ itemtodo.descr }}</q-field>-->
