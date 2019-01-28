@@ -3,10 +3,6 @@
         <div class="panel">
             <p class="caption"></p>
 
-            <q-input ref="insertTask" v-model="todo" inverted :float-label="$t('todo.insert')"
-                     :after="[{icon: 'arrow_forward', content: true, handler () {}}]"
-                     v-on:keyup.enter="insertTodo"/>
-
 
             <div style="display: none">{{ prior = 0, priorcomplet = false }}</div>
             <div class="drag">
@@ -31,6 +27,9 @@
                     </transition-group>
                 </draggable>
             </div>
+            <q-input ref="insertTask" v-model="todo" inverted :float-label="$t('todo.insert')"
+                     :after="[{icon: 'arrow_forward', content: true, handler () {}}]"
+                     v-on:keyup.enter="insertTodo"/>
 
         </div>
     </q-page>

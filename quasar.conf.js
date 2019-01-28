@@ -150,6 +150,8 @@ module.exports = function (ctx) {
         'QSlideTransition',
         'QTable',
         'QContextMenu',
+        'QProgress',
+        'QSlider',
       ],
       directives: [
         'Ripple',

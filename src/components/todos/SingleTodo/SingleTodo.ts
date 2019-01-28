@@ -27,6 +27,9 @@ export default class SingleTodo extends Vue {
   public sel: boolean = false
   public inEdit: boolean = false
   public precDescr: string = ''
+  public menuProgress: string = 'menuprogress'
+  public percProgress: string = 'percProgress'
+  public colProgress: string = 'blue'
   $q: any
 
   @Prop({ required: true }) itemtodo: ITodo
@@ -48,8 +51,13 @@ export default class SingleTodo extends Vue {
     this.watchupdate()
   }
 
+
   @Watch('itemtodo.descr') valueChanged5() {
     this.precDescr = this.itemtodo.descr
+  }
+
+  @Watch('itemtodo.progress') valueChanged6() {
+    this.updateClasses()
   }
 
   isTodo() {
@@ -81,6 +89,23 @@ export default class SingleTodo extends Vue {
       this.classExpiring += ' status_completed'
       this.classExpiringEx += ' status_completed'
     }
+
+    this.menuProgress = 'menuProgress'
+    this.percProgress = 'percProgress'
+
+    let mycolcl = ''
+    if (this.itemtodo.progress < 33) {
+      mycolcl = ' lowperc'
+    } else if (this.itemtodo.progress < 66) {
+      mycolcl = ' medperc'
+    } else {
+      mycolcl = ' highperc'
+    }
+
+    this.colProgress = mycolcl
+
+    this.menuProgress += mycolcl
+    this.percProgress += mycolcl
 
     // if (this.inEdit) {
     //   this.classDescr += ' hide'
@@ -292,5 +317,12 @@ export default class SingleTodo extends Vue {
     this.updateicon()
 
     // this.$q.notify('setPriority: ' + elem)
+  }
+
+  getPercentageProgress() {
+    if (this.itemtodo.completed)
+      return 100
+    else
+      return this.itemtodo.progress
   }
 }

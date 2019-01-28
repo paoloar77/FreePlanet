@@ -27,7 +27,8 @@ export const rescodes = {
   MenuAction: {
     DELETE: 100,
     TOGGLE_EXPIRING: 101,
-    COMPLETED: 110
+    COMPLETED: 110,
+    PROGRESS_BAR: 120
   },
 
 
@@ -77,6 +78,13 @@ export const rescodes = {
     'it': [
       {
         id: 1,
+        label: 'Progressi',
+        value: 120, // PROGRESS_BAR
+        icon: 'check_circle',
+        checked: true
+      },
+      {
+        id: 2,
         label: 'Completato',
         value: 110, // COMPLETED
         icon: 'check_circle',
@@ -100,13 +108,20 @@ export const rescodes = {
     'enUk': [
       {
         id: 1,
+        label: 'Progress',
+        value: 120, // PROGRESS_BAR
+        icon: 'check_circle',
+        checked: true
+      },
+      {
+        id: 2,
         label: 'Completed',
         value: 110, // COMPLETED
         icon: 'check_circle',
         checked: true
       },
       {
-        id: 2,
+        id: 3,
         label: 'Set Expiring',
         value: 101, // TOGGLE_EXPIRING
         icon: 'date_range',

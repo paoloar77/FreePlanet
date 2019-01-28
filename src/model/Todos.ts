@@ -11,7 +11,8 @@ export interface ITodo {
   id_prev?: number,
   id_next?: number,
   modified?: boolean,
-  pos?: number
+  pos?: number,
+  progress?: number
 }
 
 export interface ITodosState {

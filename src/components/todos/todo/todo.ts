@@ -263,7 +263,8 @@ export default class Todo extends Vue {
       id_prev: 0,
       id_next: 0,
       pos: 0,
-      modified: true
+      modified: true,
+      progress: 0
     }
     return objtodo
 
@@ -546,6 +547,8 @@ export default class Todo extends Vue {
       this.modifyField(miorec, myobj, 'id_next')
       this.modifyField(miorec, myobj, 'pos')
       this.modifyField(miorec, myobj, 'enableExpiring')
+      this.modifyField(miorec, myobj, 'progress')
+
 
       if (miorec.modified) {
         miorec.modify_at = new Date()

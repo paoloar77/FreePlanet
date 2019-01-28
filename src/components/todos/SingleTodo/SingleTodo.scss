@@ -42,7 +42,10 @@
 .pos-item {
   max-width: 24px;
   min-width: 24px;
-  margin: 0 auto;
+  margin-left: 1px;
+  margin-right: 1px;
+  padding-left: 1px;
+  padding-right: 1px;
   height: 36px;
   line-height: 36px;
   text-align: center;
@@ -120,6 +123,38 @@
 .completed-item {
   max-width: 24px;
   min-width: 24px;
+}
+
+.progress-item {
+  max-width: 32px;
+  min-width: 24px;
+  flex: 1;
+  order: 2;
+  text-align: right;
+}
+
+
+.percProgress {
+  height: 24px;
+  line-height: 24px;
+  color: #888;
+}
+
+.menuProgress {
+  width:50px;
+}
+
+.colProgress {
+}
+
+.lowperc {
+  color: red;
+}
+.medperc {
+  color: blue;
+}
+.highperc {
+  color: green;
 }
 
 .myexpired {

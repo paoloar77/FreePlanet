@@ -1,5 +1,5 @@
 <template>
-    <div :class="getClassRow()" >
+    <div :class="getClassRow()">
         <q-context-menu>
             <q-list link separator no-border class="todo-menu">
                 <q-item v-for="field in menuPopupTodo" :key="field.value"
@@ -16,6 +16,16 @@
                     <q-item-side v-if="field.value === 110">
                         <q-checkbox v-model="itemtodo.completed"/>
                     </q-item-side>
+
+                    <q-item-side v-if="field.value === 120">
+                        <q-slider :class="menuProgress" v-model="itemtodo.progress" :min="0" :max="100"/>
+                    </q-item-side>
+                    <q-item-side v-if="field.value === 120">
+                        <div :class="percProgress">
+                            {{getPercentageProgress()}}%
+                        </div>
+                    </q-item-side>
+
                 </q-item>
             </q-list>
         </q-context-menu>
@@ -40,6 +50,14 @@
                             </q-item-side>
                             <q-item-side v-if="field.value === 110">
                                 <q-checkbox v-model="itemtodo.completed"/>
+                            </q-item-side>
+                            <q-item-side v-if="field.value === 120">
+                                <q-slider :class="menuProgress" v-model="itemtodo.progress" :min="0" :max="100"/>
+                            </q-item-side>
+                            <q-item-side v-if="field.value === 120">
+                                <div :class="percProgress">
+                                    {{getPercentageProgress()}}%
+                                </div>
                             </q-item-side>
                         </q-item>
                     </q-list>
@@ -87,8 +105,20 @@
         <!--:after="[{icon: 'arrow_forward', content: true, handler () {}}]"-->
 
         <!--<div :class="classDescr" @mousedown.left="editTodo()">-->
-            <!--<q-field>{{ itemtodo.descr }}</q-field>-->
+        <!--<q-field>{{ itemtodo.descr }}</q-field>-->
         <!--</div>-->
+
+        <div v-if="isTodo()" class="flex-item progress-item">
+            <q-progress
+                    :percentage="getPercentageProgress()"
+                    class="progress-item"
+                    :color="colProgress"
+            >
+            </q-progress>
+            <div :class="percProgress">
+                {{getPercentageProgress()}}%
+            </div>
+        </div>
 
 
         <div v-if="itemtodo.enableExpiring">
@@ -96,7 +126,8 @@
                 <q-datetime
                         :class="classExpiringEx"
                         v-model="itemtodo.expiring_at"
-                        class="myexpired"/>
+                        class="myexpired">
+                </q-datetime>
             </div>
         </div>
         <!--<div class="flex-item btn-item">-->
