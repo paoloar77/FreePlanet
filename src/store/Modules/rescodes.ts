@@ -25,7 +25,8 @@ export const rescodes = {
   },
 
   MenuAction: {
-    DELETE: 100
+    DELETE: 100,
+    TOGGLE_EXPIRING: 101
   },
 
 
@@ -81,8 +82,8 @@ export const rescodes = {
       },
       {
         id: 2,
-        label: 'Attiva...',
-        value: 101, // ATTIVA
+        label: 'Imposta Scadenza',
+        value: 101, // TOGGLE_EXPIRING
         icon: 'expand_more'
       }
       ],
@@ -95,8 +96,8 @@ export const rescodes = {
       },
       {
         id: 2,
-        label: 'Attiva...',
-        value: 101, // ATTIVA
+        label: 'Set Expiring',
+        value: 101, // TOGGLE_EXPIRING
         icon: 'sun'
       }
       ]

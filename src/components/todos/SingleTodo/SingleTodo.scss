@@ -26,7 +26,7 @@
 }
 
 .rowselected {
-  border-width: 1px 0px 1px 0px;
+  border-width: 2px 0px 2px 0px;
   border-style: solid;
   border-color: rgba(49, 68, 240, 0.6);
   //background-color: rgba(166, 153, 240, 0.7) !important;
@@ -51,6 +51,18 @@
 
 .todo-menu {
 
+}
+
+.titleLista-item {
+  max-width: 92px;
+  min-width: 92px;
+  margin: 0 auto;
+  height: 36px;
+  line-height: 36px;
+  text-align: center;
+  // background-color: #ff4081;
+  font-size: 1rem;
+  font-weight: bold;
 }
 
 
@@ -98,8 +110,10 @@
   min-width: 24px;
 }
 
-
-
+.completed-item {
+  max-width: 24px;
+  min-width: 24px;
+}
 
 .myexpired {
   padding-top: 0px;
@@ -112,7 +126,14 @@
   min-width: 100px;
   display: block;
   visibility: initial;
+  color: #ccc;
 }
+
+
+.data-item .q-input-target{
+  color:red !important;
+}
+
 
 /*
 @media screen and (max-width: 600px) {
@@ -124,12 +145,27 @@
 }
 */
 
-.div_descr {
-  // background-color: green;
+.div_descr, .div_descr_edit {
   margin: 2px;
   padding: 2px;
+  min-width: 100px;
   flex: 2 1 auto;
+  vertical-align: middle;
+  text-align: left;
+
+  height: 24px;
+  line-height: 24px; /* same as height! */
+
+  &.hide {
+    display: none !important;
+    visibility: hidden;
+  }
+  &.show {
+    visibility: visible;
+  }
 }
+
+
 
 .div_descr:hover {
   border-width: 1px 0px 1px 0px;
@@ -183,6 +219,21 @@
 }
 
 .status_completed {
-  color:rgba(49, 68, 240, 0.7);;
+  color:rgba(49, 68, 240, 0.7);
 }
 
+.menuTitlePriority {
+  background-color: blue;
+  color:white;
+  padding: 2px;
+  margin: 2px;
+  font-weight: bold;
+}
+
+.test{
+  color: fuchsia;
+  &.mio1{
+
+    background-color: red;
+  }
+}

@@ -153,7 +153,7 @@ module.exports = function (ctx) {
       ],
       directives: [
         'Ripple',
-        'CloseOverlay'
+        'CloseOverlay',
       ],
       // Quasar plugins
       plugins: [

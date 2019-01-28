@@ -7,6 +7,7 @@ export interface ITodo {
   created_at: any,
   modify_at: any,
   expiring_at: any,
+  enableExpiring?: boolean,
   id_prev?: number,
   id_next?: number,
   modified?: boolean,

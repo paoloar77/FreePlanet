@@ -141,7 +141,7 @@ export default class Todo extends Vue {
 
     if ((elem1 !== null) && (elem2 !== null)) {
       if (elem1.completed === elem2.completed) {
-        return true
+        return elem1.completed
       } else {
         return elem1.completed
       }
@@ -179,7 +179,7 @@ export default class Todo extends Vue {
 
     let completed = this.getCompleted(indini, indfine)
     let changecompleted = false
-    if (completed) {
+    if (completed != null) {
       myobj.modified = (myobj.completed !== completed) ? true : myobj.modified
       myobj.completed = completed
       changecompleted = true
@@ -259,6 +259,7 @@ export default class Todo extends Vue {
       created_at: new Date(),
       modify_at: new Date(),
       expiring_at: mydateexp,
+      enableExpiring: false,
       id_prev: 0,
       id_next: 0,
       pos: 0,
@@ -278,6 +279,8 @@ export default class Todo extends Vue {
   }
 
   async insertTodo() {
+    if (this.todo.trim() === '')
+      return
 
     const objtodo = this.initcat()
 
@@ -490,24 +493,20 @@ export default class Todo extends Vue {
   // }
   //
 
-  clickRiga(item) {
-    console.log('ClickRiga : ', item)
+  deselectAllRows(item, check) {
+    console.log('deselectAllRows : ', item)
 
     for (let i = 0; i < this.$refs.single.length; i++) {
-      // @ts-ignore
-      this.$refs.single[i].classRow = ''
-    }
 
-    // // Disattiva quella precedente
-    // if (this.selrowid > 0) {
-    //   $('#' + this.getrefbyid(this.selrowid) + ' div').removeClass('rowselected')
-    // }
-    //
-    if (this.selrowid !== item.id) {
-      this.selrowid = item.id
-    } else {
-      // was already selected, so deselected
-      this.selrowid = -1
+
+      let contr = <SingleTodo>this.$refs.single[i]
+      // @ts-ignore
+      let id = contr.itemtodo.id
+      // Don't deselect the actual clicked!
+      if ((check && (item.id !== id)) || (!check)) {
+        // @ts-ignore
+        contr.deselectAndExitEdit()
+      }
     }
   }
 
@@ -533,12 +532,14 @@ export default class Todo extends Vue {
     await this.$db.transaction('rw', [this.$db.todos], async () => {
       const miorec = await this.$db.todos.get(myobj.id)
 
+      this.modifyField(miorec, myobj, 'descr')
       this.modifyField(miorec, myobj, 'completed')
       this.modifyField(miorec, myobj, 'expiring_at')
       this.modifyField(miorec, myobj, 'priority')
       this.modifyField(miorec, myobj, 'id_prev')
       this.modifyField(miorec, myobj, 'id_next')
       this.modifyField(miorec, myobj, 'pos')
+      this.modifyField(miorec, myobj, 'enableExpiring')
 
       if (miorec.modified) {
         miorec.modify_at = new Date()

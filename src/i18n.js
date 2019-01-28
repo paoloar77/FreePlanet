@@ -85,6 +85,9 @@ const messages = {
       }
     },
     todo: {
+      titleprioritymenu: 'Priorità:',
+      insert: 'Inserisci il Task',
+      edit: 'Descrizione Task:',
       completed: 'Completati'
     }
   },
@@ -174,6 +177,9 @@ const messages = {
       }
     },
     todo: {
+      titleprioritymenu: 'Priority:',
+      insert: 'Insert Task',
+      edit: 'Task Description:',
       completed: 'Completed'
     }
   },

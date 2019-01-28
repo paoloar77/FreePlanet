@@ -3,7 +3,7 @@
         <div class="panel">
             <p class="caption"></p>
 
-            <q-input v-model="todo" inverted float-label="Inserisci il Todo"
+            <q-input v-model="todo" inverted :float-label="$t('todo.insert')"
                      :after="[{icon: 'arrow_forward', content: true, handler () {}}]"
                      v-on:keyup.enter="insertTodo"/>
 
@@ -24,7 +24,7 @@
                                     <div style="display: none">{{ priorcomplet = true }}</div>
                                 </div>
                                 <SingleTodo ref="single" @deleteitem="deleteitem" @eventupdate="updateitem"
-                                            @click="clickRiga"
+                                            @deselectAllRows="deselectAllRows"
                                             :itemtodo='mytodo' />
 
                                 <div style="display: none">{{ prior = mytodo.priority, priorcomplet = mytodo.completed }}</div>

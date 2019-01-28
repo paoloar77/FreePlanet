@@ -6,15 +6,18 @@ import { UserStore } from '@modules'
 
 import { ITodo } from '../../../model/index'
 
+import $ from 'jquery'
+
 @Component({
   name: 'SingleTodo'
 })
 export default class SingleTodo extends Vue {
   public selectPriority: [] = []
-  public menuPopupTodo: [] = []
+  public menuPopupTodo: any[] = []
   public iconCompleted: string = ''
   public classCompleted: string = ''
   public classDescr: string = ''
+  public classDescrEdit:string = ''
   public classExpiring: string = ''
   public classExpiringEx: string = ''
   public iconPriority: string = ''
@@ -22,23 +25,42 @@ export default class SingleTodo extends Vue {
   public popover_menu: boolean = false
   public classRow: string = ''
   public sel: boolean = false
-  public isover: boolean = false
-  public classPosItemPopup = 'pos-item-popover'
+  public inEdit: boolean = false
+  public descrtoEdit: string = ''
   $q: any
 
   @Prop({ required: true }) itemtodo: ITodo
 
 
   @Watch('itemtodo.completed') valueChanged() {
-    this.$emit('eventupdate', this.itemtodo)
-    this.updateicon()
+    this.watchupdate()
+  }
+
+  @Watch('itemtodo.enableExpiring') valueChanged4() {
+    this.watchupdate()
   }
 
   @Watch('itemtodo.expiring_at') valueChanged2() {
-    this.$emit('eventupdate', this.itemtodo)
+    this.watchupdate()
   }
 
   @Watch('itemtodo.priority') valueChanged3() {
+    this.watchupdate()
+  }
+
+  @Watch('itemtodo.descr') valueChanged5() {
+    this.descrtoEdit = this.itemtodo.descr
+  }
+
+  isTodo () {
+    return this.isTodoByElem(this.itemtodo)
+  }
+
+  isTodoByElem (elem) {
+    return elem.descr.slice(-1) !== ':'
+  }
+
+  watchupdate() {
     this.$emit('eventupdate', this.itemtodo)
     this.updateicon()
   }
@@ -46,8 +68,11 @@ export default class SingleTodo extends Vue {
   updateClasses() {
     // this.classCompleted = 'completed-item'
     this.classCompleted = 'completed-item-popover'
-
     this.classDescr = 'flex-item div_descr'
+    this.classDescrEdit = 'flex-item div_descr_edit'
+    if (!this.isTodo())
+      this.classDescr += ' titleLista-item'
+
     this.classExpiring = 'flex-item data-item'
     this.classExpiringEx = ''
     if (this.itemtodo.completed) {
@@ -55,6 +80,26 @@ export default class SingleTodo extends Vue {
       this.classDescr += ' status_completed'
       this.classExpiring += ' status_completed'
       this.classExpiringEx += ' status_completed'
+    }
+
+    if (this.inEdit) {
+      this.classDescr += ' hide'
+      this.classDescrEdit += ' show'
+    } else {
+      this.classDescrEdit += ' hide'
+      this.classDescr += ' show'
+    }
+
+    // this.getinputdescr = 'inputdescr' + this.itemtodo.id
+
+    console.log('classDescrEdit = ', this.classDescrEdit)
+    console.log('classDescr', this.classDescr)
+
+    if (this.isTodo())
+      this.menuPopupTodo = rescodes.menuPopupTodo[UserStore.state.lang]
+    else {
+      this.menuPopupTodo = []
+      this.menuPopupTodo.push(rescodes.menuPopupTodo[UserStore.state.lang][0])
     }
 
   }
@@ -65,17 +110,8 @@ export default class SingleTodo extends Vue {
     this.updateClasses()
 
     this.selectPriority = rescodes.selectPriority[UserStore.state.lang]
-    this.menuPopupTodo = rescodes.menuPopupTodo[UserStore.state.lang]
 
 
-  }
-
-  setclassPosItemPopup() {
-
-    if (this.isover)
-      this.classPosItemPopup = 'pos-item-popover'
-    else
-      this.classPosItemPopup = 'pos-item-popover'
   }
 
   getClassRow() {
@@ -83,27 +119,82 @@ export default class SingleTodo extends Vue {
   }
 
   clickRiga () {
-    this.sel = false
-    if (this.classRow !== 'rowselected') {
-      this.sel = true
-    } else {
-      this.sel = false
+    console.log('CLICK RIGA ************')
+    if (!this.inEdit) {
+      this.$emit('deselectAllRows', this.itemtodo, true)
+
+      if (!this.sel) {
+        this.selectRiga()
+      } else {
+        this.deselectRiga()
+      }
     }
-    this.$emit('click', this.itemtodo)
+  }
 
+  selectRiga() {
+    console.log('selectRiga', this.itemtodo.descr)
+    this.sel = true
     this.classRow = 'rowselected'
+    this.updateClasses()
+    console.log('FINE selectRiga', this.itemtodo.descr)
+  }
 
+  deselectRiga() {
+    console.log('DeselectRiga', this.itemtodo.descr)
+    this.sel = false
+    this.classRow = ''
+    this.inEdit = false
     this.updateClasses()
   }
 
+  deselectAndExitEdit () {
+    this.deselectRiga()
+    this.exitEdit()
+  }
+
   mouseUp() {
-
-    if (this.sel) {
-      this.classRow = 'rowselected'
-    } else {
-      this.classRow = ''
+    if (!this.inEdit) {
+      if (this.sel) {
+        this.selectRiga()
+      } else {
+        this.deselectRiga()
+      }
     }
+  }
 
+  editTodo () {
+    console.log('INIZIO - editTodo')
+    this.$emit('click')
+    this.inEdit = true
+    if (!this.sel)
+      this.selectRiga()
+    else
+      this.updateClasses()
+
+    this.descrtoEdit = this.itemtodo.descr
+
+    let theField = <HTMLInputElement>this.$refs.inputdescr
+    theField.focus()
+    console.log('focus()')
+
+    console.log('FINE - editTodo')
+  }
+
+  exitEdit () {
+    if (this.inEdit) {
+      console.log('exitEdit')
+      this.inEdit = false
+      this.updateClasses
+      this.$emit('deselectAllRows', this.itemtodo, false)
+    }
+  }
+
+
+  updateTodo () {
+    this.watchupdate()
+    this.itemtodo.descr = this.descrtoEdit
+    this.inEdit = false
+    this.updateClasses()
   }
 
   setCompleted() {
@@ -135,6 +226,7 @@ export default class SingleTodo extends Vue {
     else if (this.itemtodo.priority === rescodes.Todos.PRIORITY_LOW)
       this.iconPriority = 'expand_more'  // expand_more
 
+    this.updateClasses()
   }
 
 
@@ -142,10 +234,19 @@ export default class SingleTodo extends Vue {
     this.$emit('deleteitem', id)
   }
 
+  enableExpiring() {
+    this.itemtodo.enableExpiring = !this.itemtodo.enableExpiring
+
+  }
+
   clickMenu(action) {
     console.log('click menu: ', action)
-    if (action === rescodes.MenuAction.DELETE)
+    if (action === rescodes.MenuAction.DELETE) {
       this.removeitem(this.itemtodo.id)
+    } else if (action === rescodes.MenuAction.TOGGLE_EXPIRING) {
+      this.enableExpiring()
+    }
+
   }
 
   setPriority(newpriority) {
