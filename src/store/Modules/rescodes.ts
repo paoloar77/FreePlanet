@@ -28,7 +28,8 @@ export const rescodes = {
     DELETE: 100,
     TOGGLE_EXPIRING: 101,
     COMPLETED: 110,
-    PROGRESS_BAR: 120
+    PROGRESS_BAR: 120,
+    PRIORITY: 130
   },
 
 
@@ -79,28 +80,35 @@ export const rescodes = {
   menuPopupTodo: {
     'it': [
       {
-        id: 1,
-        label: 'Progressi',
+        id: 10,
+        label: '',
         value: 120, // PROGRESS_BAR
-        icon: 'check_circle',
+        icon: 'rowing',
         checked: true
       },
       {
-        id: 2,
+        id: 20,
+        label: 'Imposta Priorità',
+        value: 130, // PRIORITY
+        icon: 'rowing',
+        checked: false
+      },
+      {
+        id: 30,
         label: 'Completato',
         value: 110, // COMPLETED
         icon: 'check_circle',
         checked: true
       },
       {
-        id: 3,
+        id: 40,
         label: 'Imposta Scadenza',
         value: 101, // TOGGLE_EXPIRING
         icon: 'date_range',
         checked: true
       },
       {
-        id: 10,
+        id: 50,
         label: 'Cancella',
         value: 100, // DELETE
         icon: 'delete',
@@ -109,28 +117,35 @@ export const rescodes = {
       ],
     'enUk': [
       {
-        id: 1,
-        label: 'Progress',
+        id: 10,
+        label: '',
         value: 120, // PROGRESS_BAR
         icon: 'check_circle',
         checked: true
       },
       {
-        id: 2,
+        id: 20,
+        label: 'Set Priority',
+        value: 130, // PRIORITY
+        icon: 'high_priority',
+        checked: false
+      },
+      {
+        id: 30,
         label: 'Completed',
         value: 110, // COMPLETED
         icon: 'check_circle',
         checked: true
       },
       {
-        id: 3,
+        id: 40,
         label: 'Set Expiring',
         value: 101, // TOGGLE_EXPIRING
         icon: 'date_range',
         checked: true
       },
       {
-        id: 10,
+        id: 50,
         label: 'Delete',
         value: 100, // DELETE
         icon: 'trash',

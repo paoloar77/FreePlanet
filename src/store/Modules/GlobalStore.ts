@@ -9,7 +9,12 @@ const state: IGlobalState = {
   mobileMode: false,
   menuCollapse: true,
   leftDrawerOpen: true,
-  posts: []
+  posts: [],
+  listatodo: [
+    {namecat: 'personal', description: 'personal'},
+    {namecat: 'work', description: 'work'},
+    {namecat: 'shopping', description: 'shopping'}
+    ]
 }
 
 const b = storeBuilder.module<IGlobalState>('GlobalModule', state)
@@ -18,10 +23,15 @@ const b = storeBuilder.module<IGlobalState>('GlobalModule', state)
 namespace Getters {
 
   const conta = b.read(state => state.conta, 'conta')
+  const listatodo = b.read(state => state.listatodo, 'listatodo')
 
   export const getters = {
     get conta() {
       return conta()
+    },
+
+    get listaTodo() {
+      return listatodo()
     }
   }
 }

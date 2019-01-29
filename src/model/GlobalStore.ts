@@ -10,5 +10,12 @@ export interface IGlobalState {
   menuCollapse: boolean
   leftDrawerOpen: boolean
   posts: IPost[]
+  listatodo: ITodoList[]
+}
+
+
+export interface ITodoList {
+  namecat: string
+  description: string
 }
 

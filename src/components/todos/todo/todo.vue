@@ -3,7 +3,9 @@
         <div class="panel">
             <p class="caption"></p>
 
-            <div class="categorytitle">{{ getCategory() }}</div>
+            <div class="divtitlecat">
+                <div class="categorytitle">{{ getCategory() }}</div>
+            </div>
 
 
             <div style="display: none">{{ prior = 0, priorcomplet = false }}</div>

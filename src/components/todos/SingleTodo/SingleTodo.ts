@@ -6,12 +6,17 @@ import { UserStore } from '@modules'
 
 import { ITodo } from '../../../model/index'
 
+import { SubMenus } from '@components'
+
+
 import $ from 'jquery'
 
-import { debounce } from '../../../classes/debounce'
+// import { debounce } from '../../../classes/debounce'
+import { askConfirm } from '../../../classes/routinestd'
 
 @Component({
-  name: 'SingleTodo'
+  name: 'SingleTodo',
+  components: { SubMenus }
 })
 export default class SingleTodo extends Vue {
   public selectPriority: [] = []
@@ -32,6 +37,7 @@ export default class SingleTodo extends Vue {
   public menuProgress: string = 'menuprogress'
   public percProgress: string = 'percProgress'
   public colProgress: string = 'blue'
+  public togglemenu: boolean = false
   $q: any
 
   @Prop({ required: true }) itemtodo: ITodo
@@ -304,7 +310,7 @@ export default class SingleTodo extends Vue {
   clickMenu(action) {
     console.log('click menu: ', action)
     if (action === rescodes.MenuAction.DELETE) {
-      this.removeitem(this.itemtodo.id)
+      this.askConfirmDelete()
     } else if (action === rescodes.MenuAction.TOGGLE_EXPIRING) {
       this.enableExpiring()
     } else if (action === rescodes.MenuAction.COMPLETED) {
@@ -332,4 +338,19 @@ export default class SingleTodo extends Vue {
     else
       return this.itemtodo.progress
   }
+
+  askConfirmDelete() {
+    const deletestr = this.$t('dialog.delete')
+    const cancelstr = this.$t('dialog.cancel')
+
+    askConfirm(this.$q, this.$t('dialog.msg.titledeleteTask'), this.$t('dialog.msg.deleteTask').toString(), deletestr, cancelstr)
+      .then(ris => {
+        console.log('ris', ris)
+        if (ris)
+          this.removeitem(this.itemtodo.id)
+      }).catch(err => {
+
+    })
+  }
+
 }

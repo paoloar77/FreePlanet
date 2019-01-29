@@ -508,7 +508,7 @@ export default class Todo extends Vue {
   // }
   //
 
-  deselectAllRows(item, check, onlythis:boolean = false) {
+  deselectAllRows(item, check, onlythis: boolean = false) {
     console.log('deselectAllRows : ', item)
 
     for (let i = 0; i < this.$refs.single.length; i++) {
