@@ -1,4 +1,8 @@
 
+
+$colcompleted: #a2a2a2;
+$heightitem: 19px;
+
 .flex-item{
    // background-color: #d5e2eb;
   padding: 0px;
@@ -10,7 +14,7 @@
 
 
 .flex-container2 {
-  flex-flow: row nowrap;
+  flex-flow: row wrap;
   justify-content: space-between;
   margin: 2px 5px 2px 5px;  // top right bottom left
 }
@@ -46,8 +50,8 @@
   margin-right: 1px;
   padding-left: 1px;
   padding-right: 1px;
-  height: 36px;
-  line-height: 36px;
+  height: $heightitem;
+  line-height: $heightitem;
   text-align: center;
   // background-color: #ff4081;
   font-size: 0.75rem;
@@ -67,8 +71,8 @@
   max-width: 92px;
   min-width: 92px;
   margin: 0 auto;
-  height: 36px;
-  line-height: 36px;
+  height: $heightitem;
+  line-height: $heightitem;
   text-align: center;
   // background-color: #ff4081;
   font-size: 1rem;
@@ -135,8 +139,8 @@
 
 
 .percProgress {
-  height: 24px;
-  line-height: 24px;
+  height: $heightitem;
+  line-height: $heightitem;
   color: #888;
 }
 
@@ -157,6 +161,10 @@
   color: green;
 }
 
+.percompleted {
+  color: $colcompleted
+}
+
 .myexpired {
   padding-top: 0px;
   padding-bottom: 0px;
@@ -164,10 +172,11 @@
 }
 
 .data-item {
-  //max-width: 100px;
+  max-width: 100px;
   //min-width: 100px;
   //display: flex;
   //visibility: initial;
+  margin-right: 3px;
   color: #ccc;
   order: 1;
   flex: 1;
@@ -264,7 +273,7 @@
 }
 
 .status_completed {
-  color:rgba(49, 68, 240, 0.7);
+  color: $colcompleted
 }
 
 .menuTitlePriority {

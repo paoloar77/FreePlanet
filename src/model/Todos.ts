@@ -1,6 +1,7 @@
 export interface ITodo {
   id?: number,
   userId: string
+  category?: string
   descr?: string,
   priority: number,
   completed: boolean,

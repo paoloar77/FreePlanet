@@ -74,6 +74,8 @@ export const rescodes = {
 
   },
 
+  INDEX_MENU_DELETE: 3,
+
   menuPopupTodo: {
     'it': [
       {

@@ -53,19 +53,27 @@
       console.log('Drawer created...')
     }
 
+    Glo
+
     photo = ''
     user = null
     links = {
       Dashboard: {
         routes: [
           { route: '/', faIcon: 'fa fa-home', materialIcon: 'home', name: 'pages.home' },
-          { route: '/todo', faIcon: 'fa fa-list-alt', materialIcon: 'todo', name: 'pages.Todo' },
+          {
+            route: '/todo', faIcon: 'fa fa-list-alt', materialIcon: 'todo', name: 'pages.Todo',
+            routes2: [
+              { route: '/todo/personal', faIcon: 'fa fa-list-alt', materialIcon: 'todo', name: 'Personal' },
+              { route: '/todo/work', faIcon: 'fa fa-list-alt', materialIcon: 'todo', name: 'Work' }
+            ]
+          },
           { route: '/category', faIcon: 'fa fa-list-alt', materialIcon: 'category', name: 'pages.Category' },
           { route: '/signup', faIcon: 'fa fa-registered', materialIcon: 'home', name: 'pages.SignUp' },
           { route: '/signin', faIcon: 'fa fa-anchor', materialIcon: 'home', name: 'pages.SignIn' },
           /* {route: '/vreg?idlink=aaa', faIcon: 'fa fa-login', materialIcon: 'login', name: 'pages.vreg'},*/
         ],
-        show: true
+        show: true,
       },
       Forms: {
         routes: [
@@ -140,7 +148,7 @@
         margin-top: 5%;
     }
 
-    .fixed-left:hover{
+    .fixed-left:hover {
         cursor: ew-resize;
     }
 

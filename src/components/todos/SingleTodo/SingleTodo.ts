@@ -8,6 +8,8 @@ import { ITodo } from '../../../model/index'
 
 import $ from 'jquery'
 
+import { debounce } from '../../../classes/debounce'
+
 @Component({
   name: 'SingleTodo'
 })
@@ -22,7 +24,7 @@ export default class SingleTodo extends Vue {
   public classExpiringEx: string = ''
   public iconPriority: string = ''
   public popover: boolean = false
-  public popover_menu: boolean = false
+  public popover_menu: boolean = false  // Serve
   public classRow: string = ''
   public sel: boolean = false
   public inEdit: boolean = false
@@ -102,6 +104,9 @@ export default class SingleTodo extends Vue {
       mycolcl = ' highperc'
     }
 
+    if (this.itemtodo.completed)
+      mycolcl = ' percompleted'
+
     this.colProgress = mycolcl
 
     this.menuProgress += mycolcl
@@ -124,7 +129,7 @@ export default class SingleTodo extends Vue {
       this.menuPopupTodo = rescodes.menuPopupTodo[UserStore.state.lang]
     else {
       this.menuPopupTodo = []
-      this.menuPopupTodo.push(rescodes.menuPopupTodo[UserStore.state.lang][0])
+      this.menuPopupTodo.push(rescodes.menuPopupTodo[UserStore.state.lang][rescodes.INDEX_MENU_DELETE])
     }
 
   }
@@ -304,6 +309,8 @@ export default class SingleTodo extends Vue {
       this.enableExpiring()
     } else if (action === rescodes.MenuAction.COMPLETED) {
       this.setCompleted()
+    } else if (action === rescodes.MenuAction.PROGRESS_BAR) {
+      this.updatedata()
     }
 
   }

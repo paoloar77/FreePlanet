@@ -15,6 +15,7 @@ import draggable from 'vuedraggable'
 import $ from 'jquery'
 
 @Component({
+
   components: { SingleTodo, draggable }
 })
 export default class Todo extends Vue {
@@ -39,6 +40,15 @@ export default class Todo extends Vue {
 
   @Watch('drag') changedrag() {
     console.log('drag = ' + this.drag)
+  }
+
+  @Watch('$route.params.category') changecat() {
+    console.log('changecat')
+    this.load()
+  }
+
+  getCategory() {
+    return this.$route.params.category
   }
 
   change(param) {
@@ -257,6 +267,7 @@ export default class Todo extends Vue {
       priority: rescodes.Todos.PRIORITY_NORMAL,
       completed: false,
       created_at: new Date(),
+      category: '',
       modify_at: new Date(),
       expiring_at: mydateexp,
       enableExpiring: false,
@@ -286,6 +297,7 @@ export default class Todo extends Vue {
     const objtodo = this.initcat()
 
     objtodo.descr = this.todo
+    objtodo.category = this.getCategory()
     const lastelem = this.getLastList()
     objtodo.id_prev = (lastelem !== null) ? lastelem.id : rescodes.LIST_START
     objtodo.id_next = rescodes.LIST_END
@@ -432,6 +444,7 @@ export default class Todo extends Vue {
       // #Todo If need to filter the output database ...
       await this.$db.todos
         .where('userId').equals(UserStore.state.userId)
+        .and(todo => todo.category === this.getCategory())
         .toArray()
         .then((response) => {
           Promise.all(response.map(key => key))
@@ -442,6 +455,7 @@ export default class Todo extends Vue {
     } else {
       await this.$db.todos
         .where('userId').equals(UserStore.state.userId)
+        .and(todo => todo.category === this.getCategory())
         .toArray().then(ristodos => {
           arrtemp = ristodos
         })
@@ -541,6 +555,7 @@ export default class Todo extends Vue {
 
       this.modifyField(miorec, myobj, 'descr')
       this.modifyField(miorec, myobj, 'completed')
+      this.modifyField(miorec, myobj, 'category')
       this.modifyField(miorec, myobj, 'expiring_at')
       this.modifyField(miorec, myobj, 'priority')
       this.modifyField(miorec, myobj, 'id_prev')
