@@ -38,6 +38,7 @@ export default class SingleTodo extends Vue {
   public percProgress: string = 'percProgress'
   public colProgress: string = 'blue'
   public togglemenu: boolean = false
+  public percentageProgress: number = 0
   $q: any
 
   @Prop({ required: true }) itemtodo: ITodo
@@ -92,10 +93,13 @@ export default class SingleTodo extends Vue {
     this.classExpiring = 'flex-item data-item'
     this.classExpiringEx = ''
     if (this.itemtodo.completed) {
+      this.percentageProgress = 100
       this.classCompleted += ' icon_completed'
       this.classDescr += ' status_completed'
       this.classExpiring += ' status_completed'
       this.classExpiringEx += ' status_completed'
+    } else {
+      this.percentageProgress = this.itemtodo.progress
     }
 
     this.menuProgress = 'menuProgress'
@@ -330,13 +334,6 @@ export default class SingleTodo extends Vue {
     this.updateicon()
 
     // this.$q.notify('setPriority: ' + elem)
-  }
-
-  getPercentageProgress() {
-    if (this.itemtodo.completed)
-      return 100
-    else
-      return this.itemtodo.progress
   }
 
   askConfirmDelete() {
