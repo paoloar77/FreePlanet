@@ -6,7 +6,7 @@ import { UserStore } from '@modules'
 
 import { ITodo } from '../../../model/index'
 
-import { SubMenus } from '@components'
+import { SubMenus } from '../SubMenus'
 
 
 import $ from 'jquery'

@@ -10,6 +10,7 @@ export const rescodes = {
 
   localStorage: {
     verifiedEmail: 'vf',
+    categorySel: 'cs',
     isLogged: 'ilog',
     expirationDate: 'expdate',
     leftDrawerOpen: 'ldo',

@@ -13,9 +13,9 @@ const extendTypescriptToWebpack = (config) => {
   config.resolve
     .alias
     .set('@components', path.resolve(__dirname, 'src/components/index.ts'))
-    .set('@components', path.resolve(__dirname, 'src/components'))
+    // .set('@components', path.resolve(__dirname, 'src/components'))
     .set('@views', path.resolve(__dirname, 'src/components/views/index.ts'))
-    .set('@views', path.resolve(__dirname, 'src/components/views'))
+    // .set('@views', path.resolve(__dirname, 'src/components/views'))
     .set('@src', path.resolve(__dirname, 'src'))
     .set('@icons', path.resolve(__dirname, 'src/assets/icons'))
     .set('@images', path.resolve(__dirname, 'src/assets/images'))

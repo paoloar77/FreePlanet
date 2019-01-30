@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import { Component, Prop, Watch } from 'vue-property-decorator'
 
-import { SingleTodo } from '@components'
+import { SingleTodo } from '../SingleTodo'
 import { ITodo } from '@src/model'
 
 import { rescodes } from '../../../store/Modules/rescodes'
@@ -34,6 +34,8 @@ export default class Todo extends Vue {
   itemDragEnd: any = null
   selrowid: number = 0
 
+  // @Prop({ required: false }) category: string
+
   $refs: {
     single: SingleTodo[]
   }
@@ -49,6 +51,7 @@ export default class Todo extends Vue {
 
   getCategory() {
     return this.$route.params.category
+    // return this.category
   }
 
   change(param) {
@@ -242,6 +245,9 @@ export default class Todo extends Vue {
 
 
   async load() {
+    // Set last category selected
+    localStorage.setItem(rescodes.localStorage.categorySel, this.getCategory())
+
     for (let todosKey in rescodes.Todos) {
       this.listPriorityLabel.push(rescodes.Todos[todosKey])
     }

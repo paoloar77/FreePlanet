@@ -27,13 +27,8 @@ export const RouteConfig: VueRouteConfig[] = [
   {
     path: '/todo/:category',
     component: () => import('@/components/todos/todo/todo.vue'),
-    meta: { name: 'Todos' },
-    children: [
-      {
-        path: '',
-        component: () => import('@/components/todos/SingleTodo/SingleTodo.vue')
-      }
-    ]
+    // props: { category: 'personal' },
+    meta: { name: 'Todos' }
   },
   {
     path: '/category',

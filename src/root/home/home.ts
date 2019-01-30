@@ -2,7 +2,7 @@ import Vue from 'vue'
 import { Component } from 'vue-property-decorator'
 import { GlobalStore } from '@store'
 
-import { Logo } from '@components'
+import { Logo } from '../../components/logo'
 
 @Component({
   components: { Logo }

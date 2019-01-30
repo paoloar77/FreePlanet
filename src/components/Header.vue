@@ -1,6 +1,13 @@
 <template>
     <div>
 
+<!--
+        <router-link :to="'/'" v-if="$router.currentRoute.meta.backButton">
+            <button>
+                <i>arrow_back</i>
+            </button>
+        </router-link>
+-->
         <q-layout-header>
             <q-toolbar
                     color="primary"

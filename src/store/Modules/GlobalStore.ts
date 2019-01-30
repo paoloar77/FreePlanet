@@ -9,6 +9,7 @@ const state: IGlobalState = {
   mobileMode: false,
   menuCollapse: true,
   leftDrawerOpen: true,
+  category: 'personal',
   posts: [],
   listatodo: [
     {namecat: 'personal', description: 'personal'},
@@ -24,6 +25,7 @@ namespace Getters {
 
   const conta = b.read(state => state.conta, 'conta')
   const listatodo = b.read(state => state.listatodo, 'listatodo')
+  const category = b.read(state => state.category, 'category')
 
   export const getters = {
     get conta() {
@@ -32,6 +34,10 @@ namespace Getters {
 
     get listaTodo() {
       return listatodo()
+    },
+
+    get category() {
+      return category()
     }
   }
 }
@@ -46,9 +52,15 @@ namespace Mutations {
     state.leftDrawerOpen = bool
   }
 
+  function setCategorySel(state: IGlobalState, cat: string) {
+    state.category = cat
+  }
+
+
   export const mutations = {
     setConta: b.commit(setConta),
-    setleftDrawerOpen: b.commit(setleftDrawerOpen)
+    setleftDrawerOpen: b.commit(setleftDrawerOpen),
+    setCategorySel: b.commit(setCategorySel)
   }
 
 }

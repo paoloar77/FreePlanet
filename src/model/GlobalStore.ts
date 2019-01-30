@@ -9,6 +9,7 @@ export interface IGlobalState {
   mobileMode: boolean
   menuCollapse: boolean
   leftDrawerOpen: boolean
+  category: string
   posts: IPost[]
   listatodo: ITodoList[]
 }

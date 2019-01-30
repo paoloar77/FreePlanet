@@ -10,7 +10,7 @@ import { validations, TSignin } from './signin-validate'
 
 import { validationMixin } from 'vuelidate'
 
-import { Logo } from '@components'
+import { Logo } from '../../../components/logo'
 
 import router from '@router'
 
