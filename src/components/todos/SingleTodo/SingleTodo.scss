@@ -1,16 +1,42 @@
+
+
+$colcompleted: #a2a2a2;
+$heightitem: 19px;
+
 .flex-item{
-   background-color: #d5e2eb;
-  padding: 1px;
-  margin: 1px;
+   // background-color: #d5e2eb;
+  padding: 0px;
+  margin: 0px;
   color: #000;
   font-size: 0.85rem;
-  flex: 1 1 auto;
+  //flex: 0 0 100%;
 }
 
+
 .flex-container2 {
-  flex-flow: row nowrap;
+  flex-flow: row wrap;
   justify-content: space-between;
+  margin: 2px 5px 2px 5px;  // top right bottom left
 }
+
+// Set visibility: visible to the icon menu of pos-item-popover
+.flex-container2:hover .pos-item-popover, .flex-container2:hover .priority-item-popover{
+//.flex-container2:hover .pos-item-popover {
+  background-color: rgba(230, 230, 230, 0.8);
+  display: inline-block;
+}
+
+.flex-container2:hover{
+  background-color: rgba(230, 230, 230, 0.8);
+}
+
+.rowselected {
+  border-width: 1px 0px 1px 0px;
+  border-style: solid;
+  border-color: rgba(49, 68, 240, 0.6);
+  //background-color: rgba(166, 153, 240, 0.7) !important;
+}
+
 
 .btn-item {
   max-width: 24px;
@@ -20,16 +46,77 @@
 .pos-item {
   max-width: 24px;
   min-width: 24px;
-  margin: 0 auto;
-  height: 36px;
-  line-height: 36px;
+  margin-left: 1px;
+  margin-right: 1px;
+  padding-left: 1px;
+  padding-right: 1px;
+  height: $heightitem;
+  line-height: $heightitem;
   text-align: center;
+  // background-color: #ff4081;
+  font-size: 0.75rem;
+}
+
+.todo-menu {
+  min-width: 202px;
+
+}
+
+.item-menu{
+  font-size: 1rem;
+
+}
+
+.titleLista-item {
+  max-width: 92px;
+  min-width: 92px;
+  margin: 0 auto;
+  height: $heightitem;
+  line-height: $heightitem;
+  text-align: center;
+  // background-color: #ff4081;
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+
+.pos-item-popover{
+  max-width: 24px;
+  min-width: 24px;
+  padding: 0px;
+  text-align: center;
+  vertical-align: middle;
+  display: none;
+  color: #777;
+  height: 100%;
+  //visibility: hidden;
+}
+
+
+.pos-item:hover, .pos-item-popover:hover {
+  cursor: grab;
 }
 
 .priority-item-popover {
   max-width: 24px;
   min-width: 24px;
   padding: 0px;
+  text-align: center;
+  vertical-align: middle;
+  display: none;
+  height: 100%;
+  color: #777;
+}
+
+.completed-item-popover {
+  max-width: 24px;
+  min-width: 24px;
+  padding: 0px;
+  text-align: center;
+  vertical-align: middle;
+  display: inline-block;
+  height: 100%;
+  color: #777;
 }
 
 .priority-item {
@@ -42,6 +129,42 @@
   min-width: 24px;
 }
 
+.progress-item {
+  max-width: 32px;
+  min-width: 24px;
+  flex: 1;
+  order: 2;
+  text-align: right;
+}
+
+
+.percProgress {
+  height: $heightitem;
+  line-height: $heightitem;
+  color: #888;
+}
+
+.menuProgress {
+
+}
+
+.colProgress {
+}
+
+.lowperc {
+  color: red;
+}
+.medperc {
+  color: blue;
+}
+.highperc {
+  color: green;
+}
+
+.percompleted {
+  color: $colcompleted
+}
+
 .myexpired {
   padding-top: 0px;
   padding-bottom: 0px;
@@ -50,11 +173,22 @@
 
 .data-item {
   max-width: 100px;
-  min-width: 100px;
-  display: block;
-  visibility: initial;
+  //min-width: 100px;
+  //display: flex;
+  //visibility: initial;
+  margin-right: 3px;
+  color: #ccc;
+  order: 1;
+  flex: 1;
 }
 
+
+.data-item .q-input-target{
+  color:red !important;
+}
+
+
+/*
 @media screen and (max-width: 600px) {
   .data-item {
     display: none;
@@ -62,11 +196,35 @@
     content: "";
   }
 }
+*/
+
+.div_descr, .div_descr_edit {
+  margin: 2px;
+  padding: 2px;
+  min-width: 200px;
+  vertical-align: middle;
+  text-align: left;
+
+  flex: 1;
+  //order: 2;
+  //height: 24px;
+  //line-height: 24px; /* same as height! */
+
+  &.hide {
+    display: none !important;
+    visibility: hidden;
+  }
+  &.show {
+    visibility: visible;
+  }
+}
 
 
-.div_descr {
-  // background-color: green;
-  flex: 2 1 auto;
+
+.div_descr:hover {
+  border-width: 1px 0px 1px 0px;
+  border-color: rgba(125, 255, 125, 0.5);
+  padding: 1px;
 }
 
 
@@ -75,8 +233,8 @@
   font-size: 1.0rem;
   // display: flex;
   margin: 1px;
-  padding: 2px;
-  border: 1px;
+  padding: 1px;
+  border: 0px;
   background-color: #e1ebed;
 }
 
@@ -110,6 +268,61 @@
 }
 
 
-.icon_completed:hover {
-  color: darkgreen;
+.icon_completed {
+  color: rgb(178, 235, 225);
 }
+
+.status_completed {
+  color: $colcompleted
+}
+
+.menuTitlePriority {
+  background-color: blue;
+  color:white;
+  padding: 2px;
+  margin: 2px;
+  font-weight: bold;
+}
+
+.test{
+  color: fuchsia;
+  &.mio1{
+
+    background-color: red;
+  }
+}
+
+.after_textarea {
+  display: none;
+  visibility: hidden;
+}
+
+.after_textarea:hover {
+  visibility: visible;
+}
+
+
+/*
+.container {
+  background-color: #ccc;
+  padding: 10px;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+
+}
+
+.item {
+  background-color: red;
+  padding: 10px;
+  color: white;
+
+}
+.i3{
+  order: 1;
+  flex: 1;
+}
+*/
+
+

@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import { Component, Watch } from 'vue-property-decorator'
 
-import { SingleCat } from '@components'
+import { SingleCat } from '../SingleCat'
 import { ICategory } from '@src/model'
 
 

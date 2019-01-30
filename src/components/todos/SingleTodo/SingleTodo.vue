@@ -1,48 +1,69 @@
 <template>
-    <div class="row flex-container2">
-        <div class="flex-item pos-item">{{ itemtodo.pos }}ª</div>
-        <div class="flex-item priority-item">
-            <q-btn push
-                   class="priority-item-popover"
-                   :icon="iconPriority">
-                <q-popover
-                        v-model="popover"
-                        self="top left"
+    <div :class="getClassRow()">
+        <q-context-menu ref="contextMenu">
+            <SubMenus :menuPopupTodo="menuPopupTodo" :itemtodo="itemtodo" @clickMenu="clickMenu" @setPriority="setPriority"></SubMenus>
+        </q-context-menu>
 
-                >
-                    <q-list link>
-                        <q-item v-for="field in selectPriority" :key="field.value"
-                                @click.native="setPriority(field.value), popover = false">
-                            <q-item-side :icon="field.icon" inverted color="primary"/>
-                            <q-item-main>
-                                <q-item-tile label>{{field.label}}</q-item-tile>
-                            </q-item-main>
-                        </q-item>
-                    </q-list>
+        <div v-if="isTodo()" class="flex-item pos-item" @mouseup.left="mouseUp" @mousedown="clickRiga">
+            <q-btn flat
+                   class="pos-item-popover"
+                   icon="menu" >
+                <q-popover self="top right">
+                    <SubMenus :menuPopupTodo="menuPopupTodo" :itemtodo="itemtodo" @clickMenu="clickMenu" @setPriority="setPriority"></SubMenus>
                 </q-popover>
+
             </q-btn>
         </div>
-        <div class="flex-item completed-item">
-            <q-btn push
-                   class="priority-item-popover"
+
+        <div v-if="isTodo()" class="flex-item completed-item">
+            <q-btn push flat
+                   :class="classCompleted"
                    :icon="iconCompleted"
                    @click.native="setCompleted">
             </q-btn>
-            <!--<q-icon class=" mycols allleft icon_completed ScheduleStatus" :name="iconCompleted"
-                    @click.native="setCompleted"/>-->
-        </div>
-        <div class="flex-item div_descr">
-            {{ itemtodo.descr }}
         </div>
 
-        <div class="flex-item data-item">
-            <q-datetime
-                    v-model="itemtodo.expiring_at"
-                    class="myexpired"/>
+        <q-input type="textarea" ref="inputdescr" v-model="precDescr"
+                 :class="classDescr" :max-height="50"
+                 @keydown="keyDownArea" v-on:keydown.esc="exitEdit" @blur="exitEdit(true)" @click="editTodo()"/>
+
+        <!--:after="[{icon: 'arrow_forward', content: true, handler () {}}]"-->
+
+        <!--<div :class="classDescr" @mousedown.left="editTodo()">-->
+        <!--<q-field>{{ itemtodo.descr }}</q-field>-->
+        <!--</div>-->
+
+        <div v-if="isTodo()" class="flex-item progress-item">
+            <q-progress
+                    :percentage="percentageProgress"
+                    class="progress-item"
+                    :color="colProgress"
+            >
+            </q-progress>
+            <div :class="percProgress">
+                {{percentageProgress}}%
+            </div>
         </div>
-        <div class="flex-item btn-item">
-            <q-btn class="mybtn" round color="" icon="delete" @click="remove(itemtodo.id)"></q-btn>
+
+
+        <div v-if="itemtodo.enableExpiring">
+            <div :class="classExpiring">
+                <q-datetime
+                        :class="classExpiringEx"
+                        v-model="itemtodo.expiring_at"
+                        class="myexpired">
+                </q-datetime>
+            </div>
         </div>
+        <!--<div class="flex-item btn-item">-->
+        <!--{{classPosItemPopup}}-->
+        <!--</div>-->
+        <!--<div class="flex-item btn-item">-->
+        <!--<q-btn class="mybtn" round color="" icon="delete" @click.native="removeitem(itemtodo.id)"></q-btn>-->
+        <!--</div>-->
+        <!--<div class="flex-item">-->
+        <!--[{{ itemtodo.id_prev}} - {{ itemtodo.id_next}}]-->
+        <!--</div>-->
     </div>
 
 </template>

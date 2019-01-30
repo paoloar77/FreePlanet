@@ -1,5 +1,15 @@
 const messages = {
   it: {
+    dialog: {
+      yes: 'Si',
+      no: 'No',
+      delete: 'Elimina',
+      cancel: 'Annulla',
+      msg: {
+        titledeleteTask: 'Cancella Task',
+        deleteTask: 'Vuoi cancellare questo Task?'
+      }
+    },
     comp:{
       Conta: "Conta",
     },
@@ -16,6 +26,9 @@ const messages = {
       Test: 'Test',
       Category: 'Categorie',
       Todo: 'Todo',
+      personal: 'Personale',
+      work: 'Lavoro',
+      shopping: 'Spesa',
     },
     components: {
       authentication:{
@@ -84,8 +97,24 @@ const messages = {
         undefined: 'non definito'
       }
     },
+    todo: {
+      titleprioritymenu: 'Priorità:',
+      insert: 'Inserisci il Task',
+      edit: 'Descrizione Task:',
+      completed: 'Completati'
+    }
   },
   enUk: {
+    dialog: {
+      yes: 'Yes',
+      no: 'No',
+      delete: 'Delete',
+      cancel: 'Cancel',
+      msg: {
+        titledeleteTask: 'Delete Task',
+        deleteTask: 'Delete this Task?'
+      }
+    },
     comp:{
       Conta: "Count",
     },
@@ -102,6 +131,9 @@ const messages = {
       Test: 'Test',
       Category: 'Category',
       Todo: 'Todo',
+      personal: 'Personal',
+      work: 'Work',
+      shopping: 'Shopping',
     },
     components: {
       authentication:{
@@ -170,6 +202,12 @@ const messages = {
         undefined: 'undefined'
       }
     },
+    todo: {
+      titleprioritymenu: 'Priority:',
+      insert: 'Insert Task',
+      edit: 'Task Description:',
+      completed: 'Completed'
+    }
   },
 };
 

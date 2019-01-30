@@ -22,7 +22,8 @@ const state: IUserState = {
   repeatPassword: '',
   idToken: '',
   tokens: [],
-  verifiedEmail: false
+  verifiedEmail: false,
+  categorySel: 'personal'
 }
 
 
@@ -69,6 +70,7 @@ namespace Mutations {
     state.username = data.username
     state.idToken = data.idToken
     state.verifiedEmail = data.verifiedEmail
+    state.category = data.categorySel
     // @ts-ignore
     state.tokens = [
       { access: 'auth', token: data.idToken }
@@ -106,6 +108,7 @@ namespace Mutations {
     state.tokens = []
     state.idToken = ''
     state.verifiedEmail = false
+    state.categorySel = 'personal'
   }
 
   export const mutations = {
@@ -484,12 +487,14 @@ namespace Actions {
     localStorage.removeItem(rescodes.localStorage.isLogged)
     // localStorage.removeItem(rescodes.localStorage.leftDrawerOpen)
     localStorage.removeItem(rescodes.localStorage.verifiedEmail)
+    localStorage.removeItem(rescodes.localStorage.categorySel)
 
     router.push('/signin')
   }
 
   function setGlobal() {
     GlobalStore.mutations.setleftDrawerOpen(localStorage.getItem(rescodes.localStorage.leftDrawerOpen) === 'true')
+    GlobalStore.mutations.setCategorySel(localStorage.getItem(rescodes.localStorage.categorySel))
   }
 
   async function autologin (context) {

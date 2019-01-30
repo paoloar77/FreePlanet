@@ -38,6 +38,7 @@
   import { Store } from 'vuex'
   import { UserStore } from '@modules'
   import { GlobalStore } from '@modules'
+  import { ITodoList } from "../../model";
 
 
   @Component({
@@ -48,32 +49,48 @@
   export default class Drawer extends Vue {
     public $q
     $t: any
+    public arrlista = GlobalStore.state.listatodo
+    photo = ''
+    user = null
+    links
 
     created() {
       console.log('Drawer created...')
+
+      let listatodo = []
+
+      this.arrlista.forEach((elem: ITodoList) => {
+        let item = { route: '/todo/' + elem.namecat, faIcon: 'fa fa-list-alt', materialIcon: 'todo', name: 'pages.' + elem.description }
+        listatodo.push(item)
+
+      })
+
+      this.links = {
+        Dashboard: {
+          routes: [
+            { route: '/', faIcon: 'fa fa-home', materialIcon: 'home', name: 'pages.home' },
+            {
+              route: '/todo', faIcon: 'fa fa-list-alt', materialIcon: 'todo', name: 'pages.Todo',
+              routes2: listatodo
+            },
+            { route: '/category', faIcon: 'fa fa-list-alt', materialIcon: 'category', name: 'pages.Category' },
+            { route: '/signup', faIcon: 'fa fa-registered', materialIcon: 'home', name: 'pages.SignUp' },
+            { route: '/signin', faIcon: 'fa fa-anchor', materialIcon: 'home', name: 'pages.SignIn' },
+            /* {route: '/vreg?idlink=aaa', faIcon: 'fa fa-login', materialIcon: 'login', name: 'pages.vreg'},*/
+          ],
+          show: true,
+        },
+        Forms: {
+          routes: [
+            { route: '/prec', faIcon: 'fa fa-search', materialIcon: 'search', name: 'pages.Test' },
+          ],
+          show: false
+        },
+      }
+
     }
 
-    photo = ''
-    user = null
-    links = {
-      Dashboard: {
-        routes: [
-          { route: '/', faIcon: 'fa fa-home', materialIcon: 'home', name: 'pages.home' },
-          { route: '/todo', faIcon: 'fa fa-list-alt', materialIcon: 'todo', name: 'pages.Todo' },
-          { route: '/category', faIcon: 'fa fa-list-alt', materialIcon: 'category', name: 'pages.Category' },
-          { route: '/signup', faIcon: 'fa fa-registered', materialIcon: 'home', name: 'pages.SignUp' },
-          { route: '/signin', faIcon: 'fa fa-anchor', materialIcon: 'home', name: 'pages.SignIn' },
-          /* {route: '/vreg?idlink=aaa', faIcon: 'fa fa-login', materialIcon: 'login', name: 'pages.vreg'},*/
-        ],
-        show: true
-      },
-      Forms: {
-        routes: [
-          { route: '/prec', faIcon: 'fa fa-search', materialIcon: 'search', name: 'pages.Test' },
-        ],
-        show: false
-      },
-    }
+
 
     get MenuCollapse() {
       return GlobalStore.state.menuCollapse
@@ -138,6 +155,10 @@
 
     #menu-collapse {
         margin-top: 5%;
+    }
+
+    .fixed-left:hover {
+        cursor: ew-resize;
     }
 
     footer {

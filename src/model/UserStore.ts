@@ -22,6 +22,7 @@ export interface IUserState {
   tokens?: IToken[]
 
   verifiedEmail?: boolean
+  categorySel?: string
 
   tokenforgot?: string
 

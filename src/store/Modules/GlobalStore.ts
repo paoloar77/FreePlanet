@@ -9,7 +9,13 @@ const state: IGlobalState = {
   mobileMode: false,
   menuCollapse: true,
   leftDrawerOpen: true,
-  posts: []
+  category: 'personal',
+  posts: [],
+  listatodo: [
+    {namecat: 'personal', description: 'personal'},
+    {namecat: 'work', description: 'work'},
+    {namecat: 'shopping', description: 'shopping'}
+    ]
 }
 
 const b = storeBuilder.module<IGlobalState>('GlobalModule', state)
@@ -18,10 +24,20 @@ const b = storeBuilder.module<IGlobalState>('GlobalModule', state)
 namespace Getters {
 
   const conta = b.read(state => state.conta, 'conta')
+  const listatodo = b.read(state => state.listatodo, 'listatodo')
+  const category = b.read(state => state.category, 'category')
 
   export const getters = {
     get conta() {
       return conta()
+    },
+
+    get listaTodo() {
+      return listatodo()
+    },
+
+    get category() {
+      return category()
     }
   }
 }
@@ -36,9 +52,15 @@ namespace Mutations {
     state.leftDrawerOpen = bool
   }
 
+  function setCategorySel(state: IGlobalState, cat: string) {
+    state.category = cat
+  }
+
+
   export const mutations = {
     setConta: b.commit(setConta),
-    setleftDrawerOpen: b.commit(setleftDrawerOpen)
+    setleftDrawerOpen: b.commit(setleftDrawerOpen),
+    setCategorySel: b.commit(setCategorySel)
   }
 
 }

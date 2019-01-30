@@ -1,15 +1,26 @@
 <template>
-
     <div class="list no-border platform-delimiter light-paragraph">
         <q-icon name="action"/>
         <template v-for="(parent, index) in links">
-                <!--
-                <div class="list-label cursor-pointer" @click="parent.show = !parent.show">
-                    {{replaceUnderlineToSpace(index)}} <div class="menu_freccina"><i aria-hidden="true" class="v-icon material-icons theme--light">keyboard_arrow_down</i></div>
+            <!--
+            <div class="list-label cursor-pointer" @click="parent.show = !parent.show">
+                {{replaceUnderlineToSpace(index)}} <div class="menu_freccina"><i aria-hidden="true" class="v-icon material-icons theme--light">keyboard_arrow_down</i></div>
+            </div>
+            -->
+            <div class="q-list-header">{{replaceUnderlineToSpace(index)}}</div>
+            <template v-for="child in parent.routes">
+                <div v-if="child.routes2">
+                    <q-collapsible menu :label="$t(child.name)" icon="format_list_bulleted" class="titleSubMenu">
+                        <div v-for="child2 in child.routes2">
+                            <q-item link :to="child2.route" exact
+                                    class="item item-link drawer-closer cursor-pointer">
+                                <i :class="child2.faIcon" class="item-primary"></i>
+                                <div class="item-content">{{$t(child2.name)}}</div>
+                            </q-item>
+                        </div>
+                    </q-collapsible>
                 </div>
-                -->
-                <div class="q-list-header">{{replaceUnderlineToSpace(index)}}</div>
-                <template v-for="child in parent.routes">
+                <div v-else>
                     <q-slide-transition :duration=200>
                         <div v-show="true">
                             <q-item link :to="child.route" exact
@@ -19,7 +30,8 @@
                             </q-item>
                         </div>
                     </q-slide-transition>
-                </template>
+                </div>
+            </template>
         </template>
     </div>
 </template>
@@ -67,7 +79,7 @@
         padding: 5px 8px;
     }
 
-    .menu-hr{
+    .menu-hr {
         border-color: #dedede;
         height: 0.5px;
     }

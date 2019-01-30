@@ -8,7 +8,7 @@ import { validations, TSignup } from './signup-validate'
 
 import { validationMixin } from 'vuelidate'
 
-import { Logo } from '@components'
+import { Logo } from '../../../components/logo'
 
 // import {Loading, QSpinnerFacebook, QSpinnerGears} from 'quasar'
 

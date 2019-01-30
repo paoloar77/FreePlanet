@@ -452,31 +452,31 @@
        style="fill:none;stroke:#ffffff;stroke-miterlimit:1;stroke-opacity:0" />
   </g>
     <!-- SUN -->
-    <animate xlink:href="#sun" attributeName="r" from="3.6" to="4.1" dur="5s" begin="2s" fill="freeze" />
-    <animate xlink:href="#sun"  attributeName="r"  from="4.1" to="3.6" dur="5s" begin="7s" fill="freeze" />
-    <animate xlink:href="#sun"  attributeName="r"  from="3.6" to="3.1" dur="5s" begin="12s" fill="freeze" />
-    <animate xlink:href="#sun"  attributeName="r"  from="3.1" to="3.6" dur="5s" begin="17s" fill="freeze" />
+    <animate xlink:href="#sun" attributeName="r" from="3.6" to="4.1" dur="3s" begin="2s" fill="freeze" />
+    <animate xlink:href="#sun"  attributeName="r"  from="4.1" to="3.6" dur="3s" begin="3s" fill="freeze" />
+    <animate xlink:href="#sun"  attributeName="r"  from="3.6" to="3.1" dur="3s" begin="10s" fill="freeze" />
+    <animate xlink:href="#sun"  attributeName="r"  from="3.1" to="3.6" dur="3s" begin="15s" fill="freeze" />
 
     <!-- MOON -->
-    <animate xlink:href="#moon" attributeName="r" from="3.6" to="3.1" dur="5s" begin="2s" fill="freeze" />
-    <animate xlink:href="#moon"  attributeName="r"  from="3.1" to="3.6" dur="5s" begin="7s" fill="freeze" />
-    <animate xlink:href="#moon"  attributeName="r"  from="3.6" to="4.1" dur="5s" begin="12s" fill="freeze" />
-    <animate xlink:href="#moon"  attributeName="r"  from="4.1" to="3.6" dur="5s" begin="17s" fill="freeze" />
+    <animate xlink:href="#moon" attributeName="r" from="3.6" to="3.1" dur="3s" begin="2s" fill="freeze" />
+    <animate xlink:href="#moon"  attributeName="r"  from="3.1" to="3.6" dur="3s" begin="3s" fill="freeze" />
+    <animate xlink:href="#moon"  attributeName="r"  from="3.6" to="4.1" dur="3s" begin="10s" fill="freeze" />
+    <animate xlink:href="#moon"  attributeName="r"  from="4.1" to="3.6" dur="3s" begin="15s" fill="freeze" />
 
 
-    <animateMotion id="anim1" xlink:href="#sun" dur="20s" begin="2s" fill="freeze">
+    <animateMotion id="anim1" xlink:href="#sun" dur="15s" begin="2s" fill="freeze">
         <mpath xlink:href="#motionPathSun"/>
     </animateMotion>
 
-    <animateMotion id="anim2" xlink:href="#moon" dur="20s" begin="2s" fill="freeze">
+    <animateMotion id="anim2" xlink:href="#moon" dur="15s" begin="2s" fill="freeze">
         <mpath xlink:href="#motionPathMoon"/>
     </animateMotion>
 
-    <animateMotion id="anim3" xlink:href="#sunrays" dur="20s" begin="2s" fill="freeze">
+    <animateMotion id="anim3" xlink:href="#sunrays" dur="15s" begin="2s" fill="freeze">
         <mpath xlink:href="#motionPathSun"/>
     </animateMotion>
 
-    <animateMotion id="anim4" xlink:href="#moonlight" dur="20s" begin="2s" fill="freeze">
+    <animateMotion id="anim4" xlink:href="#moonlight" dur="15s" begin="2s" fill="freeze">
         <mpath xlink:href="#motionPathMoon"/>
     </animateMotion>
 </svg>

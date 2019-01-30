@@ -9,7 +9,7 @@ export default ({ Vue }) => {
     database: 'test',
     schemas: [
       { categories: '++id, sub_categ_id, descr_it, campo2bool, campo3bool' },
-      { todos: '++id, userId, pos, descr, priority, completed, created_at, modify_at, expiring_at' }
+      { todos: '++id, userId, category, pos, descr, priority, completed, created_at, modify_at, expiring_at, progress, enableExpiring' }
     ],
     options: {
       todos: { type: 'list', primary: 'pos', label: 'label', updated_at: 'updated_at' },
