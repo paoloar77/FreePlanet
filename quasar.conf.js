@@ -180,8 +180,18 @@ module.exports = function (ctx) {
       }
     },
     pwa: {
+      // runtimeCaching: [
+      //   {
+      //     urlPattern: '/statics',
+      //     handler: 'networkFirst'
+      //   }
+      // ],
+
+      // workboxPluginMode: 'GenerateSW',
       workboxPluginMode: 'InjectManifest',
-      // workboxOptions: {},
+      workboxOptions: {
+        // swSrc: 'src/sw.js',
+      },
       manifest: {
         name: 'Free Planet',
         short_name: 'freeplanet',

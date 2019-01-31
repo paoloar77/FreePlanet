@@ -6,7 +6,7 @@ import { ITodo } from '@src/model'
 
 import { rescodes } from '../../../store/Modules/rescodes'
 
-import { UserStore } from '@modules'
+import { UserStore } from '@store'
 
 import _ from 'lodash'
 
@@ -45,7 +45,7 @@ export default class Todo extends Vue {
   }
 
   @Watch('$route.params.category') changecat() {
-    console.log('changecat')
+    // console.log('changecat')
     this.load()
   }
 
@@ -90,7 +90,7 @@ export default class Todo extends Vue {
 
   async updateLinkedList(init: boolean, arr: ITodo[] = this.todos_arr) {
 
-    console.log('updateLinkedList', this.todos_arr)
+    // console.log('updateLinkedList', this.todos_arr)
 
     let idprev = -1
     let idnext = -1
@@ -123,7 +123,7 @@ export default class Todo extends Vue {
 
       pos++
 
-      this.logelem('updateLinked', elem)
+      // this.logelem('updateLinked', elem)
 
     })
   }
@@ -240,7 +240,7 @@ export default class Todo extends Vue {
     arr.forEach(rec => {
       this.arrPrior.push(rec.value)
     })
-    console.log('Array PRIOR:', this.arrPrior)
+    // console.log('Array PRIOR:', this.arrPrior)
   }
 
 
@@ -251,15 +251,17 @@ export default class Todo extends Vue {
     for (let todosKey in rescodes.Todos) {
       this.listPriorityLabel.push(rescodes.Todos[todosKey])
     }
-    console.log('Priority:' + this.listPriorityLabel)
+    // console.log('Priority:' + this.listPriorityLabel)
     this.setarrPriority()
     this.clearArr()
 
     await this.updatetable()
 
+/*
     this.todos_arr.forEach((elem, index) => {
       this.logelem('LOAD ' + index, elem)
     })
+*/
 
   }
 
@@ -273,8 +275,8 @@ export default class Todo extends Vue {
       priority: rescodes.Todos.PRIORITY_NORMAL,
       completed: false,
       created_at: new Date(),
-      category: '',
       modify_at: new Date(),
+      category: '',
       expiring_at: mydateexp,
       enableExpiring: false,
       id_prev: 0,
@@ -309,6 +311,12 @@ export default class Todo extends Vue {
     objtodo.id_next = rescodes.LIST_END
     objtodo.pos = (lastelem !== null) ? lastelem.pos + 1 : 1
     objtodo.modified = true
+
+    if (objtodo.userId === undefined) {
+      this.$q.notify(this.$t('todo.usernotdefined'))
+      return
+    }
+
 
     // Add to Indexdb
     await this.$db.todos.add(objtodo
@@ -442,7 +450,7 @@ export default class Todo extends Vue {
   }
 
   async filtertodos(refresh: boolean = false) {
-    console.log('filtertodos')
+    // console.log('filtertodos')
 
     let arrtemp = []
 
@@ -515,7 +523,7 @@ export default class Todo extends Vue {
   //
 
   deselectAllRows(item, check, onlythis: boolean = false) {
-    console.log('deselectAllRows : ', item)
+    // console.log('deselectAllRows : ', item)
 
     for (let i = 0; i < this.$refs.single.length; i++) {
 
@@ -574,7 +582,7 @@ export default class Todo extends Vue {
       if (miorec.modified) {
         miorec.modify_at = new Date()
 
-        this.logelem('modify', miorec)
+        // this.logelem('modify', miorec)
 
         await this.$db.todos.put(miorec)
 

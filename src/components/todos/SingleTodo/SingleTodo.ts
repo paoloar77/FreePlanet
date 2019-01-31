@@ -284,7 +284,7 @@ export default class SingleTodo extends Vue {
   }
 
   updateicon() {
-    console.log('updateicon')
+    // console.log('updateicon')
     if (this.itemtodo.completed)
       this.iconCompleted = 'check_circle'
     else

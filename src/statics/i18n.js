@@ -101,7 +101,8 @@ const messages = {
       titleprioritymenu: 'Priorità:',
       insert: 'Inserisci il Task',
       edit: 'Descrizione Task:',
-      completed: 'Completati'
+      completed: 'Completati',
+      usernotdefined: 'Attenzione, occorre essere Loggati per poter aggiungere un Todo'
     }
   },
   enUk: {
@@ -206,7 +207,8 @@ const messages = {
       titleprioritymenu: 'Priority:',
       insert: 'Insert Task',
       edit: 'Task Description:',
-      completed: 'Completed'
+      completed: 'Completed',
+      usernotdefined: 'Attention, you need to be Signed In to add a new Task'
     }
   },
 };

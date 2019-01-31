@@ -106,7 +106,7 @@
       // dynamic import, so loading on demand only
       import(`quasar-framework/i18n/${lang}`).then(lang => {
         this.$q.i18n.set(lang.default)
-        import(`src/i18n`).then(function () {
+        import(`src/statics/i18n`).then(function () {
         })
       })
     }

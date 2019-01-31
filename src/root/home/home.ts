@@ -19,12 +19,12 @@ export default class Home extends Vue {
 
   constructor() {
     super()
-    console.log('Home constructor...')
+    // console.log('Home constructor...')
     this.initprompt()
   }
 
   created() {
-    console.log('Home created...')
+    // console.log('Home created...')
   }
 
   mystilecard() {
