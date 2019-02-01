@@ -1,11 +1,12 @@
 import Vue from 'vue'
-import { Component, Prop, Watch } from 'vue-property-decorator'
+import { Component, Watch } from 'vue-property-decorator'
 
 import { SingleTodo } from '../SingleTodo'
 import { ITodo } from '@src/model'
 
 import { rescodes } from '../../../store/Modules/rescodes'
 
+import { Todos } from '@store'
 import { UserStore } from '@store'
 
 import _ from 'lodash'
@@ -104,13 +105,13 @@ export default class Todo extends Vue {
         idprev = rescodes.LIST_START
       } else {
         const elemprev = this.getelem(index - 1, arr)
-        idprev = elemprev.id
+        idprev = elemprev._id
       }
       if (index === arr.length - 1) {
         idnext = rescodes.LIST_END
       } else {
         const elemnext = this.getelem(index + 1, arr)
-        idnext = elemnext.id
+        idnext = elemnext._id
       }
 
       elem.modified = ((elem.id_prev !== idprev) || (elem.id_next !== idnext) || (elem.pos !== pos)) ? true : elem.modified
@@ -129,7 +130,7 @@ export default class Todo extends Vue {
   }
 
   logelem(mystr, elem) {
-    console.log(mystr, 'elem [', elem.id, '] ', elem.descr, ' Pr(', this.getPriorityByInd(elem.priority), ') [', elem.id_prev, '-', elem.id_next, '] modif=', elem.modified)
+    console.log(mystr, 'elem [', elem._id, '] ', elem.descr, ' Pr(', this.getPriorityByInd(elem.priority), ') [', elem.id_prev, '-', elem.id_next, '] modif=', elem.modified)
   }
 
   getPriorityToSet(ind1, ind2) {
@@ -164,7 +165,7 @@ export default class Todo extends Vue {
 
   }
 
-  getTitlePriority (priority) {
+  getTitlePriority(priority) {
     let cl = ''
 
     if (priority === rescodes.Todos.PRIORITY_HIGH)
@@ -245,6 +246,8 @@ export default class Todo extends Vue {
 
 
   async load() {
+
+
     // Set last category selected
     localStorage.setItem(rescodes.localStorage.categorySel, this.getCategory())
 
@@ -257,17 +260,19 @@ export default class Todo extends Vue {
 
     await this.updatetable()
 
-/*
-    this.todos_arr.forEach((elem, index) => {
-      this.logelem('LOAD ' + index, elem)
-    })
-*/
+    /*
+        this.todos_arr.forEach((elem, index) => {
+          this.logelem('LOAD ' + index, elem)
+        })
+    */
 
   }
 
   initcat() {
 
     const mydateexp = new Date().setDate((new Date()).getDate() + 1)
+
+    console.log('User:' + UserStore.state.userId)
 
     const objtodo: ITodo = {
       userId: UserStore.state.userId,
@@ -276,6 +281,7 @@ export default class Todo extends Vue {
       completed: false,
       created_at: new Date(),
       modify_at: new Date(),
+      completed_at: null,
       category: '',
       expiring_at: mydateexp,
       enableExpiring: false,
@@ -298,16 +304,18 @@ export default class Todo extends Vue {
     return ''
   }
 
-  async insertTodo() {
+  insertTodo() {
     if (this.todo.trim() === '')
       return
 
     const objtodo = this.initcat()
 
+    console.log('autologin userId STATE ', UserStore.state.userId)
+
     objtodo.descr = this.todo
     objtodo.category = this.getCategory()
     const lastelem = this.getLastList()
-    objtodo.id_prev = (lastelem !== null) ? lastelem.id : rescodes.LIST_START
+    objtodo.id_prev = (lastelem !== null) ? lastelem._id : rescodes.LIST_START
     objtodo.id_next = rescodes.LIST_END
     objtodo.pos = (lastelem !== null) ? lastelem.pos + 1 : 1
     objtodo.modified = true
@@ -317,29 +325,69 @@ export default class Todo extends Vue {
       return
     }
 
+    this.$db.todos.add(objtodo)     // Add to Indexdb
+      .then((id) => {
+        console.log('*** IDNEW = ', id)
 
-    // Add to Indexdb
-    await this.$db.todos.add(objtodo
-    ).then((id) => {
-      console.log('*** IDNEW = ', id)
-      if (lastelem !== null) {
-        lastelem.id_next = id
-        lastelem.modified = true
-        this.modify(lastelem, false)
-      }
-      this.modify(objtodo, true)
-    }).catch(err => {
-      console.log('Errore: ' + err.message)
-    })
+        // update also the last elem
+        if (lastelem !== null) {
+          lastelem.id_next = id
+          lastelem.modified = true
+          this.modify(lastelem, false)
+        }
+
+        this.saveItemToSyncAndDb(objtodo)
+
+        // this.modify(objtodo, true)
+        this.updatetable(false)
+      }).catch(err => {
+        console.log('Errore: ' + err.message)
+      })
+
+    console.log('ESCO.........')
 
     // empty the field
     this.todo = ''
   }
 
+  saveItemToSyncAndDb(item: ITodo) {
+    // Send to Server to Sync
+    const mythis = this
+    console.log('saveItemToSyncAndDb')
+    if ('serviceWorker' in navigator && 'SyncManager' in window) {
+      navigator.serviceWorker.ready
+        .then(function (sw) {
+          // _id: new Date().toISOString(),
+          console.log('----------------------      navigator.serviceWorker.ready')
+
+          // check if exist _id, delete it
+          mythis.$db.sync_todos
+            .where('id').equals(item._id)
+            .delete()
+
+          mythis.$db.sync_todos.add(item)
+            .then(function () {
+              return sw.sync.register('sync-new-todos')
+            })
+            .then(function () {
+              let snackbarContainer = document.querySelector('#confirmation-toast')
+              let data = { message: 'Your Post was saved for syncing!' }
+              // snackbarContainer.MaterialSnackbar.showSnackbar(data)
+            })
+            .catch(function (err) {
+              console.log(err)
+            })
+        })
+    } else {
+      Todos.actions.dbSaveTodo(item)
+    }
+
+  }
+
   getElemById(id, lista = this.todos_arr) {
     let myobj: ITodo
     for (myobj of lista) {
-      if (myobj.id === id) {
+      if (myobj._id === id) {
         return myobj
       }
     }
@@ -436,7 +484,7 @@ export default class Todo extends Vue {
       current = this.getElemById(current.id_next, arrris)
       if (current === null)
         break
-      if (current.id === currentprec.id)
+      if (current._id === currentprec._id)
         break
       myarr.push(current)
       currentprec = current
@@ -452,45 +500,21 @@ export default class Todo extends Vue {
   async filtertodos(refresh: boolean = false) {
     // console.log('filtertodos')
 
-    let arrtemp = []
+    return await Todos.actions.getTodosByCategory(this.getCategory())
+      .then(arrtemp => {
 
-    if (this.filter) {
-      // #Todo If need to filter the output database ...
-      await this.$db.todos
-        .where('userId').equals(UserStore.state.userId)
-        .and(todo => todo.category === this.getCategory())
-        .toArray()
-        .then((response) => {
-          Promise.all(response.map(key => key))
-            .then((ristodos) => {
-              arrtemp = ristodos
-            })
-        })
-    } else {
-      await this.$db.todos
-        .where('userId').equals(UserStore.state.userId)
-        .and(todo => todo.category === this.getCategory())
-        .toArray().then(ristodos => {
-          arrtemp = ristodos
-        })
+        arrtemp = _.orderBy(arrtemp, ['completed', 'priority', 'pos'], ['asc', 'desc', 'asc'])
 
-      arrtemp = _.orderBy(arrtemp, ['completed', 'priority', 'pos'], ['asc', 'desc', 'asc'])
-    }
+        this.updateLinkedList(true, arrtemp)
 
-    this.updateLinkedList(true, arrtemp)
+        this.todos_arr = [...arrtemp]  // make copy
+      })
 
-    // set array
-    // arrtemp = this.setArrayFinale(arrtemp)
-
-    this.todos_arr = [...arrtemp]  // make copy
-
-
-    return []
   }
 
   sortarr(arr, field) {
 
-    return arr.slice().sort(function(a, b) {
+    return arr.slice().sort(function (a, b) {
       return a[field] - b[field]
     })
 
@@ -522,7 +546,7 @@ export default class Todo extends Vue {
   // }
   //
 
-  deselectAllRows(item, check, onlythis: boolean = false) {
+  deselectAllRows(item: ITodo, check, onlythis: boolean = false) {
     // console.log('deselectAllRows : ', item)
 
     for (let i = 0; i < this.$refs.single.length; i++) {
@@ -530,13 +554,13 @@ export default class Todo extends Vue {
 
       let contr = <SingleTodo>this.$refs.single[i]
       // @ts-ignore
-      let id = contr.itemtodo.id
+      let id = contr.itemtodo._id
       // Don't deselect the actual clicked!
       let des = false
       if (onlythis) {
-        des = item.id === id
-      }else {
-        des = ((check && (item.id !== id)) || (!check))
+        des = item._id === id
+      } else {
+        des = ((check && (item._id !== id)) || (!check))
       }
       if (des) {
         // @ts-ignore
@@ -549,7 +573,7 @@ export default class Todo extends Vue {
   //   let index = -1
   //   // get index
   //   this.$refs.single.forEach( (singletodo: SingleTodo) => {
-  //     if (singletodo.itemtodo.id === rec.id)
+  //     if (singletodo.itemtodo._id === rec._id)
   //       index = -1
   //   })
   //
@@ -559,16 +583,20 @@ export default class Todo extends Vue {
     if (recOut[field] !== recIn[field]) {
       recOut.modified = true
       recOut[field] = recIn[field]
+      return true
     }
+    return false
   }
 
 
   async modify(myobj: ITodo, update: boolean) {
     await this.$db.transaction('rw', [this.$db.todos], async () => {
-      const miorec = await this.$db.todos.get(myobj.id)
+      const miorec = await this.$db.todos.get(myobj._id)
 
       this.modifyField(miorec, myobj, 'descr')
-      this.modifyField(miorec, myobj, 'completed')
+      if (this.modifyField(miorec, myobj, 'completed'))
+        miorec.completed_at = new Date()
+
       this.modifyField(miorec, myobj, 'category')
       this.modifyField(miorec, myobj, 'expiring_at')
       this.modifyField(miorec, myobj, 'priority')
@@ -585,6 +613,8 @@ export default class Todo extends Vue {
         // this.logelem('modify', miorec)
 
         await this.$db.todos.put(miorec)
+
+        this.saveItemToSyncAndDb(miorec)
 
         if (update)
           await this.updatetable(false)

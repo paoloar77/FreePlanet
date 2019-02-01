@@ -1,5 +1,5 @@
 export interface ITodo {
-  id?: number,
+  _id?: number,
   userId: string
   category?: string
   descr?: string,
@@ -7,6 +7,7 @@ export interface ITodo {
   completed: boolean,
   created_at: any,
   modify_at: any,
+  completed_at: any,
   expiring_at: any,
   enableExpiring?: boolean,
   id_prev?: number,
@@ -18,4 +19,6 @@ export interface ITodo {
 
 export interface ITodosState {
   visuOnlyUncompleted: boolean
+  networkDataReceived: boolean
+  todos: ITodo[]
 }

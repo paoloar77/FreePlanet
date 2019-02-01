@@ -130,7 +130,7 @@ export default class SingleTodo extends Vue {
     //   this.classDescr += ' show'
     // }
 
-    // this.getinputdescr = 'inputdescr' + this.itemtodo.id
+    // this.getinputdescr = 'inputdescr' + this.itemtodo._id
 
     // console.log('classDescrEdit = ', this.classDescrEdit)
     // console.log('classDescr', this.classDescr)
@@ -344,7 +344,7 @@ export default class SingleTodo extends Vue {
       .then(ris => {
         console.log('ris', ris)
         if (ris)
-          this.removeitem(this.itemtodo.id)
+          this.removeitem(this.itemtodo._id)
       }).catch(err => {
 
     })

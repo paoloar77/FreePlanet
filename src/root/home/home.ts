@@ -54,6 +54,7 @@ export default class Home extends Vue {
       console.log('§§§§§§§§§§§§§§§§§§§§  IMPOSTA DEFERRED PROMPT  !!!!!!!!!!!!!!!!!  ')
       return false
     })
+
   }
 
   test_fetch() {

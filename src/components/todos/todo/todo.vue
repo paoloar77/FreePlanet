@@ -13,7 +13,7 @@
                 <draggable v-model="todos_arr" :options="{draggable:'.myitemdrag'}"
                            @start="onStart" @end="onEnd" class="dragArea">
                     <transition-group>
-                        <div :id="getmyid(mytodo.id)" :key="mytodo.id" v-for="mytodo in todos_arr" class="myitemdrag">
+                        <div :id="getmyid(mytodo._id)" :key="mytodo._id" v-for="mytodo in todos_arr" class="myitemdrag">
 
                             <div v-if="(prior !== mytodo.priority) && !mytodo.completed" :class="getTitlePriority(mytodo.priority)">
                                 <label>{{getPriorityByInd(mytodo.priority)}}</label>

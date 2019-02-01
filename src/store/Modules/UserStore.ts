@@ -6,7 +6,7 @@ import router from '@router'
 
 import { serv_constants } from '../Modules/serv_constants'
 import { rescodes } from '../Modules/rescodes'
-import { GlobalStore, UserStore } from '@store'
+import { GlobalStore, UserStore, Todos } from '@store'
 
 const bcrypt = require('bcryptjs')
 
@@ -156,7 +156,7 @@ namespace Actions {
 
     let x_auth_token: string = ''
 
-    return Api.SendReq(call, state.lang, Getters.getters.tok, 'POST', usertosend)
+    return await Api.SendReq(call, state.lang, Getters.getters.tok, 'POST', usertosend)
       .then((res) => {
         console.log(res)
         myres = res
@@ -197,7 +197,7 @@ namespace Actions {
 
     let myres
 
-    return Api.SendReq(call, state.lang, Getters.getters.tok, 'POST', usertosend)
+    return await Api.SendReq(call, state.lang, Getters.getters.tok, 'POST', usertosend)
       .then((res) => {
         console.log(res)
         myres = res
@@ -381,7 +381,7 @@ namespace Actions {
 
     let x_auth_token: string = ''
 
-    return Api.SendReq(call, state.lang, Getters.getters.tok, 'POST', usertosend)
+    return await Api.SendReq(call, state.lang, Getters.getters.tok, 'POST', usertosend)
       .then((res) => {
         myres = res
         x_auth_token = String(res.headers.get('x-auth'))
@@ -433,6 +433,8 @@ namespace Actions {
           localStorage.setItem(rescodes.localStorage.isLogged, String(true))
           localStorage.setItem(rescodes.localStorage.verifiedEmail, Number(verifiedEmail).toString())
 
+          setGlobal()
+
           // dispatch('storeUser', authData);
           // dispatch('setLogoutTimer', myres.data.expiresIn);
           return rescodes.OK
@@ -469,7 +471,7 @@ namespace Actions {
     }
 
     console.log(usertosend)
-    Api.SendReq(call, state.lang, Getters.getters.tok, 'DELETE', usertosend)
+    return await Api.SendReq(call, state.lang, Getters.getters.tok, 'DELETE', usertosend)
       .then(
         (res) => {
           console.log(res)
@@ -495,10 +497,13 @@ namespace Actions {
   function setGlobal() {
     GlobalStore.mutations.setleftDrawerOpen(localStorage.getItem(rescodes.localStorage.leftDrawerOpen) === 'true')
     GlobalStore.mutations.setCategorySel(localStorage.getItem(rescodes.localStorage.categorySel))
+
+    Todos.actions.dbLoadTodo()
   }
 
   async function autologin (context) {
     try {
+      console.log('*** Autologin ***')
       // INIT
       UserStore.mutations.setlang(process.env.LANG_DEFAULT)
       // ++Todo: Estrai la Lang dal Localstorage
@@ -521,7 +526,7 @@ namespace Actions {
       const username = String(localStorage.getItem(rescodes.localStorage.username))
       const verifiedEmail = localStorage.getItem(rescodes.localStorage.verifiedEmail) === '1'
 
-      setGlobal()
+      console.log('autologin userId', userId)
 
       Mutations.mutations.authUser({
         userId: userId,
@@ -529,6 +534,11 @@ namespace Actions {
         idToken: token,
         verifiedEmail: verifiedEmail
       })
+
+      setGlobal()
+
+      console.log('autologin userId STATE ', state.userId)
+
       return true
     } catch (e) {
       console.error('ERR autologin ', e.message)
