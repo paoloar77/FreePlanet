@@ -9,13 +9,50 @@
 console.log('05 ___________________________  PAO: this is my custom service worker');
 
 importScripts('https://storage.googleapis.com/workbox-cdn/releases/3.0.0/workbox-sw.js'); //++Todo: Replace with local workbox.js
-importScripts('js/idb.js');
-importScripts('js/utility.js');
+importScripts('../statics/js/idb.js');
+importScripts('js/globalenv.js');
+// importScripts('js/utility.js');
 
+importScripts('../statics/js/storage.js');
+
+const cfgenv = {
+  website: 'http://localhost:8080',
+  serverweb: 'http://localhost:3000',
+  dbname: 'mydb3',
+  dbversion: 11,
+}
+
+async function writeData(table, data) {
+  console.log('writeData', table, data);
+  await idbKeyval.setdata(table, data);
+}
+
+async function readAllData(table) {
+  console.log('readAllData', table);
+  return await idbKeyval.getalldata(table);
+}
+
+async function clearAllData(table) {
+  console.log('clearAllData', table);
+  await idbKeyval.clearalldata(table)
+}
+
+async function deleteItemFromData(table, id) {
+  console.log('deleteItemFromData', table, 'ID:', id);
+
+  await idbKeyval.deletedata(table, id)
+}
+
+
+
+// self.addEventListener('activate', function(event) {
+//   event.waitUntil(
+//     // createDB()
+//   );
+// });
 
 if (!workbox) {
   let workbox = new self.WorkboxSW();
-
 }
 
 if (workbox) {
@@ -38,7 +75,7 @@ if (workbox) {
   // workbox.routing.registerRoute(/^http/, workbox.strategies.networkFirst(), 'GET');
 
   workbox.routing.registerRoute(
-    /\.(?:png|gif|jpg|jpeg|svg)$/,
+    new RegExp(/\.(?:png|gif|jpg|jpeg|svg)$/),
     workbox.strategies.staleWhileRevalidate({
       cacheName: 'images',
       plugins: [
@@ -62,22 +99,28 @@ if (workbox) {
     })
   );
 
-  workbox.routing.registerRoute('http://localhost:3000/todos', function (args) {
-    return fetch(args.event.request)
-      .then(function (res) {
-        var clonedRes = res.clone();
-        clearAllData('todos')
-          .then(function () {
-            return clonedRes.json();
-          })
-          .then(function (data) {
-            for (let key in data) {
-              writeData('todos', data[key])
-            }
-          });
-        return res;
-      });
-  });
+
+  workbox.routing.registerRoute(
+    new RegExp(cfgenv.serverweb + '/todos/'),
+    function (args) {
+      return fetch(args.event.request, args.event.headers)
+        .then(function (res) {
+          console.log('*******  registerRoute fetch: (1) ', args.event)
+          var clonedRes = res.clone();
+          clearAllData('todos')
+            .then(function () {
+              return clonedRes.json();
+            })
+            .then(function (data) {
+              console.log('2) data Received ', data.todos)
+              for (let key in data.todos) {
+                writeData('todos', data.todos[key])
+              }
+            });
+          return res
+        })
+    }
+  );
 
 
   workbox.routing.registerRoute(
@@ -158,28 +201,6 @@ if (workbox) {
     })
   );
 
-  // workbox.core.setLogLevel(workbox.core.LOG_LEVELS.debug);
-
-  workbox.routing.registerRoute(
-    new RegExp('http://localhost:8080/todos'),
-    function (args) {
-      return fetch(args.event.request)
-        .then(function (res) {
-          console.log('*******  fetch: ', args.event)
-          var clonedRes = res.clone();
-          clearAllData('todos')
-            .then(function () {
-              return clonedRes.json();
-            })
-            .then(function (data) {
-              for (let key in data) {
-                writeData('todos', data[key])
-              }
-            });
-          return res
-        })
-    }
-  );
 
 }
 
@@ -189,68 +210,107 @@ if ('serviceWorker' in navigator) {
 
 }
 
-  // self.addEventListener('fetch', function (event) {
-  //   console.log('[Service Worker] Fetching something ....', event);
-  //   console.log('event.request.cache=', event.request.cache)
-  //   if (event.request.cache === 'only-if-cached' && event.request.mode !== 'same-origin') {
-  //     console.log('SAME ORIGIN!', event);
-  //     return;
-  //   }
-  //   event.respondWith(caches.match(event.request));
-  // });
+// self.addEventListener('fetch', function (event) {
+//   console.log('[Service Worker] Fetching something ....', event);
+//   console.log('event.request.cache=', event.request.cache)
+//   if (event.request.cache === 'only-if-cached' && event.request.mode !== 'same-origin') {
+//     console.log('SAME ORIGIN!', event);
+//     return;
+//   }
+//   event.respondWith(caches.match(event.request));
+// });
 
 
-  self.addEventListener('sync', function (event) {
-    console.log('[Service Worker] Background syncing', event);
+// const syncStore = {}
+// self.addEventListener('message', event => {
+//   if (event.data.type === 'sync') {
+//     // get a unique id to save the data
+//     const id = uuid()
+//     syncStore[id] = event.data
+//     // register a sync and pass the id as tag for it to get the data
+//     self.registration.sync.register(id)
+//   }
+//   console.log(event.data)
+// })
 
-    if (event.tag === 'sync-new-todos') {
-      console.log('[Service Worker] Syncing new Todos');
+self.addEventListener('sync', function (event) {
+  console.log('[Service Worker V5] Background syncing', event);
 
-      let authHeader = []
-      authHeader['content-type'] = 'application/json';
-      authHeader['accept-language'] = 'en';
-      // authHeader.append('x-auth', mytok)
+  let multiparams = event.tag.split('|')
+  if (multiparams && multiparams.length > 3) {
+    let cmd = multiparams[0]
+    let table = multiparams[1]
+    let method = multiparams[2]
+    let token = multiparams[3]
+    // let lang = multiparams[3]
+
+    if ((cmd === 'sync-new-todos') || (cmd === 'sync-delete-todos')) {
+      console.log('[Service Worker] Syncing', cmd, table, method);
+
+      const headers = new Headers()
+      headers.append('content-Type', 'application/json')
+      headers.append('Accept', 'application/json')
+      headers.append('x-auth', token)
 
       event.waitUntil(
-        readAllData('sync_todos')
-          .then(function (data) {
-            for (var dt of data) {
-              // var postData = new FormData();
-              // postData.append('_id', dt._id);
-              // postData.append('title', dt.title);
-              // postData.append('location', dt.location);
-              // postData.append('rawLocationLat', dt.rawLocation.lat);
-              // postData.append('rawLocationLng', dt.rawLocation.lng);
-              // postData.append('file', dt.picture, dt._id + '.png');
+        readAllData(table)
+          .then(function (alldata) {
+            console.log('data: ', alldata)
+            if (alldata) {
+              for (var rec of alldata) {
+                let link = cfgenv.serverweb + '/todos/' + rec._id
+                console.log('FETCH: ', method, link, 'data:', JSON.stringify(rec))
 
-              console.log('Data to Send 6: ', JSON.stringify(dt))
-
-              // Update myTodo to the server
-              fetch('http://localhost:3000/todos', {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json',
-                  'Accept': 'application/json'
-                },
-                // mode: 'no-cors',
-                mode: 'cors',
-                body: JSON.stringify(dt)
-              })
-                .then(function (resData) {
-                  console.log('Sent data Todo:', resData);
-                  if (resData.ok) {
-                      deleteItemFromData('sync_todos', dt.id);
-                  }
+                // Insert/Delete/Update table to the server
+                fetch(link, {
+                  method: method,
+                  headers: headers,
+                  mode: 'cors',   // 'no-cors',
+                  body: JSON.stringify(rec)
                 })
-                .catch(function (err) {
-                  console.log('Error while sending data', err);
-                });
+                  .then(function (resData) {
+                    console.log('Result data Todo:', resData);
+                    if (resData.ok) {
+                      deleteItemFromData(table, rec._id);
+                    }
+                  })
+                  .catch(function (err) {
+                    console.log('Error while sending data', err);
+                  });
+              }
             }
-
           })
       );
     }
-  });
+  }
+})
+;
 
-// }
 
+/*
+
+// send message to serviceWorker
+function sync (url, options) {
+  navigator.serviceWorker.controller.postMessage({type: 'sync', url, options})
+}
+
+
+const syncStore = {}
+self.addEventListener('message', event => {
+  if(event.data.type === 'sync') {
+    // get a unique id to save the data
+    const id = uuid()
+    syncStore[id] = event.data
+    // register a sync and pass the id as tag for it to get the data
+    self.registration.sync.register(id)
+  }
+  console.log(event.data)
+})
+
+
+self.addEventListener('sync', event => {
+  // get the data by tag
+  const {url, options} = syncStore[event.tag]
+  event.waitUntil(fetch(url, options))
+})
+*/

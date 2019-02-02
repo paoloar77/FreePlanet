@@ -5,8 +5,8 @@ export const rescodes = {
   DUPLICATE_EMAIL_ID: 11000,
   DUPLICATE_USERNAME_ID: 11100,
 
-  LIST_END: 10000000,
-  LIST_START: 0,
+  LIST_END: '10000000',
+  LIST_START: '0',
 
   localStorage: {
     verifiedEmail: 'vf',
@@ -23,6 +23,13 @@ export const rescodes = {
     PRIORITY_HIGH: 2,
     PRIORITY_NORMAL: 1,
     PRIORITY_LOW: 0
+  },
+
+  DB: {
+    CMD_SYNC_TODOS: 'sync-new-todos',
+    CMD_DELETE_TODOS: 'sync-delete-todos',
+    TABLE_SYNC_TODOS : 'sync_todos,',
+    TABLE_DELETE_TODOS : 'delete_todos,'
   },
 
   MenuAction: {
@@ -110,7 +117,7 @@ export const rescodes = {
       },
       {
         id: 50,
-        label: 'Cancella',
+        label: 'Elimina',
         value: 100, // DELETE
         icon: 'delete',
         checked: false

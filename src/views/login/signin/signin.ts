@@ -14,6 +14,8 @@ import { Logo } from '../../../components/logo'
 
 import router from '@router'
 
+import globalroutines from '../../../globalroutines/index'
+
 // import {Loading, QSpinnerFacebook, QSpinnerGears} from 'quasar'
 
 
@@ -117,6 +119,7 @@ export default class Signin extends Vue {
       .then((riscode) => {
         if (riscode === rescodes.OK) {
           router.push('/signin')
+          globalroutines(this, 'loadapp', null)
         }
         this.checkErrors(riscode)
         this.$q.loading.hide()

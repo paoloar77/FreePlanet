@@ -1,15 +1,14 @@
 import axios, { AxiosInstance, AxiosPromise, AxiosResponse, AxiosInterceptorManager } from 'axios'
 
 async function sendRequest (url: string, lang: string, mytok: string, method: string, mydata: any) {
-  console.log('LANG ' + lang)
-  // let mytok: string = this.getTok()
+
+  console.log('sendRequest', method, url, '[', lang, ']')
+
   const authHeader = new Headers()
-
-  console.log('sendRequest:', url)
-
-  authHeader.append('content-type', 'application/json')
+  authHeader.append('content-Type', 'application/json')
+  authHeader.append('Accept', 'application/json')
   authHeader.append('x-auth', mytok)
-  authHeader.append('accept-language', lang)
+  // authHeader.append('accept-language', lang)
 
   let configInit: RequestInit
 

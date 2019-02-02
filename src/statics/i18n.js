@@ -6,8 +6,8 @@ const messages = {
       delete: 'Elimina',
       cancel: 'Annulla',
       msg: {
-        titledeleteTask: 'Cancella Task',
-        deleteTask: 'Vuoi cancellare questo Task?'
+        titledeleteTask: 'Elimina Task',
+        deleteTask: 'Vuoi Eliminare questo Task?'
       }
     },
     comp:{

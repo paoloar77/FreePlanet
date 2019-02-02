@@ -80,7 +80,7 @@ export default class Category extends Vue {
   }
 
   async loadCat() {
-    await this.$db.categories.toArray().then(ris => this.categories_loc = ris)
+    // await this.$db.categories.toArray().then(ris => this.categories_loc = ris)
 
     this.updatetable()
   }

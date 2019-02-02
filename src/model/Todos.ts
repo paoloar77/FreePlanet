@@ -1,5 +1,5 @@
 export interface ITodo {
-  _id?: number,
+  _id?: string,
   userId: string
   category?: string
   descr?: string,
@@ -10,8 +10,8 @@ export interface ITodo {
   completed_at: any,
   expiring_at: any,
   enableExpiring?: boolean,
-  id_prev?: number,
-  id_next?: number,
+  id_prev?: string,
+  id_next?: string,
   modified?: boolean,
   pos?: number,
   progress?: number

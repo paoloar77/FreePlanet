@@ -14,13 +14,13 @@ register(process.env.SERVICE_WORKER_FILE, {
       console.log('REGISTERED::: !!!', process.env.SERVICE_WORKER_FILE)
 
     },
-    cached(registration) { // registration -> a ServiceWorkerRegistration instance
+    cached(registration) {
       console.log('CACHED::: Content has been cached for offline use.')
     },
-    updatefound(registration) { // registration -> a ServiceWorkerRegistration instance
+    updatefound(registration) {
       console.log('UPDATEFOUND::: New content is downloading.')
     },
-    updated(registration) { // registration -> a ServiceWorkerRegistration instance
+    updated(registration) {
       console.log('New content is available; please refresh.')
     },
     offline() {

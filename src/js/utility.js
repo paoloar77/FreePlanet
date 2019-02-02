@@ -1,67 +1,57 @@
 console.log('utility.js')
 
-var dbPromise = idb.open('mydb', 10, function (db) {
-  console.log('OPEN MYDB')
-  if (!db.objectStoreNames.contains('sync_todos')) {
-    db.createObjectStore('sync_todos', { keyPath: 'id' });
-  }
-  if (!db.objectStoreNames.contains('todos')) {
-    db.createObjectStore('todos', { keyPath: 'id' });
-  }
-});
+// var dbPromise = idb.open('mydb1', 1, function (db) {
+//   console.log('OPEN MYDB')
+//   if (!db.objectStoreNames.contains('todos')) {
+//     db.createObjectStore('todos', { keyPath: '_id' });
+//   }
+//   if (!db.objectStoreNames.contains('config')) {
+//     db.createObjectStore('config', { keyPath: '_id' });
+//   }
+// });
 
-function writeData(st, data) {
-  console.log('writeData', st, data);
-  return dbPromise
-    .then(function (db) {
-      var tx = db.transaction(st, 'readwrite');
-      var store = tx.objectStore(st);
-      store.put(data);
-      return tx.complete;
-    });
-}
 
-function readAllData(st) {
-  console.log('readAllData', st);
-  return dbPromise
-    .then(function (db) {
-      var tx = db.transaction(st, 'readonly');
-      var store = tx.objectStore(st);
-      return store.getAll();
-    });
-}
+// function readAllData(st) {
+//   console.log('readAllData', st);
+//   return dbPromise
+//     .then(function (db) {
+//       var tx = db.transaction(st, 'readonly');
+//       var store = tx.objectStore(st);
+//       return store.getAll();
+//     });
+// }
 
-function clearAllData(st) {
-  console.log('clearAllData', st);
-  return dbPromise
-    .then(function (db) {
-      var tx = db.transaction(st, 'readwrite');
-      var store = tx.objectStore(st);
-      store.clear();
-      return tx.complete;
-    });
-}
+// function clearAllData(st) {
+//   console.log('clearAllData', st);
+//   return dbPromise
+//     .then(function (db) {
+//       var tx = db.transaction(st, 'readwrite');
+//       var store = tx.objectStore(st);
+//       store.clear();
+//       return tx.complete;
+//     });
+// }
 
-function deleteItemFromData(st, id) {
-  console.log('deleteItemFromData', st, 'ID:', id);
-  dbPromise
-    .then(function (db) {
-
-      var tx = db.transaction(st, 'readwrite');
-      var store = tx.objectStore(st);
-
-      try {
-        store.delete(id);
-        return tx.complete;
-      } catch (e) {
-        return false;
-      }
-    })
-    .then(function (res) {
-      if (res)
-        console.log('Item deleted!');
-    });
-}
+// function deleteItemFromData(st, id) {
+//   console.log('deleteItemFromData', st, 'ID:', id);
+//   dbPromise
+//     .then(function (db) {
+//
+//       var tx = db.transaction(st, 'readwrite');
+//       var store = tx.objectStore(st);
+//
+//       try {
+//         store.delete(id);
+//         return tx.complete;
+//       } catch (e) {
+//         return false;
+//       }
+//     })
+//     .then(function (res) {
+//       if (res)
+//         console.log('Item deleted!');
+//     });
+// }
 
 function urlBase64ToUint8Array(base64String) {
   var padding = '='.repeat((4 - base64String.length % 4) % 4);

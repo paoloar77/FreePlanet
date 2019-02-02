@@ -10,7 +10,6 @@ import { GlobalStore, UserStore, Todos } from '@store'
 
 const bcrypt = require('bcryptjs')
 
-
 // State
 const state: IUserState = {
   userId: '',
@@ -135,7 +134,6 @@ namespace Actions {
       // return new ApiError()
     }
   }
-
 
   async function resetpwd (context, paramquery: IUserState) {
     let call = process.env.MONGODB_HOST + '/updatepwd'

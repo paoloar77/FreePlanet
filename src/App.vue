@@ -26,6 +26,8 @@
 
   import Header from './components/Header.vue'
 
+  import globalroutines from './globalroutines/index'
+
   @Component({
     components: {
       appHeader: Header,
@@ -49,6 +51,7 @@
       UserStore.actions.autologin()
         .then((loginEseguito) => {
           if (loginEseguito) {
+            globalroutines(this, 'loadapp', '')
             // this.$router.replace('/')
           }
         })

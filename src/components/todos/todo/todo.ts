@@ -13,6 +13,10 @@ import _ from 'lodash'
 
 import draggable from 'vuedraggable'
 
+import VueIdb from 'vue-idb'
+
+import globalroutines from '../../../globalroutines/index'
+
 import $ from 'jquery'
 
 @Component({
@@ -93,8 +97,8 @@ export default class Todo extends Vue {
 
     // console.log('updateLinkedList', this.todos_arr)
 
-    let idprev = -1
-    let idnext = -1
+    let idprev = ''
+    let idnext = ''
     let pos = 1
     if (arr.length > 0) {
       idprev = arr[0].id_prev
@@ -221,6 +225,7 @@ export default class Todo extends Vue {
     let update = false
     await this.todos_arr.forEach((elem: ITodo) => {
       if (elem.modified) {
+        console.log('calling MODIFY 3')
         this.modify(elem, false)
         update = true
       }
@@ -275,6 +280,7 @@ export default class Todo extends Vue {
     console.log('User:' + UserStore.state.userId)
 
     const objtodo: ITodo = {
+      _id: new Date().toISOString(),  // Create NEW
       userId: UserStore.state.userId,
       descr: '',
       priority: rescodes.Todos.PRIORITY_NORMAL,
@@ -285,8 +291,8 @@ export default class Todo extends Vue {
       category: '',
       expiring_at: mydateexp,
       enableExpiring: false,
-      id_prev: 0,
-      id_next: 0,
+      id_prev: '',
+      id_next: '',
       pos: 0,
       modified: true,
       progress: 0
@@ -304,7 +310,7 @@ export default class Todo extends Vue {
     return ''
   }
 
-  insertTodo() {
+  async insertTodo() {
     if (this.todo.trim() === '')
       return
 
@@ -314,7 +320,7 @@ export default class Todo extends Vue {
 
     objtodo.descr = this.todo
     objtodo.category = this.getCategory()
-    const lastelem = this.getLastList()
+    const lastelem: ITodo = this.getLastList()
     objtodo.id_prev = (lastelem !== null) ? lastelem._id : rescodes.LIST_START
     objtodo.id_next = rescodes.LIST_END
     objtodo.pos = (lastelem !== null) ? lastelem.pos + 1 : 1
@@ -325,24 +331,31 @@ export default class Todo extends Vue {
       return
     }
 
-    this.$db.todos.add(objtodo)     // Add to Indexdb
+    await globalroutines(this, 'write', 'todos', objtodo)
       .then((id) => {
-        console.log('*** IDNEW = ', id)
+        console.log('*** IDNEW (2) = ', id)
 
         // update also the last elem
         if (lastelem !== null) {
           lastelem.id_next = id
           lastelem.modified = true
+          console.log('calling MODIFY 4', lastelem)
           this.modify(lastelem, false)
+            .then(ris => {
+              console.log('END calling MODIFY 4')
+
+              this.saveItemToSyncAndDb(rescodes.DB.TABLE_SYNC_TODOS, 'POST', objtodo)
+              this.updatetable(false)
+
+            })
+        } else {
+          this.saveItemToSyncAndDb(rescodes.DB.TABLE_SYNC_TODOS, 'POST', objtodo)
+          this.updatetable(false)
         }
 
-        this.saveItemToSyncAndDb(objtodo)
-
-        // this.modify(objtodo, true)
-        this.updatetable(false)
       }).catch(err => {
-        console.log('Errore: ' + err.message)
-      })
+      console.log('Errore: ' + err.message)
+    })
 
     console.log('ESCO.........')
 
@@ -350,39 +363,68 @@ export default class Todo extends Vue {
     this.todo = ''
   }
 
-  saveItemToSyncAndDb(item: ITodo) {
+  cmdToSyncAndDb(cmd, table, method, itemOrId, msg: String) {
     // Send to Server to Sync
+
+    console.log('cmdToSyncAndDb', cmd, table, method, itemOrId, msg)
+
     const mythis = this
-    console.log('saveItemToSyncAndDb')
     if ('serviceWorker' in navigator && 'SyncManager' in window) {
       navigator.serviceWorker.ready
         .then(function (sw) {
           // _id: new Date().toISOString(),
           console.log('----------------------      navigator.serviceWorker.ready')
 
-          // check if exist _id, delete it
-          mythis.$db.sync_todos
-            .where('id').equals(item._id)
-            .delete()
+          // mythis.sendMessageToSW(item, method)
 
-          mythis.$db.sync_todos.add(item)
-            .then(function () {
-              return sw.sync.register('sync-new-todos')
+          globalroutines(mythis, 'write', table, itemOrId)
+            .then(function (id) {
+              console.log('id', id)
+              const sep = '|'
+
+              let multiparams = cmd + sep + table + sep + method + sep + UserStore.state.idToken + sep + UserStore.state.lang
+              return sw.sync.register(multiparams)
             })
             .then(function () {
               let snackbarContainer = document.querySelector('#confirmation-toast')
-              let data = { message: 'Your Post was saved for syncing!' }
+              let data = { message: msg }
               // snackbarContainer.MaterialSnackbar.showSnackbar(data)
             })
             .catch(function (err) {
-              console.log(err)
+              console.error('Errore in globalroutines', table, err)
             })
         })
     } else {
-      Todos.actions.dbSaveTodo(item)
+      if (cmd === rescodes.DB.CMD_SYNC_TODOS)
+        Todos.actions.dbSaveTodo(itemOrId)
+      else if (cmd === rescodes.DB.CMD_DELETE_TODOS)
+        Todos.actions.dbDeleteTodo(itemOrId)
     }
-
   }
+
+  saveItemToSyncAndDb(table: String, method, item: ITodo) {
+    return this.cmdToSyncAndDb(rescodes.DB.CMD_SYNC_TODOS, table, method, item,  'Your Post was saved for syncing!')
+  }
+
+
+  deleteItemToSyncAndDb(table: String, id: String) {
+    return this.cmdToSyncAndDb(rescodes.DB.CMD_DELETE_TODOS, table, 'DELETE', id, 'Your Post was canceled for syncing!')
+  }
+
+/*
+  sendMessageToSW(recdata, method) {
+
+    navigator.serviceWorker.controller.postMessage({
+      type: 'sync',
+      recdata,
+      method,
+      cmd: 'sync-new-todos',
+      token: UserStore.state.idToken,
+      lang: UserStore.state.lang
+    })
+  }
+*/
+
 
   getElemById(id, lista = this.todos_arr) {
     let myobj: ITodo
@@ -407,27 +449,28 @@ export default class Todo extends Vue {
       if (myobjprev !== null) {
         myobjprev.id_next = myobjtrov.id_next
         myobjprev.modified = true
+        console.log('calling MODIFY 2')
         this.modify(myobjprev, false)
       }
 
       if (myobjnext !== null) {
         myobjnext.id_prev = myobjtrov.id_prev
         myobjnext.modified = true
+        console.log('calling MODIFY 1')
         this.modify(myobjnext, false)
       }
 
-      console.log('ENTRATO')
+      this.deleteItemToSyncAndDb(rescodes.DB.TABLE_DELETE_TODOS, id)
+
       const mythis = this
       // Delete item
-      await this.$db.todos
-        .where('id').equals(id)
-        .delete()
-        .then(() => {
-          console.log('UpdateTable')
+      await globalroutines(this, 'delete', 'todos', id)
+        .then((ris) => {
+          console.log('UpdateTable', ris)
           mythis.updatetable()
         }).catch((error) => {
-          console.log('err: ', error)
-        })
+        console.log('err: ', error)
+      })
     }
 
     console.log('FINE deleteitem')
@@ -498,7 +541,7 @@ export default class Todo extends Vue {
   }
 
   async filtertodos(refresh: boolean = false) {
-    // console.log('filtertodos')
+    console.log('filtertodos')
 
     return await Todos.actions.getTodosByCategory(this.getCategory())
       .then(arrtemp => {
@@ -583,45 +626,51 @@ export default class Todo extends Vue {
     if (recOut[field] !== recIn[field]) {
       recOut.modified = true
       recOut[field] = recIn[field]
-      return true
+      return recOut[field]
     }
     return false
   }
 
 
   async modify(myobj: ITodo, update: boolean) {
-    await this.$db.transaction('rw', [this.$db.todos], async () => {
-      const miorec = await this.$db.todos.get(myobj._id)
+    await globalroutines(this, 'read', 'todos', myobj._id)
+      .then(miorec => {
+        console.log('ArrTodos: ', myobj.descr, '[', myobj._id, ']')
 
-      this.modifyField(miorec, myobj, 'descr')
-      if (this.modifyField(miorec, myobj, 'completed'))
-        miorec.completed_at = new Date()
+        if (miorec === undefined) {
+          console.log('Record not Found !!!!!! id=', myobj._id)
+          return
+        }
 
-      this.modifyField(miorec, myobj, 'category')
-      this.modifyField(miorec, myobj, 'expiring_at')
-      this.modifyField(miorec, myobj, 'priority')
-      this.modifyField(miorec, myobj, 'id_prev')
-      this.modifyField(miorec, myobj, 'id_next')
-      this.modifyField(miorec, myobj, 'pos')
-      this.modifyField(miorec, myobj, 'enableExpiring')
-      this.modifyField(miorec, myobj, 'progress')
+        this.modifyField(miorec, myobj, 'descr')
+        if (this.modifyField(miorec, myobj, 'completed'))
+          miorec.completed_at = new Date()
+
+        this.modifyField(miorec, myobj, 'category')
+        this.modifyField(miorec, myobj, 'expiring_at')
+        this.modifyField(miorec, myobj, 'priority')
+        this.modifyField(miorec, myobj, 'id_prev')
+        this.modifyField(miorec, myobj, 'id_next')
+        this.modifyField(miorec, myobj, 'pos')
+        this.modifyField(miorec, myobj, 'enableExpiring')
+        this.modifyField(miorec, myobj, 'progress')
 
 
-      if (miorec.modified) {
-        miorec.modify_at = new Date()
+        if (miorec.modified) {
+          miorec.modify_at = new Date()
 
-        // this.logelem('modify', miorec)
+          // this.logelem('modify', miorec)
 
-        await this.$db.todos.put(miorec)
+          globalroutines(this, 'write', 'todos', miorec)
+            .then(ris => {
 
-        this.saveItemToSyncAndDb(miorec)
+              this.saveItemToSyncAndDb(rescodes.DB.TABLE_SYNC_TODOS, 'PATCH', miorec)
 
-        if (update)
-          await this.updatetable(false)
-      }
-    })
-
+              if (update)
+                this.updatetable(false)
+            })
+        }
+      })
   }
-
 
 }
