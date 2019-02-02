@@ -119,7 +119,7 @@ export default class Signin extends Vue {
       .then((riscode) => {
         if (riscode === rescodes.OK) {
           router.push('/signin')
-          globalroutines(this, 'loadapp', null)
+          globalroutines(this, 'loadapp', '')
         }
         this.checkErrors(riscode)
         this.$q.loading.hide()

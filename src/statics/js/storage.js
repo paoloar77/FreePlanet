@@ -3,7 +3,7 @@ let idbKeyval = (() => {
 
   function getDB() {
     if (!db) {
-      console.log('CREO DB STATICS!')
+      console.log('CREO DB STORAGE JS !')
       db = new Promise((resolve, reject) => {
         const openreq = indexedDB.open('mydb3', 11);
 
@@ -40,9 +40,18 @@ let idbKeyval = (() => {
   return {
     async get(key) {
       let req;
-      await withStore('readonly', store => {
+      await withStore('readonly', 'keyval', store => {
         req = store.get(key);
       });
+      return req.result;
+    },
+    async getdata(table, key) {
+      let req;
+      await withStore('readonly', table, store => {
+        console.log('store', store, 'key', key)
+        req = store.get(key);
+      });
+      console.log('RISFINALE!', req.result)
       return req.result;
     },
     async getalldata(table) {
@@ -52,18 +61,28 @@ let idbKeyval = (() => {
       });
       return req.result;
     },
-    set(key, value) {
-      return withStore('readwrite', 'keyval', store => {
+    async set(key, value) {
+      return await withStore('readwrite', 'keyval', store => {
         store.put(value, key);
       });
     },
-    setdata(table, value) {
-      return withStore('readwrite', table, store  => {
+    async setdata(table, valuekey) {
+
+      let value = []
+      if (table === 'delete_todos') {
+        value['_id'] = valuekey
+      }else {
+        value = valuekey
+      }
+
+      console.log('setdata', table, value)
+
+      return await withStore('readwrite', table, store  => {
         store.put(value);
       });
     },
-    delete(key) {
-      return withStore('readwrite', 'keyval', store => {
+    async delete(key) {
+      return await withStore('readwrite', 'keyval', store => {
         store.delete(key);
       });
     },

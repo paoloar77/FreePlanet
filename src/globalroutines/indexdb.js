@@ -39,7 +39,7 @@ async function readfromIndexDbToStateTodos(context) {
 
 }
 
-export default async (context, cmd, table, datakey) => {
+export default async (context, cmd, table, datakey, id) => {
   if (cmd === 'loadapp') {
     // ****** LOAD APP AL CARICAMENTO ! *******
     return saveConfigIndexDb(context, datakey)
@@ -56,8 +56,8 @@ export default async (context, cmd, table, datakey) => {
   } else if (cmd === 'readall') {
     return await storage.getalldata(table)
   } else if (cmd === 'read') {
-    return await storage.getdata(table, datakey)
+    return await storage.getdata(table, id)
   } else if (cmd === 'delete') {
-    return await storage.deletedata(table, datakey)
+    return await storage.deletedata(table, id)
   }
 }

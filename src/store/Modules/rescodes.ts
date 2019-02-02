@@ -28,8 +28,8 @@ export const rescodes = {
   DB: {
     CMD_SYNC_TODOS: 'sync-new-todos',
     CMD_DELETE_TODOS: 'sync-delete-todos',
-    TABLE_SYNC_TODOS : 'sync_todos,',
-    TABLE_DELETE_TODOS : 'delete_todos,'
+    TABLE_SYNC_TODOS : 'sync_todos',
+    TABLE_DELETE_TODOS : 'delete_todos'
   },
 
   MenuAction: {

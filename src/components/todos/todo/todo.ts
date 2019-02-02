@@ -363,21 +363,21 @@ export default class Todo extends Vue {
     this.todo = ''
   }
 
-  cmdToSyncAndDb(cmd, table, method, itemOrId, msg: String) {
+  async cmdToSyncAndDb(cmd, table, method, item: ITodo, id, msg: String) {
     // Send to Server to Sync
 
-    console.log('cmdToSyncAndDb', cmd, table, method, itemOrId, msg)
+    console.log('cmdToSyncAndDb', cmd, table, method, item, id, msg)
 
     const mythis = this
     if ('serviceWorker' in navigator && 'SyncManager' in window) {
-      navigator.serviceWorker.ready
+      await navigator.serviceWorker.ready
         .then(function (sw) {
           // _id: new Date().toISOString(),
           console.log('----------------------      navigator.serviceWorker.ready')
 
           // mythis.sendMessageToSW(item, method)
 
-          globalroutines(mythis, 'write', table, itemOrId)
+          globalroutines(mythis, 'write', table, item, id)
             .then(function (id) {
               console.log('id', id)
               const sep = '|'
@@ -396,19 +396,19 @@ export default class Todo extends Vue {
         })
     } else {
       if (cmd === rescodes.DB.CMD_SYNC_TODOS)
-        Todos.actions.dbSaveTodo(itemOrId)
+        Todos.actions.dbSaveTodo(item)
       else if (cmd === rescodes.DB.CMD_DELETE_TODOS)
-        Todos.actions.dbDeleteTodo(itemOrId)
+        Todos.actions.dbDeleteTodo(id)
     }
   }
 
   saveItemToSyncAndDb(table: String, method, item: ITodo) {
-    return this.cmdToSyncAndDb(rescodes.DB.CMD_SYNC_TODOS, table, method, item,  'Your Post was saved for syncing!')
+    return this.cmdToSyncAndDb(rescodes.DB.CMD_SYNC_TODOS, table, method, item,  0, 'Your Post was saved for syncing!')
   }
 
 
-  deleteItemToSyncAndDb(table: String, id: String) {
-    return this.cmdToSyncAndDb(rescodes.DB.CMD_DELETE_TODOS, table, 'DELETE', id, 'Your Post was canceled for syncing!')
+  deleteItemToSyncAndDb(table: String, id) {
+    return this.cmdToSyncAndDb(rescodes.DB.CMD_DELETE_TODOS, table, 'DELETE', null, id, 'Your Post was canceled for syncing!')
   }
 
 /*
@@ -464,7 +464,7 @@ export default class Todo extends Vue {
 
       const mythis = this
       // Delete item
-      await globalroutines(this, 'delete', 'todos', id)
+      await globalroutines(this, 'delete', 'todos', null, id)
         .then((ris) => {
           console.log('UpdateTable', ris)
           mythis.updatetable()
@@ -633,7 +633,7 @@ export default class Todo extends Vue {
 
 
   async modify(myobj: ITodo, update: boolean) {
-    await globalroutines(this, 'read', 'todos', myobj._id)
+    await globalroutines(this, 'read', 'todos', null, myobj._id)
       .then(miorec => {
         console.log('ArrTodos: ', myobj.descr, '[', myobj._id, ']')
 

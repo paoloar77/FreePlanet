@@ -1,4 +1,3 @@
-import { rescodes } from "../store/Modules/rescodes";
 
 export let idbKeyval = (() => {
   let db;
@@ -49,6 +48,7 @@ export let idbKeyval = (() => {
     },
     async getdata(table, key) {
       let req;
+
       await withStore('readonly', table, store => {
         console.log('store', store, 'key', key)
         req = store.get(key);
@@ -70,9 +70,11 @@ export let idbKeyval = (() => {
     },
     async setdata(table, valuekey) {
 
+      // set only the ID, because it need to delete it
       let value = []
-      if (table === rescodes.DB.CMD_DELETE_TODOS) {
+      if (table === 'delete_todos') {
         value['_id'] = valuekey
+        value['value'] = valuekey
       }else {
         value = valuekey
       }
