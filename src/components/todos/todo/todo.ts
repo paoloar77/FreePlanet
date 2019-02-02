@@ -333,29 +333,28 @@ export default class Todo extends Vue {
 
     await globalroutines(this, 'write', 'todos', objtodo)
       .then((id) => {
-        console.log('*** IDNEW (2) = ', id)
+        console.log('*** IDNEW (3) = ', id)
 
         // update also the last elem
         if (lastelem !== null) {
           lastelem.id_next = id
           lastelem.modified = true
           console.log('calling MODIFY 4', lastelem)
-          this.modify(lastelem, false)
-            .then(ris => {
-              console.log('END calling MODIFY 4')
-
-              this.saveItemToSyncAndDb(rescodes.DB.TABLE_SYNC_TODOS, 'POST', objtodo)
-              this.updatetable(false)
-
-            })
-        } else {
-          this.saveItemToSyncAndDb(rescodes.DB.TABLE_SYNC_TODOS, 'POST', objtodo)
-          this.updatetable(false)
         }
 
+        this.modify(lastelem, false)
+          .then(ris => {
+            console.log('END calling MODIFY 4')
+
+            this.saveItemToSyncAndDb(rescodes.DB.TABLE_SYNC_TODOS, 'POST', objtodo)
+            this.updatetable(false)
+
+          })
+
+
       }).catch(err => {
-      console.log('Errore: ' + err.message)
-    })
+        console.log('Errore: ' + err.message)
+      })
 
     console.log('ESCO.........')
 
@@ -369,7 +368,7 @@ export default class Todo extends Vue {
     console.log('cmdToSyncAndDb', cmd, table, method, item, id, msg)
 
     const mythis = this
-    if ('serviceWorker' in navigator && 'SyncManager' in window) {
+    if (false && ('serviceWorker' in navigator && 'SyncManager' in window)) {
       await navigator.serviceWorker.ready
         .then(function (sw) {
           // _id: new Date().toISOString(),
@@ -395,15 +394,18 @@ export default class Todo extends Vue {
             })
         })
     } else {
-      if (cmd === rescodes.DB.CMD_SYNC_TODOS)
-        Todos.actions.dbSaveTodo(item)
-      else if (cmd === rescodes.DB.CMD_DELETE_TODOS)
+      if (cmd === rescodes.DB.CMD_SYNC_TODOS) {
+        if (method === 'POST')
+          Todos.actions.dbInsertTodo(item)
+        else if (method === 'PATCH')
+          Todos.actions.dbSaveTodo(item)
+      } else if (cmd === rescodes.DB.CMD_DELETE_TODOS)
         Todos.actions.dbDeleteTodo(id)
     }
   }
 
   saveItemToSyncAndDb(table: String, method, item: ITodo) {
-    return this.cmdToSyncAndDb(rescodes.DB.CMD_SYNC_TODOS, table, method, item,  0, 'Your Post was saved for syncing!')
+    return this.cmdToSyncAndDb(rescodes.DB.CMD_SYNC_TODOS, table, method, item, 0, 'Your Post was saved for syncing!')
   }
 
 
@@ -411,19 +413,19 @@ export default class Todo extends Vue {
     return this.cmdToSyncAndDb(rescodes.DB.CMD_DELETE_TODOS, table, 'DELETE', null, id, 'Your Post was canceled for syncing!')
   }
 
-/*
-  sendMessageToSW(recdata, method) {
+  /*
+    sendMessageToSW(recdata, method) {
 
-    navigator.serviceWorker.controller.postMessage({
-      type: 'sync',
-      recdata,
-      method,
-      cmd: 'sync-new-todos',
-      token: UserStore.state.idToken,
-      lang: UserStore.state.lang
-    })
-  }
-*/
+      navigator.serviceWorker.controller.postMessage({
+        type: 'sync',
+        recdata,
+        method,
+        cmd: 'sync-new-todos',
+        token: UserStore.state.idToken,
+        lang: UserStore.state.lang
+      })
+    }
+  */
 
 
   getElemById(id, lista = this.todos_arr) {
@@ -469,8 +471,8 @@ export default class Todo extends Vue {
           console.log('UpdateTable', ris)
           mythis.updatetable()
         }).catch((error) => {
-        console.log('err: ', error)
-      })
+          console.log('err: ', error)
+        })
     }
 
     console.log('FINE deleteitem')
@@ -633,6 +635,10 @@ export default class Todo extends Vue {
 
 
   async modify(myobj: ITodo, update: boolean) {
+    if (myobj === null)
+      return new Promise(function (resolve, reject) {
+        resolve()
+      })
     await globalroutines(this, 'read', 'todos', null, myobj._id)
       .then(miorec => {
         console.log('ArrTodos: ', myobj.descr, '[', myobj._id, ']')

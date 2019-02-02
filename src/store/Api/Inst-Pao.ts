@@ -1,6 +1,6 @@
 import axios, { AxiosInstance, AxiosPromise, AxiosResponse, AxiosInterceptorManager } from 'axios'
 
-async function sendRequest (url: string, lang: string, mytok: string, method: string, mydata: any) {
+async function sendRequest(url: string, lang: string, mytok: string, method: string, mydata: any) {
 
   console.log('sendRequest', method, url, '[', lang, ']')
 
@@ -13,6 +13,12 @@ async function sendRequest (url: string, lang: string, mytok: string, method: st
   let configInit: RequestInit
 
   if (method === 'GET') {
+    configInit = {
+      method: method,
+      cache: 'no-cache',
+      headers: authHeader
+    }
+  } else if (method === 'DELETE') {
     configInit = {
       method: method,
       cache: 'no-cache',

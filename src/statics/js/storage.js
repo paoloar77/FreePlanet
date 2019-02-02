@@ -1,4 +1,4 @@
-let idbKeyval = (() => {
+let let idbKeyval = (() => {
   let db;
 
   function getDB() {
@@ -47,6 +47,7 @@ let idbKeyval = (() => {
     },
     async getdata(table, key) {
       let req;
+
       await withStore('readonly', table, store => {
         console.log('store', store, 'key', key)
         req = store.get(key);
@@ -62,24 +63,20 @@ let idbKeyval = (() => {
       return req.result;
     },
     async set(key, value) {
-      return await withStore('readwrite', 'keyval', store => {
-        store.put(value, key);
+      let req;
+      await withStore('readwrite', 'keyval', store => {
+        req = store.put(value, key);
       });
+      return req.result;
     },
-    async setdata(table, valuekey) {
-
-      let value = []
-      if (table === 'delete_todos') {
-        value['_id'] = valuekey
-      }else {
-        value = valuekey
-      }
-
+    async setdata(table, value) {
+      let req;
       console.log('setdata', table, value)
 
-      return await withStore('readwrite', table, store  => {
-        store.put(value);
+      await withStore('readwrite', table, store  => {
+        req = store.put(value);
       });
+      return req.result;
     },
     async delete(key) {
       return await withStore('readwrite', 'keyval', store => {

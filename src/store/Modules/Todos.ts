@@ -77,12 +77,20 @@ namespace Actions {
   }
 
   async function dbSaveTodo(context, itemtodo: ITodo) {
-    console.log('dbSaveTodo', itemtodo)
+    return await dbInsertSaveTodo(context, itemtodo, 'PATCH')
+  }
+
+  async function dbInsertTodo(context, itemtodo: ITodo) {
+    return await dbInsertSaveTodo(context, itemtodo, 'POST')
+  }
+
+  async function dbInsertSaveTodo(context, itemtodo: ITodo, method) {
+    console.log('dbInsertSaveTodo', itemtodo, method)
     let call = process.env.MONGODB_HOST + '/todos/' + itemtodo._id
 
     const token = UserStore.state.idToken
 
-    let res = await Api.SendReq(call, UserStore.state.lang, token, 'PATCH', itemtodo)
+    let res = await Api.SendReq(call, UserStore.state.lang, token, method, itemtodo)
       .then(function (res) {
         return rescodes.OK
       })
@@ -127,6 +135,7 @@ namespace Actions {
   }
 
   export const actions = {
+    dbInsertTodo: b.dispatch(dbInsertTodo),
     dbSaveTodo: b.dispatch(dbSaveTodo),
     dbLoadTodo: b.dispatch(dbLoadTodo),
     dbDeleteTodo: b.dispatch(dbDeleteTodo),
