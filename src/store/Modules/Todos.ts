@@ -90,13 +90,15 @@ namespace Actions {
     console.log('ITEM', newItem)
     if (method === 'POST') {
       state.todos.push(newItem)
-    } else if (method === 'PATCH') {
-      state.todos.map(item => {
-        if (item._id === newItem._id) {
-          return newItem
-        }
-      })
+    // } else if (method === 'PATCH') {
+    //   state.todos.map(item => {
+    //     if (item._id === newItem._id) {
+    //       return newItem
+    //     }
+    //   })
     }
+
+
     console.log('DOPO state.todos', state.todos)
   }
 
@@ -117,9 +119,9 @@ namespace Actions {
         if (newItem) {
           const newId = newItem._id
 
-          if (method === 'PATCH') {
-            newItem = newItem.todo
-          }
+          // if (method === 'PATCH') {
+          //   newItem = newItem.todo
+          // }
 
           // Update ID on local
           UpdateNewIdFromDB(itemtodo, newItem, method)
@@ -136,14 +138,18 @@ namespace Actions {
     return res
   }
 
-  async function dbDeleteTodo(context, id: String) {
-    console.log('dbDeleteTodo', id)
-    let call = process.env.MONGODB_HOST + '/todos/' + id
+  async function dbDeleteTodo(context, item: ITodo) {
+    console.log('dbDeleteTodo', item)
+    let call = process.env.MONGODB_HOST + '/todos/' + item._id
 
     const token = UserStore.state.idToken
 
-    let res = await Api.SendReq(call, UserStore.state.lang, token, 'DELETE', id)
+    let res = await Api.SendReq(call, UserStore.state.lang, token, 'DELETE', item)
       .then(function (res) {
+
+        // Delete Item in to Array
+        state.todos.splice(state.todos.indexOf(item), 1)
+
         return rescodes.OK
       })
       .catch((error) => {

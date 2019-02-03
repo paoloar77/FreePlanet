@@ -1,5 +1,5 @@
 export interface ITodo {
-  _id?: string,
+  _id?: any,
   userId: string
   category?: string
   descr?: string,

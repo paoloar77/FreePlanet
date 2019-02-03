@@ -160,7 +160,8 @@ export const rescodes = {
         checked: false
       }
       ]
-  }
+  },
+
 
 
 }

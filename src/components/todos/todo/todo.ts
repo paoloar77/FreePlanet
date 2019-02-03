@@ -9,6 +9,9 @@ import { rescodes } from '../../../store/Modules/rescodes'
 import { Todos } from '@store'
 import { UserStore } from '@store'
 
+import objectId from '../../../js/objectId.js'
+
+
 import _ from 'lodash'
 
 import draggable from 'vuedraggable'
@@ -283,7 +286,7 @@ export default class Todo extends Vue {
   }
 
   copy(o) {
-    var output, v, key
+    let output, v, key
     output = Array.isArray(o) ? [] : {}
     for (key in o) {
       v = o[key]
@@ -291,6 +294,7 @@ export default class Todo extends Vue {
     }
     return output
   }
+
 
   initcat() {
 
@@ -301,7 +305,8 @@ export default class Todo extends Vue {
     console.log('User:' + UserStore.state.userId)
 
     const objtodo: ITodo = {
-      _id: new Date().toISOString(),  // Create NEW
+      // _id: new Date().toISOString(),  // Create NEW
+      _id: objectId(),
       userId: UserStore.state.userId,
       descr: '',
       priority: rescodes.Todos.PRIORITY_NORMAL,
@@ -389,7 +394,7 @@ export default class Todo extends Vue {
     console.log('cmdToSyncAndDb', cmd, table, method, item, id, msg)
 
     const mythis = this
-    if (false && ('serviceWorker' in navigator && 'SyncManager' in window)) {
+    if (('serviceWorker' in navigator && 'SyncManager' in window)) {
       await navigator.serviceWorker.ready
         .then(function (sw) {
           // _id: new Date().toISOString(),
@@ -421,7 +426,7 @@ export default class Todo extends Vue {
         else if (method === 'PATCH')
           Todos.actions.dbSaveTodo(item)
       } else if (cmd === rescodes.DB.CMD_DELETE_TODOS)
-        Todos.actions.dbDeleteTodo(id)
+        Todos.actions.dbDeleteTodo(item)
     }
   }
 
@@ -430,8 +435,8 @@ export default class Todo extends Vue {
   }
 
 
-  deleteItemToSyncAndDb(table: String, id) {
-    return this.cmdToSyncAndDb(rescodes.DB.CMD_DELETE_TODOS, table, 'DELETE', null, id, 'Your Post was canceled for syncing!')
+  deleteItemToSyncAndDb(table: String, item: ITodo, id) {
+    return this.cmdToSyncAndDb(rescodes.DB.CMD_DELETE_TODOS, table, 'DELETE', item, id, 'Your Post was canceled for syncing!')
   }
 
   /*
@@ -483,7 +488,7 @@ export default class Todo extends Vue {
         this.modify(myobjnext, false)
       }
 
-      this.deleteItemToSyncAndDb(rescodes.DB.TABLE_DELETE_TODOS, id)
+      this.deleteItemToSyncAndDb(rescodes.DB.TABLE_DELETE_TODOS, myobjtrov, id)
 
       const mythis = this
       // Delete item
