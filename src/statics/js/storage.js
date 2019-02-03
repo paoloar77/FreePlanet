@@ -1,4 +1,4 @@
-let let idbKeyval = (() => {
+let idbKeyval = (() => {
   let db;
 
   function getDB() {
@@ -52,7 +52,7 @@ let let idbKeyval = (() => {
         console.log('store', store, 'key', key)
         req = store.get(key);
       });
-      console.log('RISFINALE!', req.result)
+      // console.log('RISFINALE!', req.result)
       return req.result;
     },
     async getalldata(table) {

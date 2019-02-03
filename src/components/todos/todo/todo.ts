@@ -38,6 +38,7 @@ export default class Todo extends Vue {
   itemDragStart: any = null
   itemDragEnd: any = null
   selrowid: number = 0
+  todos_global: ITodo[] = []
 
   // @Prop({ required: false }) category: string
 
@@ -52,6 +53,11 @@ export default class Todo extends Vue {
   @Watch('$route.params.category') changecat() {
     // console.log('changecat')
     this.load()
+  }
+
+  @Watch('todos_global') refresh() {
+    console.log('Todos.state.todos CHANGED!')
+    this.updatetable(true)
   }
 
   getCategory() {
@@ -252,6 +258,9 @@ export default class Todo extends Vue {
 
   async load() {
 
+    this.todos_global = Todos.state.todos
+    this.todos_arr = [...Todos.state.todos]
+
 
     // Set last category selected
     localStorage.setItem(rescodes.localStorage.categorySel, this.getCategory())
@@ -273,9 +282,21 @@ export default class Todo extends Vue {
 
   }
 
+  copy(o) {
+    var output, v, key
+    output = Array.isArray(o) ? [] : {}
+    for (key in o) {
+      v = o[key]
+      output[key] = (typeof v === 'object') ? this.copy(v) : v
+    }
+    return output
+  }
+
   initcat() {
 
-    const mydateexp = new Date().setDate((new Date()).getDate() + 1)
+
+    let mydatenow = new Date().getDate()
+    let mydateexp = new Date().getDate() + 10
 
     console.log('User:' + UserStore.state.userId)
 
@@ -285,9 +306,9 @@ export default class Todo extends Vue {
       descr: '',
       priority: rescodes.Todos.PRIORITY_NORMAL,
       completed: false,
-      created_at: new Date(),
-      modify_at: new Date(),
-      completed_at: null,
+      created_at: mydatenow,
+      modify_at: mydatenow,
+      completed_at: 0,
       category: '',
       expiring_at: mydateexp,
       enableExpiring: false,
@@ -297,7 +318,7 @@ export default class Todo extends Vue {
       modified: true,
       progress: 0
     }
-    return objtodo
+    return this.copy(objtodo)
 
   }
 
@@ -479,11 +500,21 @@ export default class Todo extends Vue {
   }
 
   async updatetable(refresh: boolean = false) {
-    await this.filtertodos(refresh)
+    console.log('updatetable')
+
+    return await Todos.actions.getTodosByCategory(this.getCategory())
+      .then(arrtemp => {
+
+        arrtemp = _.orderBy(arrtemp, ['completed', 'priority', 'pos'], ['asc', 'desc', 'asc'])
+
+        this.updateLinkedList(true, arrtemp)
+
+        this.todos_arr = [...arrtemp]  // make copy
+      })
   }
 
   clearArr() {
-    this.todos_arr = []
+    // this.todos_arr = []
   }
 
   existArr(x) {
@@ -539,21 +570,6 @@ export default class Todo extends Vue {
 
     return myarr
 
-
-  }
-
-  async filtertodos(refresh: boolean = false) {
-    console.log('filtertodos')
-
-    return await Todos.actions.getTodosByCategory(this.getCategory())
-      .then(arrtemp => {
-
-        arrtemp = _.orderBy(arrtemp, ['completed', 'priority', 'pos'], ['asc', 'desc', 'asc'])
-
-        this.updateLinkedList(true, arrtemp)
-
-        this.todos_arr = [...arrtemp]  // make copy
-      })
 
   }
 
@@ -650,7 +666,7 @@ export default class Todo extends Vue {
 
         this.modifyField(miorec, myobj, 'descr')
         if (this.modifyField(miorec, myobj, 'completed'))
-          miorec.completed_at = new Date()
+          miorec.completed_at = new Date().getDate()
 
         this.modifyField(miorec, myobj, 'category')
         this.modifyField(miorec, myobj, 'expiring_at')
@@ -663,7 +679,7 @@ export default class Todo extends Vue {
 
 
         if (miorec.modified) {
-          miorec.modify_at = new Date()
+          miorec.modify_at = new Date().getDate()
 
           // this.logelem('modify', miorec)
 
@@ -677,6 +693,22 @@ export default class Todo extends Vue {
             })
         }
       })
+  }
+
+  clicktest () {
+    console.log('clicktest!')
+
+    const objtodo = this.initcat()
+    objtodo.descr = 'PROVA'
+    objtodo.category = this.getCategory()
+    Todos.state.todos.push(objtodo)
+
+    console.log('Todos.state.todos', Todos.state.todos)
+  }
+
+  clicktest2 () {
+    this.updatetable(false)
+    console.log('Todos.state.todos', Todos.state.todos)
   }
 
 }

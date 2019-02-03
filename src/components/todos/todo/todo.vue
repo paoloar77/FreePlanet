@@ -35,6 +35,14 @@
                      :after="[{icon: 'arrow_forward', content: true, handler () {}}]"
                      v-on:keyup.enter="insertTodo"/>
 
+            <div class="flex-item btn-item">
+            <q-btn class="mybtn" round color="" icon="lock" @click="clicktest()"></q-btn>
+            </div>
+
+            <div class="flex-item btn-item">
+                <q-btn class="mybtn" round color="" icon="person" @click="clicktest2()"></q-btn>
+            </div>
+
         </div>
     </q-page>
 

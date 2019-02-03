@@ -32,7 +32,8 @@ async function readfromIndexDbToStateTodos(context) {
   return await storage.getalldata('todos')
     .then(ristodos => {
       console.log('&&&&&&& readfromIndexDbToStateTodos OK: Num RECORD: ', ristodos.length)
-      UserStore.state.todos = ristodos
+      console.log('ristodos:', ristodos)
+      UserStore.state.todos = [...ristodos]
     }).catch((error) => {
     console.log('err: ', error)
   })

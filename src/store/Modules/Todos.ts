@@ -57,7 +57,8 @@ namespace Actions {
       }).then((resData) => {
         state.networkDataReceived = true
 
-        state.todos = resData.todos
+        console.log('******* UPDATE TODOS.STATE.TODOS !:', resData.todos)
+        state.todos = [...resData.todos]
 
         // After Login will store into the indexedDb...
 
@@ -84,6 +85,21 @@ namespace Actions {
     return await dbInsertSaveTodo(context, itemtodo, 'POST')
   }
 
+  function UpdateNewIdFromDB(oldItem, newItem, method) {
+    console.log('PRIMA state.todos', state.todos)
+    console.log('ITEM', newItem)
+    if (method === 'POST') {
+      state.todos.push(newItem)
+    } else if (method === 'PATCH') {
+      state.todos.map(item => {
+        if (item._id === newItem._id) {
+          return newItem
+        }
+      })
+    }
+    console.log('DOPO state.todos', state.todos)
+  }
+
   async function dbInsertSaveTodo(context, itemtodo: ITodo, method) {
     console.log('dbInsertSaveTodo', itemtodo, method)
     let call = process.env.MONGODB_HOST + '/todos/' + itemtodo._id
@@ -91,8 +107,23 @@ namespace Actions {
     const token = UserStore.state.idToken
 
     let res = await Api.SendReq(call, UserStore.state.lang, token, method, itemtodo)
-      .then(function (res) {
-        return rescodes.OK
+      .then( function(response) {
+        if (response)
+          return response.json()
+        else
+          return null
+      }).then(newItem => {
+        console.log('RESDATA =', newItem)
+        if (newItem) {
+          const newId = newItem._id
+
+          if (method === 'PATCH') {
+            newItem = newItem.todo
+          }
+
+          // Update ID on local
+          UpdateNewIdFromDB(itemtodo, newItem, method)
+        }
       })
       .catch((error) => {
         if (process.env.DEV) {
@@ -101,7 +132,6 @@ namespace Actions {
         }
         return rescodes.ERR_GENERICO
       })
-
 
     return res
   }
