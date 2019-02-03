@@ -31,18 +31,12 @@ async function readfromIndexDbToStateTodos(context, table) {
 
   return await storage.getalldata(table)
     .then(records => {
-      console.log('PRIMA:', Todos.state.todos)
       console.log('&&&&&&& readfromIndexDbToStateTodos OK: Num RECORD: ', records.length)
-      console.log('   records:', records)
       if (table === 'todos') {
         Todos.state.todos = [...records]
-        console.log('DOPO:', Todos.state.todos)
         Todos.state.todos_changed++
         console.log('Todos.state.todos_changed:', Todos.state.todos_changed)
-
-        setTimeout(testfunc2, 3000)
-
-
+        // setTimeout(testfunc2, 3000)
       }
     }).catch((error) => {
     console.log('err: ', error)

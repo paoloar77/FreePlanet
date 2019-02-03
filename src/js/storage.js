@@ -50,7 +50,7 @@ export let idbKeyval = (() => {
       let req;
 
       await withStore('readonly', table, store => {
-        console.log('store', store, 'key', key)
+        // console.log('store', store, 'key', key)
         req = store.get(key);
       });
       // console.log('RISFINALE!', req.result)
@@ -72,7 +72,7 @@ export let idbKeyval = (() => {
     },
     async setdata(table, value) {
       let req;
-      console.log('setdata', table, value)
+      // console.log('setdata', table, value)
 
       await withStore('readwrite', table, store  => {
         req = store.put(value);

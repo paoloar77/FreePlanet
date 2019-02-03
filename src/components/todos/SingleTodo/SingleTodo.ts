@@ -61,7 +61,7 @@ export default class SingleTodo extends Vue {
   }
 
 
-  @Watch('itemtodo.descr') valueChanged5() {
+  @Watch('itemtodo.descr',) valueChanged5() {
     this.precDescr = this.itemtodo.descr
   }
 

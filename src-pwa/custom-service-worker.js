@@ -255,11 +255,11 @@ self.addEventListener('sync', function (event) {
       event.waitUntil(
         readAllData(table)
           .then(function (alldata) {
-            console.log('data: ', alldata)
             if (alldata) {
               for (var rec of alldata) {
+                //console.log('syncing', table, '', rec.descr)
                 let link = cfgenv.serverweb + '/todos/' + rec._id
-                console.log('FETCH: ', method, link, 'data:', JSON.stringify(rec))
+                console.log('syncing', table, 'FETCH: ', method, link, 'data:', rec.descr)
 
                 // Insert/Delete/Update table to the server
                 fetch(link, {
@@ -269,13 +269,13 @@ self.addEventListener('sync', function (event) {
                   body: JSON.stringify(rec)
                 })
                   .then(function (resData) {
-                    console.log('Result data Todo:', resData);
+                    console.log('Result CALL ', method, ' OK? =', resData.ok);
                     if (resData.ok) {
                       deleteItemFromData(table, rec._id);
                     }
                   })
                   .catch(function (err) {
-                    console.log('Error while sending data', err);
+                    console.log('!!!!!!!!!!!!!!!   Error while sending data', err);
                   });
               }
             }

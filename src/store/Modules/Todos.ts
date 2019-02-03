@@ -42,7 +42,7 @@ namespace Mutations {
 
   export const mutations = {
     setTestpao: b.commit(setTestpao),
-    setTodos_changed: b.commit(setTodos_changed),
+    setTodos_changed: b.commit(setTodos_changed)
   }
 
 }
@@ -100,12 +100,17 @@ namespace Actions {
       console.log('NETWORK UNREACHABLE ! (Error in fetch)')
       consolelogpao('NETWORK UNREACHABLE ! (Error in fetch)')
       // Read all data from IndexedDB Store into Memory
-      await globalroutines(null, 'updateinMemory', 'todos', null)
-        .then(() => {
-
-          testfunc()
-        })
+      await updateArrayInMemory(context)
     }
+  }
+
+  async function updateArrayInMemory(context) {
+    console.log('Update the array in memory, from todos table from IndexedDb')
+    await globalroutines(null, 'updateinMemory', 'todos', null)
+      .then(() => {
+        console.log('updateArrayInMemory! ')
+        return true
+      })
   }
 
   function aspettansec(numsec) {
@@ -119,9 +124,8 @@ namespace Actions {
   async function testfunc() {
     while (true) {
       consolelogpao('testfunc')
-      // Todos.mutations.setTodos_changed()
       Todos.state.todos_changed++
-      console.log('Todos.state.todos_changed:', Todos.state.todos_changed)
+      // console.log('Todos.state.todos_changed:', Todos.state.todos_changed)
       await aspettansec(5000)
     }
   }
@@ -224,6 +228,7 @@ namespace Actions {
     dbSaveTodo: b.dispatch(dbSaveTodo),
     dbLoadTodo: b.dispatch(dbLoadTodo),
     dbDeleteTodo: b.dispatch(dbDeleteTodo),
+    updateArrayInMemory: b.dispatch(updateArrayInMemory),
     getTodosByCategory: b.dispatch(getTodosByCategory)
   }
 
