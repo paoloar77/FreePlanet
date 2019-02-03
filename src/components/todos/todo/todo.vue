@@ -35,6 +35,9 @@
                      :after="[{icon: 'arrow_forward', content: true, handler () {}}]"
                      v-on:keyup.enter="insertTodo"/>
 
+            <q-input v-model="testPao" float-label="testPao"/>
+            <q-input v-model="todos_changed" float-label="todos_changed"/>
+
             <div class="flex-item btn-item">
             <q-btn class="mybtn" round color="" icon="lock" @click="clicktest()"></q-btn>
             </div>

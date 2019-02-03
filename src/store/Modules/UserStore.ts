@@ -7,6 +7,7 @@ import router from '@router'
 import { serv_constants } from '../Modules/serv_constants'
 import { rescodes } from '../Modules/rescodes'
 import { GlobalStore, UserStore, Todos } from '@store'
+import globalroutines from './../../globalroutines/index'
 
 const bcrypt = require('bcryptjs')
 
@@ -348,7 +349,7 @@ namespace Actions {
           })
           .catch((error) => {
             if (process.env.DEV) {
-              console.log('ERROREEEEEEEEE')
+              console.log('signup ERROREEEEEEEEE')
               console.log(error)
             }
             Mutations.mutations.setServerCode(rescodes.ERR_GENERICO)
@@ -450,8 +451,7 @@ namespace Actions {
       })
       .catch((error) => {
         if (process.env.DEV) {
-          console.log('ERROREEEEEEEEE')
-          console.log(error)
+          console.log('signin ERRORE', error)
         }
         Mutations.mutations.setServerCode(rescodes.ERR_GENERICO)
         return rescodes.ERR_GENERICO
@@ -497,7 +497,10 @@ namespace Actions {
     GlobalStore.mutations.setCategorySel(localStorage.getItem(rescodes.localStorage.categorySel))
 
     Todos.actions.dbLoadTodo()
+
+
   }
+
 
   async function autologin (context) {
     try {

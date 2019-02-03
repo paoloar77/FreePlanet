@@ -41,7 +41,7 @@ export default class Todo extends Vue {
   itemDragStart: any = null
   itemDragEnd: any = null
   selrowid: number = 0
-  todos_global: ITodo[] = []
+  todos_global: any
 
   // @Prop({ required: false }) category: string
 
@@ -53,13 +53,34 @@ export default class Todo extends Vue {
     console.log('drag = ' + this.drag)
   }
 
+  @Watch('$route', { immediate: true, deep: true })
+  onUrlChange(newVal: any) {
+    // Some action
+  }
+
+
   @Watch('$route.params.category') changecat() {
     // console.log('changecat')
     this.load()
   }
 
-  @Watch('todos_global') refresh() {
-    console.log('Todos.state.todos CHANGED!')
+  get todos_changed() {
+    return Todos.state.todos_changed
+  }
+
+  @Watch('todos_changed', { immediate: true, deep: true })
+  changetodos_changed(value: string, oldValue: string) {
+    console.log('Todos.state.todos_changed CHANGED!', value, oldValue)
+    this.updatetable(true)
+  }
+
+  get testPao() {
+    return Todos.state.testpao
+  }
+
+  @Watch('testPao', { immediate: true, deep: true })
+  changedTestpao(value: string, oldValue: string) {
+    console.log('testpao CHANGED', value, oldValue)
     this.updatetable(true)
   }
 
@@ -258,12 +279,10 @@ export default class Todo extends Vue {
     // console.log('Array PRIOR:', this.arrPrior)
   }
 
-
   async load() {
 
-    this.todos_global = Todos.state.todos
+    this.todos_global = Todos.state.todos_changed
     this.todos_arr = [...Todos.state.todos]
-
 
     // Set last category selected
     localStorage.setItem(rescodes.localStorage.categorySel, this.getCategory())
@@ -494,7 +513,6 @@ export default class Todo extends Vue {
       // Delete item
       await globalroutines(this, 'delete', 'todos', null, id)
         .then((ris) => {
-          console.log('UpdateTable', ris)
           mythis.updatetable()
         }).catch((error) => {
           console.log('err: ', error)

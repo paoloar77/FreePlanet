@@ -1,15 +1,18 @@
-import { ITodo, ITodosState } from 'model'
+import { IGlobalState, ITodo, ITodosState } from 'model'
 import { storeBuilder } from './Store/Store'
 
 import Api from '@api'
 import { rescodes } from './rescodes'
-import { UserStore } from '@store'
+import { Todos, UserStore } from '@store'
+import globalroutines from './../../globalroutines/index'
 
 
 const state: ITodosState = {
   visuOnlyUncompleted: false,
   networkDataReceived: false,
-  todos: []
+  todos: [],
+  todos_changed: 1,
+  testpao: 'Test'
 }
 
 const b = storeBuilder.module<ITodosState>('TodosModule', state)
@@ -29,7 +32,25 @@ namespace Getters {
 
 namespace Mutations {
 
+  function setTestpao(state: ITodosState, testpao: String) {
+    state.testpao = testpao
+  }
+
+  function setTodos_changed(state: ITodosState) {
+    state.todos_changed++
+  }
+
+  export const mutations = {
+    setTestpao: b.commit(setTestpao),
+    setTodos_changed: b.commit(setTodos_changed),
+  }
+
 }
+
+function consolelogpao(strlog, strlog2 = '', strlog3 = '') {
+  globalroutines(null, 'log', strlog + strlog2 + strlog3, null)
+}
+
 
 namespace Actions {
 
@@ -67,14 +88,42 @@ namespace Actions {
       })
       .catch((error) => {
         if (process.env.DEV) {
-          console.log('ERROREEEEEEEEE')
+          console.log('dbLoadTodo ERRORE', error)
           console.log(error)
         }
+        // If error network connection, take the data from IndexedDb
+
         return rescodes.ERR_GENERICO
       })
 
+    if (!Todos.state.networkDataReceived) {
+      console.log('NETWORK UNREACHABLE ! (Error in fetch)')
+      consolelogpao('NETWORK UNREACHABLE ! (Error in fetch)')
+      // Read all data from IndexedDB Store into Memory
+      await globalroutines(null, 'updateinMemory', 'todos', null)
+        .then(() => {
 
+          testfunc()
+        })
+    }
+  }
 
+  function aspettansec(numsec) {
+    return new Promise(function (resolve, reject) {
+      setTimeout(function () {
+        resolve('anything')
+      }, numsec)
+    })
+  }
+
+  async function testfunc() {
+    while (true) {
+      consolelogpao('testfunc')
+      // Todos.mutations.setTodos_changed()
+      Todos.state.todos_changed++
+      console.log('Todos.state.todos_changed:', Todos.state.todos_changed)
+      await aspettansec(5000)
+    }
   }
 
   async function dbSaveTodo(context, itemtodo: ITodo) {
@@ -90,12 +139,12 @@ namespace Actions {
     console.log('ITEM', newItem)
     if (method === 'POST') {
       state.todos.push(newItem)
-    // } else if (method === 'PATCH') {
-    //   state.todos.map(item => {
-    //     if (item._id === newItem._id) {
-    //       return newItem
-    //     }
-    //   })
+      // } else if (method === 'PATCH') {
+      //   state.todos.map(item => {
+      //     if (item._id === newItem._id) {
+      //       return newItem
+      //     }
+      //   })
     }
 
 
@@ -109,7 +158,7 @@ namespace Actions {
     const token = UserStore.state.idToken
 
     let res = await Api.SendReq(call, UserStore.state.lang, token, method, itemtodo)
-      .then( function(response) {
+      .then(function (response) {
         if (response)
           return response.json()
         else
@@ -129,7 +178,7 @@ namespace Actions {
       })
       .catch((error) => {
         if (process.env.DEV) {
-          console.log('ERROREEEEEEEEE')
+          console.log('ERRORE FETCH', 'dbInsertSaveTodo', method)
           console.log(error)
         }
         return rescodes.ERR_GENERICO
@@ -154,7 +203,7 @@ namespace Actions {
       })
       .catch((error) => {
         if (process.env.DEV) {
-          console.log('ERROREEEEEEEEE', error)
+          console.log('ERRORE FETCH', 'dbDeleteTodo')
         }
         return rescodes.ERR_GENERICO
       })
@@ -187,7 +236,7 @@ const TodosModule = {
     return stateGetter()
   },
   getters: Getters.getters,
-  // mutations: Mutations.mutations,
+  mutations: Mutations.mutations,
   actions: Actions.actions
 }
 

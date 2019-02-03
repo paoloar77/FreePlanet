@@ -21,4 +21,6 @@ export interface ITodosState {
   visuOnlyUncompleted: boolean
   networkDataReceived: boolean
   todos: ITodo[]
+  todos_changed: number
+  testpao: String
 }
