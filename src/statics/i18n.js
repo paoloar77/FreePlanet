@@ -1,6 +1,7 @@
 const messages = {
   it: {
     dialog: {
+      ok: 'Ok',
       yes: 'Si',
       no: 'No',
       delete: 'Elimina',
@@ -103,10 +104,21 @@ const messages = {
       edit: 'Descrizione Task:',
       completed: 'Completati',
       usernotdefined: 'Attenzione, occorre essere Loggati per poter aggiungere un Todo'
+    },
+    notification : {
+      ask: 'Attiva le Notifiche',
+      waitingconfirm: 'Conferma la richiesta di Notifica',
+      confirmed: 'Notifiche Attivate!',
+      denied: 'Notifiche Disabilitate! Attenzione così non vedrai arrivarti i messaggi. Riabilitali per vederli.',
+      titlegranted: 'Permesso Notifiche Abilitato!',
+      titledenied: 'Permesso Notifiche Disabilitato!',
+      title_subscribed: 'Sottoscrizione a FreePlanet.app!',
+      subscribed: 'Ora potrai ricevere i messaggi e le notifiche.'
     }
   },
   enUk: {
     dialog: {
+      ok: 'Ok',
       yes: 'Yes',
       no: 'No',
       delete: 'Delete',
@@ -209,6 +221,16 @@ const messages = {
       edit: 'Task Description:',
       completed: 'Completed',
       usernotdefined: 'Attention, you need to be Signed In to add a new Task'
+    },
+    notification : {
+      ask: 'Enable Notification',
+      waitingconfirm: 'Confirm the Request Notification',
+      confirmed: 'Notifications Enabled!',
+      denied: 'Notifications Disabled! Attention, you will not see your messages incoming. Reenable it for see it',
+      titlegranted: 'Notification Permission Granted!',
+      titledenied: 'Notification Permission Denied!',
+      title_subscribed: 'Subscribed to FreePlanet.app!',
+      subscribed: 'You can now receive Notification and Messages.'
     }
   },
 };

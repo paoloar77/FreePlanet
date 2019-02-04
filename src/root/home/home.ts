@@ -43,8 +43,13 @@ export default class Home extends Vue {
     this.showNotification(String(my))
   }
 
-  showNotification(msg: string) {
-    this.$q.notify(msg)
+  showNotification(message: string, color = 'primary', icon = '') {
+    this.$q.notify({
+      color,
+      icon,
+      message
+    })
+
   }
 
   initprompt() {
@@ -53,6 +58,80 @@ export default class Home extends Vue {
       event.preventDefault()
       console.log('§§§§§§§§§§§§§§§§§§§§  IMPOSTA DEFERRED PROMPT  !!!!!!!!!!!!!!!!!  ')
       return false
+    })
+
+  }
+
+  getPermission () {
+    return Notification.permission
+  }
+
+  displayConfirmNotification() {
+    let options = null
+    if ('serviceWorker' in navigator) {
+      options = {
+        body: 'You successfully subscribed to our Notification service!',
+        icon: '/src/images/icons/app-icon-96x96.png',
+        image: '/src/images/sf-boat.jpg',
+        dir: 'ltr',
+        lang: 'en-US', // BCP 47,
+        vibrate: [100, 50, 200],
+        badge: '/src/images/icons/app-icon-96x96.png',
+        tag: 'confirm-notification',
+        renotify: true,  // if it's already sent, will Vibrate anyway
+        actions: [
+          { action: 'confirm', title: 'Okay', icon: '/src/images/icons/app-icon-96x96.png' },
+          { action: 'cancel', title: 'Cancel', icon: '/src/images/icons/app-icon-96x96.png' }
+        ]
+      }
+
+      navigator.serviceWorker.ready
+        .then(function(swreg) {
+          swreg.showNotification('Successfully subscribed!', options)
+        })
+    }
+  }
+
+  showNotificationExample() {
+    let options = null
+    let mythis = this
+    if ('serviceWorker' in navigator) {
+      options = {
+        body: mythis.$t('notification.subscribed'),
+        icon: '/statics/icons/android-chrome-192x192.png',
+        image: '/statics/images/freeplanet.png',
+        dir: 'ltr',
+        lang: 'en-US', // BCP 47,
+        vibrate: [100, 50, 200],
+        badge: '/statics/icons/android-chrome-192x192.png',
+        tag: 'confirm-notification',
+        renotify: true,  // if it's already sent, will Vibrate anyway
+        actions: [
+          { action: 'confirm', title: mythis.$t('dialog.ok'), icon: '/statics/icons/android-chrome-192x192.png', }
+          // { action: 'cancel', title: 'Cancel', icon: '/statics/icons/android-chrome-192x192.png', }
+        ]
+      }
+
+      navigator.serviceWorker.ready
+        .then(function(swreg) {
+          swreg.showNotification(mythis.$t('notification.title_subscribed'), options)
+        })
+    }
+  }
+
+  askfornotification () {
+    this.showNotification(this.$t('notification.waitingconfirm'), 'positive', 'notifications')
+
+    let mythis = this
+    Notification.requestPermission(function(result) {
+      console.log('User Choice', result)
+      if (result === 'granted') {
+        mythis.showNotification(mythis.$t('notification.confirmed'), 'positive', 'notifications')
+      } else {
+        mythis.showNotification(mythis.$t('notification.denied'), 'negative', 'notifications')
+
+        // displayConfirmNotification();
+      }
     })
 
   }
