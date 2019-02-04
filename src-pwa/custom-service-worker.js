@@ -277,9 +277,12 @@ self.addEventListener('sync', function (event) {
                   })
                     .then(function (resData) {
                       console.log('Result CALL ', method, ' OK? =', resData.ok);
-                      if (resData.ok) {
-                        deleteItemFromData(table, rec._id);
-                      }
+
+                      // Anyway Delete this, otherwise in some cases will return error, but it's not a problem.
+                      // for example if I change a record and then I deleted ...
+                      // if (resData.ok) {
+                      deleteItemFromData(table, rec._id);
+                      // }
 
                       console.log('DELETE: ', mystrparam)
                       deleteItemFromData('swmsg', mystrparam)

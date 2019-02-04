@@ -41,6 +41,7 @@ export default class Todo extends Vue {
   itemDragStart: any = null
   itemDragEnd: any = null
   selrowid: number = 0
+  polling = null
 
   fieldtochange: String [] = ['descr', 'completed', 'category', 'expiring_at', 'priority', 'id_prev', 'id_next', 'pos', 'enableExpiring', 'progress']
 
@@ -307,6 +308,10 @@ export default class Todo extends Vue {
     // console.log('Array PRIOR:', this.arrPrior)
   }
 
+  beforedestroy() {
+    clearInterval(this.polling)
+  }
+
   async load() {
 
     this.todos_arr = [...Todos.state.todos]
@@ -323,12 +328,22 @@ export default class Todo extends Vue {
 
     await this.updatetable()
 
+
+    this.checkUpdate_everytime()
+
     /*
         this.todos_arr.forEach((elem, index) => {
           this.logelem('LOAD ' + index, elem)
         })
     */
 
+  }
+
+  // Call to check if need to refresh
+  checkUpdate_everytime() {
+    this.polling = setInterval(() => {
+      this.checkUpdate()
+      }, 10000)
   }
 
   copy(o) {

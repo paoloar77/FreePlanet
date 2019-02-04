@@ -61,7 +61,7 @@ export default class SingleTodo extends Vue {
   }
 
 
-  @Watch('itemtodo.descr',) valueChanged5() {
+  @Watch('itemtodo.descr') valueChanged5() {
     this.precDescr = this.itemtodo.descr
   }
 
@@ -234,6 +234,8 @@ export default class SingleTodo extends Vue {
 
   exitEdit(singola: boolean = false) {
     if (this.inEdit) {
+      if (this.precDescr !== this.itemtodo.descr)
+        this.updateTodo()
       // console.log('exitEdit')
       this.inEdit = false
       this.updateClasses
@@ -243,11 +245,30 @@ export default class SingleTodo extends Vue {
 
 
   keyDownArea(e) {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault()
+/*
+    if ((e.key === 'ArrowUp') && !e.shiftKey) {
+      e.key = 'Tab'
+      e.shiftKey = true
+    }
+
+    if ((e.key === 'ArrowDown') && !e.shiftKey) {
+      let nextInput = inputs.get(inputs.index(this) + 1)
+      if (nextInput) {
+        nextInput.focus()
+      }
+    }
+*/
+
+    if (((e.key === 'Enter') || (e.key === 'Tab')) && !e.shiftKey) {
       this.updateTodo()
-      this.deselectRiga()
-      this.faiFocus('insertTask', true)
+
+      if ((e.key === 'Tab') && !e.shiftKey) {
+
+      } else {
+        e.preventDefault()
+        this.deselectRiga()
+        this.faiFocus('insertTask', true)
+      }
     }
 
     // console.log('keyDownArea', e)
@@ -261,6 +282,9 @@ export default class SingleTodo extends Vue {
   }
 
   updateTodo() {
+    if (this.itemtodo.descr === this.precDescr)
+      return
+
     this.itemtodo.descr = this.precDescr
     console.log('updateTodo', this.precDescr, this.itemtodo.descr)
     this.watchupdate()

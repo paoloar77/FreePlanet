@@ -105,12 +105,12 @@ namespace Actions {
 
     await aspettansec(1000)
 
-    console.log('waitAndcheckPendingMsg')
+    // console.log('waitAndcheckPendingMsg')
 
     return await checkPendingMsg(context)
       .then(ris => {
-        console.log('ris = ', ris)
         if (ris) {
+          console.log('ris = ', ris)
           const result = sendSwMsgIfAvailable()
             .then(something => {
               if (something) {
@@ -132,7 +132,7 @@ namespace Actions {
   }
 
   async function checkPendingMsg(context) {
-    console.log('checkPendingMsg')
+    // console.log('checkPendingMsg')
 
     return new Promise(function (resolve, reject) {
 
@@ -145,8 +145,8 @@ namespace Actions {
       // Check if there is something
       globalroutines(null, 'count', 'swmsg')
         .then(function (count) {
-          console.log('count = ', count)
           if (count > 0) {
+            console.log('count = ', count)
             return resolve(true)
           } else {
             return resolve(false)
