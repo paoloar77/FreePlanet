@@ -17,7 +17,7 @@ function saveConfigIndexDb(context) {
 }
 
 function writeConfigIndexDb(context, data) {
-  console.log('writeConfigIndexDb', data)
+  // console.log('writeConfigIndexDb', data)
 
   storage.setdata('config', data)
     .then(ris => {
@@ -27,15 +27,15 @@ function writeConfigIndexDb(context, data) {
 }
 
 async function readfromIndexDbToStateTodos(context, table) {
-  console.log('*** read from IndexDb to state.todos')
+  // console.log('*** read from IndexDb to state.todos')
 
   return await storage.getalldata(table)
     .then(records => {
-      console.log('&&&&&&& readfromIndexDbToStateTodos OK: Num RECORD: ', records.length)
+      // console.log('&&&&&&& readfromIndexDbToStateTodos OK: Num RECORD: ', records.length)
       if (table === 'todos') {
         Todos.state.todos = [...records]
         Todos.state.todos_changed++
-        console.log('Todos.state.todos_changed:', Todos.state.todos_changed)
+        // console.log('Todos.state.todos_changed:', Todos.state.todos_changed)
         // setTimeout(testfunc2, 3000)
       }
     }).catch((error) => {
@@ -67,6 +67,8 @@ export default async (context, cmd, table, datakey = null, id = '') => {
     return await readfromIndexDbToStateTodos(context, table)
   } else if (cmd === 'readall') {
     return await storage.getalldata(table)
+  } else if (cmd === 'count') {
+    return await storage.count(table)
   } else if (cmd === 'read') {
     return await storage.getdata(table, id)
   } else if (cmd === 'delete') {

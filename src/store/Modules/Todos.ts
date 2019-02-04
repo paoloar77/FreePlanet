@@ -12,7 +12,9 @@ const state: ITodosState = {
   networkDataReceived: false,
   todos: [],
   todos_changed: 1,
-  testpao: 'Test'
+  reload_fromServer: false,
+  testpao: 'Test',
+  insidePending: false
 }
 
 const b = storeBuilder.module<ITodosState>('TodosModule', state)
@@ -63,8 +65,103 @@ namespace Actions {
     return result
   }
 
-  async function dbLoadTodo(context) {
-    console.log('dbLoadTodo')
+  // If something in the call of Service Worker went wrong (Network or Server Down), then retry !
+  async function sendSwMsgIfAvailable() {
+
+    console.log(' -------- sendSwMsgIfAvailable')
+
+    let something = false
+
+    let count = await checkPendingMsg(null)
+    if (count > 0) {
+      if (('serviceWorker' in navigator && 'SyncManager' in window)) {
+        return navigator.serviceWorker.ready
+          .then(function (sw) {
+
+            globalroutines(null, 'readall', 'swmsg')
+              .then(function (arr_recmsg) {
+                let recclone = [...arr_recmsg]
+                if (arr_recmsg.length > 0) {
+
+                  console.log('      TROVATI MSG PENDENTI ! ORA LI MANDO: ', arr_recmsg)
+
+                  console.log('----------------------  2)    navigator (2) .serviceWorker.ready')
+
+                  something = true
+                  for (let rec of arr_recmsg) {
+                    console.log('             .... sw.sync.register ( ', rec._id)
+                    sw.sync.register(rec._id)
+                  }
+                }
+                return something
+              })
+          })
+      }
+    }
+    return something
+  }
+
+  async function waitAndcheckPendingMsg(context) {
+
+    await aspettansec(1000)
+
+    console.log('waitAndcheckPendingMsg')
+
+    return await checkPendingMsg(context)
+      .then(ris => {
+        console.log('ris = ', ris)
+        if (ris) {
+          const result = sendSwMsgIfAvailable()
+            .then(something => {
+              if (something) {
+                // Refresh data
+                waitAndRefreshData(context)
+              }
+            })
+        }
+      })
+
+  }
+
+  async function waitAndRefreshData(context) {
+    await aspettansec(3000)
+
+    console.log('waitAndRefreshData')
+
+    return await dbLoadTodo(context, false)
+  }
+
+  async function checkPendingMsg(context) {
+    console.log('checkPendingMsg')
+
+    return new Promise(function (resolve, reject) {
+
+      /*
+              globalroutines(null, 'readall', 'swmsg')
+                .then(function (arr_recmsg) {
+                  if (arr_recmsg.length > 0) {
+      */
+
+      // Check if there is something
+      globalroutines(null, 'count', 'swmsg')
+        .then(function (count) {
+          console.log('count = ', count)
+          if (count > 0) {
+            return resolve(true)
+          } else {
+            return resolve(false)
+          }
+        })
+        .catch(e => {
+          return reject()
+        })
+    })
+
+
+  }
+
+  async function dbLoadTodo(context, checkPending: boolean = false) {
+    console.log('dbLoadTodo', checkPending)
 
     const token = UserStore.state.idToken
 
@@ -78,29 +175,36 @@ namespace Actions {
       }).then((resData) => {
         state.networkDataReceived = true
 
-        console.log('******* UPDATE TODOS.STATE.TODOS !:', resData.todos)
+        // console.log('******* UPDATE TODOS.STATE.TODOS !:', resData.todos)
         state.todos = [...resData.todos]
+        Todos.state.todos_changed++
+
+        console.log('state.todos', state.todos, 'checkPending', checkPending)
 
         // After Login will store into the indexedDb...
 
-        console.log('state.todos', state.todos)
         return rescodes.OK
       })
       .catch((error) => {
         if (process.env.DEV) {
-          console.log('dbLoadTodo ERRORE', error)
-          console.log(error)
+          // console.log('dbLoadTodo ERRORE', error)
         }
         // If error network connection, take the data from IndexedDb
 
         return rescodes.ERR_GENERICO
       })
 
+    console.log('fine della funz...')
+
     if (!Todos.state.networkDataReceived) {
       console.log('NETWORK UNREACHABLE ! (Error in fetch)')
       consolelogpao('NETWORK UNREACHABLE ! (Error in fetch)')
       // Read all data from IndexedDB Store into Memory
       await updateArrayInMemory(context)
+    } else {
+      if (ris === rescodes.OK && checkPending) {
+        waitAndcheckPendingMsg(context)
+      }
     }
   }
 
@@ -108,7 +212,7 @@ namespace Actions {
     console.log('Update the array in memory, from todos table from IndexedDb')
     await globalroutines(null, 'updateinMemory', 'todos', null)
       .then(() => {
-        console.log('updateArrayInMemory! ')
+        // console.log('updateArrayInMemory! ')
         return true
       })
   }
@@ -229,7 +333,9 @@ namespace Actions {
     dbLoadTodo: b.dispatch(dbLoadTodo),
     dbDeleteTodo: b.dispatch(dbDeleteTodo),
     updateArrayInMemory: b.dispatch(updateArrayInMemory),
-    getTodosByCategory: b.dispatch(getTodosByCategory)
+    getTodosByCategory: b.dispatch(getTodosByCategory),
+    checkPendingMsg: b.dispatch(checkPendingMsg),
+    waitAndcheckPendingMsg: b.dispatch(waitAndcheckPendingMsg)
   }
 
 }

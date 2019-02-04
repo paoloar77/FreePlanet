@@ -3,13 +3,13 @@
  * when building for PRODUCTION
  */
 
-import {register} from 'register-service-worker'
+import { register } from 'register-service-worker'
 
 register(process.env.SERVICE_WORKER_FILE, {
     ready() {
       console.log('READY::: App is being served from cache by a service worker.')
-
     },
+
     registered(registration) { // registration -> a ServiceWorkerRegistration instance
       console.log('REGISTERED::: !!!', process.env.SERVICE_WORKER_FILE)
 
@@ -33,8 +33,6 @@ register(process.env.SERVICE_WORKER_FILE, {
 );
 
 // ServiceWorkerRegistration: https://developer.mozilla.org/en-uk/docs/Web/API/ServiceWorkerRegistration
-
-
 
 
 //    "build": "quasar build -m pwa && workbox generateSW workbox-config.js",

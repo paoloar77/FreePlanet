@@ -70,11 +70,27 @@ export default class Todo extends Vue {
     return Todos.state.todos_changed
   }
 
+  get reload_fromServer() {
+    return Todos.state.reload_fromServer
+  }
+
+
   @Watch('todos_changed', { immediate: true })
   changetodos_changed(value: string, oldValue: string) {
-    console.log('Todos.state.todos_changed CHANGED!', value, oldValue)
+    // console.log('Todos.state.todos_changed CHANGED!', value, oldValue)
     this.updatetable(true)
   }
+
+  @Watch('reload_fromServer', { immediate: true })
+  reload_fromServer_changed(value: string, oldValue: string) {
+    console.log('reload_fromServer_changed!', value, oldValue)
+    if (value) {
+      Todos.actions.dbLoadTodo(false)
+
+      Todos.actions.updateArrayInMemory()
+    }
+  }
+
 
   get testPao() {
     return Todos.state.testpao
@@ -82,7 +98,7 @@ export default class Todo extends Vue {
 
   @Watch('testPao', { immediate: true, deep: true })
   changedTestpao(value: string, oldValue: string) {
-    console.log('testpao CHANGED', value, oldValue)
+    // console.log('testpao CHANGED', value, oldValue)
     this.updatetable(true)
   }
 
@@ -372,7 +388,7 @@ export default class Todo extends Vue {
 
     const objtodo = this.initcat()
 
-    console.log('autologin userId STATE ', UserStore.state.userId)
+    console.log('insertTodo ', UserStore.state.userId)
 
     objtodo.descr = this.todo
     objtodo.category = this.getCategory()
@@ -424,6 +440,11 @@ export default class Todo extends Vue {
 
     console.log('cmdToSyncAndDb', cmd, table, method, item.descr, id, msg)
 
+    let cmdSw = cmd
+    if ((cmd === rescodes.DB.CMD_SYNC_NEW_TODOS) || (cmd === rescodes.DB.CMD_DELETE_TODOS)) {
+      cmdSw = rescodes.DB.CMD_SYNC_TODOS
+    }
+
     const mythis = this
     if (('serviceWorker' in navigator && 'SyncManager' in window)) {
       await navigator.serviceWorker.ready
@@ -438,11 +459,18 @@ export default class Todo extends Vue {
               // console.log('id', id)
               const sep = '|'
 
-              let multiparams = cmd + sep + table + sep + method + sep + UserStore.state.idToken + sep + UserStore.state.lang
-              return sw.sync.register(multiparams)
+              let multiparams = cmdSw + sep + table + sep + method + sep + UserStore.state.idToken + sep + UserStore.state.lang
+              console.log('   SENDING... sw.sync.register', multiparams)
+              let mymsgkey = {
+                _id: multiparams,
+                value: multiparams
+              }
+              globalroutines(mythis, 'write', 'swmsg', mymsgkey, multiparams)
+                .then(ris => {
+                  return sw.sync.register(multiparams)
+                })
             })
             .then(function () {
-              console.log('USCITO dalla sw.sync.register(multiparams) ')
 
               let snackbarContainer = document.querySelector('#confirmation-toast')
               let data = { message: msg }
@@ -462,7 +490,7 @@ export default class Todo extends Vue {
       }
 
     } else {
-      if (cmd === rescodes.DB.CMD_SYNC_TODOS) {
+      if (cmd === rescodes.DB.CMD_SYNC_NEW_TODOS) {
         if (method === 'POST')
           Todos.actions.dbInsertTodo(item)
         else if (method === 'PATCH')
@@ -473,7 +501,7 @@ export default class Todo extends Vue {
   }
 
   async saveItemToSyncAndDb(table: String, method, item: ITodo, update: boolean) {
-    return await this.cmdToSyncAndDb(rescodes.DB.CMD_SYNC_TODOS, table, method, item, 0, 'Your Post was saved for syncing!', update)
+    return await this.cmdToSyncAndDb(rescodes.DB.CMD_SYNC_NEW_TODOS, table, method, item, 0, 'Your Post was saved for syncing!', update)
   }
 
 
@@ -558,7 +586,7 @@ export default class Todo extends Vue {
   }
 
   async updatetable(refresh: boolean = false) {
-    console.log('updatetable')
+    // console.log('updatetable')
 
     this.prevRecords = [...this.todos_arr]
 
@@ -749,7 +777,7 @@ export default class Todo extends Vue {
           globalroutines(this, 'write', 'todos', miorec)
             .then(ris => {
 
-              this.saveItemToSyncAndDb(rescodes.DB.TABLE_SYNC_TODOS, 'PATCH', miorec, update)
+              this.saveItemToSyncAndDb(rescodes.DB.TABLE_SYNC_TODOS_PATCH, 'PATCH', miorec, update)
                 .then(() => {
                   // console.log('SET MODIFIED FALSE')
 
@@ -776,6 +804,10 @@ export default class Todo extends Vue {
   clicktest2() {
     this.updatetable(false)
     console.log('Todos.state.todos', Todos.state.todos)
+  }
+
+  checkUpdate () {
+    Todos.actions.waitAndcheckPendingMsg()
   }
 
 }

@@ -105,14 +105,15 @@ if (workbox) {
     function (args) {
       return fetch(args.event.request, args.event.headers)
         .then(function (res) {
-          console.log('*******  registerRoute fetch: (1) ', args.event)
+          // console.log('1° *******  registerRoute fetch: ', args.event)
+          // LOAD FROM SERVER , AND SAVE INTO INDEXEDDB
           var clonedRes = res.clone();
           clearAllData('todos')
             .then(function () {
               return clonedRes.json();
             })
             .then(function (data) {
-              console.log('2) data Received ', data.todos)
+              console.log('Records TODOS Received from Server [', data.todos.length, 'record]', data.todos)
               for (let key in data.todos) {
                 writeData('todos', data.todos[key])
               }
@@ -234,53 +235,65 @@ if ('serviceWorker' in navigator) {
 // })
 
 self.addEventListener('sync', function (event) {
-  console.log('[Service Worker V5] Background syncing', event);
+  console.log('[Service Worker V5] Background syncing', event.tag);
 
-  let multiparams = event.tag.split('|')
-  if (multiparams && multiparams.length > 3) {
-    let cmd = multiparams[0]
-    let table = multiparams[1]
-    let method = multiparams[2]
-    let token = multiparams[3]
-    // let lang = multiparams[3]
+  let mystrparam = event.tag
+  let multiparams = mystrparam.split('|')
+  if (multiparams) {
+    if (multiparams.length > 3) {
+      let cmd = multiparams[0]
+      let table = multiparams[1]
+      let method = multiparams[2]
+      let token = multiparams[3]
+      // let lang = multiparams[3]
 
-    if ((cmd === 'sync-new-todos') || (cmd === 'sync-delete-todos')) {
-      console.log('[Service Worker] Syncing', cmd, table, method);
+      if (cmd === 'sync-todos') {
+        console.log('[Service Worker] Syncing', cmd, table, method);
 
-      const headers = new Headers()
-      headers.append('content-Type', 'application/json')
-      headers.append('Accept', 'application/json')
-      headers.append('x-auth', token)
+        const headers = new Headers()
+        headers.append('content-Type', 'application/json')
+        headers.append('Accept', 'application/json')
+        headers.append('x-auth', token)
 
-      event.waitUntil(
-        readAllData(table)
-          .then(function (alldata) {
-            if (alldata) {
-              for (var rec of alldata) {
-                //console.log('syncing', table, '', rec.descr)
-                let link = cfgenv.serverweb + '/todos/' + rec._id
-                console.log('syncing', table, 'FETCH: ', method, link, 'data:', rec.descr)
+        console.log('A1) INIZIO.............................................................');
 
-                // Insert/Delete/Update table to the server
-                fetch(link, {
-                  method: method,
-                  headers: headers,
-                  mode: 'cors',   // 'no-cors',
-                  body: JSON.stringify(rec)
-                })
-                  .then(function (resData) {
-                    console.log('Result CALL ', method, ' OK? =', resData.ok);
-                    if (resData.ok) {
-                      deleteItemFromData(table, rec._id);
-                    }
+        event.waitUntil(
+          readAllData(table)
+            .then(function (alldata) {
+              const myrecs = [...alldata]
+              console.log('----------------------- LEGGO QUALCOSA DAL WAITUNTIL ')
+              if (myrecs) {
+                for (let rec of myrecs) {
+                  //console.log('syncing', table, '', rec.descr)
+                  let link = cfgenv.serverweb + '/todos/' + rec._id
+                  console.log('++++++++++++++++++ SYNCING !!!!  ', rec.descr, table, 'FETCH: ', method, link, 'data:')
+
+                  // Insert/Delete/Update table to the server
+                  fetch(link, {
+                    method: method,
+                    headers: headers,
+                    mode: 'cors',   // 'no-cors',
+                    body: JSON.stringify(rec)
                   })
-                  .catch(function (err) {
-                    console.log('!!!!!!!!!!!!!!!   Error while sending data', err);
-                  });
+                    .then(function (resData) {
+                      console.log('Result CALL ', method, ' OK? =', resData.ok);
+                      if (resData.ok) {
+                        deleteItemFromData(table, rec._id);
+                      }
+
+                      console.log('DELETE: ', mystrparam)
+                      deleteItemFromData('swmsg', mystrparam)
+
+                    })
+                    .catch(function (err) {
+                      console.log('!!!!!!!!!!!!!!!   Error while sending data', err);
+                    });
+                }
               }
-            }
-          })
-      );
+            })
+        );
+        console.log('A2) ?????????????????????????? ESCO DAL LOOP !!!!!!!!! err=')
+      }
     }
   }
 })

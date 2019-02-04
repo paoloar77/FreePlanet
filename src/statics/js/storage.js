@@ -3,7 +3,7 @@ let idbKeyval = (() => {
 
   function getDB() {
     if (!db) {
-      console.log('CREO DB STORAGE JS !')
+      // console.log('CREO DB STORAGE JS !')
       db = new Promise((resolve, reject) => {
         const openreq = indexedDB.open('mydb3', 11);
 
@@ -15,8 +15,10 @@ let idbKeyval = (() => {
           // First time setup: create an empty object store
           openreq.result.createObjectStore('todos', { keyPath: '_id' });
           openreq.result.createObjectStore('sync_todos', { keyPath: '_id' });
+          openreq.result.createObjectStore('sync_todos_patch', { keyPath: '_id' });
           openreq.result.createObjectStore('delete_todos', { keyPath: '_id' });
           openreq.result.createObjectStore('config', { keyPath: '_id' });
+          openreq.result.createObjectStore('swmsg', { keyPath: '_id' });
         };
 
         openreq.onsuccess = () => {
@@ -71,7 +73,7 @@ let idbKeyval = (() => {
     },
     async setdata(table, value) {
       let req;
-      console.log('setdata', table, value.descr)
+      console.log('setdata', table, value)
 
       await withStore('readwrite', table, store  => {
         req = store.put(value);

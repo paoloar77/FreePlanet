@@ -1,10 +1,9 @@
-
 export let idbKeyval = (() => {
   let db;
 
   function getDB() {
     if (!db) {
-      console.log('CREO DB STORAGE JS !')
+      // console.log('CREO DB STORAGE JS !')
       db = new Promise((resolve, reject) => {
         const openreq = indexedDB.open('mydb3', 11);
 
@@ -16,8 +15,10 @@ export let idbKeyval = (() => {
           // First time setup: create an empty object store
           openreq.result.createObjectStore('todos', { keyPath: '_id' });
           openreq.result.createObjectStore('sync_todos', { keyPath: '_id' });
+          openreq.result.createObjectStore('sync_todos_patch', { keyPath: '_id' });
           openreq.result.createObjectStore('delete_todos', { keyPath: '_id' });
           openreq.result.createObjectStore('config', { keyPath: '_id' });
+          openreq.result.createObjectStore('swmsg', { keyPath: '_id' });
         };
 
         openreq.onsuccess = () => {
@@ -50,7 +51,7 @@ export let idbKeyval = (() => {
       let req;
 
       await withStore('readonly', table, store => {
-        // console.log('store', store, 'key', key)
+        console.log('store', store, 'key', key)
         req = store.get(key);
       });
       // console.log('RISFINALE!', req.result)
@@ -63,6 +64,13 @@ export let idbKeyval = (() => {
       });
       return req.result;
     },
+    async count(table) {
+      let req;
+      await withStore('readonly', table, store => {
+        req = store.count();
+      });
+      return req.result;
+    },
     async set(key, value) {
       let req;
       await withStore('readwrite', 'keyval', store => {
@@ -72,7 +80,7 @@ export let idbKeyval = (() => {
     },
     async setdata(table, value) {
       let req;
-      // console.log('setdata', table, value)
+      console.log('setdata', table, value)
 
       await withStore('readwrite', table, store  => {
         req = store.put(value);

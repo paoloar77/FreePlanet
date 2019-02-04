@@ -496,7 +496,7 @@ namespace Actions {
     GlobalStore.mutations.setleftDrawerOpen(localStorage.getItem(rescodes.localStorage.leftDrawerOpen) === 'true')
     GlobalStore.mutations.setCategorySel(localStorage.getItem(rescodes.localStorage.categorySel))
 
-    Todos.actions.dbLoadTodo()
+    Todos.actions.dbLoadTodo(true)
 
 
   }
