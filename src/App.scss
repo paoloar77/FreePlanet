@@ -1,0 +1,41 @@
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .2s;
+}
+
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */
+{
+  opacity: 0;
+}
+
+.slide-enter {
+}
+
+.slide-enter-active {
+  animation: slide-in 0.2s ease-out forwards;
+}
+
+.slide-leave {
+}
+
+.slide-leave-active {
+  animation: slide-out 0.5s ease-out forwards;
+}
+
+@keyframes slide-in {
+  from {
+    transform: translateX(-500px);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes slide-out {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(1600px);
+  }
+}

@@ -1,3 +1,5 @@
+import objectId from "./objectId";
+
 console.log('utility.js')
 
 // var dbPromise = idb.open('mydb1', 1, function (db) {
@@ -79,3 +81,5 @@ function dataURItoBlob(dataURI) {
   var blob = new Blob([ab], { type: mimeString });
   return blob;
 }
+
+export default urlBase64ToUint8Array

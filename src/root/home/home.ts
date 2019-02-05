@@ -25,6 +25,8 @@ export default class Home extends Vue {
 
   created() {
     // console.log('Home created...')
+
+    GlobalStore.actions.prova()
   }
 
   mystilecard() {
@@ -37,6 +39,7 @@ export default class Home extends Vue {
   get conta() {
     return GlobalStore.state.conta
   }
+
   set conta(valore) {
     GlobalStore.actions.setConta(valore)
     let my = this.$q.i18n.lang
@@ -62,7 +65,7 @@ export default class Home extends Vue {
 
   }
 
-  getPermission () {
+  getPermission() {
     return Notification.permission
   }
 
@@ -86,37 +89,37 @@ export default class Home extends Vue {
       }
 
       navigator.serviceWorker.ready
-        .then(function(swreg) {
+        .then(function (swreg) {
           swreg.showNotification('Successfully subscribed!', options)
         })
     }
   }
 
   urlBase64ToUint8Array(base64String) {
-    let padding = '='.repeat((4 - base64String.length % 4) % 4);
+    let padding = '='.repeat((4 - base64String.length % 4) % 4)
     let base64 = (base64String + padding)
       .replace(/\-/g, '+')
-      .replace(/_/g, '/');
+      .replace(/_/g, '/')
 
-    let rawData = window.atob(base64);
-    let outputArray = new Uint8Array(rawData.length);
+    let rawData = window.atob(base64)
+    let outputArray = new Uint8Array(rawData.length)
 
     for (let i = 0; i < rawData.length; ++i) {
-      outputArray[i] = rawData.charCodeAt(i);
+      outputArray[i] = rawData.charCodeAt(i)
     }
-    return outputArray;
+    return outputArray
   }
 
   dataURItoBlob(dataURI) {
-    let byteString = atob(dataURI.split(',')[1]);
+    let byteString = atob(dataURI.split(',')[1])
     let mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0]
-    let ab = new ArrayBuffer(byteString.length);
-    let ia = new Uint8Array(ab);
+    let ab = new ArrayBuffer(byteString.length)
+    let ia = new Uint8Array(ab)
     for (let i = 0; i < byteString.length; i++) {
-      ia[i] = byteString.charCodeAt(i);
+      ia[i] = byteString.charCodeAt(i)
     }
-    let blob = new Blob([ab], { type: mimeString });
-    return blob;
+    let blob = new Blob([ab], { type: mimeString })
+    return blob
   }
 
 
@@ -141,17 +144,17 @@ export default class Home extends Vue {
       }
 
       navigator.serviceWorker.ready
-        .then(function(swreg) {
-          swreg.showNotification(mythis.$t('notification.title_subscribed'), options)
+        .then(function (swreg) {
+          swreg.showNotification('aaa', options)
         })
     }
   }
 
-  askfornotification () {
+  askfornotification() {
     this.showNotification(this.$t('notification.waitingconfirm'), 'positive', 'notifications')
 
     let mythis = this
-    Notification.requestPermission(function(result) {
+    Notification.requestPermission(function (result) {
       console.log('User Choice', result)
       if (result === 'granted') {
         mythis.showNotification(mythis.$t('notification.confirmed'), 'positive', 'notifications')
@@ -164,54 +167,6 @@ export default class Home extends Vue {
 
   }
 
-  configurePushSub() {
-    if (!('serviceWorker' in navigator)) {
-      return
-    }
-
-    console.log('configurePushSub')
-
-    let reg
-    const mythis = this
-    const mykey = process.env.PUBLICKEY_PUSH
-    navigator.serviceWorker.ready
-      .then(function(swreg) {
-        reg = swreg
-        return swreg.pushManager.getSubscription()
-      })
-      .then(function(sub) {
-        if (sub === null) {
-          // Create a new subscription
-          let convertedVapidPublicKey = mythis.urlBase64ToUint8Array(mykey)
-          return reg.pushManager.subscribe({
-            userVisibleOnly: true,
-            applicationServerKey: convertedVapidPublicKey
-          })
-        } else {
-          // We have a subscription
-          return sub
-        }
-      })
-      .then(function(newSub) {
-        console.log('Body newSubscription: ', newSub)
-        return fetch(process.env.MONGODB_HOST + '/subscribe', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-          },
-          body: JSON.stringify(newSub)
-        })
-      })
-      .then(function(res) {
-        if (res.ok) {
-          mythis.showNotificationExample()
-        }
-      })
-      .catch(function(err) {
-        console.log(err)
-      })
-  }
 
 
   test_fetch() {

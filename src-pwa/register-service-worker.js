@@ -5,6 +5,8 @@
 
 import { register } from 'register-service-worker'
 
+
+
 register(process.env.SERVICE_WORKER_FILE, {
     ready() {
       console.log('READY::: App is being served from cache by a service worker.')
@@ -12,7 +14,6 @@ register(process.env.SERVICE_WORKER_FILE, {
 
     registered(registration) { // registration -> a ServiceWorkerRegistration instance
       console.log('REGISTERED::: !!!', process.env.SERVICE_WORKER_FILE)
-
     },
     cached(registration) {
       console.log('CACHED::: Content has been cached for offline use.')

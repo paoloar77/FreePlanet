@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import { Component, Prop, Watch } from 'vue-property-decorator'
-import { UserStore } from '@store'
+import { GlobalStore, UserStore } from '@store'
 import { rescodes } from '../../../store/Modules/rescodes'
 import { serv_constants } from '../../../store/Modules/serv_constants'
 
@@ -120,6 +120,8 @@ export default class Signin extends Vue {
         if (riscode === rescodes.OK) {
           router.push('/signin')
           globalroutines(this, 'loadapp', '')
+
+          GlobalStore.actions.createPushSubscription()
         }
         this.checkErrors(riscode)
         this.$q.loading.hide()
