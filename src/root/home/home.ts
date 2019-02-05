@@ -71,17 +71,17 @@ export default class Home extends Vue {
     if ('serviceWorker' in navigator) {
       options = {
         body: 'You successfully subscribed to our Notification service!',
-        icon: '/src/images/icons/app-icon-96x96.png',
+        icon: '/statics/icons/app-icon-96x96.png',
         image: '/src/images/sf-boat.jpg',
         dir: 'ltr',
         lang: 'en-US', // BCP 47,
         vibrate: [100, 50, 200],
-        badge: '/src/images/icons/app-icon-96x96.png',
+        badge: '/statics/icons/app-icon-96x96.png',
         tag: 'confirm-notification',
         renotify: true,  // if it's already sent, will Vibrate anyway
         actions: [
-          { action: 'confirm', title: 'Okay', icon: '/src/images/icons/app-icon-96x96.png' },
-          { action: 'cancel', title: 'Cancel', icon: '/src/images/icons/app-icon-96x96.png' }
+          { action: 'confirm', title: 'Okay', icon: '/statics/icons/app-icon-96x96.png' },
+          { action: 'cancel', title: 'Cancel', icon: '/statics/icons/app-icon-96x96.png' }
         ]
       }
 
@@ -91,6 +91,34 @@ export default class Home extends Vue {
         })
     }
   }
+
+  urlBase64ToUint8Array(base64String) {
+    let padding = '='.repeat((4 - base64String.length % 4) % 4);
+    let base64 = (base64String + padding)
+      .replace(/\-/g, '+')
+      .replace(/_/g, '/');
+
+    let rawData = window.atob(base64);
+    let outputArray = new Uint8Array(rawData.length);
+
+    for (let i = 0; i < rawData.length; ++i) {
+      outputArray[i] = rawData.charCodeAt(i);
+    }
+    return outputArray;
+  }
+
+  dataURItoBlob(dataURI) {
+    let byteString = atob(dataURI.split(',')[1]);
+    let mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0]
+    let ab = new ArrayBuffer(byteString.length);
+    let ia = new Uint8Array(ab);
+    for (let i = 0; i < byteString.length; i++) {
+      ia[i] = byteString.charCodeAt(i);
+    }
+    let blob = new Blob([ab], { type: mimeString });
+    return blob;
+  }
+
 
   showNotificationExample() {
     let options = null
@@ -135,6 +163,56 @@ export default class Home extends Vue {
     })
 
   }
+
+  configurePushSub() {
+    if (!('serviceWorker' in navigator)) {
+      return
+    }
+
+    console.log('configurePushSub')
+
+    let reg
+    const mythis = this
+    const mykey = process.env.PUBLICKEY_PUSH
+    navigator.serviceWorker.ready
+      .then(function(swreg) {
+        reg = swreg
+        return swreg.pushManager.getSubscription()
+      })
+      .then(function(sub) {
+        if (sub === null) {
+          // Create a new subscription
+          let convertedVapidPublicKey = mythis.urlBase64ToUint8Array(mykey)
+          return reg.pushManager.subscribe({
+            userVisibleOnly: true,
+            applicationServerKey: convertedVapidPublicKey
+          })
+        } else {
+          // We have a subscription
+          return sub
+        }
+      })
+      .then(function(newSub) {
+        console.log('Body newSubscription: ', newSub)
+        return fetch(process.env.MONGODB_HOST + '/subscribe', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          body: JSON.stringify(newSub)
+        })
+      })
+      .then(function(res) {
+        if (res.ok) {
+          mythis.showNotificationExample()
+        }
+      })
+      .catch(function(err) {
+        console.log(err)
+      })
+  }
+
 
   test_fetch() {
     fetch('https:/httpbin.org/post', {

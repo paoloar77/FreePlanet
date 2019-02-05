@@ -389,8 +389,8 @@ self.addEventListener('push', function(event) {
 
   var options = {
     body: data.content,
-    icon: '/src/images/icons/app-icon-96x96.png',
-    badge: '/src/images/icons/app-icon-96x96.png',
+    icon: '/statics/icons/android-chrome-192x192.png',
+    badge: '/statics/icons/android-chrome-192x192.png',
     data: {
       url: data.openUrl
     }

@@ -4,6 +4,7 @@
 
         <q-btn v-if="getPermission() !== 'granted'" class="enable-notifications" color="primary" rounded size="lg" icon="notifications" @click="askfornotification" :label="$t('notification.ask')"/>
         <q-btn v-if="getPermission() === 'granted'" class="enable-notifications" color="primary" rounded size="lg" icon="notifications" @click="showNotificationExample" label="Send Notification"/>
+        <q-btn v-if="getPermission() === 'granted'" class="enable-notifications" color="secondary" rounded size="lg" icon="notifications" @click="configurePushSub" label="Send Push Notification !"/>
         <br>
         <div>
             <q-chip square color="secondary">
