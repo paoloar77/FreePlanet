@@ -27,7 +27,7 @@ const state: IUserState = {
   verifiedEmail: false,
   categorySel: 'personal',
   servercode: 0,
-  x_auth_token: ''
+  x_auth_token: '',
 }
 
 
@@ -76,8 +76,7 @@ namespace Getters {
     },
     get getServerCode() {
       return getServerCode()
-    }
-
+    },
   }
 
 
@@ -334,6 +333,7 @@ namespace Actions {
               localStorage.setItem(rescodes.localStorage.token, x_auth_token)
               localStorage.setItem(rescodes.localStorage.expirationDate, expirationDate.toString())
               localStorage.setItem(rescodes.localStorage.verifiedEmail, '0')
+              state.isLogged = true
               // dispatch('storeUser', authData);
               // dispatch('setLogoutTimer', myres.data.expiresIn);
 
@@ -476,6 +476,7 @@ namespace Actions {
   }
 
   function setGlobal() {
+    state.isLogged = true
     GlobalStore.mutations.setleftDrawerOpen(localStorage.getItem(rescodes.localStorage.leftDrawerOpen) === 'true')
     GlobalStore.mutations.setCategorySel(localStorage.getItem(rescodes.localStorage.categorySel))
 
@@ -506,6 +507,7 @@ namespace Actions {
       let expirationDate = new Date(String(expirationDateStr))
       const now = new Date()
       if (now >= expirationDate) {
+        console.log('!!! Login Expired')
         return false
       }
       const userId = String(localStorage.getItem(rescodes.localStorage.userId))

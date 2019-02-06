@@ -85,11 +85,11 @@ export default class Todo extends Vue {
   @Watch('reload_fromServer', { immediate: true })
   reload_fromServer_changed(value: string, oldValue: string) {
     console.log('reload_fromServer_changed!', value, oldValue)
-    if (value) {
+    // if (value) {
       Todos.actions.dbLoadTodo(false)
 
       Todos.actions.updateArrayInMemory()
-    }
+    // }
   }
 
 
@@ -397,9 +397,19 @@ export default class Todo extends Vue {
     return ''
   }
 
+  isRegistered() {
+    return localStorage.getItem(rescodes.localStorage.userId) !== ''
+  }
+
   async insertTodo() {
     if (this.todo.trim() === '')
       return
+
+    if (!this.isRegistered()) {
+      // Not logged
+      this.$q.notify(this.$t('user.notregistered'))
+      return
+    }
 
     const objtodo = this.initcat()
 

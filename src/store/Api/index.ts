@@ -79,19 +79,17 @@ export namespace ApiTool {
               }
               return reject(e)
             }
-
-            return res.json()
-              .then((body) => {
-                return resolve({res, body})
-              })
-              .catch(e => {
-                UserStore.mutations.setServerCode(rescodes.ERR_GENERICO)
-                return reject(e)
-              })
-
-          } else {
-            return resolve({res, body: res.body})
           }
+
+          return res.json()
+            .then((body) => {
+              return resolve({ res, body })
+            })
+            .catch(e => {
+              UserStore.mutations.setServerCode(rescodes.ERR_GENERICO)
+              return reject(e)
+            })
+
         })
         .catch(error => {
           if (process.env.DEV) {

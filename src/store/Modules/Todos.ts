@@ -80,12 +80,12 @@ namespace Actions {
 
             globalroutines(null, 'readall', 'swmsg')
               .then(function (arr_recmsg) {
-                let recclone = [...arr_recmsg]
+                // let recclone = [...arr_recmsg]
                 if (arr_recmsg.length > 0) {
 
                   console.log('      TROVATI MSG PENDENTI ! ORA LI MANDO: ', arr_recmsg)
 
-                  console.log('----------------------  2)    navigator (2) .serviceWorker.ready')
+                  // console.log('----------------------  2)    navigator (2) .serviceWorker.ready')
 
                   something = true
                   for (let rec of arr_recmsg) {

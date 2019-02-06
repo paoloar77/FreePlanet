@@ -113,9 +113,11 @@ if (workbox) {
               return clonedRes.json();
             })
             .then(function (data) {
-              console.log('Records TODOS Received from Server [', data.todos.length, 'record]', data.todos)
-              for (let key in data.todos) {
-                writeData('todos', data.todos[key])
+              if (data.todos) {
+                console.log('Records TODOS Received from Server [', data.todos.length, 'record]', data.todos)
+                for (let key in data.todos) {
+                  writeData('todos', data.todos[key])
+                }
               }
             });
           return res
@@ -278,7 +280,11 @@ self.addEventListener('sync', function (event) {
               if (myrecs) {
                 for (let rec of myrecs) {
                   //console.log('syncing', table, '', rec.descr)
-                  let link = cfgenv.serverweb + '/todos/' + rec._id
+                  let link = cfgenv.serverweb + '/todos'
+
+                  if (method !== 'POST')
+                    link += '/' + rec._id
+
                   console.log('++++++++++++++++++ SYNCING !!!!  ', rec.descr, table, 'FETCH: ', method, link, 'data:')
 
                   // Insert/Delete/Update table to the server
@@ -289,7 +295,7 @@ self.addEventListener('sync', function (event) {
                     body: JSON.stringify(rec)
                   })
                     .then(function (resData) {
-                      console.log('Result CALL ', method, ' OK? =', resData.ok);
+                      // console.log('Result CALL ', method, ' OK? =', resData.ok);
 
                       // Anyway Delete this, otherwise in some cases will return error, but it's not a problem.
                       // for example if I change a record and then I deleted ...

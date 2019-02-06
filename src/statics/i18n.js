@@ -52,6 +52,9 @@ const messages = {
       errore_generico: 'Errore Generico',
       errore_server: 'Impossibile accedere al Server. Riprovare Grazie',
     },
+    user: {
+      notregistered: 'Devi registrarti al servizio prima di porter memorizzare i dati'
+    },
     reg: {
       incorso: 'Registrazione in corso...',
       richiesto: 'Campo Richiesto',
@@ -172,6 +175,9 @@ const messages = {
     fetch: {
       errore_generico: 'Generic Error',
       errore_server: 'Unable to access to the Server. Retry. Thank you.',
+    },
+    user: {
+      notregistered: 'You need first to SignUp before storing data'
     },
     reg: {
       incorso: 'Registration please wait...',
