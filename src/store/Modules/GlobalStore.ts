@@ -3,6 +3,8 @@ import { storeBuilder } from './Store/Store'
 
 import Vue from 'vue'
 
+import translate from './../../globalroutines/util'
+
 import urlBase64ToUint8Array from '../../js/utility'
 
 import messages from '../../statics/i18n'
@@ -124,14 +126,17 @@ namespace Actions {
     console.log('context', context)
 
     const options = {
-      title: t('notification.title_subscribed'),
-      content: t('notification.subscribed'),
+      title: translate('notification.title_subscribed'),
+      content: translate('notification.subscribed'),
       openUrl: '/'
     }
 
     let myres = {
       options: { ...options },
-      subs: newSub
+      subs: newSub,
+      others: {
+        userId: UserStore.state.userId
+      }
     }
 
     return fetch(process.env.MONGODB_HOST + '/subscribe', {
@@ -158,7 +163,6 @@ namespace Actions {
     })
 
     return ris
-
   }
 
   function prova(context) {

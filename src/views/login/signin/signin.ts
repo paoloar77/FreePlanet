@@ -77,6 +77,11 @@ export default class Signin extends Vue {
     } else if (riscode === serv_constants.RIS_CODE_LOGIN_ERR) {
       this.showNotif(this.$t('login.errato'))
       this.$router.push('/signin')
+    } else if (riscode === rescodes.ERR_SERVERFETCH) {
+      this.showNotif(this.$t('fetch.errore_server'))
+    } else if (riscode === rescodes.ERR_GENERICO) {
+      let msg = this.$t('fetch.errore_generico') + UserStore.mutations.getMsgError(riscode)
+      this.showNotif(msg)
     } else {
       this.showNotif('Errore num ' + riscode)
     }
@@ -117,6 +122,7 @@ export default class Signin extends Vue {
     console.log(this.signin)
     UserStore.actions.signin(this.signin)
       .then((riscode) => {
+        console.log('riscode=', riscode)
         if (riscode === rescodes.OK) {
           router.push('/signin')
           globalroutines(this, 'loadapp', '')
@@ -127,6 +133,8 @@ export default class Signin extends Vue {
         this.$q.loading.hide()
       }).catch(error => {
       console.log('ERROR = ' + error)
+
+      this.checkErrors(error)
       this.$q.loading.hide()
     })
 

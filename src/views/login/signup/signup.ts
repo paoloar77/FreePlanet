@@ -124,17 +124,24 @@ export default class Signup extends Vue {
   }
 
   checkErrors(riscode: number) {
-    // console.log("RIS = " + riscode);
+    console.log('checkErrors', riscode)
     if (riscode === rescodes.DUPLICATE_EMAIL_ID) {
       this.showNotif(this.$t('reg.err.duplicate_email'))
     } else if (riscode === rescodes.DUPLICATE_USERNAME_ID) {
       this.showNotif(this.$t('reg.err.duplicate_username'))
+    } else if (riscode === rescodes.ERR_SERVERFETCH) {
+      this.showNotif(this.$t('fetch.errore_server'))
+    } else if (riscode === rescodes.ERR_GENERICO) {
+      let msg = this.$t('fetch.errore_generico') + UserStore.mutations.getMsgError(riscode)
+      this.showNotif(msg)
     } else if (riscode === rescodes.OK) {
       this.$router.push('/signin')
       this.showNotif({type: 'warning', textColor: 'black', message: this.$t('components.authentication.email_verification.link_sent')})
     } else {
       this.showNotif('Errore num ' + riscode)
     }
+
+
 
   }
 

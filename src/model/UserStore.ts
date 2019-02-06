@@ -27,4 +27,5 @@ export interface IUserState {
   tokenforgot?: string
 
   servercode?: number
+  x_auth_token?: string
 }

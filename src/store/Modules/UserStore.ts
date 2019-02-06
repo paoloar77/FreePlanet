@@ -9,12 +9,14 @@ import { rescodes } from '../Modules/rescodes'
 import { GlobalStore, UserStore, Todos } from '@store'
 import globalroutines from './../../globalroutines/index'
 
+import translate from './../../globalroutines/util'
+
 const bcrypt = require('bcryptjs')
 
 // State
 const state: IUserState = {
   userId: '',
-  email:  '',
+  email: '',
   username: '',
   idapp: process.env.APP_ID,
   password: '',
@@ -23,7 +25,9 @@ const state: IUserState = {
   idToken: '',
   tokens: [],
   verifiedEmail: false,
-  categorySel: 'personal'
+  categorySel: 'personal',
+  servercode: 0,
+  x_auth_token: ''
 }
 
 
@@ -52,14 +56,30 @@ namespace Getters {
     }
   }, 'tok')
 
+  const isServerError = b.read(state => {
+    return (state.servercode === rescodes.ERR_SERVERFETCH)
+  }, 'isServerError')
+
+  const getServerCode = b.read(state => {
+    return state.servercode
+  }, 'getServerCode')
+
   export const getters = {
     get lang() {
       return lang()
     },
     get tok() {
       return tok()
+    },
+    get isServerError() {
+      return isServerError()
+    },
+    get getServerCode() {
+      return getServerCode()
     }
+
   }
+
 
 }
 
@@ -102,6 +122,10 @@ namespace Mutations {
     state.servercode = num
   }
 
+  function setAuth(state: IUserState, x_auth_token: string) {
+    state.x_auth_token = x_auth_token
+  }
+
   function clearAuthData(state: IUserState) {
     state.userId = ''
     state.username = ''
@@ -111,6 +135,33 @@ namespace Mutations {
     state.categorySel = 'personal'
   }
 
+
+  function setErrorCatch(state: IUserState, err: number) {
+    if (state.servercode !== rescodes.ERR_SERVERFETCH) {
+      state.servercode = err
+    }
+  }
+
+  function getMsgError(state: IUserState, err: number) {
+    let msgerrore = ''
+    if (err !== rescodes.OK) {
+      msgerrore = 'Error [' + state.servercode + ']: '
+      if (state.servercode === rescodes.ERR_SERVERFETCH) {
+        msgerrore = translate('fetch.errore_server')
+      } else {
+        msgerrore = translate('fetch.errore_generico')
+      }
+
+      if (process.env.DEV) {
+        console.log('ERROREEEEEEEEE: ', msgerrore, ' (', err, ')')
+      }
+    }
+
+    // return { code: state.servercode, msg: msgerrore }
+    return msgerrore
+  }
+
+
   export const mutations = {
     authUser: b.commit(authUser),
     setpassword: b.commit(setpassword),
@@ -118,8 +169,12 @@ namespace Mutations {
     setlang: b.commit(setlang),
     UpdatePwd: b.commit(UpdatePwd),
     setServerCode: b.commit(setServerCode),
-    clearAuthData: b.commit(clearAuthData)
+    setAuth: b.commit(setAuth),
+    clearAuthData: b.commit(clearAuthData),
+    setErrorCatch: b.commit(setErrorCatch),
+    getMsgError: b.commit(getMsgError)
   }
+
 
 }
 
@@ -127,7 +182,7 @@ namespace Actions {
 
   async function sendUserEdit(context, form: Object) {
     try {
-      const {data} = await Api.postFormData('profile/edit', form)
+      const { data } = await Api.postFormData('profile/edit', form)
       console.log(data)
       // return new ApiSuccess({data})
 
@@ -136,7 +191,7 @@ namespace Actions {
     }
   }
 
-  async function resetpwd (context, paramquery: IUserState) {
+  async function resetpwd(context, paramquery: IUserState) {
     let call = process.env.MONGODB_HOST + '/updatepwd'
     console.log('CALL ' + call)
 
@@ -151,36 +206,18 @@ namespace Actions {
 
     Mutations.mutations.setServerCode(rescodes.CALLING)
 
-    let myres
-
-    let x_auth_token: string = ''
-
     return await Api.SendReq(call, state.lang, Getters.getters.tok, 'POST', usertosend)
-      .then((res) => {
-        console.log(res)
-        myres = res
-        x_auth_token = String(res.headers.get('x-auth'))
-        if (myres.status === 200) {
-          return myres.json()
-        }
-        Mutations.mutations.setServerCode(rescodes.ERR_GENERICO)
-        return { code: rescodes.ERR_GENERICO, msg: 'Errore: ' + myres.status, resetpwd: true }
-
-      })
-      .then((body) => {
-        Mutations.mutations.UpdatePwd({ idToken: x_auth_token })
-        localStorage.setItem(rescodes.localStorage.token, x_auth_token)
-
+      .then(({ res, body }) => {
         return { code: body.code, msg: body.msg }
-      }).catch((err) => {
-        console.log('ERROR: ' + err)
-        Mutations.mutations.setServerCode(rescodes.ERR_GENERICO)
-        return { code: rescodes.ERR_GENERICO, msg: 'Errore' }
+      })
+      .catch((error) => {
+        UserStore.mutations.setErrorCatch(error)
+        return UserStore.getters.getServerCode
       })
 
   }
 
-  async function requestpwd (context, paramquery: IUserState) {
+  async function requestpwd(context, paramquery: IUserState) {
 
     let call = process.env.MONGODB_HOST + '/requestnewpwd'
     console.log('CALL ' + call)
@@ -194,30 +231,17 @@ namespace Actions {
 
     Mutations.mutations.setServerCode(rescodes.CALLING)
 
-    let myres
-
     return await Api.SendReq(call, state.lang, Getters.getters.tok, 'POST', usertosend)
-      .then((res) => {
-        console.log(res)
-        myres = res
-        if (myres.status === 200) {
-          return myres.json()
-        }
-        Mutations.mutations.setServerCode(rescodes.ERR_GENERICO)
-        return { code: rescodes.ERR_GENERICO, msg: 'Errore: ' + myres.status, resetpwd: true }
-
-      })
-      .then((body) => {
+      .then(({ res, body }) => {
         return { code: body.code, msg: body.msg }
-      }).catch((err) => {
-        console.log('ERROR: ' + err)
-        Mutations.mutations.setServerCode(rescodes.ERR_GENERICO)
-        return { code: rescodes.ERR_GENERICO, msg: 'Errore' }
+      }).catch((error) => {
+        UserStore.mutations.setErrorCatch(error)
+        return UserStore.getters.getServerCode
       })
 
   }
 
-  async function vreg (context, paramquery: ILinkReg) {
+  async function vreg(context, paramquery: ILinkReg) {
     let call = process.env.MONGODB_HOST + '/vreg'
     console.log('CALL ' + call)
 
@@ -230,20 +254,8 @@ namespace Actions {
 
     Mutations.mutations.setServerCode(rescodes.CALLING)
 
-    let myres
-
     return await Api.SendReq(call, state.lang, Getters.getters.tok, 'POST', usertosend)
-      .then((res) => {
-        console.log(res)
-        myres = res
-        if (myres.status === 200) {
-          return myres.json()
-        }
-        Mutations.mutations.setServerCode(rescodes.ERR_GENERICO)
-        return { code: rescodes.ERR_GENERICO, msg: 'Errore: ' + myres.status }
-
-      })
-      .then((body) => {
+      .then(({ res, body }) => {
         // console.log("RITORNO 2 ");
         // mutations.setServerCode(myres);
         if (body.code === serv_constants.RIS_CODE_EMAIL_VERIFIED) {
@@ -253,14 +265,13 @@ namespace Actions {
           console.log('Risultato di vreg: ', body.code)
         }
         return { code: body.code, msg: body.msg }
-      }).catch((err) => {
-        console.log('ERROR: ' + err)
-        Mutations.mutations.setServerCode(rescodes.ERR_GENERICO)
-        return { code: rescodes.ERR_GENERICO, msg: 'Errore' }
+      }).catch((error) => {
+        UserStore.mutations.setErrorCatch(error)
+        return UserStore.getters.getServerCode
       })
   }
 
-  async function signup (context, authData: ISignupOptions) {
+  async function signup(context, authData: ISignupOptions) {
     let call = process.env.MONGODB_HOST + '/users'
     console.log('CALL ' + call)
 
@@ -289,16 +300,8 @@ namespace Actions {
         let x_auth_token: string = ''
 
         return Api.SendReq(call, state.lang, Getters.getters.tok, 'POST', usertosend)
-          .then((res) => {
+          .then(({ res, body }) => {
             myres = res
-            x_auth_token = String(res.headers.get('x-auth'))
-            if (x_auth_token) {
-              return res.json()
-            } else {
-              return { status: 400, code: rescodes.ERR_GENERICO }
-            }
-          })
-          .then((body) => {
             if (process.env.DEV) {
               console.log('RISULTATO ')
               console.log('STATUS ' + myres.status + ' ' + (myres.statusText))
@@ -348,17 +351,13 @@ namespace Actions {
             }
           })
           .catch((error) => {
-            if (process.env.DEV) {
-              console.log('signup ERROREEEEEEEEE')
-              console.log(error)
-            }
-            Mutations.mutations.setServerCode(rescodes.ERR_GENERICO)
-            return rescodes.ERR_GENERICO
+            UserStore.mutations.setErrorCatch(error)
+            return UserStore.getters.getServerCode
           })
       })
   }
 
-  async function signin (context, authData: ISigninOptions) {
+  async function signin(context, authData: ISigninOptions) {
     let call = process.env.MONGODB_HOST + '/users/login'
     console.log('LOGIN ' + call)
 
@@ -378,24 +377,12 @@ namespace Actions {
 
     Mutations.mutations.setServerCode(rescodes.CALLING)
 
-    let x_auth_token: string = ''
-
     return await Api.SendReq(call, state.lang, Getters.getters.tok, 'POST', usertosend)
-      .then((res) => {
+      .then(({ res, body }) => {
         myres = res
-        x_auth_token = String(res.headers.get('x-auth'))
-        let injson = res.json()
-
-        if (x_auth_token || injson) {
-          return injson
-        } else {
-          return { status: 400, code: rescodes.ERR_GENERICO }
-        }
-      })
-      .then((body) => {
         if (process.env.DEV) {
           console.log('RISULTATO ')
-          console.log('STATUS ' + myres.status + ' ' + (myres.statusText))
+          console.log('STATUS ' + res.status + ' ' + (res.statusText))
           console.log('BODY:')
           console.log(body)
         }
@@ -417,7 +404,7 @@ namespace Actions {
             Mutations.mutations.authUser({
               userId: userId,
               username: username,
-              idToken: x_auth_token,
+              idToken: state.x_auth_token,
               verifiedEmail: verifiedEmail
             })
           }
@@ -427,7 +414,7 @@ namespace Actions {
           const expirationDate = new Date(now.getTime() * 1000)
           localStorage.setItem(rescodes.localStorage.userId, userId)
           localStorage.setItem(rescodes.localStorage.username, username)
-          localStorage.setItem(rescodes.localStorage.token, x_auth_token)
+          localStorage.setItem(rescodes.localStorage.token, state.x_auth_token)
           localStorage.setItem(rescodes.localStorage.expirationDate, expirationDate.toString())
           localStorage.setItem(rescodes.localStorage.isLogged, String(true))
           localStorage.setItem(rescodes.localStorage.verifiedEmail, Number(verifiedEmail).toString())
@@ -450,15 +437,12 @@ namespace Actions {
         }
       })
       .catch((error) => {
-        if (process.env.DEV) {
-          console.log('signin ERRORE', error)
-        }
-        Mutations.mutations.setServerCode(rescodes.ERR_GENERICO)
-        return rescodes.ERR_GENERICO
+        UserStore.mutations.setErrorCatch(error)
+        return UserStore.getters.getServerCode
       })
   }
 
-  async function logout (context) {
+  async function logout(context) {
 
     let call = process.env.MONGODB_HOST + '/users/me/token'
     console.log('CALL ' + call)
@@ -470,15 +454,14 @@ namespace Actions {
 
     console.log(usertosend)
     return await Api.SendReq(call, state.lang, Getters.getters.tok, 'DELETE', usertosend)
-      .then(
-        (res) => {
-          console.log(res)
-        }
-      ).catch((err) => {
-      console.log('ERROR: ' + err)
-    }).then(() => {
-      Mutations.mutations.clearAuthData()
-    })
+      .then(({ res, body }) => {
+        console.log(res)
+      }).then(() => {
+        Mutations.mutations.clearAuthData()
+      }).catch((error) => {
+        UserStore.mutations.setErrorCatch(error)
+        return UserStore.getters.getServerCode
+      })
 
     localStorage.removeItem(rescodes.localStorage.expirationDate)
     localStorage.removeItem(rescodes.localStorage.token)
@@ -504,7 +487,7 @@ namespace Actions {
   }
 
 
-  async function autologin (context) {
+  async function autologin(context) {
     try {
       console.log('*** Autologin ***')
       // INIT

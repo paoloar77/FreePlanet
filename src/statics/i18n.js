@@ -48,6 +48,10 @@ const messages = {
         }
       }
     },
+    fetch: {
+      errore_generico: 'Errore Generico',
+      errore_server: 'Impossibile accedere al Server. Riprovare Grazie',
+    },
     reg: {
       incorso: 'Registrazione in corso...',
       richiesto: 'Campo Richiesto',
@@ -164,6 +168,10 @@ const messages = {
           link_sent: 'To confirm the Registration, read your mailbox and click on "Verify email".\nIf you can not find it check your junk mail or spam.'
         }
       }
+    },
+    fetch: {
+      errore_generico: 'Generic Error',
+      errore_server: 'Unable to access to the Server. Retry. Thank you.',
     },
     reg: {
       incorso: 'Registration please wait...',

@@ -170,13 +170,11 @@ namespace Actions {
     state.networkDataReceived = false
 
     let ris = await Api.SendReq(call, UserStore.state.lang, token, 'GET', null)
-      .then((res) => {
-        return res.json()
-      }).then((resData) => {
+      .then(({resData, body}) => {
         state.networkDataReceived = true
 
         // console.log('******* UPDATE TODOS.STATE.TODOS !:', resData.todos)
-        state.todos = [...resData.todos]
+        state.todos = [...body.todos]
         Todos.state.todos_changed++
 
         console.log('state.todos', state.todos, 'checkPending', checkPending)
@@ -186,12 +184,8 @@ namespace Actions {
         return rescodes.OK
       })
       .catch((error) => {
-        if (process.env.DEV) {
-          // console.log('dbLoadTodo ERRORE', error)
-        }
-        // If error network connection, take the data from IndexedDb
-
-        return rescodes.ERR_GENERICO
+        UserStore.mutations.setErrorCatch(error)
+        return UserStore.getters.getServerCode
       })
 
     console.log('fine della funz...')
@@ -266,30 +260,22 @@ namespace Actions {
     const token = UserStore.state.idToken
 
     let res = await Api.SendReq(call, UserStore.state.lang, token, method, itemtodo)
-      .then(function (response) {
-        if (response)
-          return response.json()
-        else
-          return null
-      }).then(newItem => {
-        console.log('RESDATA =', newItem)
-        if (newItem) {
-          const newId = newItem._id
+      .then(({res, body}) => {
+        console.log('RESDATA =', body)
+        if (body.newItem) {
+          const newId = body.newItem._id
 
           // if (method === 'PATCH') {
           //   newItem = newItem.todo
           // }
 
           // Update ID on local
-          UpdateNewIdFromDB(itemtodo, newItem, method)
+          UpdateNewIdFromDB(itemtodo, body.newItem, method)
         }
       })
       .catch((error) => {
-        if (process.env.DEV) {
-          console.log('ERRORE FETCH', 'dbInsertSaveTodo', method)
-          console.log(error)
-        }
-        return rescodes.ERR_GENERICO
+        UserStore.mutations.setErrorCatch(error)
+        return UserStore.getters.getServerCode
       })
 
     return res
@@ -302,7 +288,7 @@ namespace Actions {
     const token = UserStore.state.idToken
 
     let res = await Api.SendReq(call, UserStore.state.lang, token, 'DELETE', item)
-      .then(function (res) {
+      .then(function ({res, body}) {
 
         // Delete Item in to Array
         state.todos.splice(state.todos.indexOf(item), 1)
@@ -310,10 +296,8 @@ namespace Actions {
         return rescodes.OK
       })
       .catch((error) => {
-        if (process.env.DEV) {
-          console.log('ERRORE FETCH', 'dbDeleteTodo')
-        }
-        return rescodes.ERR_GENERICO
+        UserStore.mutations.setErrorCatch(error)
+        return UserStore.getters.getServerCode
       })
 
     return res
