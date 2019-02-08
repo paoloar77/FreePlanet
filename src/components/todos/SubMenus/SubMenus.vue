@@ -30,7 +30,7 @@
                 <q-item v-if="(field.value === 100)" :icon="field.icon" v-close-overlay
                         @click.native="clickMenu(field.value)">
                     <q-item-side :icon="field.icon"/>
-                    <q-item-tile label class="item-menu">{{field.label}}</q-item-tile>
+                    <q-item-main label class="item-menu">{{field.label}}</q-item-main>
                 </q-item>
                 <q-item v-if="(field.value === 130)" :icon="field.icon"
                         @click.native="clickMenu(field.value)">
@@ -60,3 +60,7 @@
 
 <script lang="ts" src="./SubMenus.ts">
 </script>
+
+<style lang="scss" scoped>
+    @import './SubMenus.scss';
+</style>

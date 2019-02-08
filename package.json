@@ -1,7 +1,13 @@
 {
   "name": "freeplanet",
-  "version": "0.0.1",
+  "version": "0.0.4",
   "private": true,
+  "keywords": [
+    "freeplanet",
+    "free social"
+  ],
+  "author": "Paolo Arena",
+  "license": "MIT",
   "scripts": {
     "lint": "tslint --project tsconfig.json",
     "lint:fix": "tslint --project tsconfig.json --fix",
@@ -10,11 +16,12 @@
     "pwa": "NODE_ENV=development NODE_OPTIONS=--max_old_space_size=4096 DEBUG=v8:* quasar dev -m pwa",
     "test:unit": "jest",
     "test:cover": "jest --coverage",
-    "build": "quasar build -m pwa && workbox generateSW workbox-config.js",
+    "build": "quasar build -m pwa",
     "build:clean": "quasar clean",
     "serve": "quasar serve ./dist/pwa-mat",
     "serve:coverage": "quasar serve test/coverage/lcov-report/ --cache 0 --port 8788",
-    "deploy": "deploy.sh"
+    "deploy": "deploy.sh",
+    "generate-sw": "workbox generateSW workbox-config.js"
   },
   "dependencies": {
     "@types/vuelidate": "^0.7.0",
@@ -29,6 +36,7 @@
     "graphql": "^0.13.2",
     "graphql-tag": "^2.8.0",
     "gsap": "^2.0.2",
+    "immortal-db": "^1.0.2",
     "jquery": "^3.3.1",
     "js-cookie": "^2.2.0",
     "localforage": "^1.7.3",

@@ -13,7 +13,7 @@
                 <draggable v-model="todos_arr" :options="{draggable:'.myitemdrag'}"
                            @start="onStart" @end="onEnd" class="dragArea">
                     <transition-group>
-                        <div :id="getmyid(mytodo.id)" :key="mytodo.id" v-for="mytodo in todos_arr" class="myitemdrag">
+                        <div :id="getmyid(mytodo._id)" :key="mytodo._id" v-for="mytodo in todos_arr" class="myitemdrag">
 
                             <div v-if="(prior !== mytodo.priority) && !mytodo.completed" :class="getTitlePriority(mytodo.priority)">
                                 <label>{{getPriorityByInd(mytodo.priority)}}</label>
@@ -34,6 +34,16 @@
             <q-input ref="insertTask" v-model="todo" inverted :float-label="$t('todo.insert')"
                      :after="[{icon: 'arrow_forward', content: true, handler () {}}]"
                      v-on:keyup.enter="insertTodo"/>
+
+            <q-input v-model="testPao" float-label="testPao"/>
+            <q-input v-model="todos_changed" float-label="todos_changed"/>
+            <q-input v-model="reload_fromServer" float-label="reload_fromServer"/>
+
+            <div class="flex-item btn-item">
+                <!--<q-btn class="mybtn" round color="" icon="lock" @click="clicktest()"></q-btn>-->
+                <!--<q-btn class="mybtn" round color="" icon="person" @click="clicktest2()"></q-btn>-->
+                <q-btn class="mybtn" round color="" icon="list" @click="checkUpdate()"></q-btn>
+            </div>
 
         </div>
     </q-page>

@@ -100,7 +100,7 @@ export default class Tabledata extends Vue {
     objcat.descr_it = this.category
 
     // Add to Indexdb
-    await this.$db.categories.add(objcat
+    await this.$db.categories.put(objcat
     ).then(ris => {
       myid = ris
     })

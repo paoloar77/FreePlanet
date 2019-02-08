@@ -21,10 +21,12 @@ export interface IUserState {
 
   tokens?: IToken[]
 
-  verifiedEmail?: boolean
+  verified_email?: boolean
   categorySel?: string
 
   tokenforgot?: string
 
   servercode?: number
+  x_auth_token?: string
+  isLogged?: boolean
 }

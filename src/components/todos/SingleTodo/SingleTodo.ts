@@ -130,7 +130,7 @@ export default class SingleTodo extends Vue {
     //   this.classDescr += ' show'
     // }
 
-    // this.getinputdescr = 'inputdescr' + this.itemtodo.id
+    // this.getinputdescr = 'inputdescr' + this.itemtodo._id
 
     // console.log('classDescrEdit = ', this.classDescrEdit)
     // console.log('classDescr', this.classDescr)
@@ -234,6 +234,8 @@ export default class SingleTodo extends Vue {
 
   exitEdit(singola: boolean = false) {
     if (this.inEdit) {
+      if (this.precDescr !== this.itemtodo.descr)
+        this.updateTodo()
       // console.log('exitEdit')
       this.inEdit = false
       this.updateClasses
@@ -243,11 +245,30 @@ export default class SingleTodo extends Vue {
 
 
   keyDownArea(e) {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault()
+/*
+    if ((e.key === 'ArrowUp') && !e.shiftKey) {
+      e.key = 'Tab'
+      e.shiftKey = true
+    }
+
+    if ((e.key === 'ArrowDown') && !e.shiftKey) {
+      let nextInput = inputs.get(inputs.index(this) + 1)
+      if (nextInput) {
+        nextInput.focus()
+      }
+    }
+*/
+
+    if (((e.key === 'Enter') || (e.key === 'Tab')) && !e.shiftKey) {
       this.updateTodo()
-      this.deselectRiga()
-      this.faiFocus('insertTask', true)
+
+      if ((e.key === 'Tab') && !e.shiftKey) {
+
+      } else {
+        e.preventDefault()
+        this.deselectRiga()
+        this.faiFocus('insertTask', true)
+      }
     }
 
     // console.log('keyDownArea', e)
@@ -261,6 +282,9 @@ export default class SingleTodo extends Vue {
   }
 
   updateTodo() {
+    if (this.itemtodo.descr === this.precDescr)
+      return
+
     this.itemtodo.descr = this.precDescr
     console.log('updateTodo', this.precDescr, this.itemtodo.descr)
     this.watchupdate()
@@ -284,7 +308,7 @@ export default class SingleTodo extends Vue {
   }
 
   updateicon() {
-    console.log('updateicon')
+    // console.log('updateicon')
     if (this.itemtodo.completed)
       this.iconCompleted = 'check_circle'
     else
@@ -344,7 +368,7 @@ export default class SingleTodo extends Vue {
       .then(ris => {
         console.log('ris', ris)
         if (ris)
-          this.removeitem(this.itemtodo.id)
+          this.removeitem(this.itemtodo._id)
       }).catch(err => {
 
     })

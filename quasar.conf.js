@@ -59,7 +59,7 @@ module.exports = function (ctx) {
       store: 'src/store/index.ts'
     },
     // app plugins (/src/plugins)
-    plugins: ['i18n', 'axios', 'vee-validate', 'myconfig', 'local-storage', 'error-handler', 'indexdb', 'vue-idb'],
+    plugins: ['i18n', 'axios', 'vee-validate', 'myconfig', 'local-storage', 'error-handler', 'globalroutines', 'vue-idb'],
     css: [
       'app.styl'
     ],
@@ -88,6 +88,7 @@ module.exports = function (ctx) {
           .alias
           .set('~', __dirname)
           .set('@', path.resolve(__dirname, 'src'))
+          // .set('env', path.resolve(__dirname, 'config/helpers/env.js'))
         config.module
           .rule('template-engine')
           .test(/\.pug$/)
@@ -180,8 +181,18 @@ module.exports = function (ctx) {
       }
     },
     pwa: {
+      // runtimeCaching: [
+      //   {
+      //     urlPattern: '/statics',
+      //     handler: 'networkFirst'
+      //   }
+      // ],
+
+      // workboxPluginMode: 'GenerateSW',
       workboxPluginMode: 'InjectManifest',
-      // workboxOptions: {},
+      workboxOptions: {
+        // swSrc: 'src/sw.js',
+      },
       manifest: {
         name: 'Free Planet',
         short_name: 'freeplanet',

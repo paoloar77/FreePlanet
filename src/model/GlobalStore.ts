@@ -4,6 +4,7 @@ export interface IPost {
 
 export interface IGlobalState {
   conta: number
+  isSubscribed: boolean
   isLoginPage: boolean
   layoutNeeded: boolean
   mobileMode: boolean

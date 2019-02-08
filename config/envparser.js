@@ -9,7 +9,8 @@ switch (process.env.NODE_ENV) {
     path = `.env.development`
     break
   default:
-    path = `.env`
+    path = `.env.production`
+    break
 }
 
 // console.log("PATH", path)

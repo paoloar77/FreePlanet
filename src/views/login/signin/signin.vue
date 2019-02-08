@@ -8,52 +8,54 @@
             </div>
 
             <!--Prova URL :  {{env('PROVA_PAOLO')}}-->
+            <form>
 
-            <q-field
-                    :error="$v.signin.username.$error"
-                    :error-label="`${errorMsg('username', $v.signin.username)}`"
-            >
-                <q-input
-                        v-model="signin.username"
-                        autocomplete="username"
-                        @change="val => { signin.username = val }"
-                        :before="[{icon: 'person', handler () {}}]"
-                        @blur="$v.signin.username.$touch"
+                <q-field
                         :error="$v.signin.username.$error"
-                        :float-label="$t('reg.username')"></q-input>
-            </q-field>
+                        :error-label="`${errorMsg('username', $v.signin.username)}`"
+                >
+                    <q-input
+                            v-model="signin.username"
+                            autocomplete="username"
+                            @change="val => { signin.username = val }"
+                            :before="[{icon: 'person', handler () {}}]"
+                            @blur="$v.signin.username.$touch"
+                            :error="$v.signin.username.$error"
+                            :float-label="$t('reg.username')"></q-input>
+                </q-field>
 
-            <q-field
-                    :error="$v.signin.password.$error"
-                    :error-label="`${errorMsg('password', $v.signin.password)}`"
-            >
-                <q-input
-                        v-model="signin.password"
-                        type="password"
-                        :before="[{icon: 'vpn_key', handler () {}}]"
-                        @blur="$v.signin.password.$touch"
+                <q-field
                         :error="$v.signin.password.$error"
-                        :float-label="$t('reg.password')"></q-input>
-            </q-field>
+                        :error-label="`${errorMsg('password', $v.signin.password)}`"
+                >
+                    <q-input
+                            v-model="signin.password"
+                            type="password"
+                            :before="[{icon: 'vpn_key', handler () {}}]"
+                            @blur="$v.signin.password.$touch"
+                            :error="$v.signin.password.$error"
+                            :float-label="$t('reg.password')"></q-input>
+                </q-field>
 
-            <div>
-                <a :href="getlinkforgetpwd">{{$t('reg.forgetpassword')}}</a>
-            </div>
+                <div>
+                    <a :href="getlinkforgetpwd">{{$t('reg.forgetpassword')}}</a>
+                </div>
 
-            <br>
+                <br>
 
-            <q-card-main class="flex flex-center">
-                <!--<q-btn v-if="$myconfig.socialLogin.facebook" :loading="loading" class="q-mb-md q-mr-md" rounded icon="fab fa-facebook-f" size="sm" color="blue-10" text-color="white" @click="facebook" :label="$t('components.authentication.login.facebook')"/>-->
-                <!--
-                <q-btn v-if="$myconfig.socialLogin.facebook" class="q-mb-md q-mr-md" rounded icon="fab fa-facebook-f" size="sm" color="blue-10" text-color="white" @click="facebook" :label="$t('components.authentication.login.facebook')"/>
-                <q-btn v-if="$myconfig.socialLogin.google" class="q-mb-md q-mr-md" rounded icon="fab fa-google" size="sm" color="deep-orange-14" text-color="white" @click="google" :label="$t('components.authentication.login.google')"/>
-                -->
-            </q-card-main>
+                <q-card-main class="flex flex-center">
+                    <!--<q-btn v-if="$myconfig.socialLogin.facebook" :loading="loading" class="q-mb-md q-mr-md" rounded icon="fab fa-facebook-f" size="sm" color="blue-10" text-color="white" @click="facebook" :label="$t('components.authentication.login.facebook')"/>-->
+                    <!--
+                    <q-btn v-if="$myconfig.socialLogin.facebook" class="q-mb-md q-mr-md" rounded icon="fab fa-facebook-f" size="sm" color="blue-10" text-color="white" @click="facebook" :label="$t('components.authentication.login.facebook')"/>
+                    <q-btn v-if="$myconfig.socialLogin.google" class="q-mb-md q-mr-md" rounded icon="fab fa-google" size="sm" color="deep-orange-14" text-color="white" @click="google" :label="$t('components.authentication.login.google')"/>
+                    -->
+                </q-card-main>
 
-            <div align="center">
-                <q-btn rounded size="lg" color="primary" @click="submit" :disable="$v.$error">{{$t('login.enter')}}
-                </q-btn>
-            </div>
+                <div align="center">
+                    <q-btn rounded size="lg" color="primary" @click="submit" :disable="$v.$error">{{$t('login.enter')}}
+                    </q-btn>
+                </div>
+            </form>
         </q-page>
     </div>
 </template>

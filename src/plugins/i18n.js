@@ -1,6 +1,6 @@
 // src/plugins/i18n.js
 import VueI18n from 'vue-i18n';
-import messages from 'src/i18n';
+import messages from 'src/statics/i18n';
 
 export default ({ app, store, Vue }) => {
   Vue.use(VueI18n);

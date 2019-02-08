@@ -39,7 +39,7 @@ export default class Vreg extends Vue {
   }
 
   load() {
-    console.log('load')
+    // console.log('load')
     let param: ILinkReg
     param = { idlink: this.$route.query.idlink.toString() }
     console.log('idlink = ', param)
