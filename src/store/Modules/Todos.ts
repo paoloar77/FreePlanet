@@ -3,8 +3,9 @@ import { storeBuilder } from './Store/Store'
 
 import Api from '@api'
 import { rescodes } from './rescodes'
-import { Todos, UserStore } from '@store'
+import { GlobalStore, Todos, UserStore } from '@store'
 import globalroutines from './../../globalroutines/index'
+import { Mutation } from "vuex-module-decorators"
 
 
 const state: ITodosState = {
@@ -40,6 +41,8 @@ namespace Mutations {
 
   function setTodos_changed(state: ITodosState) {
     state.todos_changed++
+    mutations.setTestpao('Cambiato : ' + String(state.todos_changed))
+    console.log('*******************************  state.todos_changed', state.todos_changed)
   }
 
   export const mutations = {
@@ -67,14 +70,13 @@ namespace Actions {
 
   // If something in the call of Service Worker went wrong (Network or Server Down), then retry !
   async function sendSwMsgIfAvailable() {
-
-    console.log(' -------- sendSwMsgIfAvailable')
-
     let something = false
 
-    let count = await checkPendingMsg(null)
-    if (count > 0) {
-      if (('serviceWorker' in navigator && 'SyncManager' in window)) {
+    if ('serviceWorker' in navigator) {
+      console.log(' -------- sendSwMsgIfAvailable')
+
+      let count = await checkPendingMsg(null)
+      if (count > 0) {
         return navigator.serviceWorker.ready
           .then(function (sw) {
 
@@ -90,14 +92,21 @@ namespace Actions {
                   something = true
                   for (let rec of arr_recmsg) {
                     console.log('             .... sw.sync.register ( ', rec._id)
-                    sw.sync.register(rec._id)
+                    if ('SyncManager' in window) {
+                      sw.sync.register(rec._id)
+                    } else {
+                      // #Todo ++ Alternative to SyncManager
+                      Api.syncAlternative(rec._id)
+                    }
                   }
+                  return something
                 }
-                return something
               })
+
           })
       }
     }
+
     return something
   }
 
@@ -170,12 +179,12 @@ namespace Actions {
     state.networkDataReceived = false
 
     let ris = await Api.SendReq(call, UserStore.state.lang, token, 'GET', null)
-      .then(({resData, body}) => {
+      .then(({ resData, body }) => {
         state.networkDataReceived = true
 
         // console.log('******* UPDATE TODOS.STATE.TODOS !:', resData.todos)
         state.todos = [...body.todos]
-        Todos.state.todos_changed++
+        Todos.mutations.setTodos_changed()
 
         console.log('state.todos', state.todos, 'checkPending', checkPending)
 
@@ -222,7 +231,7 @@ namespace Actions {
   async function testfunc() {
     while (true) {
       consolelogpao('testfunc')
-      Todos.state.todos_changed++
+      Todos.mutations.setTodos_changed()
       // console.log('Todos.state.todos_changed:', Todos.state.todos_changed)
       await aspettansec(5000)
     }
@@ -241,6 +250,7 @@ namespace Actions {
     console.log('ITEM', newItem)
     if (method === 'POST') {
       state.todos.push(newItem)
+      Todos.mutations.setTodos_changed()
       // } else if (method === 'PATCH') {
       //   state.todos.map(item => {
       //     if (item._id === newItem._id) {
@@ -255,22 +265,20 @@ namespace Actions {
 
   async function dbInsertSaveTodo(context, itemtodo: ITodo, method) {
     console.log('dbInsertSaveTodo', itemtodo, method)
-    let call = process.env.MONGODB_HOST + '/todos/' + itemtodo._id
+    let call = process.env.MONGODB_HOST + '/todos'
+
+    if (method !== 'POST')
+      call += '/' + itemtodo._id
 
     const token = UserStore.state.idToken
 
     let res = await Api.SendReq(call, UserStore.state.lang, token, method, itemtodo)
-      .then(({res, body}) => {
-        console.log('RESDATA =', body)
-        if (body.newItem) {
-          const newId = body.newItem._id
-
-          // if (method === 'PATCH') {
-          //   newItem = newItem.todo
-          // }
+      .then(({ res, newItem }) => {
+        console.log('dbInsertSaveTodo RIS =', newItem)
+        if (newItem) {
 
           // Update ID on local
-          UpdateNewIdFromDB(itemtodo, body.newItem, method)
+          UpdateNewIdFromDB(itemtodo, newItem, method)
         }
       })
       .catch((error) => {
@@ -288,10 +296,14 @@ namespace Actions {
     const token = UserStore.state.idToken
 
     let res = await Api.SendReq(call, UserStore.state.lang, token, 'DELETE', item)
-      .then(function ({res, body}) {
+      .then(function ({ res, itemris }) {
 
-        // Delete Item in to Array
-        state.todos.splice(state.todos.indexOf(item), 1)
+        if (res.status === 200) {
+          // Delete Item in to Array
+          state.todos.splice(state.todos.indexOf(item), 1)
+
+          Todos.mutations.setTodos_changed()
+        }
 
         return rescodes.OK
       })

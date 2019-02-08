@@ -24,10 +24,10 @@ const state: IUserState = {
   repeatPassword: '',
   idToken: '',
   tokens: [],
-  verifiedEmail: false,
+  verified_email: false,
   categorySel: 'personal',
   servercode: 0,
-  x_auth_token: '',
+  x_auth_token: ''
 }
 
 
@@ -76,7 +76,7 @@ namespace Getters {
     },
     get getServerCode() {
       return getServerCode()
-    },
+    }
   }
 
 
@@ -88,7 +88,7 @@ namespace Mutations {
     state.userId = data.userId
     state.username = data.username
     state.idToken = data.idToken
-    state.verifiedEmail = data.verifiedEmail
+    state.verified_email = data.verified_email
     state.category = data.categorySel
     // @ts-ignore
     state.tokens = [
@@ -130,7 +130,7 @@ namespace Mutations {
     state.username = ''
     state.tokens = []
     state.idToken = ''
-    state.verifiedEmail = false
+    state.verified_email = false
     state.categorySel = 'personal'
   }
 
@@ -299,19 +299,13 @@ namespace Actions {
         let x_auth_token: string = ''
 
         return Api.SendReq(call, state.lang, Getters.getters.tok, 'POST', usertosend)
-          .then(({ res, body }) => {
+          .then(({ res, newuser }) => {
             myres = res
-            if (process.env.DEV) {
-              console.log('RISULTATO ')
-              console.log('STATUS ' + myres.status + ' ' + (myres.statusText))
-              console.log('BODY:')
-              console.log(body)
-            }
 
             Mutations.mutations.setServerCode(myres.status)
 
             if (myres.status === 200) {
-              let userId = body.userId
+              let userId = newuser.userId
               let username = authData.username
               if (process.env.DEV) {
                 console.log('USERNAME = ' + username)
@@ -322,7 +316,7 @@ namespace Actions {
                 userId: userId,
                 username: username,
                 idToken: x_auth_token,
-                verifiedEmail: false
+                verified_email: false
               })
 
               const now = new Date()
@@ -338,16 +332,8 @@ namespace Actions {
               // dispatch('setLogoutTimer', myres.data.expiresIn);
 
               return rescodes.OK
-            } else if (myres.status === 404) {
-              if (process.env.DEV) {
-                console.log('CODE = ' + body.code)
-              }
-              return body.code
             } else {
-              if (process.env.DEV) {
-                console.log('CODE = ' + body.code)
-              }
-              return body.code
+              return rescodes.ERR_GENERICO
             }
           })
           .catch((error) => {
@@ -380,14 +366,7 @@ namespace Actions {
     return await Api.SendReq(call, state.lang, Getters.getters.tok, 'POST', usertosend)
       .then(({ res, body }) => {
         myres = res
-        if (process.env.DEV) {
-          console.log('RISULTATO ')
-          console.log('STATUS ' + res.status + ' ' + (res.statusText))
-          console.log('BODY:')
-          console.log(body)
-        }
-
-        if (body.code === serv_constants.RIS_CODE_LOGIN_ERR) {
+        if (res.code === serv_constants.RIS_CODE_LOGIN_ERR) {
           Mutations.mutations.setServerCode(body.code)
           return body.code
         }
@@ -395,9 +374,10 @@ namespace Actions {
         Mutations.mutations.setServerCode(myres.status)
 
         if (myres.status === 200) {
-          let userId = body.userId
+          let myuser: IUserState = body.usertosend
+          let userId = myuser.userId
           let username = authData.username
-          let verifiedEmail = body.verified_email === 'true' || body.verified_email === true
+          let verifiedEmail = myuser.verified_email === true
           if (process.env.DEV) {
             console.log('USERNAME = ' + username)
             console.log('IDUSER= ' + userId)
@@ -405,7 +385,7 @@ namespace Actions {
               userId: userId,
               username: username,
               idToken: state.x_auth_token,
-              verifiedEmail: verifiedEmail
+              verified_email: verifiedEmail
             })
           }
 
@@ -520,7 +500,7 @@ namespace Actions {
         userId: userId,
         username: username,
         idToken: token,
-        verifiedEmail: verifiedEmail
+        verified_email: verifiedEmail
       })
 
       setGlobal()

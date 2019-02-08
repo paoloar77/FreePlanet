@@ -88,6 +88,7 @@ module.exports = function (ctx) {
           .alias
           .set('~', __dirname)
           .set('@', path.resolve(__dirname, 'src'))
+          // .set('env', path.resolve(__dirname, 'config/helpers/env.js'))
         config.module
           .rule('template-engine')
           .test(/\.pug$/)

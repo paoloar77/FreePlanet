@@ -34,7 +34,7 @@ async function readfromIndexDbToStateTodos(context, table) {
       // console.log('&&&&&&& readfromIndexDbToStateTodos OK: Num RECORD: ', records.length)
       if (table === 'todos') {
         Todos.state.todos = [...records]
-        Todos.state.todos_changed++
+        Todos.mutations.setTodos_changed()
         // console.log('Todos.state.todos_changed:', Todos.state.todos_changed)
         // setTimeout(testfunc2, 3000)
       }
@@ -52,7 +52,7 @@ function consolelogpao(str, str2 = '', str3 = '') {
 function testfunc2 () {
   consolelogpao('testfunc2')
   Todos.mutations.setTodos_changed()
-  Todos.mutations.setTestpao(Todos.state.todos_changed)
+
   consolelogpao('testfunc2: Todos.state.todos_changed:', Todos.state.todos_changed)
 }
 

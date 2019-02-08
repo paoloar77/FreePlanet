@@ -123,6 +123,130 @@ const messages = {
       subscribed: 'Ora potrai ricevere i messaggi e le notifiche.'
     }
   },
+  es: {
+    dialog: {
+      ok: 'Vale',
+      yes: 'Sí',
+      no: 'No',
+      delete: 'Borrar',
+      cancel: 'Cancelar',
+      msg: {
+        titledeleteTask: 'Borrar Tarea',
+        deleteTask: 'Quieres borrar este tarea?'
+      }
+    },
+    comp:{
+      Conta: "Conta",
+    },
+    msg: {
+      hello: 'Buenos Días',
+      myAppName: 'FreePlanet',
+      myDescriz: 'La primera App Libera'
+    },
+    pages: {
+      home: 'Principal',
+      SignUp: 'Registrarte',
+      SignIn: 'Login',
+      vreg: 'Verifica Reg',
+      Test: 'Test',
+      Category: 'Categorías',
+      Todo: 'Tareas',
+      personal: 'Personal',
+      work: 'Trabajo',
+      shopping: 'Compras',
+    },
+    components: {
+      authentication:{
+        login: {
+          facebook: 'Facebook'
+        },
+        email_verification: {
+          title: 'Crea una cuenta',
+          introduce_email: 'ingrese su dirección de correo electrónico',
+          email: 'Email',
+          invalid_email: 'Tu correo electrónico no es válido',
+          verify_email: 'Revisa tu email',
+          go_login: 'Vuelve al Login',
+          incorrect_input: 'Entrada correcta.',
+          link_sent: 'Para confirmar el registro, lea su buzón y haga clic en "Verificar correo electrónico".\n' + 'Si no lo encuentras, busca en la carpeta Spam.'
+        }
+      }
+    },
+    fetch: {
+      errore_generico: 'Error genérico',
+      errore_server: 'No se puede acceder al Servidor. Inténtalo de nuevo, Gracias',
+    },
+    user: {
+      notregistered: 'Debe registrarse en el servicio antes de poder almacenar los datos'
+    },
+    reg: {
+      incorso: 'Registro en curso...',
+      richiesto: 'Campo requerido',
+      email: 'Email',
+      username : 'Nombre usuario',
+      password: 'contraseña',
+      repeatPassword: 'Repetir contraseña',
+      terms: "Acepto los términos y condiciones",
+      submit: "Registrarse",
+      title_verif_reg: "Verifica registro",
+      verificato: "Verificado",
+      non_verificato: "No Verificado",
+      forgetpassword:"¿Olvidaste tu contraseña?",
+      err: {
+        required: 'se requiere',
+        email: 'Debe ser una email válida.',
+        errore_generico: 'Por favor, rellene los campos correctamente',
+        atleast: 'debe ser al menos largo',
+        complexity: 'debe contener al menos 1 minúscula, 1 mayúscula y 1 dígito',
+        notmore: 'no tiene que ser más largo que',
+        char: 'caracteres',
+        terms: 'Debes aceptar las condiciones, para continuar..',
+        duplicate_email: 'La email ya ha sido registrada',
+        duplicate_username: 'El nombre de usuario ya ha sido utilizado',
+        sameaspassword: 'Las contraseñas deben ser idénticas',
+      }
+    },
+    login:{
+      incorso: 'Login en curso',
+      enter: 'Login',
+      errato: "Nombre de usuario o contraseña incorrectos. inténtelo de nuevo",
+      completato: 'Login realizado!',
+    },
+    reset: {
+      title_reset_pwd: "Restablece tu contraseña",
+      send_reset_pwd: 'Enviar restablecer contraseña',
+      incorso: 'Solicitar nueva Email...',
+      email_sent:'Email enviada',
+      check_email: 'Revise su correo electrónico, recibirá un mensaje con un enlace para restablecer su contraseña. Este enlace, por razones de seguridad, expirará después de 4 horas.',
+      title_update_pwd: 'Actualiza tu contraseña',
+      update_password: 'Actualizar contraseña',
+    },
+    logout:{
+      uscito: 'Estás desconectado',
+    },
+    errors: {
+      graphql: {
+        undefined: 'no definido'
+      }
+    },
+    todo: {
+      titleprioritymenu: 'Prioridad:',
+      insert: 'Ingrese una nueva Tarea',
+      edit: 'Descripción Tarea:',
+      completed: 'Completados',
+      usernotdefined: 'Atención, debes iniciar sesión para agregar una Tarea'
+    },
+    notification : {
+      ask: 'Activar notificaciones',
+      waitingconfirm: 'Confirmar la solicitud de notificación.',
+      confirmed: 'Notificaciones activadas!',
+      denied: 'Notificaciones deshabilitadas! Ten cuidado, así no verás llegar los mensajes. Rehabilítalos para verlos.',
+      titlegranted: 'Notificaciones permitidas habilitadas!',
+      titledenied: 'Notificaciones permitidas deshabilitadas!',
+      title_subscribed: 'Suscripción a FreePlanet.app!',
+      subscribed: 'Ahora puedes recibir mensajes y notificaciones.'
+    }
+  },
   enUk: {
     dialog: {
       ok: 'Ok',

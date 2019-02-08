@@ -35,8 +35,8 @@
                      :after="[{icon: 'arrow_forward', content: true, handler () {}}]"
                      v-on:keyup.enter="insertTodo"/>
 
-            <!--<q-input v-model="testPao" float-label="testPao"/>-->
-            <!--<q-input v-model="todos_changed" float-label="todos_changed"/>-->
+            <q-input v-model="testPao" float-label="testPao"/>
+            <q-input v-model="todos_changed" float-label="todos_changed"/>
             <q-input v-model="reload_fromServer" float-label="reload_fromServer"/>
 
             <div class="flex-item btn-item">

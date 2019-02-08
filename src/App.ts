@@ -9,7 +9,7 @@ import $ from 'jquery'
 import Header from './components/Header.vue'
 
 import globalroutines from './globalroutines/index'
-import { GlobalStore } from "./store/Modules"
+import { GlobalStore } from './store/Modules'
 
 
 
@@ -34,7 +34,7 @@ export default class App extends Vue {
     }
     if (process.env.PROD) {
       console.info('SESSIONE IN PRODUZIONE!')
-      console.info(process.env)
+      // console.info(process.env)
     }
 
     UserStore.actions.autologin()

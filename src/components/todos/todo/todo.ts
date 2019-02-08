@@ -20,6 +20,7 @@ import VueIdb from 'vue-idb'
 import globalroutines from '../../../globalroutines/index'
 
 import $ from 'jquery'
+import Api from "@api"
 
 @Component({
 
@@ -76,8 +77,11 @@ export default class Todo extends Vue {
   }
 
 
-  @Watch('todos_changed', { immediate: true })
+  @Watch('todos_changed', { immediate: true, deep: true })
   changetodos_changed(value: string, oldValue: string) {
+
+    this.$q.notify('Changed...')
+
     // console.log('Todos.state.todos_changed CHANGED!', value, oldValue)
     this.updatetable(true)
   }
@@ -86,9 +90,9 @@ export default class Todo extends Vue {
   reload_fromServer_changed(value: string, oldValue: string) {
     console.log('reload_fromServer_changed!', value, oldValue)
     // if (value) {
-      Todos.actions.dbLoadTodo(false)
+    Todos.actions.dbLoadTodo(false)
 
-      Todos.actions.updateArrayInMemory()
+    Todos.actions.updateArrayInMemory()
     // }
   }
 
@@ -343,7 +347,7 @@ export default class Todo extends Vue {
   checkUpdate_everytime() {
     this.polling = setInterval(() => {
       this.checkUpdate()
-      }, 10000)
+    }, 10000)
   }
 
   copy(o) {
@@ -470,8 +474,13 @@ export default class Todo extends Vue {
       cmdSw = rescodes.DB.CMD_SYNC_TODOS
     }
 
+    if (process.env.DEV) {
+      console.log('serviceWorker ', ('serviceWorker' in navigator) ? 'PRESENT!' : 'DOESN\'T EXIST!')
+      console.log('SyncManager ', ('SyncManager' in window) ? 'PRESENT!' : 'DOESN\'T EXIST!')
+    }
+
     const mythis = this
-    if (('serviceWorker' in navigator && 'SyncManager' in window)) {
+    if ('serviceWorker' in navigator) {
       await navigator.serviceWorker.ready
         .then(function (sw) {
           // _id: new Date().toISOString(),
@@ -482,18 +491,24 @@ export default class Todo extends Vue {
           globalroutines(mythis, 'write', table, item, id)
             .then(function (id) {
               // console.log('id', id)
-              const sep = '|'
 
-              let multiparams = cmdSw + sep + table + sep + method + sep + UserStore.state.idToken + sep + UserStore.state.lang
-              console.log('   SENDING... sw.sync.register', multiparams)
-              let mymsgkey = {
-                _id: multiparams,
-                value: multiparams
+            })
+          const sep = '|'
+
+          let multiparams = cmdSw + sep + table + sep + method + sep + UserStore.state.idToken + sep + UserStore.state.lang
+          let mymsgkey = {
+            _id: multiparams,
+            value: multiparams
+          }
+          globalroutines(mythis, 'write', 'swmsg', mymsgkey, multiparams)
+            .then(ris => {
+              if ('SyncManager' in window) {
+                console.log('   SENDING... sw.sync.register', multiparams)
+                return sw.sync.register(multiparams)
+              } else {
+                // #Todo ++ Alternative 2 to SyncManager
+                Api.syncAlternative(multiparams)
               }
-              globalroutines(mythis, 'write', 'swmsg', mymsgkey, multiparams)
-                .then(ris => {
-                  return sw.sync.register(multiparams)
-                })
             })
             .then(function () {
 
@@ -822,6 +837,7 @@ export default class Todo extends Vue {
     objtodo.descr = 'PROVA'
     objtodo.category = this.getCategory()
     Todos.state.todos.push(objtodo)
+    Todos.mutations.setTodos_changed()
 
     console.log('Todos.state.todos', Todos.state.todos)
   }
@@ -831,7 +847,7 @@ export default class Todo extends Vue {
     console.log('Todos.state.todos', Todos.state.todos)
   }
 
-  checkUpdate () {
+  checkUpdate() {
     Todos.actions.waitAndcheckPendingMsg()
   }
 

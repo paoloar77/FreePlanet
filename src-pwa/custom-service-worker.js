@@ -1,3 +1,4 @@
+
 /*
  * This file (which will be your service worker)
  * is picked up by the build system ONLY if
@@ -6,21 +7,25 @@
 
 // Questo è il swSrc
 
-console.log('05 ___________________________  PAO: this is my custom service worker');
+console.log('SW-06 ___________________________  PAO: this is my custom service worker');
 
 importScripts('https://storage.googleapis.com/workbox-cdn/releases/3.0.0/workbox-sw.js'); //++Todo: Replace with local workbox.js
 importScripts('../statics/js/idb.js');
-importScripts('js/globalenv.js');
-// importScripts('js/utility.js');
-
 importScripts('../statics/js/storage.js');
 
+
+console.log('SW-06 1');
 const cfgenv = {
-  website: 'http://localhost:8080',
-  serverweb: 'http://localhost:3000',
+  serverweb: self.location.protocol + "//" + self.location.hostname + ':3000',
   dbname: 'mydb3',
   dbversion: 11,
 }
+
+console.log('SW-06 2');
+
+console.log('SERVERWEB=', cfgenv.serverweb)
+
+// console.log('serverweb', cfgenv.serverweb)
 
 async function writeData(table, data) {
   console.log('writeData', table, data);
@@ -53,6 +58,7 @@ async function deleteItemFromData(table, id) {
 
 if (!workbox) {
   let workbox = new self.WorkboxSW();
+  console.log('SW-06 3');
 }
 
 if (workbox) {
@@ -103,24 +109,28 @@ if (workbox) {
   workbox.routing.registerRoute(
     new RegExp(cfgenv.serverweb + '/todos/'),
     function (args) {
+      console.log('registerRoute!')
       return fetch(args.event.request, args.event.headers)
         .then(function (res) {
-          // console.log('1° *******  registerRoute fetch: ', args.event)
+          console.log('1° *******  [[[ SERVICE-WORKER ]]] registerRoute fetch: ', args.event)
           // LOAD FROM SERVER , AND SAVE INTO INDEXEDDB
-          var clonedRes = res.clone();
-          clearAllData('todos')
-            .then(function () {
-              return clonedRes.json();
-            })
-            .then(function (data) {
-              if (data.todos) {
-                console.log('Records TODOS Received from Server [', data.todos.length, 'record]', data.todos)
-                for (let key in data.todos) {
-                  writeData('todos', data.todos[key])
+          console.log('res.status', res.status)
+          if (res.status === 200) {
+            var clonedRes = res.clone();
+            clearAllData('todos')
+              .then(function () {
+                return clonedRes.json();
+              })
+              .then(function (data) {
+                if (data.todos) {
+                  console.log('Records TODOS Received from Server [', data.todos.length, 'record]', data.todos)
+                  for (let key in data.todos) {
+                    writeData('todos', data.todos[key])
+                  }
                 }
-              }
-            });
-          return res
+              });
+            return res
+          }
         })
     }
   );

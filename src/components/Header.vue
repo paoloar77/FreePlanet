@@ -29,7 +29,7 @@
 
                 <q-toolbar-title>
                     {{$t('msg.myAppName')}}
-                    <div slot="subtitle">{{$t('msg.myDescriz')}}</div>
+                    <div slot="subtitle">{{$t('msg.myDescriz')}} {{ getAppVersion() }}</div>
                 </q-toolbar-title>
 
                 <q-select class="sel_lang" v-model="lang" stack-label="" :options="selectOpLang"/>
@@ -96,6 +96,10 @@
       localStorage.setItem(rescodes.localStorage.leftDrawerOpen, value.toString())
     }
 
+    getAppVersion() {
+      // return "AA"
+      return "[" + process.env.APP_VERSION + "]"
+    }
     get lang() {
       return this.$q.i18n.lang
     }
