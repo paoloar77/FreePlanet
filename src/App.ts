@@ -37,9 +37,9 @@ export default class App extends Vue {
       // console.info(process.env)
     }
 
-    UserStore.actions.autologin()
-      .then((loginEseguito) => {
-        if (loginEseguito) {
+    UserStore.actions.autologin_FromLocalStorage()
+      .then((loadstorage) => {
+        if (loadstorage) {
           globalroutines(this, 'loadapp', '')
           // this.$router.replace('/')
 
@@ -47,6 +47,9 @@ export default class App extends Vue {
           GlobalStore.actions.createPushSubscription()
         }
       })
+
+    // Calling the Server for updates ?
+    // Check the verified_email
 
   }
 

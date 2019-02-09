@@ -5,6 +5,7 @@ import {
   AxiosResponse
 } from 'axios'
 import { default as VueRouter } from 'vue-router'
+import { serv_constants } from "@src/store/Modules/serv_constants"
 // import { TokenHelper } from "./token-helper";
 
 let initialized: boolean = false
@@ -54,7 +55,7 @@ export function UseAxios(router: VueRouter) {
         }
       }
 
-      if (response.status === 403 && handle(response.status, exclude)) {
+      if (response.status === serv_constants.RIS_CODE__HTTP_FORBIDDEN_INVALID_TOKEN && handle(response.status, exclude)) {
         window.setTimeout(() => router.replace('/forbidden'), 200)
       }
 

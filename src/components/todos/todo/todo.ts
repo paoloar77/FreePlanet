@@ -80,7 +80,7 @@ export default class Todo extends Vue {
   @Watch('todos_changed', { immediate: true, deep: true })
   changetodos_changed(value: string, oldValue: string) {
 
-    this.$q.notify('Changed...')
+    // this.$q.notify('Changed...')
 
     // console.log('Todos.state.todos_changed CHANGED!', value, oldValue)
     this.updatetable(true)
@@ -287,7 +287,7 @@ export default class Todo extends Vue {
     let update = false
     await this.todos_arr.forEach((elem: ITodo) => {
       if (elem.modified) {
-        console.log('calling MODIFY 3')
+        // console.log('calling MODIFY 3')
         this.modify(elem, false)
         update = true
         elem.modified = false
@@ -367,7 +367,7 @@ export default class Todo extends Vue {
     let mydatenow = new Date().getDate()
     let mydateexp = new Date().getDate() + 10
 
-    console.log('User:' + UserStore.state.userId)
+    // console.log('User:' + UserStore.state.userId)
 
     const objtodo: ITodo = {
       // _id: new Date().toISOString(),  // Create NEW
@@ -432,30 +432,18 @@ export default class Todo extends Vue {
       return
     }
 
-    await globalroutines(this, 'write', 'todos', objtodo)
-      .then((id) => {
-        console.log('*** IDNEW (3) = ', id)
+    const id = await globalroutines(this, 'write', 'todos', objtodo)
+    // update also the last elem
+    if (lastelem !== null) {
+      lastelem.id_next = id
+      // lastelem.modified = true
+      // console.log('calling MODIFY 4', lastelem)
+    }
 
-        // update also the last elem
-        if (lastelem !== null) {
-          lastelem.id_next = id
-          // lastelem.modified = true
-          console.log('calling MODIFY 4', lastelem)
-        }
+    const rismod = await this.modify(lastelem, false)
 
-        this.modify(lastelem, false)
-          .then(ris => {
-            console.log('END calling MODIFY 4')
-
-            this.saveItemToSyncAndDb(rescodes.DB.TABLE_SYNC_TODOS, 'POST', objtodo, true)
-            this.updatetable(false)
-
-          })
-
-
-      }).catch(err => {
-        console.log('Errore: ' + err.message)
-      })
+    this.saveItemToSyncAndDb(rescodes.DB.TABLE_SYNC_TODOS, 'POST', objtodo, true)
+    this.updatetable(false)
 
     // console.log('ESCO.........')
 
@@ -587,14 +575,14 @@ export default class Todo extends Vue {
       if (myobjprev !== null) {
         myobjprev.id_next = myobjtrov.id_next
         myobjprev.modified = true
-        console.log('calling MODIFY 2')
+        // console.log('calling MODIFY 2')
         this.modify(myobjprev, false)
       }
 
       if (myobjnext !== null) {
         myobjnext.id_prev = myobjtrov.id_prev
         myobjnext.modified = true
-        console.log('calling MODIFY 1')
+        // console.log('calling MODIFY 1')
         this.modify(myobjnext, false)
       }
 
@@ -610,7 +598,7 @@ export default class Todo extends Vue {
         })
     }
 
-    console.log('FINE deleteitem')
+    // console.log('FINE deleteitem')
   }
 
   getElem(myarray: ITodo[], id) {
@@ -729,7 +717,7 @@ export default class Todo extends Vue {
   }
 
   updateitem(myobj) {
-    console.log('updateitem')
+    // console.log('updateitem')
     this.modify(myobj, true)
   }
 
@@ -778,7 +766,7 @@ export default class Todo extends Vue {
 
   modifyField(recOut, recIn, field) {
     if (recOut[field] !== recIn[field]) {
-      console.log('***************  CAMPO ', field, 'MODIFICATO!', recOut[field], recIn[field])
+      // console.log('***************  CAMPO ', field, 'MODIFICATO!', recOut[field], recIn[field])
       recOut.modified = true
       recOut[field] = recIn[field]
       return true

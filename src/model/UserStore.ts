@@ -27,6 +27,7 @@ export interface IUserState {
   tokenforgot?: string
 
   servercode?: number
+  resStatus?: number
   x_auth_token?: string
   isLogged?: boolean
 }

@@ -1,4 +1,4 @@
-import { IGlobalState } from 'model'
+import { IGlobalState, StateConnection } from 'model'
 import { storeBuilder } from './Store/Store'
 
 import Vue from 'vue'
@@ -8,7 +8,10 @@ import translate from './../../globalroutines/util'
 import urlBase64ToUint8Array from '../../js/utility'
 
 import messages from '../../statics/i18n'
-import { UserStore } from "@store"
+import { UserStore } from '@store'
+import globalroutines from './../../globalroutines/index'
+
+const allTables = ['todos', 'sync_todos', 'sync_todos_patch', 'delete_todos', 'config', 'swmsg']
 
 const state: IGlobalState = {
   conta: 0,
@@ -18,6 +21,7 @@ const state: IGlobalState = {
   mobileMode: false,
   menuCollapse: true,
   leftDrawerOpen: true,
+  stateConnection: 'online',
   category: 'personal',
   posts: [],
   listatodo: [
@@ -65,11 +69,18 @@ namespace Mutations {
     state.category = cat
   }
 
+  function setStateConnection(state: IGlobalState, stateconn: StateConnection) {
+    if (state.stateConnection !== stateconn) {
+      console.log('INTERNET ', stateconn)
+      state.stateConnection = stateconn
+    }
+  }
 
   export const mutations = {
     setConta: b.commit(setConta),
     setleftDrawerOpen: b.commit(setleftDrawerOpen),
-    setCategorySel: b.commit(setCategorySel)
+    setCategorySel: b.commit(setCategorySel),
+    setStateConnection: b.commit(setStateConnection)
   }
 
 }
@@ -109,9 +120,10 @@ namespace Actions {
         }
       })
       .then(function (newSub) {
+        // console.log('newSub', newSub)
         if (newSub) {
           saveNewSubscriptionToServer(context, newSub)
-          mystate.isSubscribed = true;
+          mystate.isSubscribed = true
         }
         return null
       })
@@ -174,8 +186,17 @@ namespace Actions {
 
   }
 
-  function loadAfterLogin (context) {
+  async function clearDataAfterLogout (context) {
 
+    // Clear all data from the IndexedDB
+    allTables.forEach(table => {
+      globalroutines(null, 'clearalldata', table, null)
+    })
+
+  }
+
+  async function loadAfterLogin (context) {
+    actions.clearDataAfterLogout()
   }
 
 
@@ -183,6 +204,7 @@ namespace Actions {
     setConta: b.dispatch(setConta),
     createPushSubscription: b.dispatch(createPushSubscription),
     loadAfterLogin: b.dispatch(loadAfterLogin),
+    clearDataAfterLogout: b.dispatch(clearDataAfterLogout),
     prova: b.dispatch(prova)
   }
 
@@ -202,4 +224,3 @@ const GlobalModule = {
 
 
 export default GlobalModule
-

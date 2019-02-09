@@ -39,6 +39,11 @@ export default class Signin extends Vue {
 
   created() {
     this.$v.$reset()
+
+    if (UserStore.state.resStatus === serv_constants.RIS_CODE__HTTP_FORBIDDEN_INVALID_TOKEN) {
+      this.showNotif(this.$t('fetch.error_doppiologin'))
+    }
+
     // this.$myconfig.socialLogin.facebook = true
     // console.log('PROVA fb:', this.$myconfig.socialLogin.facebook)
   }
@@ -125,18 +130,25 @@ export default class Signin extends Vue {
         console.log('riscode=', riscode)
         if (riscode === rescodes.OK) {
           router.push('/signin')
-          globalroutines(this, 'loadapp', '')
-
+        }
+        return riscode
+      }).then((riscode) => {
+        globalroutines(this, 'loadapp', '')
+        return riscode
+      })
+      .then((riscode) => {
+        if (riscode === rescodes.OK) {
           GlobalStore.actions.createPushSubscription()
         }
         this.checkErrors(riscode)
         this.$q.loading.hide()
-      }).catch(error => {
-      console.log('ERROR = ' + error)
+      })
+      .catch(error => {
+        console.log('ERROR = ' + error)
 
-      this.checkErrors(error)
-      this.$q.loading.hide()
-    })
+        this.checkErrors(error)
+        this.$q.loading.hide()
+      })
 
   }
 }

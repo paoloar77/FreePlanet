@@ -6,6 +6,7 @@ import { rescodes } from './rescodes'
 import { GlobalStore, Todos, UserStore } from '@store'
 import globalroutines from './../../globalroutines/index'
 import { Mutation } from "vuex-module-decorators"
+import { serv_constants } from "@src/store/Modules/serv_constants"
 
 
 const state: ITodosState = {
@@ -73,7 +74,7 @@ namespace Actions {
     let something = false
 
     if ('serviceWorker' in navigator) {
-      console.log(' -------- sendSwMsgIfAvailable')
+      // console.log(' -------- sendSwMsgIfAvailable')
 
       let count = await checkPendingMsg(null)
       if (count > 0) {
@@ -135,7 +136,7 @@ namespace Actions {
   async function waitAndRefreshData(context) {
     await aspettansec(3000)
 
-    console.log('waitAndRefreshData')
+    // console.log('waitAndRefreshData')
 
     return await dbLoadTodo(context, false)
   }
@@ -186,33 +187,38 @@ namespace Actions {
         state.todos = [...body.todos]
         Todos.mutations.setTodos_changed()
 
-        console.log('state.todos', state.todos, 'checkPending', checkPending)
+        console.log('**********  resData', resData, 'state.todos', state.todos, 'checkPending', checkPending)
 
         // After Login will store into the indexedDb...
 
         return rescodes.OK
       })
       .catch((error) => {
+        console.log('error=', error)
         UserStore.mutations.setErrorCatch(error)
         return UserStore.getters.getServerCode
       })
 
-    console.log('fine della funz...')
+    console.log('ris FUNZ: ', ris.code, 'status', ris.status)
 
     if (!Todos.state.networkDataReceived) {
-      console.log('NETWORK UNREACHABLE ! (Error in fetch)')
-      consolelogpao('NETWORK UNREACHABLE ! (Error in fetch)')
+
+      if (ris.status === serv_constants.RIS_CODE__HTTP_FORBIDDEN_INVALID_TOKEN) {
+        consolelogpao('UNAUTHORIZING... TOKEN EXPIRED... !! ')
+      } else {
+        consolelogpao('NETWORK UNREACHABLE ! (Error in fetch)', UserStore.getters.getServerCode, ris.code)
+      }
       // Read all data from IndexedDB Store into Memory
       await updateArrayInMemory(context)
     } else {
-      if (ris === rescodes.OK && checkPending) {
+      if (ris.code === rescodes.OK && checkPending) {
         waitAndcheckPendingMsg(context)
       }
     }
   }
 
   async function updateArrayInMemory(context) {
-    console.log('Update the array in memory, from todos table from IndexedDb')
+    // console.log('Update the array in memory, from todos table from IndexedDb')
     await globalroutines(null, 'updateinMemory', 'todos', null)
       .then(() => {
         // console.log('updateArrayInMemory! ')
@@ -246,8 +252,8 @@ namespace Actions {
   }
 
   function UpdateNewIdFromDB(oldItem, newItem, method) {
-    console.log('PRIMA state.todos', state.todos)
-    console.log('ITEM', newItem)
+    // console.log('PRIMA state.todos', state.todos)
+    // console.log('ITEM', newItem)
     if (method === 'POST') {
       state.todos.push(newItem)
       Todos.mutations.setTodos_changed()
@@ -260,7 +266,7 @@ namespace Actions {
     }
 
 
-    console.log('DOPO state.todos', state.todos)
+    // console.log('DOPO state.todos', state.todos)
   }
 
   async function dbInsertSaveTodo(context, itemtodo: ITodo, method) {
@@ -290,7 +296,7 @@ namespace Actions {
   }
 
   async function dbDeleteTodo(context, item: ITodo) {
-    console.log('dbDeleteTodo', item)
+    // console.log('dbDeleteTodo', item)
     let call = process.env.MONGODB_HOST + '/todos/' + item._id
 
     const token = UserStore.state.idToken

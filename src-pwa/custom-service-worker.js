@@ -1,4 +1,3 @@
-
 /*
  * This file (which will be your service worker)
  * is picked up by the build system ONLY if
@@ -7,47 +6,46 @@
 
 // Questo è il swSrc
 
-console.log('SW-06 ___________________________  PAO: this is my custom service worker');
+console.log('   [  VER-0.0.12 ] _---------________-----------_________------------__________________________  PAO: this is my custom service worker');
 
 importScripts('https://storage.googleapis.com/workbox-cdn/releases/3.0.0/workbox-sw.js'); //++Todo: Replace with local workbox.js
 importScripts('../statics/js/idb.js');
 importScripts('../statics/js/storage.js');
 
 
-console.log('SW-06 1');
+// console.log('SW-06 1');
 const cfgenv = {
   serverweb: self.location.protocol + "//" + self.location.hostname + ':3000',
   dbname: 'mydb3',
   dbversion: 11,
 }
 
-console.log('SW-06 2');
+// console.log('SW-06 2');
 
-console.log('SERVERWEB=', cfgenv.serverweb)
+// console.log('SERVERWEB=', cfgenv.serverweb)
 
 // console.log('serverweb', cfgenv.serverweb)
 
 async function writeData(table, data) {
-  console.log('writeData', table, data);
+  // console.log('writeData', table, data);
   await idbKeyval.setdata(table, data);
 }
 
 async function readAllData(table) {
-  console.log('readAllData', table);
+  // console.log('readAllData', table);
   return await idbKeyval.getalldata(table);
 }
 
 async function clearAllData(table) {
-  console.log('clearAllData', table);
+  // console.log('clearAllData', table);
   await idbKeyval.clearalldata(table)
 }
 
 async function deleteItemFromData(table, id) {
-  console.log('deleteItemFromData', table, 'ID:', id);
+  // console.log('deleteItemFromData', table, 'ID:', id);
 
   await idbKeyval.deletedata(table, id)
 }
-
 
 
 // self.addEventListener('activate', function(event) {
@@ -58,7 +56,7 @@ async function deleteItemFromData(table, id) {
 
 if (!workbox) {
   let workbox = new self.WorkboxSW();
-  console.log('SW-06 3');
+  // console.log('SW-06 3');
 }
 
 if (workbox) {
@@ -109,15 +107,15 @@ if (workbox) {
   workbox.routing.registerRoute(
     new RegExp(cfgenv.serverweb + '/todos/'),
     function (args) {
-      console.log('registerRoute!')
+      // console.log('registerRoute!')
       return fetch(args.event.request, args.event.headers)
         .then(function (res) {
-          console.log('1° *******  [[[ SERVICE-WORKER ]]] registerRoute fetch: ', args.event)
+          console.log('1° *******  [[[ SERVICE-WORKER ]]] registerRoute fetch: -> ', args.event.headers)
           // LOAD FROM SERVER , AND SAVE INTO INDEXEDDB
           console.log('res.status', res.status)
           if (res.status === 200) {
-            var clonedRes = res.clone();
-            clearAllData('todos')
+            const clonedRes = res.clone();
+            return clearAllData('todos')
               .then(function () {
                 return clonedRes.json();
               })
@@ -129,8 +127,8 @@ if (workbox) {
                   }
                 }
               });
-            return res
           }
+          return res
         })
     }
   );
@@ -201,18 +199,18 @@ if (workbox) {
     })
   );
 
-  workbox.routing.registerRoute(
-    new RegExp(/^http/),
-    workbox.strategies.networkFirst({
-      cacheName: 'all-stuff',
-      plugins: [
-        new workbox.expiration.Plugin({
-          maxAgeSeconds: 10 * 24 * 60 * 60,
-          // Only cache 10 requests.
-        }),
-      ]
-    })
-  );
+  // workbox.routing.registerRoute(
+  //   new RegExp(/^http/),
+  //   workbox.strategies.networkFirst({
+  //     cacheName: 'all-stuff',
+  //     plugins: [
+  //       new workbox.expiration.Plugin({
+  //         maxAgeSeconds: 10 * 24 * 60 * 60,
+  //         // Only cache 10 requests.
+  //       }),
+  //     ]
+  //   })
+  // );
 
 
   workbox.routing.registerRoute(
@@ -225,14 +223,14 @@ if (workbox) {
 
 if ('serviceWorker' in navigator) {
 
-  console.log('*****************      Entering in custom-service-worker.js:')
+  // console.log('*****************      Entering in custom-service-worker.js:')
 
 }
 
 self.addEventListener('fetch', (event) => {
   if (event.request.url === '/') {
     const staleWhileRevalidate = new workbox.strategies.StaleWhileRevalidate();
-    event.respondWith(staleWhileRevalidate.handle({event}));
+    event.respondWith(staleWhileRevalidate.handle({ event }));
   }
 });
 
@@ -280,13 +278,13 @@ self.addEventListener('sync', function (event) {
         headers.append('Accept', 'application/json')
         headers.append('x-auth', token)
 
-        console.log('A1) INIZIO.............................................................');
+        // console.log('A1) INIZIO.............................................................');
 
         event.waitUntil(
           readAllData(table)
             .then(function (alldata) {
               const myrecs = [...alldata]
-              console.log('----------------------- LEGGO QUALCOSA DAL WAITUNTIL ')
+              // console.log('----------------------- LEGGO QUALCOSA DAL WAITUNTIL ')
               if (myrecs) {
                 for (let rec of myrecs) {
                   //console.log('syncing', table, '', rec.descr)
@@ -304,18 +302,10 @@ self.addEventListener('sync', function (event) {
                     mode: 'cors',   // 'no-cors',
                     body: JSON.stringify(rec)
                   })
-                    .then(function (resData) {
-                      // console.log('Result CALL ', method, ' OK? =', resData.ok);
-
-                      // Anyway Delete this, otherwise in some cases will return error, but it's not a problem.
-                      // for example if I change a record and then I deleted ...
-                      // if (resData.ok) {
-                      deleteItemFromData(table, rec._id);
-                      // }
-
+                    .then(resData => deleteItemFromData(table, rec._id))
+                    .then(() => {
                       console.log('DELETE: ', mystrparam)
                       deleteItemFromData('swmsg', mystrparam)
-
                     })
                     .catch(function (err) {
                       console.log('!!!!!!!!!!!!!!!   Error while sending data', err);
@@ -360,7 +350,7 @@ self.addEventListener('sync', event => {
 })
 */
 
-self.addEventListener('notificationclick', function(event) {
+self.addEventListener('notificationclick', function (event) {
   var notification = event.notification;
   var action = event.action;
 
@@ -373,8 +363,8 @@ self.addEventListener('notificationclick', function(event) {
     console.log(action);
     event.waitUntil(
       clients.matchAll()
-        .then(function(clis) {
-          var client = clis.find(function(c) {
+        .then(function (clis) {
+          var client = clis.find(function (c) {
             return c.visibilityState === 'visible';
           });
 
@@ -390,14 +380,14 @@ self.addEventListener('notificationclick', function(event) {
   }
 });
 
-self.addEventListener('notificationclose', function(event) {
+self.addEventListener('notificationclose', function (event) {
   console.log('Notification was closed', event);
 });
 
-self.addEventListener('push', function(event) {
+self.addEventListener('push', function (event) {
   console.log('Push Notification received', event);
 
-  var data = {title: 'New!', content: 'Something new happened!', openUrl: '/'};
+  var data = { title: 'New!', content: 'Something new happened!', openUrl: '/' };
 
   if (event.data) {
     data = JSON.parse(event.data.text());

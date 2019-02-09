@@ -16,18 +16,21 @@ async function sendRequest(url: string, lang: string, mytok: string, method: str
     configInit = {
       method: method,
       cache: 'no-cache',
+      mode: 'cors',
       headers: authHeader
     }
   } else if (method === 'DELETE') {
     configInit = {
       method: method,
       cache: 'no-cache',
+      mode: 'cors',
       headers: authHeader
     }
   } else {
     configInit = {
       method: method,
       cache: 'no-cache',
+      mode: 'cors',
       body: JSON.stringify(mydata),
       headers: authHeader
     }

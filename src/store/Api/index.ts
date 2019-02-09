@@ -9,8 +9,10 @@ export { addAuthHeaders, removeAuthHeaders, API_URL } from './Instance'
 import Paths from '@paths'
 import { rescodes } from '@src/store/Modules/rescodes'
 
-import { UserStore } from '@modules'
+import { GlobalStore, UserStore } from '@modules'
 import globalroutines from './../../globalroutines/index'
+import { serv_constants } from '@src/store/Modules/serv_constants'
+import router from '@router'
 
 
 // const algoliaApi = new AlgoliaSearch()
@@ -45,45 +47,60 @@ export namespace ApiTool {
     })
   }
 
-  export async function SendReq(url: string, lang: string, mytok: string, method: string, mydata: any, noAuth: boolean = false) {
+  export async function SendReq(url: string, lang: string, mytok: string, method: string, mydata: any, setAuthToken: boolean = false) {
     UserStore.mutations.setServerCode(rescodes.EMPTY)
+    UserStore.mutations.setResStatus(0)
     UserStore.mutations.setAuth('')
     return await new Promise(function (resolve, reject) {
       let ricevuto = false
-      sendRequest(url, lang, mytok, method, mydata)
+
+      return sendRequest(url, lang, mytok, method, mydata)
         .then(resreceived => {
+          console.log('resreceived', resreceived)
           ricevuto = true
           let res = resreceived.clone()
           if (process.env.DEV) {
             console.log('SendReq RES [', res.status, ']', res)
           }
 
-          let x_auth_token = ''
+          UserStore.mutations.setResStatus(res.status)
           if (res.status === 200) {
+            let x_auth_token = ''
             try {
-              if (!noAuth) {
+              if (setAuthToken) {
                 x_auth_token = String(res.headers.get('x-auth'))
+
+                if (x_auth_token === '') {
+                  UserStore.mutations.setServerCode(rescodes.ERR_AUTHENTICATION)
+                }
+                UserStore.mutations.setAuth(x_auth_token)
 
                 if (url === process.env.MONGODB_HOST + '/updatepwd') {
                   UserStore.mutations.UpdatePwd({ idToken: x_auth_token })
                   localStorage.setItem(rescodes.localStorage.token, x_auth_token)
                 }
-
-                if (x_auth_token === '') {
-                  UserStore.mutations.setServerCode(rescodes.ERR_AUTHENTICATION)
-                }
               }
 
               UserStore.mutations.setServerCode(rescodes.OK)
-              UserStore.mutations.setAuth(x_auth_token)
             } catch (e) {
-              if (!noAuth) {
+              if (setAuthToken) {
                 UserStore.mutations.setServerCode(rescodes.ERR_AUTHENTICATION)
-                UserStore.mutations.setAuth(x_auth_token)
+                UserStore.mutations.setAuth('')
               }
-              return reject(e)
+              GlobalStore.mutations.setStateConnection(ricevuto ? 'online' : 'offline')
+              return reject({ code: rescodes.ERR_AUTHENTICATION, status: res.status })
             }
+          } else if (res.status === serv_constants.RIS_CODE__HTTP_FORBIDDEN_INVALID_TOKEN) {
+            // Forbidden
+            // You probably is connectiong with other page...
+            UserStore.mutations.setServerCode(rescodes.ERR_AUTHENTICATION)
+            UserStore.mutations.setAuth('')
+            GlobalStore.mutations.setStateConnection(ricevuto ? 'online' : 'offline')
+            router.push('/signin')
+            return reject({ code: rescodes.ERR_AUTHENTICATION, status: res.status })
           }
+
+          GlobalStore.mutations.setStateConnection(ricevuto ? 'online' : 'offline')
 
           return res.json()
             .then((body) => {
@@ -91,7 +108,7 @@ export namespace ApiTool {
             })
             .catch(e => {
               UserStore.mutations.setServerCode(rescodes.ERR_GENERICO)
-              return reject(e)
+              return reject({ code: rescodes.ERR_GENERICO, status: res.status })
             })
 
         })
@@ -104,7 +121,10 @@ export namespace ApiTool {
           } else {
             UserStore.mutations.setServerCode(rescodes.ERR_GENERICO)
           }
-          return reject(error)
+
+          GlobalStore.mutations.setStateConnection(ricevuto ? 'online' : 'offline')
+
+          return reject({ code: error, status: 0 })
         })
     })
   }
@@ -129,50 +149,56 @@ export namespace ApiTool {
           headers.append('Accept', 'application/json')
           headers.append('x-auth', token)
 
-          console.log('A1) INIZIO.............................................................')
-
+          // console.log('A1) INIZIO.............................................................')
           await globalroutines(null, 'readall', table, null)
             .then(function (alldata) {
-              const myrecs = [...alldata]
-              console.log('----------------------- LEGGO QUALCOSA ')
-              if (myrecs) {
-                for (let rec of myrecs) {
-                  // console.log('syncing', table, '', rec.descr)
-                  let link = process.env.MONGODB_HOST + '/todos'
+                const myrecs = [...alldata]
+                // console.log('----------------------- LEGGO QUALCOSA ')
+                if (myrecs) {
+                  for (let rec of myrecs) {
+                    // console.log('syncing', table, '', rec.descr)
+                    let link = process.env.MONGODB_HOST + '/todos'
 
-                  if (method !== 'POST')
-                    link += '/' + rec._id
+                    if (method !== 'POST')
+                      link += '/' + rec._id
 
-                  console.log(' [Alternative] ++++++++++++++++++ SYNCING !!!!  ', rec.descr, table, 'FETCH: ', method, link, 'data:')
+                    console.log(' [Alternative] ++++++++++++++++++ SYNCING !!!!  ', rec.descr, table, 'FETCH: ', method, link, 'data:')
 
-                  // Insert/Delete/Update table to the server
-                  fetch(link, {
-                    method: method,
-                    headers: headers,
-                    mode: 'cors',   // 'no-cors',
-                    body: JSON.stringify(rec)
-                  })
-                    .then(function (resData) {
-                      // console.log('Result CALL ', method, ' OK? =', resData.ok);
+                    let lettoqualcosa = false
 
-                      // Anyway Delete this, otherwise in some cases will return error, but it's not a problem.
-                      // for example if I change a record and then I deleted ...
-                      // if (resData.ok) {
-                      // deleteItemFromData(table, rec._id);
-                      globalroutines(null, 'delete', table, null, rec._id)
+                    // Insert/Delete/Update table to the server
+                    return fetch(link, {
+                      method: method,
+                      headers: headers,
+                      cache: 'no-cache',
+                      mode: 'cors',   // 'no-cors',
+                      body: JSON.stringify(rec)
+                    }).then(resData => {
+                      lettoqualcosa = true
 
-                      console.log('DELETE: ', mystrparam)
-                      // deleteItemFromData('swmsg', mystrparam)
-                      globalroutines(null, 'delete', 'swmsg', null, mystrparam)
-
+                      console.log('Clear', table, rec._id)
+                      return globalroutines(null, 'delete', table, null, rec._id)
                     })
-                    .catch(function (err) {
-                      console.log(' [Alternative] !!!!!!!!!!!!!!!   Error while sending data', err)
-                    })
+                      .then((ris) => {
+                        console.log('Clear', 'swmsg', method)
+                        GlobalStore.mutations.setStateConnection(lettoqualcosa ? 'online' : 'offline')
+                        // deleteItemFromData('swmsg', mystrparam)
+                        return globalroutines(null, 'delete', 'swmsg', null, mystrparam)
+                      })
+                      .catch(function (err) {
+                        console.log(' [Alternative] !!!!!!!!!!!!!!!   Error while sending data', err)
+                        GlobalStore.mutations.setStateConnection(lettoqualcosa ? 'online' : 'offline')
+                      })
+
+                  }
                 }
               }
+            ).catch(e => {
+              console.log('ERROR:', e)
             })
+
           console.log(' [Alternative] A2) ?????????????????????????? ESCO DAL LOOP !!!!!!!!! err=')
+
         }
       }
     }

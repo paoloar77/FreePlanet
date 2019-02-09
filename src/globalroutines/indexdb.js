@@ -73,6 +73,8 @@ export default async (context, cmd, table, datakey = null, id = '') => {
     return await storage.getdata(table, id)
   } else if (cmd === 'delete') {
     return await storage.deletedata(table, id)
+  } else if (cmd === 'clearalldata') {
+    return await storage.clearalldata(table)
   } else if (cmd === 'log') {
     consolelogpao(table)
   }

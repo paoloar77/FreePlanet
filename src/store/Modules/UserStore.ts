@@ -121,6 +121,10 @@ namespace Mutations {
     state.servercode = num
   }
 
+  function setResStatus(state: IUserState, status: number) {
+    state.resStatus = status
+  }
+
   function setAuth(state: IUserState, x_auth_token: string) {
     state.x_auth_token = x_auth_token
   }
@@ -168,6 +172,7 @@ namespace Mutations {
     setlang: b.commit(setlang),
     UpdatePwd: b.commit(UpdatePwd),
     setServerCode: b.commit(setServerCode),
+    setResStatus: b.commit(setResStatus),
     setAuth: b.commit(setAuth),
     clearAuthData: b.commit(clearAuthData),
     setErrorCatch: b.commit(setErrorCatch),
@@ -205,7 +210,7 @@ namespace Actions {
 
     Mutations.mutations.setServerCode(rescodes.CALLING)
 
-    return await Api.SendReq(call, state.lang, Getters.getters.tok, 'POST', usertosend)
+    return await Api.SendReq(call, state.lang, Getters.getters.tok, 'POST', usertosend, true)
       .then(({ res, body }) => {
         return { code: body.code, msg: body.msg }
       })
@@ -259,7 +264,7 @@ namespace Actions {
         // mutations.setServerCode(myres);
         if (body.code === serv_constants.RIS_CODE_EMAIL_VERIFIED) {
           console.log('VERIFICATO !!')
-          localStorage.setItem(rescodes.localStorage.verifiedEmail, '1')
+          localStorage.setItem(rescodes.localStorage.verified_email, String(true))
         } else {
           console.log('Risultato di vreg: ', body.code)
         }
@@ -326,7 +331,7 @@ namespace Actions {
               localStorage.setItem(rescodes.localStorage.username, username)
               localStorage.setItem(rescodes.localStorage.token, x_auth_token)
               localStorage.setItem(rescodes.localStorage.expirationDate, expirationDate.toString())
-              localStorage.setItem(rescodes.localStorage.verifiedEmail, '0')
+              localStorage.setItem(rescodes.localStorage.verified_email, String(false))
               state.isLogged = true
               // dispatch('storeUser', authData);
               // dispatch('setLogoutTimer', myres.data.expiresIn);
@@ -363,7 +368,7 @@ namespace Actions {
 
     Mutations.mutations.setServerCode(rescodes.CALLING)
 
-    return await Api.SendReq(call, state.lang, Getters.getters.tok, 'POST', usertosend)
+    return await Api.SendReq(call, state.lang, Getters.getters.tok, 'POST', usertosend, true)
       .then(({ res, body }) => {
         myres = res
         if (res.code === serv_constants.RIS_CODE_LOGIN_ERR) {
@@ -375,36 +380,41 @@ namespace Actions {
 
         if (myres.status === 200) {
           let myuser: IUserState = body.usertosend
-          let userId = myuser.userId
-          let username = authData.username
-          let verifiedEmail = myuser.verified_email === true
-          if (process.env.DEV) {
-            console.log('USERNAME = ' + username)
-            console.log('IDUSER= ' + userId)
-            Mutations.mutations.authUser({
-              userId: userId,
-              username: username,
-              idToken: state.x_auth_token,
-              verified_email: verifiedEmail
-            })
+          if (myuser) {
+            let userId = myuser.userId
+            let username = authData.username
+            let verified_email = myuser.verified_email
+            if (process.env.DEV) {
+              console.log('USERNAME = ' + username)
+              console.log('IDUSER= ' + userId)
+              console.log('state.x_auth_token= ' + state.x_auth_token)
+              Mutations.mutations.authUser({
+                userId,
+                username,
+                idToken: state.x_auth_token,
+                verified_email
+              })
+            }
+
+            const now = new Date()
+            // const expirationDate = new Date(now.getTime() + myres.data.expiresIn * 1000);
+            const expirationDate = new Date(now.getTime() * 1000)
+            localStorage.setItem(rescodes.localStorage.userId, userId)
+            localStorage.setItem(rescodes.localStorage.username, username)
+            localStorage.setItem(rescodes.localStorage.token, state.x_auth_token)
+            localStorage.setItem(rescodes.localStorage.expirationDate, expirationDate.toString())
+            localStorage.setItem(rescodes.localStorage.isLogged, String(true))
+            localStorage.setItem(rescodes.localStorage.verified_email, String(verified_email))
+
+            setGlobal()
+
+            // dispatch('storeUser', authData);
+            // dispatch('setLogoutTimer', myres.data.expiresIn);
+            return rescodes.OK
+          } else {
+            return rescodes.ERR_GENERICO
           }
-
-          const now = new Date()
-          // const expirationDate = new Date(now.getTime() + myres.data.expiresIn * 1000);
-          const expirationDate = new Date(now.getTime() * 1000)
-          localStorage.setItem(rescodes.localStorage.userId, userId)
-          localStorage.setItem(rescodes.localStorage.username, username)
-          localStorage.setItem(rescodes.localStorage.token, state.x_auth_token)
-          localStorage.setItem(rescodes.localStorage.expirationDate, expirationDate.toString())
-          localStorage.setItem(rescodes.localStorage.isLogged, String(true))
-          localStorage.setItem(rescodes.localStorage.verifiedEmail, Number(verifiedEmail).toString())
-
-          setGlobal()
-
-          // dispatch('storeUser', authData);
-          // dispatch('setLogoutTimer', myres.data.expiresIn);
-          return rescodes.OK
-        } else if (myres.status === 404) {
+        } else if (myres.status === serv_constants.RIS_CODE__HTTP_FORBIDDEN_INVALID_TOKEN) {
           if (process.env.DEV) {
             console.log('CODE = ' + body.code)
           }
@@ -449,31 +459,35 @@ namespace Actions {
     localStorage.removeItem(rescodes.localStorage.username)
     localStorage.removeItem(rescodes.localStorage.isLogged)
     // localStorage.removeItem(rescodes.localStorage.leftDrawerOpen)
-    localStorage.removeItem(rescodes.localStorage.verifiedEmail)
+    localStorage.removeItem(rescodes.localStorage.verified_email)
     localStorage.removeItem(rescodes.localStorage.categorySel)
 
-    router.push('/signin')
+    GlobalStore.actions.clearDataAfterLogout()
+
+    // this.$router.push('/signin')
   }
 
-  function setGlobal() {
+  async function setGlobal() {
     state.isLogged = true
     GlobalStore.mutations.setleftDrawerOpen(localStorage.getItem(rescodes.localStorage.leftDrawerOpen) === 'true')
     GlobalStore.mutations.setCategorySel(localStorage.getItem(rescodes.localStorage.categorySel))
 
-    GlobalStore.actions.loadAfterLogin()
-
-    Todos.actions.dbLoadTodo(true)
 
 
+    await GlobalStore.actions.loadAfterLogin()
+      .then(() => {
+        Todos.actions.dbLoadTodo(true)
+      })
   }
 
 
-  async function autologin(context) {
+  async function autologin_FromLocalStorage(context) {
     try {
-      console.log('*** Autologin ***')
+      console.log('*** autologin_FromLocalStorage ***')
       // INIT
+
       UserStore.mutations.setlang(process.env.LANG_DEFAULT)
-      // ++Todo: Estrai la Lang dal Localstorage
+      // Estrai la Lang dal Localstorage
       const lang = localStorage.getItem('lang')
       if (lang) {
         UserStore.mutations.setlang(lang)
@@ -492,7 +506,7 @@ namespace Actions {
       }
       const userId = String(localStorage.getItem(rescodes.localStorage.userId))
       const username = String(localStorage.getItem(rescodes.localStorage.username))
-      const verifiedEmail = localStorage.getItem(rescodes.localStorage.verifiedEmail) === '1'
+      const verified_email = localStorage.getItem(rescodes.localStorage.verified_email) === 'true'
 
       console.log('autologin userId', userId)
 
@@ -500,10 +514,10 @@ namespace Actions {
         userId: userId,
         username: username,
         idToken: token,
-        verified_email: verifiedEmail
+        verified_email: verified_email
       })
 
-      setGlobal()
+      await setGlobal()
 
       console.log('autologin userId STATE ', state.userId)
 
@@ -522,7 +536,7 @@ namespace Actions {
     signup: b.dispatch(signup),
     signin: b.dispatch(signin),
     logout: b.dispatch(logout),
-    autologin: b.dispatch(autologin)
+    autologin_FromLocalStorage: b.dispatch(autologin_FromLocalStorage)
 
   }
 }

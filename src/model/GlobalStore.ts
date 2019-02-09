@@ -2,6 +2,8 @@ export interface IPost {
   title: string
 }
 
+export type StateConnection = 'online' | 'offline'
+
 export interface IGlobalState {
   conta: number
   isSubscribed: boolean
@@ -11,6 +13,7 @@ export interface IGlobalState {
   menuCollapse: boolean
   leftDrawerOpen: boolean
   category: string
+  stateConnection: StateConnection
   posts: IPost[]
   listatodo: ITodoList[]
 }
