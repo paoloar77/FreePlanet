@@ -49,9 +49,13 @@
         <div v-if="itemtodo.enableExpiring">
             <div :class="classExpiring">
                 <q-datetime
+                        type="date"
                         :class="classExpiringEx"
                         v-model="itemtodo.expiring_at"
-                        class="myexpired">
+                        class="myexpired"
+                        format="DD/MM/YY"
+                        @change="val => { model = val }" >
+
                 </q-datetime>
             </div>
         </div>

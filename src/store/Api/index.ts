@@ -107,8 +107,10 @@ export namespace ApiTool {
               return resolve({ res, body })
             })
             .catch(e => {
-              UserStore.mutations.setServerCode(rescodes.ERR_GENERICO)
-              return reject({ code: rescodes.ERR_GENERICO, status: res.status })
+              return resolve({ res, body: {} })
+              // Array not found...
+              // UserStore.mutations.setServerCode(rescodes.ERR_GENERICO)
+              // return reject({ code: rescodes.ERR_GENERICO, status: res.status })
             })
 
         })

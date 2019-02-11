@@ -350,24 +350,11 @@ export default class Todo extends Vue {
     }, 10000)
   }
 
-  copy(o) {
-    let output, v, key
-    output = Array.isArray(o) ? [] : {}
-    for (key in o) {
-      v = o[key]
-      output[key] = (typeof v === 'object') ? this.copy(v) : v
-    }
-    return output
-  }
-
-
   initcat() {
 
+    var tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
 
-    let mydatenow = new Date().getDate()
-    let mydateexp = new Date().getDate() + 10
-
-    // console.log('User:' + UserStore.state.userId)
 
     const objtodo: ITodo = {
       // _id: new Date().toISOString(),  // Create NEW
@@ -376,11 +363,11 @@ export default class Todo extends Vue {
       descr: '',
       priority: rescodes.Todos.PRIORITY_NORMAL,
       completed: false,
-      created_at: mydatenow,
-      modify_at: mydatenow,
-      completed_at: 0,
+      created_at: new Date(),
+      modify_at: new Date(),
+      completed_at: new Date(),
       category: '',
-      expiring_at: mydateexp,
+      expiring_at: tomorrow,
       enableExpiring: false,
       id_prev: '',
       id_next: '',
@@ -388,7 +375,8 @@ export default class Todo extends Vue {
       modified: false,
       progress: 0
     }
-    return this.copy(objtodo)
+    // return this.copy(objtodo)
+    return objtodo
 
   }
 
@@ -416,8 +404,6 @@ export default class Todo extends Vue {
     }
 
     const objtodo = this.initcat()
-
-    console.log('insertTodo ', UserStore.state.userId)
 
     objtodo.descr = this.todo
     objtodo.category = this.getCategory()
@@ -766,7 +752,7 @@ export default class Todo extends Vue {
 
   modifyField(recOut, recIn, field) {
     if (recOut[field] !== recIn[field]) {
-      // console.log('***************  CAMPO ', field, 'MODIFICATO!', recOut[field], recIn[field])
+      // console.log('***************  CAMPO ', field, 'MODIFICATO!', recOut[field])
       recOut.modified = true
       recOut[field] = recIn[field]
       return true

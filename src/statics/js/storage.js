@@ -47,14 +47,28 @@ let idbKeyval = (() => {
       });
       return req.result;
     },
+
+    // jsonCopy(src) {
+    //   return JSON.parse(JSON.stringify(src));
+    // },
+
+    // contains(a, b) {
+    //   // array matches
+    //   if (Array.isArray(b)) {
+    //     return b.some(x => a.indexOf(x) > -1);
+    //   }
+    //   // string match
+    //   return a.indexOf(b) > -1;
+    // },
+
     async getdata(table, key) {
       let req;
 
       await withStore('readonly', table, store => {
-        console.log('store', store, 'key', key)
+        // console.log('store', store, 'key', key)
         req = store.get(key);
       });
-      // console.log('RISFINALE!', req.result)
+
       return req.result;
     },
     async getalldata(table) {
@@ -73,7 +87,7 @@ let idbKeyval = (() => {
     },
     async setdata(table, value) {
       let req;
-      console.log('setdata', table, value)
+      // console.log('setdata', table, value)
 
       await withStore('readwrite', table, store  => {
         req = store.put(value);

@@ -278,6 +278,8 @@ namespace Actions {
 
     const token = UserStore.state.idToken
 
+    console.log('TODO TO SAVE: ', itemtodo)
+
     let res = await Api.SendReq(call, UserStore.state.lang, token, method, itemtodo)
       .then(({ res, newItem }) => {
         console.log('dbInsertSaveTodo RIS =', newItem)

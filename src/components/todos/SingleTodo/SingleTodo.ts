@@ -69,6 +69,11 @@ export default class SingleTodo extends Vue {
     this.updateClasses()
   }
 
+  dateToYYYYMMDD(date) {
+    // may have timezone caveats https://stackoverflow.com/a/29774197/1850609
+    return date && date.toISOString().split('T')[0]
+  }
+
   isTodo() {
     return this.isTodoByElem(this.itemtodo)
   }

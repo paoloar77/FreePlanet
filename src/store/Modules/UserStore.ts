@@ -92,7 +92,7 @@ namespace Mutations {
     state.category = data.categorySel
     // @ts-ignore
     state.tokens = [
-      { access: 'auth', token: data.idToken }
+      { access: 'auth ' + navigator.userAgent, token: data.idToken, date_login: new Date() }
     ]
   }
 
@@ -114,7 +114,7 @@ namespace Mutations {
     if (!state.tokens) {
       state.tokens = []
     }
-    state.tokens.push({ access: 'auth', token: data.idToken })
+    state.tokens.push({ access: 'auth ' + navigator.userAgent, token: data.idToken, data_login: new Date()  })
   }
 
   function setServerCode(state: IUserState, num: number) {
@@ -143,6 +143,7 @@ namespace Mutations {
     if (state.servercode !== rescodes.ERR_SERVERFETCH) {
       state.servercode = err
     }
+    console.log('Err catch: (servercode:', err, ')')
   }
 
   function getMsgError(state: IUserState, err: number) {

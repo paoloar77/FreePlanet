@@ -1,5 +1,6 @@
 export let idbKeyval = (() => {
   let db;
+  const fieldsData = ['completed_at', 'created_at', 'expiring_at', 'modify_at']
 
   function getDB() {
     if (!db) {
@@ -29,7 +30,7 @@ export let idbKeyval = (() => {
     return db;
   }
 
-  async function withStore(type, table, callback, ) {
+  async function withStore(type, table, callback,) {
     const db = await getDB();
     return new Promise((resolve, reject) => {
       const transaction = db.transaction(table, type);
@@ -47,14 +48,18 @@ export let idbKeyval = (() => {
       });
       return req.result;
     },
+    jsonCopy(src) {
+      return JSON.parse(JSON.stringify(src));
+    },
+
     async getdata(table, key) {
       let req;
 
       await withStore('readonly', table, store => {
-        console.log('store', store, 'key', key)
+        // console.log('store', store, 'key', key)
         req = store.get(key);
       });
-      // console.log('RISFINALE!', req.result)
+
       return req.result;
     },
     async getalldata(table) {
@@ -80,9 +85,8 @@ export let idbKeyval = (() => {
     },
     async setdata(table, value) {
       let req;
-      // console.log('setdata', table, value)
 
-      await withStore('readwrite', table, store  => {
+      await withStore('readwrite', table, store => {
         req = store.put(value);
       });
       return req.result;

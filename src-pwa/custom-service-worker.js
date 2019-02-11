@@ -6,7 +6,7 @@
 
 // Questo è il swSrc
 
-console.log('   [  VER-0.0.12 ] _---------________-----------_________------------__________________________  PAO: this is my custom service worker');
+console.log('   [  VER-0.0.17 ] _---------________-----------_________------------__________________________  PAO: this is my custom service worker');
 
 importScripts('https://storage.googleapis.com/workbox-cdn/releases/3.0.0/workbox-sw.js'); //++Todo: Replace with local workbox.js
 importScripts('../statics/js/idb.js');
@@ -19,12 +19,6 @@ const cfgenv = {
   dbname: 'mydb3',
   dbversion: 11,
 }
-
-// console.log('SW-06 2');
-
-// console.log('SERVERWEB=', cfgenv.serverweb)
-
-// console.log('serverweb', cfgenv.serverweb)
 
 async function writeData(table, data) {
   // console.log('writeData', table, data);
@@ -108,30 +102,43 @@ if (workbox) {
     new RegExp(cfgenv.serverweb + '/todos/'),
     function (args) {
       // console.log('registerRoute!')
+      // console.log('DATABODY:', args.event.request.body)
+      let myres = null
       return fetch(args.event.request, args.event.headers)
         .then(function (res) {
-          console.log('1° *******  [[[ SERVICE-WORKER ]]] registerRoute fetch: -> ', args.event.headers)
+          myres = res
+          console.log('1° *******  [[[ SERVICE-WORKER ]]] registerRoute fetch: -> ', args.event.request, res)
           // LOAD FROM SERVER , AND SAVE INTO INDEXEDDB
           console.log('res.status', res.status)
           if (res.status === 200) {
             const clonedRes = res.clone();
-            return clearAllData('todos')
-              .then(function () {
-                return clonedRes.json();
-              })
-              .then(function (data) {
-                if (data.todos) {
-                  console.log('Records TODOS Received from Server [', data.todos.length, 'record]', data.todos)
-                  for (let key in data.todos) {
-                    writeData('todos', data.todos[key])
-                  }
-                }
-              });
+            clearAllData('todos')
+            return clonedRes
           }
-          return res
         })
-    }
-  );
+        .then((clonedRes) => {
+          if (clonedRes !== null)
+            return clonedRes.json();
+          return null
+        })
+        .then(data => {
+          if (data) {
+            if (data.todos) {
+              console.log('Records TODOS Received from Server [', data.todos.length, 'record]', data.todos)
+              for (let key in data.todos) {
+                writeData('todos', data.todos[key])
+              }
+            }
+          }
+        })
+        .then(() => {
+          return myres
+        })
+        .catch(err => {
+          console.log('ERROR registerRoute FETCH:', err)
+          return myres
+        })
+    })
 
 
   workbox.routing.registerRoute(
@@ -199,18 +206,18 @@ if (workbox) {
     })
   );
 
-  // workbox.routing.registerRoute(
-  //   new RegExp(/^http/),
-  //   workbox.strategies.networkFirst({
-  //     cacheName: 'all-stuff',
-  //     plugins: [
-  //       new workbox.expiration.Plugin({
-  //         maxAgeSeconds: 10 * 24 * 60 * 60,
-  //         // Only cache 10 requests.
-  //       }),
-  //     ]
-  //   })
-  // );
+// workbox.routing.registerRoute(
+//   new RegExp(/^http/),
+//   workbox.strategies.networkFirst({
+//     cacheName: 'all-stuff',
+//     plugins: [
+//       new workbox.expiration.Plugin({
+//         maxAgeSeconds: 10 * 24 * 60 * 60,
+//         // Only cache 10 requests.
+//       }),
+//     ]
+//   })
+// );
 
 
   workbox.routing.registerRoute(
@@ -227,12 +234,22 @@ if ('serviceWorker' in navigator) {
 
 }
 
-self.addEventListener('fetch', (event) => {
-  if (event.request.url === '/') {
-    const staleWhileRevalidate = new workbox.strategies.StaleWhileRevalidate();
-    event.respondWith(staleWhileRevalidate.handle({ event }));
-  }
+self.addEventListener('fetch', function (event) {
+  event.respondWith(
+    fetch(event.request, event.headers)
+      .catch(err => {
+        console.log('_______________________ ERRORE FETCH SW: ', event.request, err)
+        return caches.match(event.request);
+      })
+  );
 });
+
+// self.addEventListener('fetch', (event) => {
+//   if (event.request.url === '/') {
+//     const staleWhileRevalidate = new workbox.strategies.StaleWhileRevalidate();
+//     event.respondWith(staleWhileRevalidate.handle({ event }));
+//   }
+// });
 
 // self.addEventListener('fetch', function (event) {
 //   console.log('[Service Worker] Fetching something ....', event);
@@ -295,6 +312,8 @@ self.addEventListener('sync', function (event) {
 
                   console.log('++++++++++++++++++ SYNCING !!!!  ', rec.descr, table, 'FETCH: ', method, link, 'data:')
 
+                  console.log('DATATOSAVE:', JSON.stringify(rec))
+
                   // Insert/Delete/Update table to the server
                   fetch(link, {
                     method: method,
@@ -302,14 +321,15 @@ self.addEventListener('sync', function (event) {
                     mode: 'cors',   // 'no-cors',
                     body: JSON.stringify(rec)
                   })
-                    .then(resData => deleteItemFromData(table, rec._id))
                     .then(() => {
-                      console.log('DELETE: ', mystrparam)
+                      console.log('DELETE SWMSG: ', mystrparam)
                       deleteItemFromData('swmsg', mystrparam)
                     })
                     .catch(function (err) {
+                      console.log('DELETE : ', table, mystrparam)
+                      deleteItemFromData(table, rec._id)
                       console.log('!!!!!!!!!!!!!!!   Error while sending data', err);
-                    });
+                    })
                 }
               }
             })
