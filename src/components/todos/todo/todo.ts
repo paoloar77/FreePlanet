@@ -287,7 +287,7 @@ export default class Todo extends Vue {
     let update = false
     await this.todos_arr.forEach((elem: ITodo) => {
       if (elem.modified) {
-        // console.log('calling MODIFY 3')
+        console.log('calling MODIFY 3')
         this.modify(elem, false)
         update = true
         elem.modified = false
@@ -448,17 +448,17 @@ export default class Todo extends Vue {
       cmdSw = rescodes.DB.CMD_SYNC_TODOS
     }
 
-    if (process.env.DEV) {
-      console.log('serviceWorker ', ('serviceWorker' in navigator) ? 'PRESENT!' : 'DOESN\'T EXIST!')
-      console.log('SyncManager ', ('SyncManager' in window) ? 'PRESENT!' : 'DOESN\'T EXIST!')
-    }
+    // if (process.env.DEV) {
+    //   console.log('serviceWorker ', ('serviceWorker' in navigator) ? 'PRESENT!' : 'DOESN\'T EXIST!')
+    //   console.log('SyncManager ', ('SyncManager' in window) ? 'PRESENT!' : 'DOESN\'T EXIST!')
+    // }
 
     const mythis = this
     if ('serviceWorker' in navigator) {
       await navigator.serviceWorker.ready
         .then(function (sw) {
           // _id: new Date().toISOString(),
-          console.log('----------------------      navigator.serviceWorker.ready')
+          // console.log('----------------------      navigator.serviceWorker.ready')
 
           // mythis.sendMessageToSW(item, method)
 
@@ -469,20 +469,20 @@ export default class Todo extends Vue {
             })
           const sep = '|'
 
-          let multiparams = cmdSw + sep + table + sep + method + sep + UserStore.state.idToken + sep + UserStore.state.lang
+          let multiparams = cmdSw + sep + table + sep + method + sep + UserStore.state.x_auth_token + sep + UserStore.state.lang
           let mymsgkey = {
             _id: multiparams,
             value: multiparams
           }
           globalroutines(mythis, 'write', 'swmsg', mymsgkey, multiparams)
             .then(ris => {
-              if ('SyncManager' in window) {
-                console.log('   SENDING... sw.sync.register', multiparams)
-                return sw.sync.register(multiparams)
-              } else {
+              // if ('SyncManager' in window) {
+              //   console.log('   SENDING... sw.sync.register', multiparams)
+              //   return sw.sync.register(multiparams)
+              // } else {
                 // #Todo ++ Alternative 2 to SyncManager
                 Api.syncAlternative(multiparams)
-              }
+              // }
             })
             .then(function () {
 
@@ -515,12 +515,12 @@ export default class Todo extends Vue {
   }
 
   async saveItemToSyncAndDb(table: String, method, item: ITodo, update: boolean) {
-    return await this.cmdToSyncAndDb(rescodes.DB.CMD_SYNC_NEW_TODOS, table, method, item, 0, 'Your Post was saved for syncing!', update)
+    return await this.cmdToSyncAndDb(rescodes.DB.CMD_SYNC_NEW_TODOS, table, method, item, 0, '', update)
   }
 
 
   deleteItemToSyncAndDb(table: String, item: ITodo, id, update: boolean) {
-    return this.cmdToSyncAndDb(rescodes.DB.CMD_DELETE_TODOS, table, 'DELETE', item, id, 'Your Post was canceled for syncing!', update)
+    return this.cmdToSyncAndDb(rescodes.DB.CMD_DELETE_TODOS, table, 'DELETE', item, id, '', update)
   }
 
   /*
@@ -561,14 +561,14 @@ export default class Todo extends Vue {
       if (myobjprev !== null) {
         myobjprev.id_next = myobjtrov.id_next
         myobjprev.modified = true
-        // console.log('calling MODIFY 2')
+        console.log('calling MODIFY 2')
         this.modify(myobjprev, false)
       }
 
       if (myobjnext !== null) {
         myobjnext.id_prev = myobjtrov.id_prev
         myobjnext.modified = true
-        // console.log('calling MODIFY 1')
+        console.log('calling MODIFY 1')
         this.modify(myobjnext, false)
       }
 
@@ -703,7 +703,7 @@ export default class Todo extends Vue {
   }
 
   updateitem(myobj) {
-    // console.log('updateitem')
+    console.log('calling MODIFY 4 updateitem')
     this.modify(myobj, true)
   }
 
@@ -751,8 +751,10 @@ export default class Todo extends Vue {
   // }
 
   modifyField(recOut, recIn, field) {
-    if (recOut[field] !== recIn[field]) {
-      // console.log('***************  CAMPO ', field, 'MODIFICATO!', recOut[field])
+    if (String(recOut[field]) !== String(recIn[field])) {
+      console.log('***************  CAMPO ', field, 'MODIFICATO!')
+      console.log(recOut[field])
+      console.log(recIn[field])
       recOut.modified = true
       recOut[field] = recIn[field]
       return true

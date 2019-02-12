@@ -6,7 +6,7 @@
 
 // Questo è il swSrc
 
-console.log('   [  VER-0.0.17 ] _---------________-----------_________------------__________________________  PAO: this is my custom service worker');
+console.log('   [  VER-0.0.21 ] _---------________-----------_________------------__________________________  PAO: this is my custom service worker');
 
 importScripts('https://storage.googleapis.com/workbox-cdn/releases/3.0.0/workbox-sw.js'); //++Todo: Replace with local workbox.js
 importScripts('../statics/js/idb.js');
@@ -31,7 +31,7 @@ async function readAllData(table) {
 }
 
 async function clearAllData(table) {
-  // console.log('clearAllData', table);
+  console.log('clearAllData', table);
   await idbKeyval.clearalldata(table)
 }
 
@@ -104,6 +104,7 @@ if (workbox) {
       // console.log('registerRoute!')
       // console.log('DATABODY:', args.event.request.body)
       let myres = null
+      // return fetch(args.event.request, args.event.headers)
       return fetch(args.event.request, args.event.headers)
         .then(function (res) {
           myres = res
@@ -117,7 +118,7 @@ if (workbox) {
           }
         })
         .then((clonedRes) => {
-          if (clonedRes !== null)
+          if (clonedRes !== undefined)
             return clonedRes.json();
           return null
         })
@@ -140,6 +141,32 @@ if (workbox) {
         })
     })
 
+
+  workbox.routing.registerRoute(function (routeData) {
+    return (routeData.event.request.headers.get('accept').includes('text/html'));
+  }, function (args) {
+    return caches.match(args.event.request)
+      .then(function (response) {
+        if (response) {
+          return response;
+        } else {
+          return fetch(args.event.request)
+            .then(function (res) {
+              return caches.open('dynamic')
+                .then(function (cache) {
+                  cache.put(args.event.request.url, res.clone());
+                  return res;
+                })
+            })
+            .catch(function (err) {
+              return caches.match('/offline')
+                .then(function (res) {
+                  return res;
+                });
+            });
+        }
+      })
+  });
 
   workbox.routing.registerRoute(
     new RegExp(/.*\/(?:statics\/icons).*$/),
@@ -206,18 +233,18 @@ if (workbox) {
     })
   );
 
-// workbox.routing.registerRoute(
-//   new RegExp(/^http/),
-//   workbox.strategies.networkFirst({
-//     cacheName: 'all-stuff',
-//     plugins: [
-//       new workbox.expiration.Plugin({
-//         maxAgeSeconds: 10 * 24 * 60 * 60,
-//         // Only cache 10 requests.
-//       }),
-//     ]
-//   })
-// );
+  workbox.routing.registerRoute(
+    new RegExp(/^http/),
+    workbox.strategies.networkFirst({
+      cacheName: 'all-stuff',
+      plugins: [
+        new workbox.expiration.Plugin({
+          maxAgeSeconds: 10 * 24 * 60 * 60,
+          // Only cache 10 requests.
+        }),
+      ]
+    })
+  );
 
 
   workbox.routing.registerRoute(
@@ -234,15 +261,6 @@ if ('serviceWorker' in navigator) {
 
 }
 
-self.addEventListener('fetch', function (event) {
-  event.respondWith(
-    fetch(event.request, event.headers)
-      .catch(err => {
-        console.log('_______________________ ERRORE FETCH SW: ', event.request, err)
-        return caches.match(event.request);
-      })
-  );
-});
 
 // self.addEventListener('fetch', (event) => {
 //   if (event.request.url === '/') {
@@ -260,7 +278,7 @@ self.addEventListener('fetch', function (event) {
 //   }
 //   event.respondWith(caches.match(event.request));
 // });
-
+//
 
 // const syncStore = {}
 // self.addEventListener('message', event => {
@@ -273,6 +291,47 @@ self.addEventListener('fetch', function (event) {
 //   }
 //   console.log(event.data)
 // })
+
+// addEventListener('fetch', event => {
+//   // Prevent the default, and handle the request ourselves.
+//   event.respondWith(async function() {
+//     // Try to get the response from a cache.
+//     const cachedResponse = await caches.match(event.request);
+//     // Return it if we found one.
+//     if (cachedResponse && (event.request.cache !== 'no-cache'))
+//       return cachedResponse;
+//
+//     // If we didn't find a match in the cache, use the network.
+//     return fetch(event.request);
+//   }());
+// });
+
+// self.addEventListener('fetch', function (event) {
+//   event.respondWith(
+//     caches.match(event.request).then(function (response) {
+//       return response ||
+//         fetch(event.request, event.headers)
+//           .catch(err => {
+//             console.log('_______________________ ERRORE FETCH SW: ', event.request, err)
+//             writeData('config', { _id: 2, stateconn: 'offline' })
+//             return caches.match(event.request);
+//           })
+//     })
+//   );
+// });
+
+
+// self.addEventListener('fetch', function (event) {
+//   event.respondWith(
+//     fetch(event.request, event.headers)
+//       .catch(err => {
+//         console.log('_______________________ ERRORE FETCH SW: ', event.request, err)
+//         writeData('config', {_id: 2, stateconn: 'offline'})
+//         return caches.match(event.request);
+//       })
+//   );
+// });
+
 
 self.addEventListener('sync', function (event) {
   console.log('[Service Worker V5] Background syncing', event.tag);
@@ -295,13 +354,14 @@ self.addEventListener('sync', function (event) {
         headers.append('Accept', 'application/json')
         headers.append('x-auth', token)
 
+
         // console.log('A1) INIZIO.............................................................');
 
         event.waitUntil(
           readAllData(table)
             .then(function (alldata) {
               const myrecs = [...alldata]
-              // console.log('----------------------- LEGGO QUALCOSA DAL WAITUNTIL ')
+              console.log('----------------------- LEGGO QUALCOSA DAL WAITUNTIL ')
               if (myrecs) {
                 for (let rec of myrecs) {
                   //console.log('syncing', table, '', rec.descr)
@@ -312,7 +372,7 @@ self.addEventListener('sync', function (event) {
 
                   console.log('++++++++++++++++++ SYNCING !!!!  ', rec.descr, table, 'FETCH: ', method, link, 'data:')
 
-                  console.log('DATATOSAVE:', JSON.stringify(rec))
+                  // console.log('DATATOSAVE:', JSON.stringify(rec))
 
                   // Insert/Delete/Update table to the server
                   fetch(link, {
@@ -322,19 +382,28 @@ self.addEventListener('sync', function (event) {
                     body: JSON.stringify(rec)
                   })
                     .then(() => {
-                      console.log('DELETE SWMSG: ', mystrparam)
+                      deleteItemFromData(table, rec._id)
                       deleteItemFromData('swmsg', mystrparam)
+
+                      // console.log('config WRITE ONLINE')
+                      writeData('config', { _id: 2, stateconn: 'online' })
                     })
                     .catch(function (err) {
-                      console.log('DELETE : ', table, mystrparam)
-                      deleteItemFromData(table, rec._id)
+                      console.log('err', err, err.message)
+                      // console.log('DELETE : ', table, mystrparam)
+
+                      if (err.message === 'Failed to fetch') {
+                        // console.log('config WRITE OFFLINE')
+                        writeData('config', { _id: 2, stateconn: 'offline' })
+                      }
+
                       console.log('!!!!!!!!!!!!!!!   Error while sending data', err);
                     })
                 }
               }
             })
         );
-        console.log('A2) ?????????????????????????? ESCO DAL LOOP !!!!!!!!! err=')
+        // console.log('A2) ?????????????????????????? ESCO DAL LOOP !!!!!!!!! err=')
       }
     }
   }

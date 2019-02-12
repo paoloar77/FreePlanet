@@ -39,6 +39,7 @@ export default class SingleTodo extends Vue {
   public colProgress: string = 'blue'
   public togglemenu: boolean = false
   public percentageProgress: number = 0
+  public itemtodoPrec: ITodo
   $q: any
 
   @Prop({ required: true }) itemtodo: ITodo
@@ -292,6 +293,9 @@ export default class SingleTodo extends Vue {
 
     this.itemtodo.descr = this.precDescr
     console.log('updateTodo', this.precDescr, this.itemtodo.descr)
+    console.log('itemtodo', this.itemtodo)
+    console.log('Prec:', this.itemtodoPrec)
+
     this.watchupdate()
     this.inEdit = false
     // this.precDescr = this.itemtodo.descr

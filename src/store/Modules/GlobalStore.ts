@@ -12,6 +12,23 @@ import { UserStore } from '@store'
 import globalroutines from './../../globalroutines/index'
 
 const allTables = ['todos', 'sync_todos', 'sync_todos_patch', 'delete_todos', 'config', 'swmsg']
+const allTablesAfterLogin = ['todos', 'sync_todos', 'sync_todos_patch', 'delete_todos', 'config', 'swmsg']
+
+async function getstateConnSaved() {
+  const config = await globalroutines(null, 'readall', 'config', null)
+  if (config.length > 1) {
+    return config[1].stateconn
+  } else {
+    return 'online'
+  }
+}
+
+let stateConnDefault = 'online'
+
+getstateConnSaved()
+  .then(conn => {
+    stateConnDefault = conn
+  })
 
 const state: IGlobalState = {
   conta: 0,
@@ -21,15 +38,16 @@ const state: IGlobalState = {
   mobileMode: false,
   menuCollapse: true,
   leftDrawerOpen: true,
-  stateConnection: 'online',
+  stateConnection: stateConnDefault,
   category: 'personal',
   posts: [],
   listatodo: [
-    {namecat: 'personal', description: 'personal'},
-    {namecat: 'work', description: 'work'},
-    {namecat: 'shopping', description: 'shopping'}
-    ]
+    { namecat: 'personal', description: 'personal' },
+    { namecat: 'work', description: 'work' },
+    { namecat: 'shopping', description: 'shopping' }
+  ]
 }
+
 
 const b = storeBuilder.module<IGlobalState>('GlobalModule', state)
 
@@ -51,6 +69,10 @@ namespace Getters {
 
     get category() {
       return category()
+    },
+
+    get isOnline() {
+      return state.stateConnection === 'online'
     }
   }
 }
@@ -95,6 +117,10 @@ namespace Actions {
       return
     }
 
+    if (!('PushManager' in window)) {
+      return
+    }
+
     console.log('createPushSubscription')
 
     let reg
@@ -123,7 +149,12 @@ namespace Actions {
         // console.log('newSub', newSub)
         if (newSub) {
           saveNewSubscriptionToServer(context, newSub)
-          mystate.isSubscribed = true
+            .then(ris => {
+              mystate.isSubscribed = true
+            })
+            .catch(e => {
+              console.log('Error during Subscription!', e)
+            })
         }
         return null
       })
@@ -147,7 +178,8 @@ namespace Actions {
       options: { ...options },
       subs: newSub,
       others: {
-        userId: UserStore.state.userId
+        userId: UserStore.state.userId,
+        access: UserStore.state.tokens[0].access
       }
     }
 
@@ -159,6 +191,20 @@ namespace Actions {
       },
       body: JSON.stringify(myres)
 
+    })
+
+  }
+
+  async function deleteSubscriptionToServer(context) {
+    console.log('DeleteSubscriptionToServer: ')
+
+    return await fetch(process.env.MONGODB_HOST + '/subscribe/del', {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'x-auth': UserStore.state.x_auth_token
+      }
     })
 
   }
@@ -186,17 +232,48 @@ namespace Actions {
 
   }
 
-  async function clearDataAfterLogout (context) {
+  async function clearDataAfterLogout(context) {
+    console.log('clearDataAfterLogout')
 
     // Clear all data from the IndexedDB
-    allTables.forEach(table => {
+    await allTables.forEach(table => {
       globalroutines(null, 'clearalldata', table, null)
     })
 
+    // REMOVE ALL SUBSCRIPTION
+    console.log('REMOVE ALL SUBSCRIPTION...')
+    await navigator.serviceWorker.ready.then(function(reg) {
+      console.log('... Ready')
+      reg.pushManager.getSubscription().then(function(subscription) {
+        console.log('    Found Subscription...')
+        subscription.unsubscribe().then(function(successful) {
+          // You've successfully unsubscribed
+          console.log('You\'ve successfully unsubscribed')
+        }).catch(function(e) {
+          // Unsubscription failed
+        })
+      })
+    })
+
+    await deleteSubscriptionToServer(context)
+
   }
 
-  async function loadAfterLogin (context) {
-    actions.clearDataAfterLogout()
+  async function clearDataAfterLoginOnlyIfActiveConnection(context) {
+
+    // if (Getters.getters.isOnline) {
+    //   console.log('clearDataAfterLoginOnlyIfActiveConnection')
+    //   // Clear all data from the IndexedDB
+    //   allTablesAfterLogin.forEach(table => {
+    //     globalroutines(null, 'clearalldata', table, null)
+    //   })
+    // }
+
+  }
+
+
+  async function loadAfterLogin(context) {
+    actions.clearDataAfterLoginOnlyIfActiveConnection()
   }
 
 
@@ -205,6 +282,7 @@ namespace Actions {
     createPushSubscription: b.dispatch(createPushSubscription),
     loadAfterLogin: b.dispatch(loadAfterLogin),
     clearDataAfterLogout: b.dispatch(clearDataAfterLogout),
+    clearDataAfterLoginOnlyIfActiveConnection: b.dispatch(clearDataAfterLoginOnlyIfActiveConnection),
     prova: b.dispatch(prova)
   }
 

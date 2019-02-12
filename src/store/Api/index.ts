@@ -47,14 +47,13 @@ export namespace ApiTool {
     })
   }
 
-  export async function SendReq(url: string, lang: string, mytok: string, method: string, mydata: any, setAuthToken: boolean = false) {
+  export async function SendReq(url: string, method: string, mydata: any, setAuthToken: boolean = false) {
     UserStore.mutations.setServerCode(rescodes.EMPTY)
     UserStore.mutations.setResStatus(0)
-    UserStore.mutations.setAuth('')
     return await new Promise(function (resolve, reject) {
       let ricevuto = false
 
-      return sendRequest(url, lang, mytok, method, mydata)
+      return sendRequest(url, UserStore.state.lang, UserStore.state.x_auth_token, method, mydata)
         .then(resreceived => {
           console.log('resreceived', resreceived)
           ricevuto = true
@@ -76,7 +75,7 @@ export namespace ApiTool {
                 UserStore.mutations.setAuth(x_auth_token)
 
                 if (url === process.env.MONGODB_HOST + '/updatepwd') {
-                  UserStore.mutations.UpdatePwd({ idToken: x_auth_token })
+                  UserStore.mutations.UpdatePwd({ x_auth_token })
                   localStorage.setItem(rescodes.localStorage.token, x_auth_token)
                 }
               }
@@ -88,7 +87,7 @@ export namespace ApiTool {
                 UserStore.mutations.setAuth('')
               }
               GlobalStore.mutations.setStateConnection(ricevuto ? 'online' : 'offline')
-              return reject({ code: rescodes.ERR_AUTHENTICATION, status: res.status })
+              return reject({ code: rescodes.ERR_AUTHENTICATION })
             }
           } else if (res.status === serv_constants.RIS_CODE__HTTP_FORBIDDEN_INVALID_TOKEN) {
             // Forbidden
@@ -97,17 +96,17 @@ export namespace ApiTool {
             UserStore.mutations.setAuth('')
             GlobalStore.mutations.setStateConnection(ricevuto ? 'online' : 'offline')
             router.push('/signin')
-            return reject({ code: rescodes.ERR_AUTHENTICATION, status: res.status })
+            return reject({ code: rescodes.ERR_AUTHENTICATION })
           }
 
           GlobalStore.mutations.setStateConnection(ricevuto ? 'online' : 'offline')
 
           return res.json()
             .then((body) => {
-              return resolve({ res, body })
+              return resolve({ res, body, status: res.status })
             })
             .catch(e => {
-              return resolve({ res, body: {} })
+              return resolve({ res, body: {}, status: res.status })
               // Array not found...
               // UserStore.mutations.setServerCode(rescodes.ERR_GENERICO)
               // return reject({ code: rescodes.ERR_GENERICO, status: res.status })
@@ -126,7 +125,7 @@ export namespace ApiTool {
 
           GlobalStore.mutations.setStateConnection(ricevuto ? 'online' : 'offline')
 
-          return reject({ code: error, status: 0 })
+          return reject({ code: error })
         })
     })
   }
@@ -169,7 +168,7 @@ export namespace ApiTool {
                     let lettoqualcosa = false
 
                     // Insert/Delete/Update table to the server
-                    return fetch(link, {
+                    fetch(link, {
                       method: method,
                       headers: headers,
                       cache: 'no-cache',
@@ -178,16 +177,20 @@ export namespace ApiTool {
                     }).then(resData => {
                       lettoqualcosa = true
 
-                      console.log('Clear', table, rec._id)
-                      return globalroutines(null, 'delete', table, null, rec._id)
-                    })
+                      return globalroutines(null, 'delete', 'swmsg', null, mystrparam)
+                    }).then(() => globalroutines(null, 'delete', table, null, rec._id))
                       .then((ris) => {
-                        console.log('Clear', 'swmsg', method)
+                        return globalroutines(null, 'write', 'config', { _id: 2, stateconn: 'online' })
+                      })
+                      .then(() => {
+                        // console.log('Clear', 'swmsg', method)
                         GlobalStore.mutations.setStateConnection(lettoqualcosa ? 'online' : 'offline')
-                        // deleteItemFromData('swmsg', mystrparam)
-                        return globalroutines(null, 'delete', 'swmsg', null, mystrparam)
                       })
                       .catch(function (err) {
+                        if (err.message === 'Failed to fetch') {
+                          // console.log('config WRITE OFFLINE')
+                          globalroutines(null, 'write', 'config', { _id: 2, stateconn: 'offline' })
+                        }
                         console.log(' [Alternative] !!!!!!!!!!!!!!!   Error while sending data', err)
                         GlobalStore.mutations.setStateConnection(lettoqualcosa ? 'online' : 'offline')
                       })

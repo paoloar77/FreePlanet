@@ -17,8 +17,6 @@ export interface IUserState {
   lang?: string
   repeatPassword?: string
 
-  idToken?: string
-
   tokens?: IToken[]
 
   verified_email?: boolean

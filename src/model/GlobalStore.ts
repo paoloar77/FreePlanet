@@ -13,7 +13,7 @@ export interface IGlobalState {
   menuCollapse: boolean
   leftDrawerOpen: boolean
   category: string
-  stateConnection: StateConnection
+  stateConnection: string
   posts: IPost[]
   listatodo: ITodoList[]
 }

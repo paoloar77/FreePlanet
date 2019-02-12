@@ -10,7 +10,7 @@ export interface ILinkReg {
 }
 
 export interface IIdToken {
-  idToken: string
+  x_auth_token: string
 }
 
 export interface IResult {

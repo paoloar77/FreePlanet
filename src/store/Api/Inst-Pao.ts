@@ -7,7 +7,10 @@ async function sendRequest(url: string, lang: string, mytok: string, method: str
   const authHeader = new Headers()
   authHeader.append('content-Type', 'application/json')
   authHeader.append('Accept', 'application/json')
-  authHeader.append('x-auth', mytok)
+  if (url !== process.env.MONGODB_HOST + '/users/login') {
+    authHeader.append('x-auth', mytok)
+    console.log('TOK PASSATO ALLA FETCH:', mytok)
+  }
   // authHeader.append('accept-language', lang)
 
   let configInit: RequestInit

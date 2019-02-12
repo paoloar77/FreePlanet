@@ -105,6 +105,7 @@ let idbKeyval = (() => {
       });
     },
     async clearalldata(table) {
+      console.log('clearalldata', table)
       return await withStore('readwrite', table, store => {
         store.clear();
       });

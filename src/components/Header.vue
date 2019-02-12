@@ -182,10 +182,10 @@
     }
 
 
-    create () {
+    mounted () {
 
       // Test this by running the code snippet below and then
-// use the "Offline" checkbox in DevTools Network panel
+        // use the "Offline" checkbox in DevTools Network panel
 
       let mythis = this
       console.log('Event LOAD')
@@ -195,12 +195,12 @@
 
           function updateOnlineStatus(event) {
             if (navigator.onLine) {
-              console.log('ONLINE!')
+              console.log('EVENT ONLINE!')
               // handle online status
               GlobalStore.mutations.setStateConnection('online')
               mythis.changeIconConn()
             } else {
-              console.log('OFFLINE!')
+              console.log('EVENT OFFLINE!')
               // handle offline status
               GlobalStore.mutations.setStateConnection('offline')
               mythis.changeIconConn()

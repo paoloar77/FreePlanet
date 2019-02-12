@@ -1,4 +1,4 @@
-import store from '../store'
+import store, { GlobalStore } from '../store'
 import _ from 'lodash'
 import { UserStore, Todos } from '@store'
 import { i18n } from '../plugins/i18n'
@@ -10,7 +10,7 @@ function saveConfigIndexDb(context) {
   let data = []
   data['_id'] = 1
   data['lang'] = UserStore.state.lang
-  data['token'] = UserStore.state.idToken
+  data['token'] = UserStore.state.x_auth_token
   data['userId'] = UserStore.state.userId
 
   writeConfigIndexDb('config', data)

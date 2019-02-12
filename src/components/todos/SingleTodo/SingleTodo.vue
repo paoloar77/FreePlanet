@@ -60,7 +60,7 @@
             </div>
         </div>
         <!--<div class="flex-item btn-item">-->
-        <!--{{classPosItemPopup}}-->
+        <!--{{itemtodo.expiring_at}}-->
         <!--</div>-->
         <!--<div class="flex-item btn-item">-->
         <!--<q-btn class="mybtn" round color="" icon="delete" @click.native="removeitem(itemtodo._id)"></q-btn>-->
