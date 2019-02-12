@@ -43,7 +43,7 @@ namespace Mutations {
   function setTodos_changed(state: ITodosState) {
     state.todos_changed++
     mutations.setTestpao('Cambiato : ' + String(state.todos_changed))
-    console.log('*******************************  state.todos_changed', state.todos_changed)
+    console.log('*******  state.todos_changed', state.todos_changed)
   }
 
   export const mutations = {
@@ -195,16 +195,16 @@ namespace Actions {
     state.networkDataReceived = false
 
     let ris = await Api.SendReq(call, 'GET', null)
-      .then(({ resData, body, status }) => {
+      .then(({ res, body, status }) => {
         state.networkDataReceived = true
 
-        // console.log('******* UPDATE TODOS.STATE.TODOS !:', resData.todos)
+        // console.log('******* UPDATE TODOS.STATE.TODOS !:', res.todos)
         if (body.todos) {
           state.todos = [...body.todos]
           Todos.mutations.setTodos_changed()
         }
 
-        console.log('**********  resData', resData, 'state.todos', state.todos, 'checkPending', checkPending)
+        console.log('**********  res', res, 'state.todos', state.todos, 'checkPending', checkPending)
 
         // After Login will store into the indexedDb...
 
@@ -216,8 +216,8 @@ namespace Actions {
         return { status }
       })
 
-    console.log('ris : ', ris)
-    console.log('ris STATUS: ', ris.status)
+    // console.log('ris : ', ris)
+    // console.log('ris STATUS: ', ris.status)
 
     if (!Todos.state.networkDataReceived) {
 

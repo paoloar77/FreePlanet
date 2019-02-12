@@ -135,7 +135,7 @@ namespace Actions {
         mystate.isSubscribed = !(subscription === null)
 
         if (mystate.isSubscribed) {
-          console.log('User is already Subscribed!')
+          // console.log('User is already Subscribed!')
         } else {
           // Create a new subscription
           let convertedVapidPublicKey = urlBase64ToUint8Array(mykey)

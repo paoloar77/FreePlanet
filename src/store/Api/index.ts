@@ -55,11 +55,11 @@ export namespace ApiTool {
 
       return sendRequest(url, UserStore.state.lang, UserStore.state.x_auth_token, method, mydata)
         .then(resreceived => {
-          console.log('resreceived', resreceived)
+          // console.log('resreceived', resreceived)
           ricevuto = true
           let res = resreceived.clone()
           if (process.env.DEV) {
-            console.log('SendReq RES [', res.status, ']', res)
+            // console.log('SendReq RES [', res.status, ']', res)
           }
 
           UserStore.mutations.setResStatus(res.status)
@@ -143,66 +143,73 @@ export namespace ApiTool {
         // let lang = multiparams[3]
 
         if (cmd === 'sync-todos') {
-          console.log('[Alternative] Syncing', cmd, table, method)
+          // console.log('[Alternative] Syncing', cmd, table, method)
 
           const headers = new Headers()
           headers.append('content-Type', 'application/json')
           headers.append('Accept', 'application/json')
           headers.append('x-auth', token)
 
+          let errorfromserver = false
+          let lettoqualcosa = false
+
           // console.log('A1) INIZIO.............................................................')
-          await globalroutines(null, 'readall', table, null)
+          globalroutines(null, 'readall', table, null)
             .then(function (alldata) {
-                const myrecs = [...alldata]
-                // console.log('----------------------- LEGGO QUALCOSA ')
-                if (myrecs) {
-                  for (let rec of myrecs) {
-                    // console.log('syncing', table, '', rec.descr)
-                    let link = process.env.MONGODB_HOST + '/todos'
+              const myrecs = [...alldata]
+              // console.log('----------------------- LEGGO QUALCOSA ')
 
-                    if (method !== 'POST')
-                      link += '/' + rec._id
+              const promises = myrecs.map(rec => {
+                // console.log('syncing', table, '', rec.descr)
+                let link = process.env.MONGODB_HOST + '/todos'
 
-                    console.log(' [Alternative] ++++++++++++++++++ SYNCING !!!!  ', rec.descr, table, 'FETCH: ', method, link, 'data:')
+                if (method !== 'POST')
+                  link += '/' + rec._id
 
-                    let lettoqualcosa = false
+                // console.log(' [Alternative] ++++++++++++++++++ SYNCING !!!!  ', rec.descr, table, 'FETCH: ', method, link, 'data:')
 
-                    // Insert/Delete/Update table to the server
-                    fetch(link, {
-                      method: method,
-                      headers: headers,
-                      cache: 'no-cache',
-                      mode: 'cors',   // 'no-cors',
-                      body: JSON.stringify(rec)
-                    }).then(resData => {
-                      lettoqualcosa = true
+                // Insert/Delete/Update table to the server
+                return fetch(link, {
+                  method: method,
+                  headers: headers,
+                  cache: 'no-cache',
+                  mode: 'cors',   // 'no-cors',
+                  body: JSON.stringify(rec)
+                })
+                  .then(() => {
+                    globalroutines(null, 'delete', table, null, rec._id)
+                    lettoqualcosa = true
+                  })
+                  .then(() => {
+                    globalroutines(null, 'delete', 'swmsg', null, mystrparam)
+                  })
+                  .catch(function (err) {
+                    if (err.message === 'Failed to fetch') {
+                      errorfromserver = true
+                    }
+                    // console.log(' [Alternative] !!!!!!!!!!!!!!!   Error while sending data', err, errorfromserver, 'lettoqualcosa', lettoqualcosa)
+                  })
+              })
 
-                      return globalroutines(null, 'delete', 'swmsg', null, mystrparam)
-                    }).then(() => globalroutines(null, 'delete', table, null, rec._id))
-                      .then((ris) => {
-                        return globalroutines(null, 'write', 'config', { _id: 2, stateconn: 'online' })
-                      })
-                      .then(() => {
-                        // console.log('Clear', 'swmsg', method)
-                        GlobalStore.mutations.setStateConnection(lettoqualcosa ? 'online' : 'offline')
-                      })
-                      .catch(function (err) {
-                        if (err.message === 'Failed to fetch') {
-                          // console.log('config WRITE OFFLINE')
-                          globalroutines(null, 'write', 'config', { _id: 2, stateconn: 'offline' })
-                        }
-                        console.log(' [Alternative] !!!!!!!!!!!!!!!   Error while sending data', err)
-                        GlobalStore.mutations.setStateConnection(lettoqualcosa ? 'online' : 'offline')
-                      })
+              // CALL ALL THE PROMISES
+              return Promise.all(promises).then(() => {
+                return (errorfromserver && !lettoqualcosa)
+              }).catch(err => {
+                return (errorfromserver && !lettoqualcosa)
+              })
 
-                  }
-                }
-              }
-            ).catch(e => {
-              console.log('ERROR:', e)
+            }).catch(e => {
+              // console.log('ERROR:', e)
+              return (errorfromserver && !lettoqualcosa)
+            })
+            .then((errorfromserver) => {
+              // console.log('¨¨¨¨¨¨¨¨¨¨¨¨¨¨  errorfromserver:', errorfromserver)
+              const mystate = errorfromserver ? 'offline' : 'online'
+              globalroutines(null, 'write', 'config', { _id: 2, stateconn: mystate })
+              GlobalStore.mutations.setStateConnection(mystate)
             })
 
-          console.log(' [Alternative] A2) ?????????????????????????? ESCO DAL LOOP !!!!!!!!! err=')
+          // console.log(' [Alternative] A2) ?????????????????????????? ESCO DAL LOOP !!!!!!!!!')
 
         }
       }

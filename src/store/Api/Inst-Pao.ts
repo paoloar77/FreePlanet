@@ -9,7 +9,7 @@ async function sendRequest(url: string, lang: string, mytok: string, method: str
   authHeader.append('Accept', 'application/json')
   if (url !== process.env.MONGODB_HOST + '/users/login') {
     authHeader.append('x-auth', mytok)
-    console.log('TOK PASSATO ALLA FETCH:', mytok)
+    // console.log('TOK PASSATO ALLA FETCH:', mytok)
   }
   // authHeader.append('accept-language', lang)
 

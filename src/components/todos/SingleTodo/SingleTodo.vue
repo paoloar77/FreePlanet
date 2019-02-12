@@ -23,7 +23,7 @@
             </q-btn>
         </div>
 
-        <q-input type="textarea" ref="inputdescr" v-model="precDescr"
+        <q-input type="textarea" ref="inputdescr" v-model.trim="precDescr"
                  :class="classDescr" :max-height="50"
                  @keydown="keyDownArea" v-on:keydown.esc="exitEdit" @blur="exitEdit(true)" @click="editTodo()"/>
 
@@ -33,7 +33,7 @@
         <!--<q-field>{{ itemtodo.descr }}</q-field>-->
         <!--</div>-->
 
-        <div v-if="isTodo()" class="flex-item progress-item">
+        <div v-if="isTodo() && (percentageProgress > 0) " class="flex-item progress-item">
             <q-progress
                     :percentage="percentageProgress"
                     class="progress-item"

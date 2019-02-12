@@ -43,6 +43,7 @@ export default class Todo extends Vue {
   itemDragEnd: any = null
   selrowid: number = 0
   polling = null
+  mytypetransgroup: string = 'crossfade'
 
   fieldtochange: String [] = ['descr', 'completed', 'category', 'expiring_at', 'priority', 'id_prev', 'id_next', 'pos', 'enableExpiring', 'progress']
 
@@ -65,7 +66,10 @@ export default class Todo extends Vue {
 
   @Watch('$route.params.category') changecat() {
     // console.log('changecat')
-    this.load()
+    this.mytypetransgroup = 'nessuno'
+    this.updatetable().then(() => {
+      this.mytypetransgroup = 'crossfade'
+    })
   }
 
   get todos_changed() {
@@ -82,7 +86,7 @@ export default class Todo extends Vue {
 
     // this.$q.notify('Changed...')
 
-    // console.log('Todos.state.todos_changed CHANGED!', value, oldValue)
+    console.log('Todos.state.todos_changed CHANGED!', value, oldValue)
     this.updatetable(true)
   }
 
@@ -600,12 +604,16 @@ export default class Todo extends Vue {
   }
 
   async updatetable(refresh: boolean = false) {
-    // console.log('updatetable')
+    console.log('updatetable')
 
     this.prevRecords = [...this.todos_arr]
 
     return await Todos.actions.getTodosByCategory(this.getCategory())
-      .then(arrtemp => {
+      .then(arrris => {
+
+        this.todos_arr = []
+
+        let arrtemp = [...arrris]
 
         arrtemp = _.orderBy(arrtemp, ['completed', 'priority', 'pos'], ['asc', 'desc', 'asc'])
 
@@ -619,6 +627,8 @@ export default class Todo extends Vue {
         })
 
         this.todos_arr = [...arrtemp]  // make copy
+
+        console.log('AGGIORNA todos_arr')
 
       })
   }

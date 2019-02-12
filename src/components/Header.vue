@@ -191,16 +191,16 @@
       console.log('Event LOAD')
       if (window) {
         window.addEventListener('load', function () {
-          console.log('2) ENTERING Event LOAD')
+          // console.log('2) ENTERING Event LOAD')
 
           function updateOnlineStatus(event) {
             if (navigator.onLine) {
-              console.log('EVENT ONLINE!')
+              // console.log('EVENT ONLINE!')
               // handle online status
               GlobalStore.mutations.setStateConnection('online')
               mythis.changeIconConn()
             } else {
-              console.log('EVENT OFFLINE!')
+              // console.log('EVENT OFFLINE!')
               // handle offline status
               GlobalStore.mutations.setStateConnection('offline')
               mythis.changeIconConn()

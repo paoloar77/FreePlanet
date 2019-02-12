@@ -111,7 +111,7 @@ namespace Mutations {
     if (!state.tokens) {
       state.tokens = []
     }
-    state.tokens.push({ access: 'auth ' + navigator.userAgent, token: data.x_auth_token, data_login: new Date()  })
+    state.tokens.push({ access: 'auth ' + navigator.userAgent, token: data.x_auth_token, data_login: new Date() })
   }
 
   function setServerCode(state: IUserState, num: number) {
@@ -227,7 +227,7 @@ namespace Actions {
       })
       .catch((error) => {
         UserStore.mutations.setErrorCatch(error)
-        return UserStore.getters.getServerCode
+        return { code: UserStore.getters.getServerCode, msg: error }
       })
 
   }
@@ -366,7 +366,7 @@ namespace Actions {
 
     console.log('MYLANG = ' + state.lang)
 
-    await navigator.serviceWorker.ready
+    return await navigator.serviceWorker.ready
       .then(function (swreg) {
         const sub = swreg.pushManager.getSubscription()
         return sub
@@ -408,7 +408,26 @@ namespace Actions {
 
             Mutations.mutations.setServerCode(myres.status)
 
-            if (myres.status === 200) {
+            if (myres.status !== 200) {
+              return Promise.reject(rescodes.ERR_GENERICO)
+            }
+            return { res, body }
+
+          }).then(({ res, body }) => {
+
+            if (myres.status === serv_constants.RIS_CODE__HTTP_FORBIDDEN_INVALID_TOKEN) {
+              if (process.env.DEV) {
+                console.log('CODE = ' + body.code)
+              }
+              return body.code
+            } else if (res.status !== 200) {
+              if (process.env.DEV) {
+                console.log('CODE = ' + body.code)
+              }
+              return body.code
+            }
+
+            if (res.status === 200) {
               let myuser: IUserState = body.usertosend
               if (myuser) {
                 let userId = myuser.userId
@@ -436,24 +455,19 @@ namespace Actions {
                 localStorage.setItem(rescodes.localStorage.isLogged, String(true))
                 localStorage.setItem(rescodes.localStorage.verified_email, String(verified_email))
 
-                setGlobal(true)
+              }
+            }
 
-                // dispatch('storeUser', authData);
-                // dispatch('setLogoutTimer', myres.data.expiresIn);
-                return rescodes.OK
-              } else {
-                return rescodes.ERR_GENERICO
-              }
-            } else if (myres.status === serv_constants.RIS_CODE__HTTP_FORBIDDEN_INVALID_TOKEN) {
-              if (process.env.DEV) {
-                console.log('CODE = ' + body.code)
-              }
-              return body.code
+            return rescodes.OK
+
+          }).then(code => {
+            if (code === rescodes.OK) {
+              return setGlobal(true)
+                .then(() => {
+                  return code
+                })
             } else {
-              if (process.env.DEV) {
-                console.log('CODE = ' + body.code)
-              }
-              return body.code
+              return code
             }
           })
           .catch((error) => {
@@ -505,7 +519,6 @@ namespace Actions {
     state.isLogged = true
     GlobalStore.mutations.setleftDrawerOpen(localStorage.getItem(rescodes.localStorage.leftDrawerOpen) === 'true')
     GlobalStore.mutations.setCategorySel(localStorage.getItem(rescodes.localStorage.categorySel))
-
 
 
     await GlobalStore.actions.loadAfterLogin()
