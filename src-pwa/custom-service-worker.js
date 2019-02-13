@@ -13,9 +13,13 @@ importScripts('../statics/js/idb.js');
 importScripts('../statics/js/storage.js');
 
 
+let port = 3001;
+if (self.location.hostname === 'localhost') {
+  port = 3000;
+}
 // console.log('SW-06 1');
 const cfgenv = {
-  serverweb: self.location.protocol + "//" + self.location.hostname + ':3000',
+  serverweb: self.location.protocol + "//" + self.location.hostname + ':' + port,
   dbname: 'mydb3',
   dbversion: 11,
 }
