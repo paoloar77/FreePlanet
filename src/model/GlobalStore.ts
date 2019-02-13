@@ -6,7 +6,8 @@ export type StateConnection = 'online' | 'offline'
 
 export interface IGlobalState {
   conta: number
-  isSubscribed: boolean
+  wasAlreadySubOnDb: boolean
+  wasAlreadySubscribed: boolean
   isLoginPage: boolean
   layoutNeeded: boolean
   mobileMode: boolean

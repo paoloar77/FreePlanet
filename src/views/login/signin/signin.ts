@@ -80,8 +80,17 @@ export default class Signin extends Vue {
       this.showNotif({ type: 'positive', message: this.$t('login.completato') })
       this.$router.push('/')
     } else if (riscode === serv_constants.RIS_CODE_LOGIN_ERR) {
-      this.showNotif(this.$t('login.errato'))
-      this.$router.push('/signin')
+
+      // Wait N seconds to avoid calling many times...
+      return new Promise(function (resolve, reject) {
+        setTimeout(function () {
+          resolve('anything')
+        }, 1000)
+      }).then(() => {
+        this.showNotif(this.$t('login.errato'))
+        this.$router.push('/signin')
+      })
+
     } else if (riscode === rescodes.ERR_SERVERFETCH) {
       this.showNotif(this.$t('fetch.errore_server'))
     } else if (riscode === rescodes.ERR_GENERICO) {
@@ -127,7 +136,7 @@ export default class Signin extends Vue {
     console.log(this.signin)
     UserStore.actions.signin(this.signin)
       .then((riscode) => {
-        console.log('riscode=', riscode)
+        // console.log('riscode=', riscode)
         if (riscode === rescodes.OK) {
           router.push('/signin')
         }

@@ -57,7 +57,7 @@ export default class Home extends Vue {
 
   initprompt() {
     window.addEventListener('beforeinstallprompt', function (event) {
-      console.log('********************************   beforeinstallprompt fired')
+      // console.log('********************************   beforeinstallprompt fired')
       event.preventDefault()
       console.log('§§§§§§§§§§§§§§§§§§§§  IMPOSTA DEFERRED PROMPT  !!!!!!!!!!!!!!!!!  ')
       return false

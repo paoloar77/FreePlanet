@@ -55,7 +55,7 @@ export namespace ApiTool {
 
       return sendRequest(url, UserStore.state.lang, UserStore.state.x_auth_token, method, mydata)
         .then(resreceived => {
-          // console.log('resreceived', resreceived)
+          console.log('resreceived', resreceived)
           ricevuto = true
           let res = resreceived.clone()
           if (process.env.DEV) {
@@ -103,6 +103,7 @@ export namespace ApiTool {
 
           return res.json()
             .then((body) => {
+              // console.log('BODY RES = ', body)
               return resolve({ res, body, status: res.status })
             })
             .catch(e => {

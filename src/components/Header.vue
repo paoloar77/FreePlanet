@@ -188,7 +188,7 @@
         // use the "Offline" checkbox in DevTools Network panel
 
       let mythis = this
-      console.log('Event LOAD')
+      // console.log('Event LOAD')
       if (window) {
         window.addEventListener('load', function () {
           // console.log('2) ENTERING Event LOAD')

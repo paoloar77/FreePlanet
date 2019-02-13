@@ -23,7 +23,6 @@ import { GlobalStore } from './store/Modules'
 
 export default class App extends Vue {
   public backgroundColor = 'whitesmoke'
-  public isSubscribed = false
   public $q
 
 

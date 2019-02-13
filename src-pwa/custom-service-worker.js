@@ -13,9 +13,9 @@ importScripts('../statics/js/idb.js');
 importScripts('../statics/js/storage.js');
 
 
-let port = 3001;
-if (self.location.hostname === 'localhost') {
-  port = 3000;
+let port = 3000;
+if (self.location.hostname === 'test.freeplanet.app') {
+  port = 3001;
 }
 // console.log('SW-06 1');
 const cfgenv = {
@@ -481,7 +481,7 @@ self.addEventListener('notificationclose', function (event) {
 self.addEventListener('push', function (event) {
   console.log('Push Notification received', event);
 
-  var data = { title: 'New!', content: 'Something new happened!', openUrl: '/' };
+  var data = { title: 'New!', content: 'Something new happened!', url: '/' };
 
   if (event.data) {
     data = JSON.parse(event.data.text());
@@ -492,7 +492,7 @@ self.addEventListener('push', function (event) {
     icon: '/statics/icons/android-chrome-192x192.png',
     badge: '/statics/icons/android-chrome-192x192.png',
     data: {
-      url: data.openUrl
+      url: data.url
     }
   };
 

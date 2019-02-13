@@ -8,8 +8,10 @@ import translate from './../../globalroutines/util'
 import urlBase64ToUint8Array from '../../js/utility'
 
 import messages from '../../statics/i18n'
-import { UserStore } from '@store'
+import { GlobalStore, UserStore } from '@store'
 import globalroutines from './../../globalroutines/index'
+import Api from "@api"
+import { rescodes } from "@src/store/Modules/rescodes"
 
 const allTables = ['todos', 'sync_todos', 'sync_todos_patch', 'delete_todos', 'config', 'swmsg']
 const allTablesAfterLogin = ['todos', 'sync_todos', 'sync_todos_patch', 'delete_todos', 'config', 'swmsg']
@@ -32,7 +34,8 @@ getstateConnSaved()
 
 const state: IGlobalState = {
   conta: 0,
-  isSubscribed: false,
+  wasAlreadySubscribed: false,
+  wasAlreadySubOnDb: false,
   isLoginPage: false,
   layoutNeeded: true,
   mobileMode: false,
@@ -98,11 +101,16 @@ namespace Mutations {
     }
   }
 
+  function SetwasAlreadySubOnDb(state: IGlobalState, subscrib: boolean) {
+    state.wasAlreadySubOnDb = subscrib
+  }
+
   export const mutations = {
     setConta: b.commit(setConta),
     setleftDrawerOpen: b.commit(setleftDrawerOpen),
     setCategorySel: b.commit(setCategorySel),
-    setStateConnection: b.commit(setStateConnection)
+    setStateConnection: b.commit(setStateConnection),
+    SetwasAlreadySubOnDb: b.commit(SetwasAlreadySubOnDb)
   }
 
 }
@@ -113,6 +121,13 @@ namespace Actions {
   }
 
   function createPushSubscription(context) {
+
+    // If Already subscribed, don't send to the Server DB
+    if (state.wasAlreadySubOnDb) {
+      // console.log('wasAlreadySubOnDb!')
+      return
+    }
+
     if (!('serviceWorker' in navigator)) {
       return
     }
@@ -132,10 +147,11 @@ namespace Actions {
         return swreg.pushManager.getSubscription()
       })
       .then(function (subscription) {
-        mystate.isSubscribed = !(subscription === null)
+        mystate.wasAlreadySubscribed = !(subscription === null)
 
-        if (mystate.isSubscribed) {
-          // console.log('User is already Subscribed!')
+        if (mystate.wasAlreadySubOnDb) {
+          // console.log('User is already SAVED Subscribe on DB!')
+          return null
         } else {
           // Create a new subscription
           let convertedVapidPublicKey = urlBase64ToUint8Array(mykey)
@@ -146,17 +162,7 @@ namespace Actions {
         }
       })
       .then(function (newSub) {
-        // console.log('newSub', newSub)
-        if (newSub) {
-          saveNewSubscriptionToServer(context, newSub)
-            .then(ris => {
-              mystate.isSubscribed = true
-            })
-            .catch(e => {
-              console.log('Error during Subscription!', e)
-            })
-        }
-        return null
+        saveNewSubscriptionToServer(context, newSub)
       })
       .catch(function (err) {
         console.log(err)
@@ -165,8 +171,12 @@ namespace Actions {
 
   // Calling the Server to Save in the MongoDB the Subscriber
   function saveNewSubscriptionToServer(context, newSub) {
+    // If already subscribed, exit
+    if (!newSub)
+      return
+
     console.log('saveSubscriptionToServer: ', newSub)
-    console.log('context', context)
+    // console.log('context', context)
 
     const options = {
       title: translate('notification.title_subscribed'),
@@ -180,19 +190,21 @@ namespace Actions {
       others: {
         userId: UserStore.state.userId,
         access: UserStore.state.tokens[0].access
-      }
+      },
     }
 
-    return fetch(process.env.MONGODB_HOST + '/subscribe', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
-      },
-      body: JSON.stringify(myres)
+    let call = process.env.MONGODB_HOST + '/subscribe'
 
-    })
+    return Api.SendReq(call, 'POST', myres)
+      .then(({ res, body }) => {
+        state.wasAlreadySubscribed = true
+        state.wasAlreadySubOnDb = true
 
+        localStorage.setItem(rescodes.localStorage.wasAlreadySubOnDb, String(state.wasAlreadySubOnDb))
+      })
+      .catch(e => {
+        console.log('Error during Subscription!', e)
+      })
   }
 
   async function deleteSubscriptionToServer(context) {
@@ -242,14 +254,14 @@ namespace Actions {
 
     // REMOVE ALL SUBSCRIPTION
     console.log('REMOVE ALL SUBSCRIPTION...')
-    await navigator.serviceWorker.ready.then(function(reg) {
+    await navigator.serviceWorker.ready.then(function (reg) {
       console.log('... Ready')
-      reg.pushManager.getSubscription().then(function(subscription) {
+      reg.pushManager.getSubscription().then(function (subscription) {
         console.log('    Found Subscription...')
-        subscription.unsubscribe().then(function(successful) {
+        subscription.unsubscribe().then(function (successful) {
           // You've successfully unsubscribed
           console.log('You\'ve successfully unsubscribed')
-        }).catch(function(e) {
+        }).catch(function (e) {
           // Unsubscription failed
         })
       })

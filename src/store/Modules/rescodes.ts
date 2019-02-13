@@ -13,6 +13,7 @@ export const rescodes = {
 
   localStorage: {
     verified_email: 'vf',
+    wasAlreadySubOnDb: 'sb',
     categorySel: 'cs',
     isLogged: 'ilog',
     expirationDate: 'expdate',
