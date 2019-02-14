@@ -4,16 +4,6 @@
             <SubMenus :menuPopupTodo="menuPopupTodo" :itemtodo="itemtodo" @clickMenu="clickMenu" @setPriority="setPriority"></SubMenus>
         </q-context-menu>
 
-        <div v-if="isTodo()" class="flex-item pos-item" @mouseup.left="mouseUp" @mousedown="clickRiga">
-            <q-btn flat
-                   class="pos-item-popover"
-                   icon="menu" >
-                <q-popover self="top right">
-                    <SubMenus :menuPopupTodo="menuPopupTodo" :itemtodo="itemtodo" @clickMenu="clickMenu" @setPriority="setPriority"></SubMenus>
-                </q-popover>
-
-            </q-btn>
-        </div>
 
         <div v-if="isTodo()" class="flex-item completed-item">
             <q-btn push flat
@@ -23,7 +13,7 @@
             </q-btn>
         </div>
 
-        <q-input type="textarea" ref="inputdescr" v-model="precDescr"
+        <q-input type="textarea" ref="inputdescr" v-model.trim="precDescr"
                  :class="classDescr" :max-height="50"
                  @keydown="keyDownArea" v-on:keydown.esc="exitEdit" @blur="exitEdit(true)" @click="editTodo()"/>
 
@@ -33,7 +23,7 @@
         <!--<q-field>{{ itemtodo.descr }}</q-field>-->
         <!--</div>-->
 
-        <div v-if="isTodo()" class="flex-item progress-item">
+        <div v-if="isTodo() && (percentageProgress > 0) " class="flex-item progress-item">
             <q-progress
                     :percentage="percentageProgress"
                     class="progress-item"
@@ -49,14 +39,28 @@
         <div v-if="itemtodo.enableExpiring">
             <div :class="classExpiring">
                 <q-datetime
+                        type="date"
                         :class="classExpiringEx"
                         v-model="itemtodo.expiring_at"
-                        class="myexpired">
+                        class="myexpired"
+                        format="DD/MM/YY"
+                        @change="val => { model = val }" >
+
                 </q-datetime>
             </div>
         </div>
+        <div v-if="isTodo()" class="flex-item pos-item" @mouseup.left="mouseUp" @mousedown="clickRiga">
+            <q-btn flat
+                   class="pos-item-popover"
+                   icon="menu" >
+                <q-popover self="top right">
+                    <SubMenus :menuPopupTodo="menuPopupTodo" :itemtodo="itemtodo" @clickMenu="clickMenu" @setPriority="setPriority"></SubMenus>
+                </q-popover>
+
+            </q-btn>
+        </div>
         <!--<div class="flex-item btn-item">-->
-        <!--{{classPosItemPopup}}-->
+        <!--{{itemtodo.expiring_at}}-->
         <!--</div>-->
         <!--<div class="flex-item btn-item">-->
         <!--<q-btn class="mybtn" round color="" icon="delete" @click.native="removeitem(itemtodo._id)"></q-btn>-->

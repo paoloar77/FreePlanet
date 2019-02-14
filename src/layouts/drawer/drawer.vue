@@ -102,7 +102,7 @@
     }
 
     get Verificato() {
-      return UserStore.state.verifiedEmail
+      return UserStore.state.verified_email
     }
 
     get Email() {
@@ -111,6 +111,7 @@
 
     logoutHandler() {
       UserStore.actions.logout()
+      this.$router.push('/signin')
       this.$q.notify(this.$t('logout.uscito'))
     }
   }

@@ -12,7 +12,8 @@ export const rescodes = {
   LIST_START: '0',
 
   localStorage: {
-    verifiedEmail: 'vf',
+    verified_email: 'vf',
+    wasAlreadySubOnDb: 'sb',
     categorySel: 'cs',
     isLogged: 'ilog',
     expirationDate: 'expdate',

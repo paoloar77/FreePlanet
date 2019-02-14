@@ -9,8 +9,10 @@ export { addAuthHeaders, removeAuthHeaders, API_URL } from './Instance'
 import Paths from '@paths'
 import { rescodes } from '@src/store/Modules/rescodes'
 
-import { UserStore } from '@modules'
+import { GlobalStore, UserStore } from '@modules'
 import globalroutines from './../../globalroutines/index'
+import { serv_constants } from '@src/store/Modules/serv_constants'
+import router from '@router'
 
 
 // const algoliaApi = new AlgoliaSearch()
@@ -45,53 +47,70 @@ export namespace ApiTool {
     })
   }
 
-  export async function SendReq(url: string, lang: string, mytok: string, method: string, mydata: any, noAuth: boolean = false) {
+  export async function SendReq(url: string, method: string, mydata: any, setAuthToken: boolean = false) {
     UserStore.mutations.setServerCode(rescodes.EMPTY)
-    UserStore.mutations.setAuth('')
+    UserStore.mutations.setResStatus(0)
     return await new Promise(function (resolve, reject) {
       let ricevuto = false
-      sendRequest(url, lang, mytok, method, mydata)
+
+      return sendRequest(url, UserStore.state.lang, UserStore.state.x_auth_token, method, mydata)
         .then(resreceived => {
+          console.log('resreceived', resreceived)
           ricevuto = true
           let res = resreceived.clone()
           if (process.env.DEV) {
-            console.log('SendReq RES [', res.status, ']', res)
+            // console.log('SendReq RES [', res.status, ']', res)
           }
 
-          let x_auth_token = ''
+          UserStore.mutations.setResStatus(res.status)
           if (res.status === 200) {
+            let x_auth_token = ''
             try {
-              if (!noAuth) {
+              if (setAuthToken) {
                 x_auth_token = String(res.headers.get('x-auth'))
-
-                if (url === process.env.MONGODB_HOST + '/updatepwd') {
-                  UserStore.mutations.UpdatePwd({ idToken: x_auth_token })
-                  localStorage.setItem(rescodes.localStorage.token, x_auth_token)
-                }
 
                 if (x_auth_token === '') {
                   UserStore.mutations.setServerCode(rescodes.ERR_AUTHENTICATION)
                 }
+                UserStore.mutations.setAuth(x_auth_token)
+
+                if (url === process.env.MONGODB_HOST + '/updatepwd') {
+                  UserStore.mutations.UpdatePwd({ x_auth_token })
+                  localStorage.setItem(rescodes.localStorage.token, x_auth_token)
+                }
               }
 
               UserStore.mutations.setServerCode(rescodes.OK)
-              UserStore.mutations.setAuth(x_auth_token)
             } catch (e) {
-              if (!noAuth) {
+              if (setAuthToken) {
                 UserStore.mutations.setServerCode(rescodes.ERR_AUTHENTICATION)
-                UserStore.mutations.setAuth(x_auth_token)
+                UserStore.mutations.setAuth('')
               }
-              return reject(e)
+              GlobalStore.mutations.setStateConnection(ricevuto ? 'online' : 'offline')
+              return reject({ code: rescodes.ERR_AUTHENTICATION })
             }
+          } else if (res.status === serv_constants.RIS_CODE__HTTP_FORBIDDEN_INVALID_TOKEN) {
+            // Forbidden
+            // You probably is connectiong with other page...
+            UserStore.mutations.setServerCode(rescodes.ERR_AUTHENTICATION)
+            UserStore.mutations.setAuth('')
+            GlobalStore.mutations.setStateConnection(ricevuto ? 'online' : 'offline')
+            router.push('/signin')
+            return reject({ code: rescodes.ERR_AUTHENTICATION })
           }
+
+          GlobalStore.mutations.setStateConnection(ricevuto ? 'online' : 'offline')
 
           return res.json()
             .then((body) => {
-              return resolve({ res, body })
+              // console.log('BODY RES = ', body)
+              return resolve({ res, body, status: res.status })
             })
             .catch(e => {
-              UserStore.mutations.setServerCode(rescodes.ERR_GENERICO)
-              return reject(e)
+              return resolve({ res, body: {}, status: res.status })
+              // Array not found...
+              // UserStore.mutations.setServerCode(rescodes.ERR_GENERICO)
+              // return reject({ code: rescodes.ERR_GENERICO, status: res.status })
             })
 
         })
@@ -104,7 +123,10 @@ export namespace ApiTool {
           } else {
             UserStore.mutations.setServerCode(rescodes.ERR_GENERICO)
           }
-          return reject(error)
+
+          GlobalStore.mutations.setStateConnection(ricevuto ? 'online' : 'offline')
+
+          return reject({ code: error })
         })
     })
   }
@@ -122,57 +144,74 @@ export namespace ApiTool {
         // let lang = multiparams[3]
 
         if (cmd === 'sync-todos') {
-          console.log('[Alternative] Syncing', cmd, table, method)
+          // console.log('[Alternative] Syncing', cmd, table, method)
 
           const headers = new Headers()
           headers.append('content-Type', 'application/json')
           headers.append('Accept', 'application/json')
           headers.append('x-auth', token)
 
-          console.log('A1) INIZIO.............................................................')
+          let errorfromserver = false
+          let lettoqualcosa = false
 
-          await globalroutines(null, 'readall', table, null)
+          // console.log('A1) INIZIO.............................................................')
+          return globalroutines(null, 'readall', table, null)
             .then(function (alldata) {
               const myrecs = [...alldata]
-              console.log('----------------------- LEGGO QUALCOSA ')
-              if (myrecs) {
-                for (let rec of myrecs) {
-                  // console.log('syncing', table, '', rec.descr)
-                  let link = process.env.MONGODB_HOST + '/todos'
+              // console.log('----------------------- LEGGO QUALCOSA ')
 
-                  if (method !== 'POST')
-                    link += '/' + rec._id
+              const promises = myrecs.map(rec => {
+                // console.log('syncing', table, '', rec.descr)
+                let link = process.env.MONGODB_HOST + '/todos'
 
-                  console.log(' [Alternative] ++++++++++++++++++ SYNCING !!!!  ', rec.descr, table, 'FETCH: ', method, link, 'data:')
+                if (method !== 'POST')
+                  link += '/' + rec._id
 
-                  // Insert/Delete/Update table to the server
-                  fetch(link, {
-                    method: method,
-                    headers: headers,
-                    mode: 'cors',   // 'no-cors',
-                    body: JSON.stringify(rec)
+                // console.log(' [Alternative] ++++++++++++++++++ SYNCING !!!!  ', rec.descr, table, 'FETCH: ', method, link, 'data:')
+
+                // Insert/Delete/Update table to the server
+                return fetch(link, {
+                  method: method,
+                  headers: headers,
+                  cache: 'no-cache',
+                  mode: 'cors',   // 'no-cors',
+                  body: JSON.stringify(rec)
+                })
+                  .then(() => {
+                    lettoqualcosa = true
+                    return globalroutines(null, 'delete', table, null, rec._id)
                   })
-                    .then(function (resData) {
-                      // console.log('Result CALL ', method, ' OK? =', resData.ok);
+                  .then(() => {
+                    return globalroutines(null, 'delete', 'swmsg', null, mystrparam)
+                  })
+                  .catch(function (err) {
+                    if (err.message === 'Failed to fetch') {
+                      errorfromserver = true
+                    }
+                    // console.log(' [Alternative] !!!!!!!!!!!!!!!   Error while sending data', err, errorfromserver, 'lettoqualcosa', lettoqualcosa)
+                  })
+              })
 
-                      // Anyway Delete this, otherwise in some cases will return error, but it's not a problem.
-                      // for example if I change a record and then I deleted ...
-                      // if (resData.ok) {
-                      // deleteItemFromData(table, rec._id);
-                      globalroutines(null, 'delete', table, null, rec._id)
+              // CALL ALL THE PROMISES
+              return Promise.all(promises).then(() => {
+                return (errorfromserver && !lettoqualcosa)
+              }).catch(err => {
+                return (errorfromserver && !lettoqualcosa)
+              })
 
-                      console.log('DELETE: ', mystrparam)
-                      // deleteItemFromData('swmsg', mystrparam)
-                      globalroutines(null, 'delete', 'swmsg', null, mystrparam)
-
-                    })
-                    .catch(function (err) {
-                      console.log(' [Alternative] !!!!!!!!!!!!!!!   Error while sending data', err)
-                    })
-                }
-              }
+            }).catch(e => {
+              // console.log('ERROR:', e)
+              return (errorfromserver && !lettoqualcosa)
             })
-          console.log(' [Alternative] A2) ?????????????????????????? ESCO DAL LOOP !!!!!!!!! err=')
+            .then((errorfromserver) => {
+              // console.log('¨¨¨¨¨¨¨¨¨¨¨¨¨¨  errorfromserver:', errorfromserver)
+              const mystate = errorfromserver ? 'offline' : 'online'
+              GlobalStore.mutations.setStateConnection(mystate)
+              return globalroutines(null, 'write', 'config', { _id: 2, stateconn: mystate })
+            })
+
+          // console.log(' [Alternative] A2) ?????????????????????????? ESCO DAL LOOP !!!!!!!!!')
+
         }
       }
     }

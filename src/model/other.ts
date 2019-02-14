@@ -1,6 +1,8 @@
 export interface IToken {
   access: string
+  // browser: string
   token: string
+  data_login: Date
 }
 
 
@@ -9,7 +11,7 @@ export interface ILinkReg {
 }
 
 export interface IIdToken {
-  idToken: string
+  x_auth_token: string
 }
 
 export interface IResult {

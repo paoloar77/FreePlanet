@@ -18,13 +18,27 @@
                     </q-item-side>
 
                     <q-item-main v-if="field.value === 120">
-                        <q-slider :class="$parent.menuProgress" v-model="itemtodo.progress" :min="0" :max="100"/>
+                        <q-slider :class="$parent.menuProgress" v-model="itemtodo.progress" :min="0" :max="100"
+                                  :step="5"/>
+
                     </q-item-main>
-                    <q-item-side v-if="field.value === 120">
-                        <div :class="$parent.percProgress">
-                            {{$parent.percentageProgress}}%
+                    <q-item-side v-if="field.value === 120" >
+                        <div>
+                                <q-input v-model="itemtodo.progress"
+                                         class="menuInputProgress"
+                                         type="number"
+                                         suffix="%"
+                                         @change="val => { model = val }"
+                                         @keydown="KeychangeProgress"
+                                />
                         </div>
                     </q-item-side>
+
+                    <!--<q-item-side right v-if="field.value === 120">-->
+                    <!--<div :class="$parent.percProgress">-->
+                    <!--{{$parent.percentageProgress}}%-->
+                    <!--</div>-->
+                    <!--</q-item-side>-->
 
                 </q-item>
                 <q-item v-if="(field.value === 100)" :icon="field.icon" v-close-overlay
@@ -61,6 +75,6 @@
 <script lang="ts" src="./SubMenus.ts">
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
     @import './SubMenus.scss';
 </style>

@@ -39,6 +39,11 @@ export default class Signin extends Vue {
 
   created() {
     this.$v.$reset()
+
+    if (UserStore.state.resStatus === serv_constants.RIS_CODE__HTTP_FORBIDDEN_INVALID_TOKEN) {
+      this.showNotif(this.$t('fetch.error_doppiologin'))
+    }
+
     // this.$myconfig.socialLogin.facebook = true
     // console.log('PROVA fb:', this.$myconfig.socialLogin.facebook)
   }
@@ -75,8 +80,17 @@ export default class Signin extends Vue {
       this.showNotif({ type: 'positive', message: this.$t('login.completato') })
       this.$router.push('/')
     } else if (riscode === serv_constants.RIS_CODE_LOGIN_ERR) {
-      this.showNotif(this.$t('login.errato'))
-      this.$router.push('/signin')
+
+      // Wait N seconds to avoid calling many times...
+      return new Promise(function (resolve, reject) {
+        setTimeout(function () {
+          resolve('anything')
+        }, 1000)
+      }).then(() => {
+        this.showNotif(this.$t('login.errato'))
+        this.$router.push('/signin')
+      })
+
     } else if (riscode === rescodes.ERR_SERVERFETCH) {
       this.showNotif(this.$t('fetch.errore_server'))
     } else if (riscode === rescodes.ERR_GENERICO) {
@@ -122,21 +136,35 @@ export default class Signin extends Vue {
     console.log(this.signin)
     UserStore.actions.signin(this.signin)
       .then((riscode) => {
-        console.log('riscode=', riscode)
+        // console.log('riscode=', riscode)
         if (riscode === rescodes.OK) {
           router.push('/signin')
-          globalroutines(this, 'loadapp', '')
-
-          GlobalStore.actions.createPushSubscription()
         }
-        this.checkErrors(riscode)
-        this.$q.loading.hide()
-      }).catch(error => {
-      console.log('ERROR = ' + error)
+        return riscode
+      }).then((riscode) => {
+        globalroutines(this, 'loadapp', '')
+        return riscode
+      })
+      .then((riscode) => {
+        if (riscode === rescodes.OK) {
+          GlobalStore.actions.createPushSubscription()
+            .then(ris => {
+            })
+            .catch(e => {
+              console.log('ERROR = ' + e)
+            })
+            .then(() => {
+              this.checkErrors(riscode)
+              this.$q.loading.hide()
+            })
+        }
+      })
+      .catch(error => {
+        console.log('ERROR = ' + error)
 
-      this.checkErrors(error)
-      this.$q.loading.hide()
-    })
+        this.checkErrors(error)
+        this.$q.loading.hide()
+      })
 
   }
 }

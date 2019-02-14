@@ -1,6 +1,6 @@
 import Api from '@api'
 import { ISignupOptions, ISigninOptions, IUserState } from 'model'
-import { ILinkReg, IResult, IIdToken } from 'model/other'
+import { ILinkReg, IResult, IIdToken, IToken } from 'model/other'
 import { storeBuilder } from './Store/Store'
 import router from '@router'
 
@@ -22,7 +22,6 @@ const state: IUserState = {
   password: '',
   lang: '',
   repeatPassword: '',
-  idToken: '',
   tokens: [],
   verified_email: false,
   categorySel: 'personal',
@@ -44,17 +43,17 @@ namespace Getters {
     }
   }, 'lang')
 
-  const tok = b.read(state => {
-    if (state.tokens) {
-      if (typeof state.tokens[0] !== 'undefined') {
-        return state.tokens[0].token
-      } else {
-        return ''
-      }
-    } else {
-      return ''
-    }
-  }, 'tok')
+  // const tok = b.read(state => {
+  //   if (state.tokens) {
+  //     if (typeof state.tokens[0] !== 'undefined') {
+  //       return state.tokens[0].token
+  //     } else {
+  //       return ''
+  //     }
+  //   } else {
+  //     return ''
+  //   }
+  // }, 'tok')
 
   const isServerError = b.read(state => {
     return (state.servercode === rescodes.ERR_SERVERFETCH)
@@ -68,9 +67,9 @@ namespace Getters {
     get lang() {
       return lang()
     },
-    get tok() {
-      return tok()
-    },
+    // get tok() {
+    //   return tok()
+    // },
     get isServerError() {
       return isServerError()
     },
@@ -87,13 +86,11 @@ namespace Mutations {
   function authUser(state, data: IUserState) {
     state.userId = data.userId
     state.username = data.username
-    state.idToken = data.idToken
     state.verified_email = data.verified_email
     state.category = data.categorySel
-    // @ts-ignore
-    state.tokens = [
-      { access: 'auth', token: data.idToken }
-    ]
+    resetArrToken(state.tokens)
+    state.tokens.push({ access: 'auth', token: state.x_auth_token, date_login: new Date() })
+    // console.log('state.tokens', state.tokens)
   }
 
   function setpassword(state: IUserState, newstr: string) {
@@ -110,26 +107,43 @@ namespace Mutations {
   }
 
   function UpdatePwd(state: IUserState, data: IIdToken) {
-    state.idToken = data.idToken
+    state.x_auth_token = data.x_auth_token
     if (!state.tokens) {
       state.tokens = []
     }
-    state.tokens.push({ access: 'auth', token: data.idToken })
+    state.tokens.push({ access: 'auth', token: data.x_auth_token, data_login: new Date() })
   }
 
   function setServerCode(state: IUserState, num: number) {
     state.servercode = num
   }
 
+  function setResStatus(state: IUserState, status: number) {
+    state.resStatus = status
+  }
+
   function setAuth(state: IUserState, x_auth_token: string) {
+
     state.x_auth_token = x_auth_token
+  }
+
+
+  function resetArrToken(arrtokens) {
+    if (!arrtokens.tokens) {
+      arrtokens.tokens = []
+    }
+
+    // Take only the others access (from others Browser)
+    return arrtokens.filter((token: IToken) => {
+      return token.access !== 'auth'
+    })
   }
 
   function clearAuthData(state: IUserState) {
     state.userId = ''
     state.username = ''
-    state.tokens = []
-    state.idToken = ''
+    resetArrToken(state.tokens)
+    state.x_auth_token = ''
     state.verified_email = false
     state.categorySel = 'personal'
   }
@@ -139,6 +153,7 @@ namespace Mutations {
     if (state.servercode !== rescodes.ERR_SERVERFETCH) {
       state.servercode = err
     }
+    console.log('Err catch: (servercode:', err, ')')
   }
 
   function getMsgError(state: IUserState, err: number) {
@@ -168,6 +183,7 @@ namespace Mutations {
     setlang: b.commit(setlang),
     UpdatePwd: b.commit(UpdatePwd),
     setServerCode: b.commit(setServerCode),
+    setResStatus: b.commit(setResStatus),
     setAuth: b.commit(setAuth),
     clearAuthData: b.commit(clearAuthData),
     setErrorCatch: b.commit(setErrorCatch),
@@ -205,13 +221,13 @@ namespace Actions {
 
     Mutations.mutations.setServerCode(rescodes.CALLING)
 
-    return await Api.SendReq(call, state.lang, Getters.getters.tok, 'POST', usertosend)
+    return await Api.SendReq(call, 'POST', usertosend, true)
       .then(({ res, body }) => {
         return { code: body.code, msg: body.msg }
       })
       .catch((error) => {
         UserStore.mutations.setErrorCatch(error)
-        return UserStore.getters.getServerCode
+        return { code: UserStore.getters.getServerCode, msg: error }
       })
 
   }
@@ -230,7 +246,7 @@ namespace Actions {
 
     Mutations.mutations.setServerCode(rescodes.CALLING)
 
-    return await Api.SendReq(call, state.lang, Getters.getters.tok, 'POST', usertosend)
+    return await Api.SendReq(call, 'POST', usertosend)
       .then(({ res, body }) => {
         return { code: body.code, msg: body.msg }
       }).catch((error) => {
@@ -253,13 +269,13 @@ namespace Actions {
 
     Mutations.mutations.setServerCode(rescodes.CALLING)
 
-    return await Api.SendReq(call, state.lang, Getters.getters.tok, 'POST', usertosend)
+    return await Api.SendReq(call, 'POST', usertosend)
       .then(({ res, body }) => {
         // console.log("RITORNO 2 ");
         // mutations.setServerCode(myres);
         if (body.code === serv_constants.RIS_CODE_EMAIL_VERIFIED) {
           console.log('VERIFICATO !!')
-          localStorage.setItem(rescodes.localStorage.verifiedEmail, '1')
+          localStorage.setItem(rescodes.localStorage.verified_email, String(true))
         } else {
           console.log('Risultato di vreg: ', body.code)
         }
@@ -296,16 +312,18 @@ namespace Actions {
 
         Mutations.mutations.setServerCode(rescodes.CALLING)
 
-        let x_auth_token: string = ''
-
-        return Api.SendReq(call, state.lang, Getters.getters.tok, 'POST', usertosend)
-          .then(({ res, newuser }) => {
+        return Api.SendReq(call, 'POST', usertosend)
+          .then(({ res, body }) => {
             myres = res
+
+            const newuser = body
+
+            console.log('newuser', newuser)
 
             Mutations.mutations.setServerCode(myres.status)
 
             if (myres.status === 200) {
-              let userId = newuser.userId
+              let userId = newuser._id
               let username = authData.username
               if (process.env.DEV) {
                 console.log('USERNAME = ' + username)
@@ -313,9 +331,8 @@ namespace Actions {
               }
 
               Mutations.mutations.authUser({
-                userId: userId,
-                username: username,
-                idToken: x_auth_token,
+                userId,
+                username,
                 verified_email: false
               })
 
@@ -324,9 +341,9 @@ namespace Actions {
               const expirationDate = new Date(now.getTime() * 1000)
               localStorage.setItem(rescodes.localStorage.userId, userId)
               localStorage.setItem(rescodes.localStorage.username, username)
-              localStorage.setItem(rescodes.localStorage.token, x_auth_token)
+              localStorage.setItem(rescodes.localStorage.token, state.x_auth_token)
               localStorage.setItem(rescodes.localStorage.expirationDate, expirationDate.toString())
-              localStorage.setItem(rescodes.localStorage.verifiedEmail, '0')
+              localStorage.setItem(rescodes.localStorage.verified_email, String(false))
               state.isLogged = true
               // dispatch('storeUser', authData);
               // dispatch('setLogoutTimer', myres.data.expiresIn);
@@ -349,71 +366,114 @@ namespace Actions {
 
     console.log('MYLANG = ' + state.lang)
 
+    let sub = null
+
+    if ('serviceWorker' in navigator) {
+      sub = await navigator.serviceWorker.ready
+        .then(function (swreg) {
+          const sub = swreg.pushManager.getSubscription()
+          return sub
+        })
+        .catch(e => {
+          sub = null
+        })
+    }
+
+    const options = {
+      title: translate('notification.title_subscribed'),
+      content: translate('notification.subscribed'),
+      openUrl: '/'
+    }
+
     const usertosend = {
       username: authData.username,
       password: authData.password,
       idapp: process.env.APP_ID,
       keyappid: process.env.PAO_APP_ID,
-      lang: state.lang
+      lang: state.lang,
+      subs: sub,
+      options
     }
 
     console.log(usertosend)
 
-    let myres: IResult
-
     Mutations.mutations.setServerCode(rescodes.CALLING)
 
-    return await Api.SendReq(call, state.lang, Getters.getters.tok, 'POST', usertosend)
+    let myres: IResult
+
+    return Api.SendReq(call, 'POST', usertosend, true)
       .then(({ res, body }) => {
         myres = res
-        if (res.code === serv_constants.RIS_CODE_LOGIN_ERR) {
+
+        if (body.code === serv_constants.RIS_CODE_LOGIN_ERR) {
           Mutations.mutations.setServerCode(body.code)
-          return body.code
+          return { myres, body }
         }
 
         Mutations.mutations.setServerCode(myres.status)
 
+        if (myres.status !== 200) {
+          return Promise.reject(rescodes.ERR_GENERICO)
+        }
+        return { myres, body }
+
+      }).then(({ myres, body }) => {
+
+        if (myres.status === serv_constants.RIS_CODE__HTTP_FORBIDDEN_INVALID_TOKEN) {
+          if (process.env.DEV) {
+            console.log('CODE = ' + body.code)
+          }
+          return body.code
+        } else if (myres.status !== 200) {
+          if (process.env.DEV) {
+            console.log('CODE = ' + body.code)
+          }
+          return body.code
+        }
+
         if (myres.status === 200) {
+          GlobalStore.mutations.SetwasAlreadySubOnDb(body.subsExistonDb)
+
           let myuser: IUserState = body.usertosend
-          let userId = myuser.userId
-          let username = authData.username
-          let verifiedEmail = myuser.verified_email === true
-          if (process.env.DEV) {
-            console.log('USERNAME = ' + username)
-            console.log('IDUSER= ' + userId)
+          if (myuser) {
+            let userId = myuser.userId
+            let username = authData.username
+            let verified_email = myuser.verified_email
+            if (process.env.DEV) {
+              console.log('USERNAME = ' + username, 'IDUSER= ' + userId)
+              // console.log('state.x_auth_token= ' + state.x_auth_token)
+            }
+
             Mutations.mutations.authUser({
-              userId: userId,
-              username: username,
-              idToken: state.x_auth_token,
-              verified_email: verifiedEmail
+              userId,
+              username,
+              verified_email
             })
+
+            const now = new Date()
+            // const expirationDate = new Date(now.getTime() + myres.data.expiresIn * 1000);
+            const expirationDate = new Date(now.getTime() * 1000)
+            localStorage.setItem(rescodes.localStorage.userId, userId)
+            localStorage.setItem(rescodes.localStorage.username, username)
+            localStorage.setItem(rescodes.localStorage.token, state.x_auth_token)
+            localStorage.setItem(rescodes.localStorage.expirationDate, expirationDate.toString())
+            localStorage.setItem(rescodes.localStorage.isLogged, String(true))
+            localStorage.setItem(rescodes.localStorage.verified_email, String(verified_email))
+            localStorage.setItem(rescodes.localStorage.wasAlreadySubOnDb, String(GlobalStore.state.wasAlreadySubOnDb))
+
           }
+        }
 
-          const now = new Date()
-          // const expirationDate = new Date(now.getTime() + myres.data.expiresIn * 1000);
-          const expirationDate = new Date(now.getTime() * 1000)
-          localStorage.setItem(rescodes.localStorage.userId, userId)
-          localStorage.setItem(rescodes.localStorage.username, username)
-          localStorage.setItem(rescodes.localStorage.token, state.x_auth_token)
-          localStorage.setItem(rescodes.localStorage.expirationDate, expirationDate.toString())
-          localStorage.setItem(rescodes.localStorage.isLogged, String(true))
-          localStorage.setItem(rescodes.localStorage.verifiedEmail, Number(verifiedEmail).toString())
+        return rescodes.OK
 
-          setGlobal()
-
-          // dispatch('storeUser', authData);
-          // dispatch('setLogoutTimer', myres.data.expiresIn);
-          return rescodes.OK
-        } else if (myres.status === 404) {
-          if (process.env.DEV) {
-            console.log('CODE = ' + body.code)
-          }
-          return body.code
+      }).then(code => {
+        if (code === rescodes.OK) {
+          return setGlobal(true)
+            .then(() => {
+              return code
+            })
         } else {
-          if (process.env.DEV) {
-            console.log('CODE = ' + body.code)
-          }
-          return body.code
+          return code
         }
       })
       .catch((error) => {
@@ -423,6 +483,20 @@ namespace Actions {
   }
 
   async function logout(context) {
+    console.log('logout')
+
+    localStorage.removeItem(rescodes.localStorage.expirationDate)
+    localStorage.removeItem(rescodes.localStorage.token)
+    localStorage.removeItem(rescodes.localStorage.userId)
+    localStorage.removeItem(rescodes.localStorage.username)
+    localStorage.removeItem(rescodes.localStorage.isLogged)
+    // localStorage.removeItem(rescodes.localStorage.leftDrawerOpen)
+    localStorage.removeItem(rescodes.localStorage.verified_email)
+    localStorage.removeItem(rescodes.localStorage.categorySel)
+    localStorage.removeItem(rescodes.localStorage.wasAlreadySubOnDb)
+
+
+    await GlobalStore.actions.clearDataAfterLogout()
 
     let call = process.env.MONGODB_HOST + '/users/me/token'
     console.log('CALL ' + call)
@@ -433,7 +507,7 @@ namespace Actions {
     }
 
     console.log(usertosend)
-    return await Api.SendReq(call, state.lang, Getters.getters.tok, 'DELETE', usertosend)
+    const riscall = await Api.SendReq(call, 'DELETE', usertosend)
       .then(({ res, body }) => {
         console.log(res)
       }).then(() => {
@@ -443,37 +517,31 @@ namespace Actions {
         return UserStore.getters.getServerCode
       })
 
-    localStorage.removeItem(rescodes.localStorage.expirationDate)
-    localStorage.removeItem(rescodes.localStorage.token)
-    localStorage.removeItem(rescodes.localStorage.userId)
-    localStorage.removeItem(rescodes.localStorage.username)
-    localStorage.removeItem(rescodes.localStorage.isLogged)
-    // localStorage.removeItem(rescodes.localStorage.leftDrawerOpen)
-    localStorage.removeItem(rescodes.localStorage.verifiedEmail)
-    localStorage.removeItem(rescodes.localStorage.categorySel)
+    return riscall
 
-    router.push('/signin')
+    // this.$router.push('/signin')
   }
 
-  function setGlobal() {
+  async function setGlobal(loggedWithNetwork: boolean) {
     state.isLogged = true
     GlobalStore.mutations.setleftDrawerOpen(localStorage.getItem(rescodes.localStorage.leftDrawerOpen) === 'true')
     GlobalStore.mutations.setCategorySel(localStorage.getItem(rescodes.localStorage.categorySel))
 
-    GlobalStore.actions.loadAfterLogin()
 
-    Todos.actions.dbLoadTodo(true)
-
-
+    await GlobalStore.actions.loadAfterLogin()
+      .then(() => {
+        Todos.actions.dbLoadTodo(true)
+      })
   }
 
 
-  async function autologin(context) {
+  async function autologin_FromLocalStorage(context) {
     try {
-      console.log('*** Autologin ***')
+      // console.log('*** autologin_FromLocalStorage ***')
       // INIT
+
       UserStore.mutations.setlang(process.env.LANG_DEFAULT)
-      // ++Todo: Estrai la Lang dal Localstorage
+      // Estrai la Lang dal Localstorage
       const lang = localStorage.getItem('lang')
       if (lang) {
         UserStore.mutations.setlang(lang)
@@ -492,18 +560,21 @@ namespace Actions {
       }
       const userId = String(localStorage.getItem(rescodes.localStorage.userId))
       const username = String(localStorage.getItem(rescodes.localStorage.username))
-      const verifiedEmail = localStorage.getItem(rescodes.localStorage.verifiedEmail) === '1'
+      const verified_email = localStorage.getItem(rescodes.localStorage.verified_email) === 'true'
 
-      console.log('autologin userId', userId)
+      GlobalStore.state.wasAlreadySubOnDb = localStorage.getItem(rescodes.localStorage.wasAlreadySubOnDb) === 'true'
+
+      console.log('*************  autologin userId', userId)
+
+      UserStore.mutations.setAuth(token)
 
       Mutations.mutations.authUser({
         userId: userId,
         username: username,
-        idToken: token,
-        verified_email: verifiedEmail
+        verified_email: verified_email,
       })
 
-      setGlobal()
+      await setGlobal(false)
 
       console.log('autologin userId STATE ', state.userId)
 
@@ -522,7 +593,7 @@ namespace Actions {
     signup: b.dispatch(signup),
     signin: b.dispatch(signin),
     logout: b.dispatch(logout),
-    autologin: b.dispatch(autologin)
+    autologin_FromLocalStorage: b.dispatch(autologin_FromLocalStorage)
 
   }
 }

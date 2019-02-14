@@ -78,7 +78,10 @@ $heightitem: 19px;
   padding: 0px;
   text-align: center;
   vertical-align: middle;
-  display: none;
+  display: block;
+  @media screen and (min-width: 600px) {
+    display: none;
+  }
   color: #777;
   height: 100%;
   //visibility: hidden;
@@ -289,6 +292,7 @@ $heightitem: 19px;
 .after_textarea:hover {
   visibility: visible;
 }
+
 
 
 /*

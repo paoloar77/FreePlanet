@@ -12,7 +12,6 @@ import globalroutines from './globalroutines/index'
 import { GlobalStore } from './store/Modules'
 
 
-
 @Component({
   components: {
     appHeader: Header
@@ -23,9 +22,9 @@ import { GlobalStore } from './store/Modules'
 
 export default class App extends Vue {
   public backgroundColor = 'whitesmoke'
-  public isSubscribed = false
   public $q
 
+  public listaRoutingNoLogin = ['/vreg?', '/offline']
 
   created() {
     if (process.env.DEV) {
@@ -37,19 +36,35 @@ export default class App extends Vue {
       // console.info(process.env)
     }
 
-    UserStore.actions.autologin()
-      .then((loginEseguito) => {
-        if (loginEseguito) {
-          globalroutines(this, 'loadapp', '')
-          // this.$router.replace('/')
+    // Make autologin only if some routing
+
+    // console.log('window.location.href', window.location.href)
+
+    let chiamaautologin = true
+    this.listaRoutingNoLogin.forEach(mystr => {
+      if (window.location.href.includes(mystr)) {
+        chiamaautologin = false
+      }
+    })
+
+    if (chiamaautologin) {
+      console.log('CHIAMA autologin_FromLocalStorage')
+      UserStore.actions.autologin_FromLocalStorage()
+        .then((loadstorage) => {
+          if (loadstorage) {
+            globalroutines(this, 'loadapp', '')
+            // this.$router.replace('/')
 
             // Create Subscription to Push Notification
-          GlobalStore.actions.createPushSubscription()
-        }
-      })
+            GlobalStore.actions.createPushSubscription()
+          }
+        })
+    }
+
+    // Calling the Server for updates ?
+    // Check the verified_email
 
   }
-
 
 
 }

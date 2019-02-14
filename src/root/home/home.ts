@@ -57,9 +57,10 @@ export default class Home extends Vue {
 
   initprompt() {
     window.addEventListener('beforeinstallprompt', function (event) {
-      console.log('********************************   beforeinstallprompt fired')
+      // console.log('********************************   beforeinstallprompt fired')
       event.preventDefault()
-      console.log('§§§§§§§§§§§§§§§§§§§§  IMPOSTA DEFERRED PROMPT  !!!!!!!!!!!!!!!!!  ')
+      // console.log('§§§§§§§§§§§§§§§§§§§§  IMPOSTA DEFERRED PROMPT  !!!!!!!!!!!!!!!!!  ')
+      // #Todo++ IMPOSTA DEFERRED PROMPT
       return false
     })
 
@@ -67,6 +68,10 @@ export default class Home extends Vue {
 
   getPermission() {
     return Notification.permission
+  }
+
+  NotServiceWorker () {
+    return (!('serviceWorker' in navigator))
   }
 
   displayConfirmNotification() {
@@ -88,10 +93,12 @@ export default class Home extends Vue {
         ]
       }
 
-      navigator.serviceWorker.ready
-        .then(function (swreg) {
-          swreg.showNotification('Successfully subscribed!', options)
-        })
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.ready
+          .then(function (swreg) {
+            swreg.showNotification('Successfully subscribed!', options)
+          })
+      }
     }
   }
 
@@ -166,7 +173,6 @@ export default class Home extends Vue {
     })
 
   }
-
 
 
   test_fetch() {

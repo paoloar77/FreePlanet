@@ -39,6 +39,7 @@ export default class SingleTodo extends Vue {
   public colProgress: string = 'blue'
   public togglemenu: boolean = false
   public percentageProgress: number = 0
+  public itemtodoPrec: ITodo
   $q: any
 
   @Prop({ required: true }) itemtodo: ITodo
@@ -67,6 +68,11 @@ export default class SingleTodo extends Vue {
 
   @Watch('itemtodo.progress') valueChanged6() {
     this.updateClasses()
+  }
+
+  dateToYYYYMMDD(date) {
+    // may have timezone caveats https://stackoverflow.com/a/29774197/1850609
+    return date && date.toISOString().split('T')[0]
   }
 
   isTodo() {
@@ -258,6 +264,15 @@ export default class SingleTodo extends Vue {
       }
     }
 */
+    if (((e.keyCode === 8) || (e.keyCode === 46)) && (this.precDescr === '') && !e.shiftKey) {
+      e.preventDefault()
+      this.deselectRiga()
+      this.clickMenu(rescodes.MenuAction.DELETE)
+        .then(() => {
+          this.faiFocus('insertTask', true)
+          return
+        })
+    }
 
     if (((e.key === 'Enter') || (e.key === 'Tab')) && !e.shiftKey) {
       this.updateTodo()
@@ -287,6 +302,9 @@ export default class SingleTodo extends Vue {
 
     this.itemtodo.descr = this.precDescr
     console.log('updateTodo', this.precDescr, this.itemtodo.descr)
+    console.log('itemtodo', this.itemtodo)
+    console.log('Prec:', this.itemtodoPrec)
+
     this.watchupdate()
     this.inEdit = false
     // this.precDescr = this.itemtodo.descr
@@ -335,16 +353,16 @@ export default class SingleTodo extends Vue {
 
   }
 
-  clickMenu(action) {
+  async clickMenu(action) {
     console.log('click menu: ', action)
     if (action === rescodes.MenuAction.DELETE) {
-      this.askConfirmDelete()
+      return await this.askConfirmDelete()
     } else if (action === rescodes.MenuAction.TOGGLE_EXPIRING) {
-      this.enableExpiring()
+      return await this.enableExpiring()
     } else if (action === rescodes.MenuAction.COMPLETED) {
-      this.setCompleted()
+      return await this.setCompleted()
     } else if (action === rescodes.MenuAction.PROGRESS_BAR) {
-      this.updatedata()
+      return await this.updatedata()
     }
 
   }
@@ -360,11 +378,11 @@ export default class SingleTodo extends Vue {
     // this.$q.notify('setPriority: ' + elem)
   }
 
-  askConfirmDelete() {
+  async askConfirmDelete() {
     const deletestr = this.$t('dialog.delete')
     const cancelstr = this.$t('dialog.cancel')
 
-    askConfirm(this.$q, this.$t('dialog.msg.titledeleteTask'), this.$t('dialog.msg.deleteTask').toString(), deletestr, cancelstr)
+    await askConfirm(this.$q, this.$t('dialog.msg.titledeleteTask'), this.$t('dialog.msg.deleteTask').toString(), deletestr, cancelstr)
       .then(ris => {
         console.log('ris', ris)
         if (ris)

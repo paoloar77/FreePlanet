@@ -1,4 +1,4 @@
-import { IGlobalState } from 'model'
+import { IGlobalState, StateConnection } from 'model'
 import { storeBuilder } from './Store/Store'
 
 import Vue from 'vue'
@@ -8,24 +8,49 @@ import translate from './../../globalroutines/util'
 import urlBase64ToUint8Array from '../../js/utility'
 
 import messages from '../../statics/i18n'
-import { UserStore } from "@store"
+import { GlobalStore, UserStore } from '@store'
+import globalroutines from './../../globalroutines/index'
+import Api from "@api"
+import { rescodes } from "@src/store/Modules/rescodes"
+
+const allTables = ['todos', 'sync_todos', 'sync_todos_patch', 'delete_todos', 'config', 'swmsg']
+const allTablesAfterLogin = ['todos', 'sync_todos', 'sync_todos_patch', 'delete_todos', 'config', 'swmsg']
+
+async function getstateConnSaved() {
+  const config = await globalroutines(null, 'readall', 'config', null)
+  if (config.length > 1) {
+    return config[1].stateconn
+  } else {
+    return 'online'
+  }
+}
+
+let stateConnDefault = 'online'
+
+getstateConnSaved()
+  .then(conn => {
+    stateConnDefault = conn
+  })
 
 const state: IGlobalState = {
   conta: 0,
-  isSubscribed: false,
+  wasAlreadySubscribed: false,
+  wasAlreadySubOnDb: false,
   isLoginPage: false,
   layoutNeeded: true,
   mobileMode: false,
   menuCollapse: true,
   leftDrawerOpen: true,
+  stateConnection: stateConnDefault,
   category: 'personal',
   posts: [],
   listatodo: [
-    {namecat: 'personal', description: 'personal'},
-    {namecat: 'work', description: 'work'},
-    {namecat: 'shopping', description: 'shopping'}
-    ]
+    { namecat: 'personal', description: 'personal' },
+    { namecat: 'work', description: 'work' },
+    { namecat: 'shopping', description: 'shopping' }
+  ]
 }
+
 
 const b = storeBuilder.module<IGlobalState>('GlobalModule', state)
 
@@ -47,6 +72,10 @@ namespace Getters {
 
     get category() {
       return category()
+    },
+
+    get isOnline() {
+      return state.stateConnection === 'online'
     }
   }
 }
@@ -65,11 +94,23 @@ namespace Mutations {
     state.category = cat
   }
 
+  function setStateConnection(state: IGlobalState, stateconn: StateConnection) {
+    if (state.stateConnection !== stateconn) {
+      console.log('INTERNET ', stateconn)
+      state.stateConnection = stateconn
+    }
+  }
+
+  function SetwasAlreadySubOnDb(state: IGlobalState, subscrib: boolean) {
+    state.wasAlreadySubOnDb = subscrib
+  }
 
   export const mutations = {
     setConta: b.commit(setConta),
     setleftDrawerOpen: b.commit(setleftDrawerOpen),
-    setCategorySel: b.commit(setCategorySel)
+    setCategorySel: b.commit(setCategorySel),
+    setStateConnection: b.commit(setStateConnection),
+    SetwasAlreadySubOnDb: b.commit(SetwasAlreadySubOnDb)
   }
 
 }
@@ -80,7 +121,18 @@ namespace Actions {
   }
 
   function createPushSubscription(context) {
+
+    // If Already subscribed, don't send to the Server DB
+    // if (state.wasAlreadySubOnDb) {
+    //   // console.log('wasAlreadySubOnDb!')
+    //   return
+    // }
+
     if (!('serviceWorker' in navigator)) {
+      return
+    }
+
+    if (!('PushManager' in window)) {
       return
     }
 
@@ -89,18 +141,21 @@ namespace Actions {
     let reg
     const mykey = process.env.PUBLICKEY_PUSH
     const mystate = state
-    navigator.serviceWorker.ready
+    return navigator.serviceWorker.ready
       .then(function (swreg) {
         reg = swreg
         return swreg.pushManager.getSubscription()
       })
       .then(function (subscription) {
-        mystate.isSubscribed = !(subscription === null)
+        mystate.wasAlreadySubscribed = !(subscription === null)
 
-        if (mystate.isSubscribed) {
-          console.log('User is already Subscribed!')
+        if (mystate.wasAlreadySubscribed) {
+          console.log('User is already SAVED Subscribe on DB!')
+          // return null
+          return subscription
         } else {
           // Create a new subscription
+          console.log('Create a new subscription')
           let convertedVapidPublicKey = urlBase64ToUint8Array(mykey)
           return reg.pushManager.subscribe({
             userVisibleOnly: true,
@@ -109,44 +164,66 @@ namespace Actions {
         }
       })
       .then(function (newSub) {
-        if (newSub) {
-          saveNewSubscriptionToServer(context, newSub)
-          mystate.isSubscribed = true;
-        }
-        return null
+        saveNewSubscriptionToServer(context, newSub)
       })
       .catch(function (err) {
-        console.log(err)
+        console.log('ERR createPushSubscription:', err)
       })
   }
 
   // Calling the Server to Save in the MongoDB the Subscriber
   function saveNewSubscriptionToServer(context, newSub) {
+    // If already subscribed, exit
+    if (!newSub)
+      return
+
     console.log('saveSubscriptionToServer: ', newSub)
-    console.log('context', context)
+    // console.log('context', context)
 
-    const options = {
-      title: translate('notification.title_subscribed'),
-      content: translate('notification.subscribed'),
-      openUrl: '/'
-    }
+    let options = null
 
-    let myres = {
-      options: { ...options },
-      subs: newSub,
-      others: {
-        userId: UserStore.state.userId
+    // If is not already stored in DB, then show the message to the user.
+    if (!state.wasAlreadySubscribed) {
+      options = {
+        title: translate('notification.title_subscribed'),
+        content: translate('notification.subscribed'),
+        openUrl: '/'
       }
     }
 
-    return fetch(process.env.MONGODB_HOST + '/subscribe', {
-      method: 'POST',
+    let myres = {
+      options,
+      subs: newSub,
+      others: {
+        userId: UserStore.state.userId,
+        access: UserStore.state.tokens[0].access
+      },
+    }
+
+    let call = process.env.MONGODB_HOST + '/subscribe'
+
+    return Api.SendReq(call, 'POST', myres)
+      .then(({ res, body }) => {
+        state.wasAlreadySubscribed = true
+        state.wasAlreadySubOnDb = true
+
+        localStorage.setItem(rescodes.localStorage.wasAlreadySubOnDb, String(state.wasAlreadySubOnDb))
+      })
+      .catch(e => {
+        console.log('Error during Subscription!', e)
+      })
+  }
+
+  async function deleteSubscriptionToServer(context) {
+    console.log('DeleteSubscriptionToServer: ')
+
+    return await fetch(process.env.MONGODB_HOST + '/subscribe/del', {
+      method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
-        'Accept': 'application/json'
-      },
-      body: JSON.stringify(myres)
-
+        'Accept': 'application/json',
+        'x-auth': UserStore.state.x_auth_token
+      }
     })
 
   }
@@ -174,8 +251,50 @@ namespace Actions {
 
   }
 
-  function loadAfterLogin (context) {
+  async function clearDataAfterLogout(context) {
+    console.log('clearDataAfterLogout')
 
+    // Clear all data from the IndexedDB
+    await allTables.forEach(table => {
+      globalroutines(null, 'clearalldata', table, null)
+    })
+
+    if ('serviceWorker' in navigator) {
+      // REMOVE ALL SUBSCRIPTION
+      console.log('REMOVE ALL SUBSCRIPTION...')
+      await navigator.serviceWorker.ready.then(function (reg) {
+        console.log('... Ready')
+        reg.pushManager.getSubscription().then(function (subscription) {
+          console.log('    Found Subscription...')
+          subscription.unsubscribe().then(function (successful) {
+            // You've successfully unsubscribed
+            console.log('You\'ve successfully unsubscribed')
+          }).catch(function (e) {
+            // Unsubscription failed
+          })
+        })
+      })
+    }
+
+    await deleteSubscriptionToServer(context)
+
+  }
+
+  async function clearDataAfterLoginOnlyIfActiveConnection(context) {
+
+    // if (Getters.getters.isOnline) {
+    //   console.log('clearDataAfterLoginOnlyIfActiveConnection')
+    //   // Clear all data from the IndexedDB
+    //   allTablesAfterLogin.forEach(table => {
+    //     globalroutines(null, 'clearalldata', table, null)
+    //   })
+    // }
+
+  }
+
+
+  async function loadAfterLogin(context) {
+    actions.clearDataAfterLoginOnlyIfActiveConnection()
   }
 
 
@@ -183,6 +302,8 @@ namespace Actions {
     setConta: b.dispatch(setConta),
     createPushSubscription: b.dispatch(createPushSubscription),
     loadAfterLogin: b.dispatch(loadAfterLogin),
+    clearDataAfterLogout: b.dispatch(clearDataAfterLogout),
+    clearDataAfterLoginOnlyIfActiveConnection: b.dispatch(clearDataAfterLoginOnlyIfActiveConnection),
     prova: b.dispatch(prova)
   }
 
@@ -202,4 +323,3 @@ const GlobalModule = {
 
 
 export default GlobalModule
-

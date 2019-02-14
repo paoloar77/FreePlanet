@@ -104,8 +104,8 @@
           if (ris.code === serv_constants.RIS_CODE_OK)
             this.emailsent = true;
           this.$q.loading.hide();
-        }).catch(error => {
-        console.log("ERROR = " + error);
+        }).catch(err => {
+        console.log("ERROR = " + err.error);
         this.$q.loading.hide();
       });
 

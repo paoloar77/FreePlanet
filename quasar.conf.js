@@ -195,6 +195,7 @@ module.exports = function (ctx) {
       },
       manifest: {
         name: 'Free Planet',
+        version: '0.0.14',
         short_name: 'freeplanet',
         description: 'Social project in order to connecting people each others (working in progress...)',
         display: 'standalone',

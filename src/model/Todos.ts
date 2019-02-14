@@ -5,10 +5,10 @@ export interface ITodo {
   descr?: string,
   priority: number,
   completed: boolean,
-  created_at: any,
-  modify_at: any,
-  completed_at: any,
-  expiring_at: any,
+  created_at: Date,
+  modify_at: Date,
+  completed_at: Date,
+  expiring_at: Date,
   enableExpiring?: boolean,
   id_prev?: string,
   id_next?: string,
@@ -22,7 +22,7 @@ export interface ITodosState {
   networkDataReceived: boolean
   todos: ITodo[]
   todos_changed: number
-  reload_fromServer: boolean
+  reload_fromServer: number
   testpao: String
   insidePending: boolean
 }

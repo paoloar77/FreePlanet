@@ -34,6 +34,11 @@ export const RouteConfig: VueRouteConfig[] = [
     path: '/category',
     component: () => import('@/components/categories/category/category.vue'),
     meta: { name: 'Categories' }
+  },
+  {
+    path: '/offline',
+    component: () => import('@/components/offline/offline.vue'),
+    meta: { name: 'Offline' }
   }
   /*
   {

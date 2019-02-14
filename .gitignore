@@ -3,6 +3,9 @@
 .thumbs.db
 .env
 .env.production
+.env.production.bak
+.env.prod.bak
+.env.test
 node_modules
 /dist
 /src-cordova/node_modules
@@ -28,4 +31,6 @@ coverage
 /_PROVE
 /_LOCALE
 deploy.sh
-deploy_production.sh
+deploy_on_production.sh
+deploy_on_test_server.sh
+send_to_production.sh

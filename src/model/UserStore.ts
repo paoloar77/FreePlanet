@@ -17,8 +17,6 @@ export interface IUserState {
   lang?: string
   repeatPassword?: string
 
-  idToken?: string
-
   tokens?: IToken[]
 
   verified_email?: boolean
@@ -27,6 +25,7 @@ export interface IUserState {
   tokenforgot?: string
 
   servercode?: number
+  resStatus?: number
   x_auth_token?: string
   isLogged?: boolean
 }

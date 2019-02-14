@@ -17,7 +17,7 @@ const messages = {
     msg: {
       hello: 'Buongiorno',
       myAppName: 'FreePlanet',
-      myDescriz: 'La prima App Libera'
+      myDescriz: ''
     },
     pages: {
       home: 'Principale',
@@ -51,6 +51,7 @@ const messages = {
     fetch: {
       errore_generico: 'Errore Generico',
       errore_server: 'Impossibile accedere al Server. Riprovare Grazie',
+      error_doppiologin: 'Rieseguire il Login. Accesso aperto da un altro dispositivo.',
     },
     user: {
       notregistered: 'Devi registrarti al servizio prima di porter memorizzare i dati'
@@ -121,7 +122,8 @@ const messages = {
       titledenied: 'Permesso Notifiche Disabilitato!',
       title_subscribed: 'Sottoscrizione a FreePlanet.app!',
       subscribed: 'Ora potrai ricevere i messaggi e le notifiche.'
-    }
+    },
+    connection: 'Connessione',
   },
   es: {
     dialog: {
@@ -141,7 +143,7 @@ const messages = {
     msg: {
       hello: 'Buenos Días',
       myAppName: 'FreePlanet',
-      myDescriz: 'La primera App Libera'
+      myDescriz: ''
     },
     pages: {
       home: 'Principal',
@@ -175,6 +177,7 @@ const messages = {
     fetch: {
       errore_generico: 'Error genérico',
       errore_server: 'No se puede acceder al Servidor. Inténtalo de nuevo, Gracias',
+      error_doppiologin: 'Vuelva a iniciar sesión. Acceso abierto por otro dispositivo.',
     },
     user: {
       notregistered: 'Debe registrarse en el servicio antes de poder almacenar los datos'
@@ -245,7 +248,8 @@ const messages = {
       titledenied: 'Notificaciones permitidas deshabilitadas!',
       title_subscribed: 'Suscripción a FreePlanet.app!',
       subscribed: 'Ahora puedes recibir mensajes y notificaciones.'
-    }
+    },
+    connection: 'Connection',
   },
   enUk: {
     dialog: {
@@ -265,7 +269,7 @@ const messages = {
     msg: {
       hello: 'Hello!',
       myAppName: 'FreePlanet',
-      myDescriz: 'The first Free app'
+      myDescriz: ''
     },
     pages: {
       home: 'Dashboard One',
@@ -299,6 +303,7 @@ const messages = {
     fetch: {
       errore_generico: 'Generic Error',
       errore_server: 'Unable to access to the Server. Retry. Thank you.',
+      error_doppiologin: 'Signup again. Another access was made with another device.',
     },
     user: {
       notregistered: 'You need first to SignUp before storing data'
@@ -369,7 +374,8 @@ const messages = {
       titledenied: 'Notification Permission Denied!',
       title_subscribed: 'Subscribed to FreePlanet.app!',
       subscribed: 'You can now receive Notification and Messages.'
-    }
+    },
+    connection: 'Conexión',
   },
 };
 

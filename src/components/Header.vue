@@ -32,6 +32,17 @@
                     <div slot="subtitle">{{$t('msg.myDescriz')}} {{ getAppVersion() }}</div>
                 </q-toolbar-title>
 
+                <q-btn
+                        flat
+                        dense
+                        round
+                        @click=""
+                        aria-label="Connection"
+                >
+                    <q-icon :name="iconConn" :class="clIconConn"></q-icon>
+                    <q-icon v-if="isUserNotAuth" name="device_unknown"></q-icon>
+                </q-btn>
+
                 <q-select class="sel_lang" v-model="lang" stack-label="" :options="selectOpLang"/>
 
                 <!--
@@ -68,17 +79,72 @@
 
   import { GlobalStore } from '@modules'
   import { rescodes } from '../store/Modules/rescodes'
+  import QIcon from "quasar-framework/src/components/icon/QIcon";
+  import { StateConnection } from "../model";
+  import { Watch } from "vue-property-decorator";
+  import QField from "quasar-framework/src/components/field/QField";
 
   @Component({
     components: {
+      QField,
+      QIcon,
       drawer,
       messagePopover,
     }
   })
 
   export default class Header extends Vue {
+    public $t
     public $v
     public $q
+    public isUserNotAuth: boolean = false
+    public iconConn: string = 'wifi'
+    public clIconConn: string = 'clIconOnline'
+    public strConn: string = ''
+
+    get conn_changed() {
+      return GlobalStore.state.stateConnection
+    }
+
+    @Watch('GlobalStore.state.stateConnection', { immediate: true, deep: true })
+    changeconn(value: string, oldValue: string) {
+
+      this.strConn = value
+
+      // this.$q.notify({
+      //   color : 'primary',
+      //   icon: 'wifi',
+      //   message: "CAMBIATOO! " + value
+      // })
+
+    }
+
+
+    @Watch('conn_changed', { immediate: true, deep: true })
+    changeconn_changed(value: string, oldValue: string) {
+      if (value != oldValue) {
+
+        // console.log('SSSSSSSS: ', value, oldValue)
+
+        const color = (value === 'online') ? 'positive' : 'warning'
+
+        if (oldValue !== undefined) {
+          this.$q.notify({
+            color,
+            icon: 'wifi',
+            message: this.$t('connection') + ` ${value}`
+          })
+        }
+
+        // console.log('Todos.state.todos_changed CHANGED!', value, oldValue)
+        this.changeIconConn()
+      }
+    }
+
+    changeIconConn() {
+      this.iconConn = GlobalStore.state.stateConnection === 'online' ? "wifi" : "wifi_off"
+      this.clIconConn = GlobalStore.state.stateConnection === 'online' ? 'clIconOnline' : 'clIconOffline'
+    }
 
     public selectOpLang = [
       { label: 'English (UK)', icon: 'fa-flag-us', value: 'en-uk' },
@@ -113,6 +179,38 @@
         import(`src/statics/i18n`).then(function () {
         })
       })
+    }
+
+
+    mounted () {
+
+      // Test this by running the code snippet below and then
+        // use the "Offline" checkbox in DevTools Network panel
+
+      let mythis = this
+      // console.log('Event LOAD')
+      if (window) {
+        window.addEventListener('load', function () {
+          // console.log('2) ENTERING Event LOAD')
+
+          function updateOnlineStatus(event) {
+            if (navigator.onLine) {
+              // console.log('EVENT ONLINE!')
+              // handle online status
+              GlobalStore.mutations.setStateConnection('online')
+              mythis.changeIconConn()
+            } else {
+              // console.log('EVENT OFFLINE!')
+              // handle offline status
+              GlobalStore.mutations.setStateConnection('offline')
+              mythis.changeIconConn()
+            }
+          }
+
+          window.addEventListener('online', updateOnlineStatus);
+          window.addEventListener('offline', updateOnlineStatus);
+        });
+      }
     }
 
     public snakeToCamel(str) {
@@ -357,6 +455,14 @@
 
     .fa-flag-it:before {
         content: url('../statics/icons/flag_it.svg');
+    }
+
+    .clIconOnline {
+        color: white;
+    }
+
+    .clIconOffline {
+        color: red;
     }
 
 </style>

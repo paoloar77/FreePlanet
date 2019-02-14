@@ -5,7 +5,8 @@ import Api from '@api'
 import { rescodes } from './rescodes'
 import { GlobalStore, Todos, UserStore } from '@store'
 import globalroutines from './../../globalroutines/index'
-import { Mutation } from "vuex-module-decorators"
+import { Mutation } from 'vuex-module-decorators'
+import { serv_constants } from '@src/store/Modules/serv_constants'
 
 
 const state: ITodosState = {
@@ -13,7 +14,7 @@ const state: ITodosState = {
   networkDataReceived: false,
   todos: [],
   todos_changed: 1,
-  reload_fromServer: false,
+  reload_fromServer: 0,
   testpao: 'Test',
   insidePending: false
 }
@@ -42,7 +43,7 @@ namespace Mutations {
   function setTodos_changed(state: ITodosState) {
     state.todos_changed++
     mutations.setTestpao('Cambiato : ' + String(state.todos_changed))
-    console.log('*******************************  state.todos_changed', state.todos_changed)
+    // console.log('*******  state.todos_changed', state.todos_changed)
   }
 
   export const mutations = {
@@ -77,27 +78,27 @@ namespace Actions {
 
       let count = await checkPendingMsg(null)
       if (count > 0) {
-        return navigator.serviceWorker.ready
+        return await navigator.serviceWorker.ready
           .then(function (sw) {
 
-            globalroutines(null, 'readall', 'swmsg')
+            return globalroutines(null, 'readall', 'swmsg')
               .then(function (arr_recmsg) {
                 // let recclone = [...arr_recmsg]
                 if (arr_recmsg.length > 0) {
 
-                  console.log('      TROVATI MSG PENDENTI ! ORA LI MANDO: ', arr_recmsg)
+                  // console.log('      TROVATI MSG PENDENTI ! ORA LI MANDO: ', arr_recmsg)
 
                   // console.log('----------------------  2)    navigator (2) .serviceWorker.ready')
 
                   something = true
                   for (let rec of arr_recmsg) {
-                    console.log('             .... sw.sync.register ( ', rec._id)
-                    if ('SyncManager' in window) {
-                      sw.sync.register(rec._id)
-                    } else {
+                    // console.log('             .... sw.sync.register ( ', rec._id)
+                    // if ('SyncManager' in window) {
+                    //   sw.sync.register(rec._id)
+                    // } else {
                       // #Todo ++ Alternative to SyncManager
                       Api.syncAlternative(rec._id)
-                    }
+                    // }
                   }
                   return something
                 }
@@ -114,17 +115,15 @@ namespace Actions {
 
     await aspettansec(1000)
 
-    // console.log('waitAndcheckPendingMsg')
-
     return await checkPendingMsg(context)
       .then(ris => {
         if (ris) {
-          console.log('ris = ', ris)
-          const result = sendSwMsgIfAvailable()
+          console.log('risPending = ', ris)
+          return sendSwMsgIfAvailable()
             .then(something => {
               if (something) {
                 // Refresh data
-                waitAndRefreshData(context)
+                return waitAndRefreshData(context)
               }
             })
         }
@@ -135,13 +134,29 @@ namespace Actions {
   async function waitAndRefreshData(context) {
     await aspettansec(3000)
 
-    console.log('waitAndRefreshData')
-
     return await dbLoadTodo(context, false)
   }
 
   async function checkPendingMsg(context) {
     // console.log('checkPendingMsg')
+
+    const config = await globalroutines(null, 'readall', 'config', null)
+    // console.log('config', config)
+
+    try {
+      if (config) {
+        if (config[1].stateconn !== undefined) {
+          // console.log('config.stateconn', config[1].stateconn)
+
+          if (config[1].stateconn !== GlobalStore.state.stateConnection) {
+            GlobalStore.mutations.setStateConnection(config[1].stateconn)
+          }
+
+        }
+      }
+    } catch (e) {
+
+    }
 
     return new Promise(function (resolve, reject) {
 
@@ -172,47 +187,56 @@ namespace Actions {
   async function dbLoadTodo(context, checkPending: boolean = false) {
     console.log('dbLoadTodo', checkPending)
 
-    const token = UserStore.state.idToken
+    if (UserStore.state.userId === '')
+      return false // Login not made
 
     let call = process.env.MONGODB_HOST + '/todos/' + UserStore.state.userId
 
     state.networkDataReceived = false
 
-    let ris = await Api.SendReq(call, UserStore.state.lang, token, 'GET', null)
-      .then(({ resData, body }) => {
+    let ris = await Api.SendReq(call, 'GET', null)
+      .then(({ res, body, status }) => {
         state.networkDataReceived = true
 
-        // console.log('******* UPDATE TODOS.STATE.TODOS !:', resData.todos)
-        state.todos = [...body.todos]
-        Todos.mutations.setTodos_changed()
+        // console.log('******* UPDATE TODOS.STATE.TODOS !:', res.todos)
+        if (body.todos) {
+          state.todos = [...body.todos]
+          // Todos.mutations.setTodos_changed()
+        }
 
-        console.log('state.todos', state.todos, 'checkPending', checkPending)
+        console.log('**********  res', 'state.todos', state.todos, 'checkPending', checkPending)
 
         // After Login will store into the indexedDb...
 
-        return rescodes.OK
+        return { status }
       })
-      .catch((error) => {
+      .catch(error => {
+        console.log('error=', error)
         UserStore.mutations.setErrorCatch(error)
-        return UserStore.getters.getServerCode
+        return { status }
       })
 
-    console.log('fine della funz...')
+    // console.log('ris : ', ris)
+    // console.log('ris STATUS: ', ris.status)
 
     if (!Todos.state.networkDataReceived) {
-      console.log('NETWORK UNREACHABLE ! (Error in fetch)')
-      consolelogpao('NETWORK UNREACHABLE ! (Error in fetch)')
+
+      if (ris.status === serv_constants.RIS_CODE__HTTP_FORBIDDEN_INVALID_TOKEN) {
+        consolelogpao('UNAUTHORIZING... TOKEN EXPIRED... !! ')
+      } else {
+        consolelogpao('NETWORK UNREACHABLE ! (Error in fetch)', UserStore.getters.getServerCode, ris.status)
+      }
       // Read all data from IndexedDB Store into Memory
       await updateArrayInMemory(context)
     } else {
-      if (ris === rescodes.OK && checkPending) {
+      if (ris.status === rescodes.OK && checkPending) {
         waitAndcheckPendingMsg(context)
       }
     }
   }
 
   async function updateArrayInMemory(context) {
-    console.log('Update the array in memory, from todos table from IndexedDb')
+    // console.log('Update the array in memory, from todos table from IndexedDb')
     await globalroutines(null, 'updateinMemory', 'todos', null)
       .then(() => {
         // console.log('updateArrayInMemory! ')
@@ -246,8 +270,8 @@ namespace Actions {
   }
 
   function UpdateNewIdFromDB(oldItem, newItem, method) {
-    console.log('PRIMA state.todos', state.todos)
-    console.log('ITEM', newItem)
+    // console.log('PRIMA state.todos', state.todos)
+    // console.log('ITEM', newItem)
     if (method === 'POST') {
       state.todos.push(newItem)
       Todos.mutations.setTodos_changed()
@@ -260,19 +284,22 @@ namespace Actions {
     }
 
 
-    console.log('DOPO state.todos', state.todos)
+    // console.log('DOPO state.todos', state.todos)
   }
 
   async function dbInsertSaveTodo(context, itemtodo: ITodo, method) {
     console.log('dbInsertSaveTodo', itemtodo, method)
     let call = process.env.MONGODB_HOST + '/todos'
 
+    if (UserStore.state.userId === '')
+      return false // Login not made
+
     if (method !== 'POST')
       call += '/' + itemtodo._id
 
-    const token = UserStore.state.idToken
+    console.log('TODO TO SAVE: ', itemtodo)
 
-    let res = await Api.SendReq(call, UserStore.state.lang, token, method, itemtodo)
+    let res = await Api.SendReq(call, method, itemtodo)
       .then(({ res, newItem }) => {
         console.log('dbInsertSaveTodo RIS =', newItem)
         if (newItem) {
@@ -290,12 +317,13 @@ namespace Actions {
   }
 
   async function dbDeleteTodo(context, item: ITodo) {
-    console.log('dbDeleteTodo', item)
+    // console.log('dbDeleteTodo', item)
     let call = process.env.MONGODB_HOST + '/todos/' + item._id
 
-    const token = UserStore.state.idToken
+    if (UserStore.state.userId === '')
+      return false // Login not made
 
-    let res = await Api.SendReq(call, UserStore.state.lang, token, 'DELETE', item)
+    let res = await Api.SendReq(call, 'DELETE', item)
       .then(function ({ res, itemris }) {
 
         if (res.status === 200) {
