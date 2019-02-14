@@ -183,16 +183,16 @@ namespace Actions {
     let options = null
 
     // If is not already stored in DB, then show the message to the user.
-    // if (!state.wasAlreadySubscribed) {
+    if (!state.wasAlreadySubscribed) {
       options = {
         title: translate('notification.title_subscribed'),
         content: translate('notification.subscribed'),
         openUrl: '/'
       }
-    // }
+    }
 
     let myres = {
-      options: { ...options },
+      options,
       subs: newSub,
       others: {
         userId: UserStore.state.userId,

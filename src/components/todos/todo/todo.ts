@@ -363,7 +363,7 @@ export default class Todo extends Vue {
   async load() {
 
 
-    this.todos_arr = [...Todos.state.todos]
+    // this.todos_arr = [...Todos.state.todos]
 
     // Set last category selected
     localStorage.setItem(rescodes.localStorage.categorySel, this.getCategory())
@@ -380,11 +380,6 @@ export default class Todo extends Vue {
 
     this.checkUpdate_everytime()
 
-    /*
-        this.todos_arr.forEach((elem, index) => {
-          this.logelem('LOAD ' + index, elem)
-        })
-    */
 
     this.loadDone = true
   }
