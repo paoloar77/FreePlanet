@@ -1,5 +1,6 @@
 let idbKeyval = (() => {
   let db;
+  // console.log('idbKeyval...')
 
   function getDB() {
     if (!db) {

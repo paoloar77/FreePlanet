@@ -89,7 +89,7 @@ namespace Mutations {
     state.verified_email = data.verified_email
     state.category = data.categorySel
     resetArrToken(state.tokens)
-    state.tokens.push({ access: 'auth ' + navigator.userAgent, token: state.x_auth_token, date_login: new Date() })
+    state.tokens.push({ access: 'auth', token: state.x_auth_token, date_login: new Date() })
     // console.log('state.tokens', state.tokens)
   }
 
@@ -111,7 +111,7 @@ namespace Mutations {
     if (!state.tokens) {
       state.tokens = []
     }
-    state.tokens.push({ access: 'auth ' + navigator.userAgent, token: data.x_auth_token, data_login: new Date() })
+    state.tokens.push({ access: 'auth', token: data.x_auth_token, data_login: new Date() })
   }
 
   function setServerCode(state: IUserState, num: number) {
@@ -135,7 +135,7 @@ namespace Mutations {
 
     // Take only the others access (from others Browser)
     return arrtokens.filter((token: IToken) => {
-      return token.access !== 'auth ' + navigator.userAgent
+      return token.access !== 'auth'
     })
   }
 
@@ -368,14 +368,16 @@ namespace Actions {
 
     let sub = null
 
-    sub = await navigator.serviceWorker.ready
-      .then(function (swreg) {
-        const sub = swreg.pushManager.getSubscription()
-        return sub
-      })
-      .catch(e => {
-        sub = null
-      })
+    if ('serviceWorker' in navigator) {
+      sub = await navigator.serviceWorker.ready
+        .then(function (swreg) {
+          const sub = swreg.pushManager.getSubscription()
+          return sub
+        })
+        .catch(e => {
+          sub = null
+        })
+    }
 
     const options = {
       title: translate('notification.title_subscribed'),

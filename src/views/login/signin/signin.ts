@@ -148,9 +148,16 @@ export default class Signin extends Vue {
       .then((riscode) => {
         if (riscode === rescodes.OK) {
           GlobalStore.actions.createPushSubscription()
+            .then(ris => {
+            })
+            .catch(e => {
+              console.log('ERROR = ' + e)
+            })
+            .then(() => {
+              this.checkErrors(riscode)
+              this.$q.loading.hide()
+            })
         }
-        this.checkErrors(riscode)
-        this.$q.loading.hide()
       })
       .catch(error => {
         console.log('ERROR = ' + error)

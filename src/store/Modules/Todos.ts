@@ -14,7 +14,7 @@ const state: ITodosState = {
   networkDataReceived: false,
   todos: [],
   todos_changed: 1,
-  reload_fromServer: false,
+  reload_fromServer: 0,
   testpao: 'Test',
   insidePending: false
 }
@@ -43,7 +43,7 @@ namespace Mutations {
   function setTodos_changed(state: ITodosState) {
     state.todos_changed++
     mutations.setTestpao('Cambiato : ' + String(state.todos_changed))
-    console.log('*******  state.todos_changed', state.todos_changed)
+    // console.log('*******  state.todos_changed', state.todos_changed)
   }
 
   export const mutations = {
@@ -78,10 +78,10 @@ namespace Actions {
 
       let count = await checkPendingMsg(null)
       if (count > 0) {
-        return navigator.serviceWorker.ready
+        return await navigator.serviceWorker.ready
           .then(function (sw) {
 
-            globalroutines(null, 'readall', 'swmsg')
+            return globalroutines(null, 'readall', 'swmsg')
               .then(function (arr_recmsg) {
                 // let recclone = [...arr_recmsg]
                 if (arr_recmsg.length > 0) {
@@ -119,11 +119,11 @@ namespace Actions {
       .then(ris => {
         if (ris) {
           console.log('risPending = ', ris)
-          const result = sendSwMsgIfAvailable()
+          return sendSwMsgIfAvailable()
             .then(something => {
               if (something) {
                 // Refresh data
-                waitAndRefreshData(context)
+                return waitAndRefreshData(context)
               }
             })
         }
@@ -204,7 +204,7 @@ namespace Actions {
           Todos.mutations.setTodos_changed()
         }
 
-        console.log('**********  res', res, 'state.todos', state.todos, 'checkPending', checkPending)
+        console.log('**********  res', 'state.todos', state.todos, 'checkPending', checkPending)
 
         // After Login will store into the indexedDb...
 

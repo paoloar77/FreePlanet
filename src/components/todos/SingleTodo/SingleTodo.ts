@@ -266,9 +266,9 @@ export default class SingleTodo extends Vue {
 */
     if (((e.keyCode === 8) || (e.keyCode === 46)) && (this.precDescr === '') && !e.shiftKey) {
       e.preventDefault()
+      this.deselectRiga()
       this.clickMenu(rescodes.MenuAction.DELETE)
         .then(() => {
-          this.deselectRiga()
           this.faiFocus('insertTask', true)
           return
         })
@@ -356,13 +356,13 @@ export default class SingleTodo extends Vue {
   async clickMenu(action) {
     console.log('click menu: ', action)
     if (action === rescodes.MenuAction.DELETE) {
-      return this.askConfirmDelete()
+      return await this.askConfirmDelete()
     } else if (action === rescodes.MenuAction.TOGGLE_EXPIRING) {
-      return this.enableExpiring()
+      return await this.enableExpiring()
     } else if (action === rescodes.MenuAction.COMPLETED) {
-      return this.setCompleted()
+      return await this.setCompleted()
     } else if (action === rescodes.MenuAction.PROGRESS_BAR) {
-      return this.updatedata()
+      return await this.updatedata()
     }
 
   }

@@ -22,7 +22,7 @@ export interface ITodosState {
   networkDataReceived: boolean
   todos: ITodo[]
   todos_changed: number
-  reload_fromServer: boolean
+  reload_fromServer: number
   testpao: String
   insidePending: boolean
 }

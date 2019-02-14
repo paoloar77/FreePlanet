@@ -6,11 +6,11 @@
 
 // Questo è il swSrc
 
-console.log('   [  VER-0.0.21 ] _---------________------  PAO: this is my custom service worker');
+console.log('   [  VER-0.0.27 ] _---------________------  PAO: this is my custom service worker');
 
-importScripts('https://storage.googleapis.com/workbox-cdn/releases/3.0.0/workbox-sw.js'); //++Todo: Replace with local workbox.js
 importScripts('../statics/js/idb.js');
 importScripts('../statics/js/storage.js');
+importScripts('https://storage.googleapis.com/workbox-cdn/releases/3.0.0/workbox-sw.js'); //++Todo: Replace with local workbox.js
 
 
 let port = 3000;
@@ -23,6 +23,9 @@ const cfgenv = {
   dbname: 'mydb3',
   dbversion: 11,
 }
+
+// console.log('serverweb', cfgenv.serverweb)
+
 
 async function writeData(table, data) {
   // console.log('writeData', table, data);
@@ -54,10 +57,10 @@ async function deleteItemFromData(table, id) {
 
 if (!workbox) {
   let workbox = new self.WorkboxSW();
-  // console.log('SW-06 3');
 }
 
 if (workbox) {
+  // console.log('WORKBOX PRESENT')
   // const url = new URL(location.href);
   // const debug = url.searchParams.has('debug');
   const debug = false;
@@ -101,11 +104,12 @@ if (workbox) {
     })
   );
 
+  // console.log('  routing.registerRoute function declaration:')
 
   workbox.routing.registerRoute(
     new RegExp(cfgenv.serverweb + '/todos/'),
     function (args) {
-      // console.log('registerRoute!')
+      console.log('registerRoute! ', cfgenv.serverweb + '/todos/')
       // console.log('DATABODY:', args.event.request.body)
       let myres = null
       // return fetch(args.event.request, args.event.headers)
@@ -117,8 +121,11 @@ if (workbox) {
           // console.log('res.status', res.status)
           if (res.status === 200) {
             const clonedRes = res.clone();
-            clearAllData('todos')
-            return clonedRes
+
+            return clearAllData('todos')
+              .then(() => {
+                return clonedRes
+              })
           }
         })
         .then((clonedRes) => {
@@ -126,12 +133,12 @@ if (workbox) {
             return clonedRes.json();
           return null
         })
-        .then(data => {
+        .then(async data => {
           if (data) {
             if (data.todos) {
-              console.log('Records TODOS Received from Server [', data.todos.length, 'record]', data.todos)
-              for (let key in data.todos) {
-                writeData('todos', data.todos[key])
+              console.log('***********************+++++++++++++++++++++++++++++++++++++++++++++++++++**********    Records TODOS Received from Server [', data.todos.length, 'record]', data.todos)
+              for (const key in data.todos) {
+                await writeData('todos', data.todos[key])
               }
             }
           }
@@ -483,21 +490,30 @@ self.addEventListener('push', function (event) {
 
   var data = { title: 'New!', content: 'Something new happened!', url: '/' };
 
-  if (event.data) {
-    data = JSON.parse(event.data.text());
-  }
+  try {
 
-  var options = {
-    body: data.content,
-    icon: '/statics/icons/android-chrome-192x192.png',
-    badge: '/statics/icons/android-chrome-192x192.png',
-    data: {
-      url: data.url
+    if (event.data) {
+      try {
+        data = JSON.parse(event.data.text());
+      } catch (e) {
+        data = event.data.text();
+      }
     }
-  };
 
-  event.waitUntil(
-    self.registration.showNotification(data.title, options)
-  );
+    var options = {
+      body: data.content,
+      icon: '/statics/icons/android-chrome-192x192.png',
+      badge: '/statics/icons/android-chrome-192x192.png',
+      data: {
+        url: data.url
+      }
+    };
+
+    event.waitUntil(
+      self.registration.showNotification(data.title, options)
+    );
+  } catch (e) {
+    console.log('Error on event push:', e)
+  }
 });
 

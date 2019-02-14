@@ -17,7 +17,7 @@ const messages = {
     msg: {
       hello: 'Buongiorno',
       myAppName: 'FreePlanet',
-      myDescriz: 'La prima App Libera'
+      myDescriz: ''
     },
     pages: {
       home: 'Principale',
@@ -143,7 +143,7 @@ const messages = {
     msg: {
       hello: 'Buenos Días',
       myAppName: 'FreePlanet',
-      myDescriz: 'La primera App Libera'
+      myDescriz: ''
     },
     pages: {
       home: 'Principal',
@@ -269,7 +269,7 @@ const messages = {
     msg: {
       hello: 'Hello!',
       myAppName: 'FreePlanet',
-      myDescriz: 'The first Free app'
+      myDescriz: ''
     },
     pages: {
       home: 'Dashboard One',

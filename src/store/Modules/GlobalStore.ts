@@ -123,10 +123,10 @@ namespace Actions {
   function createPushSubscription(context) {
 
     // If Already subscribed, don't send to the Server DB
-    if (state.wasAlreadySubOnDb) {
-      // console.log('wasAlreadySubOnDb!')
-      return
-    }
+    // if (state.wasAlreadySubOnDb) {
+    //   // console.log('wasAlreadySubOnDb!')
+    //   return
+    // }
 
     if (!('serviceWorker' in navigator)) {
       return
@@ -141,7 +141,7 @@ namespace Actions {
     let reg
     const mykey = process.env.PUBLICKEY_PUSH
     const mystate = state
-    navigator.serviceWorker.ready
+    return navigator.serviceWorker.ready
       .then(function (swreg) {
         reg = swreg
         return swreg.pushManager.getSubscription()
@@ -149,11 +149,13 @@ namespace Actions {
       .then(function (subscription) {
         mystate.wasAlreadySubscribed = !(subscription === null)
 
-        if (mystate.wasAlreadySubOnDb) {
-          // console.log('User is already SAVED Subscribe on DB!')
-          return null
+        if (mystate.wasAlreadySubscribed) {
+          console.log('User is already SAVED Subscribe on DB!')
+          // return null
+          return subscription
         } else {
           // Create a new subscription
+          console.log('Create a new subscription')
           let convertedVapidPublicKey = urlBase64ToUint8Array(mykey)
           return reg.pushManager.subscribe({
             userVisibleOnly: true,
@@ -165,7 +167,7 @@ namespace Actions {
         saveNewSubscriptionToServer(context, newSub)
       })
       .catch(function (err) {
-        console.log(err)
+        console.log('ERR createPushSubscription:', err)
       })
   }
 
@@ -178,11 +180,16 @@ namespace Actions {
     console.log('saveSubscriptionToServer: ', newSub)
     // console.log('context', context)
 
-    const options = {
-      title: translate('notification.title_subscribed'),
-      content: translate('notification.subscribed'),
-      openUrl: '/'
-    }
+    let options = null
+
+    // If is not already stored in DB, then show the message to the user.
+    // if (!state.wasAlreadySubscribed) {
+      options = {
+        title: translate('notification.title_subscribed'),
+        content: translate('notification.subscribed'),
+        openUrl: '/'
+      }
+    // }
 
     let myres = {
       options: { ...options },
@@ -252,20 +259,22 @@ namespace Actions {
       globalroutines(null, 'clearalldata', table, null)
     })
 
-    // REMOVE ALL SUBSCRIPTION
-    console.log('REMOVE ALL SUBSCRIPTION...')
-    await navigator.serviceWorker.ready.then(function (reg) {
-      console.log('... Ready')
-      reg.pushManager.getSubscription().then(function (subscription) {
-        console.log('    Found Subscription...')
-        subscription.unsubscribe().then(function (successful) {
-          // You've successfully unsubscribed
-          console.log('You\'ve successfully unsubscribed')
-        }).catch(function (e) {
-          // Unsubscription failed
+    if ('serviceWorker' in navigator) {
+      // REMOVE ALL SUBSCRIPTION
+      console.log('REMOVE ALL SUBSCRIPTION...')
+      await navigator.serviceWorker.ready.then(function (reg) {
+        console.log('... Ready')
+        reg.pushManager.getSubscription().then(function (subscription) {
+          console.log('    Found Subscription...')
+          subscription.unsubscribe().then(function (successful) {
+            // You've successfully unsubscribed
+            console.log('You\'ve successfully unsubscribed')
+          }).catch(function (e) {
+            // Unsubscription failed
+          })
         })
       })
-    })
+    }
 
     await deleteSubscriptionToServer(context)
 

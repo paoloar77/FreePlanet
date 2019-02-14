@@ -111,11 +111,11 @@
 
       this.strConn = value
 
-      this.$q.notify({
-        color : 'primary',
-        icon: 'wifi',
-        message: "CAMBIATOO! " + value
-      })
+      // this.$q.notify({
+      //   color : 'primary',
+      //   icon: 'wifi',
+      //   message: "CAMBIATOO! " + value
+      // })
 
     }
 
@@ -124,7 +124,7 @@
     changeconn_changed(value: string, oldValue: string) {
       if (value != oldValue) {
 
-        console.log('SSSSSSSS: ', value, oldValue)
+        // console.log('SSSSSSSS: ', value, oldValue)
 
         const color = (value === 'online') ? 'positive' : 'warning'
 

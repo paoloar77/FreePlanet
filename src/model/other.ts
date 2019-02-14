@@ -1,5 +1,6 @@
 export interface IToken {
   access: string
+  // browser: string
   token: string
   data_login: Date
 }

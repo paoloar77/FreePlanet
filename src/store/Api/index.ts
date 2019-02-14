@@ -155,7 +155,7 @@ export namespace ApiTool {
           let lettoqualcosa = false
 
           // console.log('A1) INIZIO.............................................................')
-          globalroutines(null, 'readall', table, null)
+          return globalroutines(null, 'readall', table, null)
             .then(function (alldata) {
               const myrecs = [...alldata]
               // console.log('----------------------- LEGGO QUALCOSA ')
@@ -178,11 +178,11 @@ export namespace ApiTool {
                   body: JSON.stringify(rec)
                 })
                   .then(() => {
-                    globalroutines(null, 'delete', table, null, rec._id)
                     lettoqualcosa = true
+                    return globalroutines(null, 'delete', table, null, rec._id)
                   })
                   .then(() => {
-                    globalroutines(null, 'delete', 'swmsg', null, mystrparam)
+                    return globalroutines(null, 'delete', 'swmsg', null, mystrparam)
                   })
                   .catch(function (err) {
                     if (err.message === 'Failed to fetch') {
@@ -206,8 +206,8 @@ export namespace ApiTool {
             .then((errorfromserver) => {
               // console.log('¨¨¨¨¨¨¨¨¨¨¨¨¨¨  errorfromserver:', errorfromserver)
               const mystate = errorfromserver ? 'offline' : 'online'
-              globalroutines(null, 'write', 'config', { _id: 2, stateconn: mystate })
               GlobalStore.mutations.setStateConnection(mystate)
+              return globalroutines(null, 'write', 'config', { _id: 2, stateconn: mystate })
             })
 
           // console.log(' [Alternative] A2) ?????????????????????????? ESCO DAL LOOP !!!!!!!!!')

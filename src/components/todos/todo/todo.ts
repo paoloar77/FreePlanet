@@ -20,7 +20,7 @@ import VueIdb from 'vue-idb'
 import globalroutines from '../../../globalroutines/index'
 
 import $ from 'jquery'
-import Api from "@api"
+import Api from '@api'
 
 @Component({
 
@@ -43,7 +43,9 @@ export default class Todo extends Vue {
   itemDragEnd: any = null
   selrowid: number = 0
   polling = null
-  mytypetransgroup: string = 'crossfade'
+  mytypetransgroup: string = 'flip-list'
+  tmpstrTodos: string = ''
+  loadDone: boolean = false
 
   fieldtochange: String [] = ['descr', 'completed', 'category', 'expiring_at', 'priority', 'id_prev', 'id_next', 'pos', 'enableExpiring', 'progress']
 
@@ -67,7 +69,7 @@ export default class Todo extends Vue {
   @Watch('$route.params.category') changecat() {
     // console.log('changecat')
     this.mytypetransgroup = 'nessuno'
-    this.updatetable().then(() => {
+    this.updatetable(false, '$route.params.category').then(() => {
       this.mytypetransgroup = 'crossfade'
     })
   }
@@ -80,23 +82,31 @@ export default class Todo extends Vue {
     return Todos.state.reload_fromServer
   }
 
+  set reload_fromServer(value: number) {
+    Todos.state.reload_fromServer = value
+  }
+
 
   @Watch('todos_changed', { immediate: true, deep: true })
-  changetodos_changed(value: string, oldValue: string) {
+  changetodos_changed(value: number, oldValue: number) {
 
     // this.$q.notify('Changed...')
 
-    console.log('Todos.state.todos_changed CHANGED!', value, oldValue)
-    this.updatetable(true)
+    if ((value > 1) && (this.loadDone)) {
+      // console.log('Todos.state.todos_changed CHANGED!', value, oldValue)
+      this.updatetable(true, 'todos_changed')
+    }
   }
 
   @Watch('reload_fromServer', { immediate: true })
-  reload_fromServer_changed(value: string, oldValue: string) {
-    console.log('reload_fromServer_changed!', value, oldValue)
-    // if (value) {
-    Todos.actions.dbLoadTodo(false)
+  reload_fromServer_changed(value: number, oldValue: number) {
+    if (value > 0) {
+      // console.log('reload_fromServer_changed!', value, oldValue)
+      // if (value) {
+      Todos.actions.dbLoadTodo(false)
 
-    Todos.actions.updateArrayInMemory()
+      Todos.actions.updateArrayInMemory()
+    }
     // }
   }
 
@@ -108,7 +118,37 @@ export default class Todo extends Vue {
   @Watch('testPao', { immediate: true, deep: true })
   changedTestpao(value: string, oldValue: string) {
     // console.log('testpao CHANGED', value, oldValue)
-    this.updatetable(true)
+    // this.updatetable(true, 'testPao')
+  }
+
+  getArrTodos() {
+
+    let mystr = ''
+    let mythis = this
+
+    mythis.tmpstrTodos = ''
+    globalroutines(null, 'readall', 'todos', null)
+      .then(function (alldata) {
+        const myrecs = [...alldata]
+
+        myrecs.forEach(rec => {
+          mystr = mystr + rec.descr + ']   ['
+        })
+
+        mythis.tmpstrTodos = 'TODOS: ' + mystr
+      })
+  }
+
+  setArrTodos() {
+
+    let mystr = ''
+    let mythis = this
+
+    mythis.tmpstrTodos = ''
+    globalroutines(null, 'write', 'todos', this.todos_arr[0])
+      .then(function (alldata) {
+        mythis.getArrTodos()
+      })
   }
 
   getCategory() {
@@ -283,7 +323,7 @@ export default class Todo extends Vue {
     // Updated only elements modified
     await this.updateModifyRecords(true)
 
-    this.updatetable()
+    this.updatetable(false, 'onEnd')
 
   }
 
@@ -299,7 +339,7 @@ export default class Todo extends Vue {
     })
 
     if (update)
-      await this.updatetable(refresh)
+      await this.updatetable(refresh, 'updateModifyRecords')
   }
 
 
@@ -322,6 +362,7 @@ export default class Todo extends Vue {
 
   async load() {
 
+
     this.todos_arr = [...Todos.state.todos]
 
     // Set last category selected
@@ -334,7 +375,7 @@ export default class Todo extends Vue {
     this.setarrPriority()
     this.clearArr()
 
-    await this.updatetable()
+    await this.updatetable(false, 'load')
 
 
     this.checkUpdate_everytime()
@@ -345,6 +386,7 @@ export default class Todo extends Vue {
         })
     */
 
+    this.loadDone = true
   }
 
   // Call to check if need to refresh
@@ -356,8 +398,8 @@ export default class Todo extends Vue {
 
   initcat() {
 
-    var tomorrow = new Date();
-    tomorrow.setDate(tomorrow.getDate() + 1);
+    let tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1)
 
 
     const objtodo: ITodo = {
@@ -433,7 +475,7 @@ export default class Todo extends Vue {
     const rismod = await this.modify(lastelem, false)
 
     this.saveItemToSyncAndDb(rescodes.DB.TABLE_SYNC_TODOS, 'POST', objtodo, true)
-    this.updatetable(false)
+    this.updatetable(false, 'insertTodo')
 
     // console.log('ESCO.........')
 
@@ -582,7 +624,7 @@ export default class Todo extends Vue {
       // Delete item
       await globalroutines(this, 'delete', 'todos', null, id)
         .then((ris) => {
-          mythis.updatetable()
+          mythis.updatetable(false, 'deleteitem')
         }).catch((error) => {
           console.log('err: ', error)
         })
@@ -603,8 +645,8 @@ export default class Todo extends Vue {
     return itemnew.pos !== itemold.pos
   }
 
-  async updatetable(refresh: boolean = false) {
-    console.log('updatetable')
+  async updatetable(refresh: boolean = false, strpos = '') {
+    console.log('updatetable', strpos)
 
     this.prevRecords = [...this.todos_arr]
 
@@ -808,7 +850,7 @@ export default class Todo extends Vue {
                   // console.log('SET MODIFIED FALSE')
 
                   if (update)
-                    this.updatetable(false)
+                    this.updatetable(false, 'modify')
 
                 })
             })
@@ -829,7 +871,7 @@ export default class Todo extends Vue {
   }
 
   clicktest2() {
-    this.updatetable(false)
+    this.updatetable(false, 'clicktest')
     console.log('Todos.state.todos', Todos.state.todos)
   }
 
