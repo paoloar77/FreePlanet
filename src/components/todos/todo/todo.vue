@@ -35,7 +35,7 @@
                      :after="[{icon: 'arrow_forward', content: true, handler () {}}]"
                      v-on:keyup.enter="insertTodo"/>
 
-            <!--{{ tmpstrTodos }}-->
+            {{ tmpstrTodos }}
 
             <div class="flex-item btn-item">
                 <q-btn class="mybtn" round color="" icon="lock" @click="getArrTodos">Get Todo</q-btn>

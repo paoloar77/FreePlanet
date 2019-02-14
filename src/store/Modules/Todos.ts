@@ -201,7 +201,7 @@ namespace Actions {
         // console.log('******* UPDATE TODOS.STATE.TODOS !:', res.todos)
         if (body.todos) {
           state.todos = [...body.todos]
-          // Todos.mutations.setTodos_changed()
+          Todos.mutations.setTodos_changed()
         }
 
         console.log('**********  res', 'state.todos', state.todos, 'checkPending', checkPending)
