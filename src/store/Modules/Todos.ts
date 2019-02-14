@@ -90,17 +90,23 @@ namespace Actions {
 
                   // console.log('----------------------  2)    navigator (2) .serviceWorker.ready')
 
+                  let promiseChain = Promise.resolve()
+
                   something = true
                   for (let rec of arr_recmsg) {
                     // console.log('             .... sw.sync.register ( ', rec._id)
                     // if ('SyncManager' in window) {
                     //   sw.sync.register(rec._id)
                     // } else {
-                      // #Todo ++ Alternative to SyncManager
-                      Api.syncAlternative(rec._id)
+
+                    // #Alternative to SyncManager
+                    promiseChain = promiseChain.then(() => {
+                      return Api.syncAlternative(rec._id)
+                    })
+
                     // }
                   }
-                  return something
+                  return promiseChain
                 }
               })
 
@@ -108,7 +114,9 @@ namespace Actions {
       }
     }
 
-    return something
+    return new Promise(function (resolve, reject) {
+      resolve(something)
+    })
   }
 
   async function waitAndcheckPendingMsg(context) {
@@ -155,19 +163,11 @@ namespace Actions {
         }
       }
     } catch (e) {
-
     }
 
     return new Promise(function (resolve, reject) {
-
-      /*
-              globalroutines(null, 'readall', 'swmsg')
-                .then(function (arr_recmsg) {
-                  if (arr_recmsg.length > 0) {
-      */
-
       // Check if there is something
-      globalroutines(null, 'count', 'swmsg')
+      return globalroutines(null, 'count', 'swmsg')
         .then(function (count) {
           if (count > 0) {
             console.log('count = ', count)

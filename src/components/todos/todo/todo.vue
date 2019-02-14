@@ -37,16 +37,16 @@
 
             <!--{{ tmpstrTodos }}-->
 
-            <!--<div class="flex-item btn-item">-->
-                <!--<q-btn class="mybtn" round color="" icon="lock" @click="getArrTodos">Get Todo</q-btn>-->
-                <!--<q-btn class="mybtn" round color="" icon="person" @click="setArrTodos">Set Todo</q-btn>-->
-                <!--<q-btn class="mybtn" round color="" icon="list" @click="reload_fromServer++">Reload</q-btn>-->
-            <!--</div>-->
+            <div class="flex-item btn-item">
+                <q-btn class="mybtn" round color="" icon="lock" @click="getArrTodos">Get Todo</q-btn>
+                <q-btn class="mybtn" round color="" icon="person" @click="setArrTodos">Set Todo</q-btn>
+                <q-btn class="mybtn" round color="" icon="list" @click="reload_fromServer++">Reload</q-btn>
+            </div>
 
             <!--<q-input v-model="testPao" float-label="testPao"/>-->
-            <!--<q-input v-model="todos_changed" float-label="todos_changed"/>-->
+            <q-input v-model="todos_changed" float-label="todos_changed"/>
 
-            <!--<q-input v-model="reload_fromServer" float-label="reload_fromServer"/>-->
+            <q-input v-model="reload_fromServer" float-label="reload_fromServer"/>
 
             <!--<div class="flex-item btn-item">-->
                 <!--&lt;!&ndash;<q-btn class="mybtn" round color="" icon="lock" @click="clicktest()"></q-btn>&ndash;&gt;-->

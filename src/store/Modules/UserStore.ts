@@ -371,7 +371,7 @@ namespace Actions {
     if ('serviceWorker' in navigator) {
       sub = await navigator.serviceWorker.ready
         .then(function (swreg) {
-          const sub = swreg.pushManager.getSubscription()
+          let sub = swreg.pushManager.getSubscription()
           return sub
         })
         .catch(e => {
