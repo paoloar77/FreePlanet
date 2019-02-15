@@ -12,7 +12,7 @@
             <div class="drag">
                 <draggable v-model="todos_arr" :options="{draggable:'.myitemdrag'}"
                            @start="onStart" @end="onEnd" class="dragArea">
-                    <transition-group :name="mytypetransgroup">
+                    <!--<transition-group :name="mytypetransgroup">-->
                         <div :id="getmyid(mytodo._id)" :key="mytodo._id" v-for="mytodo in todos_arr" class="myitemdrag">
 
                             <div v-if="(prior !== mytodo.priority) && !mytodo.completed" :class="getTitlePriority(mytodo.priority)">
@@ -28,9 +28,13 @@
 
                             <div style="display: none">{{ prior = mytodo.priority, priorcomplet = mytodo.completed }}</div>
                         </div>
-                    </transition-group>
+                    <!--</transition-group>-->
                 </draggable>
             </div>
+            <q-context-menu ref="contextMenu">
+            <SubMenus :menuPopupTodo="menuPopupTodo" :itemtodo="itemtodo" @clickMenu="clickMenu" @setPriority="setPriority"></SubMenus>
+            </q-context-menu>
+
             <q-input ref="insertTask" v-model="todo" inverted :float-label="$t('todo.insert')"
                      :after="[{icon: 'arrow_forward', content: true, handler () {}}]"
                      v-on:keyup.enter="insertTodo"/>

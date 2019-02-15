@@ -128,7 +128,6 @@ namespace Actions {
 
                   let promiseChain = Promise.resolve()
 
-                  something = true
                   for (let rec of arr_recmsg) {
                     // console.log('             .... sw.sync.register ( ', rec._id)
                     // if ('SyncManager' in window) {
@@ -138,6 +137,9 @@ namespace Actions {
                     // #Alternative to SyncManager
                     promiseChain = promiseChain.then(() => {
                       return Api.syncAlternative(rec._id)
+                        .then(() => {
+                          something = true
+                        })
                     })
 
                     // }
@@ -166,6 +168,7 @@ namespace Actions {
           return sendSwMsgIfAvailable()
             .then(something => {
               if (something) {
+                console.log('something')
                 // Refresh data
                 return waitAndRefreshData(context)
               }

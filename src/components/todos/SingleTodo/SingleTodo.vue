@@ -1,8 +1,5 @@
 <template>
     <div :class="getClassRow()">
-        <q-context-menu ref="contextMenu">
-            <SubMenus :menuPopupTodo="menuPopupTodo" :itemtodo="itemtodo" @clickMenu="clickMenu" @setPriority="setPriority"></SubMenus>
-        </q-context-menu>
 
 
         <div v-if="isTodo()" class="flex-item completed-item">
@@ -53,9 +50,9 @@
             <q-btn push
                    :class="clButtPopover"
                    icon="menu" >
-                <q-popover self="top right">
-                    <SubMenus :menuPopupTodo="menuPopupTodo" :itemtodo="itemtodo" @clickMenu="clickMenu" @setPriority="setPriority"></SubMenus>
-                </q-popover>
+                <!--<q-popover self="top right">-->
+                    <!--<SubMenus :menuPopupTodo="menuPopupTodo" :itemtodo="itemtodo" @clickMenu="clickMenu" @setPriority="setPriority"></SubMenus>-->
+                <!--</q-popover>-->
 
             </q-btn>
         </div>

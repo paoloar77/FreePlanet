@@ -399,7 +399,7 @@ namespace Actions {
 
     Mutations.mutations.setServerCode(rescodes.CALLING)
 
-    let myres: IResult
+    let myres: any
 
     return Api.SendReq(call, 'POST', usertosend, true)
       .then(({ res, body }) => {
