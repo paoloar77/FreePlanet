@@ -569,9 +569,9 @@ namespace Actions {
       UserStore.mutations.setAuth(token)
 
       Mutations.mutations.authUser({
-        userId: userId,
-        username: username,
-        verified_email: verified_email,
+        userId,
+        username,
+        verified_email
       })
 
       await setGlobal(false)
