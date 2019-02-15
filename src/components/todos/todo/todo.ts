@@ -105,7 +105,7 @@ export default class Todo extends Vue {
       // if (value) {
       Todos.actions.dbLoadTodo(false)
         .then(() => {
-          return Todos.actions.updateArrayInMemory()
+          // return Todos.actions.updatefromIndexedDbToStateTodo()
         })
     }
     // }
@@ -462,6 +462,7 @@ export default class Todo extends Vue {
       return
     }
 
+    // 1) Insert into the IndexedDb
     const id = await globalroutines(this, 'write', 'todos', objtodo)
     // update also the last elem
     if (lastelem !== null) {
@@ -470,15 +471,21 @@ export default class Todo extends Vue {
       // console.log('calling MODIFY 4', lastelem)
     }
 
+    // Create record in Memory
+    Todos.mutations.createNewItem(objtodo)
+
+    // Modify the record above to the new last
     await this.modify(lastelem, false)
-
-    await this.saveItemToSyncAndDb(rescodes.DB.TABLE_SYNC_TODOS, 'POST', objtodo, true)
-    await this.updatetable(false, 'insertTodo')
-
-    // console.log('ESCO.........')
 
     // empty the field
     this.todo = ''
+
+    this.updatetable(false, 'insertTodo')
+
+    this.saveItemToSyncAndDb(rescodes.DB.TABLE_SYNC_TODOS, 'POST', objtodo, true)
+
+    // console.log('ESCO.........')
+
   }
 
 
@@ -525,8 +532,10 @@ export default class Todo extends Vue {
                   // }
                 })
                 .then(function () {
-                  let data = { message: msg, position: 'bottom', timeout: 3000 }
-                  mythis.$q.notify(data)
+                  if (msg !== '') {
+                    let data = { message: msg, position: 'bottom', timeout: 3000 }
+                    mythis.$q.notify(data)
+                  }
                 })
                 .catch(function (err) {
                   console.error('Errore in globalroutines', table, err)
@@ -534,32 +543,36 @@ export default class Todo extends Vue {
             })
         })
 
-      if (update) {
-        // // Update the array in memory, from todos table from IndexedDb
-        await Todos.actions.updateArrayInMemory()
-          .then((ris) => {
-            return ris
-          })
-      }
+      // if (update) {
+      //   // // Update the array in memory, from IndexedDb update the todos array
+      //   await Todos.actions.updatefromIndexedDbToStateTodo()
+      //     .then((ris) => {
+      //       return ris
+      //     })
+      // }
 
-    } else {
-      if (cmd === rescodes.DB.CMD_SYNC_NEW_TODOS) {
-        if (method === 'POST')
-          await Todos.actions.dbInsertTodo(item)
-        else if (method === 'PATCH')
-          await Todos.actions.dbSaveTodo(item)
-      } else if (cmd === rescodes.DB.CMD_DELETE_TODOS)
-        await Todos.actions.dbDeleteTodo(item)
+    }
+
+    if (cmd === rescodes.DB.CMD_SYNC_NEW_TODOS) {
+      if (method === 'POST')
+        await Todos.actions.dbInsertTodo(item)
+      else if (method === 'PATCH')
+        await Todos.actions.dbSaveTodo(item)
+    } else if (cmd === rescodes.DB.CMD_DELETE_TODOS) {
+      await Todos.actions.dbDeleteTodo(item)
     }
   }
 
   async saveItemToSyncAndDb(table: String, method, item: ITodo, update: boolean) {
+    // let msg = (method === 'PATCH') ? 'Modif: ' : '++Create: '
+    // msg = msg + item.descr
     return await this.cmdToSyncAndDb(rescodes.DB.CMD_SYNC_NEW_TODOS, table, method, item, 0, '', update)
   }
 
 
-  async deleteItemToSyncAndDb(table: String, item: ITodo, id, update: boolean) {
-    return await this.cmdToSyncAndDb(rescodes.DB.CMD_DELETE_TODOS, table, 'DELETE', item, id, '', update)
+  deleteItemToSyncAndDb(table: String, item: ITodo, id, update: boolean) {
+    // let msg = 'Delete: ' + item.descr
+    this.cmdToSyncAndDb(rescodes.DB.CMD_DELETE_TODOS, table, 'DELETE', item, id, '', update)
   }
 
   /*
@@ -591,6 +604,8 @@ export default class Todo extends Vue {
   async deleteitem(id) {
     console.log('deleteitem: KEY = ', id)
 
+
+
     let myobjtrov = this.getElemById(id)
 
     if (myobjtrov !== null) {
@@ -611,16 +626,23 @@ export default class Todo extends Vue {
         await this.modify(myobjnext, false)
       }
 
-      await this.deleteItemToSyncAndDb(rescodes.DB.TABLE_DELETE_TODOS, myobjtrov, id, true)
+      // 1) Delete from the Todos Array
+      Todos.mutations.deletemyitem(myobjtrov)
+      Todos.mutations.setTodos_changed()
 
-      const mythis = this
-      // Delete item
-      await globalroutines(this, 'delete', 'todos', null, id)
+      // 2) Delete from the IndexedDb
+      globalroutines(this, 'delete', 'todos', null, id)
         .then((ris) => {
-          mythis.updatetable(false, 'deleteitem')
+          // Update in to the UI
+          this.updatetable(true, 'deleteitem')
+
         }).catch((error) => {
           console.log('err: ', error)
         })
+
+      // 3) Delete from the Server (call)
+      this.deleteItemToSyncAndDb(rescodes.DB.TABLE_DELETE_TODOS, myobjtrov, id, true)
+
     }
 
     // console.log('FINE deleteitem')
@@ -646,7 +668,7 @@ export default class Todo extends Vue {
     return await Todos.actions.getTodosByCategory(this.getCategory())
       .then(arrris => {
 
-        this.todos_arr = []
+        // this.todos_arr = []
 
         let arrtemp = [...arrris]
 
@@ -663,7 +685,7 @@ export default class Todo extends Vue {
 
         this.todos_arr = [...arrtemp]  // make copy
 
-        console.log('AGGIORNA todos_arr')
+        console.log('AGGIORNA todos_arr [', this.todos_arr.length, ']')
 
       })
   }
@@ -797,9 +819,9 @@ export default class Todo extends Vue {
 
   modifyField(recOut, recIn, field) {
     if (String(recOut[field]) !== String(recIn[field])) {
-      console.log('***************  CAMPO ', field, 'MODIFICATO!')
-      console.log(recOut[field])
-      console.log(recIn[field])
+      // console.log('***************  CAMPO ', field, 'MODIFICATO!')
+      // console.log(recOut[field])
+      // console.log(recIn[field])
       recOut.modified = true
       recOut[field] = recIn[field]
       return true
@@ -833,19 +855,22 @@ export default class Todo extends Vue {
           miorec.modify_at = new Date().getDate()
           miorec.modified = false
 
-          // this.logelem('modify', miorec)
+          // 1) Modify on Global Memory
+          Todos.mutations.modifymyItem(miorec)
 
-          return globalroutines(this, 'write', 'todos', miorec)
+          if (update) {
+            // 4) Update the filter in Memory
+            this.updatetable(false, 'modify')
+          }
+
+          // this.logelem('modify', miorec)
+          // 2) Modify on IndexedDb
+          globalroutines(this, 'write', 'todos', miorec)
             .then(ris => {
 
-              return this.saveItemToSyncAndDb(rescodes.DB.TABLE_SYNC_TODOS_PATCH, 'PATCH', miorec, update)
-                .then(() => {
-                  // console.log('SET MODIFIED FALSE')
+              // 3) Modify on the Server (call)
+              this.saveItemToSyncAndDb(rescodes.DB.TABLE_SYNC_TODOS_PATCH, 'PATCH', miorec, update)
 
-                  if (update)
-                    return this.updatetable(false, 'modify')
-
-                })
             })
         }
       })

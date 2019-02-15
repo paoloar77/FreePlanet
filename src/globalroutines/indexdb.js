@@ -63,7 +63,7 @@ export default async (context, cmd, table, datakey = null, id = '') => {
 
   } else if (cmd === 'write') {
     return await storage.setdata(table, datakey)
-  } else if (cmd === 'updateinMemory') {
+  } else if (cmd === 'updatefromIndexedDbToStateTodo') {
     return await readfromIndexDbToStateTodos(context, table)
   } else if (cmd === 'readall') {
     return await storage.getalldata(table)

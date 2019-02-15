@@ -13,7 +13,7 @@
             </q-btn>
         </div>
 
-        <q-input type="textarea" ref="inputdescr" v-model.trim="precDescr"
+        <q-input hide-underline type="textarea" ref="inputdescr" v-model.trim="precDescr"
                  :class="classDescr" :max-height="50"
                  @keydown="keyDownArea" v-on:keydown.esc="exitEdit" @blur="exitEdit(true)" @click="editTodo()"/>
 
@@ -50,8 +50,8 @@
             </div>
         </div>
         <div v-if="isTodo()" class="flex-item pos-item" @mouseup.left="mouseUp" @mousedown="clickRiga">
-            <q-btn flat
-                   class="pos-item-popover"
+            <q-btn push
+                   :class="clButtPopover"
                    icon="menu" >
                 <q-popover self="top right">
                     <SubMenus :menuPopupTodo="menuPopupTodo" :itemtodo="itemtodo" @clickMenu="clickMenu" @setPriority="setPriority"></SubMenus>
@@ -59,6 +59,8 @@
 
             </q-btn>
         </div>
+        <!--clButtPopover: {{ clButtPopover }}-->
+        <!--Sel: {{ sel }}-->
         <!--<div class="flex-item btn-item">-->
         <!--{{itemtodo.expiring_at}}-->
         <!--</div>-->

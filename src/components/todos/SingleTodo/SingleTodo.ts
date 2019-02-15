@@ -40,6 +40,8 @@ export default class SingleTodo extends Vue {
   public togglemenu: boolean = false
   public percentageProgress: number = 0
   public itemtodoPrec: ITodo
+  public clButtPopover: string = 'pos-item-popover'
+
   $q: any
 
   @Prop({ required: true }) itemtodo: ITodo
@@ -127,6 +129,9 @@ export default class SingleTodo extends Vue {
 
     this.menuProgress += mycolcl
     this.percProgress += mycolcl
+
+    this.clButtPopover = this.sel ? 'pos-item-popover comp_selected' : 'pos-item-popover'
+
 
     // if (this.inEdit) {
     //   this.classDescr += ' hide'
@@ -264,6 +269,7 @@ export default class SingleTodo extends Vue {
       }
     }
 */
+    // Delete Key or Backspage
     if (((e.keyCode === 8) || (e.keyCode === 46)) && (this.precDescr === '') && !e.shiftKey) {
       e.preventDefault()
       this.deselectRiga()
@@ -382,11 +388,13 @@ export default class SingleTodo extends Vue {
     const deletestr = this.$t('dialog.delete')
     const cancelstr = this.$t('dialog.cancel')
 
-    await askConfirm(this.$q, this.$t('dialog.msg.titledeleteTask'), this.$t('dialog.msg.deleteTask').toString(), deletestr, cancelstr)
+    let msg = this.$t('dialog.msg.deleteTask', {'mytodo' : this.itemtodo.descr })
+    await askConfirm(this.$q, this.$t('dialog.msg.titledeleteTask'), msg, deletestr, cancelstr)
       .then(ris => {
         console.log('ris', ris)
-        if (ris)
+        if (ris) {
           this.removeitem(this.itemtodo._id)
+        }
       }).catch(err => {
 
     })

@@ -132,7 +132,7 @@ export namespace ApiTool {
   }
 
   export async function syncAlternative(mystrparam) {
-    console.log('[ALTERNATIVE Background syncing', mystrparam)
+    // console.log('[ALTERNATIVE Background syncing', mystrparam)
 
     let multiparams = mystrparam.split('|')
     if (multiparams) {

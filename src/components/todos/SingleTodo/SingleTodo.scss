@@ -26,6 +26,10 @@ $heightitem: 19px;
   display: inline-block;
 }
 
+.comp_selected {
+  display: inline-block !important;
+}
+
 .flex-container2:hover{
   background-color: rgba(230, 230, 230, 0.8);
 }
@@ -87,6 +91,9 @@ $heightitem: 19px;
   //visibility: hidden;
 }
 
+//.q-popover.animate-scale {
+//  animation: none;
+//}
 
 .pos-item:hover, .pos-item-popover:hover {
   cursor: grab;

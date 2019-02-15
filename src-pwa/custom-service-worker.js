@@ -137,7 +137,7 @@ if (workbox) {
           if (data) {
             if (data.todos) {
               console.log('***********************+++++++++++++++++++++++++++++++++++++++++++++++++++**********    Records TODOS Received from Server [', data.todos.length, 'record]', data.todos)
-              for (const key in data.todos) {
+              for (let key in data.todos) {
                 await writeData('todos', data.todos[key])
               }
             }
@@ -506,7 +506,9 @@ self.addEventListener('push', function (event) {
       badge: '/statics/icons/android-chrome-192x192.png',
       data: {
         url: data.url
-      }
+      },
+      tag: 'received',
+      renitify: true, // vibrate also with others messages.
     };
 
     event.waitUntil(

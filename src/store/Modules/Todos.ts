@@ -46,9 +46,45 @@ namespace Mutations {
     // console.log('*******  state.todos_changed', state.todos_changed)
   }
 
+  function findTodoById(state: ITodosState, id: string) {
+    for (let i = 0; i < state.todos.length; i++) {
+      if (state.todos[i]._id === id)
+        return i
+    }
+    return -1
+  }
+
+  function createNewItem(state: ITodosState, myitem: ITodo) {
+    state.todos.push(myitem)
+    Todos.mutations.setTodos_changed()
+  }
+
+
+  function modifymyItem(state: ITodosState, myitem: ITodo) {
+    // Find record
+    const ind = findTodoById(state, myitem._id)
+    if (ind >= 0)
+      state.todos[ind] = rescodes.jsonCopy(myitem)
+
+  }
+
+  function deletemyitem(state: ITodosState, myitem: ITodo) {
+    // Find record
+    const ind = findTodoById(state, myitem._id)
+
+    // Delete Item in to Array
+    if (ind >= 0)
+      state.todos.splice(ind, 1)
+
+  }
+
+
   export const mutations = {
     setTestpao: b.commit(setTestpao),
-    setTodos_changed: b.commit(setTodos_changed)
+    setTodos_changed: b.commit(setTodos_changed),
+    modifymyItem: b.commit(modifymyItem),
+    deletemyitem: b.commit(deletemyitem),
+    createNewItem: b.commit(createNewItem)
   }
 
 }
@@ -226,8 +262,10 @@ namespace Actions {
       } else {
         consolelogpao('NETWORK UNREACHABLE ! (Error in fetch)', UserStore.getters.getServerCode, ris.status)
       }
-      // Read all data from IndexedDB Store into Memory
-      await updateArrayInMemory(context)
+      if ('serviceWorker' in navigator) {
+        // Read all data from IndexedDB Store into Memory
+        await updatefromIndexedDbToStateTodo(context)
+      }
     } else {
       if (ris.status === rescodes.OK && checkPending) {
         waitAndcheckPendingMsg(context)
@@ -235,11 +273,11 @@ namespace Actions {
     }
   }
 
-  async function updateArrayInMemory(context) {
+  async function updatefromIndexedDbToStateTodo(context) {
     // console.log('Update the array in memory, from todos table from IndexedDb')
-    await globalroutines(null, 'updateinMemory', 'todos', null)
+    await globalroutines(null, 'updatefromIndexedDbToStateTodo', 'todos', null)
       .then(() => {
-        // console.log('updateArrayInMemory! ')
+        console.log('updatefromIndexedDbToStateTodo! ')
         return true
       })
   }
@@ -269,78 +307,57 @@ namespace Actions {
     return await dbInsertSaveTodo(context, itemtodo, 'POST')
   }
 
-  function UpdateNewIdFromDB(oldItem, newItem, method) {
-    // console.log('PRIMA state.todos', state.todos)
-    // console.log('ITEM', newItem)
-    if (method === 'POST') {
-      state.todos.push(newItem)
-      Todos.mutations.setTodos_changed()
-      // } else if (method === 'PATCH') {
-      //   state.todos.map(item => {
-      //     if (item._id === newItem._id) {
-      //       return newItem
-      //     }
-      //   })
+  async function dbInsertSaveTodo(context, itemtodo: ITodo, method) {
+
+    if (!('serviceWorker' in navigator)) {
+
+      console.log('dbInsertSaveTodo', itemtodo, method)
+      let call = process.env.MONGODB_HOST + '/todos'
+
+      if (UserStore.state.userId === '')
+        return false // Login not made
+
+      if (method !== 'POST')
+        call += '/' + itemtodo._id
+
+      console.log('TODO TO SAVE: ', itemtodo)
+
+      let res = await Api.SendReq(call, method, itemtodo)
+        .then(({ res, newItem }) => {
+          console.log('dbInsertSaveTodo to the Server', newItem)
+
+          return (res.status === 200)
+        })
+        .catch((error) => {
+          UserStore.mutations.setErrorCatch(error)
+          // return UserStore.getters.getServerCode
+          return false
+        })
     }
 
-
-    // console.log('DOPO state.todos', state.todos)
-  }
-
-  async function dbInsertSaveTodo(context, itemtodo: ITodo, method) {
-    console.log('dbInsertSaveTodo', itemtodo, method)
-    let call = process.env.MONGODB_HOST + '/todos'
-
-    if (UserStore.state.userId === '')
-      return false // Login not made
-
-    if (method !== 'POST')
-      call += '/' + itemtodo._id
-
-    console.log('TODO TO SAVE: ', itemtodo)
-
-    let res = await Api.SendReq(call, method, itemtodo)
-      .then(({ res, newItem }) => {
-        console.log('dbInsertSaveTodo RIS =', newItem)
-        if (newItem) {
-
-          // Update ID on local
-          UpdateNewIdFromDB(itemtodo, newItem, method)
-        }
-      })
-      .catch((error) => {
-        UserStore.mutations.setErrorCatch(error)
-        return UserStore.getters.getServerCode
-      })
-
-    return res
+    return true
   }
 
   async function dbDeleteTodo(context, item: ITodo) {
-    // console.log('dbDeleteTodo', item)
-    let call = process.env.MONGODB_HOST + '/todos/' + item._id
 
-    if (UserStore.state.userId === '')
-      return false // Login not made
+    if (!('serviceWorker' in navigator)) {
+      // console.log('dbDeleteTodo', item)
+      let call = process.env.MONGODB_HOST + '/todos/' + item._id
 
-    let res = await Api.SendReq(call, 'DELETE', item)
-      .then(function ({ res, itemris }) {
+      if (UserStore.state.userId === '')
+        return false // Login not made
 
-        if (res.status === 200) {
-          // Delete Item in to Array
-          state.todos.splice(state.todos.indexOf(item), 1)
+      let res = await Api.SendReq(call, 'DELETE', item)
+        .then(function ({ res, itemris }) {
+          console.log('dbDeleteTodo to the Server')
+        })
+        .catch((error) => {
+          UserStore.mutations.setErrorCatch(error)
+          return UserStore.getters.getServerCode
+        })
 
-          Todos.mutations.setTodos_changed()
-        }
-
-        return rescodes.OK
-      })
-      .catch((error) => {
-        UserStore.mutations.setErrorCatch(error)
-        return UserStore.getters.getServerCode
-      })
-
-    return res
+      return res
+    }
   }
 
   async function getTodosByCategory(context, category: string) {
@@ -356,7 +373,7 @@ namespace Actions {
     dbSaveTodo: b.dispatch(dbSaveTodo),
     dbLoadTodo: b.dispatch(dbLoadTodo),
     dbDeleteTodo: b.dispatch(dbDeleteTodo),
-    updateArrayInMemory: b.dispatch(updateArrayInMemory),
+    updatefromIndexedDbToStateTodo: b.dispatch(updatefromIndexedDbToStateTodo),
     getTodosByCategory: b.dispatch(getTodosByCategory),
     checkPendingMsg: b.dispatch(checkPendingMsg),
     waitAndcheckPendingMsg: b.dispatch(waitAndcheckPendingMsg)

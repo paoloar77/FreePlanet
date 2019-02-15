@@ -43,10 +43,10 @@ export default class Home extends Vue {
   set conta(valore) {
     GlobalStore.actions.setConta(valore)
     let my = this.$q.i18n.lang
-    this.showNotification(String(my))
+    this.showNotif(String(my))
   }
 
-  showNotification(message: string, color = 'primary', icon = '') {
+  showNotif(message: string, color = 'primary', icon = '') {
     this.$q.notify({
       color,
       icon,
@@ -158,15 +158,15 @@ export default class Home extends Vue {
   }
 
   askfornotification() {
-    this.showNotification(this.$t('notification.waitingconfirm'), 'positive', 'notifications')
+    this.showNotif(this.$t('notification.waitingconfirm'), 'positive', 'notifications')
 
     let mythis = this
     Notification.requestPermission(function (result) {
       console.log('User Choice', result)
       if (result === 'granted') {
-        mythis.showNotification(mythis.$t('notification.confirmed'), 'positive', 'notifications')
+        mythis.showNotif(mythis.$t('notification.confirmed'), 'positive', 'notifications')
       } else {
-        mythis.showNotification(mythis.$t('notification.denied'), 'negative', 'notifications')
+        mythis.showNotif(mythis.$t('notification.denied'), 'negative', 'notifications')
 
         // displayConfirmNotification();
       }

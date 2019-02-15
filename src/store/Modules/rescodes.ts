@@ -89,7 +89,7 @@ export const rescodes = {
 
   },
 
-  INDEX_MENU_DELETE: 3,
+  INDEX_MENU_DELETE: 4,
 
   menuPopupTodo: {
     'it': [
@@ -167,6 +167,11 @@ export const rescodes = {
       }
       ]
   },
+
+  jsonCopy(src) {
+    return JSON.parse(JSON.stringify(src))
+  }
+
 
 
 
