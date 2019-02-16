@@ -102,8 +102,9 @@ namespace Mutations {
   }
 
   function setlang(state: IUserState, newstr: string) {
+    console.log('SETLANG', newstr)
     state.lang = newstr
-    localStorage.setItem('lang', state.lang)
+    localStorage.setItem(rescodes.localStorage.lang, state.lang)
   }
 
   function UpdatePwd(state: IUserState, data: IIdToken) {
@@ -339,6 +340,7 @@ namespace Actions {
               const now = new Date()
               // const expirationDate = new Date(now.getTime() + myres.data.expiresIn * 1000);
               const expirationDate = new Date(now.getTime() * 1000)
+              localStorage.setItem(rescodes.localStorage.lang, state.lang)
               localStorage.setItem(rescodes.localStorage.userId, userId)
               localStorage.setItem(rescodes.localStorage.username, username)
               localStorage.setItem(rescodes.localStorage.token, state.x_auth_token)
@@ -453,6 +455,7 @@ namespace Actions {
             const now = new Date()
             // const expirationDate = new Date(now.getTime() + myres.data.expiresIn * 1000);
             const expirationDate = new Date(now.getTime() * 1000)
+            localStorage.setItem(rescodes.localStorage.lang, state.lang)
             localStorage.setItem(rescodes.localStorage.userId, userId)
             localStorage.setItem(rescodes.localStorage.username, username)
             localStorage.setItem(rescodes.localStorage.token, state.x_auth_token)
@@ -540,12 +543,7 @@ namespace Actions {
       // console.log('*** autologin_FromLocalStorage ***')
       // INIT
 
-      UserStore.mutations.setlang(process.env.LANG_DEFAULT)
-      // Estrai la Lang dal Localstorage
-      const lang = localStorage.getItem('lang')
-      if (lang) {
-        UserStore.mutations.setlang(lang)
-      }
+      UserStore.state.lang = localStorage.getItem(rescodes.localStorage.lang)
 
       const token = localStorage.getItem(rescodes.localStorage.token)
       if (!token) {

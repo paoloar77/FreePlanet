@@ -1,13 +1,13 @@
 <template>
     <div>
 
-<!--
-        <router-link :to="'/'" v-if="$router.currentRoute.meta.backButton">
-            <button>
-                <i>arrow_back</i>
-            </button>
-        </router-link>
--->
+        <!--
+                <router-link :to="'/'" v-if="$router.currentRoute.meta.backButton">
+                    <button>
+                        <i>arrow_back</i>
+                    </button>
+                </router-link>
+        -->
         <q-layout-header>
             <q-toolbar
                     color="primary"
@@ -43,7 +43,22 @@
                     <q-icon v-if="isUserNotAuth" name="device_unknown"></q-icon>
                 </q-btn>
 
-                <q-select class="sel_lang" v-model="lang" stack-label="" :options="selectOpLang"/>
+                <q-btn-dropdown
+                        :label="langshort"
+                >
+                    <q-list link>
+                        <q-item v-for="langrec in selectOpLang" :key="langrec.value" v-close-overlay
+                                @click.native="lang = langrec.value">
+                            <q-item-side>
+                                <img :src="langrec.image" class="flagimg">
+                            </q-item-side>
+                            <q-item-main>
+                                <q-item-tile sublabel>{{langrec.label}}</q-item-tile>
+                            </q-item-main>
+                        </q-item>
+                    </q-list>
+                </q-btn-dropdown>
+
 
                 <!--
                 <message-popover></message-popover>
@@ -77,12 +92,12 @@
   import drawer from '../layouts/drawer/drawer.vue'
   import messagePopover from '../layouts/toolbar/messagePopover/messagePopover.vue'
 
-  import { GlobalStore } from '@modules'
+  import { GlobalStore, UserStore } from '@modules'
   import { rescodes } from '../store/Modules/rescodes'
-  import QIcon from "quasar-framework/src/components/icon/QIcon";
-  import { StateConnection } from "../model";
-  import { Watch } from "vue-property-decorator";
-  import QField from "quasar-framework/src/components/field/QField";
+  import QIcon from "quasar-framework/src/components/icon/QIcon"
+  import { StateConnection } from "../model"
+  import { Watch } from "vue-property-decorator"
+  import QField from "quasar-framework/src/components/field/QField"
 
   @Component({
     components: {
@@ -101,6 +116,7 @@
     public iconConn: string = 'wifi'
     public clIconConn: string = 'clIconOnline'
     public strConn: string = ''
+    public langshort: string = ''
 
     get conn_changed() {
       return GlobalStore.state.stateConnection
@@ -147,10 +163,10 @@
     }
 
     public selectOpLang = [
-      { label: 'English (UK)', icon: 'fa-flag-us', value: 'en-uk' },
-      { label: 'German', icon: 'fa-flag-de', value: 'de' },
-      { label: 'Spanish', icon: 'fa-flag-es', value: 'es' },
-      { label: 'Italian', icon: 'fa-facebook', value: 'it' }
+      { label: 'English', icon: 'fa-flag-us', value: 'enUs', image: '../statics/images/gb.png', short: 'EN' },
+      { label: 'German', icon: 'fa-flag-de', value: 'de', image: '../statics/images/de.png', short: 'DE' },
+      { label: 'Spanish', icon: 'fa-flag-es', value: 'es', image: '../statics/images/es.png', short: 'SP' },
+      { label: 'Italian', icon: 'fa-facebook', value: 'it', image: '../statics/images/it.png', short: 'IT' }
     ]
 
     get leftDrawerOpen() {
@@ -166,26 +182,80 @@
       // return "AA"
       return "[" + process.env.APP_VERSION + "]"
     }
+
     get lang() {
       return this.$q.i18n.lang
     }
 
+
+    setshortlang (lang) {
+      for (let indrec in this.selectOpLang) {
+        if (this.selectOpLang[indrec].value === lang) {
+          // console.log('this.selectOpLang[indrec].short', this.selectOpLang[indrec].short, this.selectOpLang[indrec].value)
+          this.langshort = this.selectOpLang[indrec].short
+          return
+        }
+      }
+
+    }
+
     set lang(lang) {
       this.$i18n.locale = this.snakeToCamel(lang)
+      // this.$q.notify('IMPOSTA LANG= ' + this.$i18n.locale)
+      // console.log('IMPOSTA LANG= ' + this.$i18n.locale)
+
+      UserStore.mutations.setlang(this.$i18n.locale)
+
+      let mylangtopass = lang
+
+      this.setshortlang(mylangtopass)
+
+      if (mylangtopass === 'enUs')
+        mylangtopass = 'en-us'
 
       // dynamic import, so loading on demand only
-      import(`quasar-framework/i18n/${lang}`).then(lang => {
+      import(`quasar-framework/i18n/${mylangtopass}`).then(lang => {
         this.$q.i18n.set(lang.default)
         import(`src/statics/i18n`).then(function () {
         })
       })
     }
 
+    getLangAtt() {
+      return this.$q.i18n.lang
+    }
 
-    mounted () {
+    setLangAtt(mylang) {
+      this.$q.i18n.lang = mylang
+    }
+
+    beforeMount() {
+      // Estrai la Lang dal Localstorage
+
+      let my = this.getLangAtt()
+      // this.$q.notify('prima: ' + String(my))
+
+      let mylang = localStorage.getItem(rescodes.localStorage.lang)
+      if (mylang.toLowerCase() === 'enus')
+        mylang = 'enUs'
+      if (mylang.toLowerCase() === 'enuk')
+        mylang = 'enUk'
+
+      if (!mylang)
+        mylang = process.env.LANG_DEFAULT
+
+
+      this.setLangAtt(mylang)
+      this.setshortlang(mylang)
+      // this.$q.notify('Dopo: ' + String(this.getLangAtt()))
+
+    }
+
+    mounted() {
+
 
       // Test this by running the code snippet below and then
-        // use the "Offline" checkbox in DevTools Network panel
+      // use the "Offline" checkbox in DevTools Network panel
 
       let mythis = this
       // console.log('Event LOAD')
@@ -207,9 +277,9 @@
             }
           }
 
-          window.addEventListener('online', updateOnlineStatus);
-          window.addEventListener('offline', updateOnlineStatus);
-        });
+          window.addEventListener('online', updateOnlineStatus)
+          window.addEventListener('offline', updateOnlineStatus)
+        })
       }
     }
 
@@ -239,7 +309,7 @@
         }
     }
 
-    .fixed-left:hover{
+    .fixed-left:hover {
         cursor: ew-resize;
     }
 
@@ -463,6 +533,11 @@
 
     .clIconOffline {
         color: red;
+    }
+
+    .flagimg {
+        width: 30px;
+        height: 24px;
     }
 
 </style>

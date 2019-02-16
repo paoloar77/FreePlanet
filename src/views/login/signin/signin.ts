@@ -142,6 +142,8 @@ export default class Signin extends Vue {
         }
         return riscode
       }).then((riscode) => {
+        this.$i18n.locale = UserStore.state.lang    // Set Lang
+
         globalroutines(this, 'loadapp', '')
         return riscode
       })

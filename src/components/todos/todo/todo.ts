@@ -354,9 +354,11 @@ export default class Todo extends Vue {
   setarrPriority() {
     this.arrPrior = []
     const arr = rescodes.selectPriority[UserStore.state.lang]
-    arr.forEach(rec => {
-      this.arrPrior.push(rec.value)
-    })
+    if (arr) {
+      arr.forEach(rec => {
+        this.arrPrior.push(rec.value)
+      })
+    }
     // console.log('Array PRIOR:', this.arrPrior)
   }
 
@@ -424,10 +426,15 @@ export default class Todo extends Vue {
   }
 
   getPriorityByInd(index) {
-    const arr = rescodes.selectPriority[UserStore.state.lang]
-    for (let rec of arr) {
-      if (rec.value === index)
-        return rec.label
+    // console.log('LANG in PRIOR', UserStore.state.lang)
+    try {
+      const arr = rescodes.selectPriority[UserStore.state.lang]
+      for (let rec of arr) {
+        if (rec.value === index)
+          return rec.label
+      }
+    } catch (e) {
+
     }
     return ''
   }

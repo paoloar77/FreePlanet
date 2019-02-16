@@ -1,6 +1,10 @@
 <template>
     <div :class="getClassRow()">
-
+        <!--<div v-if="isFirst">-->
+            <!--<q-context-menu ref="contextMenu">-->
+                <!--<SubMenus :menuPopupTodo="menuPopupTodo" :itemtodo="itemtodo" @clickMenu="clickMenu" @setPriority="setPriority"></SubMenus>-->
+            <!--</q-context-menu>-->
+        <!--</div>-->
 
         <div v-if="isTodo()" class="flex-item completed-item">
             <q-btn push flat

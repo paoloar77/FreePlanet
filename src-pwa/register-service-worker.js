@@ -33,7 +33,7 @@ register(process.env.SERVICE_WORKER_FILE, {
   }
 );
 
-// ServiceWorkerRegistration: https://developer.mozilla.org/en-uk/docs/Web/API/ServiceWorkerRegistration
+// ServiceWorkerRegistration: https://developer.mozilla.org/enUs/docs/Web/API/ServiceWorkerRegistration
 
 
 //    "build": "quasar build -m pwa && workbox generateSW workbox-config.js",

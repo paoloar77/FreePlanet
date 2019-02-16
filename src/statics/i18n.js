@@ -251,7 +251,7 @@ const messages = {
     },
     connection: 'Connection',
   },
-  enUk: {
+  'enUs': {
     dialog: {
       ok: 'Ok',
       yes: 'Yes',

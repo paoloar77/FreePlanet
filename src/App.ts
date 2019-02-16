@@ -52,6 +52,10 @@ export default class App extends Vue {
       UserStore.actions.autologin_FromLocalStorage()
         .then((loadstorage) => {
           if (loadstorage) {
+
+            this.$i18n.locale = UserStore.state.lang    // Set Lang
+            console.log('lang CARICATO:', this.$i18n.locale)
+
             globalroutines(this, 'loadapp', '')
             // this.$router.replace('/')
 

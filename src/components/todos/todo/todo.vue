@@ -31,9 +31,8 @@
                     <!--</transition-group>-->
                 </draggable>
             </div>
-            <q-context-menu ref="contextMenu">
-            <SubMenus :menuPopupTodo="menuPopupTodo" :itemtodo="itemtodo" @clickMenu="clickMenu" @setPriority="setPriority"></SubMenus>
-            </q-context-menu>
+
+
 
             <q-input ref="insertTask" v-model="todo" inverted :float-label="$t('todo.insert')"
                      :after="[{icon: 'arrow_forward', content: true, handler () {}}]"

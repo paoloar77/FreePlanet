@@ -20,7 +20,8 @@ export const rescodes = {
     leftDrawerOpen: 'ldo',
     userId: 'uid',
     token: 'tk',
-    username: 'uname'
+    username: 'uname',
+    lang:'lg'
   },
 
   Todos: {
@@ -67,7 +68,45 @@ export const rescodes = {
         value: 0,
         icon: 'expand_more'
       }],
-    'enUk': [
+    'es': [
+      {
+        id: 1,
+        label: 'Alta',
+        value: 2,
+        icon: 'expand_less'
+      },
+      {
+        id: 2,
+        label: 'Normal',
+        value: 1,
+        icon: 'remove'
+      },
+      {
+        id: 3,
+        label: 'Baja',
+        value: 0,
+        icon: 'expand_more'
+      }],
+    'enUs': [
+      {
+        id: 1,
+        label: 'High',
+        value: 2,
+        icon: 'expand_less'
+      },
+      {
+        id: 2,
+        label: 'Normal',
+        value: 1,
+        icon: 'remove'
+      },
+      {
+        id: 3,
+        label: 'Low',
+        value: 0,
+        icon: 'expand_more'
+      }],
+    'de': [
       {
         id: 1,
         label: 'High',
@@ -86,6 +125,7 @@ export const rescodes = {
         value: 0,
         icon: 'expand_more'
       }]
+
 
   },
 
@@ -129,7 +169,44 @@ export const rescodes = {
         checked: false
       }
       ],
-    'enUk': [
+    'es': [
+      {
+        id: 10,
+        label: '',
+        value: 120, // PROGRESS_BAR
+        icon: 'rowing',
+        checked: true
+      },
+      {
+        id: 20,
+        label: 'Establecer Prioridad',
+        value: 130, // PRIORITY
+        icon: 'rowing',
+        checked: false
+      },
+      {
+        id: 30,
+        label: 'Completado',
+        value: 110, // COMPLETED
+        icon: 'check_circle',
+        checked: true
+      },
+      {
+        id: 40,
+        label: 'Establecer expiración',
+        value: 101, // TOGGLE_EXPIRING
+        icon: 'date_range',
+        checked: true
+      },
+      {
+        id: 50,
+        label: 'Borrar',
+        value: 100, // DELETE
+        icon: 'delete',
+        checked: false
+      }
+    ],
+    'enUs': [
       {
         id: 10,
         label: '',
