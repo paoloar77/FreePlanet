@@ -122,6 +122,10 @@ export default class Todo extends Vue {
     // this.updatetable(true, 'testPao')
   }
 
+  isTodoByElem(elem) {
+    return elem.descr.slice(-1) !== ':'
+  }
+
   getArrTodos() {
 
     let mystr = ''

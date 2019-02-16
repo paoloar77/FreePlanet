@@ -272,7 +272,7 @@ const messages = {
       myDescriz: ''
     },
     pages: {
-      home: 'Dashboard One',
+      home: 'Dashboard',
       SignUp: 'SignUp',
       SignIn: 'SignIn',
       vreg: 'Verify Reg',

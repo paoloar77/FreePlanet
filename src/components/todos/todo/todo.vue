@@ -13,7 +13,11 @@
                 <draggable v-model="todos_arr" :options="{draggable:'.myitemdrag'}"
                            @start="onStart" @end="onEnd" class="dragArea">
                     <!--<transition-group :name="mytypetransgroup">-->
+                        <div style="display: none">{{counter = 0}} </div>
                         <div :id="getmyid(mytodo._id)" :key="mytodo._id" v-for="mytodo in todos_arr" class="myitemdrag">
+
+                            <!--<div v-if="isTodoByElem(mytodo)" style="display: none">{{counter++ = (mytodo.counter === undefined) ? 0: mytodo.counter++}} </div>-->
+                            <div v-if="isTodoByElem(mytodo)" style="display: none">{{counter++, mytodo.counter = counter}} </div>
 
                             <div v-if="(prior !== mytodo.priority) && !mytodo.completed" :class="getTitlePriority(mytodo.priority)">
                                 <label>{{getPriorityByInd(mytodo.priority)}}</label>

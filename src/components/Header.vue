@@ -165,8 +165,8 @@
     public selectOpLang = [
       { label: 'English', icon: 'fa-flag-us', value: 'enUs', image: '../statics/images/gb.png', short: 'EN' },
       { label: 'German', icon: 'fa-flag-de', value: 'de', image: '../statics/images/de.png', short: 'DE' },
-      { label: 'Spanish', icon: 'fa-flag-es', value: 'es', image: '../statics/images/es.png', short: 'SP' },
-      { label: 'Italian', icon: 'fa-facebook', value: 'it', image: '../statics/images/it.png', short: 'IT' }
+      { label: 'Italian', icon: 'fa-facebook', value: 'it', image: '../statics/images/it.png', short: 'IT' },
+      { label: 'Spanish', icon: 'fa-flag-es', value: 'es', image: '../statics/images/es.png', short: 'SP' }
     ]
 
     get leftDrawerOpen() {

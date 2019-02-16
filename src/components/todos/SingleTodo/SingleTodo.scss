@@ -2,6 +2,8 @@
 
 $colcompleted: #a2a2a2;
 $heightitem: 19px;
+$heightcounter: 26px;
+$heightdescr: 22px;
 
 .flex-item{
    // background-color: #d5e2eb;
@@ -46,6 +48,18 @@ $heightitem: 19px;
   max-width: 24px;
 }
 
+.counter-item {
+  margin: auto auto auto 2px;
+  padding: 2px;
+  vertical-align: middle;
+  text-align: left;
+  font-size: 1.10rem;
+  //color: blue !important;
+
+  //order: 2;
+  //height: 24px;
+  //line-height: 24px; /* same as height! */
+}
 
 .pos-item {
   max-width: 24px;
@@ -59,6 +73,9 @@ $heightitem: 19px;
   text-align: center;
   // background-color: #ff4081;
   font-size: 0.75rem;
+  order: 2;
+  flex: 1;
+
 }
 
 
@@ -198,16 +215,16 @@ $heightitem: 19px;
 */
 
 .div_descr, .div_descr_edit {
-  margin: 2px;
-  padding: 2px;
+  margin: auto auto auto 2px;
+  //padding: 2px;
   min-width: 200px;
   vertical-align: middle;
   text-align: left;
+  color: blue !important;
 
   flex: 1;
   //order: 2;
-  //height: 24px;
-  //line-height: 24px; /* same as height! */
+  line-height: $heightdescr; /* same as height! */
 
   &.hide {
     display: none !important;
@@ -221,9 +238,9 @@ $heightitem: 19px;
 
 
 .div_descr:hover {
-  border-width: 1px 0px 1px 0px;
+  //border-width: 1px 0px 1px 0px;
   border-color: rgba(125, 255, 125, 0.5);
-  padding: 1px;
+  //padding: 1px;
 }
 
 
@@ -272,7 +289,7 @@ $heightitem: 19px;
 }
 
 .status_completed {
-  color: $colcompleted
+  color: $colcompleted !important;
 }
 
 .menuTitlePriority {

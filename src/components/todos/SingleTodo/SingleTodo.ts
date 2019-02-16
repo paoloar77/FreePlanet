@@ -41,6 +41,7 @@ export default class SingleTodo extends Vue {
   public percentageProgress: number = 0
   public itemtodoPrec: ITodo
   public clButtPopover: string = 'pos-item-popover'
+  public numpos: number = 0
 
   $q: any
 
@@ -95,8 +96,10 @@ export default class SingleTodo extends Vue {
     this.classCompleted = 'completed-item-popover'
     this.classDescr = 'flex-item div_descr show'
     this.classDescrEdit = 'flex-item div_descr_edit'
-    if (!this.isTodo())
+    if (!this.isTodo()) {
       this.classDescr += ' titleLista-item'
+      this.classDescrEdit += ' titleLista-item'
+    }
 
     this.classExpiring = 'flex-item data-item'
     this.classExpiringEx = ''
@@ -104,6 +107,7 @@ export default class SingleTodo extends Vue {
       this.percentageProgress = 100
       this.classCompleted += ' icon_completed'
       this.classDescr += ' status_completed'
+      this.classDescrEdit += ' status_completed'
       this.classExpiring += ' status_completed'
       this.classExpiringEx += ' status_completed'
     } else {
@@ -172,13 +176,15 @@ export default class SingleTodo extends Vue {
 
   clickRiga() {
     // console.log('CLICK RIGA ************')
-    if (!this.inEdit) {
-      this.$emit('deselectAllRows', this.itemtodo, true)
+    if (!this.sel) {
+      if (!this.inEdit) {
+        this.$emit('deselectAllRows', this.itemtodo, true)
 
-      if (!this.sel) {
-        this.selectRiga()
-      } else {
-        this.deselectRiga()
+        if (!this.sel) {
+          this.selectRiga()
+        } else {
+          this.deselectRiga()
+        }
       }
     }
   }
@@ -214,17 +220,23 @@ export default class SingleTodo extends Vue {
     }
   }
 
-  editTodo() {
-    // console.log('INIZIO - editTodo')
-    this.$emit('click')
-    this.precDescr = this.itemtodo.descr
-    this.inEdit = true
-    if (!this.sel)
-      this.selectRiga()
-    else
-      this.updateClasses()
+  clickRow() {
+    this.clickRiga()
+  }
 
-    this.faiFocus('inputdescr')
+  editTodo() {
+    if (!this.itemtodo.completed) {
+      // console.log('INIZIO - editTodo')
+      this.$emit('click')
+      this.precDescr = this.itemtodo.descr
+      this.inEdit = true
+      if (!this.sel)
+        this.selectRiga()
+      else
+        this.updateClasses()
+
+      this.faiFocus('inputdescr')
+    }
 
 
     // console.log('FINE - editTodo')
@@ -255,7 +267,23 @@ export default class SingleTodo extends Vue {
   }
 
 
+  keyDownRow(e) {
+    console.log('keyDownRow')
+    // Delete Key or Backspage
+    if (((e.keyCode === 8) || (e.keyCode === 46)) && (this.precDescr === '') && !e.shiftKey) {
+      e.preventDefault()
+      this.deselectRiga()
+      this.clickMenu(rescodes.MenuAction.DELETE)
+        .then(() => {
+          this.faiFocus('insertTask', true)
+          return
+        })
+    }
+
+  }
+
   keyDownArea(e) {
+    console.log('keyDownArea')
 /*
     if ((e.key === 'ArrowUp') && !e.shiftKey) {
       e.key = 'Tab'
@@ -295,7 +323,7 @@ export default class SingleTodo extends Vue {
     // console.log('keyDownArea', e)
     if (e.key === 'Escape') {
       this.deselectRiga()
-      this.faiFocus('insertTask', true)
+      // this.faiFocus('insertTask', true)
       console.log('LOAD this.precDescr', this.precDescr)
       this.precDescr = this.itemtodo.descr
     }
@@ -324,6 +352,8 @@ export default class SingleTodo extends Vue {
     this.updateicon()
 
     this.updatedata()
+
+    this.deselectAndExitEdit()
   }
 
   updatedata() {

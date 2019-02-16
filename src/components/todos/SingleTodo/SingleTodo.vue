@@ -1,5 +1,6 @@
 <template>
-    <div :class="getClassRow()">
+    <div :class="getClassRow()" @click="clickRow">
+        <!--<div v-if="isTodo()" class="flex-item counter-item">{{itemtodo.counter}}</div>-->
         <!--<div v-if="isFirst">-->
             <!--<q-context-menu ref="contextMenu">-->
                 <!--<SubMenus :menuPopupTodo="menuPopupTodo" :itemtodo="itemtodo" @clickMenu="clickMenu" @setPriority="setPriority"></SubMenus>-->
@@ -14,9 +15,16 @@
             </q-btn>
         </div>
 
-        <q-input hide-underline type="textarea" ref="inputdescr" v-model.trim="precDescr"
-                 :class="classDescr" :max-height="50"
+        <q-input v-if="sel && !itemtodo.completed" hide-underline type="textarea" ref="inputdescr" v-model.trim="precDescr"
+                 :class="classDescrEdit" :max-height="50"
                  @keydown="keyDownArea" v-on:keydown.esc="exitEdit" @blur="exitEdit(true)" @click="editTodo()"/>
+
+        <div v-else :class="classDescr"
+             @keydown="keyDownRow">{{itemtodo.descr}}</div>
+
+        <!--<q-field dark v-else :label="itemtodo.descr"-->
+                 <!--:class="classDescr"-->
+                 <!--@keydown="keyDownRow"></q-field>-->
 
         <!--:after="[{icon: 'arrow_forward', content: true, handler () {}}]"-->
 
@@ -37,7 +45,7 @@
         </div>
 
 
-        <div v-if="itemtodo.enableExpiring">
+        <div v-if="itemtodo.enableExpiring" class="flex-item">
             <div :class="classExpiring">
                 <q-datetime
                         type="date"
@@ -54,9 +62,9 @@
             <q-btn push
                    :class="clButtPopover"
                    icon="menu" >
-                <!--<q-popover self="top right">-->
-                    <!--<SubMenus :menuPopupTodo="menuPopupTodo" :itemtodo="itemtodo" @clickMenu="clickMenu" @setPriority="setPriority"></SubMenus>-->
-                <!--</q-popover>-->
+                <q-popover v-if="sel" self="top right">
+                    <SubMenus :menuPopupTodo="menuPopupTodo" :itemtodo="itemtodo" @clickMenu="clickMenu" @setPriority="setPriority"></SubMenus>
+                </q-popover>
 
             </q-btn>
         </div>
