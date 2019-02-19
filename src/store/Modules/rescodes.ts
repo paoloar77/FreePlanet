@@ -68,7 +68,7 @@ export const rescodes = {
         value: 0,
         icon: 'expand_more'
       }],
-    'es': [
+    'esEs': [
       {
         id: 1,
         label: 'Alta',
@@ -169,7 +169,7 @@ export const rescodes = {
         checked: false
       }
       ],
-    'es': [
+    'esEs': [
       {
         id: 10,
         label: '',

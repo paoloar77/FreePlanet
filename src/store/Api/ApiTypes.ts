@@ -5,8 +5,9 @@ export class AxiosSuccess {
   public status: number
   public data: any
 
-  constructor(data: any) {
+  constructor(data: any, status: number) {
     this.data = data
+    this.status = status
   }
 }
 
@@ -14,10 +15,12 @@ export class AxiosError {
   public success: boolean = false
   public status: number
   public data: any
+  public code: any
 
-  constructor(status: number, data?: any) {
+  constructor(status: number, data?: any, code?: any) {
     this.status = status
     this.data = data
+    this.code = code
     if (status !== 401) {
       // if (status == 0) message = 'Vérifiez votre connexion Internet';
       // NotificationsStore.actions.addNotification({ type: 'warning', message: message })

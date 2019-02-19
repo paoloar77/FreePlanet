@@ -166,7 +166,7 @@
       { label: 'English', icon: 'fa-flag-us', value: 'enUs', image: '../statics/images/gb.png', short: 'EN' },
       { label: 'German', icon: 'fa-flag-de', value: 'de', image: '../statics/images/de.png', short: 'DE' },
       { label: 'Italian', icon: 'fa-facebook', value: 'it', image: '../statics/images/it.png', short: 'IT' },
-      { label: 'Spanish', icon: 'fa-flag-es', value: 'es', image: '../statics/images/es.png', short: 'SP' }
+      { label: 'Spanish', icon: 'fa-flag-es', value: 'esEs', image: '../statics/images/es.png', short: 'ES' }
     ]
 
     get leftDrawerOpen() {
@@ -200,6 +200,7 @@
     }
 
     set lang(lang) {
+      console.log('set lang(' + this.$i18n.locale)
       this.$i18n.locale = this.snakeToCamel(lang)
       // this.$q.notify('IMPOSTA LANG= ' + this.$i18n.locale)
       // console.log('IMPOSTA LANG= ' + this.$i18n.locale)
@@ -212,6 +213,9 @@
 
       if (mylangtopass === 'enUs')
         mylangtopass = 'en-us'
+
+      if (mylangtopass === 'esEs')
+        mylangtopass = 'es'
 
       // dynamic import, so loading on demand only
       import(`quasar-framework/i18n/${mylangtopass}`).then(lang => {
@@ -226,6 +230,7 @@
     }
 
     setLangAtt(mylang) {
+      console.log('MYLL=', mylang)
       this.$q.i18n.lang = mylang
     }
 
@@ -236,10 +241,25 @@
       // this.$q.notify('prima: ' + String(my))
 
       let mylang = localStorage.getItem(rescodes.localStorage.lang)
-      if (mylang.toLowerCase() === 'enus')
-        mylang = 'enUs'
-      if (mylang.toLowerCase() === 'enuk')
-        mylang = 'enUk'
+      if (mylang === null)
+      {
+        if (navigator) {
+          mylang = navigator.language
+          console.log(`LANG2 NAVIGATOR ${mylang}`)
+        } else {
+          mylang = this.$q.i18n.lang
+        }
+
+        console.log('IMPOSTA LANGMY', mylang)
+      }
+      if (mylang !== null) {
+        if (mylang.toLowerCase() === 'enus')
+          mylang = 'enUs'
+        if ((mylang.toLowerCase() === 'eses') || (mylang.toLowerCase() === 'es-es'))
+          mylang = 'esEs'
+        if ((mylang.toLowerCase() === 'enuk') || (mylang.toLowerCase() === 'en-uk'))
+          mylang = 'enUk'
+      }
 
       if (!mylang)
         mylang = process.env.LANG_DEFAULT

@@ -13,6 +13,7 @@ import { GlobalStore, UserStore } from '@modules'
 import globalroutines from './../../globalroutines/index'
 import { serv_constants } from '@src/store/Modules/serv_constants'
 import router from '@router'
+import * as Types from "@src/store/Api/ApiTypes"
 
 
 // const algoliaApi = new AlgoliaSearch()
@@ -47,86 +48,31 @@ export namespace ApiTool {
     })
   }
 
-  export async function SendReq(url: string, method: string, mydata: any, setAuthToken: boolean = false) {
+  export async function SendReq(url: string, method: string, mydata: any, setAuthToken: boolean = false): Promise<Types.AxiosSuccess | Types.AxiosError> {
     UserStore.mutations.setServerCode(rescodes.EMPTY)
     UserStore.mutations.setResStatus(0)
     return await new Promise(function (resolve, reject) {
-      let ricevuto = false
 
-      return sendRequest(url, UserStore.state.lang, UserStore.state.x_auth_token, method, mydata)
-        .then(resreceived => {
-          console.log('resreceived', resreceived)
-          ricevuto = true
-          let res = resreceived.clone()
-          if (process.env.DEV) {
-            // console.log('SendReq RES [', res.status, ']', res)
-          }
+      return sendRequest(url, method, mydata)
+        .then(res => {
+          console.log('res', res)
 
           UserStore.mutations.setResStatus(res.status)
-          if (res.status === 200) {
-            let x_auth_token = ''
-            try {
-              if (setAuthToken) {
-                x_auth_token = String(res.headers.get('x-auth'))
-
-                if (x_auth_token === '') {
-                  UserStore.mutations.setServerCode(rescodes.ERR_AUTHENTICATION)
-                }
-                UserStore.mutations.setAuth(x_auth_token)
-
-                if (url === process.env.MONGODB_HOST + '/updatepwd') {
-                  UserStore.mutations.UpdatePwd({ x_auth_token })
-                  localStorage.setItem(rescodes.localStorage.token, x_auth_token)
-                }
-              }
-
-              UserStore.mutations.setServerCode(rescodes.OK)
-            } catch (e) {
-              if (setAuthToken) {
-                UserStore.mutations.setServerCode(rescodes.ERR_AUTHENTICATION)
-                UserStore.mutations.setAuth('')
-              }
-              GlobalStore.mutations.setStateConnection(ricevuto ? 'online' : 'offline')
-              return reject({ code: rescodes.ERR_AUTHENTICATION })
-            }
-          } else if (res.status === serv_constants.RIS_CODE__HTTP_FORBIDDEN_INVALID_TOKEN) {
+          if (res.status === serv_constants.RIS_CODE__HTTP_FORBIDDEN_INVALID_TOKEN) {
             // Forbidden
             // You probably is connectiong with other page...
             UserStore.mutations.setServerCode(rescodes.ERR_AUTHENTICATION)
             UserStore.mutations.setAuth('')
-            GlobalStore.mutations.setStateConnection(ricevuto ? 'online' : 'offline')
             router.push('/signin')
             return reject({ code: rescodes.ERR_AUTHENTICATION })
           }
 
-          GlobalStore.mutations.setStateConnection(ricevuto ? 'online' : 'offline')
-
-          return res.json()
-            .then((body) => {
-              // console.log('BODY RES = ', body)
-              return resolve({ res, body, status: res.status })
-            })
-            .catch(e => {
-              return resolve({ res, body: {}, status: res.status })
-              // Array not found...
-              // UserStore.mutations.setServerCode(rescodes.ERR_GENERICO)
-              // return reject({ code: rescodes.ERR_GENERICO, status: res.status })
-            })
+          return resolve(res)
 
         })
         .catch(error => {
-          if (process.env.DEV) {
-            console.log('ERROR using', url, error, 'ricevuto=', ricevuto)
-          }
-          if (!ricevuto) {
-            UserStore.mutations.setServerCode(rescodes.ERR_SERVERFETCH)
-          } else {
-            UserStore.mutations.setServerCode(rescodes.ERR_GENERICO)
-          }
-
-          GlobalStore.mutations.setStateConnection(ricevuto ? 'online' : 'offline')
-
-          return reject({ code: error })
+          console.log('error', error)
+          return reject(error)
         })
     })
   }

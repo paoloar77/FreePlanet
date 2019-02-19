@@ -136,7 +136,7 @@ export default class Signin extends Vue {
     console.log(this.signin)
     UserStore.actions.signin(this.signin)
       .then((riscode) => {
-        // console.log('riscode=', riscode)
+        console.log('signin FINITO CALL: riscode=', riscode)
         if (riscode === rescodes.OK) {
           router.push('/signin')
         }
@@ -162,7 +162,7 @@ export default class Signin extends Vue {
         }
       })
       .catch(error => {
-        console.log('ERROR = ' + error)
+        console.log('ERROR SIGNIN = ' + error)
 
         this.checkErrors(error)
         this.$q.loading.hide()

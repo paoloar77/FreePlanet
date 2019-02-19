@@ -229,30 +229,27 @@ namespace Actions {
     if (UserStore.state.userId === '')
       return false // Login not made
 
-    let call = process.env.MONGODB_HOST + '/todos/' + UserStore.state.userId
-
     state.networkDataReceived = false
 
-    let ris = await Api.SendReq(call, 'GET', null)
-      .then(({ res, body, status }) => {
+    let ris = await Api.SendReq('/todos/' + UserStore.state.userId, 'GET', null)
+      .then(res => {
         state.networkDataReceived = true
 
         // console.log('******* UPDATE TODOS.STATE.TODOS !:', res.todos)
-        if (body.todos) {
-          state.todos = [...body.todos]
+        if (res.data.todos) {
+          state.todos = [...res.data.todos]
           Todos.mutations.setTodos_changed()
         }
 
         console.log('**********  res', 'state.todos', state.todos, 'checkPending', checkPending)
-
         // After Login will store into the indexedDb...
 
-        return { status }
+        return res
       })
       .catch(error => {
         console.log('error=', error)
         UserStore.mutations.setErrorCatch(error)
-        return { status }
+        return error
       })
 
     // console.log('ris : ', ris)
@@ -315,7 +312,7 @@ namespace Actions {
     if (!('serviceWorker' in navigator)) {
 
       console.log('dbInsertSaveTodo', itemtodo, method)
-      let call = process.env.MONGODB_HOST + '/todos'
+      let call = '/todos'
 
       if (UserStore.state.userId === '')
         return false // Login not made
@@ -326,8 +323,8 @@ namespace Actions {
       console.log('TODO TO SAVE: ', itemtodo)
 
       let res = await Api.SendReq(call, method, itemtodo)
-        .then(({ res, newItem }) => {
-          console.log('dbInsertSaveTodo to the Server', newItem)
+        .then(res => {
+          console.log('dbInsertSaveTodo to the Server', res.data)
 
           return (res.status === 200)
         })
@@ -345,13 +342,11 @@ namespace Actions {
 
     if (!('serviceWorker' in navigator)) {
       // console.log('dbDeleteTodo', item)
-      let call = process.env.MONGODB_HOST + '/todos/' + item._id
-
       if (UserStore.state.userId === '')
         return false // Login not made
 
-      let res = await Api.SendReq(call, 'DELETE', item)
-        .then(function ({ res, itemris }) {
+      let res = await Api.SendReq('/todos/' + item._id, 'DELETE', item)
+        .then(res => {
           console.log('dbDeleteTodo to the Server')
         })
         .catch((error) => {

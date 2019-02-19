@@ -79,13 +79,14 @@
             /* {route: '/vreg?idlink=aaa', faIcon: 'fa fa-login', materialIcon: 'login', name: 'pages.vreg'},*/
           ],
           show: true,
-        },
-        Forms: {
-          routes: [
-            { route: '/prec', faIcon: 'fa fa-search', materialIcon: 'search', name: 'pages.Test' },
-          ],
-          show: false
-        },
+        }
+        // ,
+        // Forms: {
+        //   routes: [
+        //     { route: '/prec', faIcon: 'fa fa-search', materialIcon: 'search', name: 'pages.Test' },
+        //   ],
+        //   show: false
+        // },
       }
 
     }

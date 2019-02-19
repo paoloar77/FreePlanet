@@ -1,50 +1,25 @@
 import axios, { AxiosInstance, AxiosPromise, AxiosResponse, AxiosInterceptorManager } from 'axios'
+import Api from '@api'
+import * as Types from '@src/store/Api/ApiTypes'
 
-async function sendRequest(url: string, lang: string, mytok: string, method: string, mydata: any) {
+async function sendRequest(url: string, method: string, mydata: any) {
 
-  console.log('sendRequest', method, url, '[', lang, ']')
+  console.log('sendRequest', method, url)
 
-  const authHeader = new Headers()
-  authHeader.append('content-Type', 'application/json')
-  authHeader.append('Accept', 'application/json')
-  if (url !== process.env.MONGODB_HOST + '/users/login') {
-    authHeader.append('x-auth', mytok)
-    // console.log('TOK PASSATO ALLA FETCH:', mytok)
-  }
-  // authHeader.append('accept-language', lang)
+  let request
+  if (method === 'GET')
+    request = Api.get(url, mydata)
+  else if (method === 'POST')
+    request = Api.post(url, mydata)
+  else if (method === 'DELETE')
+    request = Api.Delete(url, mydata)
+  else if (method === 'PUT')
+    request = Api.put(url, mydata)
 
-  let configInit: RequestInit
-
-  if (method === 'GET') {
-    configInit = {
-      method: method,
-      cache: 'no-cache',
-      mode: 'cors',
-      headers: authHeader
-    }
-  } else if (method === 'DELETE') {
-    configInit = {
-      method: method,
-      cache: 'no-cache',
-      mode: 'cors',
-      headers: authHeader
-    }
-  } else {
-    configInit = {
-      method: method,
-      cache: 'no-cache',
-      mode: 'cors',
-      headers: authHeader
-    }
-
-    if (mydata !== null)
-      configInit.body = JSON.stringify(mydata)
-
-  }
-
-  const request: Promise<Response> = fetch(url, configInit)
-  return request
-
+  const req: Promise<Types.AxiosSuccess | Types.AxiosError> = request
+  return req
 }
+
+
 
 export default sendRequest

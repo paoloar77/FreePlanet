@@ -125,7 +125,7 @@ const messages = {
     },
     connection: 'Connessione',
   },
-  es: {
+  'esEs': {
     dialog: {
       ok: 'Vale',
       yes: 'Sí',

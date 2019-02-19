@@ -200,10 +200,8 @@ namespace Actions {
       },
     }
 
-    let call = process.env.MONGODB_HOST + '/subscribe'
-
-    return Api.SendReq(call, 'POST', myres)
-      .then(({ res, body }) => {
+    return Api.SendReq('/subscribe', 'POST', myres)
+      .then(res => {
         state.wasAlreadySubscribed = true
         state.wasAlreadySubOnDb = true
 
