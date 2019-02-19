@@ -32,6 +32,11 @@ export default class SubMenus extends Vue {
     if (this.itemtodo.progress < 0) {
       this.itemtodo.progress = 0
     }
+
+    if (e.key === 'Enter') {
+      // chiudi il meno
+      this.$emit('clickMenu', 0)
+    }
   }
 
   create () {

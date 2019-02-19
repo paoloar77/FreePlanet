@@ -16,7 +16,7 @@
         </div>
 
         <q-input v-if="sel && !itemtodo.completed" hide-underline type="textarea" ref="inputdescr" v-model.trim="precDescr"
-                 :class="classDescrEdit" :max-height="50"
+                 :class="classDescrEdit" :max-height="100"
                  @keydown="keyDownArea" v-on:keydown.esc="exitEdit" @blur="exitEdit(true)" @click="editTodo()"/>
 
         <div v-else :class="classDescr"
@@ -32,33 +32,34 @@
         <!--<q-field>{{ itemtodo.descr }}</q-field>-->
         <!--</div>-->
 
-        <div v-if="isTodo() && (percentageProgress > 0) " class="flex-item progress-item">
+        <div v-if="isTodo() && (percentageProgress > 0) " class="flex-item progress-item shadow-1">
             <q-progress
                     :percentage="percentageProgress"
-                    class="progress-item"
+                    class="progrbar-item"
                     :color="colProgress"
             >
             </q-progress>
             <div :class="percProgress">
                 {{percentageProgress}}%
+                <q-popup-edit v-model="itemtodo.progress" title="Progress" buttons class="editProgress">
+                    <q-input type="number" v-model="itemtodo.progress" :max="100" :min="0" />
+                </q-popup-edit>
+
             </div>
         </div>
 
 
-        <div v-if="itemtodo.enableExpiring" class="flex-item">
-            <div :class="classExpiring">
-                <q-datetime
-                        type="date"
-                        :class="classExpiringEx"
-                        v-model="itemtodo.expiring_at"
-                        class="myexpired"
-                        format="DD/MM/YY"
-                        @change="val => { model = val }" >
+        <div v-if="itemtodo.enableExpiring" :class="classExpiring">
+            <q-datetime
+                    type="date"
+                    v-model="itemtodo.expiring_at"
+                    class="myexpired"
+                    format="DD/MM/YY"
+                    @change="val => { model = val }" >
 
-                </q-datetime>
-            </div>
+            </q-datetime>
         </div>
-        <div v-if="isTodo()" class="flex-item pos-item" @mouseup.left="mouseUp" @mousedown="clickRiga">
+        <div v-if="isTodo()" class="flex-item pos-item item-drag" @mouseup.left="mouseUp" @mousedown="clickRiga">
             <q-btn push
                    :class="clButtPopover"
                    icon="menu" >

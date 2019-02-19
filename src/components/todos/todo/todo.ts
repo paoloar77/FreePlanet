@@ -17,6 +17,8 @@ import draggable from 'vuedraggable'
 
 import VueIdb from 'vue-idb'
 
+// import 'statics/css/dragula.css'
+
 import globalroutines from '../../../globalroutines/index'
 
 import $ from 'jquery'
@@ -43,9 +45,11 @@ export default class Todo extends Vue {
   itemDragEnd: any = null
   selrowid: number = 0
   polling = null
-  mytypetransgroup: string = 'flip-list'
+  mytypetransgroup: string = '' // 'flip-list'
   tmpstrTodos: string = ''
   loadDone: boolean = false
+  public dragging: number
+  public itemdrag: any = {}
 
   fieldtochange: String [] = ['descr', 'completed', 'category', 'expiring_at', 'priority', 'id_prev', 'id_next', 'pos', 'enableExpiring', 'progress']
 
@@ -60,6 +64,7 @@ export default class Todo extends Vue {
     console.log('drag = ' + this.drag)
   }
 
+
   @Watch('$route', { immediate: true, deep: true })
   onUrlChange(newVal: any) {
     // Some action
@@ -68,9 +73,14 @@ export default class Todo extends Vue {
 
   @Watch('$route.params.category') changecat() {
     // console.log('changecat')
-    this.mytypetransgroup = 'nessuno'
+    // this.mytypetransgroup = ''
     this.updatetable(false, '$route.params.category').then(() => {
-      this.mytypetransgroup = 'crossfade'
+
+      const mythis = this
+      setTimeout(function () {
+        // mythis.mytypetransgroup = 'crossfade'
+      }, 1000)
+
     })
   }
 
@@ -292,7 +302,10 @@ export default class Todo extends Vue {
   }
 
   async onEnd(itemdragend) {
-    console.log('newindex=', itemdragend.newIndex, 'oldindex=', itemdragend.oldIndex)
+    console.log('3) newindex=', itemdragend.newIndex, 'oldindex=', itemdragend.oldIndex)
+
+    // MOVE
+    this.todos_arr.splice(itemdragend.newIndex, 0, this.todos_arr.splice(itemdragend.oldIndex, 1)[0])
 
     if (itemdragend.newIndex === itemdragend.oldIndex)
       return // If nothing change, exit
@@ -616,7 +629,6 @@ export default class Todo extends Vue {
     console.log('deleteitem: KEY = ', id)
 
 
-
     let myobjtrov = this.getElemById(id)
 
     if (myobjtrov !== null) {
@@ -648,8 +660,8 @@ export default class Todo extends Vue {
           this.updatetable(true, 'deleteitem')
 
         }).catch((error) => {
-          console.log('err: ', error)
-        })
+        console.log('err: ', error)
+      })
 
       // 3) Delete from the Server (call)
       this.deleteItemToSyncAndDb(rescodes.DB.TABLE_DELETE_TODOS, myobjtrov, id, true)
@@ -906,6 +918,49 @@ export default class Todo extends Vue {
 
   checkUpdate() {
     Todos.actions.waitAndcheckPendingMsg()
+  }
+
+  dragStart(which, ev) {
+    this.itemdrag.indTemp = which
+    console.log('1) DRAG INIZIO: ', which)
+    this.itemdrag.oldIndex = which
+    this.dragging = which
+  }
+
+  public randomHexColor() {
+    return Math.random().toString(16).slice(2, 8)
+  }
+
+  dragEnter(index, ev) {
+    if (this.itemdrag.indTemp !== index) {
+      console.log(`[${index}] DRAG ENTER`)
+      this.itemdrag.indTemp = index
+
+      this.getItemDrag(index).addClass('draggato2').removeClass('non-draggato')
+    }
+  }
+
+  getItemDrag(index) {
+    return $('div[name=REF' + index + ']')
+  }
+
+  dragLeave(index, ev) {
+    if (this.itemdrag.indTemp !== index) {
+      this.getItemDrag(index).addClass('non-draggato').removeClass('draggato')
+    }
+  }
+
+  dragEnd(ev) {
+    this.dragging = -1
+  }
+
+  dragFinish(to, ev) {
+    this.itemdrag.indTemp = -1
+    this.getItemDrag(to).addClass('non-draggato').removeClass('draggato')
+    console.log('2) DRAG FINE: ', to)
+    this.itemdrag.newIndex = to
+    this.onEnd(this.itemdrag)
+
   }
 
 }

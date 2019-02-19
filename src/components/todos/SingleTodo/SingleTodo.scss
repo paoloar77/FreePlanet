@@ -1,16 +1,23 @@
 
 
 $colcompleted: #a2a2a2;
-$heightitem: 19px;
+$heightitem: 32px;
+$heightothers: 32px;
+$heightBtn: 100%;
 $heightcounter: 26px;
-$heightdescr: 22px;
+$heightdescr: 20px;
 
 .flex-item{
    // background-color: #d5e2eb;
   padding: 0px;
-  margin: 0px;
+  margin: 1px;
+  margin-left: 3px;
+  margin-right: 3px;
   color: #000;
   font-size: 0.85rem;
+  height: $heightBtn;
+  line-height: $heightBtn;
+  vertical-align: middle;
   //flex: 0 0 100%;
 }
 
@@ -18,7 +25,7 @@ $heightdescr: 22px;
 .flex-container2 {
   flex-flow: row wrap;
   justify-content: space-between;
-  margin: 2px 5px 2px 5px;  // top right bottom left
+  margin: 0px 5px 0px 5px;  // top right bottom left
 }
 
 // Set visibility: visible to the icon menu of pos-item-popover
@@ -26,6 +33,7 @@ $heightdescr: 22px;
 //.flex-container2:hover .pos-item-popover {
   background-color: rgba(230, 230, 230, 0.8);
   display: inline-block;
+  transition: all ease-in-out .3s;
 }
 
 .comp_selected {
@@ -68,8 +76,12 @@ $heightdescr: 22px;
   margin-right: 1px;
   padding-left: 1px;
   padding-right: 1px;
-  height: $heightitem;
+  margin: 0px;
+  padding-top: 0px;
+  padding-bottom: 0px;
+  //height: $heightitem;
   line-height: $heightitem;
+  min-height: $heightitem;
   text-align: center;
   // background-color: #ff4081;
   font-size: 0.75rem;
@@ -104,7 +116,8 @@ $heightdescr: 22px;
     display: none;
   }
   color: #777;
-  height: 100%;
+  height: $heightitem;
+  line-height: $heightitem;
   //visibility: hidden;
 }
 
@@ -134,7 +147,8 @@ $heightdescr: 22px;
   text-align: center;
   vertical-align: middle;
   display: inline-block;
-  height: 100%;
+  height: $heightitem;
+  line-height: $heightitem;
   color: #777;
 }
 
@@ -146,23 +160,38 @@ $heightdescr: 22px;
 .completed-item {
   max-width: 24px;
   min-width: 24px;
+  height: $heightitem;
+  line-height: $heightitem;
 }
 
 .progress-item {
-  max-width: 32px;
-  min-width: 24px;
+  margin: 1px;
+  padding: 2px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  max-width: 36px;
+  min-width: 32px;
   flex: 1;
-  order: 2;
-  text-align: right;
+  order: 1;
 }
 
+.progrbar-item {
+  //height: 10px
+  padding-top: 7px;
+}
 
 .percProgress {
-  height: $heightitem;
-  line-height: $heightitem;
+  padding-top: 3px;
   color: #888;
+  vertical-align: middle;
+  text-align: center;
+  cursor: pointer;
+  //line-height: $heightitem;
 }
 
+.editProgress{
+  //height: 20px;
+}
 
 .colProgress {
 }
@@ -182,13 +211,14 @@ $heightdescr: 22px;
 }
 
 .myexpired {
-  padding-top: 0px;
-  padding-bottom: 0px;
-  font-size: 12px;
+  padding-top: 5px;
+  padding-bottom: 3px;
+  font-size: 0.85rem;
+  vertical-align: middle;
 }
 
 .data-item {
-  max-width: 100px;
+  max-width: 80px;
   //min-width: 100px;
   //display: flex;
   //visibility: initial;
@@ -196,6 +226,8 @@ $heightdescr: 22px;
   color: #ccc;
   order: 1;
   flex: 1;
+  height: $heightBtn;
+  line-height: $heightBtn;
 }
 
 
@@ -217,10 +249,12 @@ $heightdescr: 22px;
 .div_descr, .div_descr_edit {
   margin: auto auto auto 2px;
   //padding: 2px;
-  min-width: 200px;
+  min-width: 100px;
   vertical-align: middle;
   text-align: left;
   color: blue !important;
+  max-height: 42px;
+  overflow: hidden;
 
   flex: 1;
   //order: 2;
@@ -236,6 +270,9 @@ $heightdescr: 22px;
 }
 
 
+.div_descr_edit {
+  max-height: 90px;
+}
 
 .div_descr:hover {
   //border-width: 1px 0px 1px 0px;

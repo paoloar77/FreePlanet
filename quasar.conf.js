@@ -59,7 +59,7 @@ module.exports = function (ctx) {
       store: 'src/store/index.ts'
     },
     // app plugins (/src/plugins)
-    plugins: ['i18n', 'axios', 'vee-validate', 'myconfig', 'local-storage', 'error-handler', 'globalroutines', 'vue-idb'],
+    plugins: ['i18n', 'axios', 'vee-validate', 'myconfig', 'local-storage', 'error-handler', 'globalroutines', 'vue-idb', 'vue2-dragula'],
     css: [
       'app.styl'
     ],
@@ -153,6 +153,7 @@ module.exports = function (ctx) {
         'QContextMenu',
         'QProgress',
         'QSlider',
+        'QPopupEdit',
       ],
       directives: [
         'Ripple',

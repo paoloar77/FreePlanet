@@ -55,7 +55,7 @@ export namespace ApiTool {
 
       return sendRequest(url, method, mydata)
         .then(res => {
-          console.log('res', res)
+          // console.log('res', res)
 
           UserStore.mutations.setResStatus(res.status)
           if (res.status === serv_constants.RIS_CODE__HTTP_FORBIDDEN_INVALID_TOKEN) {
@@ -108,7 +108,7 @@ export namespace ApiTool {
 
               const promises = myrecs.map(rec => {
                 // console.log('syncing', table, '', rec.descr)
-                let link = process.env.MONGODB_HOST + '/todos'
+                let link = String(process.env.MONGODB_HOST) + '/todos'
 
                 if (method !== 'POST')
                   link += '/' + rec._id

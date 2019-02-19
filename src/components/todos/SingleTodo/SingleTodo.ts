@@ -101,7 +101,7 @@ export default class SingleTodo extends Vue {
       this.classDescrEdit += ' titleLista-item'
     }
 
-    this.classExpiring = 'flex-item data-item'
+    this.classExpiring = 'flex-item data-item shadow-1'
     this.classExpiringEx = ''
     if (this.itemtodo.completed) {
       this.percentageProgress = 100
@@ -126,8 +126,9 @@ export default class SingleTodo extends Vue {
       mycolcl = ' highperc'
     }
 
-    if (this.itemtodo.completed)
+    if (this.itemtodo.completed) {
       mycolcl = ' percompleted'
+    }
 
     this.colProgress = mycolcl
 
@@ -250,7 +251,9 @@ export default class SingleTodo extends Vue {
         theField = <HTMLInputElement>mythis.$parent.$parent.$parent.$parent.$refs[elem]
       else
         theField = <HTMLInputElement>mythis.$refs[elem]
-      theField.focus()
+
+      if (theField !== undefined)
+        theField.focus()
       // console.log('focus()')
     }, 100)
   }
@@ -316,7 +319,7 @@ export default class SingleTodo extends Vue {
       } else {
         e.preventDefault()
         this.deselectRiga()
-        this.faiFocus('insertTask', true)
+        this.faiFocus('insertTask', false)
       }
     }
 
@@ -399,6 +402,8 @@ export default class SingleTodo extends Vue {
       return await this.setCompleted()
     } else if (action === rescodes.MenuAction.PROGRESS_BAR) {
       return await this.updatedata()
+    } else if (action === 0) {
+      this.deselectAndExitEdit()
     }
 
   }
@@ -429,5 +434,6 @@ export default class SingleTodo extends Vue {
 
     })
   }
+
 
 }
