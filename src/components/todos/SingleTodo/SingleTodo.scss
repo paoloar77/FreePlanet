@@ -48,7 +48,7 @@ $heightdescr: 20px;
   border-width: 1px 0px 1px 0px;
   border-style: solid;
   border-color: rgba(49, 68, 240, 0.6);
-  //background-color: rgba(166, 153, 240, 0.7) !important;
+  background-color: rgba(83, 132, 250, 0.44) !important;
 }
 
 
@@ -218,7 +218,7 @@ $heightdescr: 20px;
 }
 
 .data-item {
-  max-width: 80px;
+  max-width: 85px;
   //min-width: 100px;
   //display: flex;
   //visibility: initial;
@@ -246,19 +246,27 @@ $heightdescr: 20px;
 }
 */
 
+.divdescrTot {
+  display: table;
+  flex: 1;
+  height:  $heightitem;
+  vertical-align: middle;
+}
+
 .div_descr, .div_descr_edit {
-  margin: auto auto auto 2px;
+  margin: auto auto auto 0px;
   //padding: 2px;
   min-width: 100px;
-  vertical-align: middle;
   text-align: left;
   color: blue !important;
-  max-height: 42px;
   overflow: hidden;
 
-  flex: 1;
+  vertical-align: middle;
+  line-height: 120%;
+
+  //background-color: #d50000;
+
   //order: 2;
-  line-height: $heightdescr; /* same as height! */
 
   &.hide {
     display: none !important;
@@ -269,9 +277,15 @@ $heightdescr: 20px;
   }
 }
 
+.div_descr {
+  display: table-cell;
+
+}
+
 
 .div_descr_edit {
   max-height: 90px;
+  line-height: $heightitem;
 }
 
 .div_descr:hover {

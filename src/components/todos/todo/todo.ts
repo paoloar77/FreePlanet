@@ -52,6 +52,7 @@ export default class Todo extends Vue {
   public itemdrag: any = {}
   public service: any
   public actualMaxPosition: number = 15
+  public scrollable = true
 
   fieldtochange: String [] = ['descr', 'completed', 'category', 'expiring_at', 'priority', 'id_prev', 'id_next', 'pos', 'enableExpiring', 'progress']
 
@@ -444,7 +445,33 @@ export default class Todo extends Vue {
       this.onEnd(itemdragend)
     })
 
+    let mythis = this
+
+    $service.eventBus.$on('drag', function (el, source) {
+      console.log('+++ DRAG')
+      mythis.scrollable = false
+    })
+    $service.eventBus.$on('drop', function (el, source) {
+      console.log('+++ DROP')
+      mythis.scrollable = true
+    })
+
+
     this.load()
+  }
+
+  mounted() {
+
+    let mythis = this
+    if (window) {
+      window.addEventListener('touchmove', function (e) {
+        console.log('touchmove')
+        if (!mythis.scrollable) {
+          e.preventDefault()
+        }
+      }, { passive: false })
+    }
+
   }
 
   setarrPriority() {

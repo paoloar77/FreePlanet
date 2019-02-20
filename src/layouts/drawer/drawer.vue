@@ -23,9 +23,9 @@
             <small>- Small</small>
         </footer>-->
 
-        <div class="fixed-bottom text-center light text-italic">
-            Powered by Perseo
-        </div>
+        <!--<div class="fixed-bottom text-center light text-italic">-->
+            <!--Powered by Perseo-->
+        <!--</div>-->
 
     </div>
 </template>

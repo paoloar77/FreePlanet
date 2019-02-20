@@ -95,7 +95,7 @@ export default class SingleTodo extends Vue {
     // this.classCompleted = 'completed-item'
     this.classCompleted = 'completed-item-popover'
     this.classDescr = 'flex-item div_descr show donotdrag'
-    this.classDescrEdit = 'flex-item div_descr_edit'
+    this.classDescrEdit = 'flex-item div_descr_edit donotdrag'
     if (!this.isTodo()) {
       this.classDescr += ' titleLista-item'
       this.classDescrEdit += ' titleLista-item'

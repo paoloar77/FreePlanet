@@ -2,9 +2,9 @@
     <div :class="getClassRow()" @click="clickRow">
         <div v-if="isTodo()" class="flex-item counter-item dragula-container">{{itemtodo.pos}}</div>
         <!--<div v-if="isFirst">-->
-            <!--<q-context-menu ref="contextMenu">-->
-                <!--<SubMenus :menuPopupTodo="menuPopupTodo" :itemtodo="itemtodo" @clickMenu="clickMenu" @setPriority="setPriority"></SubMenus>-->
-            <!--</q-context-menu>-->
+        <!--<q-context-menu ref="contextMenu">-->
+        <!--<SubMenus :menuPopupTodo="menuPopupTodo" :itemtodo="itemtodo" @clickMenu="clickMenu" @setPriority="setPriority"></SubMenus>-->
+        <!--</q-context-menu>-->
         <!--</div>-->
 
         <div v-if="isTodo()" class="flex-item completed-item">
@@ -15,16 +15,21 @@
             </q-btn>
         </div>
 
-        <q-input v-if="sel && !itemtodo.completed" hide-underline type="textarea" ref="inputdescr" v-model.trim="precDescr"
-                 :class="classDescrEdit" :max-height="100"
-                 @keydown="keyDownArea" v-on:keydown.esc="exitEdit" @blur="exitEdit(true)" @click="editTodo()"/>
+        <div class="flex-item donotdrag divdescrTot">
+            <q-input v-if="sel && !itemtodo.completed" hide-underline type="textarea" ref="inputdescr"
+                     v-model.trim="precDescr"
+                     :class="classDescrEdit" :max-height="100"
+                     @keydown="keyDownArea" v-on:keydown.esc="exitEdit" @blur="exitEdit(true)" @click="editTodo()"/>
 
-        <div v-else :class="classDescr"
-             @keydown="keyDownRow">{{itemtodo.descr}}</div>
+            <div v-else :class="classDescr"
+                 @keydown="keyDownRow">{{itemtodo.descr}}
+            </div>
+
+        </div>
 
         <!--<q-field dark v-else :label="itemtodo.descr"-->
-                 <!--:class="classDescr"-->
-                 <!--@keydown="keyDownRow"></q-field>-->
+        <!--:class="classDescr"-->
+        <!--@keydown="keyDownRow"></q-field>-->
 
         <!--:after="[{icon: 'arrow_forward', content: true, handler () {}}]"-->
 
@@ -42,7 +47,7 @@
             <div :class="percProgress">
                 {{percentageProgress}}%
                 <q-popup-edit v-model="itemtodo.progress" title="Progress" buttons class="editProgress">
-                    <q-input type="number" v-model="itemtodo.progress" :max="100" :min="0" />
+                    <q-input type="number" v-model="itemtodo.progress" :max="100" :min="0"/>
                 </q-popup-edit>
 
             </div>
@@ -55,16 +60,17 @@
                     v-model="itemtodo.expiring_at"
                     class="myexpired"
                     format="DD/MM/YY"
-                    @change="val => { model = val }" >
+                    @change="val => { model = val }">
 
             </q-datetime>
         </div>
-        <div v-if="isTodo()" class="flex-item pos-item item-drag " @mouseup.left="mouseUp" @mousedown="clickRiga">
+        <div v-if="isTodo()" class="flex-item pos-item " @mouseup.left="mouseUp" @mousedown="clickRiga">
             <q-btn push
                    :class="clButtPopover"
-                   icon="menu" >
+                   icon="menu">
                 <q-popover v-if="sel" self="top right">
-                    <SubMenus :menuPopupTodo="menuPopupTodo" :itemtodo="itemtodo" @clickMenu="clickMenu" @setPriority="setPriority"></SubMenus>
+                    <SubMenus :menuPopupTodo="menuPopupTodo" :itemtodo="itemtodo" @clickMenu="clickMenu"
+                              @setPriority="setPriority"></SubMenus>
                 </q-popover>
 
             </q-btn>
