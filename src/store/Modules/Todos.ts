@@ -54,8 +54,13 @@ namespace Mutations {
     return -1
   }
 
-  function createNewItem(state: ITodosState, myitem: ITodo) {
-    state.todos.push(myitem)
+  function createNewItem(state: ITodosState, { objtodo, atfirst }) {
+    console.log('atfirst', atfirst)
+    if (atfirst)
+      state.todos.unshift(objtodo)
+    else
+      state.todos.push(objtodo)
+
     Todos.mutations.setTodos_changed()
   }
 

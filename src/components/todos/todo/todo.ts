@@ -32,7 +32,8 @@ export default class Todo extends Vue {
 
   filter: boolean = false
   title: string = ''
-  todo: string = ''
+  todotop: string = ''
+  todobottom: string = ''
   todos_arr: ITodo[] = []
   prevRecords: ITodo[] = []
   drag: boolean = true
@@ -50,6 +51,7 @@ export default class Todo extends Vue {
   public dragging: number
   public itemdrag: any = {}
   public service: any
+  public actualMaxPosition: number = 15
 
   fieldtochange: String [] = ['descr', 'completed', 'category', 'expiring_at', 'priority', 'id_prev', 'id_next', 'pos', 'enableExpiring', 'progress']
 
@@ -84,16 +86,23 @@ export default class Todo extends Vue {
     })
   }
 
+  // Computed:
   get todos_changed() {
     return Todos.state.todos_changed
   }
 
+  // Computed:
   get reload_fromServer() {
     return Todos.state.reload_fromServer
   }
 
   set reload_fromServer(value: number) {
     Todos.state.reload_fromServer = value
+  }
+
+  // Computed:
+  get showingDataTodo() {
+    return this.todos_arr.slice(0, this.actualMaxPosition)
   }
 
 
@@ -195,9 +204,6 @@ export default class Todo extends Vue {
       return null
   }
 
-  getFirstelem() {
-    return this.todos_arr[this.todos_arr.length - 1]
-  }
 
   onStart() {
 
@@ -306,11 +312,11 @@ export default class Todo extends Vue {
   async onEnd(itemdragend) {
     console.log('3) newindex=', itemdragend.newIndex, 'oldindex=', itemdragend.oldIndex)
 
-    // MOVE
-    this.todos_arr.splice(itemdragend.newIndex, 0, this.todos_arr.splice(itemdragend.oldIndex, 1)[0])
-
     if (itemdragend.newIndex === itemdragend.oldIndex)
       return // If nothing change, exit
+
+    // MOVE
+    this.todos_arr.splice(itemdragend.newIndex, 0, this.todos_arr.splice(itemdragend.oldIndex, 1)[0])
 
     let myobj = this.getelem(itemdragend.newIndex)
 
@@ -385,17 +391,38 @@ export default class Todo extends Vue {
 
   created() {
     const $service = this.$dragula.$service
-    $service.options('todos_arr', { direction: 'vertical' })
+    $service.options('first',
+      {
+        isContainer: function (el) {
+          return el.classList.contains('dragula-container')
+        },
+        moves: function (el, source, handle, sibling) {
+          console.log('moves')
+          return !el.classList.contains('donotdrag') // elements are always draggable by default
+        },
+        accepts: function (el, target, source, sibling) {
+          // console.log('accepts dragging '+ el.id + ' from ' + source.id + ' to ' + target.id)
+          return true // elements can be dropped in any of the `containers` by default
+        },
+        invalid: function (el, handle) {
+          console.log('invalid')
+          return el.classList.contains('donotdrag') // don't prevent any drags from initiating by default
+        },
+        direction: 'vertical'
+      })
     $service.eventBus.$on('dragend', (args) => {
+
+      // this.dragula = Dragula(containers, {
+      //   moves: function (el, container, handle) {
+      //     return handle.classList.contains('handle')
+      //   }
+      // })
+
 
       let itemdragend = {
         newIndex: this.getElementIndex(args.el),
         oldIndex: this.getElementOldIndex(args.el)
       }
-      // console.log('args', args)
-
-      // console.log('newIndex', itemdragend.newIndex)
-      // console.log('oldIndex', itemdragend.oldIndex)
 
       this.onEnd(itemdragend)
     })
@@ -495,8 +522,12 @@ export default class Todo extends Vue {
     return localStorage.getItem(rescodes.localStorage.userId) !== ''
   }
 
-  async insertTodo() {
-    if (this.todo.trim() === '')
+  async insertTodo(atfirst: boolean = false) {
+    let descr = this.todobottom.trim()
+    if (atfirst)
+      descr = this.todotop.trim()
+
+    if (descr === '')
       return
 
     if (!this.isRegistered()) {
@@ -507,37 +538,55 @@ export default class Todo extends Vue {
 
     const objtodo = this.initcat()
 
-    objtodo.descr = this.todo
+    objtodo.descr = descr
     objtodo.category = this.getCategory()
 
-    const lastelem: ITodo = this.getLastList()
-    objtodo.id_prev = (lastelem !== null) ? lastelem._id : rescodes.LIST_START
-    objtodo.id_next = rescodes.LIST_END
-    objtodo.pos = (lastelem !== null) ? lastelem.pos + 1 : 1
+    let elemtochange: ITodo
+
+    if (atfirst) {
+      elemtochange = this.getFirstList()
+      objtodo.id_prev = rescodes.LIST_START
+      objtodo.id_next = (elemtochange !== null) ? elemtochange._id : rescodes.LIST_END
+      objtodo.pos = (elemtochange !== null) ? elemtochange.pos - 1 : 1
+    } else {
+      elemtochange = this.getLastList()
+      objtodo.id_prev = (elemtochange !== null) ? elemtochange._id : rescodes.LIST_START
+      objtodo.id_next = rescodes.LIST_END
+      objtodo.pos = (elemtochange !== null) ? elemtochange.pos + 1 : 1
+    }
     objtodo.modified = false
+
+    console.log('objtodo', objtodo)
 
     if (objtodo.userId === undefined) {
       this.$q.notify(this.$t('todo.usernotdefined'))
       return
     }
 
+    // Create record in Memory
+    Todos.mutations.createNewItem({ objtodo, atfirst })
+
     // 1) Insert into the IndexedDb
     const id = await globalroutines(this, 'write', 'todos', objtodo)
+
     // update also the last elem
-    if (lastelem !== null) {
-      lastelem.id_next = id
-      // lastelem.modified = true
-      // console.log('calling MODIFY 4', lastelem)
+    if (atfirst) {
+      if (elemtochange !== null) {
+        elemtochange.id_prev = id
+      }
+    } else {
+      if (elemtochange !== null) {
+        elemtochange.id_next = id
+      }
     }
-
-    // Create record in Memory
-    Todos.mutations.createNewItem(objtodo)
-
-    // Modify the record above to the new last
-    await this.modify(lastelem, false)
+    // Modify the other record
+    await this.modify(elemtochange, false)
 
     // empty the field
-    this.todo = ''
+    if (atfirst)
+      this.todotop = ''
+    else
+      this.todobottom = ''
 
     this.updatetable(false, 'insertTodo')
 
@@ -760,7 +809,7 @@ export default class Todo extends Vue {
     return x = (typeof x !== 'undefined' && x instanceof Array) ? x : []
   }
 
-  getFirstList(arrlist) {
+  getFirstList(arrlist = this.todos_arr) {
     let elem: ITodo
     for (elem of arrlist) {
       if (elem.id_prev === rescodes.LIST_START) {
@@ -913,7 +962,7 @@ export default class Todo extends Vue {
 
 
         if (miorec.modified) {
-          // console.log('Todo MODIFICATO! ', miorec.descr, 'SALVALO SULLA IndexedDB todos')
+          console.log('Todo MODIFICATO! ', miorec.descr, miorec.pos, 'SALVALO SULLA IndexedDB todos')
           miorec.modify_at = new Date().getDate()
           miorec.modified = false
 
@@ -1003,6 +1052,14 @@ export default class Todo extends Vue {
 
     }
   */
+
+  loadMoreTodo(index, done) {
+    setTimeout(() => {
+      this.actualMaxPosition += 15
+      done()
+    }, 100)
+
+  }
 
 
 }

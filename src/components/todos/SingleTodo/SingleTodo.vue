@@ -1,6 +1,6 @@
 <template>
     <div :class="getClassRow()" @click="clickRow">
-        <div v-if="isTodo()" class="flex-item counter-item">{{itemtodo.pos}}</div>
+        <div v-if="isTodo()" class="flex-item counter-item dragula-container">{{itemtodo.pos}}</div>
         <!--<div v-if="isFirst">-->
             <!--<q-context-menu ref="contextMenu">-->
                 <!--<SubMenus :menuPopupTodo="menuPopupTodo" :itemtodo="itemtodo" @clickMenu="clickMenu" @setPriority="setPriority"></SubMenus>-->
@@ -59,7 +59,7 @@
 
             </q-datetime>
         </div>
-        <div v-if="isTodo()" class="flex-item pos-item item-drag" @mouseup.left="mouseUp" @mousedown="clickRiga">
+        <div v-if="isTodo()" class="flex-item pos-item item-drag " @mouseup.left="mouseUp" @mousedown="clickRiga">
             <q-btn push
                    :class="clButtPopover"
                    icon="menu" >

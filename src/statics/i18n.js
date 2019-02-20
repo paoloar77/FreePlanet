@@ -108,7 +108,8 @@ const messages = {
     },
     todo: {
       titleprioritymenu: 'Priorità:',
-      insert: 'Inserisci il Task',
+      inserttop: 'Inserisci il Task in alto',
+      insertbottom: 'Inserisci il Task in basso',
       edit: 'Descrizione Task:',
       completed: 'Completati',
       usernotdefined: 'Attenzione, occorre essere Loggati per poter aggiungere un Todo'
@@ -234,7 +235,8 @@ const messages = {
     },
     todo: {
       titleprioritymenu: 'Prioridad:',
-      insert: 'Ingrese una nueva Tarea',
+      inserttop: 'Ingrese una nueva Tarea arriba',
+      insertbottom: 'Ingrese una nueva Tarea abajo',
       edit: 'Descripción Tarea:',
       completed: 'Completados',
       usernotdefined: 'Atención, debes iniciar sesión para agregar una Tarea'
@@ -360,7 +362,8 @@ const messages = {
     },
     todo: {
       titleprioritymenu: 'Priority:',
-      insert: 'Insert Task',
+      inserttop: 'Insert Task at the top',
+      insertbottom: 'Insert Task at the bottom',
       edit: 'Task Description:',
       completed: 'Completed',
       usernotdefined: 'Attention, you need to be Signed In to add a new Task'
