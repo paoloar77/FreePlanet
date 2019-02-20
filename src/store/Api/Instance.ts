@@ -1,7 +1,7 @@
 import axios, { AxiosInstance, AxiosPromise, AxiosResponse, AxiosInterceptorManager } from 'axios'
 // import LoginModule from '../Modules/Auth/LoginStore'
 import router from '@router'
-import {clone} from 'lodash'
+import { clone } from 'lodash'
 import * as Types from './ApiTypes'
 import { GlobalStore, UserStore } from '@store'
 import { rescodes } from '@src/store/Modules/rescodes'
@@ -21,8 +21,10 @@ axiosInstance.interceptors.response.use(
     return response
   },
   (error) => {
-    console.log(error.response.status)
-    console.log('Request Error: ', error.response)
+    if (error.response) {
+      console.log(error.response.status)
+      console.log('Request Error: ', error.response)
+    }
     return Promise.reject(error)
   }
 )
@@ -48,11 +50,12 @@ async function Request(type: string, path: string, payload: any, setAuthToken?: 
         }
       })
       ricevuto = true
+      console.log('response', response)
       // console.log(new Types.AxiosSuccess(response.data, response.status))
 
       const setAuthToken = (path === '/updatepwd')
 
-      if (response.status === 200) {
+      if (response && (response.status === 200)) {
         let x_auth_token = ''
         try {
           if (setAuthToken || (path === '/users/login')) {
@@ -87,7 +90,8 @@ async function Request(type: string, path: string, payload: any, setAuthToken?: 
       // @ts-ignore
       response = await axiosInstance[type](path, {
         params: payload,
-        headers: {'Content-Type': 'application/json',
+        headers: {
+          'Content-Type': 'application/json',
           'x-auth': UserStore.state.x_auth_token
         }
       })
@@ -104,18 +108,28 @@ async function Request(type: string, path: string, payload: any, setAuthToken?: 
   }
   catch (error) {
     if (process.env.DEV) {
-      console.log('ERROR using', path, error, 'ricevuto=', ricevuto)
+      console.log('ERROR using', path)
+      // console.log('Error received: ', error)
+      // console.log('ricevuto=', ricevuto)
+      console.log('error.response=', error.response)
     }
+    let mycode = 0
     if (!ricevuto) {
+      mycode = rescodes.ERR_SERVERFETCH
       UserStore.mutations.setServerCode(rescodes.ERR_SERVERFETCH)
     } else {
+      mycode = rescodes.ERR_GENERICO
       UserStore.mutations.setServerCode(rescodes.ERR_GENERICO)
     }
 
     if (error.response) {
-      return Promise.reject(new Types.AxiosError(error.response.status, error.response.data))
+      if (error.response.data && error.response.data.code) {
+        mycode = error.response.data.code
+        UserStore.mutations.setServerCode(mycode)
+      }
+      return Promise.reject(new Types.AxiosError(error.response.status, error.response.data, error.response.data.code))
     } else {
-      return Promise.reject(new Types.AxiosError(0))
+      return Promise.reject(new Types.AxiosError(0, null, mycode, error))
     }
   }
 }

@@ -14,6 +14,7 @@ export interface ITodo {
   id_next?: string,
   modified?: boolean,
   pos?: number,
+  order?: number,
   progress?: number
 }
 

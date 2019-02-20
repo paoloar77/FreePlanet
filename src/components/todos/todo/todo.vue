@@ -12,10 +12,13 @@
             <div class="drag">
                 <!--<draggable v-model="todos_arr" :options="{draggable:'.myitemdrag'}"-->
                            <!--@start="onStart" @end="onEnd" class="dragArea">-->
-                    <transition-group :name="mytypetransgroup">
-                        <div :id="getmyid(mytodo._id)" v-for="(mytodo, index) in todos_arr" :key="mytodo._id"  class="myitemdrag"
-                             draggable="true" @dragstart="dragStart(index, $event)" @dragover.prevent @dragenter="dragEnter(index)"
-                             @dragleave="dragLeave(index)" @dragend="dragEnd" @drop="dragFinish(index, $event)" >
+                    <!--<transition-group :name="mytypetransgroup">-->
+                        <!--<div :id="getmyid(mytodo._id)" v-for="(mytodo, index) in todos_arr" :key="mytodo._id"  class="myitemdrag"-->
+                             <!--draggable="true" @dragstart="dragStart(index, $event)" @dragover.prevent @dragenter="dragEnter(index)"-->
+                             <!--@dragleave="dragLeave(index)" @dragend="dragEnd" @drop="dragFinish(index, $event)" >-->
+                    <div class="container" v-dragula="todos_arr" drake="first">
+                        <div :id="getmyid(mytodo._id)" :index="index" v-for="(mytodo, index) in todos_arr" :key="mytodo._id"  class="myitemdrag">
+
 
                             <div v-if="(prior !== mytodo.priority) && !mytodo.completed" :class="getTitlePriority(mytodo.priority)">
                                 <label>{{getPriorityByInd(mytodo.priority)}}</label>
@@ -28,11 +31,12 @@
                                         @deselectAllRows="deselectAllRows" @onEnd="onEnd"
                                         :itemtodo='mytodo' />
 
-                            <div :name="`REF${index}`" class="divdrag non-draggato"></div>
+                            <!--<div :name="`REF${index}`" class="divdrag non-draggato"></div>-->
 
                             <div style="display: none">{{ prior = mytodo.priority, priorcomplet = mytodo.completed }}</div>
                         </div>
-                    </transition-group>
+                    </div>
+                    <!--</transition-group>-->
                 <!--</draggable>-->
             </div>
 

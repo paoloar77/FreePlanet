@@ -1,6 +1,6 @@
 <template>
     <div :class="getClassRow()" @click="clickRow">
-        <!--<div v-if="isTodo()" class="flex-item counter-item">{{itemtodo.counter}}</div>-->
+        <div v-if="isTodo()" class="flex-item counter-item">{{itemtodo.pos}}</div>
         <!--<div v-if="isFirst">-->
             <!--<q-context-menu ref="contextMenu">-->
                 <!--<SubMenus :menuPopupTodo="menuPopupTodo" :itemtodo="itemtodo" @clickMenu="clickMenu" @setPriority="setPriority"></SubMenus>-->

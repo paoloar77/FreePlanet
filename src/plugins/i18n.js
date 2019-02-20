@@ -6,20 +6,22 @@ import { rescodes } from "../store/Modules/rescodes";
 export default ({ app, store, Vue }) => {
   Vue.use(VueI18n);
   // Vue.config.lang = process.env.LANG_DEFAULT;
-  let mylang = localStorage.getItem(rescodes.localStorage.lang)
 
-  if ((navigator) && (mylang === null)) {
+  let mylang = rescodes.getItemLS(rescodes.localStorage.lang)
+
+  if ((navigator) && (mylang === '')) {
     mylang = navigator.language
     console.log(`LANG NAVIGATOR ${mylang}`)
   }
 
-  if (mylang === '') {
+  if (mylang === '')
     mylang = process.env.LANG_DEFAULT;
-  }
+
   if (mylang.toLowerCase() === 'es-es')
     mylang = 'esEs'
 
-  console.log('MYLANG=', mylang)
+  console.log('MYLANG2=', mylang)
+  console.log('process.env.LANG_DEFAULT=', process.env.LANG_DEFAULT)
   Vue.config.lang = mylang
 
   // console.log("PLUGINS INIT....");

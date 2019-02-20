@@ -53,9 +53,11 @@ export default class App extends Vue {
         .then((loadstorage) => {
           if (loadstorage) {
 
-            if (UserStore.state.lang !== null) {
+            if (UserStore.state.lang !== '') {
               console.log('SETLOCALE :', this.$i18n.locale)
               this.$i18n.locale = UserStore.state.lang    // Set Lang
+            } else {
+              UserStore.mutations.setlang(this.$i18n.locale)
             }
             console.log('lang CARICATO:', this.$i18n.locale)
 

@@ -151,6 +151,7 @@ export default class SingleTodo extends Vue {
     // console.log('classDescrEdit = ', this.classDescrEdit)
     // console.log('classDescr', this.classDescr)
 
+    // console.log('UserStore.state.lang', UserStore.state.lang)
     if (this.isTodo())
       this.menuPopupTodo = rescodes.menuPopupTodo[UserStore.state.lang]
     else {

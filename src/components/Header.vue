@@ -240,8 +240,8 @@
       let my = this.getLangAtt()
       // this.$q.notify('prima: ' + String(my))
 
-      let mylang = localStorage.getItem(rescodes.localStorage.lang)
-      if (mylang === null)
+      let mylang = rescodes.getItemLS(rescodes.localStorage.lang)
+      if (mylang === '')
       {
         if (navigator) {
           mylang = navigator.language
@@ -252,7 +252,7 @@
 
         console.log('IMPOSTA LANGMY', mylang)
       }
-      if (mylang !== null) {
+      if (mylang !== '') {
         if (mylang.toLowerCase() === 'enus')
           mylang = 'enUs'
         if ((mylang.toLowerCase() === 'eses') || (mylang.toLowerCase() === 'es-es'))

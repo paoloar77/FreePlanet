@@ -13,11 +13,10 @@ import objectId from '../../../js/objectId.js'
 
 import _ from 'lodash'
 
-import draggable from 'vuedraggable'
 
-import VueIdb from 'vue-idb'
+// _.cloneDeep(  Per clonare un oggetto
 
-// import 'statics/css/dragula.css'
+import '../../../statics/css/dragula.css'
 
 import globalroutines from '../../../globalroutines/index'
 
@@ -26,7 +25,7 @@ import Api from '@api'
 
 @Component({
 
-  components: { SingleTodo, draggable }
+  components: { SingleTodo }
 })
 export default class Todo extends Vue {
   $q: any
@@ -50,6 +49,7 @@ export default class Todo extends Vue {
   loadDone: boolean = false
   public dragging: number
   public itemdrag: any = {}
+  public service: any
 
   fieldtochange: String [] = ['descr', 'completed', 'category', 'expiring_at', 'priority', 'id_prev', 'id_next', 'pos', 'enableExpiring', 'progress']
 
@@ -205,7 +205,7 @@ export default class Todo extends Vue {
     this.itemDragStart = null
   }
 
-  updateLinkedList(init: boolean, arr: ITodo[] = this.todos_arr) {
+  updateLinkedList(drag: boolean, init: boolean, arr: ITodo[] = this.todos_arr) {
 
     // console.log('updateLinkedList', this.todos_arr)
 
@@ -232,15 +232,17 @@ export default class Todo extends Vue {
 
       // elem.modified = ((elem.id_prev !== idprev) || (elem.id_next !== idnext) || (elem.pos !== pos)) ? true : elem.modified
       // elem.modified = elem.pos !== pos ? true : elem.modified
-      // if (elem.modified)
-      //   console.log('MODIFICATO QUIIIIIIIIIIIIIIIIIIII', elem.id_prev, idprev, elem.id_next, idnext, elem.pos, pos)
 
       elem.id_prev = idprev
       elem.id_next = idnext
-      if (elem.pos !== pos) {
+      if ((elem.pos !== pos) || (drag && (elem.order !== elem.pos))) {
         elem.modified = true
         elem.pos = pos
       }
+
+      // if (elem.modified)
+      //   console.log('MODIFICATO QUIIIIIIIIIIIIIIIIIIII', elem.id_prev, idprev, elem.id_next, idnext, elem.pos, pos)
+
       if (init) {
         elem.modified = false
       }
@@ -336,7 +338,7 @@ export default class Todo extends Vue {
       }
     }
 
-    this.updateLinkedList(false)
+    this.updateLinkedList(false, false)
 
     // Updated only elements modified
     await this.updateModifyRecords(true)
@@ -363,9 +365,42 @@ export default class Todo extends Vue {
       return await this.updatetable(refresh, 'updateModifyRecords')
   }
 
+  async updateAll(drag?: boolean) {
+    this.updateLinkedList(drag, false)
 
-  async created() {
-    await this.load()
+    // Updated only elements modified
+    await this.updateModifyRecords(true)
+
+    await this.updatetable(false, 'onEnd')
+
+  }
+
+  private getElementIndex(el: any) {
+    return [].slice.call(el.parentElement.children).indexOf(el)
+  }
+
+  private getElementOldIndex(el: any) {
+    return el.attributes['index'].value
+  }
+
+  created() {
+    const $service = this.$dragula.$service
+    $service.options('todos_arr', { direction: 'vertical' })
+    $service.eventBus.$on('dragend', (args) => {
+
+      let itemdragend = {
+        newIndex: this.getElementIndex(args.el),
+        oldIndex: this.getElementOldIndex(args.el)
+      }
+      // console.log('args', args)
+
+      // console.log('newIndex', itemdragend.newIndex)
+      // console.log('oldIndex', itemdragend.oldIndex)
+
+      this.onEnd(itemdragend)
+    })
+
+    this.load()
   }
 
   setarrPriority() {
@@ -688,6 +723,10 @@ export default class Todo extends Vue {
 
     this.prevRecords = [...this.todos_arr]
 
+    // To cloning an array...
+    // this.prevRecords = _.cloneDeep(this.todos_arr)
+
+
     return await Todos.actions.getTodosByCategory(this.getCategory())
       .then(arrris => {
 
@@ -697,7 +736,7 @@ export default class Todo extends Vue {
 
         arrtemp = _.orderBy(arrtemp, ['completed', 'priority', 'pos'], ['asc', 'desc', 'asc'])
 
-        this.updateLinkedList(true, arrtemp)
+        this.updateLinkedList(false, true, arrtemp)
 
         // If changed the position, then set modified
         arrtemp.forEach(itemNew => {
@@ -874,7 +913,7 @@ export default class Todo extends Vue {
 
 
         if (miorec.modified) {
-          console.log('Todo MODIFICATO! ', miorec.descr, 'SALVALO SULLA IndexedDB todos')
+          // console.log('Todo MODIFICATO! ', miorec.descr, 'SALVALO SULLA IndexedDB todos')
           miorec.modify_at = new Date().getDate()
           miorec.modified = false
 
@@ -920,47 +959,50 @@ export default class Todo extends Vue {
     Todos.actions.waitAndcheckPendingMsg()
   }
 
-  dragStart(which, ev) {
-    this.itemdrag.indTemp = which
-    console.log('1) DRAG INIZIO: ', which)
-    this.itemdrag.oldIndex = which
-    this.dragging = which
-  }
-
-  public randomHexColor() {
-    return Math.random().toString(16).slice(2, 8)
-  }
-
-  dragEnter(index, ev) {
-    if (this.itemdrag.indTemp !== index) {
-      console.log(`[${index}] DRAG ENTER`)
-      this.itemdrag.indTemp = index
-
-      this.getItemDrag(index).addClass('draggato2').removeClass('non-draggato')
+  /*
+    dragStart(which, ev) {
+      this.itemdrag.indTemp = which
+      console.log('1) DRAG INIZIO: ', which)
+      this.itemdrag.oldIndex = which
+      this.dragging = which
     }
-  }
 
-  getItemDrag(index) {
-    return $('div[name=REF' + index + ']')
-  }
-
-  dragLeave(index, ev) {
-    if (this.itemdrag.indTemp !== index) {
-      this.getItemDrag(index).addClass('non-draggato').removeClass('draggato')
+    public randomHexColor() {
+      return Math.random().toString(16).slice(2, 8)
     }
-  }
 
-  dragEnd(ev) {
-    this.dragging = -1
-  }
+    dragEnter(index, ev) {
+      if (this.itemdrag.indTemp !== index) {
+        console.log(`[${index}] DRAG ENTER`)
+        this.itemdrag.indTemp = index
 
-  dragFinish(to, ev) {
-    this.itemdrag.indTemp = -1
-    this.getItemDrag(to).addClass('non-draggato').removeClass('draggato')
-    console.log('2) DRAG FINE: ', to)
-    this.itemdrag.newIndex = to
-    this.onEnd(this.itemdrag)
+        this.getItemDrag(index).addClass('draggato2').removeClass('non-draggato')
+      }
+    }
 
-  }
+    getItemDrag(index) {
+      return $('div[name=REF' + index + ']')
+    }
+
+    dragLeave(index, ev) {
+      if (this.itemdrag.indTemp !== index) {
+        this.getItemDrag(index).addClass('non-draggato').removeClass('draggato')
+      }
+    }
+
+    dragEnd(ev) {
+      this.dragging = -1
+    }
+
+    dragFinish(to, ev) {
+      this.itemdrag.indTemp = -1
+      this.getItemDrag(to).addClass('non-draggato').removeClass('draggato')
+      console.log('2) DRAG FINE: ', to)
+      this.itemdrag.newIndex = to
+      this.onEnd(this.itemdrag)
+
+    }
+  */
+
 
 }

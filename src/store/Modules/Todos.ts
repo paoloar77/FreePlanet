@@ -247,7 +247,7 @@ namespace Actions {
         return res
       })
       .catch(error => {
-        console.log('error=', error)
+        console.log('error dbLoadTodo', error)
         UserStore.mutations.setErrorCatch(error)
         return error
       })

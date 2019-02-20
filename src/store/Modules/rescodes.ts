@@ -21,7 +21,7 @@ export const rescodes = {
     userId: 'uid',
     token: 'tk',
     username: 'uname',
-    lang:'lg'
+    lang: 'lg'
   },
 
   Todos: {
@@ -247,6 +247,14 @@ export const rescodes = {
 
   jsonCopy(src) {
     return JSON.parse(JSON.stringify(src))
+  },
+
+  getItemLS(item) {
+    let ris = localStorage.getItem(item)
+    if ((ris == null) || (ris === '') || (ris === 'null'))
+      ris = ''
+
+    return ris
   }
 
 

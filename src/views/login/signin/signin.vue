@@ -52,7 +52,7 @@
                 </q-card-main>
 
                 <div align="center">
-                    <q-btn rounded size="lg" color="primary" @click="submit" :disable="$v.$error">{{$t('login.enter')}}
+                    <q-btn rounded size="lg" color="primary" @click="submit" :disable="$v.$error || iswaitingforRes">{{$t('login.enter')}}
                     </q-btn>
                 </div>
             </form>

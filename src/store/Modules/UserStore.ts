@@ -10,6 +10,7 @@ import { GlobalStore, UserStore, Todos } from '@store'
 import globalroutines from './../../globalroutines/index'
 
 import translate from './../../globalroutines/util'
+import * as Types from "@src/store/Api/ApiTypes"
 
 const bcrypt = require('bcryptjs')
 
@@ -150,11 +151,11 @@ namespace Mutations {
   }
 
 
-  function setErrorCatch(state: IUserState, err: number) {
+  function setErrorCatch(state: IUserState, axerr: Types.AxiosError) {
     if (state.servercode !== rescodes.ERR_SERVERFETCH) {
-      state.servercode = err
+      state.servercode = axerr.getCode()
     }
-    console.log('Err catch: (servercode:', err, ')')
+    console.log('Err catch: (servercode:', axerr.getCode(), axerr.getMsgError(), ')')
   }
 
   function getMsgError(state: IUserState, err: number) {
@@ -224,9 +225,9 @@ namespace Actions {
       .then(res => {
         return { code: res.data.code, msg: res.data.msg }
       })
-      .catch((error) => {
+      .catch((error: Types.AxiosError) => {
         UserStore.mutations.setErrorCatch(error)
-        return { code: UserStore.getters.getServerCode, msg: error }
+        return { code: UserStore.getters.getServerCode, msg: error.getMsgError() }
       })
 
   }
@@ -351,9 +352,9 @@ namespace Actions {
   }
 
   async function signin(context, authData: ISigninOptions) {
-    console.log('LOGIN ')
+    console.log('LOGIN signin')
 
-    console.log('MYLANG = ' + state.lang)
+    // console.log('MYLANG = ' + state.lang)
 
     let sub = null
 
@@ -361,6 +362,7 @@ namespace Actions {
       if ('serviceWorker' in navigator) {
         sub = await navigator.serviceWorker.ready
           .then(function (swreg) {
+            console.log('swreg')
             let sub = swreg.pushManager.getSubscription()
             return sub
           })
@@ -388,19 +390,19 @@ namespace Actions {
       options
     }
 
+    // console.log('PASSO 4')
+
     console.log(usertosend)
 
     Mutations.mutations.setServerCode(rescodes.CALLING)
 
     let myres: any
 
+    console.log('Api.SendReq')
+
     return Api.SendReq('/users/login', 'POST', usertosend, true)
       .then(res => {
         myres = res
-        if (myres.data.code === serv_constants.RIS_CODE_LOGIN_ERR) {
-          Mutations.mutations.setServerCode(myres.data.code)
-          return myres
-        }
 
         if (myres.status !== 200) {
           return Promise.reject(rescodes.ERR_GENERICO)
@@ -512,7 +514,7 @@ namespace Actions {
       // console.log('*** autologin_FromLocalStorage ***')
       // INIT
 
-      UserStore.state.lang = localStorage.getItem(rescodes.localStorage.lang)
+      UserStore.state.lang = rescodes.getItemLS(rescodes.localStorage.lang)
 
       const token = localStorage.getItem(rescodes.localStorage.token)
       if (!token) {
