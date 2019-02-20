@@ -253,9 +253,9 @@ namespace Actions {
     console.log('clearDataAfterLogout')
 
     // Clear all data from the IndexedDB
-    await allTables.forEach(table => {
-      globalroutines(null, 'clearalldata', table, null)
-    })
+    for (const table of allTables){
+      await globalroutines(null, 'clearalldata', table, null)
+    }
 
     if ('serviceWorker' in navigator) {
       // REMOVE ALL SUBSCRIPTION

@@ -2,6 +2,7 @@ import Vue from 'vue'
 import { Component, Watch } from 'vue-property-decorator'
 
 import { ICategory } from '@src/model'
+import globalroutines from "@src/globalroutines"
 
 @Component({
 })
@@ -116,7 +117,7 @@ export default class Tabledata extends Vue {
 
   async deleteCategory(myarrobj) {
 
-    await myarrobj.forEach(myobj => {
+    for (const myobj of myarrobj) {
 
       if (myobj.id !== undefined) {
         console.log('KEY = ', myobj.id)
@@ -136,7 +137,7 @@ export default class Tabledata extends Vue {
           return deleteCount
         }
       }
-    })
+    }
 
   }
 

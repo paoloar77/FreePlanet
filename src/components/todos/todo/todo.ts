@@ -241,13 +241,13 @@ export default class Todo extends Vue {
 
       elem.id_prev = idprev
       elem.id_next = idnext
-      if ((elem.pos !== pos) || (drag && (elem.order !== elem.pos))) {
+      if (elem.pos !== pos) {
         elem.modified = true
         elem.pos = pos
       }
 
-      // if (elem.modified)
-      //   console.log('MODIFICATO QUIIIIIIIIIIIIIIIIIIII', elem.id_prev, idprev, elem.id_next, idnext, elem.pos, pos)
+      if (elem.modified)
+        console.log('MODIFICATO QUIIIIIII', elem.descr, elem.pos, pos, elem.id_prev, elem.id_next)
 
       if (init) {
         elem.modified = false
@@ -309,14 +309,29 @@ export default class Todo extends Vue {
     return cl + ' titlePriority'
   }
 
+  logga_arr(myarr: ITodo[]) {
+    let mystr = '\n'
+    myarr.forEach(item => {
+      mystr += '[' + item.pos + '] ' + item.descr + ' Pr(' + this.getPriorityByInd(item.priority) + ') [' + item.id_prev + '-' + item.id_next + '] modif=' + item.modified + '\n'
+      // mystr += '[' + item.pos + '] ' + item.descr + '\n'
+    })
+
+    return mystr
+  }
+
   async onEnd(itemdragend) {
     console.log('3) newindex=', itemdragend.newIndex, 'oldindex=', itemdragend.oldIndex)
 
     if (itemdragend.newIndex === itemdragend.oldIndex)
       return // If nothing change, exit
 
+    // console.log('this.todos_arr PRIMA', this.logga_arr(this.todos_arr))
+    // console.log('this.state.todos PRIMA', this.logga_arr(Todos.state.todos))
     // MOVE
     this.todos_arr.splice(itemdragend.newIndex, 0, this.todos_arr.splice(itemdragend.oldIndex, 1)[0])
+
+    // console.log('this.todos_arr DOPO 1', this.logga_arr(this.todos_arr))
+
 
     let myobj = this.getelem(itemdragend.newIndex)
 
@@ -346,26 +361,35 @@ export default class Todo extends Vue {
 
     this.updateLinkedList(false, false)
 
+    // console.log('this.todos_arr DOPO ORDERLIST POS', this.logga_arr(this.todos_arr))
+    // console.log('this.state.todos DOPÔ ORDERLIST POS', this.logga_arr(Todos.state.todos))
+
     // Updated only elements modified
     await this.updateModifyRecords(true)
 
     await this.updatetable(false, 'onEnd')
 
+    // console.log('this.todos_arr DOPO 2', this.logga_arr(this.todos_arr))
+    // console.log('this.state.todos DOPÔ 2', this.logga_arr(Todos.state.todos))
+
   }
 
   async updateModifyRecords(refresh: boolean = false) {
     let update = false
+    // console.log('updateModifyRecords - INI')
 
-    await this.todos_arr.forEach((elem: ITodo) => {
+    for (const elem of this.todos_arr) {
       if (elem.modified) {
         console.log('calling MODIFY 3')
-        return this.modify(elem, false)
+        await this.modify(elem, false)
           .then(() => {
             update = true
             elem.modified = false
           })
       }
-    })
+    }
+
+    // console.log('updateModifyRecords - FINE')
 
     if (update)
       return await this.updatetable(refresh, 'updateModifyRecords')
@@ -386,18 +410,18 @@ export default class Todo extends Vue {
   }
 
   private getElementOldIndex(el: any) {
-    return el.attributes['index'].value
+    return parseInt(el.attributes['index'].value)
   }
 
   created() {
     const $service = this.$dragula.$service
     $service.options('first',
       {
-        isContainer: function (el) {
-          return el.classList.contains('dragula-container')
-        },
+        // isContainer: function (el) {
+        //   return el.classList.contains('dragula-container')
+        // },
         moves: function (el, source, handle, sibling) {
-          console.log('moves')
+          // console.log('moves')
           return !el.classList.contains('donotdrag') // elements are always draggable by default
         },
         accepts: function (el, target, source, sibling) {
@@ -405,19 +429,12 @@ export default class Todo extends Vue {
           return true // elements can be dropped in any of the `containers` by default
         },
         invalid: function (el, handle) {
-          console.log('invalid')
+          // console.log('invalid')
           return el.classList.contains('donotdrag') // don't prevent any drags from initiating by default
         },
         direction: 'vertical'
       })
     $service.eventBus.$on('dragend', (args) => {
-
-      // this.dragula = Dragula(containers, {
-      //   moves: function (el, container, handle) {
-      //     return handle.classList.contains('handle')
-      //   }
-      // })
-
 
       let itemdragend = {
         newIndex: this.getElementIndex(args.el),
@@ -930,9 +947,7 @@ export default class Todo extends Vue {
 
   modifyField(recOut, recIn, field) {
     if (String(recOut[field]) !== String(recIn[field])) {
-      // console.log('***************  CAMPO ', field, 'MODIFICATO!')
-      // console.log(recOut[field])
-      // console.log(recIn[field])
+      // console.log('***************  CAMPO ', field, 'MODIFICATO!', recOut[field], recIn[field])
       recOut.modified = true
       recOut[field] = recIn[field]
       return true
@@ -962,7 +977,7 @@ export default class Todo extends Vue {
 
 
         if (miorec.modified) {
-          console.log('Todo MODIFICATO! ', miorec.descr, miorec.pos, 'SALVALO SULLA IndexedDB todos')
+          // console.log('Todo MODIFICATO! ', miorec.descr, miorec.pos, 'SALVALO SULLA IndexedDB todos')
           miorec.modify_at = new Date().getDate()
           miorec.modified = false
 
@@ -976,11 +991,11 @@ export default class Todo extends Vue {
 
           // this.logelem('modify', miorec)
           // 2) Modify on IndexedDb
-          globalroutines(this, 'write', 'todos', miorec)
+          return globalroutines(this, 'write', 'todos', miorec)
             .then(ris => {
 
               // 3) Modify on the Server (call)
-              this.saveItemToSyncAndDb(rescodes.DB.TABLE_SYNC_TODOS_PATCH, 'PATCH', miorec, update)
+              return this.saveItemToSyncAndDb(rescodes.DB.TABLE_SYNC_TODOS_PATCH, 'PATCH', miorec, update)
 
             })
         }
