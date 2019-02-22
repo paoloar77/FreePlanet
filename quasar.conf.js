@@ -150,6 +150,11 @@ module.exports = function (ctx) {
         'QDatetime',
         'QSlideTransition',
         'QTable',
+        'QTableColumns',
+        'QTh',
+        'QTr',
+        'QSearch',
+        'QTd',
         'QContextMenu',
         'QProgress',
         'QSlider',
@@ -161,9 +166,9 @@ module.exports = function (ctx) {
       ],
       // Quasar plugins
       plugins: [
+        'Meta',
         'Dialog',
         'Notify',
-        'Meta',
         'Cookies',
         'ActionSheet', 'Loading'
       ],

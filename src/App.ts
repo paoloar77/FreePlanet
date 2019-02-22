@@ -26,6 +26,17 @@ export default class App extends Vue {
 
   public listaRoutingNoLogin = ['/vreg?', '/offline']
 
+  meta () {
+    return {
+      keywords: { name: 'keywords', content: 'WebSite' },
+      // meta tags
+      meta: {
+        mykey: { name: 'mykey', content: 'Key 1' },
+        keywords: { name: 'keywords', content: 'MyKeywords' }
+      }
+    }
+  }
+
   created() {
     if (process.env.DEV) {
       console.info('SESSIONE IN SVILUPPO ! (DEV)')

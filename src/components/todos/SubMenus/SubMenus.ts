@@ -5,6 +5,11 @@ import { ITodo } from '../../../model/index'
 import { rescodes } from '@src/store/Modules/rescodes'
 import { UserStore } from '@store'
 
+// Doesn't exist in quasar this ? error TS2305
+// import { format } from 'quasar'
+// const { between } = format
+
+// import { filter } from 'quasar'
 
 @Component({
   name: 'SubMenus'
@@ -26,6 +31,8 @@ export default class SubMenus extends Vue {
   }
 
   KeychangeProgress (e) {
+    // between(50, 10, 20)
+
     if (this.itemtodo.progress > 100) {
       this.itemtodo.progress = 100
     }

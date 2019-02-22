@@ -22,6 +22,8 @@ import globalroutines from '../../../globalroutines/index'
 
 import $ from 'jquery'
 import Api from '@api'
+import { Getter, State } from 'vuex-class'
+import { GetterTree } from 'vuex'
 
 @Component({
 
@@ -53,6 +55,12 @@ export default class Todo extends Vue {
   public service: any
   public actualMaxPosition: number = 15
   public scrollable = true
+  public compKey1: number = 0
+  public compKey2: number = 0
+  public compKey3: number = 0
+  // public priorcomplet: number[] = []
+  public arrFiltered: any [] = []
+
 
   fieldtochange: String [] = ['descr', 'completed', 'category', 'expiring_at', 'priority', 'id_prev', 'id_next', 'pos', 'enableExpiring', 'progress']
 
@@ -66,6 +74,8 @@ export default class Todo extends Vue {
   @Watch('drag') changedrag() {
     console.log('drag = ' + this.drag)
   }
+
+  // @Getter
 
 
   @Watch('$route', { immediate: true, deep: true })
@@ -103,7 +113,8 @@ export default class Todo extends Vue {
 
   // Computed:
   get showingDataTodo() {
-    return this.todos_arr.slice(0, this.actualMaxPosition)
+    // return this.todos_arr.slice(0, this.actualMaxPosition)
+    return this.arrFiltered
   }
 
 
@@ -157,7 +168,7 @@ export default class Todo extends Vue {
         const myrecs = [...alldata]
 
         myrecs.forEach(rec => {
-          mystr = mystr + rec.descr + ']   ['
+          mystr = mystr + rec.descr + rec.completed + ']   ['
         })
 
         mythis.tmpstrTodos = 'TODOS: ' + mystr
@@ -465,7 +476,7 @@ export default class Todo extends Vue {
     let mythis = this
     if (window) {
       window.addEventListener('touchmove', function (e) {
-        console.log('touchmove')
+        // console.log('touchmove')
         if (!mythis.scrollable) {
           e.preventDefault()
         }
@@ -515,7 +526,7 @@ export default class Todo extends Vue {
   checkUpdate_everytime() {
     this.polling = setInterval(() => {
       this.checkUpdate()
-    }, 10000)
+    }, 60000)
   }
 
   initcat() {
@@ -840,6 +851,8 @@ export default class Todo extends Vue {
 
         this.todos_arr = [...arrtemp]  // make copy
 
+        this.arrFiltered = this.todos_arr.filter((item, index) => index < this.actualMaxPosition)
+
         console.log('AGGIORNA todos_arr [', this.todos_arr.length, ']')
 
       })
@@ -925,9 +938,16 @@ export default class Todo extends Vue {
   }
 
   updateitem(myobj) {
-    console.log('calling MODIFY 4 updateitem')
-    this.modify(myobj, true)
+    console.log('calling MODIFY 4 updateitem', myobj)
+    // Update the others components...
+    this.compKey1++
+    this.compKey2++
+    this.compKey3++
+
+    console.log('this.compKey3', this.compKey3)
+    return this.modify(myobj, true)
   }
+
 
   // inactiveAllButtons() {
   //   let divs = this.$children.filter(function (child) {
@@ -988,18 +1008,19 @@ export default class Todo extends Vue {
       return new Promise(function (resolve, reject) {
         resolve()
       })
-    return await globalroutines(this, 'read', 'todos', null, myobj._id)
+    const myobjsaved = rescodes.jsonCopy(myobj)
+    return await globalroutines(this, 'read', 'todos', null, myobjsaved._id)
       .then(miorec => {
         if (miorec === undefined) {
-          console.log('~~~~~~~~~~~~~~~~~~~~ !!!!!!!!!!!!!!!!!!  Record not Found !!!!!! id=', myobj._id)
+          console.log('~~~~~~~~~~~~~~~~~~~~ !!!!!!!!!!!!!!!!!!  Record not Found !!!!!! id=', myobjsaved._id)
           return
         }
 
-        if (this.modifyField(miorec, myobj, 'completed'))
+        if (this.modifyField(miorec, myobjsaved, 'completed'))
           miorec.completed_at = new Date().getDate()
 
         this.fieldtochange.forEach(field => {
-          this.modifyField(miorec, myobj, field)
+          this.modifyField(miorec, myobjsaved, field)
         })
 
 
@@ -1022,7 +1043,7 @@ export default class Todo extends Vue {
             .then(ris => {
 
               // 3) Modify on the Server (call)
-              return this.saveItemToSyncAndDb(rescodes.DB.TABLE_SYNC_TODOS_PATCH, 'PATCH', miorec, update)
+              this.saveItemToSyncAndDb(rescodes.DB.TABLE_SYNC_TODOS_PATCH, 'PATCH', miorec, update)
 
             })
         }

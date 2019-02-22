@@ -57,23 +57,35 @@ function testfunc2 () {
 }
 
 export default async (context, cmd, table, datakey = null, id = '') => {
+
+  // console.log('TABLE', table, 'cmd', cmd)
   if (cmd === 'loadapp') {
     // ****** LOAD APP AL CARICAMENTO ! *******
     return saveConfigIndexDb(context, datakey)
 
   } else if (cmd === 'write') {
+    if (GlobalStore)
+      GlobalStore.state.connData.uploading_indexeddb = 1
     return await storage.setdata(table, datakey)
   } else if (cmd === 'updatefromIndexedDbToStateTodo') {
     return await readfromIndexDbToStateTodos(context, table)
   } else if (cmd === 'readall') {
+    if (GlobalStore)
+      GlobalStore.state.connData.downloading_indexeddb = 1
     return await storage.getalldata(table)
   } else if (cmd === 'count') {
     return await storage.count(table)
   } else if (cmd === 'read') {
+    if (GlobalStore)
+      GlobalStore.state.connData.downloading_indexeddb = 1
     return await storage.getdata(table, id)
   } else if (cmd === 'delete') {
+    if (GlobalStore)
+      GlobalStore.state.connData.uploading_indexeddb = 1
     return await storage.deletedata(table, id)
   } else if (cmd === 'clearalldata') {
+    if (GlobalStore)
+      GlobalStore.state.connData.uploading_indexeddb = 1
     return await storage.clearalldata(table)
   } else if (cmd === 'log') {
     consolelogpao(table)

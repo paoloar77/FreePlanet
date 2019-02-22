@@ -20,16 +20,16 @@
                 <!--draggable="true" @dragstart="dragStart(index, $event)" @dragover.prevent @dragenter="dragEnter(index)"-->
                 <!--@dragleave="dragLeave(index)" @dragend="dragEnd" @drop="dragFinish(index, $event)" >-->
                 <q-infinite-scroll :handler="loadMoreTodo" :offset="7">
-                    <div class="container" v-dragula="todos_arr" drake="first">
+                    <div class="container" v-dragula="todos_arr" drake="first" :key="compKey3">
                         <div :id="getmyid(mytodo._id)" :index="index" v-for="(mytodo, index) in showingDataTodo"
                              :key="mytodo._id" class="myitemdrag">
 
 
                             <div v-if="(prior !== mytodo.priority) && !mytodo.completed"
-                                 :class="getTitlePriority(mytodo.priority)">
+                                 :class="getTitlePriority(mytodo.priority)" :key="compKey1">
                                 <label>{{getPriorityByInd(mytodo.priority)}}</label>
                             </div>
-                            <div v-if="(!priorcomplet && mytodo.completed)" class="titleCompleted">
+                            <div v-if="(!priorcomplet && mytodo.completed)" class="titleCompleted" :key="compKey2">
                                 <label>{{$t('todo.completed')}}</label>
                                 <div style="display: none">{{ priorcomplet = true }}</div>
                             </div>
@@ -54,12 +54,13 @@
                      v-on:keyup.enter="insertTodo(false)"/>
 
             <!--{{ tmpstrTodos }}-->
+            <!--<br>-->
 
-            <!--<div class="flex-item btn-item">-->
+            <!--&lt;!&ndash;<div class="flex-item btn-item">&ndash;&gt;-->
             <!--<q-btn class="mybtn" round color="" icon="lock" @click="getArrTodos">Get Todo</q-btn>-->
             <!--<q-btn class="mybtn" round color="" icon="person" @click="setArrTodos">Set Todo</q-btn>-->
             <!--<q-btn class="mybtn" round color="" icon="list" @click="reload_fromServer++">Reload</q-btn>-->
-            <!--</div>-->
+            <!--&lt;!&ndash;</div>&ndash;&gt;-->
 
             <!--&lt;!&ndash;<q-input v-model="testPao" float-label="testPao"/>&ndash;&gt;-->
             <!--<q-input v-model="todos_changed" float-label="todos_changed"/>-->
@@ -67,8 +68,8 @@
             <!--<q-input v-model="reload_fromServer" float-label="reload_fromServer"/>-->
 
             <!--<div class="flex-item btn-item">-->
-            <!--&lt;!&ndash;<q-btn class="mybtn" round color="" icon="lock" @click="clicktest()"></q-btn>&ndash;&gt;-->
-            <!--&lt;!&ndash;<q-btn class="mybtn" round color="" icon="person" @click="clicktest2()"></q-btn>&ndash;&gt;-->
+            <!--<q-btn class="mybtn" round color="" icon="lock" @click="clicktest()"></q-btn>-->
+            <!--<q-btn class="mybtn" round color="" icon="person" @click="clicktest2()"></q-btn>-->
             <!--<q-btn class="mybtn" round color="" icon="list" @click="checkUpdate()"></q-btn>-->
             <!--</div>-->
 

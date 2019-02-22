@@ -17,6 +17,7 @@
             </div>
         </div>
 
+
         <menu-one :links="links"></menu-one>
 
         <!--<footer>
@@ -55,8 +56,6 @@
     links
 
     created() {
-      // console.log('Drawer created...')
-
       let listatodo = []
 
       this.arrlista.forEach((elem: ITodoList) => {
@@ -65,29 +64,42 @@
 
       })
 
-      this.links = {
-        Dashboard: {
-          routes: [
-            { route: '/', faIcon: 'fa fa-home', materialIcon: 'home', name: 'pages.home' },
-            {
-              route: '/todo', faIcon: 'fa fa-list-alt', materialIcon: 'todo', name: 'pages.Todo',
-              routes2: listatodo
-            },
-            { route: '/category', faIcon: 'fa fa-list-alt', materialIcon: 'category', name: 'pages.Category' },
-            { route: '/signup', faIcon: 'fa fa-registered', materialIcon: 'home', name: 'pages.SignUp' },
-            { route: '/signin', faIcon: 'fa fa-anchor', materialIcon: 'home', name: 'pages.SignIn' },
-            /* {route: '/vreg?idlink=aaa', faIcon: 'fa fa-login', materialIcon: 'login', name: 'pages.vreg'},*/
-          ],
-          show: true,
+      if (UserStore.state.isAdmin) {
+        this.links = {
+          Dashboard: {
+            routes: [
+              { route: '/', faIcon: 'fa fa-home', materialIcon: 'home', name: 'pages.home' },
+              {
+                route: '/todo', faIcon: 'fa fa-list-alt', materialIcon: 'todo', name: 'pages.Todo',
+                routes2: listatodo
+              },
+              { route: '/category', faIcon: 'fa fa-list-alt', materialIcon: 'category', name: 'pages.Category' },
+              { route: '/signup', faIcon: 'fa fa-registered', materialIcon: 'home', name: 'pages.SignUp' },
+              { route: '/admin/cfgserv', faIcon: 'fa fa-database', materialIcon: 'admin', name: 'pages.Admin' },
+              { route: '/signin', faIcon: 'fa fa-anchor', materialIcon: 'home', name: 'pages.SignIn' },
+              /* {route: '/vreg?idlink=aaa', faIcon: 'fa fa-login', materialIcon: 'login', name: 'pages.vreg'},*/
+            ],
+            show: true,
+          }
         }
-        // ,
-        // Forms: {
-        //   routes: [
-        //     { route: '/prec', faIcon: 'fa fa-search', materialIcon: 'search', name: 'pages.Test' },
-        //   ],
-        //   show: false
-        // },
+      } else {
+        // Normal USER:
+        this.links = {
+          Dashboard: {
+            routes: [
+              { route: '/', faIcon: 'fa fa-home', materialIcon: 'home', name: 'pages.home' },
+              {
+                route: '/todo', faIcon: 'fa fa-list-alt', materialIcon: 'todo', name: 'pages.Todo',
+                routes2: listatodo
+              },
+              { route: '/signup', faIcon: 'fa fa-registered', materialIcon: 'home', name: 'pages.SignUp' },
+              { route: '/signin', faIcon: 'fa fa-anchor', materialIcon: 'home', name: 'pages.SignIn' },
+            ],
+            show: true,
+          }
+        }
       }
+
 
     }
 

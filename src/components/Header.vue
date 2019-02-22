@@ -27,10 +27,37 @@
                 </q-btn>
 
 
+                <div v-if="$q.platform.is.desktop">
+                    <!--I'm only rendered on desktop!-->
+                </div>
+
+                <div v-if="$q.platform.is.mobile">
+                    <!--I'm only rendered on mobile!-->
+                </div>
+
+                <div v-if="$q.platform.is.electron">
+                    <!--I'm only rendered on Electron!-->
+                </div>
+
+                <q-btn id="newvers" v-if="isNewVersionAvailable" color="secondary" rounded icon="refresh"
+                       class="btnNewVersShow" @click="RefreshApp" :label="$t('notification.newVersionAvailable')"/>
+
+
                 <q-toolbar-title>
                     {{$t('msg.myAppName')}}
                     <div slot="subtitle">{{$t('msg.myDescriz')}} {{ getAppVersion() }}</div>
                 </q-toolbar-title>
+
+                <div v-if="isAdmin">
+                    <q-btn flat dense round aria-label="">
+                        <q-icon :class="clCloudUpload" name="cloud_upload"></q-icon>
+                    </q-btn>
+
+                    <q-btn flat dense round aria-label="">
+                        <q-icon :class="clCloudUp_Indexeddb" name="arrow_upward"></q-icon>
+                    </q-btn>
+
+                </div>
 
                 <q-btn
                         flat
@@ -42,6 +69,7 @@
                     <q-icon :name="iconConn" :class="clIconConn"></q-icon>
                     <q-icon v-if="isUserNotAuth" name="device_unknown"></q-icon>
                 </q-btn>
+
 
                 <q-btn-dropdown
                         :label="langshort"
@@ -117,9 +145,21 @@
     public clIconConn: string = 'clIconOnline'
     public strConn: string = ''
     public langshort: string = ''
+    public clCloudUpload: string = ''
+    public clCloudDownload: string = ''
+    public clCloudUp_Indexeddb: string = ''
+    public clCloudDown_Indexeddb: string = 'clIndexeddbsend'
 
     get conn_changed() {
       return GlobalStore.state.stateConnection
+    }
+
+    get isAdmin() {
+      return UserStore.state.isAdmin
+    }
+
+    get conndata_changed() {
+      return GlobalStore.state.connData
     }
 
     @Watch('GlobalStore.state.stateConnection', { immediate: true, deep: true })
@@ -133,6 +173,27 @@
       //   message: "CAMBIATOO! " + value
       // })
 
+    }
+
+    @Watch('conndata_changed', { immediate: true, deep: true })
+    changeconnData(value: any, oldValue: any) {
+      // console.log('CHANGED GlobalStore.state.connData', value)
+
+      this.clCloudUpload = (value.uploading_server === 1) ? "clCloudUpload send" : "clCloudUpload"
+      this.clCloudUpload = (value.downloading_server === 1) ? "clCloudUpload receive" : "clCloudUpload"
+      this.clCloudUp_Indexeddb = (value.uploading_indexeddb === 1) ? "clIndexeddb send" : "clIndexeddb"
+      this.clCloudUp_Indexeddb = (value.downloading_indexeddb === 1) ? "clIndexeddb receive" : "clIndexeddb"
+
+      this.clCloudUpload = (value.uploading_server === -1) ? "clCloudUpload error" : this.clCloudUpload
+      this.clCloudUpload = (value.downloading_server === -1) ? "clCloudUpload error" : this.clCloudDownload
+      this.clCloudUp_Indexeddb = (value.uploading_indexeddb === -1) ? "clIndexeddb error" : this.clCloudUp_Indexeddb
+      this.clCloudUp_Indexeddb = (value.downloading_indexeddb === -1) ? "clIndexeddb error" : this.clCloudDown_Indexeddb
+
+      // console.log('clCloudUpload', this.clCloudUpload)
+      // console.log('clCloudDownload', this.clCloudDownload)
+      // console.log('clCloudUp_Indexeddb', this.clCloudUp_Indexeddb)
+      // console.log('value.downloading_indexeddb', value.downloading_indexeddb)
+      // console.log('value.uploading_server', value.uploading_server)
     }
 
 
@@ -157,6 +218,20 @@
       }
     }
 
+    get isNewVersionAvailable() {
+      console.log('______________ isNewVersionAvailable')
+      return GlobalStore.getters.isNewVersionAvailable
+    }
+
+    RefreshApp() {
+      // Unregister Service Worker
+      navigator.serviceWorker.getRegistrations().then(function(registrations) {
+        for(let registration of registrations) {
+          registration.unregister()
+        } })
+      window.location.reload(true)
+    }
+
     changeIconConn() {
       this.iconConn = GlobalStore.state.stateConnection === 'online' ? "wifi" : "wifi_off"
       this.clIconConn = GlobalStore.state.stateConnection === 'online' ? 'clIconOnline' : 'clIconOffline'
@@ -169,6 +244,35 @@
       { label: 'Spanish', icon: 'fa-flag-es', value: 'esEs', image: '../statics/images/es.png', short: 'ES' }
     ]
 
+
+    // -------------------------------------------------------------------------
+    // QUASAR Example using event to open drawer from another component or page
+    // -------------------------------------------------------------------------
+    // (1) This code is inside layout file that have a drawer
+    //     if this.leftDrawerOpen is true, drawer is displayed
+
+    // (2) Listen for an event in created
+    /*    created(){
+          this.$root.$on("openLeftDrawer", this.openLeftDrawercb);
+        },
+        methods: {
+          openURL,
+          // (3) Define the callback in methods
+          openLeftDrawercb() {
+          this.leftDrawerOpen = !this.leftDrawerOpen;
+        }
+      }
+
+      // (4) In another component or page, emit the event!
+      //     Call the method when clicking button etc.
+      methods: {
+        openLeftDrawer() {
+          this.$root.$emit("openLeftDrawer");
+        }
+      }
+    // -------------------------------------------------------------------------
+    */
+
     get leftDrawerOpen() {
       return GlobalStore.state.leftDrawerOpen
     }
@@ -180,7 +284,13 @@
 
     getAppVersion() {
       // return "AA"
-      return "[" + process.env.APP_VERSION + "]"
+      let strv = ''
+      if (process.env.DEV) {
+        strv = 'DEV '
+      } else if (process.env.TEST) {
+        strv = 'TEST '
+      }
+      return "[" + strv + process.env.APP_VERSION + "]"
     }
 
     get lang() {
@@ -188,7 +298,7 @@
     }
 
 
-    setshortlang (lang) {
+    setshortlang(lang) {
       for (let indrec in this.selectOpLang) {
         if (this.selectOpLang[indrec].value === lang) {
           // console.log('this.selectOpLang[indrec].short', this.selectOpLang[indrec].short, this.selectOpLang[indrec].value)
@@ -241,8 +351,7 @@
       // this.$q.notify('prima: ' + String(my))
 
       let mylang = rescodes.getItemLS(rescodes.localStorage.lang)
-      if (mylang === '')
-      {
+      if (mylang === '') {
         if (navigator) {
           mylang = navigator.language
           console.log(`LANG2 NAVIGATOR ${mylang}`)
@@ -275,7 +384,7 @@
 
 
       // Test this by running the code snippet below and then
-      // use the "Offline" checkbox in DevTools Network panel
+      // use the "TableOnlyView" checkbox in DevTools Network panel
 
       let mythis = this
       // console.log('Event LOAD')
@@ -558,6 +667,48 @@
     .flagimg {
         width: 30px;
         height: 24px;
+    }
+
+    .clCloudUpload {
+        transition: all 1s ease-out;
+        color: initial;
+        &.send {
+            transition: all 1s ease-in;
+            background-color: lightgreen;
+        }
+        &.receive {
+            transition: all 1s ease-in;
+            background-color: yellow;
+        }
+        &.error {
+            transition: all 1s ease-in;
+            background-color: red;
+        }
+    }
+
+    .clIndexeddb {
+        transition: all 1s ease-out;
+        color: initial;
+        &.receive {
+            transition: all 1s ease-in;
+            background-color: yellow;
+        }
+        &.send {
+            transition: all 1s ease-in;
+            background-color: lightgreen;
+        }
+        &.error {
+            transition: all 1s ease-in;
+            background-color: red;
+        }
+    }
+
+    .btnNewVersHide {
+        display: none;
+    }
+
+    .btnNewVersShow {
+        display: inline-block;
     }
 
 </style>

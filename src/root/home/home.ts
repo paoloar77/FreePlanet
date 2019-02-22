@@ -26,8 +26,23 @@ export default class Home extends Vue {
   created() {
     // console.log('Home created...')
 
+
     GlobalStore.actions.prova()
   }
+
+  meta() {
+    return {
+      keywords: { name: 'keywords', content: 'Quasar website' },
+      // meta tags
+      meta: {
+        mykey: { name: 'mykey', content: 'Key 1' },
+        description: { name: 'description', content: 'Page 1' },
+        keywords: { name: 'keywords', content: 'Quasar website' },
+        equiv: { 'http-equiv': 'Content-Type', content: 'text/html; charset=UTF-8' }
+      }
+    }
+  }
+
 
   mystilecard() {
     return {
@@ -70,7 +85,7 @@ export default class Home extends Vue {
     return Notification.permission
   }
 
-  NotServiceWorker () {
+  NotServiceWorker() {
     return (!('serviceWorker' in navigator))
   }
 
@@ -156,6 +171,8 @@ export default class Home extends Vue {
         })
     }
   }
+
+
 
   askfornotification() {
     this.showNotif(this.$t('notification.waitingconfirm'), 'positive', 'notifications')

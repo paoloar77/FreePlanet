@@ -10,7 +10,7 @@ import { GlobalStore, UserStore, Todos } from '@store'
 import globalroutines from './../../globalroutines/index'
 
 import translate from './../../globalroutines/util'
-import * as Types from "@src/store/Api/ApiTypes"
+import * as Types from '@src/store/Api/ApiTypes'
 
 const bcrypt = require('bcryptjs')
 
@@ -27,7 +27,8 @@ const state: IUserState = {
   verified_email: false,
   categorySel: 'personal',
   servercode: 0,
-  x_auth_token: ''
+  x_auth_token: '',
+  isAdmin: false
 }
 
 
@@ -84,13 +85,23 @@ namespace Getters {
 
 
 namespace Mutations {
-  function authUser(state, data: IUserState) {
+  function authUser(state: IUserState, data: IUserState ) {
     state.userId = data.userId
     state.username = data.username
-    state.verified_email = data.verified_email
-    state.category = data.categorySel
+    if (data.verified_email)
+      state.verified_email = data.verified_email
+
+    if (data.categorySel)
+      state.categorySel = data.categorySel  // ??
+
+
     resetArrToken(state.tokens)
-    state.tokens.push({ access: 'auth', token: state.x_auth_token, date_login: new Date() })
+    state.tokens.push({ access: 'auth', token: state.x_auth_token, data_login: new Date() })
+
+    // ++Todo: Settings Users Admin
+    if (state.username === 'paoloar77')
+      state.isAdmin = true
+
     // console.log('state.tokens', state.tokens)
   }
 
@@ -501,6 +512,7 @@ namespace Actions {
     GlobalStore.mutations.setleftDrawerOpen(localStorage.getItem(rescodes.localStorage.leftDrawerOpen) === 'true')
     GlobalStore.mutations.setCategorySel(localStorage.getItem(rescodes.localStorage.categorySel))
 
+    GlobalStore.actions.checkUpdates()
 
     await GlobalStore.actions.loadAfterLogin()
       .then(() => {

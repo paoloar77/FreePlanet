@@ -30,6 +30,7 @@ const messages = {
       personal: 'Personale',
       work: 'Lavoro',
       shopping: 'Spesa',
+      Admin: 'Admin',
     },
     components: {
       authentication:{
@@ -122,7 +123,8 @@ const messages = {
       titlegranted: 'Permesso Notifiche Abilitato!',
       titledenied: 'Permesso Notifiche Disabilitato!',
       title_subscribed: 'Sottoscrizione a FreePlanet.app!',
-      subscribed: 'Ora potrai ricevere i messaggi e le notifiche.'
+      subscribed: 'Ora potrai ricevere i messaggi e le notifiche.',
+      newVersionAvailable: 'Nuova Versione!'
     },
     connection: 'Connessione',
   },
@@ -157,6 +159,7 @@ const messages = {
       personal: 'Personal',
       work: 'Trabajo',
       shopping: 'Compras',
+      Admin: 'Administración',
     },
     components: {
       authentication:{
@@ -249,7 +252,8 @@ const messages = {
       titlegranted: 'Notificaciones permitidas habilitadas!',
       titledenied: 'Notificaciones permitidas deshabilitadas!',
       title_subscribed: 'Suscripción a FreePlanet.app!',
-      subscribed: 'Ahora puedes recibir mensajes y notificaciones.'
+      subscribed: 'Ahora puedes recibir mensajes y notificaciones.',
+      newVersionAvailable: 'Nueva Versión!'
     },
     connection: 'Connection',
   },
@@ -284,6 +288,7 @@ const messages = {
       personal: 'Personal',
       work: 'Work',
       shopping: 'Shopping',
+      Admin: 'Admin',
     },
     components: {
       authentication:{
@@ -376,7 +381,8 @@ const messages = {
       titlegranted: 'Notification Permission Granted!',
       titledenied: 'Notification Permission Denied!',
       title_subscribed: 'Subscribed to FreePlanet.app!',
-      subscribed: 'You can now receive Notification and Messages.'
+      subscribed: 'You can now receive Notification and Messages.',
+      newVersionAvailable: 'New Version!'
     },
     connection: 'Conexión',
   },

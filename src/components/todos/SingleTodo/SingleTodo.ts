@@ -78,6 +78,11 @@ export default class SingleTodo extends Vue {
     return date && date.toISOString().split('T')[0]
   }
 
+  // Computed:
+  get isSel() {
+    return this.sel
+  }
+
   isTodo() {
     return this.isTodoByElem(this.itemtodo)
   }
@@ -176,8 +181,9 @@ export default class SingleTodo extends Vue {
     return 'row flex-container2 ' + this.classRow
   }
 
-  clickRiga() {
+  clickRiga(clickmenu: boolean = false) {
     // console.log('CLICK RIGA ************')
+
     if (!this.sel) {
       if (!this.inEdit) {
         this.$emit('deselectAllRows', this.itemtodo, true)
@@ -361,8 +367,9 @@ export default class SingleTodo extends Vue {
   }
 
   updatedata() {
-    console.log('calling this.$emit(eventupdate)')
-    this.$emit('eventupdate', this.itemtodo)
+    const myitem = rescodes.jsonCopy(this.itemtodo)
+    console.log('calling this.$emit(eventupdate)', myitem)
+    this.$emit('eventupdate', myitem)
   }
 
   updateicon() {

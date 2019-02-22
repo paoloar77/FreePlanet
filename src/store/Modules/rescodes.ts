@@ -11,6 +11,8 @@ export const rescodes = {
   LIST_END: '10000000',
   LIST_START: '0',
 
+  SERVKEY_VERS: 'vers',
+
   localStorage: {
     verified_email: 'vf',
     wasAlreadySubOnDb: 'sb',

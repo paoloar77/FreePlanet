@@ -28,4 +28,5 @@ export interface IUserState {
   resStatus?: number
   x_auth_token?: string
   isLogged?: boolean
+  isAdmin?: boolean
 }

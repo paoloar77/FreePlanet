@@ -7,6 +7,8 @@
         <!--<q-btn v-if="getPermission() === 'granted'" class="enable-notifications" color="secondary" rounded size="lg" icon="notifications" @click="createPushSubscription" label="Create Push Subscription !"/>-->
 
 
+
+
         <br>
         <div>
             <q-chip square color="secondary">

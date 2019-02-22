@@ -1,4 +1,4 @@
-import { IGlobalState, StateConnection } from 'model'
+import { ICfgServer, IGlobalState, StateConnection } from 'model'
 import { storeBuilder } from './Store/Store'
 
 import Vue from 'vue'
@@ -8,10 +8,10 @@ import translate from './../../globalroutines/util'
 import urlBase64ToUint8Array from '../../js/utility'
 
 import messages from '../../statics/i18n'
-import { GlobalStore, UserStore } from '@store'
+import { GlobalStore, Todos, UserStore } from '@store'
 import globalroutines from './../../globalroutines/index'
-import Api from "@api"
-import { rescodes } from "@src/store/Modules/rescodes"
+import Api from '@api'
+import { rescodes } from '@src/store/Modules/rescodes'
 
 const allTables = ['todos', 'sync_todos', 'sync_todos_patch', 'delete_todos', 'config', 'swmsg']
 const allTablesAfterLogin = ['todos', 'sync_todos', 'sync_todos_patch', 'delete_todos', 'config', 'swmsg']
@@ -42,13 +42,21 @@ const state: IGlobalState = {
   menuCollapse: true,
   leftDrawerOpen: true,
   stateConnection: stateConnDefault,
+  networkDataReceived: false,
+  cfgServer: [],
   category: 'personal',
   posts: [],
   listatodo: [
     { namecat: 'personal', description: 'personal' },
     { namecat: 'work', description: 'work' },
     { namecat: 'shopping', description: 'shopping' }
-  ]
+  ],
+  connData: {
+    uploading_server: 0,
+    uploading_indexeddb: 0,
+    downloading_server: 0,
+    downloading_indexeddb: 0
+  }
 }
 
 
@@ -75,7 +83,19 @@ namespace Getters {
     },
 
     get isOnline() {
+      console.log('*********************** isOnline')
       return state.stateConnection === 'online'
+    },
+
+    get isNewVersionAvailable() {
+      console.log('state.cfgServer', state.cfgServer)
+      const serversrec = state.cfgServer.find(x => x.chiave === rescodes.SERVKEY_VERS)
+      console.log('Record ', serversrec)
+      if (serversrec) {
+        console.log('Vers Server ', serversrec.valore, 'Vers locale:', process.env.APP_VERSION)
+        return serversrec.valore !== process.env.APP_VERSION
+      } else
+        return false
     }
   }
 }
@@ -197,7 +217,7 @@ namespace Actions {
       others: {
         userId: UserStore.state.userId,
         access: UserStore.state.tokens[0].access
-      },
+      }
     }
 
     return Api.SendReq('/subscribe', 'POST', myres)
@@ -253,7 +273,7 @@ namespace Actions {
     console.log('clearDataAfterLogout')
 
     // Clear all data from the IndexedDB
-    for (const table of allTables){
+    for (const table of allTables) {
       await globalroutines(null, 'clearalldata', table, null)
     }
 
@@ -295,6 +315,47 @@ namespace Actions {
     actions.clearDataAfterLoginOnlyIfActiveConnection()
   }
 
+  async function saveCfgServerKey(context, dataval: ICfgServer) {
+    console.log('saveCfgServerKey dataval', dataval)
+
+    let ris = await Api.SendReq('/admin/updateval', 'POST', {pairval: dataval})
+      .then(res => {
+
+      })
+
+  }
+
+  async function checkUpdates(context) {
+    console.log('checkUpdates')
+
+    // if (UserStore.state.userId === '')
+    //   return false // Login not made
+
+    state.networkDataReceived = false
+
+    let ris = await Api.SendReq('/checkupdates', 'GET', null)
+      .then(res => {
+        state.networkDataReceived = true
+
+        console.log('******* checkUpdates RES :', res.data.cfgServer)
+        if (res.data.cfgServer) {
+          state.cfgServer = [...res.data.cfgServer]
+          console.log('res.data.cfgServer', res.data.cfgServer)
+          // Todos.mutations.setTodos_changed()
+        }
+
+        // console.log('**********  res', 'state.todos', state.todos, 'checkPending', checkPending)
+        // After Login will store into the indexedDb...
+
+        return res
+      })
+      .catch(error => {
+        console.log('error checkUpdates', error)
+        UserStore.mutations.setErrorCatch(error)
+        return error
+      })
+
+  }
 
   export const actions = {
     setConta: b.dispatch(setConta),
@@ -302,7 +363,9 @@ namespace Actions {
     loadAfterLogin: b.dispatch(loadAfterLogin),
     clearDataAfterLogout: b.dispatch(clearDataAfterLogout),
     clearDataAfterLoginOnlyIfActiveConnection: b.dispatch(clearDataAfterLoginOnlyIfActiveConnection),
-    prova: b.dispatch(prova)
+    prova: b.dispatch(prova),
+    saveCfgServerKey: b.dispatch(saveCfgServerKey),
+    checkUpdates: b.dispatch(checkUpdates)
   }
 
 }

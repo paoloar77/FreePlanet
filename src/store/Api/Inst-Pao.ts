@@ -15,6 +15,8 @@ async function sendRequest(url: string, method: string, mydata: any) {
     request = Api.Delete(url, mydata)
   else if (method === 'PUT')
     request = Api.put(url, mydata)
+  else if (method === 'PATCH')
+    request = Api.patch(url, mydata)
 
   const req: Promise<Types.AxiosSuccess | Types.AxiosError> = request
   return req

@@ -20,7 +20,6 @@ export interface ITodo {
 
 export interface ITodosState {
   visuOnlyUncompleted: boolean
-  networkDataReceived: boolean
   todos: ITodo[]
   todos_changed: number
   reload_fromServer: number

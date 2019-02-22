@@ -11,7 +11,6 @@ import { serv_constants } from '@src/store/Modules/serv_constants'
 
 const state: ITodosState = {
   visuOnlyUncompleted: false,
-  networkDataReceived: false,
   todos: [],
   todos_changed: 1,
   reload_fromServer: 0,
@@ -162,14 +161,15 @@ namespace Actions {
     })
   }
 
+
   async function waitAndcheckPendingMsg(context) {
 
-    await aspettansec(1000)
+    // await aspettansec(1000)
 
     return await checkPendingMsg(context)
       .then(ris => {
         if (ris) {
-          console.log('risPending = ', ris)
+          // console.log('risPending = ', ris)
           return sendSwMsgIfAvailable()
             .then(something => {
               if (something) {
@@ -184,7 +184,7 @@ namespace Actions {
   }
 
   async function waitAndRefreshData(context) {
-    await aspettansec(3000)
+    // await aspettansec(3000)
 
     return await dbLoadTodo(context, false)
   }
@@ -214,7 +214,7 @@ namespace Actions {
       return globalroutines(null, 'count', 'swmsg')
         .then(function (count) {
           if (count > 0) {
-            console.log('count = ', count)
+            // console.log('count = ', count)
             return resolve(true)
           } else {
             return resolve(false)
@@ -234,11 +234,11 @@ namespace Actions {
     if (UserStore.state.userId === '')
       return false // Login not made
 
-    state.networkDataReceived = false
+    GlobalStore.state.networkDataReceived = false
 
     let ris = await Api.SendReq('/todos/' + UserStore.state.userId, 'GET', null)
       .then(res => {
-        state.networkDataReceived = true
+        GlobalStore.state.networkDataReceived = true
 
         // console.log('******* UPDATE TODOS.STATE.TODOS !:', res.todos)
         if (res.data.todos) {
@@ -260,7 +260,7 @@ namespace Actions {
     // console.log('ris : ', ris)
     // console.log('ris STATUS: ', ris.status)
 
-    if (!Todos.state.networkDataReceived) {
+    if (!GlobalStore.state.networkDataReceived) {
 
       if (ris.status === serv_constants.RIS_CODE__HTTP_FORBIDDEN_INVALID_TOKEN) {
         consolelogpao('UNAUTHORIZING... TOKEN EXPIRED... !! ')
@@ -379,7 +379,7 @@ namespace Actions {
     updatefromIndexedDbToStateTodo: b.dispatch(updatefromIndexedDbToStateTodo),
     getTodosByCategory: b.dispatch(getTodosByCategory),
     checkPendingMsg: b.dispatch(checkPendingMsg),
-    waitAndcheckPendingMsg: b.dispatch(waitAndcheckPendingMsg)
+    waitAndcheckPendingMsg: b.dispatch(waitAndcheckPendingMsg),
   }
 
 }

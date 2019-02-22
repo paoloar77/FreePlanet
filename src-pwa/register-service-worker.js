@@ -20,6 +20,7 @@ register(process.env.SERVICE_WORKER_FILE, {
     },
     updatefound(registration) {
       console.log('UPDATEFOUND::: New content is downloading.')
+      // $('#newvers').addClass('btnNewVersShow').removeClass("btnNewVersHide")
     },
     updated(registration) {
       console.log('New content is available; please refresh.')

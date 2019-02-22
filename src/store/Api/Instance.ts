@@ -42,7 +42,7 @@ async function Request(type: string, path: string, payload: any, setAuthToken?: 
   try {
     console.log(`Axios Request [${type}]:`, axiosInstance.defaults)
     let response: AxiosResponse
-    if (type === 'post' || type === 'put') {
+    if (type === 'post' || type === 'put' || type === 'patch') {
       response = await axiosInstance[type](path, payload, {
         headers: {
           'Content-Type': 'application/json',
@@ -107,6 +107,11 @@ async function Request(type: string, path: string, payload: any, setAuthToken?: 
     }
   }
   catch (error) {
+    setTimeout(function () {
+      GlobalStore.state.connData.uploading_server = (GlobalStore.state.connData.uploading_server === 1) ? -1 : GlobalStore.state.connData.uploading_server
+      GlobalStore.state.connData.downloading_server = (GlobalStore.state.connData.downloading_server === 1) ? -1 : GlobalStore.state.connData.downloading_server
+    }, 1000)
+
     if (process.env.DEV) {
       console.log('ERROR using', path)
       // console.log('Error received: ', error)

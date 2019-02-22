@@ -1,13 +1,13 @@
 <template>
     <div :class="getClassRow()" @click="clickRow">
-        <div v-if="isTodo()" class="flex-item counter-item dragula-container">{{itemtodo.pos}}</div>
+        <!--<div v-if="isTodo()" class="flex-item counter-item dragula-container">{{itemtodo.pos}}</div>-->
         <!--<div v-if="isFirst">-->
         <!--<q-context-menu ref="contextMenu">-->
         <!--<SubMenus :menuPopupTodo="menuPopupTodo" :itemtodo="itemtodo" @clickMenu="clickMenu" @setPriority="setPriority"></SubMenus>-->
         <!--</q-context-menu>-->
         <!--</div>-->
 
-        <div v-if="isTodo()" class="flex-item completed-item">
+        <div v-if="isTodo()" class="flex-item completed-item donotdrag">
             <q-btn push flat
                    :class="classCompleted"
                    :icon="iconCompleted"
@@ -64,11 +64,11 @@
 
             </q-datetime>
         </div>
-        <div v-if="isTodo()" class="flex-item pos-item " @mouseup.left="mouseUp" @mousedown="clickRiga">
+        <div v-if="isTodo()" class="flex-item pos-item " @mousedown="clickRiga">
             <q-btn push
                    :class="clButtPopover"
                    icon="menu">
-                <q-popover v-if="sel" self="top right">
+                <q-popover id="popmenu" v-if="true" self="top right">
                     <SubMenus :menuPopupTodo="menuPopupTodo" :itemtodo="itemtodo" @clickMenu="clickMenu"
                               @setPriority="setPriority"></SubMenus>
                 </q-popover>
