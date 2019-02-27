@@ -4,7 +4,7 @@ import router from '@router'
 import { clone } from 'lodash'
 import * as Types from './ApiTypes'
 import { GlobalStore, UserStore } from '@store'
-import { rescodes } from '@src/store/Modules/rescodes'
+import { tools } from '@src/store/Modules/tools'
 import { serv_constants } from '@src/store/Modules/serv_constants'
 
 export const API_URL = process.env.MONGODB_HOST
@@ -40,7 +40,7 @@ export const removeAuthHeaders = () => {
 async function Request(type: string, path: string, payload: any, setAuthToken?: boolean): Promise<Types.AxiosSuccess | Types.AxiosError> {
   let ricevuto = false
   try {
-    console.log(`Axios Request [${type}]:`, axiosInstance.defaults)
+    // console.log(`Axios Request [${type}]:`, axiosInstance.defaults)
     let response: AxiosResponse
     if (type === 'post' || type === 'put' || type === 'patch') {
       response = await axiosInstance[type](path, payload, {
@@ -50,7 +50,7 @@ async function Request(type: string, path: string, payload: any, setAuthToken?: 
         }
       })
       ricevuto = true
-      console.log('response', response)
+      // console.log('Request Response: ', response)
       // console.log(new Types.AxiosSuccess(response.data, response.status))
 
       const setAuthToken = (path === '/updatepwd')
@@ -62,26 +62,26 @@ async function Request(type: string, path: string, payload: any, setAuthToken?: 
             x_auth_token = String(response.headers['x-auth'])
 
             if (x_auth_token === '') {
-              UserStore.mutations.setServerCode(rescodes.ERR_AUTHENTICATION)
+              UserStore.mutations.setServerCode(tools.ERR_AUTHENTICATION)
             }
             if (setAuthToken) {
               UserStore.mutations.UpdatePwd(x_auth_token)
-              localStorage.setItem(rescodes.localStorage.token, x_auth_token)
+              localStorage.setItem(tools.localStorage.token, x_auth_token)
             }
 
             UserStore.mutations.setAuth(x_auth_token)
-            localStorage.setItem(rescodes.localStorage.token, x_auth_token)
+            localStorage.setItem(tools.localStorage.token, x_auth_token)
           }
 
           GlobalStore.mutations.setStateConnection(ricevuto ? 'online' : 'offline')
-          UserStore.mutations.setServerCode(rescodes.OK)
+          UserStore.mutations.setServerCode(tools.OK)
         } catch (e) {
           if (setAuthToken) {
-            UserStore.mutations.setServerCode(rescodes.ERR_AUTHENTICATION)
+            UserStore.mutations.setServerCode(tools.ERR_AUTHENTICATION)
             UserStore.mutations.setAuth('')
           }
           GlobalStore.mutations.setStateConnection(ricevuto ? 'online' : 'offline')
-          return Promise.reject(new Types.AxiosError(serv_constants.RIS_CODE__HTTP_FORBIDDEN_INVALID_TOKEN, null, rescodes.ERR_AUTHENTICATION))
+          return Promise.reject(new Types.AxiosError(serv_constants.RIS_CODE__HTTP_FORBIDDEN_INVALID_TOKEN, null, tools.ERR_AUTHENTICATION))
         }
       }
 
@@ -120,11 +120,11 @@ async function Request(type: string, path: string, payload: any, setAuthToken?: 
     }
     let mycode = 0
     if (!ricevuto) {
-      mycode = rescodes.ERR_SERVERFETCH
-      UserStore.mutations.setServerCode(rescodes.ERR_SERVERFETCH)
+      mycode = tools.ERR_SERVERFETCH
+      UserStore.mutations.setServerCode(tools.ERR_SERVERFETCH)
     } else {
-      mycode = rescodes.ERR_GENERICO
-      UserStore.mutations.setServerCode(rescodes.ERR_GENERICO)
+      mycode = tools.ERR_GENERICO
+      UserStore.mutations.setServerCode(tools.ERR_GENERICO)
     }
 
     if (error.response) {

@@ -1,8 +1,10 @@
-.svgclass{
+
+.svgclass {
   color: white;
   transform: translateY(0px);
 
 }
+
 
 .svgclass_animate {
   transform: translateY(-70px);
@@ -14,16 +16,24 @@
 
 }
 
-@keyframes gravity{
-  0%{
+#logoimg {
+  height: 150px;
+  width: auto;
+  @media screen and (max-width: 600px) {
+  }
+}
+
+@keyframes gravity {
+  0% {
     transform: rotateY(0deg);
   }
-  100%{
+  100% {
     transform: rotateY(360deg);
   }
 }
 
-#smile{
+#smile {
   opacity: 0.1 !important;
   fill: red;
 }
+

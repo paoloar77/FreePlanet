@@ -7,14 +7,14 @@ import translate from './../../globalroutines/util'
 
 import urlBase64ToUint8Array from '../../js/utility'
 
-import messages from '../../statics/i18n'
+import messages from '../../assets/i18n'
 import { GlobalStore, Todos, UserStore } from '@store'
 import globalroutines from './../../globalroutines/index'
 import Api from '@api'
-import { rescodes } from '@src/store/Modules/rescodes'
+import { tools } from '@src/store/Modules/tools'
 
-const allTables = ['todos', 'sync_todos', 'sync_todos_patch', 'delete_todos', 'config', 'swmsg']
-const allTablesAfterLogin = ['todos', 'sync_todos', 'sync_todos_patch', 'delete_todos', 'config', 'swmsg']
+const allTables = ['todos', 'categories', 'sync_todos', 'sync_todos_patch', 'delete_todos', 'config', 'swmsg']
+const allTablesAfterLogin = ['todos', 'categories', 'sync_todos', 'sync_todos_patch', 'delete_todos', 'config', 'swmsg']
 
 async function getstateConnSaved() {
   const config = await globalroutines(null, 'readall', 'config', null)
@@ -44,6 +44,7 @@ const state: IGlobalState = {
   stateConnection: stateConnDefault,
   networkDataReceived: false,
   cfgServer: [],
+  testp1: { contatore: 0, mioarray: [] },
   category: 'personal',
   posts: [],
   listatodo: [
@@ -69,7 +70,17 @@ namespace Getters {
   const listatodo = b.read(state => state.listatodo, 'listatodo')
   const category = b.read(state => state.category, 'category')
 
+  const testpao1_getter_contatore = b.read(state => param1 => state.testp1.contatore + 100 + param1, 'testpao1_getter_contatore')
+  const testpao1_getter_array = b.read(state => param1 => state.testp1.mioarray.filter(item => item).map(item => item.valore) , 'testpao1_getter_array')
+
+
   export const getters = {
+    get testpao1_getter_contatore() {
+      return testpao1_getter_contatore()
+    },
+    get testpao1_getter_array() {
+      return testpao1_getter_array()
+    },
     get conta() {
       return conta()
     },
@@ -89,7 +100,7 @@ namespace Getters {
 
     get isNewVersionAvailable() {
       console.log('state.cfgServer', state.cfgServer)
-      const serversrec = state.cfgServer.find(x => x.chiave === rescodes.SERVKEY_VERS)
+      const serversrec = state.cfgServer.find(x => x.chiave === tools.SERVKEY_VERS)
       console.log('Record ', serversrec)
       if (serversrec) {
         console.log('Vers Server ', serversrec.valore, 'Vers locale:', process.env.APP_VERSION)
@@ -101,6 +112,18 @@ namespace Getters {
 }
 
 namespace Mutations {
+  function setPaoArray(state: IGlobalState, miorec: ICfgServer) {
+    state.testp1.mioarray[state.testp1.mioarray.length - 1] = miorec
+
+    tools.notifyarraychanged(state.testp1.mioarray)
+    console.log('last elem = ', state.testp1.mioarray[state.testp1.mioarray.length - 1])
+  }
+  function NewArray(state: IGlobalState, newarr: ICfgServer[]) {
+    state.testp1.mioarray = newarr
+  }
+  function setPaoArray_Delete(state: IGlobalState) {
+    state.testp1.mioarray.pop()
+  }
 
   function setConta(state: IGlobalState, num: number) {
     state.conta = num
@@ -130,7 +153,10 @@ namespace Mutations {
     setleftDrawerOpen: b.commit(setleftDrawerOpen),
     setCategorySel: b.commit(setCategorySel),
     setStateConnection: b.commit(setStateConnection),
-    SetwasAlreadySubOnDb: b.commit(SetwasAlreadySubOnDb)
+    SetwasAlreadySubOnDb: b.commit(SetwasAlreadySubOnDb),
+    setPaoArray: b.commit(setPaoArray),
+    setPaoArray_Delete: b.commit(setPaoArray_Delete),
+    NewArray: b.commit(NewArray)
   }
 
 }
@@ -170,7 +196,7 @@ namespace Actions {
         mystate.wasAlreadySubscribed = !(subscription === null)
 
         if (mystate.wasAlreadySubscribed) {
-          console.log('User is already SAVED Subscribe on DB!')
+          // console.log('User is already SAVED Subscribe on DB!')
           // return null
           return subscription
         } else {
@@ -197,7 +223,7 @@ namespace Actions {
     if (!newSub)
       return
 
-    console.log('saveSubscriptionToServer: ', newSub)
+    // console.log('saveSubscriptionToServer: ', newSub)
     // console.log('context', context)
 
     let options = null
@@ -225,7 +251,7 @@ namespace Actions {
         state.wasAlreadySubscribed = true
         state.wasAlreadySubOnDb = true
 
-        localStorage.setItem(rescodes.localStorage.wasAlreadySubOnDb, String(state.wasAlreadySubOnDb))
+        localStorage.setItem(tools.localStorage.wasAlreadySubOnDb, String(state.wasAlreadySubOnDb))
       })
       .catch(e => {
         console.log('Error during Subscription!', e)
@@ -262,6 +288,7 @@ namespace Actions {
 
   function prova(context) {
     // console.log('prova')
+    // state.testp1.mioarray[state.testp1.mioarray.length - 1].valore = 'VALMODIF';
 
     // let msg = t('notification.title_subscribed')
 
@@ -318,7 +345,7 @@ namespace Actions {
   async function saveCfgServerKey(context, dataval: ICfgServer) {
     console.log('saveCfgServerKey dataval', dataval)
 
-    let ris = await Api.SendReq('/admin/updateval', 'POST', {pairval: dataval})
+    let ris = await Api.SendReq('/admin/updateval', 'POST', { pairval: dataval })
       .then(res => {
 
       })
@@ -341,7 +368,6 @@ namespace Actions {
         if (res.data.cfgServer) {
           state.cfgServer = [...res.data.cfgServer]
           console.log('res.data.cfgServer', res.data.cfgServer)
-          // Todos.mutations.setTodos_changed()
         }
 
         // console.log('**********  res', 'state.todos', state.todos, 'checkPending', checkPending)

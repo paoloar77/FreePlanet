@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import { Component, Prop, Watch } from 'vue-property-decorator'
 import { GlobalStore, UserStore } from '@store'
-import { rescodes } from '../../../store/Modules/rescodes'
+import { tools } from '../../../store/Modules/tools'
 import { serv_constants } from '../../../store/Modules/serv_constants'
 
 
@@ -78,7 +78,7 @@ export default class Signin extends Vue {
   checkErrors(riscode) {
     // console.log('checkErrors: ', riscode)
     try {
-      if (riscode === rescodes.OK) {
+      if (riscode === tools.OK) {
         this.showNotif({ type: 'positive', message: this.$t('login.completato') })
         this.$router.push('/')
       } else if (riscode === serv_constants.RIS_CODE_LOGIN_ERR) {
@@ -97,9 +97,9 @@ export default class Signin extends Vue {
           this.$router.push('/signin')
         })
 
-      } else if (riscode === rescodes.ERR_SERVERFETCH) {
+      } else if (riscode === tools.ERR_SERVERFETCH) {
         this.showNotif(this.$t('fetch.errore_server'))
-      } else if (riscode === rescodes.ERR_GENERICO) {
+      } else if (riscode === tools.ERR_GENERICO) {
         let msg = this.$t('fetch.errore_generico') + UserStore.mutations.getMsgError(riscode)
         this.showNotif(msg)
       } else {
@@ -155,7 +155,7 @@ export default class Signin extends Vue {
     UserStore.actions.signin(this.signin)
       .then((riscode) => {
         // console.log('signin FINITO CALL: riscode=', riscode)
-        if (riscode === rescodes.OK) {
+        if (riscode === tools.OK) {
           router.push('/signin')
         }
         return riscode
@@ -171,7 +171,7 @@ export default class Signin extends Vue {
         return riscode
       })
       .then((riscode) => {
-        if (riscode === rescodes.OK) {
+        if (riscode === tools.OK) {
           GlobalStore.actions.createPushSubscription()
             .then(rissub => {
 

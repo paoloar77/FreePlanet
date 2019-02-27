@@ -60,7 +60,7 @@
 
   import {mapActions} from 'vuex'
   import * as types from '../../store/mutation-types'
-  //import {rescodes} from '../../store/Modules/user'
+  //import {tools} from '../../store/Modules/user'
 
   import {serv_constants} from '../../store/Modules/serv_constants';
 

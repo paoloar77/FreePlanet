@@ -17,7 +17,11 @@ const messages = {
     msg: {
       hello: 'Buongiorno',
       myAppName: 'FreePlanet',
-      myDescriz: ''
+      underconstruction: 'App in costruzione...',
+      myDescriz: '',
+      sottoTitoloApp: 'Il primo Vero Social',
+      sottoTitoloApp2: 'Libero, Equo e Solidale',
+      sottoTitoloApp3: 'dove Vive Consapevolezza e Aiuto Comunitario'
     },
     pages: {
       home: 'Principale',
@@ -31,6 +35,8 @@ const messages = {
       work: 'Lavoro',
       shopping: 'Spesa',
       Admin: 'Admin',
+      Test1: 'Test1',
+      Test2: 'Test2',
     },
     components: {
       authentication:{
@@ -112,10 +118,11 @@ const messages = {
       inserttop: 'Inserisci il Task in alto',
       insertbottom: 'Inserisci il Task in basso',
       edit: 'Descrizione Task:',
-      completed: 'Completati',
+      completed: 'Ultimi Completati',
       usernotdefined: 'Attenzione, occorre essere Loggati per poter aggiungere un Todo'
     },
     notification : {
+      status: 'Stato',
       ask: 'Attiva le Notifiche',
       waitingconfirm: 'Conferma la richiesta di Notifica',
       confirmed: 'Notifiche Attivate!',
@@ -146,7 +153,11 @@ const messages = {
     msg: {
       hello: 'Buenos Días',
       myAppName: 'FreePlanet',
-      myDescriz: ''
+      underconstruction: 'App en construcción...',
+      myDescriz: '',
+      sottoTitoloApp: 'El primer Verdadero Social',
+      sottoTitoloApp2: 'Libre, justo y Solidario',
+      sottoTitoloApp3: 'Donde vive Conciencia y Ayuda comunitaria'
     },
     pages: {
       home: 'Principal',
@@ -160,6 +171,8 @@ const messages = {
       work: 'Trabajo',
       shopping: 'Compras',
       Admin: 'Administración',
+      Test1: 'Test1',
+      Test2: 'Test2',
     },
     components: {
       authentication:{
@@ -241,10 +254,11 @@ const messages = {
       inserttop: 'Ingrese una nueva Tarea arriba',
       insertbottom: 'Ingrese una nueva Tarea abajo',
       edit: 'Descripción Tarea:',
-      completed: 'Completados',
+      completed: 'Ultimos Completados',
       usernotdefined: 'Atención, debes iniciar sesión para agregar una Tarea'
     },
     notification : {
+      status: 'Estado',
       ask: 'Activar notificaciones',
       waitingconfirm: 'Confirmar la solicitud de notificación.',
       confirmed: 'Notificaciones activadas!',
@@ -275,7 +289,11 @@ const messages = {
     msg: {
       hello: 'Hello!',
       myAppName: 'FreePlanet',
-      myDescriz: ''
+      underconstruction: 'App in constuction...',
+      myDescriz: '',
+      sottoTitoloApp: 'The first Real Social',
+      sottoTitoloApp2: 'Free, Fair and solidarity',
+      sottoTitoloApp3: 'Where the conscience and community help live'
     },
     pages: {
       home: 'Dashboard',
@@ -289,6 +307,8 @@ const messages = {
       work: 'Work',
       shopping: 'Shopping',
       Admin: 'Admin',
+      Test1: 'Test1',
+      Test2: 'Test2',
     },
     components: {
       authentication:{
@@ -370,10 +390,11 @@ const messages = {
       inserttop: 'Insert Task at the top',
       insertbottom: 'Insert Task at the bottom',
       edit: 'Task Description:',
-      completed: 'Completed',
+      completed: 'Lasts Completed',
       usernotdefined: 'Attention, you need to be Signed In to add a new Task'
     },
     notification : {
+      status: 'Status',
       ask: 'Enable Notification',
       waitingconfirm: 'Confirm the Request Notification',
       confirmed: 'Notifications Enabled!',

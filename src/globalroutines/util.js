@@ -1,5 +1,5 @@
 import { UserStore } from "../store/Modules";
-import messages from "../statics/i18n";
+import messages from "../assets/i18n";
 
 function translate(params) {
   let msg = params.split('.')

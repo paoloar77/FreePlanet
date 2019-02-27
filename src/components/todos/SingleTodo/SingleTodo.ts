@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import { Component, Prop, Watch } from 'vue-property-decorator'
 
-import { rescodes } from '../../../store/Modules/rescodes'
+import { tools } from '../../../store/Modules/tools'
 import { UserStore } from '@modules'
 
 import { ITodo } from '../../../model/index'
@@ -48,21 +48,21 @@ export default class SingleTodo extends Vue {
   @Prop({ required: true }) itemtodo: ITodo
 
 
-  @Watch('itemtodo.completed') valueChanged() {
-    this.watchupdate()
-  }
+  // @Watch('itemtodo.completed') valueChanged() {
+  //   this.watchupdate('completed')
+  // }
 
   @Watch('itemtodo.enableExpiring') valueChanged4() {
-    this.watchupdate()
+    this.watchupdate('enableExpiring')
   }
 
   @Watch('itemtodo.expiring_at') valueChanged2() {
-    this.watchupdate()
+    this.watchupdate('expiring_at')
   }
 
-  @Watch('itemtodo.priority') valueChanged3() {
-    this.watchupdate()
-  }
+  // @Watch('itemtodo.priority') valueChanged3() {
+  //   this.watchupdate('priority')
+  // }
 
 
   @Watch('itemtodo.descr') valueChanged5() {
@@ -91,8 +91,8 @@ export default class SingleTodo extends Vue {
     return elem.descr.slice(-1) !== ':'
   }
 
-  watchupdate() {
-    this.$emit('eventupdate', this.itemtodo)
+  watchupdate(field = '') {
+    this.$emit('eventupdate', {myitem: this.itemtodo, field } )
     this.updateicon()
   }
 
@@ -158,10 +158,10 @@ export default class SingleTodo extends Vue {
 
     // console.log('UserStore.state.lang', UserStore.state.lang)
     if (this.isTodo())
-      this.menuPopupTodo = rescodes.menuPopupTodo[UserStore.state.lang]
+      this.menuPopupTodo = tools.menuPopupTodo[UserStore.state.lang]
     else {
       this.menuPopupTodo = []
-      this.menuPopupTodo.push(rescodes.menuPopupTodo[UserStore.state.lang][rescodes.INDEX_MENU_DELETE])
+      this.menuPopupTodo.push(tools.menuPopupTodo[UserStore.state.lang][tools.INDEX_MENU_DELETE])
     }
 
   }
@@ -172,7 +172,7 @@ export default class SingleTodo extends Vue {
 
     this.updateClasses()
 
-    this.selectPriority = rescodes.selectPriority[UserStore.state.lang]
+    this.selectPriority = tools.selectPriority[UserStore.state.lang]
 
 
   }
@@ -283,7 +283,7 @@ export default class SingleTodo extends Vue {
     if (((e.keyCode === 8) || (e.keyCode === 46)) && (this.precDescr === '') && !e.shiftKey) {
       e.preventDefault()
       this.deselectRiga()
-      this.clickMenu(rescodes.MenuAction.DELETE)
+      this.clickMenu(tools.MenuAction.DELETE)
         .then(() => {
           this.faiFocus('insertTask', true)
           return
@@ -311,7 +311,7 @@ export default class SingleTodo extends Vue {
     if (((e.keyCode === 8) || (e.keyCode === 46)) && (this.precDescr === '') && !e.shiftKey) {
       e.preventDefault()
       this.deselectRiga()
-      this.clickMenu(rescodes.MenuAction.DELETE)
+      this.clickMenu(tools.MenuAction.DELETE)
         .then(() => {
           this.faiFocus('insertTask', true)
           return
@@ -349,7 +349,7 @@ export default class SingleTodo extends Vue {
     console.log('itemtodo', this.itemtodo)
     console.log('Prec:', this.itemtodoPrec)
 
-    this.watchupdate()
+    this.watchupdate('descr')
     this.inEdit = false
     // this.precDescr = this.itemtodo.descr
     this.updateClasses()
@@ -361,15 +361,15 @@ export default class SingleTodo extends Vue {
 
     this.updateicon()
 
-    this.updatedata()
+    this.updatedata('completed')
 
     this.deselectAndExitEdit()
   }
 
-  updatedata() {
-    const myitem = rescodes.jsonCopy(this.itemtodo)
-    console.log('calling this.$emit(eventupdate)', myitem)
-    this.$emit('eventupdate', myitem)
+  updatedata(field: string) {
+    // const myitem = tools.jsonCopy(this.itemtodo)
+    console.log('calling this.$emit(eventupdate)', this.itemtodo)
+    this.$emit('eventupdate', { myitem: this.itemtodo, field } )
   }
 
   updateicon() {
@@ -380,11 +380,11 @@ export default class SingleTodo extends Vue {
       this.iconCompleted = 'check_circle_outline'
 
 
-    if (this.itemtodo.priority === rescodes.Todos.PRIORITY_HIGH)
+    if (this.itemtodo.priority === tools.Todos.PRIORITY_HIGH)
       this.iconPriority = 'expand_less'  // expand_less
-    else if (this.itemtodo.priority === rescodes.Todos.PRIORITY_NORMAL)
+    else if (this.itemtodo.priority === tools.Todos.PRIORITY_NORMAL)
       this.iconPriority = 'remove'
-    else if (this.itemtodo.priority === rescodes.Todos.PRIORITY_LOW)
+    else if (this.itemtodo.priority === tools.Todos.PRIORITY_LOW)
       this.iconPriority = 'expand_more'  // expand_more
 
     this.updateClasses()
@@ -392,7 +392,7 @@ export default class SingleTodo extends Vue {
 
 
   removeitem(id) {
-    this.$emit('deleteitem', id)
+    this.$emit('deleteItem', id)
   }
 
   enableExpiring() {
@@ -402,14 +402,14 @@ export default class SingleTodo extends Vue {
 
   async clickMenu(action) {
     console.log('click menu: ', action)
-    if (action === rescodes.MenuAction.DELETE) {
+    if (action === tools.MenuAction.DELETE) {
       return await this.askConfirmDelete()
-    } else if (action === rescodes.MenuAction.TOGGLE_EXPIRING) {
+    } else if (action === tools.MenuAction.TOGGLE_EXPIRING) {
       return await this.enableExpiring()
-    } else if (action === rescodes.MenuAction.COMPLETED) {
+    } else if (action === tools.MenuAction.COMPLETED) {
       return await this.setCompleted()
-    } else if (action === rescodes.MenuAction.PROGRESS_BAR) {
-      return await this.updatedata()
+    } else if (action === tools.MenuAction.PROGRESS_BAR) {
+      return await this.updatedata('progress')
     } else if (action === 0) {
       this.deselectAndExitEdit()
     }
@@ -418,11 +418,13 @@ export default class SingleTodo extends Vue {
 
   setPriority(newpriority) {
 
-    this.itemtodo.priority = newpriority
+    if (this.itemtodo.priority !== newpriority) {
+      this.itemtodo.priority = newpriority
 
-    this.updatedata()
+      this.updatedata('priority')
 
-    this.updateicon()
+      this.updateicon()
+    }
 
     // this.$q.notify('setPriority: ' + elem)
   }

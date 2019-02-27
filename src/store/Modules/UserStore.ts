@@ -5,7 +5,7 @@ import { storeBuilder } from './Store/Store'
 import router from '@router'
 
 import { serv_constants } from '../Modules/serv_constants'
-import { rescodes } from '../Modules/rescodes'
+import { tools } from '../Modules/tools'
 import { GlobalStore, UserStore, Todos } from '@store'
 import globalroutines from './../../globalroutines/index'
 
@@ -36,6 +36,9 @@ const b = storeBuilder.module<IUserState>('UserModule', state)
 const stateGetter = b.state()
 
 namespace Getters {
+  // const fullName = b.read(function fullName(state): string {
+  //   return state.userInfos.firstname?capitalize(state.userInfos.firstname) + " " + capitalize(state.userInfos.lastname):null;
+  // })
 
   const lang = b.read(state => {
     if (state.lang !== '') {
@@ -58,7 +61,7 @@ namespace Getters {
   // }, 'tok')
 
   const isServerError = b.read(state => {
-    return (state.servercode === rescodes.ERR_SERVERFETCH)
+    return (state.servercode === tools.ERR_SERVERFETCH)
   }, 'isServerError')
 
   const getServerCode = b.read(state => {
@@ -78,6 +81,7 @@ namespace Getters {
     get getServerCode() {
       return getServerCode()
     }
+    // get fullName() { return fullName();},
   }
 
 
@@ -116,7 +120,7 @@ namespace Mutations {
   function setlang(state: IUserState, newstr: string) {
     console.log('SETLANG', newstr)
     state.lang = newstr
-    localStorage.setItem(rescodes.localStorage.lang, state.lang)
+    localStorage.setItem(tools.localStorage.lang, state.lang)
   }
 
   function UpdatePwd(state: IUserState, x_auth_token: string) {
@@ -163,7 +167,7 @@ namespace Mutations {
 
 
   function setErrorCatch(state: IUserState, axerr: Types.AxiosError) {
-    if (state.servercode !== rescodes.ERR_SERVERFETCH) {
+    if (state.servercode !== tools.ERR_SERVERFETCH) {
       state.servercode = axerr.getCode()
     }
     console.log('Err catch: (servercode:', axerr.getCode(), axerr.getMsgError(), ')')
@@ -171,9 +175,9 @@ namespace Mutations {
 
   function getMsgError(state: IUserState, err: number) {
     let msgerrore = ''
-    if (err !== rescodes.OK) {
+    if (err !== tools.OK) {
       msgerrore = 'Error [' + state.servercode + ']: '
-      if (state.servercode === rescodes.ERR_SERVERFETCH) {
+      if (state.servercode === tools.ERR_SERVERFETCH) {
         msgerrore = translate('fetch.errore_server')
       } else {
         msgerrore = translate('fetch.errore_generico')
@@ -230,7 +234,7 @@ namespace Actions {
     }
     console.log(usertosend)
 
-    Mutations.mutations.setServerCode(rescodes.CALLING)
+    Mutations.mutations.setServerCode(tools.CALLING)
 
     return await Api.SendReq('/updatepwd', 'POST', usertosend, true)
       .then(res => {
@@ -252,7 +256,7 @@ namespace Actions {
     }
     console.log(usertosend)
 
-    Mutations.mutations.setServerCode(rescodes.CALLING)
+    Mutations.mutations.setServerCode(tools.CALLING)
 
     return await Api.SendReq('/requestnewpwd', 'POST', usertosend)
       .then(res => {
@@ -272,7 +276,7 @@ namespace Actions {
     }
     console.log(usertosend)
 
-    Mutations.mutations.setServerCode(rescodes.CALLING)
+    Mutations.mutations.setServerCode(tools.CALLING)
 
     return await Api.SendReq('/vreg', 'POST', usertosend)
       .then(res => {
@@ -280,7 +284,7 @@ namespace Actions {
         // mutations.setServerCode(myres);
         if (res.data.code === serv_constants.RIS_CODE_EMAIL_VERIFIED) {
           console.log('VERIFICATO !!')
-          localStorage.setItem(rescodes.localStorage.verified_email, String(true))
+          localStorage.setItem(tools.localStorage.verified_email, String(true))
         } else {
           console.log('Risultato di vreg: ', res.data.code)
         }
@@ -312,7 +316,7 @@ namespace Actions {
 
         console.log(usertosend)
 
-        Mutations.mutations.setServerCode(rescodes.CALLING)
+        Mutations.mutations.setServerCode(tools.CALLING)
 
         return Api.SendReq('/users', 'POST', usertosend)
           .then(res => {
@@ -340,19 +344,19 @@ namespace Actions {
               const now = new Date()
               // const expirationDate = new Date(now.getTime() + myres.data.expiresIn * 1000);
               const expirationDate = new Date(now.getTime() * 1000)
-              localStorage.setItem(rescodes.localStorage.lang, state.lang)
-              localStorage.setItem(rescodes.localStorage.userId, userId)
-              localStorage.setItem(rescodes.localStorage.username, username)
-              localStorage.setItem(rescodes.localStorage.token, state.x_auth_token)
-              localStorage.setItem(rescodes.localStorage.expirationDate, expirationDate.toString())
-              localStorage.setItem(rescodes.localStorage.verified_email, String(false))
+              localStorage.setItem(tools.localStorage.lang, state.lang)
+              localStorage.setItem(tools.localStorage.userId, userId)
+              localStorage.setItem(tools.localStorage.username, username)
+              localStorage.setItem(tools.localStorage.token, state.x_auth_token)
+              localStorage.setItem(tools.localStorage.expirationDate, expirationDate.toString())
+              localStorage.setItem(tools.localStorage.verified_email, String(false))
               state.isLogged = true
               // dispatch('storeUser', authData);
               // dispatch('setLogoutTimer', myres.data.expiresIn);
 
-              return rescodes.OK
+              return tools.OK
             } else {
-              return rescodes.ERR_GENERICO
+              return tools.ERR_GENERICO
             }
           })
           .catch((error) => {
@@ -405,7 +409,7 @@ namespace Actions {
 
     console.log(usertosend)
 
-    Mutations.mutations.setServerCode(rescodes.CALLING)
+    Mutations.mutations.setServerCode(tools.CALLING)
 
     let myres: any
 
@@ -416,7 +420,7 @@ namespace Actions {
         myres = res
 
         if (myres.status !== 200) {
-          return Promise.reject(rescodes.ERR_GENERICO)
+          return Promise.reject(tools.ERR_GENERICO)
         }
         return myres
 
@@ -440,22 +444,22 @@ namespace Actions {
             const now = new Date()
             // const expirationDate = new Date(now.getTime() + myres.data.expiresIn * 1000);
             const expirationDate = new Date(now.getTime() * 1000)
-            localStorage.setItem(rescodes.localStorage.lang, state.lang)
-            localStorage.setItem(rescodes.localStorage.userId, userId)
-            localStorage.setItem(rescodes.localStorage.username, username)
-            localStorage.setItem(rescodes.localStorage.token, state.x_auth_token)
-            localStorage.setItem(rescodes.localStorage.expirationDate, expirationDate.toString())
-            localStorage.setItem(rescodes.localStorage.isLogged, String(true))
-            localStorage.setItem(rescodes.localStorage.verified_email, String(verified_email))
-            localStorage.setItem(rescodes.localStorage.wasAlreadySubOnDb, String(GlobalStore.state.wasAlreadySubOnDb))
+            localStorage.setItem(tools.localStorage.lang, state.lang)
+            localStorage.setItem(tools.localStorage.userId, userId)
+            localStorage.setItem(tools.localStorage.username, username)
+            localStorage.setItem(tools.localStorage.token, state.x_auth_token)
+            localStorage.setItem(tools.localStorage.expirationDate, expirationDate.toString())
+            localStorage.setItem(tools.localStorage.isLogged, String(true))
+            localStorage.setItem(tools.localStorage.verified_email, String(verified_email))
+            localStorage.setItem(tools.localStorage.wasAlreadySubOnDb, String(GlobalStore.state.wasAlreadySubOnDb))
 
           }
         }
 
-        return rescodes.OK
+        return tools.OK
 
       }).then(code => {
-        if (code === rescodes.OK) {
+        if (code === tools.OK) {
           return setGlobal(true)
             .then(() => {
               return code
@@ -473,15 +477,15 @@ namespace Actions {
   async function logout(context) {
     console.log('logout')
 
-    localStorage.removeItem(rescodes.localStorage.expirationDate)
-    localStorage.removeItem(rescodes.localStorage.token)
-    localStorage.removeItem(rescodes.localStorage.userId)
-    localStorage.removeItem(rescodes.localStorage.username)
-    localStorage.removeItem(rescodes.localStorage.isLogged)
+    localStorage.removeItem(tools.localStorage.expirationDate)
+    localStorage.removeItem(tools.localStorage.token)
+    localStorage.removeItem(tools.localStorage.userId)
+    localStorage.removeItem(tools.localStorage.username)
+    localStorage.removeItem(tools.localStorage.isLogged)
     // localStorage.removeItem(rescodes.localStorage.leftDrawerOpen)
-    localStorage.removeItem(rescodes.localStorage.verified_email)
-    localStorage.removeItem(rescodes.localStorage.categorySel)
-    localStorage.removeItem(rescodes.localStorage.wasAlreadySubOnDb)
+    localStorage.removeItem(tools.localStorage.verified_email)
+    localStorage.removeItem(tools.localStorage.categorySel)
+    localStorage.removeItem(tools.localStorage.wasAlreadySubOnDb)
 
 
     await GlobalStore.actions.clearDataAfterLogout()
@@ -509,14 +513,14 @@ namespace Actions {
 
   async function setGlobal(loggedWithNetwork: boolean) {
     state.isLogged = true
-    GlobalStore.mutations.setleftDrawerOpen(localStorage.getItem(rescodes.localStorage.leftDrawerOpen) === 'true')
-    GlobalStore.mutations.setCategorySel(localStorage.getItem(rescodes.localStorage.categorySel))
+    GlobalStore.mutations.setleftDrawerOpen(localStorage.getItem(tools.localStorage.leftDrawerOpen) === 'true')
+    GlobalStore.mutations.setCategorySel(localStorage.getItem(tools.localStorage.categorySel))
 
     GlobalStore.actions.checkUpdates()
 
     await GlobalStore.actions.loadAfterLogin()
       .then(() => {
-        Todos.actions.dbLoadTodo(true)
+        Todos.actions.dbLoadTodo({ checkPending: true })
       })
   }
 
@@ -526,24 +530,24 @@ namespace Actions {
       // console.log('*** autologin_FromLocalStorage ***')
       // INIT
 
-      UserStore.state.lang = rescodes.getItemLS(rescodes.localStorage.lang)
+      UserStore.state.lang = tools.getItemLS(tools.localStorage.lang)
 
-      const token = localStorage.getItem(rescodes.localStorage.token)
+      const token = localStorage.getItem(tools.localStorage.token)
       if (!token) {
         return false
       }
-      const expirationDateStr = localStorage.getItem(rescodes.localStorage.expirationDate)
+      const expirationDateStr = localStorage.getItem(tools.localStorage.expirationDate)
       let expirationDate = new Date(String(expirationDateStr))
       const now = new Date()
       if (now >= expirationDate) {
         console.log('!!! Login Expired')
         return false
       }
-      const userId = String(localStorage.getItem(rescodes.localStorage.userId))
-      const username = String(localStorage.getItem(rescodes.localStorage.username))
-      const verified_email = localStorage.getItem(rescodes.localStorage.verified_email) === 'true'
+      const userId = String(localStorage.getItem(tools.localStorage.userId))
+      const username = String(localStorage.getItem(tools.localStorage.username))
+      const verified_email = localStorage.getItem(tools.localStorage.verified_email) === 'true'
 
-      GlobalStore.state.wasAlreadySubOnDb = localStorage.getItem(rescodes.localStorage.wasAlreadySubOnDb) === 'true'
+      GlobalStore.state.wasAlreadySubOnDb = localStorage.getItem(tools.localStorage.wasAlreadySubOnDb) === 'true'
 
       console.log('*************  autologin userId', userId)
 

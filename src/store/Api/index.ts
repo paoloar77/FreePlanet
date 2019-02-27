@@ -7,7 +7,7 @@ import axios from 'axios'
 export { addAuthHeaders, removeAuthHeaders, API_URL } from './Instance'
 // import {AlgoliaSearch} from './AlgoliaController'
 import Paths from '@paths'
-import { rescodes } from '@src/store/Modules/rescodes'
+import { tools } from '@src/store/Modules/tools'
 
 import { GlobalStore, UserStore } from '@modules'
 import globalroutines from './../../globalroutines/index'
@@ -62,7 +62,7 @@ export namespace ApiTool {
   }
 
   export async function SendReq(url: string, method: string, mydata: any, setAuthToken: boolean = false): Promise<Types.AxiosSuccess | Types.AxiosError> {
-    UserStore.mutations.setServerCode(rescodes.EMPTY)
+    UserStore.mutations.setServerCode(tools.EMPTY)
     UserStore.mutations.setResStatus(0)
     return await new Promise(function (resolve, reject) {
 
@@ -85,10 +85,10 @@ export namespace ApiTool {
           if (res.status === serv_constants.RIS_CODE__HTTP_FORBIDDEN_INVALID_TOKEN) {
             // Forbidden
             // You probably is connectiong with other page...
-            UserStore.mutations.setServerCode(rescodes.ERR_AUTHENTICATION)
+            UserStore.mutations.setServerCode(tools.ERR_AUTHENTICATION)
             UserStore.mutations.setAuth('')
             router.push('/signin')
-            return reject({ code: rescodes.ERR_AUTHENTICATION })
+            return reject({ code: tools.ERR_AUTHENTICATION })
           }
 
           return resolve(res)
@@ -147,7 +147,7 @@ export namespace ApiTool {
                 if (method !== 'POST')
                   link += '/' + rec._id
 
-                console.log(' [Alternative] ++++++++++++++++++ SYNCING !!!!  ', rec.descr, table, 'FETCH: ', method, link, 'data:')
+                // console.log(' [Alternative] ++++++++++++++++++ SYNCING !!!!  ', rec.descr, table, 'FETCH: ', method, link, 'data:')
 
                 // Insert/Delete/Update table to the server
                 return SendReq(link, method, rec)

@@ -3,7 +3,7 @@ import _ from 'lodash'
 import { UserStore, Todos } from '@store'
 import { i18n } from '../plugins/i18n'
 
-import {idbKeyval as storage} from '../js/storage.js';
+import { idbKeyval as storage } from '../js/storage.js';
 
 function saveConfigIndexDb(context) {
 
@@ -27,20 +27,43 @@ function writeConfigIndexDb(context, data) {
 }
 
 async function readfromIndexDbToStateTodos(context, table) {
-  // console.log('*** read from IndexDb to state.todos')
+  console.log('*** readfromIndexDbToStateTodos ***')
 
   return await storage.getalldata(table)
-    .then(records => {
+    .then(reccat => {
       // console.log('&&&&&&& readfromIndexDbToStateTodos OK: Num RECORD: ', records.length)
-      if (table === 'todos') {
-        Todos.state.todos = [...records]
-        Todos.mutations.setTodos_changed()
-        // console.log('Todos.state.todos_changed:', Todos.state.todos_changed)
-        // setTimeout(testfunc2, 3000)
+      if (table === 'categories') {
+        console.log('reccat', reccat)
+        Todos.state.categories = []
+        for (let indcat in reccat) {
+          Todos.state.categories.push(reccat[indcat].valore)
+        }
+
+        console.log('ARRAY Categories', Todos.state.categories)
+
+        return storage.getalldata('todos')
+          .then(records => {
+            console.log('todos records', records)
+            // console.log('&&&&&&& readfromIndexDbToStateTodos OK: Num RECORD: ', records.length)
+
+            for (let myrec in records) {
+              const cat = myrec.category
+              let indcat = state.categories.indexOf(cat)
+              if (Todos.state.todos[indcat] === undefined)
+                Todos.state.todos[indcat] = {}
+
+              // add to the right array
+              Todos.state.todos[indcat].push(myrec)
+
+            }
+
+            console.log('************  ARRAYS SALVATI IN MEMORIA Todos.state.todos ', Todos.state.todos)
+          })
       }
+
     }).catch((error) => {
-    console.log('err: ', error)
-  })
+      console.log('err: ', error)
+    })
 
 }
 
@@ -49,11 +72,9 @@ function consolelogpao(str, str2 = '', str3 = '') {
   // Todos.mutations.setTestpao(str + str2 + str3)
 }
 
-function testfunc2 () {
+function testfunc2() {
   consolelogpao('testfunc2')
-  Todos.mutations.setTodos_changed()
 
-  consolelogpao('testfunc2: Todos.state.todos_changed:', Todos.state.todos_changed)
 }
 
 export default async (context, cmd, table, datakey = null, id = '') => {

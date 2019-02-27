@@ -1,13 +1,13 @@
 // src/plugins/i18n.js
 import VueI18n from 'vue-i18n';
-import messages from 'src/statics/i18n';
-import { rescodes } from "../store/Modules/rescodes";
+import messages from 'src/assets/i18n';
+import { tools } from "../store/Modules/tools";
 
 export default ({ app, store, Vue }) => {
   Vue.use(VueI18n);
   // Vue.config.lang = process.env.LANG_DEFAULT;
 
-  let mylang = rescodes.getItemLS(rescodes.localStorage.lang)
+  let mylang = tools.getItemLS(tools.localStorage.lang)
 
   if ((navigator) && (mylang === '')) {
     mylang = navigator.language

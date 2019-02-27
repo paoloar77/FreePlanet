@@ -1,4 +1,9 @@
-export const rescodes = {
+import { ITodo } from '@src/model'
+import globalroutines from './../../globalroutines/index'
+import { Todos, UserStore } from '@store'
+import Api from '@api'
+
+export const tools = {
   EMPTY: 0,
   CALLING: 10,
   OK: 20,
@@ -36,9 +41,9 @@ export const rescodes = {
     CMD_SYNC_TODOS: 'sync-todos',
     CMD_SYNC_NEW_TODOS: 'sync-new-todos',
     CMD_DELETE_TODOS: 'sync-delete-todos',
-    TABLE_SYNC_TODOS : 'sync_todos',
-    TABLE_SYNC_TODOS_PATCH : 'sync_todos_patch',
-    TABLE_DELETE_TODOS : 'delete_todos'
+    TABLE_SYNC_TODOS: 'sync_todos',
+    TABLE_SYNC_TODOS_PATCH: 'sync_todos_patch',
+    TABLE_DELETE_TODOS: 'delete_todos'
   },
 
   MenuAction: {
@@ -170,7 +175,7 @@ export const rescodes = {
         icon: 'delete',
         checked: false
       }
-      ],
+    ],
     'esEs': [
       {
         id: 10,
@@ -244,7 +249,7 @@ export const rescodes = {
         icon: 'trash',
         checked: false
       }
-      ]
+    ]
   },
 
   jsonCopy(src) {
@@ -257,8 +262,76 @@ export const rescodes = {
       ris = ''
 
     return ris
-  }
+  },
 
+  notifyarraychanged(array) {
+    if (array.length > 0)
+      array.splice(array.length - 1, 1, array[array.length - 1])
+  },
+
+  existArr(x) {
+    return x = (typeof x !== 'undefined' && x instanceof Array) ? x : []
+  },
+
+  json2array(json) {
+    let result = []
+    let keys = Object.keys(json)
+    keys.forEach(function (key) {
+      result.push(json[key])
+    })
+    return result
+  },
+
+  async cmdToSyncAndDb(cmd, table, method, item: ITodo, id, msg: String) {
+    // Send to Server to Sync
+
+    console.log('cmdToSyncAndDb', cmd, table, method, item.descr, id, msg)
+
+    let cmdSw = cmd
+    if ((cmd === tools.DB.CMD_SYNC_NEW_TODOS) || (cmd === tools.DB.CMD_DELETE_TODOS)) {
+      cmdSw = tools.DB.CMD_SYNC_TODOS
+    }
+
+    if ('serviceWorker' in navigator) {
+      return await navigator.serviceWorker.ready
+        .then(function (sw) {
+          // console.log('----------------------      navigator.serviceWorker.ready')
+
+          return globalroutines(null, 'write', table, item, id)
+            .then(function (id) {
+              // console.log('id', id)
+              const sep = '|'
+
+              let multiparams = cmdSw + sep + table + sep + method + sep + UserStore.state.x_auth_token + sep + UserStore.state.lang
+              let mymsgkey = {
+                _id: multiparams,
+                value: multiparams
+              }
+              return globalroutines(null, 'write', 'swmsg', mymsgkey, multiparams)
+                .then(ris => {
+                  // if ('SyncManager' in window) {
+                  //   console.log('   SENDING... sw.sync.register', multiparams)
+                  //   return sw.sync.register(multiparams)
+                  // } else {
+                  // #Todo ++ Alternative 2 to SyncManager
+                  return Api.syncAlternative(multiparams)
+                  // }
+                })
+                .then(function () {
+                  let data = null
+                  if (msg !== '') {
+                    data = { message: msg, position: 'bottom', timeout: 3000 }
+                  }
+                  return data
+                })
+                .catch(function (err) {
+                  console.error('Errore in globalroutines', table, err)
+                })
+            })
+        })
+    }
+
+  }
 
 
 

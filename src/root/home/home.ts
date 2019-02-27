@@ -30,6 +30,7 @@ export default class Home extends Vue {
     GlobalStore.actions.prova()
   }
 
+
   meta() {
     return {
       keywords: { name: 'keywords', content: 'Quasar website' },
@@ -95,7 +96,7 @@ export default class Home extends Vue {
       options = {
         body: 'You successfully subscribed to our Notification service!',
         icon: '/statics/icons/app-icon-96x96.png',
-        image: '/src/images/sf-boat.jpg',
+        image: '/assets/images/sf-boat.jpg',
         dir: 'ltr',
         lang: 'enUs', // BCP 47,
         vibrate: [100, 50, 200],
@@ -152,7 +153,7 @@ export default class Home extends Vue {
       options = {
         body: mythis.$t('notification.subscribed'),
         icon: '/statics/icons/android-chrome-192x192.png',
-        image: '/statics/images/freeplanet.png',
+        image: '/assets/images/freeplanet.png',
         dir: 'ltr',
         lang: 'enUs', // BCP 47,
         vibrate: [100, 50, 200],

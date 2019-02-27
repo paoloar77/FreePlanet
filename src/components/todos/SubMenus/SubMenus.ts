@@ -2,7 +2,7 @@ import Vue from 'vue'
 import { Component, Prop } from 'vue-property-decorator'
 
 import { ITodo } from '../../../model/index'
-import { rescodes } from '@src/store/Modules/rescodes'
+import { tools } from '@src/store/Modules/tools'
 import { UserStore } from '@store'
 
 // Doesn't exist in quasar this ? error TS2305
@@ -16,7 +16,7 @@ import { UserStore } from '@store'
 })
 
 export default class SubMenus extends Vue {
-  public selectPriority: [] = rescodes.selectPriority[UserStore.state.lang]
+  public selectPriority: [] = tools.selectPriority[UserStore.state.lang]
 
   @Prop({ required: false }) menuPopupTodo: any[]
   @Prop({ required: false }) itemtodo: ITodo
@@ -47,7 +47,7 @@ export default class SubMenus extends Vue {
   }
 
   create () {
-    this.selectPriority = rescodes.selectPriority[UserStore.state.lang]
+    this.selectPriority = tools.selectPriority[UserStore.state.lang]
 
     console.log('CREAZIONE')
   }

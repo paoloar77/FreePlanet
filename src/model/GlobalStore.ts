@@ -14,6 +14,11 @@ export interface ICfgServer {
   valore: string
 }
 
+export interface ITestp1 {
+  contatore: number
+  mioarray: ICfgServer[]
+}
+
 export type StateConnection = 'online' | 'offline'
 
 export interface IGlobalState {
@@ -29,6 +34,7 @@ export interface IGlobalState {
   stateConnection: string
   networkDataReceived: boolean
   cfgServer: ICfgServer[]
+  testp1: ITestp1
   connData: IConnData
   posts: IPost[]
   listatodo: ITodoList[]

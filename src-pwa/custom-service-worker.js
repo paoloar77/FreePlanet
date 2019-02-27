@@ -8,8 +8,8 @@
 
 console.log('   [  VER-0.0.27 ] _---------________------  PAO: this is my custom service worker');
 
-importScripts('../statics/js/idb.js');
-importScripts('../statics/js/storage.js');
+importScripts('../assets/js/idb.js');
+importScripts('../assets/js/storage.js');
 importScripts('https://storage.googleapis.com/workbox-cdn/releases/3.0.0/workbox-sw.js'); //++Todo: Replace with local workbox.js
 
 
@@ -122,24 +122,50 @@ if (workbox) {
           if (res.status === 200) {
             const clonedRes = res.clone();
 
-            return clearAllData('todos')
+            // console.log('1) clearAllData(categories)')
+            return clearAllData('categories')
               .then(() => {
-                return clonedRes
+                // console.log('2) clearAllData(todos)')
+                return clearAllData('todos')
+                  .then(() => {
+                    // console.log('3)  ....return clonedRes')
+                    return clonedRes
+                  })
               })
           }
         })
         .then((clonedRes) => {
+          // console.log('  3) ')
           if (clonedRes !== undefined)
             return clonedRes.json();
           return null
         })
-        .then(async data => {
+        .then(data => {
+          // console.log('  4) data = ', data)
           if (data) {
             if (data.todos) {
-              console.log('***********************+++++++++++++++++++++++++++++++++++++++++++++++++++**********    Records TODOS Received from Server [', data.todos.length, 'record]', data.todos)
-              for (let key in data.todos) {
-                await writeData('todos', data.todos[key])
+
+              let promiseChain = Promise.resolve();
+
+              console.log('*********+++++++++++++++++**********    Records TODOS Received from Server [', data.todos.length, 'record]', data.todos)
+
+              for (let cat in data.categories) {
+                promiseChain = promiseChain.then(() => {
+                  return writeData('categories', { _id: cat, valore: data.categories[cat] } )
+                })
               }
+
+              for (let indrecCat in data.todos) {
+                for (let indrec in data.todos[indrecCat]) {
+                  promiseChain = promiseChain.then(() => {
+                    return writeData('todos', data.todos[indrecCat][indrec])
+                  })
+                }
+              }
+
+              // console.log('promiseChain', promiseChain)
+
+              return promiseChain
             }
           }
         })
@@ -180,7 +206,7 @@ if (workbox) {
   });
 
   workbox.routing.registerRoute(
-    new RegExp(/.*\/(?:statics\/icons).*$/),
+    new RegExp(/.*\/(?:assets\/icons).*$/),
     workbox.strategies.cacheFirst({
       cacheName: 'image-cache',
       plugins: [
@@ -232,9 +258,9 @@ if (workbox) {
   );
 
   workbox.routing.registerRoute(
-    new RegExp(/.*\/(?:statics).*$/),
+    new RegExp(/.*\/(?:assets).*$/),
     workbox.strategies.cacheFirst({
-      cacheName: 'statics',
+      cacheName: 'assets',
       plugins: [
         new workbox.expiration.Plugin({
           maxAgeSeconds: 10 * 24 * 60 * 60,

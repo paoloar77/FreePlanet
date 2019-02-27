@@ -1,0 +1,50 @@
+.background-red {
+  background-color: red;
+  padding: 2px;
+}
+
+.fixed-bottom {
+  margin-bottom: 1%;
+}
+
+.fixed-bottom a img {
+  width: 25px;
+  height: 25px;
+}
+
+#avatar {
+  padding: 20px;
+}
+
+#profile {
+  height: 130px;
+  background-color: #009688;
+}
+
+#user-name {
+  left: 90px;
+  bottom: 77px;
+  position: relative;
+  width: 159px;
+}
+
+#user-actions {
+  left: 90px;
+  bottom: 71px;
+  position: relative;
+  width: 171px;
+}
+
+#menu-collapse {
+  margin-top: 5%;
+}
+
+.fixed-left:hover {
+  cursor: ew-resize;
+}
+
+footer {
+  small {
+    color: red;
+  }
+}

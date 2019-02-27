@@ -4,7 +4,7 @@
             <p class="caption"></p>
 
             <div class="divtitlecat">
-                <div class="categorytitle">{{ getCategory() }}</div>
+                <div class="categorytitle">{{ categoryAtt }}</div>
             </div>
 
             <q-input ref="insertTask" v-model="todotop" inverted :float-label="$t('todo.inserttop')"
@@ -19,21 +19,17 @@
                 <!--<div :id="getmyid(mytodo._id)" v-for="(mytodo, index) in todos_arr" :key="mytodo._id"  class="myitemdrag"-->
                 <!--draggable="true" @dragstart="dragStart(index, $event)" @dragover.prevent @dragenter="dragEnter(index)"-->
                 <!--@dragleave="dragLeave(index)" @dragend="dragEnd" @drop="dragFinish(index, $event)" >-->
-                <q-infinite-scroll :handler="loadMoreTodo" :offset="7">
-                    <div class="container" v-dragula="todos_arr" drake="first" :key="compKey3">
-                        <div :id="getmyid(mytodo._id)" :index="index" v-for="(mytodo, index) in showingDataTodo"
+
+                <!--<q-infinite-scroll :handler="loadMoreTodo" :offset="7">-->
+                    <div class="container" v-dragula="todos_dacompletare(categoryAtt)" drake="first">
+                        <div :id="getmyid(mytodo._id)" :index="index" v-for="(mytodo, index) in todos_dacompletare(categoryAtt)"
                              :key="mytodo._id" class="myitemdrag">
 
-
                             <div v-if="(prior !== mytodo.priority) && !mytodo.completed"
-                                 :class="getTitlePriority(mytodo.priority)" :key="compKey1">
+                                 :class="getTitlePriority(mytodo.priority)">
                                 <label>{{getPriorityByInd(mytodo.priority)}}</label>
                             </div>
-                            <div v-if="(!priorcomplet && mytodo.completed)" class="titleCompleted" :key="compKey2">
-                                <label>{{$t('todo.completed')}}</label>
-                                <div style="display: none">{{ priorcomplet = true }}</div>
-                            </div>
-                            <SingleTodo ref="single" @deleteitem="deleteitem" @eventupdate="updateitem"
+                            <SingleTodo ref="single" @deleteItem="mydeleteItem" @eventupdate="updateitem"
                                         @deselectAllRows="deselectAllRows" @onEnd="onEnd"
                                         :itemtodo='mytodo'/>
 
@@ -43,19 +39,40 @@
                             </div>
                         </div>
                     </div>
-                </q-infinite-scroll>
+                <!--</q-infinite-scroll>-->
+
+                <div v-if="doneTodosCount > 0" class="titleCompleted">
+                    <label>{{$t('todo.completed')}}</label>
+                </div>
+
+                <!--<q-infinite-scroll :handler="loadMoreTodo" :offset="7">-->
+                    <div class="container" v-dragula="todos_completati(categoryAtt)" drake="second">
+                        <div :id="getmyid(mytodo._id)" :index="index" v-for="(mytodo, index) in todos_completati(categoryAtt)"
+                             :key="mytodo._id" class="myitemdrag">
+
+                            <SingleTodo ref="single" @deleteItem="deleteItem(mytodo._id)" @eventupdate="updateitem"
+                                        @deselectAllRows="deselectAllRows" @onEnd="onEnd"
+                                        :itemtodo='mytodo'/>
+
+                            <!--<div :name="`REF${index}`" class="divdrag non-draggato"></div>-->
+
+                            <div style="display: none">{{ prior = mytodo.priority, priorcomplet = mytodo.completed }}
+                            </div>
+                        </div>
+                    </div>
+                <!--</q-infinite-scroll>-->
                 <!--</transition-group>-->
                 <!--</draggable>-->
             </div>
 
 
-            <q-input v-if="todos_arr.length > 0" ref="insertTaskBottom" v-model="todobottom" inverted :float-label="$t('todo.insertbottom')"
+            <q-input v-if="TodosCount > 0" ref="insertTaskBottom" v-model="todobottom" inverted :float-label="$t('todo.insertbottom')"
                      :after="[{icon: 'arrow_forward', content: true, handler () {}}]"
                      v-on:keyup.enter="insertTodo(false)"/>
 
-            <!--{{ tmpstrTodos }}-->
-            <!--<br>-->
+            <br>
 
+<!--&lt;!&ndash;-->
             <!--&lt;!&ndash;<div class="flex-item btn-item">&ndash;&gt;-->
             <!--<q-btn class="mybtn" round color="" icon="lock" @click="getArrTodos">Get Todo</q-btn>-->
             <!--<q-btn class="mybtn" round color="" icon="person" @click="setArrTodos">Set Todo</q-btn>-->
@@ -72,7 +89,10 @@
             <!--<q-btn class="mybtn" round color="" icon="person" @click="clicktest2()"></q-btn>-->
             <!--<q-btn class="mybtn" round color="" icon="list" @click="checkUpdate()"></q-btn>-->
             <!--</div>-->
+<!--&ndash;&gt;-->
 
+
+            <!--<span style="white-space: pre;">{{ todos_vista }}</span>-->
         </div>
     </q-page>
 

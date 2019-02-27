@@ -83,9 +83,6 @@
         <!--<div class="flex-item btn-item">-->
         <!--<q-btn class="mybtn" round color="" icon="delete" @click.native="removeitem(itemtodo._id)"></q-btn>-->
         <!--</div>-->
-        <!--<div class="flex-item">-->
-        <!--[{{ itemtodo.id_prev}} - {{ itemtodo.id_next}}]-->
-        <!--</div>-->
     </div>
 
 </template>

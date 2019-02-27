@@ -121,7 +121,7 @@
   import messagePopover from '../layouts/toolbar/messagePopover/messagePopover.vue'
 
   import { GlobalStore, UserStore } from '@modules'
-  import { rescodes } from '../store/Modules/rescodes'
+  import { tools } from '../store/Modules/tools'
   import QIcon from "quasar-framework/src/components/icon/QIcon"
   import { StateConnection } from "../model"
   import { Watch } from "vue-property-decorator"
@@ -213,7 +213,6 @@
           })
         }
 
-        // console.log('Todos.state.todos_changed CHANGED!', value, oldValue)
         this.changeIconConn()
       }
     }
@@ -238,10 +237,10 @@
     }
 
     public selectOpLang = [
-      { label: 'English', icon: 'fa-flag-us', value: 'enUs', image: '../statics/images/gb.png', short: 'EN' },
-      { label: 'German', icon: 'fa-flag-de', value: 'de', image: '../statics/images/de.png', short: 'DE' },
-      { label: 'Italian', icon: 'fa-facebook', value: 'it', image: '../statics/images/it.png', short: 'IT' },
-      { label: 'Spanish', icon: 'fa-flag-es', value: 'esEs', image: '../statics/images/es.png', short: 'ES' }
+      { label: 'English', icon: 'fa-flag-us', value: 'enUs', image: '../assets/images/gb.png', short: 'EN' },
+      // { label: 'German', icon: 'fa-flag-de', value: 'de', image: '../assets/images/de.png', short: 'DE' },
+      { label: 'Italiano', icon: 'fa-facebook', value: 'it', image: '../assets/images/it.png', short: 'IT' },
+      { label: 'Español', icon: 'fa-flag-es', value: 'esEs', image: '../assets/images/es.png', short: 'ES' }
     ]
 
 
@@ -279,7 +278,7 @@
 
     set leftDrawerOpen(value) {
       GlobalStore.state.leftDrawerOpen = value
-      localStorage.setItem(rescodes.localStorage.leftDrawerOpen, value.toString())
+      localStorage.setItem(tools.localStorage.leftDrawerOpen, value.toString())
     }
 
     getAppVersion() {
@@ -330,7 +329,7 @@
       // dynamic import, so loading on demand only
       import(`quasar-framework/i18n/${mylangtopass}`).then(lang => {
         this.$q.i18n.set(lang.default)
-        import(`src/statics/i18n`).then(function () {
+        import(`src/assets/i18n`).then(function () {
         })
       })
     }
@@ -350,7 +349,7 @@
       let my = this.getLangAtt()
       // this.$q.notify('prima: ' + String(my))
 
-      let mylang = rescodes.getItemLS(rescodes.localStorage.lang)
+      let mylang = tools.getItemLS(tools.localStorage.lang)
       if (mylang === '') {
         if (navigator) {
           mylang = navigator.language
