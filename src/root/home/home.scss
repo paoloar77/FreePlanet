@@ -40,7 +40,7 @@
 }
 
 .landing__hero {
-  min-height: 90vh
+  min-height: 100vh
 }
 
 .landing__header {
@@ -81,7 +81,7 @@
 .landing__footer {
   background: -webkit-gradient(linear, left top, left bottom, color-stop(65%, rgba(0, 0, 0, .1)), to(#000));
   background: linear-gradient(180deg, rgba(0, 0, 0, .1) 65%, #000);
-  //padding-top: 72px !important;
+  padding-top: 72px !important;
   //padding-bottom: 72px !important
 }
 
@@ -110,10 +110,10 @@
   .landing__hero .text-h1 {
     font-size: 3rem;
     line-height: 3.05rem;
-    //margin-bottom: 24px
+    margin-bottom: 24px
   }
   .landing > section.padding {
-    //padding-top: 90px;
+    padding-top: 50px;
     //padding-bottom: 90px
   }
   .landing .feature-item {
@@ -137,7 +137,7 @@ body.mobile .landing:before {
   content: "";
   position: fixed;
   top: 0;
-  height: 90vh;
+  height: 100vh;
   left: 0;
   right: 0;
   bottom: 0;

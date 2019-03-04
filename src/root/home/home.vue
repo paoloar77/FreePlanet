@@ -52,7 +52,7 @@
                                         <q-btn rounded size="lg" color="primary" @click="PagLogin" class="btn-start">
                                             {{$t('login.enter')}}
                                         </q-btn>
-                                        <q-btn rounded size="lg" color="secondary" @click="PagReg" class="btn-start">
+                                        <q-btn rounded size="lg" color="positive" @click="PagReg" class="btn-start">
                                             {{$t('reg.submit')}}
                                         </q-btn>
                                     </div>

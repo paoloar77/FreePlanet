@@ -80,7 +80,7 @@
         <br>
 
         <div class="wrapper">
-        <q-btn rounded size="lg" color="secondary" @click="submitOk" :disabled='!allowSubmit'>{{$t('reg.submit')}}
+        <q-btn rounded size="lg" color="positive" @click="submitOk" :disabled='!allowSubmit'>{{$t('reg.submit')}}
         </q-btn>
         </div>
 

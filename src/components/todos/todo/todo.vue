@@ -118,7 +118,7 @@
             <!--<q-btn class="mybtn" round color="" icon="lock" @click="clickaggshowtype()"></q-btn>-->
 
 
-            <span style="white-space: pre;">{{ todos_vista }}</span>
+            <!--<span style="white-space: pre;">{{ todos_vista }}</span>-->
         </div>
     </q-page>
 
