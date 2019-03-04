@@ -365,8 +365,8 @@
           mylang = 'enUs'
         if ((mylang.toLowerCase() === 'eses') || (mylang.toLowerCase() === 'es-es'))
           mylang = 'esEs'
-        if ((mylang.toLowerCase() === 'enuk') || (mylang.toLowerCase() === 'en-uk'))
-          mylang = 'enUk'
+        if ((mylang.toLowerCase() === 'enus') || (mylang.toLowerCase() === 'en-us'))
+          mylang = 'enUs'
       }
 
       if (!mylang)
