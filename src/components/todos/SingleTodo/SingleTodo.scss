@@ -263,6 +263,7 @@ $heightdescr: 20px;
 
   vertical-align: middle;
   line-height: 120%;
+  max-height: 40px;
 
   //background-color: #d50000;
 
@@ -285,6 +286,7 @@ $heightdescr: 20px;
 
 .div_descr_edit {
   max-height: 90px;
+  //line-height: 120%;
   line-height: $heightitem;
 }
 
