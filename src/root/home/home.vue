@@ -54,7 +54,7 @@
                                             icon="notifications"
                                             class="shadow"
                                             :label="$t('notification.titlegranted')"
-                                            helper="Stato Notifiche">
+                                            :helper="$t('notification.statusnot')">
                                     </q-field>
                                     <q-field
                                             v-if="NotServiceWorker()"

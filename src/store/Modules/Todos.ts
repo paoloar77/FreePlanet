@@ -15,7 +15,7 @@ import { costanti } from '@src/store/Modules/costanti'
 
 const state: ITodosState = {
   showtype: costanti.ShowTypeTask.SHOW_LAST_N_COMPLETED,
-  todos: [[]],
+  todos: {},
   categories: [],
   // todos_changed: 1,
   reload_fromServer: 0,
@@ -288,15 +288,19 @@ namespace Mutations {
     return -1
   }
 
+
+
   function createNewItem(state: ITodosState, { objtodo, atfirst, categorySel }) {
-    const indcat = state.categories.indexOf(categorySel)
+    let indcat = state.categories.indexOf(categorySel)
+    if (indcat == -1) {
+      state.categories.push(categorySel)
+      indcat = state.categories.indexOf(categorySel)
+    }
     console.log('createNewItem', objtodo, 'cat=', categorySel, 'state.todos[indcat]', state.todos[indcat])
     if (state.todos[indcat] === undefined) {
       state.todos[indcat] = []
-    }
-    if (!state.todos[indcat]) {
       state.todos[indcat].push(objtodo)
-      console.log('state.todos[indcat]', state.todos[indcat])
+      console.log('push state.todos[indcat]', state.todos)
       return
     }
     if (atfirst)
@@ -796,19 +800,25 @@ namespace Actions {
 
 
   async function swapElems(context, itemdragend: IDrag) {
-    // console.log('swapElems', itemdragend)
+    console.log('swapElems', itemdragend)
+    console.log('state.todos', state.todos)
+    console.log('state.categories', state.categories)
     const cat = itemdragend.category
     const indcat = state.categories.indexOf(cat)
 
     if (itemdragend.field === 'priority') {
       // get last elem priority
+      console.log('get last elem priority')
       itemdragend.newIndex = getLastFirstElemPriority(itemdragend.category, itemdragend.prioritychosen, itemdragend.atfirst, itemdragend.idelemtochange)
       itemdragend.oldIndex = getIndexById(itemdragend.category, itemdragend.idelemtochange)
 
       console.log('swapElems PRIORITY', itemdragend)
     }
 
+    console.log('indcat', indcat)
+
     if (isValidIndex(cat, indcat) && isValidIndex(cat, itemdragend.newIndex) && isValidIndex(cat, itemdragend.oldIndex)) {
+      console.log('isValidIndex')
       state.todos[indcat].splice(itemdragend.newIndex, 0, state.todos[indcat].splice(itemdragend.oldIndex, 1)[0])
       tools.notifyarraychanged(state.todos[indcat][itemdragend.newIndex])
       tools.notifyarraychanged(state.todos[indcat][itemdragend.oldIndex])
@@ -819,18 +829,21 @@ namespace Actions {
 
         if (isValidIndex(cat, precind) && isValidIndex(cat, nextind)) {
           if ((state.todos[indcat][precind].priority === state.todos[indcat][nextind].priority) && (state.todos[indcat][precind].priority !== state.todos[indcat][itemdragend.newIndex].priority)) {
+            console.log('   1)')
             state.todos[indcat][itemdragend.newIndex].priority = state.todos[indcat][precind].priority
             tools.notifyarraychanged(state.todos[indcat][itemdragend.newIndex])
           }
         } else {
           if (!isValidIndex(cat, precind)) {
             if ((state.todos[indcat][nextind].priority !== state.todos[indcat][itemdragend.newIndex].priority)) {
+              console.log('   2)')
               state.todos[indcat][itemdragend.newIndex].priority = state.todos[indcat][nextind].priority
               tools.notifyarraychanged(state.todos[indcat][itemdragend.newIndex])
             }
 
           } else {
             if ((state.todos[indcat][precind].priority !== state.todos[indcat][itemdragend.newIndex].priority)) {
+              console.log('   3)')
               state.todos[indcat][itemdragend.newIndex].priority = state.todos[indcat][precind].priority
               tools.notifyarraychanged(state.todos[indcat][itemdragend.newIndex])
             }

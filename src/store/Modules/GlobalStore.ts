@@ -246,7 +246,7 @@ namespace Actions {
       return
     }
 
-    console.log('createPushSubscription')
+    // console.log('createPushSubscription')
 
     let reg
     const mykey = process.env.PUBLICKEY_PUSH

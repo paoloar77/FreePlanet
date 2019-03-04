@@ -142,6 +142,11 @@ export default class SingleTodo extends Vue {
 
     this.clButtPopover = this.sel ? 'pos-item-popover comp_selected' : 'pos-item-popover'
 
+    if (!this.itemtodo.completed) {
+      this.clButtPopover += ' pos-item-popover_cursor'
+    }
+
+
 
     // if (this.inEdit) {
     //   this.classDescr += ' hide'
@@ -245,8 +250,6 @@ export default class SingleTodo extends Vue {
 
       this.faiFocus('inputdescr')
     }
-
-
     // console.log('FINE - editTodo')
   }
 

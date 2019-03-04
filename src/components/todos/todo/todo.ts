@@ -15,6 +15,8 @@ import { Getter, State, Mutation } from 'vuex-class'
 import { costanti } from '@src/store/Modules/costanti'
 const namespace: string = 'Todos'
 
+import globalroutines from './../../../globalroutines/index'
+
 
 @Component({
 
@@ -44,6 +46,7 @@ export default class Todo extends Vue {
   public service: any
   public actualMaxPosition: number = 15
   public scrollable = true
+  public tmpstrTodos: string = ''
   public categoryAtt: string = ''
   // public showtype: number = Todos.state.showtype
 
@@ -501,6 +504,37 @@ export default class Todo extends Vue {
     }, 100)
 
   }
+
+  getArrTodos() {
+
+    let mystr = ''
+    let mythis = this
+
+    mythis.tmpstrTodos = ''
+    return globalroutines(null, 'readall', 'todos', null)
+      .then(function (alldata) {
+        const myrecs = [...alldata]
+
+        myrecs.forEach(rec => {
+          mystr = mystr + rec.descr + rec.completed + ']   ['
+        })
+
+        mythis.tmpstrTodos = 'TODOS: ' + mystr
+      })
+  }
+
+  // setArrTodos() {
+  //
+  //   let mystr = ''
+  //   let mythis = this
+  //
+  //   mythis.tmpstrTodos = ''
+  //   return globalroutines(null, 'write', 'todos', this.todos_arr[0])
+  //     .then(function (alldata) {
+  //       mythis.getArrTodos()
+  //     })
+  // }
+  //
 
 
 }

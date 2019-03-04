@@ -37,7 +37,7 @@ export interface IDrag {
 
 export interface ITodosState {
   showtype: number
-  todos: [ITodo[]]
+  todos: {}
   categories: string[]
   // todos_changed: number
   reload_fromServer: number

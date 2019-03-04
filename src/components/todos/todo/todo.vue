@@ -1,9 +1,6 @@
 <template>
     <q-page>
         <div class="panel">
-            <p class="caption"></p>
-
-            showtype = {{showtype}}
             <div class="divtitlecat">
                 <div class="flex-container">
                     <div class="flex-item categorytitle">{{categoryAtt | capitalize}}</div>
@@ -29,17 +26,6 @@
                                             <q-item-main v-else>
                                                 <q-item-tile label class="item-menu">{{field.label}}</q-item-tile>
                                             </q-item-main>
-                                            <!--<q-item-side>-->
-                                            <!--<div>-->
-                                            <!--<q-input v-model="itemtodo.progress"-->
-                                            <!--class="menuInputCompleted"-->
-                                            <!--type="number"-->
-                                            <!--suffix=""-->
-                                            <!--@change="val => { model = val }"-->
-                                            <!--&gt;-->
-                                            <!--</div>-->
-                                            <!--</q-item-side>-->
-
                                         </q-item>
                                     </div>
                                 </q-list>
@@ -55,13 +41,6 @@
 
             <div style="display: none">{{ prior = 0, priorcomplet = false }}</div>
             <div>
-                <!--<draggable v-model="todos_arr" :options="{draggable:'.myitemdrag'}"-->
-                <!--@start="onStart" @end="onEnd" class="dragArea">-->
-                <!--<transition-group :name="mytypetransgroup">-->
-                <!--<div :id="getmyid(mytodo._id)" v-for="(mytodo, index) in todos_arr" :key="mytodo._id"  class="myitemdrag"-->
-                <!--draggable="true" @dragstart="dragStart(index, $event)" @dragover.prevent @dragenter="dragEnter(index)"-->
-                <!--@dragleave="dragLeave(index)" @dragend="dragEnd" @drop="dragFinish(index, $event)" >-->
-
                 <!--<q-infinite-scroll :handler="loadMoreTodo" :offset="7">-->
                 <div class="container" v-dragula="todos_dacompletare(categoryAtt)" drake="first">
                     <div :id="getmyid(mytodo._id)" :index="index"
@@ -89,7 +68,7 @@
                 </div>
 
                 <!--<q-infinite-scroll :handler="loadMoreTodo" :offset="7">-->
-                <div class="container" v-dragula="todos_completati(categoryAtt)" drake="second">
+                <div class="container">
                     <div :id="getmyid(mytodo._id)" :index="index"
                          v-for="(mytodo, index) in todos_completati(categoryAtt)"
                          :key="mytodo._id" class="myitemdrag">
@@ -105,8 +84,6 @@
                     </div>
                 </div>
                 <!--</q-infinite-scroll>-->
-                <!--</transition-group>-->
-                <!--</draggable>-->
             </div>
 
 
@@ -117,14 +94,16 @@
 
             <br>
 
-            <!--
-            <div class="flex-item btn-item">
-            <q-btn class="mybtn" round color="" icon="lock" @click="getArrTodos">Get Todo</q-btn>
-            <q-btn class="mybtn" round color="" icon="person" @click="setArrTodos">Set Todo</q-btn>
-            <q-btn class="mybtn" round color="" icon="list" @click="reload_fromServer++">Reload</q-btn>
+            <!--{{ tmpstrTodos }}-->
+
+            <!--<div class="flex-item btn-item">-->
+            <!--<q-btn class="mybtn" round color="" icon="lock" @click="getArrTodos">Get Todo</q-btn>-->
+            <!--&lt;!&ndash;<q-btn class="mybtn" round color="" icon="person" @click="setArrTodos">Set Todo</q-btn>&ndash;&gt;-->
+            <!--&lt;!&ndash;<q-btn class="mybtn" round color="" icon="list" @click="reload_fromServer++">Reload</q-btn>&ndash;&gt;-->
             <!--</div>-->
 
-            <!--&lt;!&ndash;<q-input v-model="testPao" float-label="testPao"/>&ndash;&gt;-->
+                <!--
+                <!--&lt;!&ndash;<q-input v-model="testPao" float-label="testPao"/>&ndash;&gt;-->
             <!--<q-input v-model="todos_changed" float-label="todos_changed"/>-->
 
             <!--<q-input v-model="reload_fromServer" float-label="reload_fromServer"/>-->
@@ -139,7 +118,7 @@
             <!--<q-btn class="mybtn" round color="" icon="lock" @click="clickaggshowtype()"></q-btn>-->
 
 
-            <!--<span style="white-space: pre;">{{ todos_vista }}</span>-->
+            <span style="white-space: pre;">{{ todos_vista }}</span>
         </div>
     </q-page>
 
