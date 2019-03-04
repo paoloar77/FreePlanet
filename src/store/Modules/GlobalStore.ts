@@ -1,4 +1,4 @@
-import { ICfgServer, IGlobalState, StateConnection } from 'model'
+import { ICfgServer, IConfig, IGlobalState, StateConnection } from 'model'
 import { storeBuilder } from './Store/Store'
 
 import Vue from 'vue'
@@ -12,18 +12,12 @@ import { GlobalStore, Todos, UserStore } from '@store'
 import globalroutines from './../../globalroutines/index'
 import Api from '@api'
 import { tools } from '@src/store/Modules/tools'
+import { costanti } from '@src/store/Modules/costanti'
+import * as Types from '@src/store/Api/ApiTypes'
 
 const allTables = ['todos', 'categories', 'sync_todos', 'sync_todos_patch', 'delete_todos', 'config', 'swmsg']
 const allTablesAfterLogin = ['todos', 'categories', 'sync_todos', 'sync_todos_patch', 'delete_todos', 'config', 'swmsg']
 
-async function getstateConnSaved() {
-  const config = await globalroutines(null, 'readall', 'config', null)
-  if (config.length > 1) {
-    return config[1].stateconn
-  } else {
-    return 'online'
-  }
-}
 
 let stateConnDefault = 'online'
 
@@ -57,6 +51,22 @@ const state: IGlobalState = {
     uploading_indexeddb: 0,
     downloading_server: 0,
     downloading_indexeddb: 0
+  },
+  arrConfig: []
+}
+
+async function getConfig(id) {
+  return await globalroutines(null, 'read', 'config', null, id)
+}
+
+async function getstateConnSaved() {
+  const config = await getConfig(costanti.CONFIG_ID_CFG)
+  console.log('config', config)
+  if (config.length > 1) {
+    const cfgstateconn = config[1]
+    return cfgstateconn.stateconn
+  } else {
+    return 'online'
   }
 }
 
@@ -71,7 +81,27 @@ namespace Getters {
   const category = b.read(state => state.category, 'category')
 
   const testpao1_getter_contatore = b.read(state => param1 => state.testp1.contatore + 100 + param1, 'testpao1_getter_contatore')
-  const testpao1_getter_array = b.read(state => param1 => state.testp1.mioarray.filter(item => item).map(item => item.valore) , 'testpao1_getter_array')
+  const testpao1_getter_array = b.read(state => param1 => state.testp1.mioarray.filter(item => item).map(item => item.valore), 'testpao1_getter_array')
+
+  const getConfigbyId = b.read(state => id => state.arrConfig.find(item => item._id === id), 'getConfigbyId')
+  const getConfigStringbyId = b.read(state => id => {
+    const config = state.arrConfig.find(item => item._id === id)
+    if (config) {
+      return config.value
+    } else {
+      return ''
+    }
+  }, 'getConfigStringbyId')
+
+  const showtype = b.read(state => {
+    // const config = state.arrConfig.find(item => item._id === cat + costanti.CONFIG_ID_SHOW_TYPE_TODOS)
+    const config = state.arrConfig.find(item => item._id === costanti.CONFIG_ID_SHOW_TYPE_TODOS)
+    if (config)
+      return config.value
+    else
+      return ''
+
+  }, 'showtype')
 
 
   export const getters = {
@@ -91,6 +121,18 @@ namespace Getters {
 
     get category() {
       return category()
+    },
+
+    get getConfigbyId() {
+      return getConfigbyId()
+    },
+
+    get getConfigStringbyId() {
+      return getConfigStringbyId()
+    },
+
+    get showtype() {
+      return showtype()
     },
 
     get isOnline() {
@@ -118,9 +160,11 @@ namespace Mutations {
     tools.notifyarraychanged(state.testp1.mioarray)
     console.log('last elem = ', state.testp1.mioarray[state.testp1.mioarray.length - 1])
   }
+
   function NewArray(state: IGlobalState, newarr: ICfgServer[]) {
     state.testp1.mioarray = newarr
   }
+
   function setPaoArray_Delete(state: IGlobalState) {
     state.testp1.mioarray.pop()
   }
@@ -144,8 +188,26 @@ namespace Mutations {
     }
   }
 
+  function saveConfig(state: IGlobalState, data: IConfig) {
+    let dataout
+    // this.$set(dataout, data.value, {'value': 'default value'})
+    return globalroutines(null, 'write', 'config', { _id: data._id, value: data.value })
+  }
+
   function SetwasAlreadySubOnDb(state: IGlobalState, subscrib: boolean) {
     state.wasAlreadySubOnDb = subscrib
+  }
+
+  function setShowType(state: IGlobalState, showtype: number) {
+    // console.log('setShowType', showtype)
+    const config = Getters.getters.getConfigbyId(costanti.CONFIG_ID_SHOW_TYPE_TODOS)
+    // console.log('config', config)
+    if (config) {
+      config.value = String(showtype)
+      Todos.state.showtype = parseInt(config.value)
+      // console.log('Todos.state.showtype', Todos.state.showtype)
+      GlobalStore.mutations.saveConfig({ _id: costanti.CONFIG_ID_SHOW_TYPE_TODOS, value: String(showtype) })
+    }
   }
 
   export const mutations = {
@@ -154,9 +216,11 @@ namespace Mutations {
     setCategorySel: b.commit(setCategorySel),
     setStateConnection: b.commit(setStateConnection),
     SetwasAlreadySubOnDb: b.commit(SetwasAlreadySubOnDb),
+    saveConfig: b.commit(saveConfig),
     setPaoArray: b.commit(setPaoArray),
     setPaoArray_Delete: b.commit(setPaoArray_Delete),
-    NewArray: b.commit(NewArray)
+    NewArray: b.commit(NewArray),
+    setShowType: b.commit(setShowType)
   }
 
 }
@@ -339,7 +403,10 @@ namespace Actions {
 
 
   async function loadAfterLogin(context) {
+    console.log('loadAfterLogin')
     actions.clearDataAfterLoginOnlyIfActiveConnection()
+
+    state.arrConfig = await globalroutines(null, 'readall', 'config', null)
   }
 
   async function saveCfgServerKey(context, dataval: ICfgServer) {

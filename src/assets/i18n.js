@@ -144,7 +144,7 @@ const messages = {
       cancel: 'Cancelar',
       msg: {
         titledeleteTask: 'Borrar Tarea',
-        deleteTask: 'Quieres borrar %s?'
+        deleteTask: 'Quieres borrar {mytodo}?'
       }
     },
     comp:{
@@ -280,7 +280,7 @@ const messages = {
       cancel: 'Cancel',
       msg: {
         titledeleteTask: 'Delete Task',
-        deleteTask: 'Delete %s?'
+        deleteTask: 'Delete Task {mytodo}?'
       }
     },
     comp:{

@@ -4,11 +4,12 @@ import { UserStore, Todos } from '@store'
 import { i18n } from '../plugins/i18n'
 
 import { idbKeyval as storage } from '../js/storage.js';
+import { costanti } from '../store/Modules/costanti';
 
 function saveConfigIndexDb(context) {
 
   let data = []
-  data['_id'] = 1
+  data['_id'] = costanti.CONFIG_ID_CFG
   data['lang'] = UserStore.state.lang
   data['token'] = UserStore.state.x_auth_token
   data['userId'] = UserStore.state.userId

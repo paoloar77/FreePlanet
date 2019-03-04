@@ -13,7 +13,8 @@ import { GlobalStore, UserStore } from '@modules'
 import globalroutines from './../../globalroutines/index'
 import { serv_constants } from '@src/store/Modules/serv_constants'
 import router from '@router'
-import * as Types from "@src/store/Api/ApiTypes"
+import * as Types from '@src/store/Api/ApiTypes'
+import { costanti } from '@src/store/Modules/costanti'
 
 
 // const algoliaApi = new AlgoliaSearch()
@@ -188,7 +189,8 @@ export namespace ApiTool {
               // console.log('¨¨¨¨¨¨¨¨¨¨¨¨¨¨  errorfromserver:', errorfromserver)
               const mystate = errorfromserver ? 'offline' : 'online'
               GlobalStore.mutations.setStateConnection(mystate)
-              return globalroutines(null, 'write', 'config', { _id: 2, stateconn: mystate })
+              GlobalStore.mutations.saveConfig( { _id: costanti.CONFIG_ID_STATE_CONN, value: mystate })
+
             })
 
           // console.log(' [Alternative] A2) ?????????????????????????? ESCO DAL LOOP !!!!!!!!!')

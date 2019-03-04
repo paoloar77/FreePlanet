@@ -1,4 +1,4 @@
-import { IGlobalState, ITodo, ITodosState, IParamTodo, IUserState, IDrag } from 'model'
+import { ITodo, ITodosState, IParamTodo, IDrag } from 'model'
 import { storeBuilder } from './Store/Store'
 
 import Api from '@api'
@@ -9,11 +9,12 @@ import { Mutation } from 'vuex-module-decorators'
 import { serv_constants } from '@src/store/Modules/serv_constants'
 import { GetterTree } from 'vuex'
 import objectId from '@src/js/objectId'
+import { costanti } from '@src/store/Modules/costanti'
 
 // import _ from 'lodash'
 
 const state: ITodosState = {
-  visuOnlyUncompleted: false,
+  showtype: costanti.ShowTypeTask.SHOW_LAST_N_COMPLETED,
   todos: [[]],
   categories: [],
   // todos_changed: 1,
@@ -228,7 +229,12 @@ namespace Getters {
   const todos_completati = b.read((state: ITodosState) => (cat: string): ITodo[] => {
     const indcat = getindexbycategory(cat)
     if (state.todos[indcat]) {
-      return state.todos[indcat].filter(todo => todo.completed).slice(0, state.visuLastCompleted)  // Show only the first N completed
+      if (state.showtype === costanti.ShowTypeTask.SHOW_LAST_N_COMPLETED)
+        return state.todos[indcat].filter(todo => todo.completed).slice(0, state.visuLastCompleted)  // Show only the first N completed
+      else if (state.showtype === costanti.ShowTypeTask.SHOW_ALL)
+        return state.todos[indcat].filter(todo => todo.completed)
+      else
+        return []
     } else return []
   }, 'todos_completati')
 
@@ -409,10 +415,14 @@ namespace Actions {
     return await dbLoadTodo(context, { checkPending: false })
   }
 
+  async function readConfig(id) {
+    return await globalroutines(null, 'read', 'config', null, String(id))
+  }
+
   async function checkPendingMsg(context) {
     // console.log('checkPendingMsg')
 
-    const config = await globalroutines(null, 'readall', 'config', null)
+    const config = await globalroutines(null, 'read', 'config', null, '1')
     // console.log('config', config)
 
     try {
@@ -465,6 +475,12 @@ namespace Actions {
         } else {
           state.todos = [[]]
         }
+
+        // console.log('PRIMA showtype = ', state.showtype)
+
+        state.showtype = parseInt(GlobalStore.getters.getConfigStringbyId(costanti.CONFIG_ID_SHOW_TYPE_TODOS))
+
+        // console.log('showtype = ', state.showtype)
 
         // console.log('ARRAY TODOS = ', state.todos)
 
@@ -681,28 +697,32 @@ namespace Actions {
         if (atfirst) {
           // Check the second item, if it's different priority, then move to the first position of the priority
           const secondindelem = indelem + 1
-          const secondelem = getElemByIndex(objtodo.category, secondindelem)
-          if (secondelem.priority !== objtodo.priority) {
-            itemdragend = {
-              field: 'priority',
-              idelemtochange: objtodo._id,
-              prioritychosen: objtodo.priority,
-              category: objtodo.category,
-              atfirst
+          if (isValidIndex(objtodo.category, secondindelem)) {
+            const secondelem = getElemByIndex(objtodo.category, secondindelem)
+            if (secondelem.priority !== objtodo.priority) {
+              itemdragend = {
+                field: 'priority',
+                idelemtochange: objtodo._id,
+                prioritychosen: objtodo.priority,
+                category: objtodo.category,
+                atfirst
+              }
             }
           }
 
         } else {
           // get previous of the last
           const prevlastindelem = indelem - 1
-          const prevlastelem = getElemByIndex(objtodo.category, prevlastindelem)
-          if (prevlastelem.priority !== objtodo.priority) {
-            itemdragend = {
-              field: 'priority',
-              idelemtochange: objtodo._id,
-              prioritychosen: objtodo.priority,
-              category: objtodo.category,
-              atfirst
+          if (isValidIndex(objtodo.category, prevlastindelem)) {
+            const prevlastelem = getElemByIndex(objtodo.category, prevlastindelem)
+            if (prevlastelem.priority !== objtodo.priority) {
+              itemdragend = {
+                field: 'priority',
+                idelemtochange: objtodo._id,
+                prioritychosen: objtodo.priority,
+                category: objtodo.category,
+                atfirst
+              }
             }
           }
         }

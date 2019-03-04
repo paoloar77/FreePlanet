@@ -6,18 +6,26 @@ import { ITodo, ITodosState, IDrag, IGlobalState, ICfgServer } from '@src/model'
 
 import { tools } from '../../../store/Modules/tools'
 
-import { Todos } from '@store'
+import { GlobalStore, Todos } from '@store'
 import { UserStore } from '@store'
 
 // _.cloneDeep(  Per clonare un oggetto
 
-import { Getter } from 'vuex-class'
+import { Getter, State, Mutation } from 'vuex-class'
+import { costanti } from '@src/store/Modules/costanti'
 const namespace: string = 'Todos'
 
 
 @Component({
 
-  components: { SingleTodo }
+  components: { SingleTodo },
+  filters: {
+    capitalize: function (value) {
+      if (!value) return ''
+      value = value.toString()
+      return value.charAt(0).toUpperCase() + value.slice(1)
+    }
+  }
 })
 export default class Todo extends Vue {
   $q: any
@@ -37,6 +45,7 @@ export default class Todo extends Vue {
   public actualMaxPosition: number = 15
   public scrollable = true
   public categoryAtt: string = ''
+  // public showtype: number = Todos.state.showtype
 
   $refs: {
     single: SingleTodo[]
@@ -52,8 +61,39 @@ export default class Todo extends Vue {
     this.categoryAtt = this.$route.params.category
   }
 
+  get showtype () {
+    return Todos.state.showtype
+  }
+
+  set showtype (value) {
+    // console.log('showtype', value)
+    GlobalStore.mutations.setShowType(value)
+  }
+
+  // clickaggshowtype () {
+  //   console.log('1B) clickaggshowtype Todos.state.showtype=', Todos.state.showtype)
+  //   Todos.state.showtype = costanti.ShowTypeTask.SHOW_ALL
+  //   console.log('2B) Dopo: showtype=', this.showtype)
+  // }
+
+
+  loadval (e) {
+    console.log('1) loadval, showtype=', this.showtype)
+    this.showtype = Todos.state.showtype
+    console.log('2) Dopo: showtype=', this.showtype)
+  }
+
+
   get doneTodosCount() {
     return Todos.getters.doneTodosCount(this.categoryAtt)
+  }
+
+  get menuPopupConfigTodo() {
+    return tools.menuPopupConfigTodo[UserStore.state.lang]
+  }
+
+  get listOptionShowTask() {
+    return tools.listOptionShowTask[UserStore.state.lang]
   }
 
   get TodosCount() {
@@ -92,6 +132,10 @@ export default class Todo extends Vue {
 
   getmyid(id) {
     return 'row' + id
+  }
+
+  showTask(field_value) {
+    return field_value === tools.MenuAction.SHOW_TASK
   }
 
   onStart() {
@@ -295,6 +339,7 @@ export default class Todo extends Vue {
   }
 
   async load() {
+    console.log('LOAD TODO....')
     this.categoryAtt = this.$route.params.category
 
     // Set last category selected
@@ -343,6 +388,7 @@ export default class Todo extends Vue {
   }
 
   mydeleteItem(idobj: string) {
+    console.log('mydeleteItem', idobj)
     return Todos.actions.deleteItem({ cat: this.categoryAtt, idobj })
   }
 

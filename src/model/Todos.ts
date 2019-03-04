@@ -35,10 +35,9 @@ export interface IDrag {
   atfirst?: boolean
 }
 
-
 export interface ITodosState {
-  visuOnlyUncompleted: boolean
-  todos: [ ITodo[] ]
+  showtype: number
+  todos: [ITodo[]]
   categories: string[]
   // todos_changed: number
   reload_fromServer: number

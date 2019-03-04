@@ -71,6 +71,7 @@
   font-size: 1.25rem;
   font-weight: bold;
   text-align: center;
+  flex: 1;
 }
 
 .titleSubMenu {
@@ -101,4 +102,9 @@
   animation: fadeIn 0.2s ease-in 1 forwards;
   min-height: 50px;
   background-color: #9f9f9f;
+}
+
+.menuInputCompleted > div:nth-child(2) > div > input {
+  min-width: 30px;
+  width: 30px;
 }

@@ -1,7 +1,7 @@
 import Vue from 'vue'
-import { Component, Watch } from 'vue-property-decorator'
+import { Component } from 'vue-property-decorator'
 
-import { GlobalStore, UserStore } from '@store'
+import { GlobalStore } from '@store'
 
 
 @Component({})
@@ -26,16 +26,19 @@ export default class CfgServer extends Vue {
       field: 'chiave',
       sortable: true
     },
+    { name: 'userid', label: 'UserId', field: 'userid', sortable: false },
     { name: 'valore', label: 'Valore', field: 'valore', sortable: false }
   ]
 
-  public visibleColumns: ['chiave', 'valore']
+  public visibleColumns: ['chiave', 'userid', 'valore']
   public separator: 'horizontal'
   public filter: string = ''
   public selected: any[] = []
   public dark: boolean = true
 
   public keysel: string = ''
+  public userIdsel: string = ''
+
 
   get tableClass () {
     if (this.dark) {
@@ -46,6 +49,7 @@ export default class CfgServer extends Vue {
   selItem(item) {
     console.log('item', item)
     this.keysel = item.chiave
+    this.userIdsel = item.userid
     console.log('this.keysel', this.keysel)
   }
 
@@ -54,6 +58,7 @@ export default class CfgServer extends Vue {
 
     const mydata = {
       chiave: this.keysel,
+      userId: this.userIdsel,
       valore: newVal
     }
     // Save on Server

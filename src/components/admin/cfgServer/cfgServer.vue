@@ -15,6 +15,14 @@
                     </q-field>
                 </q-popup-edit>
             </q-td>
+            <q-td key="userid" :props="props">
+                {{ props.row.userId }}
+                <q-popup-edit v-model="props.row.userId" disable>
+                    <q-field count>
+                        <q-input v-model="props.row.userId" />
+                    </q-field>
+                </q-popup-edit>
+            </q-td>
             <q-td key="valore" :props="props">
                 {{ props.row.valore }}
                 <q-popup-edit v-model="props.row.valore" title="Aggiorna Valore" buttons @save="SaveValue" @show="selItem(props.row)">

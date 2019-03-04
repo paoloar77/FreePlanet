@@ -1,4 +1,5 @@
 import { ITodo } from '@src/model'
+import { costanti } from './costanti'
 import globalroutines from './../../globalroutines/index'
 import { Todos, UserStore } from '@store'
 import Api from '@api'
@@ -51,7 +52,8 @@ export const tools = {
     TOGGLE_EXPIRING: 101,
     COMPLETED: 110,
     PROGRESS_BAR: 120,
-    PRIORITY: 130
+    PRIORITY: 130,
+    SHOW_TASK: 150,
   },
 
 
@@ -248,6 +250,105 @@ export const tools = {
         value: 100, // DELETE
         icon: 'trash',
         checked: false
+      }
+    ]
+  },
+
+  menuPopupConfigTodo: {
+    'it': [
+      {
+        id: 10,
+        label: 'Mostra Task',
+        value: 150,  // SHOW_TASK
+        icon: 'rowing',
+      },
+    ],
+    'esEs': [
+      {
+        id: 10,
+        label: 'Mostrar Tareas',
+        value: 150,
+        icon: 'rowing',
+      },
+    ],
+    'enUs': [
+      {
+        id: 10,
+        label: 'Show Task',
+        value: 150,
+        icon: 'rowing',
+      },
+    ]
+  },
+
+  listOptionShowTask: {
+    'it': [
+      {
+        id: 10,
+        label: 'Mostra gli ultimi N completati',
+        value: costanti.ShowTypeTask.SHOW_LAST_N_COMPLETED,
+        icon: 'rowing',
+        checked: true
+      },
+      {
+        id: 20,
+        label: 'Compiti da Completare',
+        value: costanti.ShowTypeTask.SHOW_ONLY_TOCOMPLETE,
+        icon: 'rowing',
+        checked: false
+      },
+      {
+        id: 30,
+        label: 'Tutti i compiti',
+        value: costanti.ShowTypeTask.SHOW_ALL,
+        icon: 'check_circle',
+        checked: true
+      }
+    ],
+    'esEs': [
+      {
+        id: 10,
+        label: 'Mostrar los ultimos N completados',
+        value: costanti.ShowTypeTask.SHOW_LAST_N_COMPLETED,
+        icon: 'rowing',
+        checked: true
+      },
+      {
+        id: 20,
+        label: 'Tareas para completar',
+        value: costanti.ShowTypeTask.SHOW_ONLY_TOCOMPLETE,
+        icon: 'rowing',
+        checked: false
+      },
+      {
+        id: 30,
+        label: 'Todos las Tareas',
+        value: costanti.ShowTypeTask.SHOW_ALL,
+        icon: 'check_circle',
+        checked: true
+      }
+    ],
+    'enUs': [
+      {
+        id: 10,
+        label: 'Show last N Completed',
+        value: costanti.ShowTypeTask.SHOW_LAST_N_COMPLETED,
+        icon: 'rowing',
+        checked: true
+      },
+      {
+        id: 20,
+        label: 'Task to complete',
+        value: costanti.ShowTypeTask.SHOW_ONLY_TOCOMPLETE,
+        icon: 'rowing',
+        checked: false
+      },
+      {
+        id: 30,
+        label: 'All Tasks',
+        value: costanti.ShowTypeTask.SHOW_ALL,
+        icon: 'check_circle',
+        checked: true
       }
     ]
   },

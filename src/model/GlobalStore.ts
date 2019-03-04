@@ -11,6 +11,7 @@ export interface IConnData {
 
 export interface ICfgServer {
   chiave: string
+  userId: string
   valore: string
 }
 
@@ -20,6 +21,12 @@ export interface ITestp1 {
 }
 
 export type StateConnection = 'online' | 'offline'
+
+export interface IConfig {
+  _id: string,
+  key?: string,
+  value: string
+}
 
 export interface IGlobalState {
   conta: number
@@ -38,6 +45,7 @@ export interface IGlobalState {
   connData: IConnData
   posts: IPost[]
   listatodo: ITodoList[]
+  arrConfig: IConfig[]
 }
 
 

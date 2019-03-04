@@ -4,3 +4,31 @@ md	992px	Medium-sized window
 lg	1200px	Large sized window
 xl	Infinite	Extra large sized window
 
+
+--------------------------------------------------------
+https://alligator.io/vuejs/progressive-image-rendering/
+--- lOADING LAZY IMAGES:
+--------------------------------------------------------
+
+<template>
+  <v-lazy-image src="http://lorempixel.com/400/200/" />
+</template>
+
+<script>
+import VLazyImage from "v-lazy-image";
+
+export default {
+  components: {
+    VLazyImage
+  }
+};
+
+.v-lazy-image {
+  filter: blur(10px);
+  transition: filter 0.7s;
+}
+
+.v-lazy-image-loaded {
+  filter: blur(0);
+}
+--------------------------------------------------------
