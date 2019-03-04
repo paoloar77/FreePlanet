@@ -3,7 +3,7 @@
         <div class="landing">
             <section>
                 <div class="landing__hero">
-                    <div style="height: 18vh;"></div>
+                    <div class="landing__header"></div>
                     <div class="landing__hero-content row justify-center q-gutter-xl">
                         <div class="row">
                             <logo></logo>
@@ -29,24 +29,34 @@
 
                                 </div>
 
-<!--
-                                <q-btn>
+                                <!--
+                                                                <q-btn>
 
-                                    Canale Telegram: <a href="https://t.me/freeplanet_channel" target="_blank"
-                                                        style="color: white;">
-                                    <q-icon class="fab fa-telegram" size="2rem"/>
-                                    </a>
-                                </q-btn>
--->
+                                                                    Canale Telegram: <a href="https://t.me/freeplanet_channel" target="_blank"
+                                                                                        style="color: white;">
+                                                                    <q-icon class="fab fa-telegram" size="2rem"/>
+                                                                    </a>
+                                                                </q-btn>
+                                -->
 
-                                <div style="margin: 5px;">
+                                <div v-if="isInCostruction" style="margin: 5px;">
                                     <q-alert
                                             type="info"
                                             class="q-mb-sm">
                                         {{$t('msg.underconstruction')}}
                                     </q-alert>
+                                    <br>
                                 </div>
-                                <br>
+                                <div v-else>
+                                    <div v-if="!isLogged" style="margin: 5px; padding: 5px;" class="home">
+                                        <q-btn rounded size="lg" color="primary" @click="PagLogin" class="btn-start">
+                                            {{$t('login.enter')}}
+                                        </q-btn>
+                                        <q-btn rounded size="lg" color="secondary" @click="PagReg" class="btn-start">
+                                            {{$t('reg.submit')}}
+                                        </q-btn>
+                                    </div>
+                                </div>
 
                                 <div>
                                     <q-field

@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import { Component } from 'vue-property-decorator'
-import { GlobalStore } from '@store'
+import { GlobalStore, UserStore } from '@store'
 
 import { Logo } from '../../components/logo'
 
@@ -28,6 +28,10 @@ export default class Home extends Vue {
 
 
     GlobalStore.actions.prova()
+  }
+
+  get isLogged(){
+    return UserStore.state.isLogged
   }
 
 
@@ -82,12 +86,24 @@ export default class Home extends Vue {
 
   }
 
+  get isInCostruction () {
+    return process.env.IN_CONSTRUCTION === '1'
+  }
+
   getPermission() {
     return Notification.permission
   }
 
   NotServiceWorker() {
     return (!('serviceWorker' in navigator))
+  }
+
+  PagLogin () {
+    this.$router.replace('/signin')
+  }
+
+  PagReg () {
+    this.$router.replace('/signup')
   }
 
   displayConfirmNotification() {

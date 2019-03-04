@@ -487,6 +487,7 @@ namespace Actions {
     localStorage.removeItem(tools.localStorage.categorySel)
     localStorage.removeItem(tools.localStorage.wasAlreadySubOnDb)
 
+    state.isLogged = false
 
     await GlobalStore.actions.clearDataAfterLogout()
 

@@ -46,14 +46,14 @@ export default class Drawer extends Vue {
               routes2: listatodo
             },
             { route: '/category', faIcon: 'fa fa-list-alt', materialIcon: 'category', name: 'pages.Category' },
-            { route: '/signup', faIcon: 'fa fa-registered', materialIcon: 'home', name: 'pages.SignUp' },
+            // { route: '/signup', faIcon: 'fa fa-registered', materialIcon: 'home', name: 'pages.SignUp' },
             { route: '/admin/cfgserv', faIcon: 'fa fa-database', materialIcon: 'admin', name: 'pages.Admin' },
             { route: '/admin/testp1/par1', faIcon: 'fa fa-database', materialIcon: 'admin', name: 'pages.Test1' },
             { route: '/admin/testp1/par2', faIcon: 'fa fa-database', materialIcon: 'admin', name: 'pages.Test2' },
-            { route: '/signin', faIcon: 'fa fa-anchor', materialIcon: 'home', name: 'pages.SignIn' },
+            // { route: '/signin', faIcon: 'fa fa-anchor', materialIcon: 'home', name: 'pages.SignIn' },
             /* {route: '/vreg?idlink=aaa', faIcon: 'fa fa-login', materialIcon: 'login', name: 'pages.vreg'},*/
           ],
-          show: true,
+          show: true
         }
       }
     } else {
@@ -77,9 +77,9 @@ export default class Drawer extends Vue {
                 route: '/todo', faIcon: 'fa fa-list-alt', materialIcon: 'todo', name: 'pages.Todo',
                 routes2: listatodo
               },
-              { route: '/category', faIcon: 'fa fa-list-alt', materialIcon: 'category', name: 'pages.Category' },
-              { route: '/signup', faIcon: 'fa fa-registered', materialIcon: 'home', name: 'pages.SignUp' },
-              { route: '/signin', faIcon: 'fa fa-anchor', materialIcon: 'home', name: 'pages.SignIn' },
+              { route: '/category', faIcon: 'fa fa-list-alt', materialIcon: 'category', name: 'pages.Category' }
+              // { route: '/signup', faIcon: 'fa fa-registered', materialIcon: 'home', name: 'pages.SignUp' },
+              // { route: '/signin', faIcon: 'fa fa-anchor', materialIcon: 'home', name: 'pages.SignIn' },
               /* {route: '/vreg?idlink=aaa', faIcon: 'fa fa-login', materialIcon: 'login', name: 'pages.vreg'},*/
             ],
             show: true,
@@ -112,8 +112,16 @@ export default class Drawer extends Vue {
 
   logoutHandler() {
     UserStore.actions.logout()
-    this.$router.push('/signin')
-    this.$q.notify(this.$t('logout.uscito'))
+      .then(() => {
+        this.$router.replace('/logout')
+
+        const mythis = this
+        setTimeout(function () {
+          mythis.$router.replace('/')
+        }, 1000)
+
+        this.$q.notify(this.$t('logout.uscito'))
+      })
   }
 }
 

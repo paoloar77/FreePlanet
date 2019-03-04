@@ -21,7 +21,7 @@
                             :before="[{icon: 'person', handler () {}}]"
                             @blur="$v.signin.username.$touch"
                             :error="$v.signin.username.$error"
-                            :float-label="$t('reg.username')"></q-input>
+                            :float-label="$t('reg.username_login')"></q-input>
                 </q-field>
 
                 <q-field
