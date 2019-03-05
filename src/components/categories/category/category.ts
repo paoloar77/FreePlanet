@@ -121,7 +121,7 @@ export default class Category extends Vue {
 
   async deleteCategory(myarrobj) {
 
-    await myarrobj.forEach(myobj => {
+    for (const myobj of myarrobj) {
 
       if (myobj.id !== undefined) {
         console.log('KEY = ', myobj.id)
@@ -141,7 +141,7 @@ export default class Category extends Vue {
           return deleteCount
         }
       }
-    })
+    }
 
   }
 

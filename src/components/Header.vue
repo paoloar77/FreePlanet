@@ -1,13 +1,13 @@
 <template>
     <div>
 
-<!--
-        <router-link :to="'/'" v-if="$router.currentRoute.meta.backButton">
-            <button>
-                <i>arrow_back</i>
-            </button>
-        </router-link>
--->
+        <!--
+                <router-link :to="'/'" v-if="$router.currentRoute.meta.backButton">
+                    <button>
+                        <i>arrow_back</i>
+                    </button>
+                </router-link>
+        -->
         <q-layout-header>
             <q-toolbar
                     color="primary"
@@ -27,10 +27,37 @@
                 </q-btn>
 
 
+                <div v-if="$q.platform.is.desktop">
+                    <!--I'm only rendered on desktop!-->
+                </div>
+
+                <div v-if="$q.platform.is.mobile">
+                    <!--I'm only rendered on mobile!-->
+                </div>
+
+                <div v-if="$q.platform.is.electron">
+                    <!--I'm only rendered on Electron!-->
+                </div>
+
+                <q-btn id="newvers" v-if="isNewVersionAvailable" color="secondary" rounded icon="refresh"
+                       class="btnNewVersShow" @click="RefreshApp" :label="$t('notification.newVersionAvailable')"/>
+
+
                 <q-toolbar-title>
                     {{$t('msg.myAppName')}}
                     <div slot="subtitle">{{$t('msg.myDescriz')}} {{ getAppVersion() }}</div>
                 </q-toolbar-title>
+
+                <div v-if="isAdmin">
+                    <q-btn flat dense round aria-label="">
+                        <q-icon :class="clCloudUpload" name="cloud_upload"></q-icon>
+                    </q-btn>
+
+                    <q-btn flat dense round aria-label="">
+                        <q-icon :class="clCloudUp_Indexeddb" name="arrow_upward"></q-icon>
+                    </q-btn>
+
+                </div>
 
                 <q-btn
                         flat
@@ -43,7 +70,23 @@
                     <q-icon v-if="isUserNotAuth" name="device_unknown"></q-icon>
                 </q-btn>
 
-                <q-select class="sel_lang" v-model="lang" stack-label="" :options="selectOpLang"/>
+
+                <q-btn-dropdown
+                        :label="langshort"
+                >
+                    <q-list link>
+                        <q-item v-for="langrec in selectOpLang" :key="langrec.value" v-close-overlay
+                                @click.native="lang = langrec.value">
+                            <q-item-side>
+                                <img :src="langrec.image" class="flagimg">
+                            </q-item-side>
+                            <q-item-main>
+                                <q-item-tile sublabel>{{langrec.label}}</q-item-tile>
+                            </q-item-main>
+                        </q-item>
+                    </q-list>
+                </q-btn-dropdown>
+
 
                 <!--
                 <message-popover></message-popover>
@@ -77,12 +120,12 @@
   import drawer from '../layouts/drawer/drawer.vue'
   import messagePopover from '../layouts/toolbar/messagePopover/messagePopover.vue'
 
-  import { GlobalStore } from '@modules'
-  import { rescodes } from '../store/Modules/rescodes'
-  import QIcon from "quasar-framework/src/components/icon/QIcon";
-  import { StateConnection } from "../model";
-  import { Watch } from "vue-property-decorator";
-  import QField from "quasar-framework/src/components/field/QField";
+  import { GlobalStore, UserStore } from '@modules'
+  import { tools } from '../store/Modules/tools'
+  import QIcon from "quasar-framework/src/components/icon/QIcon"
+  import { StateConnection } from "../model"
+  import { Watch } from "vue-property-decorator"
+  import QField from "quasar-framework/src/components/field/QField"
 
   @Component({
     components: {
@@ -101,9 +144,22 @@
     public iconConn: string = 'wifi'
     public clIconConn: string = 'clIconOnline'
     public strConn: string = ''
+    public langshort: string = ''
+    public clCloudUpload: string = ''
+    public clCloudDownload: string = ''
+    public clCloudUp_Indexeddb: string = ''
+    public clCloudDown_Indexeddb: string = 'clIndexeddbsend'
 
     get conn_changed() {
       return GlobalStore.state.stateConnection
+    }
+
+    get isAdmin() {
+      return UserStore.state.isAdmin
+    }
+
+    get conndata_changed() {
+      return GlobalStore.state.connData
     }
 
     @Watch('GlobalStore.state.stateConnection', { immediate: true, deep: true })
@@ -117,6 +173,27 @@
       //   message: "CAMBIATOO! " + value
       // })
 
+    }
+
+    @Watch('conndata_changed', { immediate: true, deep: true })
+    changeconnData(value: any, oldValue: any) {
+      // console.log('CHANGED GlobalStore.state.connData', value)
+
+      this.clCloudUpload = (value.uploading_server === 1) ? "clCloudUpload send" : "clCloudUpload"
+      this.clCloudUpload = (value.downloading_server === 1) ? "clCloudUpload receive" : "clCloudUpload"
+      this.clCloudUp_Indexeddb = (value.uploading_indexeddb === 1) ? "clIndexeddb send" : "clIndexeddb"
+      this.clCloudUp_Indexeddb = (value.downloading_indexeddb === 1) ? "clIndexeddb receive" : "clIndexeddb"
+
+      this.clCloudUpload = (value.uploading_server === -1) ? "clCloudUpload error" : this.clCloudUpload
+      this.clCloudUpload = (value.downloading_server === -1) ? "clCloudUpload error" : this.clCloudDownload
+      this.clCloudUp_Indexeddb = (value.uploading_indexeddb === -1) ? "clIndexeddb error" : this.clCloudUp_Indexeddb
+      this.clCloudUp_Indexeddb = (value.downloading_indexeddb === -1) ? "clIndexeddb error" : this.clCloudDown_Indexeddb
+
+      // console.log('clCloudUpload', this.clCloudUpload)
+      // console.log('clCloudDownload', this.clCloudDownload)
+      // console.log('clCloudUp_Indexeddb', this.clCloudUp_Indexeddb)
+      // console.log('value.downloading_indexeddb', value.downloading_indexeddb)
+      // console.log('value.uploading_server', value.uploading_server)
     }
 
 
@@ -136,9 +213,22 @@
           })
         }
 
-        // console.log('Todos.state.todos_changed CHANGED!', value, oldValue)
         this.changeIconConn()
       }
+    }
+
+    get isNewVersionAvailable() {
+      console.log('______________ isNewVersionAvailable')
+      return GlobalStore.getters.isNewVersionAvailable
+    }
+
+    RefreshApp() {
+      // Unregister Service Worker
+      navigator.serviceWorker.getRegistrations().then(function(registrations) {
+        for(let registration of registrations) {
+          registration.unregister()
+        } })
+      window.location.reload(true)
     }
 
     changeIconConn() {
@@ -147,11 +237,40 @@
     }
 
     public selectOpLang = [
-      { label: 'English (UK)', icon: 'fa-flag-us', value: 'en-uk' },
-      { label: 'German', icon: 'fa-flag-de', value: 'de' },
-      { label: 'Spanish', icon: 'fa-flag-es', value: 'es' },
-      { label: 'Italian', icon: 'fa-facebook', value: 'it' }
+      { label: 'English', icon: 'fa-flag-us', value: 'enUs', image: '../statics/images/gb.png', short: 'EN' },
+      // { label: 'German', icon: 'fa-flag-de', value: 'de', image: '../statics/images/de.png', short: 'DE' },
+      { label: 'Italiano', icon: 'fa-facebook', value: 'it', image: '../statics/images/it.png', short: 'IT' },
+      { label: 'Español', icon: 'fa-flag-es', value: 'esEs', image: '../statics/images/es.png', short: 'ES' }
     ]
+
+
+    // -------------------------------------------------------------------------
+    // QUASAR Example using event to open drawer from another component or page
+    // -------------------------------------------------------------------------
+    // (1) This code is inside layout file that have a drawer
+    //     if this.leftDrawerOpen is true, drawer is displayed
+
+    // (2) Listen for an event in created
+    /*    created(){
+          this.$root.$on("openLeftDrawer", this.openLeftDrawercb);
+        },
+        methods: {
+          openURL,
+          // (3) Define the callback in methods
+          openLeftDrawercb() {
+          this.leftDrawerOpen = !this.leftDrawerOpen;
+        }
+      }
+
+      // (4) In another component or page, emit the event!
+      //     Call the method when clicking button etc.
+      methods: {
+        openLeftDrawer() {
+          this.$root.$emit("openLeftDrawer");
+        }
+      }
+    // -------------------------------------------------------------------------
+    */
 
     get leftDrawerOpen() {
       return GlobalStore.state.leftDrawerOpen
@@ -159,33 +278,112 @@
 
     set leftDrawerOpen(value) {
       GlobalStore.state.leftDrawerOpen = value
-      localStorage.setItem(rescodes.localStorage.leftDrawerOpen, value.toString())
+      localStorage.setItem(tools.localStorage.leftDrawerOpen, value.toString())
     }
 
     getAppVersion() {
       // return "AA"
-      return "[" + process.env.APP_VERSION + "]"
+      let strv = ''
+      if (process.env.DEV) {
+        strv = 'DEV '
+      } else if (process.env.TEST) {
+        strv = 'TEST '
+      }
+      return "[" + strv + process.env.APP_VERSION + "]"
     }
+
     get lang() {
       return this.$q.i18n.lang
     }
 
+
+    setshortlang(lang) {
+      for (let indrec in this.selectOpLang) {
+        if (this.selectOpLang[indrec].value === lang) {
+          // console.log('this.selectOpLang[indrec].short', this.selectOpLang[indrec].short, this.selectOpLang[indrec].value)
+          this.langshort = this.selectOpLang[indrec].short
+          return
+        }
+      }
+
+    }
+
     set lang(lang) {
+      console.log('set lang(' + this.$i18n.locale)
       this.$i18n.locale = this.snakeToCamel(lang)
+      // this.$q.notify('IMPOSTA LANG= ' + this.$i18n.locale)
+      // console.log('IMPOSTA LANG= ' + this.$i18n.locale)
+
+      UserStore.mutations.setlang(this.$i18n.locale)
+
+      let mylangtopass = lang
+
+      this.setshortlang(mylangtopass)
+
+      if (mylangtopass === 'enUs')
+        mylangtopass = 'en-us'
+
+      if (mylangtopass === 'esEs')
+        mylangtopass = 'es'
 
       // dynamic import, so loading on demand only
-      import(`quasar-framework/i18n/${lang}`).then(lang => {
+      import(`quasar-framework/i18n/${mylangtopass}`).then(lang => {
         this.$q.i18n.set(lang.default)
         import(`src/statics/i18n`).then(function () {
         })
       })
     }
 
+    getLangAtt() {
+      return this.$q.i18n.lang
+    }
 
-    mounted () {
+    setLangAtt(mylang) {
+      console.log('MYLL=', mylang)
+      this.$q.i18n.lang = mylang
+    }
+
+    beforeMount() {
+      // Estrai la Lang dal Localstorage
+
+      let my = this.getLangAtt()
+      // this.$q.notify('prima: ' + String(my))
+
+      let mylang = tools.getItemLS(tools.localStorage.lang)
+      if (mylang === '') {
+        if (navigator) {
+          mylang = navigator.language
+          console.log(`LANG2 NAVIGATOR ${mylang}`)
+        } else {
+          mylang = this.$q.i18n.lang
+        }
+
+        console.log('IMPOSTA LANGMY', mylang)
+      }
+      if (mylang !== '') {
+        if (mylang.toLowerCase() === 'enus')
+          mylang = 'enUs'
+        if ((mylang.toLowerCase() === 'eses') || (mylang.toLowerCase() === 'es-es'))
+          mylang = 'esEs'
+        if ((mylang.toLowerCase() === 'enus') || (mylang.toLowerCase() === 'en-us'))
+          mylang = 'enUs'
+      }
+
+      if (!mylang)
+        mylang = process.env.LANG_DEFAULT
+
+
+      this.setLangAtt(mylang)
+      this.setshortlang(mylang)
+      // this.$q.notify('Dopo: ' + String(this.getLangAtt()))
+
+    }
+
+    mounted() {
+
 
       // Test this by running the code snippet below and then
-        // use the "Offline" checkbox in DevTools Network panel
+      // use the "TableOnlyView" checkbox in DevTools Network panel
 
       let mythis = this
       // console.log('Event LOAD')
@@ -207,9 +405,9 @@
             }
           }
 
-          window.addEventListener('online', updateOnlineStatus);
-          window.addEventListener('offline', updateOnlineStatus);
-        });
+          window.addEventListener('online', updateOnlineStatus)
+          window.addEventListener('offline', updateOnlineStatus)
+        })
       }
     }
 
@@ -239,7 +437,7 @@
         }
     }
 
-    .fixed-left:hover{
+    .fixed-left:hover {
         cursor: ew-resize;
     }
 
@@ -463,6 +661,53 @@
 
     .clIconOffline {
         color: red;
+    }
+
+    .flagimg {
+        width: 30px;
+        height: 24px;
+    }
+
+    .clCloudUpload {
+        transition: all 1s ease-out;
+        color: initial;
+        &.send {
+            transition: all 1s ease-in;
+            background-color: lightgreen;
+        }
+        &.receive {
+            transition: all 1s ease-in;
+            background-color: yellow;
+        }
+        &.error {
+            transition: all 1s ease-in;
+            background-color: red;
+        }
+    }
+
+    .clIndexeddb {
+        transition: all 1s ease-out;
+        color: initial;
+        &.receive {
+            transition: all 1s ease-in;
+            background-color: yellow;
+        }
+        &.send {
+            transition: all 1s ease-in;
+            background-color: lightgreen;
+        }
+        &.error {
+            transition: all 1s ease-in;
+            background-color: red;
+        }
+    }
+
+    .btnNewVersHide {
+        display: none;
+    }
+
+    .btnNewVersShow {
+        display: inline-block;
     }
 
 </style>

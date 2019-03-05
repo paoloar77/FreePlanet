@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import { Component, Prop, Watch } from 'vue-property-decorator'
 import { GlobalStore, UserStore } from '@store'
-import { rescodes } from '../../../store/Modules/rescodes'
+import { tools } from '../../../store/Modules/tools'
 import { serv_constants } from '../../../store/Modules/serv_constants'
 
 
@@ -30,6 +30,7 @@ export default class Signin extends Vue {
   public $q
   loading: boolean
   $t: any
+  public iswaitingforRes: boolean = false
 
   public signin: ISigninOptions = {
     username: process.env.TEST_USERNAME || '',
@@ -75,31 +76,46 @@ export default class Signin extends Vue {
   }
 
   checkErrors(riscode) {
-    // console.log("RIS = " + riscode);
-    if (riscode === rescodes.OK) {
-      this.showNotif({ type: 'positive', message: this.$t('login.completato') })
-      this.$router.push('/')
-    } else if (riscode === serv_constants.RIS_CODE_LOGIN_ERR) {
+    // console.log('checkErrors: ', riscode)
+    try {
+      if (riscode === tools.OK) {
+        this.showNotif({ type: 'positive', message: this.$t('login.completato') })
+        this.$router.push('/')
+      } else if (riscode === serv_constants.RIS_CODE_LOGIN_ERR) {
 
-      // Wait N seconds to avoid calling many times...
-      return new Promise(function (resolve, reject) {
-        setTimeout(function () {
-          resolve('anything')
-        }, 1000)
-      }).then(() => {
-        this.showNotif(this.$t('login.errato'))
-        this.$router.push('/signin')
-      })
+        // Wait N seconds to avoid calling many times...
+        return new Promise(function (resolve, reject) {
+          setTimeout(function () {
+            resolve('anything')
+          }, 3000)
+        }).then(() => {
+          setTimeout( () => {
+            this.$q.loading.hide()
+          }, 200)
+          this.showNotif(this.$t('login.errato'))
+          this.iswaitingforRes = false
+          this.$router.push('/signin')
+        })
 
-    } else if (riscode === rescodes.ERR_SERVERFETCH) {
-      this.showNotif(this.$t('fetch.errore_server'))
-    } else if (riscode === rescodes.ERR_GENERICO) {
-      let msg = this.$t('fetch.errore_generico') + UserStore.mutations.getMsgError(riscode)
-      this.showNotif(msg)
-    } else {
-      this.showNotif('Errore num ' + riscode)
+      } else if (riscode === tools.ERR_SERVERFETCH) {
+        this.showNotif(this.$t('fetch.errore_server'))
+      } else if (riscode === tools.ERR_GENERICO) {
+        let msg = this.$t('fetch.errore_generico') + UserStore.mutations.getMsgError(riscode)
+        this.showNotif(msg)
+      } else {
+        this.showNotif('Errore num ' + riscode)
+      }
+
+      if (riscode !== serv_constants.RIS_CODE_LOGIN_ERR) {
+        this.iswaitingforRes = false
+        setTimeout( () => {
+          this.$q.loading.hide()
+        }, 200)
+      }
+
+    } finally {
+
     }
-
   }
 
   redirect(response) {
@@ -131,39 +147,52 @@ export default class Signin extends Vue {
       return
     }
 
-    this.$q.loading.show({ message: this.$t('login.incorso') })
+    let msg = this.$t('login.incorso')
+    if (process.env.DEBUG)
+      msg += ' ' + process.env.MONGODB_HOST
+    this.$q.loading.show({ message: msg})
+    // disable Button Login:
+    this.iswaitingforRes = true
 
-    console.log(this.signin)
+    if (process.env.DEBUG)
+      console.log('this.signin', this.signin)
+
     UserStore.actions.signin(this.signin)
       .then((riscode) => {
-        // console.log('riscode=', riscode)
-        if (riscode === rescodes.OK) {
+        // console.log('signin FINITO CALL: riscode=', riscode)
+        if (riscode === tools.OK) {
           router.push('/signin')
         }
         return riscode
       }).then((riscode) => {
+        if (UserStore.state.lang !== '')
+          this.$i18n.locale = UserStore.state.lang    // Set Lang
+        else
+          UserStore.mutations.setlang(this.$i18n.locale)     // Set Lang
+
+        // console.log('LANG ORA=', UserStore.state.lang)
+
         globalroutines(this, 'loadapp', '')
         return riscode
       })
       .then((riscode) => {
-        if (riscode === rescodes.OK) {
+        if (riscode === tools.OK) {
           GlobalStore.actions.createPushSubscription()
-            .then(ris => {
+            .then(rissub => {
+
             })
             .catch(e => {
-              console.log('ERROR = ' + e)
-            })
-            .then(() => {
-              this.checkErrors(riscode)
-              this.$q.loading.hide()
+              console.log('ERROR Subscription = ' + e)
             })
         }
+
+        this.checkErrors(riscode)
+
       })
       .catch(error => {
-        console.log('ERROR = ' + error)
+        console.log('ERROR SIGNIN = ' + error)
 
         this.checkErrors(error)
-        this.$q.loading.hide()
       })
 
   }

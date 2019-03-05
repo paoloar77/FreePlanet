@@ -21,7 +21,7 @@
                             :before="[{icon: 'person', handler () {}}]"
                             @blur="$v.signin.username.$touch"
                             :error="$v.signin.username.$error"
-                            :float-label="$t('reg.username')"></q-input>
+                            :float-label="$t('reg.username_login')"></q-input>
                 </q-field>
 
                 <q-field
@@ -52,7 +52,7 @@
                 </q-card-main>
 
                 <div align="center">
-                    <q-btn rounded size="lg" color="primary" @click="submit" :disable="$v.$error">{{$t('login.enter')}}
+                    <q-btn rounded size="lg" color="primary" @click="submit" :disable="$v.$error || iswaitingforRes">{{$t('login.enter')}}
                     </q-btn>
                 </div>
             </form>

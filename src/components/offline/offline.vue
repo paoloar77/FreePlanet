@@ -1,6 +1,6 @@
 <template>
     <div id="offline">
-        Offline Page !
+        TableOnlyView Page !
     </div>
 </template>
 <script lang="ts" src="./offline.ts">

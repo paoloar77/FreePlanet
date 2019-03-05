@@ -1,7 +1,7 @@
 // Configuration for your app
 
 const path = require('path');
-
+const helpers = require('./helpers');
 const webpack = require('webpack')
 const envparser = require('./config/envparser')
 
@@ -12,24 +12,24 @@ const extendTypescriptToWebpack = (config) => {
     .add('.ts', '.js', '.vue')
   config.resolve
     .alias
-    .set('@components', path.resolve(__dirname, 'src/components/index.ts'))
-    // .set('@components', path.resolve(__dirname, 'src/components'))
-    .set('@views', path.resolve(__dirname, 'src/components/views/index.ts'))
-    // .set('@views', path.resolve(__dirname, 'src/components/views'))
-    .set('@src', path.resolve(__dirname, 'src'))
-    .set('@icons', path.resolve(__dirname, 'src/assets/icons'))
-    .set('@images', path.resolve(__dirname, 'src/assets/images'))
-    .set('@classes', path.resolve(__dirname, 'src/classes/index.ts'))
-    .set('@utils', path.resolve(__dirname, 'src/utils/index.ts'))
-    .set('@utils', path.resolve(__dirname, 'src/utils/*'))
-    .set('@css', path.resolve(__dirname, 'src/styles/variables.scss'))
-    .set('@router', path.resolve(__dirname, 'src/router/index.ts'))
-    .set('@validators', path.resolve(__dirname, 'src/utils/validators.ts'))
-    .set('@api', path.resolve(__dirname, 'src/store/Api/index.ts'))
-    .set('@paths', path.resolve(__dirname, 'src/store/Api/ApiRoutes.ts'))
-    .set('@types', path.resolve(__dirname, 'src/typings/index.ts'))
-    .set('@store', path.resolve(__dirname, 'src/store/index.ts'))
-    .set('@modules', path.resolve(__dirname, 'src/store/Modules/index.ts'))
+    .set('@components', helpers.root('src/components/index.ts'))
+    // .set('@components', helpers.root('src/components'))
+    .set('@views', helpers.root('src/components/views/index.ts'))
+    // .set('@views', helpers.root('src/components/views'))
+    .set('@src', helpers.root('src'))
+    .set('@css', helpers.root('src/statics/css/*'))
+    .set('@icons', helpers.root('src/statics/icons/*'))
+    .set('@images', helpers.root('src/statics/images/*'))
+    .set('@classes', helpers.root('src/classes/index.ts'))
+    .set('@utils', helpers.root('src/utils/index.ts'))
+    .set('@utils', helpers.root('src/utils/*'))
+    .set('@router', helpers.root('src/router/index.ts'))
+    .set('@validators', helpers.root('src/utils/validators.ts'))
+    .set('@api', helpers.root('src/store/Api/index.ts'))
+    .set('@paths', helpers.root('src/store/Api/ApiRoutes.ts'))
+    .set('@types', helpers.root('src/typings/index.ts'))
+    .set('@store', helpers.root('src/store/index.ts'))
+    .set('@modules', helpers.root('src/store/Modules/index.ts'))
   config.module
     .rule('typescript')
     .test(/\.tsx?$/)
@@ -59,7 +59,7 @@ module.exports = function (ctx) {
       store: 'src/store/index.ts'
     },
     // app plugins (/src/plugins)
-    plugins: ['i18n', 'axios', 'vee-validate', 'myconfig', 'local-storage', 'error-handler', 'globalroutines', 'vue-idb'],
+    plugins: ['i18n', 'axios', 'vee-validate', 'myconfig', 'local-storage', 'error-handler', 'globalroutines', 'vue-idb', 'dragula', 'guard'],
     css: [
       'app.styl'
     ],
@@ -72,6 +72,12 @@ module.exports = function (ctx) {
       'fontawesome'
     ],
     supportIE: false,
+    aliases: {
+      quasar: path.resolve(__dirname, '../node_modules/quasar-framework/'),
+      src: path.resolve(__dirname, '../src'),
+      statics: path.resolve(__dirname, '../src/statics'),
+      components: path.resolve(__dirname, '../src/components')
+    },
     build: {
       showProgress: true,
       env: envparser(),
@@ -87,8 +93,8 @@ module.exports = function (ctx) {
         config.resolve
           .alias
           .set('~', __dirname)
-          .set('@', path.resolve(__dirname, 'src'))
-          // .set('env', path.resolve(__dirname, 'config/helpers/env.js'))
+          .set('@', helpers.root('src'))
+          // .set('env', helpers.root('config/helpers/env.js'))
         config.module
           .rule('template-engine')
           .test(/\.pug$/)
@@ -150,9 +156,15 @@ module.exports = function (ctx) {
         'QDatetime',
         'QSlideTransition',
         'QTable',
+        'QTableColumns',
+        'QTh',
+        'QTr',
+        'QSearch',
+        'QTd',
         'QContextMenu',
         'QProgress',
         'QSlider',
+        'QPopupEdit',
       ],
       directives: [
         'Ripple',
@@ -160,9 +172,9 @@ module.exports = function (ctx) {
       ],
       // Quasar plugins
       plugins: [
+        'Meta',
         'Dialog',
         'Notify',
-        'Meta',
         'Cookies',
         'ActionSheet', 'Loading'
       ],

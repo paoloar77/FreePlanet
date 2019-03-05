@@ -26,6 +26,17 @@ export default class App extends Vue {
 
   public listaRoutingNoLogin = ['/vreg?', '/offline']
 
+  meta () {
+    return {
+      keywords: { name: 'keywords', content: 'WebSite' },
+      // meta tags
+      meta: {
+        mykey: { name: 'mykey', content: 'Key 1' },
+        keywords: { name: 'keywords', content: 'MyKeywords' }
+      }
+    }
+  }
+
   created() {
     if (process.env.DEV) {
       console.info('SESSIONE IN SVILUPPO ! (DEV)')
@@ -48,10 +59,19 @@ export default class App extends Vue {
     })
 
     if (chiamaautologin) {
-      console.log('CHIAMA autologin_FromLocalStorage')
+      // console.log('CHIAMA autologin_FromLocalStorage')
       UserStore.actions.autologin_FromLocalStorage()
         .then((loadstorage) => {
           if (loadstorage) {
+
+            if (UserStore.state.lang !== '') {
+              // console.log('SETLOCALE :', this.$i18n.locale)
+              this.$i18n.locale = UserStore.state.lang    // Set Lang
+            } else {
+              UserStore.mutations.setlang(this.$i18n.locale)
+            }
+            // console.log('lang CARICATO:', this.$i18n.locale)
+
             globalroutines(this, 'loadapp', '')
             // this.$router.replace('/')
 

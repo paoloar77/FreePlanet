@@ -8,9 +8,14 @@ function translate(params) {
   let stringa = messages[lang]
 
   let ris = stringa
-  msg.forEach(param => {
-    ris = ris[param]
-  })
+  if (ris !== undefined) {
+    msg.forEach(param => {
+      ris = ris[param]
+    })
+  } else {
+    console.log('ERRORE IN TRANSLATE! ', params, ' NON ESISTE!')
+    return params
+  }
 
   return ris
 }

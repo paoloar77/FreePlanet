@@ -25,6 +25,10 @@
     "paths": {
       "@src/*": ["./*"],
       "@components": ["./components/index.ts"],
+      "@css/*": ["./statics/css/*"],
+      "@icons/*": ["./statics/icons/*"],
+      "@images/*": ["./statics/images/*"],
+      "@js/*": ["./statics/js/*"],
       "@classes": ["./classes/index.ts"],
       "@utils/*": ["./utils/*"],
       "@validators": ["./utils/validators.ts"],

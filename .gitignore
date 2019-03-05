@@ -2,6 +2,7 @@
 .DS_Store
 .thumbs.db
 .env
+.env.development
 .env.production
 .env.production.bak
 .env.prod.bak
@@ -12,7 +13,6 @@ node_modules
 /src-cordova/platforms
 /src-cordova/plugins
 /src-cordova/www
-/src-pwa
 /src-ssr
 npm-debug.log*
 yarn-debug.log*
@@ -34,3 +34,8 @@ deploy.sh
 deploy_on_production.sh
 deploy_on_test_server.sh
 send_to_production.sh
+compileandserve.sh
+deploy_all.sh
+deploy_frontend.sh
+mongodb_delete_pc_locale_paolo.sh
+serve_on_localhost.sh

@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import { Component } from 'vue-property-decorator'
-import { GlobalStore } from '@store'
+import { GlobalStore, UserStore } from '@store'
 
 import { Logo } from '../../components/logo'
 
@@ -26,8 +26,28 @@ export default class Home extends Vue {
   created() {
     // console.log('Home created...')
 
+
     GlobalStore.actions.prova()
   }
+
+  get isLogged(){
+    return UserStore.state.isLogged
+  }
+
+
+  meta() {
+    return {
+      keywords: { name: 'keywords', content: 'Quasar website' },
+      // meta tags
+      meta: {
+        mykey: { name: 'mykey', content: 'Key 1' },
+        description: { name: 'description', content: 'Page 1' },
+        keywords: { name: 'keywords', content: 'Quasar website' },
+        equiv: { 'http-equiv': 'Content-Type', content: 'text/html; charset=UTF-8' }
+      }
+    }
+  }
+
 
   mystilecard() {
     return {
@@ -43,10 +63,10 @@ export default class Home extends Vue {
   set conta(valore) {
     GlobalStore.actions.setConta(valore)
     let my = this.$q.i18n.lang
-    this.showNotification(String(my))
+    this.showNotif(String(my))
   }
 
-  showNotification(message: string, color = 'primary', icon = '') {
+  showNotif(message: string, color = 'primary', icon = '') {
     this.$q.notify({
       color,
       icon,
@@ -66,12 +86,24 @@ export default class Home extends Vue {
 
   }
 
+  get isInCostruction () {
+    return process.env.IN_CONSTRUCTION === '1'
+  }
+
   getPermission() {
     return Notification.permission
   }
 
-  NotServiceWorker () {
+  NotServiceWorker() {
     return (!('serviceWorker' in navigator))
+  }
+
+  PagLogin () {
+    this.$router.replace('/signin')
+  }
+
+  PagReg () {
+    this.$router.replace('/signup')
   }
 
   displayConfirmNotification() {
@@ -80,9 +112,9 @@ export default class Home extends Vue {
       options = {
         body: 'You successfully subscribed to our Notification service!',
         icon: '/statics/icons/app-icon-96x96.png',
-        image: '/src/images/sf-boat.jpg',
+        image: '/statics/images/sf-boat.jpg',
         dir: 'ltr',
-        lang: 'en-US', // BCP 47,
+        lang: 'enUs', // BCP 47,
         vibrate: [100, 50, 200],
         badge: '/statics/icons/app-icon-96x96.png',
         tag: 'confirm-notification',
@@ -139,7 +171,7 @@ export default class Home extends Vue {
         icon: '/statics/icons/android-chrome-192x192.png',
         image: '/statics/images/freeplanet.png',
         dir: 'ltr',
-        lang: 'en-US', // BCP 47,
+        lang: 'enUs', // BCP 47,
         vibrate: [100, 50, 200],
         badge: '/statics/icons/android-chrome-192x192.png',
         tag: 'confirm-notification',
@@ -157,16 +189,18 @@ export default class Home extends Vue {
     }
   }
 
+
+
   askfornotification() {
-    this.showNotification(this.$t('notification.waitingconfirm'), 'positive', 'notifications')
+    this.showNotif(this.$t('notification.waitingconfirm'), 'positive', 'notifications')
 
     let mythis = this
     Notification.requestPermission(function (result) {
       console.log('User Choice', result)
       if (result === 'granted') {
-        mythis.showNotification(mythis.$t('notification.confirmed'), 'positive', 'notifications')
+        mythis.showNotif(mythis.$t('notification.confirmed'), 'positive', 'notifications')
       } else {
-        mythis.showNotification(mythis.$t('notification.denied'), 'negative', 'notifications')
+        mythis.showNotif(mythis.$t('notification.denied'), 'negative', 'notifications')
 
         // displayConfirmNotification();
       }

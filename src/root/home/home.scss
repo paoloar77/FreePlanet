@@ -1,3 +1,219 @@
 .mycard {
   visibility: hidden;
 }
+
+.landing {
+  background: #000 url(../../statics/images/cover.jpg) no-repeat 50% fixed;
+  background-size: cover
+}
+
+.landing > section {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  padding: 0 16px
+}
+
+.landing > section.padding {
+  padding: 180px 16px
+}
+
+.landing > section > div {
+  position: relative;
+  max-width: 1040px;
+  width: 100%
+}
+
+.landing__toolbar {
+  background: -webkit-gradient(linear, left top, left bottom, from(#000), to(transparent));
+  background: linear-gradient(180deg, #000, transparent);
+  padding: 0 !important
+}
+
+.landing__toolbar .q-btn {
+  border-radius: 0 0 5px 5px;
+  -ms-flex-item-align: stretch;
+  align-self: stretch
+}
+
+.landing__hero {
+  min-height: 100vh
+}
+
+.landing__header {
+  height: 18vh
+}
+
+.landing__arrow {
+  bottom: 8px;
+  opacity: .4
+}
+
+.landing__front {
+  background: -webkit-gradient(linear, left top, left bottom, from(transparent), color-stop(15%, rgba(0, 0, 0, .6)));
+  background: linear-gradient(180deg, transparent, rgba(0, 0, 0, .6) 15%)
+}
+
+.landing__logo {
+  width: 150px;
+  height: 150px;
+  margin-top: 21px;
+  -webkit-animation: logo-rotate 240s linear infinite;
+  animation: logo-rotate 240s linear infinite
+}
+
+.landing__features .q-icon {
+  font-size: 64px
+}
+
+.landing__features h4, .landing__features h6 {
+  margin: 26px 0
+}
+
+.landing__features p {
+  opacity: .6;
+  font-size: 16px
+}
+
+.landing__footer {
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(65%, rgba(0, 0, 0, .1)), to(#000));
+  background: linear-gradient(180deg, rgba(0, 0, 0, .1) 65%, #000);
+  padding-top: 72px !important;
+  //padding-bottom: 72px !important
+}
+
+.landing__footer .doc-link {
+  color: #fff
+}
+
+.landing__footer .doc-link:hover {
+  opacity: .8
+}
+
+.landing__swirl-bg {
+  background-repeat: no-repeat !important;
+  background-position: top;
+  background-size: contain !important;
+  background-image: url(https://cdn.quasar-framework.org/img/landing_first_section.png) !important
+}
+
+@media (max-width: 718px) {
+  .landing__hero {
+    text-align: center
+  }
+  .landing__header {
+    height: 9vh
+  }
+  .landing__hero .text-h1 {
+    font-size: 3rem;
+    line-height: 3.05rem;
+    margin-bottom: 24px
+  }
+  .landing > section.padding {
+    padding-top: 50px;
+    //padding-bottom: 90px
+  }
+  .landing .feature-item {
+    text-align: center
+  }
+  .landing__hero-content {
+    //padding-bottom: 180px
+  }
+  .landing__hero-btns {
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center
+  }
+}
+
+body.mobile .landing {
+  background: unset
+}
+
+body.mobile .landing:before {
+  content: "";
+  position: fixed;
+  top: 0;
+  height: 100vh;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: -1;
+  background: #000 url(../../statics/images/cover.jpg) 50%;
+  background-size: cover
+}
+
+@-webkit-keyframes logo-rotate {
+  to {
+    -webkit-transform: rotate(-1turn);
+    transform: rotate(-1turn)
+  }
+}
+
+@keyframes logo-rotate {
+  to {
+    -webkit-transform: rotate(-1turn);
+    transform: rotate(-1turn)
+  }
+}
+
+
+
+
+.home {
+  //background-color: rgb(250, 250, 250);
+  padding: 5px;
+  display: flex;
+  //flex-wrap: nowrap;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.btn-start {
+  margin: 5px;
+}
+
+.shadow {
+  //color: white;
+  text-shadow: 2px 2px 4px #000000;
+}
+
+.shadow-max {
+  //color: white;
+  text-shadow: 4px 4px 8px #000000;
+}
+
+
+.text-h1 {
+  font-size: 6rem;
+  font-weight: 300;
+  line-height: 6rem;
+  letter-spacing: -.01562em;
+}
+
+.text-weight-bold {
+  font-weight: 700;
+}
+
+.text-subtitle1 {
+  font-size: 1.25rem;
+  font-weight: 400;
+  line-height: 1.75rem;
+  letter-spacing: .00937em;
+  &.big {
+    font-size: 1.5rem;
+  }
+}
+.text-subtitle2 {
+
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.75rem;
+  letter-spacing: .00937em;
+}
+
+

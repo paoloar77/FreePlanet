@@ -122,24 +122,50 @@ if (workbox) {
           if (res.status === 200) {
             const clonedRes = res.clone();
 
-            return clearAllData('todos')
+            // console.log('1) clearAllData(categories)')
+            return clearAllData('categories')
               .then(() => {
-                return clonedRes
+                // console.log('2) clearAllData(todos)')
+                return clearAllData('todos')
+                  .then(() => {
+                    // console.log('3)  ....return clonedRes')
+                    return clonedRes
+                  })
               })
           }
         })
         .then((clonedRes) => {
+          // console.log('  3) ')
           if (clonedRes !== undefined)
             return clonedRes.json();
           return null
         })
-        .then(async data => {
+        .then(data => {
+          // console.log('  4) data = ', data)
           if (data) {
             if (data.todos) {
-              console.log('***********************+++++++++++++++++++++++++++++++++++++++++++++++++++**********    Records TODOS Received from Server [', data.todos.length, 'record]', data.todos)
-              for (const key in data.todos) {
-                await writeData('todos', data.todos[key])
+
+              let promiseChain = Promise.resolve();
+
+              console.log('*********+++++++++++++++++**********    Records TODOS Received from Server [', data.todos.length, 'record]', data.todos)
+
+              for (let cat in data.categories) {
+                promiseChain = promiseChain.then(() => {
+                  return writeData('categories', { _id: cat, valore: data.categories[cat] } )
+                })
               }
+
+              for (let indrecCat in data.todos) {
+                for (let indrec in data.todos[indrecCat]) {
+                  promiseChain = promiseChain.then(() => {
+                    return writeData('todos', data.todos[indrecCat][indrec])
+                  })
+                }
+              }
+
+              // console.log('promiseChain', promiseChain)
+
+              return promiseChain
             }
           }
         })
@@ -506,7 +532,9 @@ self.addEventListener('push', function (event) {
       badge: '/statics/icons/android-chrome-192x192.png',
       data: {
         url: data.url
-      }
+      },
+      tag: 'received',
+      renitify: true, // vibrate also with others messages.
     };
 
     event.waitUntil(

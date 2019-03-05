@@ -15,6 +15,7 @@ export let idbKeyval = (() => {
         openreq.onupgradeneeded = () => {
           // First time setup: create an empty object store
           openreq.result.createObjectStore('todos', { keyPath: '_id' });
+          openreq.result.createObjectStore('categories', { keyPath: '_id' });
           openreq.result.createObjectStore('sync_todos', { keyPath: '_id' });
           openreq.result.createObjectStore('sync_todos_patch', { keyPath: '_id' });
           openreq.result.createObjectStore('delete_todos', { keyPath: '_id' });
@@ -56,7 +57,7 @@ export let idbKeyval = (() => {
       let req;
 
       await withStore('readonly', table, store => {
-        console.log('getdata', table, key)
+        // console.log('getdata', table, key)
         req = store.get(key);
       });
 

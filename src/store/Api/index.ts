@@ -7,33 +7,48 @@ import axios from 'axios'
 export { addAuthHeaders, removeAuthHeaders, API_URL } from './Instance'
 // import {AlgoliaSearch} from './AlgoliaController'
 import Paths from '@paths'
-import { rescodes } from '@src/store/Modules/rescodes'
+import { tools } from '@src/store/Modules/tools'
 
 import { GlobalStore, UserStore } from '@modules'
 import globalroutines from './../../globalroutines/index'
 import { serv_constants } from '@src/store/Modules/serv_constants'
 import router from '@router'
+import * as Types from '@src/store/Api/ApiTypes'
+import { costanti } from '@src/store/Modules/costanti'
 
 
 // const algoliaApi = new AlgoliaSearch()
 export namespace ApiTool {
   export async function post(path: string, payload?: any) {
+    GlobalStore.state.connData.downloading_server = 1
+    GlobalStore.state.connData.uploading_server = 1
     return await Request('post', path, payload)
   }
 
   export async function postFormData(path: string, payload?: any) {
+    GlobalStore.state.connData.uploading_server = 1
+    GlobalStore.state.connData.downloading_server = 1
     return await Request('postFormData', path, payload)
   }
 
   export async function get(path: string, payload?: any) {
+    GlobalStore.state.connData.downloading_server = 1
+    GlobalStore.state.connData.uploading_server = 0
     return await Request('get', path, payload)
   }
 
   export async function put(path: string, payload?: any) {
+    GlobalStore.state.connData.uploading_server = 1
     return await Request('put', path, payload)
   }
 
+  export async function patch(path: string, payload?: any) {
+    GlobalStore.state.connData.uploading_server = 1
+    return await Request('patch', path, payload)
+  }
+
   export async function Delete(path: string, payload: any) {
+    GlobalStore.state.connData.uploading_server = 1
     return await Request('delete', path, payload)
   }
 
@@ -47,92 +62,57 @@ export namespace ApiTool {
     })
   }
 
-  export async function SendReq(url: string, method: string, mydata: any, setAuthToken: boolean = false) {
-    UserStore.mutations.setServerCode(rescodes.EMPTY)
+  export async function SendReq(url: string, method: string, mydata: any, setAuthToken: boolean = false): Promise<Types.AxiosSuccess | Types.AxiosError> {
+    UserStore.mutations.setServerCode(tools.EMPTY)
     UserStore.mutations.setResStatus(0)
     return await new Promise(function (resolve, reject) {
-      let ricevuto = false
 
-      return sendRequest(url, UserStore.state.lang, UserStore.state.x_auth_token, method, mydata)
-        .then(resreceived => {
-          console.log('resreceived', resreceived)
-          ricevuto = true
-          let res = resreceived.clone()
-          if (process.env.DEV) {
-            // console.log('SendReq RES [', res.status, ']', res)
-          }
+
+      return sendRequest(url, method, mydata)
+        .then(res => {
+          // console.log('res', res)
+
+          setTimeout(function () {
+            if (method === 'get')
+              GlobalStore.state.connData.downloading_server = 0
+            else {
+              GlobalStore.state.connData.uploading_server = 0
+              GlobalStore.state.connData.downloading_server = 0
+            }
+          }, 1000)
+
 
           UserStore.mutations.setResStatus(res.status)
-          if (res.status === 200) {
-            let x_auth_token = ''
-            try {
-              if (setAuthToken) {
-                x_auth_token = String(res.headers.get('x-auth'))
-
-                if (x_auth_token === '') {
-                  UserStore.mutations.setServerCode(rescodes.ERR_AUTHENTICATION)
-                }
-                UserStore.mutations.setAuth(x_auth_token)
-
-                if (url === process.env.MONGODB_HOST + '/updatepwd') {
-                  UserStore.mutations.UpdatePwd({ x_auth_token })
-                  localStorage.setItem(rescodes.localStorage.token, x_auth_token)
-                }
-              }
-
-              UserStore.mutations.setServerCode(rescodes.OK)
-            } catch (e) {
-              if (setAuthToken) {
-                UserStore.mutations.setServerCode(rescodes.ERR_AUTHENTICATION)
-                UserStore.mutations.setAuth('')
-              }
-              GlobalStore.mutations.setStateConnection(ricevuto ? 'online' : 'offline')
-              return reject({ code: rescodes.ERR_AUTHENTICATION })
-            }
-          } else if (res.status === serv_constants.RIS_CODE__HTTP_FORBIDDEN_INVALID_TOKEN) {
+          if (res.status === serv_constants.RIS_CODE__HTTP_FORBIDDEN_INVALID_TOKEN) {
             // Forbidden
             // You probably is connectiong with other page...
-            UserStore.mutations.setServerCode(rescodes.ERR_AUTHENTICATION)
+            UserStore.mutations.setServerCode(tools.ERR_AUTHENTICATION)
             UserStore.mutations.setAuth('')
-            GlobalStore.mutations.setStateConnection(ricevuto ? 'online' : 'offline')
             router.push('/signin')
-            return reject({ code: rescodes.ERR_AUTHENTICATION })
+            return reject({ code: tools.ERR_AUTHENTICATION })
           }
 
-          GlobalStore.mutations.setStateConnection(ricevuto ? 'online' : 'offline')
-
-          return res.json()
-            .then((body) => {
-              // console.log('BODY RES = ', body)
-              return resolve({ res, body, status: res.status })
-            })
-            .catch(e => {
-              return resolve({ res, body: {}, status: res.status })
-              // Array not found...
-              // UserStore.mutations.setServerCode(rescodes.ERR_GENERICO)
-              // return reject({ code: rescodes.ERR_GENERICO, status: res.status })
-            })
+          return resolve(res)
 
         })
         .catch(error => {
-          if (process.env.DEV) {
-            console.log('ERROR using', url, error, 'ricevuto=', ricevuto)
-          }
-          if (!ricevuto) {
-            UserStore.mutations.setServerCode(rescodes.ERR_SERVERFETCH)
-          } else {
-            UserStore.mutations.setServerCode(rescodes.ERR_GENERICO)
-          }
+          setTimeout(function () {
+            if (method === 'get')
+              GlobalStore.state.connData.downloading_server = -1
+            else {
+              GlobalStore.state.connData.uploading_server = -1
+              GlobalStore.state.connData.downloading_server = -1
+            }
+          }, 1000)
 
-          GlobalStore.mutations.setStateConnection(ricevuto ? 'online' : 'offline')
-
-          return reject({ code: error })
+          console.log('error', error)
+          return reject(error)
         })
     })
   }
 
   export async function syncAlternative(mystrparam) {
-    console.log('[ALTERNATIVE Background syncing', mystrparam)
+    // console.log('[ALTERNATIVE Background syncing', mystrparam)
 
     let multiparams = mystrparam.split('|')
     if (multiparams) {
@@ -146,10 +126,10 @@ export namespace ApiTool {
         if (cmd === 'sync-todos') {
           // console.log('[Alternative] Syncing', cmd, table, method)
 
-          const headers = new Headers()
-          headers.append('content-Type', 'application/json')
-          headers.append('Accept', 'application/json')
-          headers.append('x-auth', token)
+          // const headers = new Headers()
+          // headers.append('content-Type', 'application/json')
+          // headers.append('Accept', 'application/json')
+          // headers.append('x-auth', token)
 
           let errorfromserver = false
           let lettoqualcosa = false
@@ -162,7 +142,8 @@ export namespace ApiTool {
 
               const promises = myrecs.map(rec => {
                 // console.log('syncing', table, '', rec.descr)
-                let link = process.env.MONGODB_HOST + '/todos'
+                // let link = String(process.env.MONGODB_HOST) + '/todos'
+                let link = '/todos'
 
                 if (method !== 'POST')
                   link += '/' + rec._id
@@ -170,13 +151,14 @@ export namespace ApiTool {
                 // console.log(' [Alternative] ++++++++++++++++++ SYNCING !!!!  ', rec.descr, table, 'FETCH: ', method, link, 'data:')
 
                 // Insert/Delete/Update table to the server
-                return fetch(link, {
-                  method: method,
-                  headers: headers,
-                  cache: 'no-cache',
-                  mode: 'cors',   // 'no-cors',
-                  body: JSON.stringify(rec)
-                })
+                return SendReq(link, method, rec)
+                // return fetch(link, {
+                //   method: method,
+                //   headers: headers,
+                //   cache: 'no-cache',
+                //   mode: 'cors',   // 'no-cors',
+                //   body: JSON.stringify(rec)
+                // })
                   .then(() => {
                     lettoqualcosa = true
                     return globalroutines(null, 'delete', table, null, rec._id)
@@ -207,7 +189,8 @@ export namespace ApiTool {
               // console.log('¨¨¨¨¨¨¨¨¨¨¨¨¨¨  errorfromserver:', errorfromserver)
               const mystate = errorfromserver ? 'offline' : 'online'
               GlobalStore.mutations.setStateConnection(mystate)
-              return globalroutines(null, 'write', 'config', { _id: 2, stateconn: mystate })
+              GlobalStore.mutations.saveConfig( { _id: costanti.CONFIG_ID_STATE_CONN, value: mystate })
+
             })
 
           // console.log(' [Alternative] A2) ?????????????????????????? ESCO DAL LOOP !!!!!!!!!')

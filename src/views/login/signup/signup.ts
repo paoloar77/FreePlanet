@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import { Component, Prop, Watch } from 'vue-property-decorator'
 import { UserStore } from '@store'
-import { rescodes } from '../../../store/Modules/rescodes'
+import { tools } from '../../../store/Modules/tools'
 
 import { ISignupOptions, IUserState } from 'model'
 import { validations, TSignup } from './signup-validate'
@@ -125,16 +125,16 @@ export default class Signup extends Vue {
 
   checkErrors(riscode: number) {
     console.log('checkErrors', riscode)
-    if (riscode === rescodes.DUPLICATE_EMAIL_ID) {
+    if (riscode === tools.DUPLICATE_EMAIL_ID) {
       this.showNotif(this.$t('reg.err.duplicate_email'))
-    } else if (riscode === rescodes.DUPLICATE_USERNAME_ID) {
+    } else if (riscode === tools.DUPLICATE_USERNAME_ID) {
       this.showNotif(this.$t('reg.err.duplicate_username'))
-    } else if (riscode === rescodes.ERR_SERVERFETCH) {
+    } else if (riscode === tools.ERR_SERVERFETCH) {
       this.showNotif(this.$t('fetch.errore_server'))
-    } else if (riscode === rescodes.ERR_GENERICO) {
+    } else if (riscode === tools.ERR_GENERICO) {
       let msg = this.$t('fetch.errore_generico') + UserStore.mutations.getMsgError(riscode)
       this.showNotif(msg)
-    } else if (riscode === rescodes.OK) {
+    } else if (riscode === tools.OK) {
       this.$router.push('/signin')
       this.showNotif({type: 'warning', textColor: 'black', message: this.$t('components.authentication.email_verification.link_sent')})
     } else {

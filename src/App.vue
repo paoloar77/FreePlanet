@@ -1,6 +1,6 @@
 <template>
     <div id="q-app">
-        <q-layout :style="{ backgroundColor: backgroundColor}">
+        <q-layout :style="">
             <app-header></app-header>
             <div class="layout-view">
                 <q-ajax-bar></q-ajax-bar>

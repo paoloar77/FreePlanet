@@ -5,19 +5,24 @@ export class AxiosSuccess {
   public status: number
   public data: any
 
-  constructor(data: any) {
+  constructor(data: any, status: number) {
     this.data = data
+    this.status = status
   }
 }
 
 export class AxiosError {
   public success: boolean = false
-  public status: number
+  public status: number = 0
   public data: any
+  public code: any = 0
+  public msgerr: string = ''
 
-  constructor(status: number, data?: any) {
+  constructor(status: number, data?: any, code?: any, msgerr?: string) {
     this.status = status
     this.data = data
+    this.code = code
+    this.msgerr = msgerr
     if (status !== 401) {
       // if (status == 0) message = 'Vérifiez votre connexion Internet';
       // NotificationsStore.actions.addNotification({ type: 'warning', message: message })
@@ -27,6 +32,22 @@ export class AxiosError {
         // LoginStore.actions.disconnectRequest()
       }
     }
+  }
+
+  public getMsgError() {
+    if (this.data && this.data.error)
+      return this.data.error.message
+
+    return this.msgerr
+  }
+  public getCode() {
+    if (this.code === 0) {
+      if (this.data.code) {
+        return this.data.code
+      }
+    }
+
+    return this.code
   }
 }
 
