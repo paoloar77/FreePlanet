@@ -69,7 +69,7 @@ export default class Todo extends Vue {
   }
 
   set showtype (value) {
-    // console.log('showtype', value)
+    console.log('showtype', value)
     GlobalStore.mutations.setShowType(value)
   }
 

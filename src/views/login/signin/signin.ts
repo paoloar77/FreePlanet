@@ -147,11 +147,16 @@ export default class Signin extends Vue {
       return
     }
 
-    this.$q.loading.show({ message: this.$t('login.incorso') })
+    let msg = this.$t('login.incorso')
+    if (process.env.DEBUG)
+      msg += ' ' + process.env.MONGODB_HOST
+    this.$q.loading.show({ message: msg})
     // disable Button Login:
     this.iswaitingforRes = true
 
-    console.log(this.signin)
+    if (process.env.DEBUG)
+      console.log('this.signin', this.signin)
+
     UserStore.actions.signin(this.signin)
       .then((riscode) => {
         // console.log('signin FINITO CALL: riscode=', riscode)

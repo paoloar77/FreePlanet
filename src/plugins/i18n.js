@@ -1,6 +1,6 @@
 // src/plugins/i18n.js
 import VueI18n from 'vue-i18n';
-import messages from 'src/assets/i18n';
+import messages from 'src/statics/i18n';
 import { tools } from "../store/Modules/tools";
 
 export default ({ app, store, Vue }) => {

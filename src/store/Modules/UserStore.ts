@@ -367,7 +367,7 @@ namespace Actions {
   }
 
   async function signin(context, authData: ISigninOptions) {
-    console.log('LOGIN signin')
+    // console.log('LOGIN signin')
 
     // console.log('MYLANG = ' + state.lang)
 
@@ -406,8 +406,8 @@ namespace Actions {
     }
 
     // console.log('PASSO 4')
-
-    console.log(usertosend)
+    if (process.env.DEBUG === '1')
+      console.log(usertosend)
 
     Mutations.mutations.setServerCode(tools.CALLING)
 

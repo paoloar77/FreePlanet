@@ -1,54 +1,59 @@
 import { RouteConfig as VueRouteConfig } from 'vue-router'
 
 import { RouteNames } from './route-names'
+import { tools } from '@src/store/Modules/tools'
+
+import auth from '../middleware/auth'
+
 
 export const RouteConfig: VueRouteConfig[] = [
   {
-    component: () => import('@/root/home/home.vue'),
-    name: RouteNames.home,
     path: '/',
-    meta: { name: 'Home' }
+    name: RouteNames.home,
+    component: () => import('@/root/home/home.vue')
   },
   {
     path: '/signup',
-    component: () => import('@/views/login/signup/signup.vue'),
-    meta: { name: 'Registration' }
+    name: 'Registration',
+    component: () => import('@/views/login/signup/signup.vue')
   },
   {
     path: '/signin',
-    component: () => import('@/views/login/signin/signin.vue'),
-    meta: { name: 'Login' }
+    name: RouteNames.login,
+    component: () => import('@/views/login/signin/signin.vue')
   },
   {
     path: '/vreg',
-    component: () => import('@/views/login/vreg/vreg.vue'),
-    meta: { name: 'Verify Reg' }
+    name: 'Verify Reg',
+    component: () => import('@/views/login/vreg/vreg.vue')
   },
   {
     path: '/todo/:category',
+    name: 'Todos',
     component: () => import('@/components/todos/todo/todo.vue'),
-    // props: { category: 'personal' },
-    meta: { name: 'Todos' }
+    meta: {
+      middleware: [auth]
+    }
   },
   {
     path: '/category',
-    component: () => import('@/components/categories/category/category.vue'),
-    meta: { name: 'Categories' }
+    name: 'category',
+    component: () => import('@/components/categories/category/category.vue')
   },
   {
     path: '/admin/cfgserv',
-    component: () => import('@/components/admin/cfgServer/cfgServer.vue'),
-    meta: { name: 'Categories' }
+    name: 'cfgserv',
+    component: () => import('@/components/admin/cfgServer/cfgServer.vue')
   },
   {
     path: '/admin/testp1/:category',
-    component: () => import('@/components/admin/testp1/testp1.vue'),
-    meta: { name: 'Categories' }
+    name: 'Categories',
+    component: () => import('@/components/admin/testp1/testp1.vue')
   },
   {
     path: '/offline',
-    component: () => import('@/components/offline/offline.vue'),
-    meta: { name: 'Offline' }
+    name: 'Offline',
+    component: () => import('@/components/offline/offline.vue')
   }
   /*
   {
@@ -74,4 +79,3 @@ export const RouteConfig: VueRouteConfig[] = [
     meta: { name: 'Embeeded' }
   }*/
 ]
-

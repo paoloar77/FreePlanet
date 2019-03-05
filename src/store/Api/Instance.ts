@@ -17,12 +17,14 @@ export const axiosInstance: AxiosInstance = axios.create({
 
 axiosInstance.interceptors.response.use(
   (response) => {
-    console.log(response)
+    if (process.env.DEBUG === '1')
+      console.log(response)
     return response
   },
   (error) => {
     if (error.response) {
-      console.log(error.response.status)
+      if (process.env.DEBUG === '1')
+        console.log(error.response.status)
       console.log('Request Error: ', error.response)
     }
     return Promise.reject(error)

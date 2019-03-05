@@ -50,7 +50,7 @@
             <!--<div>-->
                 <!--&lt;!&ndash; the row with a type of gutter &ndash;&gt;-->
                 <!--<q-alert-->
-                        <!--avatar="assets/boy-avatar.png"-->
+                        <!--avatar="statics/boy-avatar.png"-->
                         <!--color="primary"-->
                         <!--message="Jack"-->
                         <!--detail="Per un mondo più Consapevole"-->

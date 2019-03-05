@@ -7,7 +7,7 @@ import translate from './../../globalroutines/util'
 
 import urlBase64ToUint8Array from '../../js/utility'
 
-import messages from '../../assets/i18n'
+import messages from '../../statics/i18n'
 import { GlobalStore, Todos, UserStore } from '@store'
 import globalroutines from './../../globalroutines/index'
 import Api from '@api'
@@ -62,11 +62,15 @@ async function getConfig(id) {
 async function getstateConnSaved() {
   const config = await getConfig(costanti.CONFIG_ID_CFG)
   console.log('config', config)
-  if (config.length > 1) {
-    const cfgstateconn = config[1]
-    return cfgstateconn.stateconn
+  if (config) {
+    if (config.length > 1) {
+      const cfgstateconn = config[1]
+      return cfgstateconn.stateconn
+    } else {
+      return 'online'
+    }
   } else {
-    return 'online'
+    return 'offline'
   }
 }
 
@@ -84,12 +88,12 @@ namespace Getters {
   const testpao1_getter_array = b.read(state => param1 => state.testp1.mioarray.filter(item => item).map(item => item.valore), 'testpao1_getter_array')
 
   const getConfigbyId = b.read(state => id => state.arrConfig.find(item => item._id === id), 'getConfigbyId')
-  const getConfigStringbyId = b.read(state => id => {
-    const config = state.arrConfig.find(item => item._id === id)
+  const getConfigStringbyId = b.read(state => params => {
+    const config = state.arrConfig.find(item => item._id === params.id)
     if (config) {
       return config.value
     } else {
-      return ''
+      return params.default
     }
   }, 'getConfigStringbyId')
 
@@ -199,15 +203,18 @@ namespace Mutations {
   }
 
   function setShowType(state: IGlobalState, showtype: number) {
-    // console.log('setShowType', showtype)
+    console.log('setShowType', showtype)
     const config = Getters.getters.getConfigbyId(costanti.CONFIG_ID_SHOW_TYPE_TODOS)
-    // console.log('config', config)
+    console.log('config', config)
     if (config) {
       config.value = String(showtype)
       Todos.state.showtype = parseInt(config.value)
-      // console.log('Todos.state.showtype', Todos.state.showtype)
-      GlobalStore.mutations.saveConfig({ _id: costanti.CONFIG_ID_SHOW_TYPE_TODOS, value: String(showtype) })
+    } else {
+      Todos.state.showtype = showtype
     }
+    console.log('Todos.state.showtype', Todos.state.showtype)
+    GlobalStore.mutations.saveConfig({ _id: costanti.CONFIG_ID_SHOW_TYPE_TODOS, value: String(showtype) })
+
   }
 
   export const mutations = {

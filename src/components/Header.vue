@@ -237,10 +237,10 @@
     }
 
     public selectOpLang = [
-      { label: 'English', icon: 'fa-flag-us', value: 'enUs', image: '../assets/images/gb.png', short: 'EN' },
-      // { label: 'German', icon: 'fa-flag-de', value: 'de', image: '../assets/images/de.png', short: 'DE' },
-      { label: 'Italiano', icon: 'fa-facebook', value: 'it', image: '../assets/images/it.png', short: 'IT' },
-      { label: 'Español', icon: 'fa-flag-es', value: 'esEs', image: '../assets/images/es.png', short: 'ES' }
+      { label: 'English', icon: 'fa-flag-us', value: 'enUs', image: '../statics/images/gb.png', short: 'EN' },
+      // { label: 'German', icon: 'fa-flag-de', value: 'de', image: '../statics/images/de.png', short: 'DE' },
+      { label: 'Italiano', icon: 'fa-facebook', value: 'it', image: '../statics/images/it.png', short: 'IT' },
+      { label: 'Español', icon: 'fa-flag-es', value: 'esEs', image: '../statics/images/es.png', short: 'ES' }
     ]
 
 
@@ -329,7 +329,7 @@
       // dynamic import, so loading on demand only
       import(`quasar-framework/i18n/${mylangtopass}`).then(lang => {
         this.$q.i18n.set(lang.default)
-        import(`src/assets/i18n`).then(function () {
+        import(`src/statics/i18n`).then(function () {
         })
       })
     }

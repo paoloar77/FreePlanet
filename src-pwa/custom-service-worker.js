@@ -8,8 +8,8 @@
 
 console.log('   [  VER-0.0.27 ] _---------________------  PAO: this is my custom service worker');
 
-importScripts('../assets/js/idb.js');
-importScripts('../assets/js/storage.js');
+importScripts('../statics/js/idb.js');
+importScripts('../statics/js/storage.js');
 importScripts('https://storage.googleapis.com/workbox-cdn/releases/3.0.0/workbox-sw.js'); //++Todo: Replace with local workbox.js
 
 
@@ -206,7 +206,7 @@ if (workbox) {
   });
 
   workbox.routing.registerRoute(
-    new RegExp(/.*\/(?:assets\/icons).*$/),
+    new RegExp(/.*\/(?:statics\/icons).*$/),
     workbox.strategies.cacheFirst({
       cacheName: 'image-cache',
       plugins: [
@@ -258,9 +258,9 @@ if (workbox) {
   );
 
   workbox.routing.registerRoute(
-    new RegExp(/.*\/(?:assets).*$/),
+    new RegExp(/.*\/(?:statics).*$/),
     workbox.strategies.cacheFirst({
-      cacheName: 'assets',
+      cacheName: 'statics',
       plugins: [
         new workbox.expiration.Plugin({
           maxAgeSeconds: 10 * 24 * 60 * 60,

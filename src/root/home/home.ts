@@ -112,7 +112,7 @@ export default class Home extends Vue {
       options = {
         body: 'You successfully subscribed to our Notification service!',
         icon: '/statics/icons/app-icon-96x96.png',
-        image: '/assets/images/sf-boat.jpg',
+        image: '/statics/images/sf-boat.jpg',
         dir: 'ltr',
         lang: 'enUs', // BCP 47,
         vibrate: [100, 50, 200],
@@ -169,7 +169,7 @@ export default class Home extends Vue {
       options = {
         body: mythis.$t('notification.subscribed'),
         icon: '/statics/icons/android-chrome-192x192.png',
-        image: '/assets/images/freeplanet.png',
+        image: '/statics/images/freeplanet.png',
         dir: 'ltr',
         lang: 'enUs', // BCP 47,
         vibrate: [100, 50, 200],

@@ -17,9 +17,9 @@ const extendTypescriptToWebpack = (config) => {
     .set('@views', helpers.root('src/components/views/index.ts'))
     // .set('@views', helpers.root('src/components/views'))
     .set('@src', helpers.root('src'))
-    .set('@css', helpers.root('src/assets/css/*'))
+    .set('@css', helpers.root('src/statics/css/*'))
     .set('@icons', helpers.root('src/statics/icons/*'))
-    .set('@images', helpers.root('src/assets/images/*'))
+    .set('@images', helpers.root('src/statics/images/*'))
     .set('@classes', helpers.root('src/classes/index.ts'))
     .set('@utils', helpers.root('src/utils/index.ts'))
     .set('@utils', helpers.root('src/utils/*'))
@@ -59,7 +59,7 @@ module.exports = function (ctx) {
       store: 'src/store/index.ts'
     },
     // app plugins (/src/plugins)
-    plugins: ['i18n', 'axios', 'vee-validate', 'myconfig', 'local-storage', 'error-handler', 'globalroutines', 'vue-idb', 'dragula'],
+    plugins: ['i18n', 'axios', 'vee-validate', 'myconfig', 'local-storage', 'error-handler', 'globalroutines', 'vue-idb', 'dragula', 'guard'],
     css: [
       'app.styl'
     ],
@@ -72,6 +72,12 @@ module.exports = function (ctx) {
       'fontawesome'
     ],
     supportIE: false,
+    aliases: {
+      quasar: path.resolve(__dirname, '../node_modules/quasar-framework/'),
+      src: path.resolve(__dirname, '../src'),
+      statics: path.resolve(__dirname, '../src/statics'),
+      components: path.resolve(__dirname, '../src/components')
+    },
     build: {
       showProgress: true,
       env: envparser(),
@@ -180,7 +186,7 @@ module.exports = function (ctx) {
       pwa: {
         runtimeCaching: [
           {
-            urlPattern: '/assets',
+            urlPattern: '/statics',
             handler: 'networkFirst'
           }
         ]
@@ -189,7 +195,7 @@ module.exports = function (ctx) {
     pwa: {
       // runtimeCaching: [
       //   {
-      //     urlPattern: '/assets',
+      //     urlPattern: '/statics',
       //     handler: 'networkFirst'
       //   }
       // ],

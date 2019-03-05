@@ -13,7 +13,7 @@ export default class Offline extends Vue {
   logoimg: string = ''
 
   created() {
-    this.logoimg = '/assets/images/' + process.env.LOGO_REG
+    this.logoimg = '/statics/images/' + process.env.LOGO_REG
     this.animate()
   }
 

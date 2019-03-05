@@ -404,7 +404,8 @@ namespace Actions {
           return sendSwMsgIfAvailable()
             .then(something => {
               if (something) {
-                console.log('something')
+                if (process.env.DEBUG === '1')
+                  console.log('something')
                 // Refresh data
                 return waitAndRefreshData(context)
               }
@@ -482,13 +483,13 @@ namespace Actions {
 
         // console.log('PRIMA showtype = ', state.showtype)
 
-        state.showtype = parseInt(GlobalStore.getters.getConfigStringbyId(costanti.CONFIG_ID_SHOW_TYPE_TODOS))
+        state.showtype = parseInt(GlobalStore.getters.getConfigStringbyId({id: costanti.CONFIG_ID_SHOW_TYPE_TODOS, default: costanti.ShowTypeTask.SHOW_LAST_N_COMPLETED }))
 
         // console.log('showtype = ', state.showtype)
 
         // console.log('ARRAY TODOS = ', state.todos)
-
-        console.log('dbLoadTodo', 'state.todos', state.todos, 'state.categories', state.categories)
+        if (process.env.DEBUG === '1')
+          console.log('dbLoadTodo', 'state.todos', state.todos, 'state.categories', state.categories)
 
         return res
       })
@@ -499,7 +500,8 @@ namespace Actions {
       })
 
     if (ris.status !== 200) {
-      console.log('ris.status', ris.status)
+      if (process.env.DEBUG === '1')
+        console.log('ris.status', ris.status)
       if (ris.status === serv_constants.RIS_CODE__HTTP_FORBIDDEN_INVALID_TOKEN) {
         consolelogpao('UNAUTHORIZING... TOKEN EXPIRED... !! ')
       } else {

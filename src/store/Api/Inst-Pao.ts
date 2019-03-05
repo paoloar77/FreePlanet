@@ -4,7 +4,8 @@ import * as Types from '@src/store/Api/ApiTypes'
 
 async function sendRequest(url: string, method: string, mydata: any) {
 
-  console.log('sendRequest', method, url)
+  if (!process.env.DEBUG)
+    console.log('sendRequest', method, url)
 
   let request
   if (method === 'GET')
