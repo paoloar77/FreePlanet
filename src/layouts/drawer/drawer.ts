@@ -115,9 +115,8 @@ export default class Drawer extends Vue {
       .then(() => {
         this.$router.replace('/logout')
 
-        const mythis = this
-        setTimeout(function () {
-          mythis.$router.replace('/')
+        setTimeout(() => {
+          this.$router.replace('/')
         }, 1000)
 
         this.$q.notify(this.$t('logout.uscito'))

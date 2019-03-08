@@ -254,13 +254,12 @@ export default class SingleTodo extends Vue {
   }
 
   faiFocus(elem, isparent: boolean = false) {
-    let mythis = this
     setTimeout(() => {
       let theField = null
       if (isparent)
-        theField = <HTMLInputElement>mythis.$parent.$parent.$parent.$parent.$refs[elem]
+        theField = <HTMLInputElement>this.$parent.$parent.$parent.$parent.$refs[elem]
       else
-        theField = <HTMLInputElement>mythis.$refs[elem]
+        theField = <HTMLInputElement>this.$refs[elem]
 
       if (theField !== undefined)
         theField.focus()

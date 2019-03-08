@@ -156,39 +156,6 @@ export default class Todo extends Vue {
     return 'elem [' + elem._id + '] ' + elem.descr + ' Pr(' + this.getPriorityByInd(elem.priority) + ') [ID_PREV=' + elem.id_prev + '] modif=' + elem.modified + ' '
   }
 
-  // getPriorityToSet(ind1, ind2) {
-  //   let elem1 = this.getelem(ind1)
-  //   let elem2 = this.getelem(ind2)
-  //
-  //   if ((elem1 !== null) && (elem2 !== null)) {
-  //     if (elem1.priority === elem2.priority) {
-  //       return elem1.priority
-  //     } else {
-  //       // if different priority then take the first
-  //       return elem1.priority
-  //     }
-  //   } else {
-  //     return (elem1 != null) ? elem1.priority : ((elem2 != null) ? elem2.priority : null)
-  //   }
-  // }
-  //
-
-  getCompleted(ind1, ind2) {
-    // let elem1 = this.getelem(ind1)
-    // let elem2 = this.getelem(ind2)
-    //
-    // if ((elem1 !== null) && (elem2 !== null)) {
-    //   if (elem1.completed === elem2.completed) {
-    //     return elem1.completed
-    //   } else {
-    //     return elem1.completed
-    //   }
-    // } else {
-    //   return (elem1 != null) ? elem1.completed : ((elem2 != null) ? elem2.completed : null)
-    // }
-
-  }
-
   getTitlePriority(priority) {
     let cl = ''
 
@@ -218,27 +185,6 @@ export default class Todo extends Vue {
 
     await Todos.actions.swapElems(itemdragend)
 
-    // If the newIndex is between another priority, then change priority
-
-    // if (!changecompleted) {
-    //   // if I changed the completed, I don't have to put in other list priority
-    //   let newpriority = this.getPriorityToSet(indini, indfine)
-    //   if (newpriority != null && newpriority >= 0) {
-    //     myobj.modified = (myobj.priority !== newpriority) ? true : myobj.modified
-    //     myobj.priority = newpriority
-    //     console.log('NewPriority: ', newpriority)
-    //   }
-    // }
-
-    // let completed = this.getCompleted(indini, indfine)
-    // let changecompleted = false
-    // if (completed != null) {
-    //   myobj.modified = (myobj.completed !== completed) ? true : myobj.modified
-    //   myobj.completed = completed
-    //   changecompleted = true
-    //   console.log('Newcompleted: ', completed, 'modif', myobj.modified)
-    // }
-
   }
 
   private getElementIndex(el: any) {
@@ -247,20 +193,6 @@ export default class Todo extends Vue {
 
   private getElementOldIndex(el: any) {
     return parseInt(el.attributes['index'].value)
-  }
-
-
-  private getElementParentId(el: any) {
-    const elem = [].slice.call(el.parentElement.children)
-    console.log('elem', elem)
-    const id = elem.attributes['id'].substring(3)
-    return id
-  }
-
-  private getElementId(el: any) {
-    console.log(' el ', el)
-    const id = el.attributes['id'].value.substring(3)
-    return id
   }
 
 
@@ -288,8 +220,6 @@ export default class Todo extends Vue {
     $service.eventBus.$on('dragend', (args) => {
 
       let itemdragend: IDrag = {
-        // newIndex: this.getElementIndex(args.el),
-        // oldIndex: this.getElementOldIndex(args.el)
         category: this.categoryAtt,
         newIndex: this.getElementIndex(args.el),
         oldIndex: this.getElementOldIndex(args.el)
@@ -298,32 +228,29 @@ export default class Todo extends Vue {
       this.onEnd(itemdragend)
     })
 
-    let mythis = this
-
-    $service.eventBus.$on('drag', function (el, source) {
+    $service.eventBus.$on('drag', (el, source) => {
       // mythis.inddragging = mythis.getElementIndex(el)
-      console.log('+++ DRAG ind=', mythis.inddragging)
-      mythis.scrollable = false
+      console.log('+++ DRAG ind=', this.inddragging)
+      this.scrollable = false
     })
-    $service.eventBus.$on('drop', function (el, source) {
+    $service.eventBus.$on('drop', (el, source) => {
       console.log('+++ DROP')
-      mythis.scrollable = true
+      this.scrollable = true
     })
 
 
     this.load()
   }
 
-  mounted() {
+  mounted () {
     // console.log('*** MOUNTED ***')
 
     this.categoryAtt = this.$route.params.category
 
-    let mythis = this
     if (window) {
-      window.addEventListener('touchmove', function (e) {
+      window.addEventListener('touchmove', (e) => {
         // console.log('touchmove')
-        if (!mythis.scrollable) {
+        if (!this.scrollable) {
           e.preventDefault()
         }
       }, { passive: false })
@@ -367,7 +294,7 @@ export default class Todo extends Vue {
     }, 60000)
   }
 
-  beforedestroy() {
+  beforeDestroy() {
     clearInterval(this.polling)
   }
 
@@ -431,10 +358,6 @@ export default class Todo extends Vue {
           this.todotop = ''
         else
           this.todobottom = ''
-
-
-
-
       })
   }
 
@@ -508,18 +431,17 @@ export default class Todo extends Vue {
   getArrTodos() {
 
     let mystr = ''
-    let mythis = this
 
-    mythis.tmpstrTodos = ''
+    this.tmpstrTodos = ''
     return globalroutines(null, 'readall', 'todos', null)
-      .then(function (alldata) {
+      .then((alldata) => {
         const myrecs = [...alldata]
 
         myrecs.forEach(rec => {
           mystr = mystr + rec.descr + rec.completed + ']   ['
         })
 
-        mythis.tmpstrTodos = 'TODOS: ' + mystr
+        this.tmpstrTodos = 'TODOS: ' + mystr
       })
   }
 

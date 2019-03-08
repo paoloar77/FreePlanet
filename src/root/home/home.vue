@@ -1,6 +1,6 @@
 <template>
     <q-page class="text-white">
-        <div class="landing">
+        <div :class="firstClassSection">
             <section>
                 <div class="landing__hero">
                     <div class="landing__header"></div>
@@ -15,8 +15,14 @@
                                 </div>
                                 <div class="text-subtitle1 shadow big text-italic q-pl-sm"><strong>{{$t('msg.sottoTitoloApp2')}}</strong>
                                 </div>
-                                <div class="text-subtitle2 shadow text-italic q-pl-sm ">{{$t('msg.sottoTitoloApp3')}}
+                                <div class="text-subtitle2 shadow text-italic q-pl-sm">
+                                    {{$t('msg.sottoTitoloApp3')}}
                                 </div>
+
+                                <div class="text-subtitle3 shadow text-italic q-pl-sm ">
+                                    {{$t('msg.sottoTitoloApp4')}}
+                                </div>
+
 
 
                                 <!--
@@ -39,7 +45,8 @@
                                 </div>
                                 <div v-else>
                                     <div v-if="!isLogged" style="margin: 5px; padding: 5px;" class="home">
-                                        <q-btn rounded size="lg" color="primary" @click="PagLogin" class="btn-start">
+                                        <q-btn rounded size="lg" color="primary" @click="PagLogin"
+                                               class="btn-start">
                                             {{$t('login.enter')}}
                                         </q-btn>
                                         <q-btn rounded size="lg" color="positive" @click="PagReg" class="btn-start">
@@ -48,59 +55,134 @@
                                     </div>
                                 </div>
 
-                                <div>
-                                    <q-field
-                                            v-if="getPermission() === 'granted'"
-                                            icon="notifications"
-                                            class="shadow"
-                                            :label="$t('notification.titlegranted')"
-                                            :helper="$t('notification.statusnot')">
-                                    </q-field>
-                                    <q-field
-                                            v-if="NotServiceWorker()"
-                                            class="shadow"
-                                            icon="notifications"
-                                            label="Service Worker not present"
-                                    >
-                                    </q-field>
+                                <div v-if="isLogged">
+                                    <div>
+                                        <!--<q-field-->
+                                        <!--v-if="getPermission() === 'granted'"-->
+                                        <!--icon="notifications"-->
+                                        <!--class="shadow"-->
+                                        <!--:label="$t('notification.titlegranted')"-->
+                                        <!--:helper="$t('notification.statusnot')">-->
+                                        <!--</q-field>-->
+                                        <q-field
+                                                v-if="NotServiceWorker()"
+                                                class="shadow"
+                                                icon="notifications"
+                                                label="Service Worker not present"
+                                        >
+                                        </q-field>
+                                    </div>
+
+                                    <div>
+                                        <q-btn v-if="getPermission() !== 'granted'"
+                                               class="enable-notifications shadow"
+                                               color="primary" rounded
+                                               size="md"
+                                               icon="notifications" @click="askfornotification"
+                                               :label="$t('notification.ask')"/>
+                                        <!--<q-btn v-if="getPermission() === 'granted'" class="enable-notifications" color="primary" rounded size="lg" icon="notifications" @click="showNotificationExample" label="Send Notification"/>-->
+                                        <!--<q-btn v-if="getPermission() === 'granted'" class="enable-notifications" color="secondary" rounded size="lg" icon="notifications" @click="createPushSubscription" label="Create Push Subscription !"/>-->
+
+                                    </div>
                                 </div>
 
-                                <div>
-                                    <q-btn v-if="getPermission() !== 'granted'" class="enable-notifications shadow"
-                                           color="primary" rounded
-                                           size="lg"
-                                           icon="notifications" @click="askfornotification"
-                                           :label="$t('notification.ask')"/>
-                                    <!--<q-btn v-if="getPermission() === 'granted'" class="enable-notifications" color="primary" rounded size="lg" icon="notifications" @click="showNotificationExample" label="Send Notification"/>-->
-                                    <!--<q-btn v-if="getPermission() === 'granted'" class="enable-notifications" color="secondary" rounded size="lg" icon="notifications" @click="createPushSubscription" label="Create Push Subscription !"/>-->
 
+                                <div class="q-pt-md q-pl-sm">
+                                    <div class="text-body2">Ver. {{getenv('APP_VERSION')}}</div>
                                 </div>
-
-                                <!--<div class="q-pt-md q-pl-sm">-->
-                                <!--<div class="landing__hero-btns q-gutter-md row items-center"><a tabindex="0"-->
-                                <!--type="button"-->
-                                <!--href="/introduction-to-quasar"-->
-                                <!--class="q-btn inline relative-position q-btn-item non-selectable q-btn&#45;&#45;rectangle bg-white text-primary q-focusable q-hoverable q-btn&#45;&#45;push">-->
-                                <!--<div class="q-focus-helper"></div>-->
-                                <!--<div class="q-btn__content text-center col items-center q-anchor&#45;&#45;skip justify-center row">-->
-                                <!--<div>About</div>-->
-                                <!--</div>-->
-                                <!--</a><a tabindex="0" type="button" href="/start"-->
-                                <!--class="q-btn inline relative-position q-btn-item non-selectable q-btn&#45;&#45;rectangle bg-white text-primary q-focusable q-hoverable q-btn&#45;&#45;push">-->
-                                <!--<div class="q-focus-helper"></div>-->
-                                <!--<div class="q-btn__content text-center col items-center q-anchor&#45;&#45;skip justify-center row">-->
-                                <!--<div>Get started</div>-->
-                                <!--</div>-->
-                                <!--</a>-->
-                                <!--<div class="text-body2">v1.0.0-beta.4</div>-->
-                                <!--</div>-->
-                                <!--</div>-->
                             </div>
                         </div>
                     </div>
+                    <div class="landing__arrow absolute-bottom text-center">
+                        <i aria-hidden="true" class="q-icon text-h2 text-white material-icons">expand_more</i>
+                    </div>
                 </div>
             </section>
+
+            <section class="padding bg-white text-grey-10 text-center">
+                <div class="landing__features row items-start q-col-gutter-xl">
+                    <div class="col-12 text-center">
+                        <div class="feature-item q-mx-md"><img src="statics/images/group-together.jpg"
+                                                               class="doc-img"></div>
+                    </div>
+                    <div class="col-12 text-center"><h4>{{$t('homepage.descrapp_title1')}}</h4>
+                        <p v-html="$t('homepage.descrapp_pag1')"></p>
+                        <p v-html="$t('homepage.descrapp_pag2')"></p>
+                    </div>
+                </div>
+            </section>
+            <section class="padding bg-primary landing__swirl-bg">
+                <div class="landing__features row justify-between items-start q-col-gutter-xl">
+                    <div class="col-12 col-sm-5">
+                        <div class="feature-item"><i aria-hidden="true"
+                                                     class="q-icon fas fa-users"> </i><h4>
+                            {{$t('homepage.freesocial.title')}}</h4>
+                            <p class="feat-descr" v-html="$t('homepage.freesocial.descr')"></p></div>
+                    </div>
+                    <div class="col-12 col-sm-5">
+                        <div class="feature-item"><i aria-hidden="true"
+                                                     class="q-icon fas fa-users"> </i><h4>
+                            {{$t('homepage.freetalent.title')}}</h4>
+                            <p class="feat-descr" v-html="$t('homepage.freetalent.descr')"></p></div>
+                    </div>
+                    <div class="col-12 col-sm-5">
+                        <div class="feature-item"><i aria-hidden="true"
+                                                     class="q-icon fas fa-users"> </i><h4>
+                            {{$t('homepage.freegas.title')}}</h4>
+                            <p class="feat-descr" v-html="$t('homepage.freegas.descr')"></p></div>
+                    </div>
+                    <div class="col-12 col-sm-5">
+                        <div class="feature-item"><i aria-hidden="true"
+                                                     class="q-icon fas fa-users"> </i><h4>
+                            {{$t('homepage.free.title')}}</h4>
+                            <p class="feat-descr" v-html="$t('homepage.free.descr')"></p></div>
+                    </div>
+                    <div class="col-12 col-sm-5">
+                        <div class="feature-item"><i aria-hidden="true"
+                                                     class="q-icon fas fa-browser"> </i>
+                            <div class="q-gutter-sm"><i aria-hidden="true"
+                                                        class="q-icon fas fa-browser"> </i><i
+                                    aria-hidden="true" class="q-icon fab fa-chrome"> </i><i
+                                    aria-hidden="true" class="q-icon fab fa-firefox"> </i><i
+                                    aria-hidden="true" class="q-icon fab fa-safari"> </i><i
+                                    aria-hidden="true" class="q-icon fab fa-edge"> </i></div>
+
+                            <h4>{{$t('homepage.multiplatform.title')}}</h4>
+                            <p class="feat-descr" v-html="$t('homepage.multiplatform.descr')"></p></div>
+                    </div>
+                </div>
+            </section>
+            <section class="landing__footer">
+                <div class="text-center">
+                    <div class="landing__footer-icons row flex-center">
+                        <a :href="TelegramSupport" target="_blank"><i aria-hidden="true"
+                                                                                 class="q-icon fab fa-telegram dark"></i></a>
+                        <!--<a href="" target="_blank"><i aria-hidden="true" class="q-icon fab fa-github"> </i></a>-->
+                        <!--<a href="https://twitter.com/" target="_blank"><i aria-hidden="true" class="q-icon fab fa-twitter"> </i></a>-->
+                            <!--<a href="https://discord.gg/5TDhbDg" target="_blank"><i aria-hidden="true"-->
+                                                                                 <!--class="q-icon fab fa-discord"> </i></a><a-->
+                            <!--href="https://forum.quasar-framework.org/" target="_blank"><i aria-hidden="true"-->
+                                                                                          <!--class="q-icon fas fa-comments"> </i></a><a-->
+                            <!--href="https://www.patreon.com/quasarframework" target="_blank"><i aria-hidden="true"-->
+                                                                                              <!--class="q-icon fab fa-patreon"> </i></a>-->
+                    </div>
+
+                    <div class="q-mt-md">Released under the
+                        <!--<a href="https://github.com/quasarframework/quasar/blob/dev/LICENSE" target="_blank"-->
+                            <!--rel="noopener noreferrer" class="doc-link">-->
+                        MIT LICENSE
+                        <!--<i aria-hidden="true"-->
+                                                                                     <!--class="q-icon material-icons">launch</i></a>-->
+                        <!--| <a href="https://www.iubenda.com/privacy-policy/40685560" target="_blank"-->
+                             <!--rel="noopener noreferrer" class="doc-link">Privacy Policy<i aria-hidden="true"-->
+                                                                                         <!--class="q-icon material-icons">launch</i></a>-->
+                    </div>
+
+                </div>
+            </section>
+
         </div>
+
     </q-page>
 
 

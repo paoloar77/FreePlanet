@@ -43,7 +43,10 @@ export const RouteConfig: VueRouteConfig[] = [
   {
     path: '/admin/cfgserv',
     name: 'cfgserv',
-    component: () => import('@/components/admin/cfgServer/cfgServer.vue')
+    component: () => import('@/components/admin/cfgServer/cfgServer.vue'),
+    meta: {
+      middleware: [auth]
+    }
   },
   {
     path: '/admin/testp1/:category',

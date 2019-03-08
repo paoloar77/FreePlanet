@@ -238,9 +238,9 @@
 
     public selectOpLang = [
       { label: 'English', icon: 'fa-flag-us', value: 'enUs', image: '../statics/images/gb.png', short: 'EN' },
+      { label: 'Español', icon: 'fa-flag-es', value: 'esEs', image: '../statics/images/es.png', short: 'ES' },
+      { label: 'Italiano', icon: 'fa-facebook', value: 'it', image: '../statics/images/it.png', short: 'IT' }
       // { label: 'German', icon: 'fa-flag-de', value: 'de', image: '../statics/images/de.png', short: 'DE' },
-      { label: 'Italiano', icon: 'fa-facebook', value: 'it', image: '../statics/images/it.png', short: 'IT' },
-      { label: 'Español', icon: 'fa-flag-es', value: 'esEs', image: '../statics/images/es.png', short: 'ES' }
     ]
 
 

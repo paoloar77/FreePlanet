@@ -14,8 +14,9 @@ export default class Home extends Vue {
   displaycard: string = 'block'
   svgclass: string = 'svgclass'
   $t: any
-
+  firstClassSection: string = 'landing fade homep-cover-img animate-fade homep-cover-img-1'
   public $q
+  polling
 
   constructor() {
     super()
@@ -23,15 +24,34 @@ export default class Home extends Vue {
     this.initprompt()
   }
 
-  created() {
-    // console.log('Home created...')
+  mounted() {
+    let primo = true
+    let mytime = 10000
+    this.polling = setInterval(() => {
 
+      this.firstClassSection = 'landing fade homep-cover-img ' + (primo ? 'homep-cover-img-2' : 'homep-cover-img-1')
+      primo = !primo
+
+      console.log('this.firstClassSection', this.firstClassSection)
+
+    }, mytime)
+  }
+
+  beforeDestroy() {
+    console.log('beforeDestroy')
+    clearInterval(this.polling)
+  }
+  created() {
 
     GlobalStore.actions.prova()
   }
 
-  get isLogged(){
+  get isLogged() {
     return UserStore.state.isLogged
+  }
+
+  get TelegramSupport() {
+    return process.env.TELEGRAM_SUPPORT
   }
 
 
@@ -58,6 +78,10 @@ export default class Home extends Vue {
 
   get conta() {
     return GlobalStore.state.conta
+  }
+
+  getenv(myvar) {
+    return process.env[myvar]
   }
 
   set conta(valore) {
@@ -177,7 +201,7 @@ export default class Home extends Vue {
         tag: 'confirm-notification',
         renotify: true,  // if it's already sent, will Vibrate anyway
         actions: [
-          { action: 'confirm', title: mythis.$t('dialog.ok'), icon: '/statics/icons/android-chrome-192x192.png', }
+          { action: 'confirm', title: mythis.$t('dialog.ok'), icon: '/statics/icons/android-chrome-192x192.png' }
           // { action: 'cancel', title: 'Cancel', icon: '/statics/icons/android-chrome-192x192.png', }
         ]
       }
@@ -194,13 +218,12 @@ export default class Home extends Vue {
   askfornotification() {
     this.showNotif(this.$t('notification.waitingconfirm'), 'positive', 'notifications')
 
-    let mythis = this
-    Notification.requestPermission(function (result) {
+    Notification.requestPermission((result) => {
       console.log('User Choice', result)
       if (result === 'granted') {
-        mythis.showNotif(mythis.$t('notification.confirmed'), 'positive', 'notifications')
+        this.showNotif(this.$t('notification.confirmed'), 'positive', 'notifications')
       } else {
-        mythis.showNotif(mythis.$t('notification.denied'), 'negative', 'notifications')
+        this.showNotif(this.$t('notification.denied'), 'negative', 'notifications')
 
         // displayConfirmNotification();
       }
@@ -248,4 +271,21 @@ export default class Home extends Vue {
     }
 
   }
+
+
+/*
+  backgroundSequence() {
+    window.clearTimeout()
+    let k = 0
+    for (let i = 0; i < bgImageArray.length; i++) {
+      const mythis = this
+      setTimeout(function() {
+        document.documentElement.style.background = 'url(' + mythis.base + mythis.bgImageArray[k] + ') no-repeat center center fixed'
+        document.documentElement.style.backgroundSize = 'cover'
+        if ((k + 1) === mythis.bgImageArray.length) { setTimeout(function() { mythis.backgroundSequence() }, (mythis.secs * 1000))} else { k++ }
+      }, (mythis.secs * 1000) * i)
+    }
+  }
+  backgroundSequence()
+*/
 }

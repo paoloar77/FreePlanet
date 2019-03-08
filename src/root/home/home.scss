@@ -1,3 +1,16 @@
+body {
+  font-family: 'Source Sans Pro', 'Helvetica Neue', Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: #a7a7a7;
+  line-height: 1.5;
+  font-size: 16px;
+}
+
+p {
+  margin: 0 0 16px;
+}
+
 .mycard {
   visibility: hidden;
 }
@@ -18,7 +31,7 @@
 }
 
 .landing > section.padding {
-  padding: 180px 16px
+  padding: 90px 16px
 }
 
 .landing > section > div {
@@ -61,12 +74,16 @@
   width: 150px;
   height: 150px;
   margin-top: 21px;
-  -webkit-animation: logo-rotate 240s linear infinite;
-  animation: logo-rotate 240s linear infinite
+  //-webkit-animation: logo-rotate 240s linear infinite;
+  //animation: logo-rotate 240s linear infinite
 }
 
 .landing__features .q-icon {
   font-size: 64px
+}
+
+h4{
+  line-height: 1.5;
 }
 
 .landing__features h4, .landing__features h6 {
@@ -74,15 +91,16 @@
 }
 
 .landing__features p {
-  opacity: .6;
-  font-size: 16px
+  opacity: .7;
+  font-size: 16px;
+  line-height: 1.5;
 }
 
 .landing__footer {
   background: -webkit-gradient(linear, left top, left bottom, color-stop(65%, rgba(0, 0, 0, .1)), to(#000));
   background: linear-gradient(180deg, rgba(0, 0, 0, .1) 65%, #000);
   padding-top: 72px !important;
-  //padding-bottom: 72px !important
+  padding-bottom: 72px !important
 }
 
 .landing__footer .doc-link {
@@ -100,6 +118,15 @@
   background-image: url(https://cdn.quasar-framework.org/img/landing_first_section.png) !important
 }
 
+.feat-descr {
+  font-size: 1.25rem;
+}
+
+.q-col-gutter-xl {
+  padding: 50px 50px;
+  //margin-left: -48px
+}
+
 @media (max-width: 718px) {
   .landing__hero {
     text-align: center
@@ -113,24 +140,32 @@
     margin-bottom: 24px
   }
   .landing > section.padding {
-    padding-top: 50px;
+    padding: 40px 16px
     //padding-bottom: 90px
   }
+
+
   .landing .feature-item {
-    text-align: center
+    text-align: center;
+    margin-top: 20px;
   }
   .landing__hero-content {
-    //padding-bottom: 180px
+    padding-bottom: 180px
   }
   .landing__hero-btns {
     -webkit-box-pack: center;
     -ms-flex-pack: center;
     justify-content: center
   }
+
+  .q-col-gutter-xl {
+    padding: 15px 15px;
+  }
+
 }
 
 body.mobile .landing {
-  background: unset
+  //background: unset
 }
 
 body.mobile .landing:before {
@@ -142,10 +177,12 @@ body.mobile .landing:before {
   right: 0;
   bottom: 0;
   z-index: -1;
-  background: #000 url(../../statics/images/cover.jpg) 50%;
+  //background: #000 url(../../statics/images/cover.jpg) 50%;
+
   background-size: cover
 }
 
+/*
 @-webkit-keyframes logo-rotate {
   to {
     -webkit-transform: rotate(-1turn);
@@ -159,9 +196,7 @@ body.mobile .landing:before {
     transform: rotate(-1turn)
   }
 }
-
-
-
+*/
 
 .home {
   //background-color: rgb(250, 250, 250);
@@ -187,12 +222,18 @@ body.mobile .landing:before {
   text-shadow: 4px 4px 8px #000000;
 }
 
-
 .text-h1 {
   font-size: 6rem;
   font-weight: 300;
   line-height: 6rem;
   letter-spacing: -.01562em;
+}
+
+.text-h2 {
+  font-size: 3.75rem;
+  font-weight: 300;
+  line-height: 3.75rem;
+  letter-spacing: -.00833em;
 }
 
 .text-weight-bold {
@@ -208,12 +249,52 @@ body.mobile .landing:before {
     font-size: 1.5rem;
   }
 }
-.text-subtitle2 {
 
+.text-subtitle2 {
   font-size: 1rem;
   font-weight: 400;
   line-height: 1.75rem;
   letter-spacing: .00937em;
 }
 
+.text-subtitle3 {
+  font-size: 0.75rem;
+  font-weight: 400;
+  line-height: 1.75rem;
+  letter-spacing: .00937em;
+}
+
+.homep-cover-img-1 {
+  background: #000 url(../../statics/images/cover.jpg) no-repeat 50% fixed;
+  transition: background-image 1s ease-in-out;
+}
+
+.homep-cover-img-2 {
+  background: #000 url(../../statics/images/all_together.jpg) no-repeat 50% fixed;
+  transition: background-image 1s ease-in-out;
+}
+
+.homep-cover-img.hide-filter:before {
+  opacity: 0
+}
+
+.landing__footer-icons {
+  font-size: 28px
+}
+
+.landing__footer-icons a {
+  margin: 0 8px 8px;
+  text-decoration: none;
+  outline: 0;
+  color: #fff;
+  transition: color .28s
+}
+
+.landing__footer-icons a:hover {
+  color: #e0e0e0
+}
+
+.doc-img{
+  max-width: 100%;
+}
 
