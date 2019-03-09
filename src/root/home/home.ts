@@ -4,6 +4,21 @@ import { GlobalStore, UserStore } from '@store'
 
 import { Logo } from '../../components/logo'
 
+import VueScrollReveal from 'vue-scroll-reveal';
+
+Vue.use(VueScrollReveal, {
+  class: 'v-scroll-reveal', // A CSS class applied to elements with the v-scroll-reveal directive; useful for animation overrides.
+  duration: 1200,
+  scale: 0.95,
+  distance: '10px',
+  rotate: {
+    x: 0,
+    y: 0,
+    z: 0
+  }
+  // mobile: true
+});
+
 @Component({
   components: { Logo }
 })
@@ -32,7 +47,7 @@ export default class Home extends Vue {
       this.firstClassSection = 'landing fade homep-cover-img ' + (primo ? 'homep-cover-img-2' : 'homep-cover-img-1')
       primo = !primo
 
-      console.log('this.firstClassSection', this.firstClassSection)
+      // console.log('this.firstClassSection', this.firstClassSection)
 
     }, mytime)
   }

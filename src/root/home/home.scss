@@ -4,11 +4,20 @@ body {
   -moz-osx-font-smoothing: grayscale;
   color: #a7a7a7;
   line-height: 1.5;
-  font-size: 16px;
+  //font-size: 1rem;
+}
+
+$grayshadow: #555;
+
+.testo-banda {
+  //background: -webkit-gradient(linear, left top, left bottom, from(#3144f0), to(transparent));
+  //background: linear-gradient(180deg, #3144f0, transparent);
+  //background: rgba(0, 0, 0, .6)
 }
 
 p {
   margin: 0 0 16px;
+  text-shadow: 2px 2px 4px $grayshadow;
 }
 
 .mycard {
@@ -84,6 +93,7 @@ p {
 
 h4{
   line-height: 1.5;
+  text-shadow: 4px 4px 8px $grayshadow;
 }
 
 .landing__features h4, .landing__features h6 {
@@ -92,7 +102,7 @@ h4{
 
 .landing__features p {
   opacity: .7;
-  font-size: 16px;
+  font-size: 1rem;
   line-height: 1.5;
 }
 
@@ -115,54 +125,24 @@ h4{
   background-repeat: no-repeat !important;
   background-position: top;
   background-size: contain !important;
-  background-image: url(https://cdn.quasar-framework.org/img/landing_first_section.png) !important
+  background-image: url(../../statics/images/landing_first_section.png) !important
 }
 
 .feat-descr {
-  font-size: 1.25rem;
+  font-size: 1.15rem;
 }
+
+.feat-descr:hover {
+  transition: opacity 0.5s ease-in-out;
+  opacity: 0.9;
+}
+
 
 .q-col-gutter-xl {
   padding: 50px 50px;
   //margin-left: -48px
 }
 
-@media (max-width: 718px) {
-  .landing__hero {
-    text-align: center
-  }
-  .landing__header {
-    height: 9vh
-  }
-  .landing__hero .text-h1 {
-    font-size: 3rem;
-    line-height: 3.05rem;
-    margin-bottom: 24px
-  }
-  .landing > section.padding {
-    padding: 40px 16px
-    //padding-bottom: 90px
-  }
-
-
-  .landing .feature-item {
-    text-align: center;
-    margin-top: 20px;
-  }
-  .landing__hero-content {
-    padding-bottom: 180px
-  }
-  .landing__hero-btns {
-    -webkit-box-pack: center;
-    -ms-flex-pack: center;
-    justify-content: center
-  }
-
-  .q-col-gutter-xl {
-    padding: 15px 15px;
-  }
-
-}
 
 body.mobile .landing {
   //background: unset
@@ -214,12 +194,12 @@ body.mobile .landing:before {
 
 .shadow {
   //color: white;
-  text-shadow: 2px 2px 4px #000000;
+  text-shadow: 2px 2px 4px $grayshadow;
 }
 
 .shadow-max {
   //color: white;
-  text-shadow: 4px 4px 8px #000000;
+  text-shadow: 4px 4px 8px $grayshadow;
 }
 
 .text-h1 {
@@ -241,9 +221,10 @@ body.mobile .landing:before {
 }
 
 .text-subtitle1 {
-  font-size: 1.25rem;
+  font-size: 1.35rem;
   font-weight: 400;
   line-height: 1.75rem;
+  text-shadow: 4px 4px 8px $grayshadow;
   letter-spacing: .00937em;
   &.big {
     font-size: 1.5rem;
@@ -251,17 +232,19 @@ body.mobile .landing:before {
 }
 
 .text-subtitle2 {
+  font-size: 1.15rem;
+  font-weight: 400;
+  line-height: 1.75rem;
+  letter-spacing: .00937em;
+  text-shadow: 4px 4px 8px $grayshadow;
+}
+
+.text-subtitle3 {
   font-size: 1rem;
   font-weight: 400;
   line-height: 1.75rem;
   letter-spacing: .00937em;
-}
-
-.text-subtitle3 {
-  font-size: 0.75rem;
-  font-weight: 400;
-  line-height: 1.75rem;
-  letter-spacing: .00937em;
+  text-shadow: 2px 2px 4px $grayshadow;
 }
 
 .homep-cover-img-1 {
@@ -298,3 +281,63 @@ body.mobile .landing:before {
   max-width: 100%;
 }
 
+.mylist {
+  background: #3fdaff;
+  padding-left: 20px;
+}
+
+
+@media (max-width: 718px) {
+  .landing__hero {
+    text-align: center
+  }
+  .landing__header {
+    height: 9vh
+  }
+  .landing__hero .text-h1 {
+    font-size: 3rem;
+    line-height: 3.05rem;
+    margin-bottom: 24px
+  }
+  .landing > section.padding {
+    padding: 40px 16px
+    //padding-bottom: 90px
+  }
+
+  .landing__features h4, .landing__features h6 {
+    margin: 20px 0
+  }
+
+  h4{
+    line-height: 1.4;
+    text-shadow: 4px 4px 8px $grayshadow;
+  }
+
+
+  .landing .feature-item {
+    text-align: center;
+    margin-top: 20px;
+  }
+  .landing__hero-content {
+    padding-bottom: 180px
+  }
+  .landing__hero-btns {
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center
+  }
+
+  .q-col-gutter-xl {
+    padding: 10px 5px;
+  }
+
+  .text-subtitle1 {
+    font-size: 1.25rem;
+  }
+  .text-subtitle2 {
+    font-size: 1rem;
+  }
+  .text-subtitle3 {
+    font-size: 0.75rem;
+  }
+}

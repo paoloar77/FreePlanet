@@ -9,11 +9,11 @@
                             <logo></logo>
                         </div>
                         <div class="flex justify-end">
-                            <div class="q-gutter-sm">
+                            <div class="q-gutter-sm testo-banda">
                                 <div class="text-h1 shadow-max">FreePlanet</div>
                                 <div class="text-subtitle1 shadow text-italic q-pl-sm">{{$t('msg.sottoTitoloApp')}}
                                 </div>
-                                <div class="text-subtitle1 shadow big text-italic q-pl-sm"><strong>{{$t('msg.sottoTitoloApp2')}}</strong>
+                                <div class="text-subtitle1 shadow-max big text-italic q-pl-sm"><strong>{{$t('msg.sottoTitoloApp2')}}</strong>
                                 </div>
                                 <div class="text-subtitle2 shadow text-italic q-pl-sm">
                                     {{$t('msg.sottoTitoloApp3')}}
@@ -22,7 +22,6 @@
                                 <div class="text-subtitle3 shadow text-italic q-pl-sm ">
                                     {{$t('msg.sottoTitoloApp4')}}
                                 </div>
-
 
 
                                 <!--
@@ -99,7 +98,7 @@
                 </div>
             </section>
 
-            <section class="padding bg-white text-grey-10 text-center">
+            <section class="padding bg-white text-grey-10 text-center" v-scroll-reveal.reset>
                 <div class="landing__features row items-start q-col-gutter-xl">
                     <div class="col-12 text-center">
                         <div class="feature-item q-mx-md"><img src="statics/images/group-together.jpg"
@@ -111,7 +110,7 @@
                     </div>
                 </div>
             </section>
-            <section class="padding bg-primary landing__swirl-bg">
+            <section class="padding bg-primary landing__swirl-bg" v-scroll-reveal.reset>
                 <div class="landing__features row justify-between items-start q-col-gutter-xl">
                     <div class="col-12 col-sm-5">
                         <div class="feature-item"><i aria-hidden="true"
@@ -121,21 +120,38 @@
                     </div>
                     <div class="col-12 col-sm-5">
                         <div class="feature-item"><i aria-hidden="true"
-                                                     class="q-icon fas fa-users"> </i><h4>
+                                                     class="q-icon fas fa-user-clock"> </i><h4>
                             {{$t('homepage.freetalent.title')}}</h4>
                             <p class="feat-descr" v-html="$t('homepage.freetalent.descr')"></p></div>
                     </div>
                     <div class="col-12 col-sm-5">
                         <div class="feature-item"><i aria-hidden="true"
-                                                     class="q-icon fas fa-users"> </i><h4>
+                                                     class="q-icon fas fa-carrot"> </i><i aria-hidden="true"
+                                                                                             class="q-icon fas fa-apple-alt"> </i><h4>
                             {{$t('homepage.freegas.title')}}</h4>
                             <p class="feat-descr" v-html="$t('homepage.freegas.descr')"></p></div>
                     </div>
                     <div class="col-12 col-sm-5">
                         <div class="feature-item"><i aria-hidden="true"
-                                                     class="q-icon fas fa-users"> </i><h4>
-                            {{$t('homepage.free.title')}}</h4>
-                            <p class="feat-descr" v-html="$t('homepage.free.descr')"></p></div>
+                                                     class="q-icon fas fa-home"> </i><h4>
+                            {{$t('homepage.freeliving.title')}}</h4>
+                            <p class="feat-descr" v-html="$t('homepage.freeliving.descr')"></p></div>
+                    </div>
+                </div>
+            </section>
+            <section class="padding bg-indigo-8" v-scroll-reveal.reset>
+                <div class="landing__features row justify-between items-start q-col-gutter-xl">
+                    <div class="col-12 col-sm-5">
+                        <div class="feature-item"><i aria-hidden="true"
+                                                     class="q-icon fas fa-people-carry"> </i><h4>
+                            {{$t('homepage.freecollabora.title')}}</h4>
+                            <p class="feat-descr" v-html="$t('homepage.freecollabora.descr')"></p></div>
+                    </div>
+                    <div class="col-12 col-sm-5">
+                        <div class="feature-item"><i aria-hidden="true"
+                                                     class="q-icon fas fa-hands-helping"> </i><h4>
+                            {{$t('homepage.freesostieni.title')}}</h4>
+                            <p class="feat-descr" v-html="$t('homepage.freesostieni.descr')"></p></div>
                     </div>
                     <div class="col-12 col-sm-5">
                         <div class="feature-item"><i aria-hidden="true"
@@ -150,32 +166,43 @@
                             <h4>{{$t('homepage.multiplatform.title')}}</h4>
                             <p class="feat-descr" v-html="$t('homepage.multiplatform.descr')"></p></div>
                     </div>
+                    <div class="col-12 col-sm-5">
+                        <div class="feature-item"><i aria-hidden="true"
+                                                     class="q-icon fas fa-universal-access"> </i><h4>
+                            {{$t('homepage.free.title')}}</h4>
+                            <p class="feat-descr" v-html="$t('homepage.free.descr')"></p></div>
+                    </div>
                 </div>
             </section>
             <section class="landing__footer">
                 <div class="text-center">
                     <div class="landing__footer-icons row flex-center">
-                        <a :href="TelegramSupport" target="_blank"><i aria-hidden="true"
-                                                                                 class="q-icon fab fa-telegram dark"></i></a>
+                        <a href="https://www.facebook.com/freeplanetapp" target="_blank">
+                            <i aria-hidden="true" class="q-icon fab fa-facebook-f"> </i></a>
+
+                        <a :href="TelegramSupport" target="_blank">
+                            <i aria-hidden="true" class="q-icon fab fa-telegram dark"></i></a>
+
+
                         <!--<a href="" target="_blank"><i aria-hidden="true" class="q-icon fab fa-github"> </i></a>-->
                         <!--<a href="https://twitter.com/" target="_blank"><i aria-hidden="true" class="q-icon fab fa-twitter"> </i></a>-->
-                            <!--<a href="https://discord.gg/5TDhbDg" target="_blank"><i aria-hidden="true"-->
-                                                                                 <!--class="q-icon fab fa-discord"> </i></a><a-->
-                            <!--href="https://forum.quasar-framework.org/" target="_blank"><i aria-hidden="true"-->
-                                                                                          <!--class="q-icon fas fa-comments"> </i></a><a-->
-                            <!--href="https://www.patreon.com/quasarframework" target="_blank"><i aria-hidden="true"-->
-                                                                                              <!--class="q-icon fab fa-patreon"> </i></a>-->
+                        <!--<a href="https://discord.gg/5TDhbDg" target="_blank"><i aria-hidden="true"-->
+                        <!--class="q-icon fab fa-discord"> </i></a><a-->
+                        <!--href="https://forum.quasar-framework.org/" target="_blank"><i aria-hidden="true"-->
+                        <!--class="q-icon fas fa-comments"> </i></a><a-->
+                        <!--href="https://www.patreon.com/quasarframework" target="_blank"><i aria-hidden="true"-->
+                        <!--class="q-icon fab fa-patreon"> </i></a>-->
                     </div>
 
                     <div class="q-mt-md">Released under the
                         <!--<a href="https://github.com/quasarframework/quasar/blob/dev/LICENSE" target="_blank"-->
-                            <!--rel="noopener noreferrer" class="doc-link">-->
+                        <!--rel="noopener noreferrer" class="doc-link">-->
                         MIT LICENSE
                         <!--<i aria-hidden="true"-->
-                                                                                     <!--class="q-icon material-icons">launch</i></a>-->
+                        <!--class="q-icon material-icons">launch</i></a>-->
                         <!--| <a href="https://www.iubenda.com/privacy-policy/40685560" target="_blank"-->
-                             <!--rel="noopener noreferrer" class="doc-link">Privacy Policy<i aria-hidden="true"-->
-                                                                                         <!--class="q-icon material-icons">launch</i></a>-->
+                        <!--rel="noopener noreferrer" class="doc-link">Privacy Policy<i aria-hidden="true"-->
+                        <!--class="q-icon material-icons">launch</i></a>-->
                     </div>
 
                 </div>

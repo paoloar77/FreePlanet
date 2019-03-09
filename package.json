@@ -53,6 +53,7 @@
     "vue-idb": "^0.2.0",
     "vue-property-decorator": "^7.2.0",
     "vue-router": "^3.0.1",
+    "vue-scroll-reveal": "^1.0.11",
     "vue-svgicon": "^3.1.0",
     "vue2-dragula": "^2.5.4",
     "vuelidate": "^0.7.4",
