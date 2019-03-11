@@ -2,8 +2,9 @@
   <div id="firebaseui-auth-container"></div>
 </template>
 
-<script>
-  export default {
+<script lang="ts" >
+  import Vue from 'vue'
+export default Vue.extend({
     name: 'auth',
     mounted () {
       var uiConfig = {
@@ -16,7 +17,7 @@
       //var ui = new firebaseui.auth.AuthUI(firebase.auth())
       //ui.start('#firebaseui-auth-container', uiConfig)
     }
-  }
+  })
 </script>
 
 <style lang="css">

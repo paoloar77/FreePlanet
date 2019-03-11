@@ -2,9 +2,9 @@
     <div class="mypanel">
 
         <div v-if="!emailinviata">
-            <q-alert color="primary q-title" style="text-align: center;">
+            <q-banner color="primary q-title" style="text-align: center;">
                 {{ $t('reset.title_reset_pwd')}}
-            </q-alert>
+            </q-banner>
             <br>
 
             <q-field
@@ -30,9 +30,9 @@
 
         </div>
         <div v-else>
-            <q-alert color="primary q-title" style="text-align: center;">
+            <q-banner color="primary q-title" style="text-align: center;">
                 {{ $t('reset.email_sent')}}
-            </q-alert>
+            </q-banner>
             <br>
 
             <div>
@@ -45,72 +45,68 @@
     </div>
 </template>
 
-<script>
+<script lang="ts" >
 
   import {mapActions} from 'vuex'
   import * as types from '../../store/mutation-types'
-  import { rescodes } from '../../../store/Modules/tools'
 
   import {serv_constants} from '../../store/Modules/serv_constants'
 
 
-  export default {
-    data() {
-      return {
-        risultato: '',
-        riscode: 0,
-        emailsent: false,
-        form: {
-          email: '',
-          tokenforgot: 0,
-        },
-      }
-    },
+  import Vue from 'vue'
+  import { email, required } from "vuelidate/lib/validators"
+  import { UserStore } from "../../store/Modules";
+  import { IUserState } from "../../model";
+  export default class RequestResetPwd extends Vue{
+    emailsent = false
+    form: IUserState = {
+      email: '',
+      tokenforgot: ''
+    }
+
     created() {
-      this.load();
-    },
-    computed: {
-      emailinviata: function () {
+      // this.load();
+    }
+    get emailinviata() {
         return this.emailsent
-      },
-    },
-    validations: {
-      form: {
-        email: {
-          required, email,
-        },
-      }
-    },
-    methods: {
-      ...mapActions("user", {
-        requestresetpwd: types.USER_REQUESTRESETPWD,
-      }),
-    },
+    }
+    // validations: {
+    //   form: {
+    //     email: {
+    //       required, email,
+    //     },
+    //   }
+    // },
+
+    showNotif(msg: any) {
+      this.$q.notify(msg)
+    }
+
     submit() {
-      this.$v.form.$touch();
+      this.$v.form.$touch()
 
       if (this.$v.form.$error) {
-        this.showNotif(this.$t('reg.err.errore_generico'));
+        this.showNotif(this.$t('reg.err.errore_generico'))
         return
       }
 
-      this.$q.loading.show({message: this.$t('reset.incorso')});
+      this.$q.loading.show({message: this.$t('reset.incorso')})
 
-      this.tokenforgot = '';
+      this.form.tokenforgot = ''
 
       console.log(this.form);
-      this.requestresetpwd(this.form)
+      UserStore.actions.requestpwd(this.form)
         .then((ris) => {
           if (ris.code === serv_constants.RIS_CODE_OK)
-            this.emailsent = true;
-          this.$q.loading.hide();
+            this.emailsent = true
+          this.$q.loading.hide()
         }).catch(err => {
-        console.log("ERROR = " + err.error);
-        this.$q.loading.hide();
+        console.log("ERROR = " + err.error)
+        this.$q.loading.hide()
       });
 
     }
-  }
+  })
 
 </script>
 

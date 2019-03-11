@@ -101,7 +101,7 @@ export default class Home extends Vue {
 
   set conta(valore) {
     GlobalStore.actions.setConta(valore)
-    let my = this.$q.i18n.lang
+    let my = this.$q.lang.isoName
     this.showNotif(String(my))
   }
 

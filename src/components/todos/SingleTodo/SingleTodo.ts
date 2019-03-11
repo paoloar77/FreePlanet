@@ -1,22 +1,19 @@
 import Vue from 'vue'
 import { Component, Prop, Watch } from 'vue-property-decorator'
 
-import { tools } from '../../../store/Modules/tools'
 import { UserStore } from '@modules'
+import { tools } from '../../../store/Modules/tools'
 
 import { ITodo } from '../../../model/index'
 
 import { SubMenus } from '../SubMenus'
 
-
-import $ from 'jquery'
-
-// import { debounce } from '../../../classes/debounce'
+import { date } from 'quasar'
 import { askConfirm } from '../../../classes/routinestd'
 
 @Component({
-  name: 'SingleTodo',
-  components: { SubMenus }
+  components: { SubMenus },
+  name: 'SingleTodo'
 })
 export default class SingleTodo extends Vue {
   public selectPriority: [] = []
@@ -43,20 +40,19 @@ export default class SingleTodo extends Vue {
   public clButtPopover: string = 'pos-item-popover'
   public numpos: number = 0
 
-  $q: any
+  public $q: any
 
-  @Prop({ required: true }) itemtodo: ITodo
-
+  @Prop({ required: true }) public itemtodo: ITodo
 
   // @Watch('itemtodo.completed') valueChanged() {
   //   this.watchupdate('completed')
   // }
 
-  @Watch('itemtodo.enableExpiring') valueChanged4() {
+  @Watch('itemtodo.enableExpiring') public valueChanged4() {
     this.watchupdate('enableExpiring')
   }
 
-  @Watch('itemtodo.expiring_at') valueChanged2() {
+  @Watch('itemtodo.expiring_at') public valueChanged2() {
     this.watchupdate('expiring_at')
   }
 
@@ -64,39 +60,40 @@ export default class SingleTodo extends Vue {
   //   this.watchupdate('priority')
   // }
 
-
-  @Watch('itemtodo.descr') valueChanged5() {
+  @Watch('itemtodo.descr') public valueChanged5() {
     this.precDescr = this.itemtodo.descr
   }
 
-  @Watch('itemtodo.progress') valueChanged6() {
+  @Watch('itemtodo.progress') public valueChanged6() {
     this.updateClasses()
   }
 
-  dateToYYYYMMDD(date) {
+/*
+  public dateToYYYYMMDD(date) {
     // may have timezone caveats https://stackoverflow.com/a/29774197/1850609
     return date && date.toISOString().split('T')[0]
   }
+*/
 
   // Computed:
   get isSel() {
     return this.sel
   }
 
-  isTodo() {
+  public isTodo() {
     return this.isTodoByElem(this.itemtodo)
   }
 
-  isTodoByElem(elem) {
+  public isTodoByElem(elem) {
     return elem.descr.slice(-1) !== ':'
   }
 
-  watchupdate(field = '') {
+  public watchupdate(field = '') {
     this.$emit('eventupdate', {myitem: this.itemtodo, field } )
     this.updateicon()
   }
 
-  updateClasses() {
+  public updateClasses() {
     // this.classCompleted = 'completed-item'
     this.classCompleted = 'completed-item-popover'
     this.classDescr = 'flex-item div_descr show donotdrag'
@@ -146,8 +143,6 @@ export default class SingleTodo extends Vue {
       this.clButtPopover += ' pos-item-popover_cursor'
     }
 
-
-
     // if (this.inEdit) {
     //   this.classDescr += ' hide'
     //   this.classDescrEdit += ' show'
@@ -162,8 +157,9 @@ export default class SingleTodo extends Vue {
     // console.log('classDescr', this.classDescr)
 
     // console.log('UserStore.state.lang', UserStore.state.lang)
-    if (this.isTodo())
+    if (this.isTodo()) {
       this.menuPopupTodo = tools.menuPopupTodo[UserStore.state.lang]
+    }
     else {
       this.menuPopupTodo = []
       this.menuPopupTodo.push(tools.menuPopupTodo[UserStore.state.lang][tools.INDEX_MENU_DELETE])
@@ -171,7 +167,11 @@ export default class SingleTodo extends Vue {
 
   }
 
-  created() {
+  public getstrDate(mytimestamp) {
+    return date.formatDate(mytimestamp, 'DD-MM-YY')
+  }
+
+  public created() {
     this.precDescr = this.itemtodo.descr
     this.updateicon()
 
@@ -179,14 +179,13 @@ export default class SingleTodo extends Vue {
 
     this.selectPriority = tools.selectPriority[UserStore.state.lang]
 
-
   }
 
-  getClassRow() {
+  public getClassRow() {
     return 'row flex-container2 ' + this.classRow
   }
 
-  clickRiga(clickmenu: boolean = false) {
+  public clickRiga(clickmenu: boolean = false) {
     // console.log('CLICK RIGA ************')
 
     if (!this.sel) {
@@ -202,7 +201,7 @@ export default class SingleTodo extends Vue {
     }
   }
 
-  selectRiga() {
+  public selectRiga() {
     // console.log('selectRiga', this.itemtodo.descr)
     this.sel = true
     this.classRow = 'rowselected'
@@ -210,7 +209,7 @@ export default class SingleTodo extends Vue {
     // console.log('FINE selectRiga', this.itemtodo.descr)
   }
 
-  deselectRiga() {
+  public deselectRiga() {
     // console.log('DeselectRiga', this.itemtodo.descr)
     this.sel = false
     this.classRow = ''
@@ -218,12 +217,12 @@ export default class SingleTodo extends Vue {
     this.updateClasses()
   }
 
-  deselectAndExitEdit() {
+  public deselectAndExitEdit() {
     this.deselectRiga()
     this.exitEdit()
   }
 
-  mouseUp() {
+  public mouseUp() {
     if (!this.inEdit) {
       if (this.sel) {
         this.selectRiga()
@@ -233,44 +232,50 @@ export default class SingleTodo extends Vue {
     }
   }
 
-  clickRow() {
+  public clickRow() {
     this.clickRiga()
   }
 
-  editTodo() {
+  public editTodo() {
     if (!this.itemtodo.completed) {
       // console.log('INIZIO - editTodo')
       this.$emit('click')
       this.precDescr = this.itemtodo.descr
       this.inEdit = true
-      if (!this.sel)
+      if (!this.sel) {
         this.selectRiga()
-      else
+      }
+      else {
         this.updateClasses()
+      }
 
       this.faiFocus('inputdescr')
     }
     // console.log('FINE - editTodo')
   }
 
-  faiFocus(elem, isparent: boolean = false) {
+  public faiFocus(elem, isparent: boolean = false) {
     setTimeout(() => {
       let theField = null
-      if (isparent)
-        theField = <HTMLInputElement>this.$parent.$parent.$parent.$parent.$refs[elem]
-      else
-        theField = <HTMLInputElement>this.$refs[elem]
+      if (isparent) {
+        theField = this.$parent.$parent.$parent.$parent.$refs[elem] as HTMLInputElement
+      }
+      else {
+        theField = this.$refs[elem] as HTMLInputElement
+      }
 
-      if (theField !== undefined)
+      if (theField !== undefined) {
         theField.focus()
+      }
       // console.log('focus()')
     }, 100)
   }
 
-  exitEdit(singola: boolean = false) {
+  public exitEdit(singola: boolean = false) {
     if (this.inEdit) {
-      if (this.precDescr !== this.itemtodo.descr)
+      if (this.precDescr !== this.itemtodo.descr) {
         this.updateTodo()
+      }
       // console.log('exitEdit')
       this.inEdit = false
       this.updateClasses
@@ -278,8 +283,7 @@ export default class SingleTodo extends Vue {
     }
   }
 
-
-  keyDownRow(e) {
+  public keyDownRow(e) {
     console.log('keyDownRow')
     // Delete Key or Backspage
     if (((e.keyCode === 8) || (e.keyCode === 46)) && (this.precDescr === '') && !e.shiftKey) {
@@ -294,7 +298,7 @@ export default class SingleTodo extends Vue {
 
   }
 
-  keyDownArea(e) {
+  public keyDownArea(e) {
     console.log('keyDownArea')
 /*
     if ((e.key === 'ArrowUp') && !e.shiftKey) {
@@ -342,9 +346,10 @@ export default class SingleTodo extends Vue {
 
   }
 
-  updateTodo() {
-    if (this.itemtodo.descr === this.precDescr)
+  public updateTodo() {
+    if (this.itemtodo.descr === this.precDescr) {
       return
+    }
 
     this.itemtodo.descr = this.precDescr
     console.log('updateTodo', this.precDescr, this.itemtodo.descr)
@@ -357,7 +362,7 @@ export default class SingleTodo extends Vue {
     this.updateClasses()
   }
 
-  setCompleted() {
+  public setCompleted() {
     // console.log('setCompleted')
     this.itemtodo.completed = !this.itemtodo.completed
 
@@ -368,41 +373,44 @@ export default class SingleTodo extends Vue {
     this.deselectAndExitEdit()
   }
 
-  updatedata(field: string) {
+  public updatedata(field: string) {
     // const myitem = tools.jsonCopy(this.itemtodo)
     console.log('calling this.$emit(eventupdate)', this.itemtodo)
     this.$emit('eventupdate', { myitem: this.itemtodo, field } )
   }
 
-  updateicon() {
+  public updateicon() {
     // console.log('updateicon')
-    if (this.itemtodo.completed)
+    if (this.itemtodo.completed) {
       this.iconCompleted = 'check_circle'
-    else
+    }
+    else {
       this.iconCompleted = 'check_circle_outline'
+    }
 
-
-    if (this.itemtodo.priority === tools.Todos.PRIORITY_HIGH)
-      this.iconPriority = 'expand_less'  // expand_less
-    else if (this.itemtodo.priority === tools.Todos.PRIORITY_NORMAL)
+    if (this.itemtodo.priority === tools.Todos.PRIORITY_HIGH) {
+      this.iconPriority = 'expand_less'
+    }  // expand_less
+    else if (this.itemtodo.priority === tools.Todos.PRIORITY_NORMAL) {
       this.iconPriority = 'remove'
-    else if (this.itemtodo.priority === tools.Todos.PRIORITY_LOW)
-      this.iconPriority = 'expand_more'  // expand_more
+ }
+    else if (this.itemtodo.priority === tools.Todos.PRIORITY_LOW) {
+      this.iconPriority = 'expand_more'
+ }  // expand_more
 
     this.updateClasses()
   }
 
-
-  removeitem(id) {
+  public removeitem(id) {
     this.$emit('deleteItem', id)
   }
 
-  enableExpiring() {
+  public enableExpiring() {
     this.itemtodo.enableExpiring = !this.itemtodo.enableExpiring
 
   }
 
-  async clickMenu(action) {
+  public async clickMenu(action) {
     console.log('click menu: ', action)
     if (action === tools.MenuAction.DELETE) {
       return await this.askConfirmDelete()
@@ -418,7 +426,7 @@ export default class SingleTodo extends Vue {
 
   }
 
-  setPriority(newpriority) {
+  public setPriority(newpriority) {
 
     if (this.itemtodo.priority !== newpriority) {
       this.itemtodo.priority = newpriority
@@ -431,21 +439,20 @@ export default class SingleTodo extends Vue {
     // this.$q.notify('setPriority: ' + elem)
   }
 
-  async askConfirmDelete() {
+  public async askConfirmDelete() {
     const deletestr = this.$t('dialog.delete')
     const cancelstr = this.$t('dialog.cancel')
 
-    let msg = this.$t('dialog.msg.deleteTask', {'mytodo' : this.itemtodo.descr })
+    const msg = this.$t('dialog.msg.deleteTask', {mytodo : this.itemtodo.descr })
     await askConfirm(this.$q, this.$t('dialog.msg.titledeleteTask'), msg, deletestr, cancelstr)
-      .then(ris => {
+      .then((ris) => {
         console.log('ris', ris)
         if (ris) {
           this.removeitem(this.itemtodo._id)
         }
-      }).catch(err => {
+      }).catch((err) => {
 
     })
   }
-
 
 }

@@ -10,7 +10,7 @@
             <div class="q-list-header">{{replaceUnderlineToSpace(index)}}</div>
             <template v-for="child in parent.routes">
                 <div v-if="child.routes2">
-                    <q-collapsible menu :label="$t(child.name)" icon="format_list_bulleted" class="titleSubMenu">
+                    <q-expansion-item menu :label="$t(child.name)" icon="format_list_bulleted" class="titleSubMenu">
                         <div v-for="child2 in child.routes2">
                             <q-item link :to="child2.route" exact
                                     class="item item-link drawer-closer cursor-pointer">
@@ -18,7 +18,7 @@
                                 <div class="item-content">{{$t(child2.name)}}</div>
                             </q-item>
                         </div>
-                    </q-collapsible>
+                    </q-expansion-item>
                 </div>
                 <div v-else>
                     <q-slide-transition :duration=200>
@@ -36,39 +36,42 @@
     </div>
 </template>
 
-<script>
-  export default {
-    props: ['links'],
-    watch: {
-      '$route.path'() {
-        Object.keys(this.links).forEach(parentName => {
-          this.setParentVisibilityBasedOnRoute(this.links[parentName])
-        })
-      }
-    },
-    computed: {
-      currentRoutePath() {
-        return this.$route.path
-      }
-    },
-    methods: {
-      created() {
-        console.log("MENUONE CREATED!");
-      },
-      setParentVisibilityBasedOnRoute(parent) {
-        parent.routes.forEach(item => {
-          if (this.$route.path === item.route) {
-            parent.show = true
-            return
-          }
-        })
-      },
-      replaceUnderlineToSpace(text) {
-        while (text.indexOf('_') !== -1) {
-          text = text.replace('_', ' ')
+<script lang="ts">
+  import Vue from 'vue'
+  import { Prop, Watch } from "vue-property-decorator"
+
+  export default class menuOne extends Vue {
+    @Prop({ required: true }) links
+
+    @Watch('$route.path')
+    modifroute() {
+      Object.keys(this.links).forEach(parentName => {
+        this.setParentVisibilityBasedOnRoute(this.links[parentName])
+      })
+    }
+
+    get currentRoutePath() {
+      return this.$route.path
+    }
+
+    created() {
+      console.log("MENUONE CREATED!")
+    }
+
+    setParentVisibilityBasedOnRoute(parent) {
+      parent.routes.forEach(item => {
+        if (this.$route.path === item.route) {
+          parent.show = true
+          return
         }
-        return text
+      })
+    }
+
+    replaceUnderlineToSpace(text) {
+      while (text.indexOf('_') !== -1) {
+        text = text.replace('_', ' ')
       }
+      return text
     }
   }
 </script>

@@ -35,11 +35,11 @@
                                 -->
 
                                 <div v-if="isInCostruction" style="margin: 5px;">
-                                    <q-alert
+                                    <q-banner
                                             type="info"
                                             class="q-mb-sm">
                                         {{$t('msg.underconstruction')}}
-                                    </q-alert>
+                                    </q-banner>
                                     <br>
                                 </div>
                                 <div v-else>
@@ -126,7 +126,6 @@
                     </div>
                     <div class="col-12 col-sm-5">
                         <div class="feature-item"><i aria-hidden="true"
-                                                     class="q-icon fas fa-carrot"> </i><i aria-hidden="true"
                                                                                              class="q-icon fas fa-apple-alt"> </i><h4>
                             {{$t('homepage.freegas.title')}}</h4>
                             <p class="feat-descr" v-html="$t('homepage.freegas.descr')"></p></div>
@@ -181,7 +180,7 @@
                             <i aria-hidden="true" class="q-icon fab fa-facebook-f"> </i></a>
 
                         <a :href="TelegramSupport" target="_blank">
-                            <i aria-hidden="true" class="q-icon fab fa-telegram dark"></i></a>
+                            <i aria-hidden="true" class="q-icon fab fa-telegram"></i></a>
 
 
                         <!--<a href="" target="_blank"><i aria-hidden="true" class="q-icon fab fa-github"> </i></a>-->

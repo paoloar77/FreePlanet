@@ -2,9 +2,9 @@
     <div class="mypanel">
 
         <div v-if="!emailinviata">
-            <q-alert color="primary q-title" style="text-align: center;">
+            <q-banner color="primary q-title" style="text-align: center;">
                 {{ $t('reset.title_update_pwd')}}
-            </q-alert>
+            </q-banner>
             <br>
 
             <q-field
@@ -41,9 +41,9 @@
 
         </div>
         <div v-else>
-            <q-alert color="primary q-title" style="text-align: center;">
+            <q-banner color="primary q-title" style="text-align: center;">
                 {{ $t('reset.email_sent')}}
-            </q-alert>
+            </q-banner>
             <br>
 
             <div>
@@ -56,76 +56,74 @@
     </div>
 </template>
 
-<script>
+<script lang="ts">
 
-  import {mapActions} from 'vuex'
+  import { mapActions } from 'vuex'
   import * as types from '../../store/mutation-types'
   //import {tools} from '../../store/Modules/user'
 
-  import {serv_constants} from '../../store/Modules/serv_constants';
+  import { serv_constants } from '../../store/Modules/serv_constants'
 
 
-  export default {
-    data() {
-      return {
-        risultato: '',
-        riscode: 0,
-        emailsent: false,
-        form: {
-          password: '',
-          repeatPassword: '',
-          tokenforgot: 0,
-        },
-      }
-    },
+  import Vue from 'vue'
+  import { required } from "vuelidate/lib/validators"
+  import { UserStore } from "../../store/Modules";
+  import { IUserState } from "../../model";
+
+  export default class UpdatePassword extends Vue {
+    emailsent = false
+    form: IUserState = {
+      password: '',
+      repeatPassword: '',
+      tokenforgot: '',
+    }
+
     created() {
-      this.load();
-    },
-    computed: {
-      emailinviata: function () {
+      // this.load()
+    }
+    get emailinviata() {
         return this.emailsent
-      },
-    },
-    validations: {
-      form: {
-        password: {
-          required,
-        },
-        repeatPassword: {
-          required,
-          sameAsPassword: sameAs('password')
-        },
-      }
-    },
-    methods: {
-      ...mapActions("user", {
-        updatepwd: types.USER_UPDATEPWD,
-      }),
-    },
+    }
+    // validations: {
+    //   form: {
+    //     password: {
+    //       required,
+    //     },
+    //     repeatPassword: {
+    //       required,
+    //       sameAsPassword: sameAs('password')
+    //     },
+    //   }
+    // },
+
+    showNotif(msg: any) {
+      this.$q.notify(msg)
+    }
+
     submit() {
-      this.$v.form.$touch();
+      this.$v.form.$touch()
 
       if (this.$v.form.$error) {
-        this.showNotif(this.$t('reg.err.errore_generico'));
+        this.showNotif(this.$t('reg.err.errore_generico'))
         return
       }
 
-      this.$q.loading.show({message: this.$t('reset.incorso')});
+      this.$q.loading.show({ message: this.$t('reset.incorso') })
 
-      this.tokenforgot = '';
+      this.form.tokenforgot = ''
 
-      console.log(this.form);
-      this.updatepwd(this.form)
+      console.log(this.form)
+      UserStore.actions.resetpwd(this.form)
         .then((ris) => {
-          this.emailsent = ris.updatepwd;
-          this.$q.loading.hide();
+          this.emailsent = ris.updatepwd
+          this.$q.loading.hide()
         }).catch(error => {
-        console.log("ERROR = " + error);
-        this.$q.loading.hide();
-      });
+        console.log("ERROR = " + error)
+        this.$q.loading.hide()
+      })
 
     }
-  }
+  })
 
 </script>
 

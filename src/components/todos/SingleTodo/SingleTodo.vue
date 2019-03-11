@@ -38,12 +38,13 @@
         <!--</div>-->
 
         <div v-if="isTodo() && (percentageProgress > 0) " class="flex-item progress-item shadow-1">
-            <q-progress
+            <q-linear-progress
+                    stripe
                     :percentage="percentageProgress"
                     class="progrbar-item"
                     :color="colProgress"
             >
-            </q-progress>
+            </q-linear-progress>
             <div :class="percProgress">
                 {{percentageProgress}}%
                 <q-popup-edit v-model="itemtodo.progress" title="Progress" buttons class="editProgress">
@@ -55,23 +56,26 @@
 
 
         <div v-if="itemtodo.enableExpiring" :class="classExpiring">
-            <q-datetime
-                    type="date"
-                    v-model="itemtodo.expiring_at"
-                    class="myexpired"
-                    format="DD/MM/YY"
-                    @change="val => { model = val }">
-
-            </q-datetime>
+            {{getstrDate(itemtodo.expiring_at)}}
+            <q-popup-edit v-model="itemtodo.expiring_at" title="Edit" buttons class="">
+                <q-input
+                        filled
+                        v-model="itemtodo.expiring_at"
+                        type="date"
+                        class="myexpired"
+                        format="DD/MM/YY"
+                        @change="val => { model = val }">
+                </q-input>
+            </q-popup-edit>
         </div>
         <div v-if="isTodo()" class="flex-item pos-item " @mousedown="clickRiga">
             <q-btn push
                    :class="clButtPopover"
                    icon="menu">
-                <q-popover id="popmenu" v-if="true" self="top right">
+                <q-menu id="popmenu" v-if="true" self="top right">
                     <SubMenus :menuPopupTodo="menuPopupTodo" :itemtodo="itemtodo" @clickMenu="clickMenu"
                               @setPriority="setPriority"></SubMenus>
-                </q-popover>
+                </q-menu>
 
             </q-btn>
         </div>

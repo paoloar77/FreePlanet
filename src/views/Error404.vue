@@ -24,8 +24,9 @@
   </div>
 </template>
 
-<script type="text/javascript">
-export default {
+<script lang="ts" type="text/javascript">
+import Vue from 'vue'
+export default Vue.extend({
   data () {
     return {
       canGoBack: window.history.length > 1
@@ -36,7 +37,7 @@ export default {
       window.history.go(-1)
     }
   }
-}
+})
 </script>
 
 <style lang="stylus">

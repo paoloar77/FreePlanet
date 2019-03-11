@@ -7,14 +7,14 @@
                     <div class="flex-item">
                         <q-btn push
                                icon="settings">
-                            <q-popover id="popconfig" self="top right">
+                            <q-menu id="popconfig" self="top right">
                                 <q-list link separator no-border class="todo-menu">
                                     <div v-for="field in menuPopupConfigTodo" :key="field.value">
                                         <q-item :icon="field.icon"
                                                 @click.native="">
-                                            <q-item-side :icon="field.icon"/>
+                                            <q-item-section :icon="field.icon"/>
 
-                                            <q-item-main v-if="showTask(field.value)">
+                                            <q-item-label v-if="showTask(field.value)">
 
                                                 <q-select
                                                         radio
@@ -22,14 +22,14 @@
                                                         :float-label="field.label"
                                                         v-model="showtype"
                                                         :options="listOptionShowTask"/>
-                                            </q-item-main>
-                                            <q-item-main v-else>
-                                                <q-item-tile label class="item-menu">{{field.label}}</q-item-tile>
-                                            </q-item-main>
+                                            </q-item-label>
+                                            <q-item-label v-else>
+                                                <q-item-section label class="item-menu">{{field.label}}</q-item-section>
+                                            </q-item-label>
                                         </q-item>
                                     </div>
                                 </q-list>
-                            </q-popover>
+                            </q-menu>
                         </q-btn>
                     </div>
                 </div>

@@ -11,7 +11,7 @@ export const DefaultUser = <IUserState>{
 export interface IUserState {
   userId?: string
   email?: string
-  username: string
+  username?: string
   idapp?: any
   password?: string
   lang?: string

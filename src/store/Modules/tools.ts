@@ -77,7 +77,7 @@ export const tools = {
         value: 0,
         icon: 'expand_more'
       }],
-    'esEs': [
+    'es': [
       {
         id: 1,
         label: 'Alta',
@@ -178,7 +178,7 @@ export const tools = {
         checked: false
       }
     ],
-    'esEs': [
+    'es': [
       {
         id: 10,
         label: '',
@@ -263,7 +263,7 @@ export const tools = {
         icon: 'rowing',
       },
     ],
-    'esEs': [
+    'es': [
       {
         id: 10,
         label: 'Mostrar Tareas',
@@ -305,7 +305,7 @@ export const tools = {
         checked: true
       }
     ],
-    'esEs': [
+    'es': [
       {
         id: 10,
         label: 'Mostrar los ultimos N completados',

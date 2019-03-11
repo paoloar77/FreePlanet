@@ -1,9 +1,9 @@
 import { ISignupOptions } from 'model'
-import { required, minLength, email, sameAs } from 'vuelidate/lib/validators'
+import { email, minLength, required, sameAs } from 'vuelidate/lib/validators'
 // import { ValidationRuleset } from 'vuelidate'
-import { complexity, registereduser, registeredemail } from '../../../validation'
+import { complexity, registeredemail, registereduser } from '../../../validation'
 
-export type TSignup = { signup: ISignupOptions, validationGroup: string[] }
+export interface TSignup { signup: ISignupOptions, validationGroup: string[] }
 
 export const validations = {
     signup: {
@@ -12,17 +12,17 @@ export const validations = {
             sameAsPassword: sameAs('password')
         },
         password: {
-            required,
-            complexity
+          complexity,
+          required
         },
         username: {
-            required,
-            registereduser
+          registereduser,
+          required
         },
         email: {
-          required,
           email,
-          registeredemail
+          registeredemail,
+          required
         },
         terms: {
          required

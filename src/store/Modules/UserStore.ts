@@ -225,7 +225,7 @@ namespace Actions {
 
   async function resetpwd(context, paramquery: IUserState) {
 
-    let usertosend = {
+    const usertosend = {
       keyappid: process.env.PAO_APP_ID,
       idapp: process.env.APP_ID,
       email: paramquery.email,
@@ -573,14 +573,13 @@ namespace Actions {
 
 
   export const actions = {
-    resetpwd: b.dispatch(resetpwd),
-    requestpwd: b.dispatch(requestpwd),
-    vreg: b.dispatch(vreg),
-    signup: b.dispatch(signup),
-    signin: b.dispatch(signin),
+    autologin_FromLocalStorage: b.dispatch(autologin_FromLocalStorage),
     logout: b.dispatch(logout),
-    autologin_FromLocalStorage: b.dispatch(autologin_FromLocalStorage)
-
+    requestpwd: b.dispatch(requestpwd),
+    resetpwd: b.dispatch(resetpwd),
+    signin: b.dispatch(signin),
+    signup: b.dispatch(signup),
+    vreg: b.dispatch(vreg)
   }
 }
 
@@ -589,9 +588,9 @@ const UserModule = {
   get state() {
     return stateGetter()
   },
+  actions: Actions.actions,
   getters: Getters.getters,
-  mutations: Mutations.mutations,
-  actions: Actions.actions
+  mutations: Mutations.mutations
 }
 
 export default UserModule

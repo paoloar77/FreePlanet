@@ -1,9 +1,9 @@
 <template>
     <q-page padding class="vreg">
         <div class="mypanel">
-            <q-alert color="primary q-title" style="text-align: center;">
+            <q-banner color="primary q-title" style="text-align: center;">
                 {{ $t('reg.title_verif_reg')}}
-            </q-alert>
+            </q-banner>
             <br>
 
             <transition
@@ -12,18 +12,18 @@
                     appear
             >
             <span>
-                <q-alert
+                <q-banner
                         v-if="giaverificato"
                         type="warning"
                 >
                     {{ myrisultato}}
-                </q-alert>
-                <q-alert
+                </q-banner>
+                <q-banner
                         v-if="verificatook"
                         type="positive"
                 >
                     {{ myrisultato}}
-                </q-alert>
+                </q-banner>
             </span>
             </transition>
 
