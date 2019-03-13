@@ -69,6 +69,7 @@ export default class SingleTodo extends Vue {
     this.updateClasses()
 
     console.log('this.percentageProgress', this.percentageProgress, 'this.itemtodo.progress', this.itemtodo.progress)
+    this.watchupdate('progress')
   }
 
 /*

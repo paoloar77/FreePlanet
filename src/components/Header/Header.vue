@@ -75,10 +75,13 @@
                         stretch
                         flat
                         :label="langshort"
+                        auto-close
                 >
                     <q-list bordered>
-                        <q-item clickable v-ripple v-for="langrec in selectOpLang" :key="langrec.value"
-                                @click.native="lang = langrec.value">
+                        <q-item clickable v-ripple
+
+                                v-for="langrec in selectOpLang" :key="langrec.value"
+                                @click="lang = langrec.value">
                             <q-item-section avatar>
                                 <img :src="langrec.image" class="flagimg">
                             </q-item-section>

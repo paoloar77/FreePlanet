@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { Component, Prop } from 'vue-property-decorator'
+import { Component, Prop, Watch } from 'vue-property-decorator'
 
 import { tools } from '@src/store/Modules/tools'
 import { UserStore } from '@store'
