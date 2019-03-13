@@ -4,12 +4,12 @@
             <section>
                 <div class="landing__hero">
                     <div class="landing__header"></div>
-                    <div class="landing__hero-content row justify-center q-gutter-xl">
+                    <div class="landing__hero-content row justify-center q-gutter-xs clgutter">
                         <div class="row">
                             <logo></logo>
                         </div>
                         <div class="flex justify-end">
-                            <div class="q-gutter-sm testo-banda">
+                            <div class="q-gutter-xs testo-banda clgutter">
                                 <div class="text-h1 shadow-max">FreePlanet</div>
                                 <div class="text-subtitle1 shadow text-italic q-pl-sm">{{$t('msg.sottoTitoloApp')}}
                                 </div>

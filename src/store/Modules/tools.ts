@@ -4,6 +4,12 @@ import { Todos, UserStore } from '@store'
 import globalroutines from './../../globalroutines/index'
 import { costanti } from './costanti'
 
+export interface INotify {
+  color?: string | 'primary'
+  textColor?: string
+  icon?: string | ''
+}
+
 export const tools = {
   EMPTY: 0,
   CALLING: 10,
@@ -431,7 +437,22 @@ export const tools = {
             })
         })
     }
+  },
 
+  showNotif(q: any, msg, data?: INotify | null ) {
+    let myicon = data ? data.icon : 'ion-add'
+    if (!myicon)
+      myicon = 'ion-add'
+    let mycolor = data ? data.color : 'primary'
+    if (!mycolor)
+      mycolor = 'primary'
+    q.notify({
+      message: msg,
+      icon: myicon,
+      classes: 'my-notif-class',
+      color: mycolor,
+      timeout: 3000
+    })
   }
 
 }

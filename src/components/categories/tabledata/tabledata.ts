@@ -3,6 +3,7 @@ import { Component, Watch } from 'vue-property-decorator'
 
 import { ICategory } from '@src/model'
 import globalroutines from "@src/globalroutines"
+import { tools } from "@src/store/Modules/tools"
 
 @Component({
 })
@@ -172,10 +173,9 @@ export default class Tabledata extends Vue {
 
     const seldel = [...this.selectedSecond]
     if (this.deleteCategory(this.selectedSecond)) {
-      this.$q.notify({
+      tools.showNotif(this.$q, `Deleted ` + (seldel.length.toString()) + ' item', {
         color: 'primary',
-        icon: 'delete',
-        message: `Deleted ` + (seldel.length.toString()) + ' item'
+        icon: 'delete'
       })
 
 

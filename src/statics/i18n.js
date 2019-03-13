@@ -166,7 +166,7 @@ const messages = {
       forgetpassword: "Password dimenticata?",
       err: {
         required: 'è richiesto',
-        email: 'dev\'essere una email valida',
+        email: 'inserire una email valida',
         errore_generico: 'Si prega di compilare correttamente i campi',
         atleast: 'dev\'essere lungo almeno di',
         complexity: 'deve contenere almeno 1 carattere minuscolo, 1 maiuscola e 1 cifra',

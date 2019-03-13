@@ -321,13 +321,13 @@ export default class Todo extends Vue {
     }
 
     if (UserStore.state.userId === undefined) {
-      this.$q.notify(this.$t('todo.usernotdefined'))
+      tools.showNotif(this.$q, this.$t('todo.usernotdefined'))
       return
     }
 
     if (!this.isRegistered()) {
       // Not logged
-      this.$q.notify(this.$t('user.notregistered'))
+      tools.showNotif(this.$q, this.$t('user.notregistered'))
       return
     }
 
@@ -341,7 +341,7 @@ export default class Todo extends Vue {
 
         console.log('data', data)
         if (data !== null) {
-          this.$q.notify(data)
+          tools.showNotif(this.$q, data)
         }
 
         // empty the field

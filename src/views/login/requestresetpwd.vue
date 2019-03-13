@@ -57,6 +57,7 @@
   import { email, required } from "vuelidate/lib/validators"
   import { UserStore } from "../../store/Modules";
   import { IUserState } from "../../model";
+  import { tools } from "../../store/Modules/tools";
   export default class RequestResetPwd extends Vue{
     emailsent = false
     form: IUserState = {
@@ -78,15 +79,11 @@
     //   }
     // },
 
-    showNotif(msg: any) {
-      this.$q.notify(msg)
-    }
-
     submit() {
       this.$v.form.$touch()
 
       if (this.$v.form.$error) {
-        this.showNotif(this.$t('reg.err.errore_generico'))
+        tools.showNotif(this.$q, this.$t('reg.err.errore_generico'))
         return
       }
 

@@ -4,7 +4,8 @@ import { GlobalStore, UserStore } from '@store'
 
 import { Logo } from '../../components/logo'
 
-import VueScrollReveal from 'vue-scroll-reveal';
+import VueScrollReveal from 'vue-scroll-reveal'
+import { tools } from '@src/store/Modules/tools'
 
 Vue.use(VueScrollReveal, {
   class: 'v-scroll-reveal', // A CSS class applied to elements with the v-scroll-reveal directive; useful for animation overrides.
@@ -17,21 +18,21 @@ Vue.use(VueScrollReveal, {
     z: 0
   }
   // mobile: true
-});
+})
 
 @Component({
   components: { Logo }
 })
 export default class Home extends Vue {
-  text: string = ''
-  visibile: boolean = false
-  cardvisible: string = 'hidden'
-  displaycard: string = 'block'
-  svgclass: string = 'svgclass'
-  $t: any
-  firstClassSection: string = 'landing fade homep-cover-img animate-fade homep-cover-img-1'
+  public text: string = ''
+  public visibile: boolean = false
+  public cardvisible: string = 'hidden'
+  public displaycard: string = 'block'
+  public svgclass: string = 'svgclass'
+  public $t: any
+  public firstClassSection: string = 'landing fade homep-cover-img animate-fade homep-cover-img-1'
   public $q
-  polling
+  public polling
 
   constructor() {
     super()
@@ -39,9 +40,9 @@ export default class Home extends Vue {
     this.initprompt()
   }
 
-  mounted() {
+  public mounted() {
     let primo = true
-    let mytime = 10000
+    const mytime = 10000
     this.polling = setInterval(() => {
 
       this.firstClassSection = 'landing fade homep-cover-img ' + (primo ? 'homep-cover-img-2' : 'homep-cover-img-1')
@@ -52,11 +53,11 @@ export default class Home extends Vue {
     }, mytime)
   }
 
-  beforeDestroy() {
+  public beforeDestroy() {
     console.log('beforeDestroy')
     clearInterval(this.polling)
   }
-  created() {
+  public created() {
 
     GlobalStore.actions.prova()
   }
@@ -69,8 +70,7 @@ export default class Home extends Vue {
     return process.env.TELEGRAM_SUPPORT
   }
 
-
-  meta() {
+  public meta() {
     return {
       keywords: { name: 'keywords', content: 'Quasar website' },
       // meta tags
@@ -78,13 +78,12 @@ export default class Home extends Vue {
         mykey: { name: 'mykey', content: 'Key 1' },
         description: { name: 'description', content: 'Page 1' },
         keywords: { name: 'keywords', content: 'Quasar website' },
-        equiv: { 'http-equiv': 'Content-Type', content: 'text/html; charset=UTF-8' }
+        equiv: { 'http-equiv': 'Content-Type', 'content': 'text/html; charset=UTF-8' }
       }
     }
   }
 
-
-  mystilecard() {
+  public mystilecard() {
     return {
       visibility: this.cardvisible,
       display: this.displaycard
@@ -95,27 +94,18 @@ export default class Home extends Vue {
     return GlobalStore.state.conta
   }
 
-  getenv(myvar) {
+  public getenv(myvar) {
     return process.env[myvar]
   }
 
   set conta(valore) {
     GlobalStore.actions.setConta(valore)
-    let my = this.$q.lang.isoName
-    this.showNotif(String(my))
+    const my = this.$q.lang.isoName
+    tools.showNotif(this.$q, String(my))
   }
 
-  showNotif(message: string, color = 'primary', icon = '') {
-    this.$q.notify({
-      color,
-      icon,
-      message
-    })
-
-  }
-
-  initprompt() {
-    window.addEventListener('beforeinstallprompt', function (event) {
+  public initprompt() {
+    window.addEventListener('beforeinstallprompt', function(event) {
       // console.log('********************************   beforeinstallprompt fired')
       event.preventDefault()
       // console.log('§§§§§§§§§§§§§§§§§§§§  IMPOSTA DEFERRED PROMPT  !!!!!!!!!!!!!!!!!  ')
@@ -125,27 +115,27 @@ export default class Home extends Vue {
 
   }
 
-  get isInCostruction () {
+  get isInCostruction() {
     return process.env.IN_CONSTRUCTION === '1'
   }
 
-  getPermission() {
+  public getPermission() {
     return Notification.permission
   }
 
-  NotServiceWorker() {
+  public NotServiceWorker() {
     return (!('serviceWorker' in navigator))
   }
 
-  PagLogin () {
+  public PagLogin() {
     this.$router.replace('/signin')
   }
 
-  PagReg () {
+  public PagReg() {
     this.$router.replace('/signup')
   }
 
-  displayConfirmNotification() {
+  public displayConfirmNotification() {
     let options = null
     if ('serviceWorker' in navigator) {
       options = {
@@ -166,21 +156,21 @@ export default class Home extends Vue {
 
       if ('serviceWorker' in navigator) {
         navigator.serviceWorker.ready
-          .then(function (swreg) {
+          .then(function(swreg) {
             swreg.showNotification('Successfully subscribed!', options)
           })
       }
     }
   }
 
-  urlBase64ToUint8Array(base64String) {
-    let padding = '='.repeat((4 - base64String.length % 4) % 4)
-    let base64 = (base64String + padding)
+  public urlBase64ToUint8Array(base64String) {
+    const padding = '='.repeat((4 - base64String.length % 4) % 4)
+    const base64 = (base64String + padding)
       .replace(/\-/g, '+')
       .replace(/_/g, '/')
 
-    let rawData = window.atob(base64)
-    let outputArray = new Uint8Array(rawData.length)
+    const rawData = window.atob(base64)
+    const outputArray = new Uint8Array(rawData.length)
 
     for (let i = 0; i < rawData.length; ++i) {
       outputArray[i] = rawData.charCodeAt(i)
@@ -188,22 +178,21 @@ export default class Home extends Vue {
     return outputArray
   }
 
-  dataURItoBlob(dataURI) {
-    let byteString = atob(dataURI.split(',')[1])
-    let mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0]
-    let ab = new ArrayBuffer(byteString.length)
-    let ia = new Uint8Array(ab)
+  public dataURItoBlob(dataURI) {
+    const byteString = atob(dataURI.split(',')[1])
+    const mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0]
+    const ab = new ArrayBuffer(byteString.length)
+    const ia = new Uint8Array(ab)
     for (let i = 0; i < byteString.length; i++) {
       ia[i] = byteString.charCodeAt(i)
     }
-    let blob = new Blob([ab], { type: mimeString })
+    const blob = new Blob([ab], { type: mimeString })
     return blob
   }
 
-
-  showNotificationExample() {
+  public showNotificationExample() {
     let options = null
-    let mythis = this
+    const mythis = this
     if ('serviceWorker' in navigator) {
       options = {
         body: mythis.$t('notification.subscribed'),
@@ -222,23 +211,21 @@ export default class Home extends Vue {
       }
 
       navigator.serviceWorker.ready
-        .then(function (swreg) {
+        .then(function(swreg) {
           swreg.showNotification('aaa', options)
         })
     }
   }
 
-
-
-  askfornotification() {
-    this.showNotif(this.$t('notification.waitingconfirm'), 'positive', 'notifications')
+  public askfornotification() {
+    tools.showNotif(this.$q, this.$t('notification.waitingconfirm'), {color: 'positive', icon: 'notifications'})
 
     Notification.requestPermission((result) => {
       console.log('User Choice', result)
       if (result === 'granted') {
-        this.showNotif(this.$t('notification.confirmed'), 'positive', 'notifications')
+        tools.showNotif(this.$q, this.$t('notification.confirmed'), {color: 'positive', icon: 'notifications'})
       } else {
-        this.showNotif(this.$t('notification.denied'), 'negative', 'notifications')
+        tools.showNotif(this.$q, this.$t('notification.denied'), {color: 'negative', icon: 'notifications'})
 
         // displayConfirmNotification();
       }
@@ -246,8 +233,7 @@ export default class Home extends Vue {
 
   }
 
-
-  test_fetch() {
+  public test_fetch() {
     fetch('https:/httpbin.org/post', {
       method: 'POST',
       headers: {
@@ -257,20 +243,22 @@ export default class Home extends Vue {
       // mode: 'no-cors',
       mode: 'cors',
       body: JSON.stringify({ message: 'Does this work?' })
-    }).then(function (response) {
+    }).then(function(response) {
       console.log(response)
-      if (response)
+      if (response) {
         return response.json()
-      else
+      }
+      else {
         return null
-    }).then(function (data) {
+      }
+    }).then(function(data) {
       console.log(data)
-    }).catch(function (err) {
+    }).catch(function(err) {
       console.log(err)
     })
   }
 
-  openCreatePostModal() {
+  public openCreatePostModal() {
     console.log('APERTO ! openCreatePostModal')
 
     this.conta = this.conta + 1
@@ -286,7 +274,6 @@ export default class Home extends Vue {
     }
 
   }
-
 
 /*
   backgroundSequence() {

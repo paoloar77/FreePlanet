@@ -450,7 +450,6 @@ export default class SingleTodo extends Vue {
       this.updateicon()
     }
 
-    // this.$q.notify('setPriority: ' + elem)
   }
 
   public async askConfirmDelete() {

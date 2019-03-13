@@ -99,7 +99,7 @@ export default class Header extends Vue {
   set lang(lang) {
     console.log('set lang(' + this.$i18n.locale)
     this.$i18n.locale = this.snakeToCamel(lang)
-    // this.$q.notify('IMPOSTA LANG= ' + this.$i18n.locale)
+    // tools.showNotif(this.$q, 'IMPOSTA LANG= ' + this.$i18n.locale)
     // console.log('IMPOSTA LANG= ' + this.$i18n.locale)
 
     UserStore.mutations.setlang(this.$i18n.locale)
@@ -123,13 +123,6 @@ export default class Header extends Vue {
   public changeconn(value: string, oldValue: string) {
 
     this.strConn = value
-
-    // this.$q.notify({
-    //   color : 'primary',
-    //   icon: 'wifi',
-    //   message: "CAMBIATOO! " + value
-    // })
-
   }
 
   @Watch('conndata_changed', { immediate: true, deep: true })
@@ -162,10 +155,9 @@ export default class Header extends Vue {
       const color = (value === 'online') ? 'positive' : 'warning'
 
       if (oldValue !== undefined) {
-        this.$q.notify({
+        tools.showNotif(this.$q, this.$t('connection') + ` ${value}`, {
           color,
-          icon: 'wifi',
-          message: this.$t('connection') + ` ${value}`
+          icon: 'wifi'
         })
       }
 
@@ -235,7 +227,7 @@ export default class Header extends Vue {
 
     console.log('this.$q.i18n=', this.$q.i18n, 'this.$q.getLocale()=', this.$q.lang.isoName)
     const my = this.getLangAtt()
-    this.$q.notify('prima: ' + String(my))
+    tools.showNotif(this.$q, 'prima: ' + String(my))
 
     let mylang = tools.getItemLS(tools.localStorage.lang)
     if (mylang === '') {
@@ -266,7 +258,6 @@ export default class Header extends Vue {
 
     this.setLangAtt(mylang)
     this.setshortlang(mylang)
-    // this.$q.notify('Dopo: ' + String(this.getLangAtt()))
 
   }
 

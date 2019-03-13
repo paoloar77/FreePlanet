@@ -4,6 +4,7 @@ import { UserStore } from '@modules'
 import { GlobalStore } from '@modules'
 import Vue from 'vue'
 import { Component, Prop } from 'vue-property-decorator'
+import { tools } from "@src/store/Modules/tools"
 
 const namespace: string = 'GlobalModule'
 
@@ -46,7 +47,7 @@ export default class Drawer extends Vue {
           this.$router.replace('/')
         }, 1000)
 
-        this.$q.notify(this.$t('logout.uscito'))
+        tools.showNotif(this.$q, this.$t('logout.uscito'), {icon: 'exit_to_app'})
       })
   }
 }

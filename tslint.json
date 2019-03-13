@@ -6,6 +6,7 @@
   "jsRules": {},
   "rules": {
     "no-console": false,
+    "object-literal-sort-keys": false,
 //    "no-restricted-syntax": [
 //      "error",
 //      {
@@ -22,11 +23,13 @@
       true,
       "spaces"
     ],
+    "ordered-imports": false,
     "no-duplicate-variable": true,
     "no-eval": true,
     "no-internal-module": false,
     "no-trailing-whitespace": false,
     "no-var-keyword": true,
+    "max-line-length": false,
     "one-line": [
       true,
       "check-open-brace",

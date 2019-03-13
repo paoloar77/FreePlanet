@@ -286,19 +286,29 @@ body.mobile .landing:before {
   padding-left: 20px;
 }
 
+.clgutter{
+  margin-top:20px;
+  padding: 10px;
+}
+
 
 @media (max-width: 718px) {
   .landing__hero {
     text-align: center
   }
   .landing__header {
-    height: 9vh
+    height: 7vh
+  }
+  .clgutter{
+    margin-top: 0px;
+    padding: 0px;
   }
   .landing__hero .text-h1 {
     font-size: 3rem;
     line-height: 3.05rem;
     margin-bottom: 24px
   }
+
   .landing > section.padding {
     padding: 40px 16px
     //padding-bottom: 90px

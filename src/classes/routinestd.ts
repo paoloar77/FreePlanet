@@ -12,10 +12,8 @@ export async function askConfirm($q: any, mytitle, mytext, ok, cancel) {
       title: mytitle
     }).then((ris) => {
       return true
-      // this.$q.notify('Agreed!')
     }).catch(() => {
       return false
-      // this.$q.notify('Disagreed...')
     })
   } catch (e) {
     return false

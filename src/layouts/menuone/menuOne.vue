@@ -8,15 +8,15 @@
                 <div v-for="item in parent.routes">
                     <div v-if="item.routes2">
                         <q-expansion-item
-                                :header-inset-level="1"
-                                :content-inset-level="1"
+                                :header-inset-level="0.5"
+                                :content-inset-level="0.5"
                                 :label="$t(item.name)"
                                 :icon="item.materialIcon"
                                 class="titleSubMenu"
                         >
 
                             <q-expansion-item v-for="(child2, index) in item.routes2" :to="child2.route" :key="index"
-                                              :header-inset-level="1.1"
+                                              :header-inset-level="0.5"
                                               :duration="300"
                                               expand-icon="map"
                                               :active="child2.label === 'Outbox'"

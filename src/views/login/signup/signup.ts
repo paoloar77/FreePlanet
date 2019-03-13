@@ -88,11 +88,6 @@ export default class Signup extends Vue {
     return process.env
   }
 
-  showNotif(params: any) {
-    this.$q.notify(params)
-  }
-
-
   public errorMsg(cosa: string, item: any) {
     try {
       if (!item.$error) return ''
@@ -126,19 +121,19 @@ export default class Signup extends Vue {
   checkErrors(riscode: number) {
     console.log('checkErrors', riscode)
     if (riscode === tools.DUPLICATE_EMAIL_ID) {
-      this.showNotif(this.$t('reg.err.duplicate_email'))
+      tools.showNotif(this.$q, this.$t('reg.err.duplicate_email'))
     } else if (riscode === tools.DUPLICATE_USERNAME_ID) {
-      this.showNotif(this.$t('reg.err.duplicate_username'))
+      tools.showNotif(this.$q, this.$t('reg.err.duplicate_username'))
     } else if (riscode === tools.ERR_SERVERFETCH) {
-      this.showNotif(this.$t('fetch.errore_server'))
+      tools.showNotif(this.$q, this.$t('fetch.errore_server'))
     } else if (riscode === tools.ERR_GENERICO) {
       let msg = this.$t('fetch.errore_generico') + UserStore.mutations.getMsgError(riscode)
-      this.showNotif(msg)
+      tools.showNotif(this.$q, msg)
     } else if (riscode === tools.OK) {
       this.$router.push('/signin')
-      this.showNotif({type: 'warning', textColor: 'black', message: this.$t('components.authentication.email_verification.link_sent')})
+      tools.showNotif(this.$q, this.$t('components.authentication.email_verification.link_sent'), {color: 'warning', textColor: 'black'})
     } else {
-      this.showNotif('Errore num ' + riscode)
+      tools.showNotif(this.$q, 'Errore num ' + riscode)
     }
 
 
@@ -152,12 +147,12 @@ export default class Signup extends Vue {
     this.duplicate_username = false
 
     if (!this.signup.terms) {
-      this.showNotif(this.$t('reg.err.terms'))
+      tools.showNotif(this.$q, this.$t('reg.err.terms'))
       return
     }
 
     if (this.$v.signup.$error) {
-      this.showNotif(this.$t('reg.err.errore_generico'))
+      tools.showNotif(this.$q, this.$t('reg.err.errore_generico'))
       return
     }
 
