@@ -169,13 +169,20 @@ const messages = {
         email: 'inserire una email valida',
         errore_generico: 'Si prega di compilare correttamente i campi',
         atleast: 'dev\'essere lungo almeno di',
-        complexity: 'deve contenere almeno 1 carattere minuscolo, 1 maiuscola e 1 cifra',
+        complexity: 'deve contenere almeno 1 minuscola, 1 maiuscola e 1 cifra',
         notmore: 'non dev\'essere lungo più di',
         char: 'caratteri',
         terms: 'Devi accettare le condizioni, per continuare.',
         duplicate_email: 'l\'Email è già stata registrata',
         duplicate_username: 'L\'Username è stato già utilizzato',
         sameaspassword: 'Le password devono essere identiche',
+      },
+      tips: {
+        email: 'inserisci la tua email',
+        username: 'username lunga almeno 6 caratteri',
+        password: 'deve contenere 1 minuscola, 1 maiuscola e 1 cifra',
+        repeatpassword: 'ripetere la password',
+
       }
     },
     login: {

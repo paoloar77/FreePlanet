@@ -9,12 +9,11 @@
 
             <!--Prova URL :  {{env('PROVA_PAOLO')}}-->
             <form>
-                <div class="q-gutter-md">
+                <div class="q-gutter-xs">
 
                     <q-input
                             v-model="signin.username"
                             rounded outlined
-                            autocomplete="username"
                             @blur="$v.signin.username.$touch"
                             :error="$v.signin.username.$error"
                             :error-message="`${errorMsg('username', $v.signin.username)}`"
