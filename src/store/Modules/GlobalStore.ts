@@ -160,7 +160,7 @@ namespace Getters {
             routes: [
               { route: '/', faIcon: 'fa fa-home', materialIcon: 'home', name: 'pages.home' },
               {
-                route: '/todo', faIcon: 'fa fa-list-alt', materialIcon: 'todo', name: 'pages.Todo',
+                route: '/todo', faIcon: 'fa fa-list-alt', materialIcon: 'format_list_numbered', name: 'pages.Todo',
                 routes2: listatodo
               },
               { route: '/category', faIcon: 'fa fa-list-alt', materialIcon: 'category', name: 'pages.Category' }

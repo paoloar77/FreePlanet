@@ -227,7 +227,7 @@ export default class Header extends Vue {
 
     console.log('this.$q.i18n=', this.$q.i18n, 'this.$q.getLocale()=', this.$q.lang.isoName)
     const my = this.getLangAtt()
-    tools.showNotif(this.$q, 'prima: ' + String(my))
+    // tools.showNotif(this.$q, 'prima: ' + String(my))
 
     let mylang = tools.getItemLS(tools.localStorage.lang)
     if (mylang === '') {

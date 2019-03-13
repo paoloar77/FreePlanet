@@ -185,7 +185,7 @@ module.exports = function (ctx) {
       iconSet: 'fontawesome-v5',
       lang: 'it', // Quasar language
     },
-    animations: [],
+    animations: 'all',
     ssr: {
       pwa: {
         runtimeCaching: [

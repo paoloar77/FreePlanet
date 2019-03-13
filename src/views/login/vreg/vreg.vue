@@ -1,30 +1,37 @@
 <template>
     <q-page padding class="vreg">
-        <div class="mypanel">
-            <q-banner color="primary q-title" style="text-align: center;">
+        <div class="q-pa-md q-gutter-sm">
+            <q-banner
+                    rounded
+                    class="bg-primary text-white"
+                    color="primary q-title"
+                    style="text-align: center;">
                 {{ $t('reg.title_verif_reg')}}
             </q-banner>
             <br>
 
             <transition
-                    enter-active-class="animated flipInX"
-                    leave-active-class="animated flipOutX"
+                    enter-active-class="animated fadeIn"
+                    leave-active-class="animated fadeOut"
                     appear
+
             >
-            <span>
                 <q-banner
+                        rounded
+                        class="bg-warning text-black"
+                        style="text-align: center;"
                         v-if="giaverificato"
-                        type="warning"
                 >
-                    {{ myrisultato}}
+                    <span class="mybanner">{{ myrisultato}}</span>
                 </q-banner>
                 <q-banner
+                        class="bg-positive text-white"
+                        style="text-align: center;"
+                        rounded
                         v-if="verificatook"
-                        type="positive"
                 >
-                    {{ myrisultato}}
+                    <span class="mybanner">{{ myrisultato}}</span>
                 </q-banner>
-            </span>
             </transition>
 
 
