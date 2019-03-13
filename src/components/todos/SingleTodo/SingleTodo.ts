@@ -22,7 +22,7 @@ export default class SingleTodo extends Vue {
   public classCompleted: string = ''
   public classDescr: string = ''
   public classDescrEdit: string = ''
-  public classExpiring: string = ''
+  public classExpiring: string = 'flex-item data-item shadow-1'
   public classExpiringEx: string = ''
   public iconPriority: string = ''
   public popover: boolean = false
@@ -65,7 +65,10 @@ export default class SingleTodo extends Vue {
   }
 
   @Watch('itemtodo.progress') public valueChanged6() {
+    console.log('itemtodo.progress')
     this.updateClasses()
+
+    console.log('this.percentageProgress', this.percentageProgress, 'this.itemtodo.progress', this.itemtodo.progress)
   }
 
 /*
@@ -102,6 +105,9 @@ export default class SingleTodo extends Vue {
       this.classDescr += ' titleLista-item'
       this.classDescrEdit += ' titleLista-item'
     }
+
+    if (this.itemtodo.progress > 100)
+      this.itemtodo.progress = 100
 
     this.classExpiring = 'flex-item data-item shadow-1'
     this.classExpiringEx = ''
@@ -360,6 +366,14 @@ export default class SingleTodo extends Vue {
     this.inEdit = false
     // this.precDescr = this.itemtodo.descr
     this.updateClasses()
+  }
+
+  public aggiornaProgress(value, initialval){
+    if (value !== initialval) {
+      this.itemtodo.progress = value
+      this.updatedata('progress')
+      this.deselectAndExitEdit()
+    }
   }
 
   public setCompleted() {

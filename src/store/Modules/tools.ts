@@ -1,8 +1,8 @@
-import { ITodo } from '@src/model'
-import { costanti } from './costanti'
-import globalroutines from './../../globalroutines/index'
-import { Todos, UserStore } from '@store'
 import Api from '@api'
+import { ITodo } from '@src/model'
+import { Todos, UserStore } from '@store'
+import globalroutines from './../../globalroutines/index'
+import { costanti } from './costanti'
 
 export const tools = {
   EMPTY: 0,
@@ -53,12 +53,11 @@ export const tools = {
     COMPLETED: 110,
     PROGRESS_BAR: 120,
     PRIORITY: 130,
-    SHOW_TASK: 150,
+    SHOW_TASK: 150
   },
 
-
   selectPriority: {
-    'it': [
+    it: [
       {
         id: 1,
         label: 'Alta',
@@ -77,7 +76,7 @@ export const tools = {
         value: 0,
         icon: 'expand_more'
       }],
-    'es': [
+    es: [
       {
         id: 1,
         label: 'Alta',
@@ -96,7 +95,7 @@ export const tools = {
         value: 0,
         icon: 'expand_more'
       }],
-    'enUs': [
+    enUs: [
       {
         id: 1,
         label: 'High',
@@ -115,7 +114,7 @@ export const tools = {
         value: 0,
         icon: 'expand_more'
       }],
-    'de': [
+    de: [
       {
         id: 1,
         label: 'High',
@@ -135,13 +134,12 @@ export const tools = {
         icon: 'expand_more'
       }]
 
-
   },
 
   INDEX_MENU_DELETE: 4,
 
   menuPopupTodo: {
-    'it': [
+    it: [
       {
         id: 10,
         label: '',
@@ -178,7 +176,7 @@ export const tools = {
         checked: false
       }
     ],
-    'es': [
+    es: [
       {
         id: 10,
         label: '',
@@ -215,7 +213,7 @@ export const tools = {
         checked: false
       }
     ],
-    'enUs': [
+    enUs: [
       {
         id: 10,
         label: '',
@@ -255,34 +253,34 @@ export const tools = {
   },
 
   menuPopupConfigTodo: {
-    'it': [
+    it: [
       {
         id: 10,
         label: 'Mostra Task',
         value: 150,  // SHOW_TASK
-        icon: 'rowing',
-      },
+        icon: 'rowing'
+      }
     ],
-    'es': [
+    es: [
       {
         id: 10,
         label: 'Mostrar Tareas',
         value: 150,
-        icon: 'rowing',
-      },
+        icon: 'rowing'
+      }
     ],
-    'enUs': [
+    enUs: [
       {
         id: 10,
         label: 'Show Task',
         value: 150,
-        icon: 'rowing',
-      },
+        icon: 'rowing'
+      }
     ]
   },
 
   listOptionShowTask: {
-    'it': [
+    it: [
       {
         id: 10,
         label: 'Mostra gli ultimi N completati',
@@ -305,7 +303,7 @@ export const tools = {
         checked: true
       }
     ],
-    'es': [
+    es: [
       {
         id: 10,
         label: 'Mostrar los ultimos N completados',
@@ -328,7 +326,7 @@ export const tools = {
         checked: true
       }
     ],
-    'enUs': [
+    enUs: [
       {
         id: 10,
         label: 'Show last N Completed',
@@ -359,15 +357,17 @@ export const tools = {
 
   getItemLS(item) {
     let ris = localStorage.getItem(item)
-    if ((ris == null) || (ris === '') || (ris === 'null'))
+    if ((ris == null) || (ris === '') || (ris === 'null')) {
       ris = ''
+    }
 
     return ris
   },
 
   notifyarraychanged(array) {
-    if (array.length > 0)
+    if (array.length > 0) {
       array.splice(array.length - 1, 1, array[array.length - 1])
+    }
   },
 
   existArr(x) {
@@ -375,9 +375,9 @@ export const tools = {
   },
 
   json2array(json) {
-    let result = []
-    let keys = Object.keys(json)
-    keys.forEach(function (key) {
+    const result = []
+    const keys = Object.keys(json)
+    keys.forEach(function(key) {
       result.push(json[key])
     })
     return result
@@ -395,21 +395,21 @@ export const tools = {
 
     if ('serviceWorker' in navigator) {
       return await navigator.serviceWorker.ready
-        .then(function (sw) {
+        .then(function(sw) {
           // console.log('----------------------      navigator.serviceWorker.ready')
 
           return globalroutines(null, 'write', table, item, id)
-            .then(function (id) {
+            .then(function(id) {
               // console.log('id', id)
               const sep = '|'
 
-              let multiparams = cmdSw + sep + table + sep + method + sep + UserStore.state.x_auth_token + sep + UserStore.state.lang
-              let mymsgkey = {
+              const multiparams = cmdSw + sep + table + sep + method + sep + UserStore.state.x_auth_token + sep + UserStore.state.lang
+              const mymsgkey = {
                 _id: multiparams,
                 value: multiparams
               }
               return globalroutines(null, 'write', 'swmsg', mymsgkey, multiparams)
-                .then(ris => {
+                .then((ris) => {
                   // if ('SyncManager' in window) {
                   //   console.log('   SENDING... sw.sync.register', multiparams)
                   //   return sw.sync.register(multiparams)
@@ -418,14 +418,14 @@ export const tools = {
                   return Api.syncAlternative(multiparams)
                   // }
                 })
-                .then(function () {
+                .then(function() {
                   let data = null
                   if (msg !== '') {
                     data = { message: msg, position: 'bottom', timeout: 3000 }
                   }
                   return data
                 })
-                .catch(function (err) {
+                .catch(function(err) {
                   console.error('Errore in globalroutines', table, err)
                 })
             })
@@ -433,7 +433,5 @@ export const tools = {
     }
 
   }
-
-
 
 }

@@ -11,7 +11,8 @@
   cursor: pointer;
 }
 
-.menuInputProgress > div:nth-child(2) > div > input {
+.menuInputProgress > div > div > div > input {
   min-width: 30px;
+  max-width: 30px;
   width: 30px;
 }

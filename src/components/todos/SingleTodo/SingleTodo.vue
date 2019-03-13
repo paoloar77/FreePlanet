@@ -18,6 +18,8 @@
         <div class="flex-item donotdrag divdescrTot">
             <q-input v-if="sel && !itemtodo.completed" hide-underline type="textarea" ref="inputdescr"
                      v-model.trim="precDescr"
+                     autogrow
+                     dense
                      :class="classDescrEdit" :max-height="100"
                      @keydown="keyDownArea" v-on:keydown.esc="exitEdit" @blur="exitEdit(true)" @click="editTodo()"/>
 
@@ -37,7 +39,7 @@
         <!--<q-field>{{ itemtodo.descr }}</q-field>-->
         <!--</div>-->
 
-        <div v-if="isTodo() && (percentageProgress > 0) " class="flex-item progress-item shadow-1">
+        <div v-if="isTodo() && (itemtodo.progress > 0) " class="flex-item progress-item shadow-1">
             <q-linear-progress
                     stripe
                     :percentage="percentageProgress"
@@ -47,8 +49,11 @@
             </q-linear-progress>
             <div :class="percProgress">
                 {{percentageProgress}}%
-                <q-popup-edit v-model="itemtodo.progress" title="Progress" buttons class="editProgress">
-                    <q-input type="number" v-model="itemtodo.progress" :max="100" :min="0"/>
+                <q-popup-edit v-model="percentageProgress" title="Progress" buttons class="editProgress"
+                              @change="val => { model = val }"
+                              @save="aggiornaProgress"
+                >
+                    <q-input dense autofocus type="number" v-model="percentageProgress" :max="100" :min="0"/>
                 </q-popup-edit>
 
             </div>
@@ -57,16 +62,24 @@
 
         <div v-if="itemtodo.enableExpiring" :class="classExpiring">
             {{getstrDate(itemtodo.expiring_at)}}
-            <q-popup-edit v-model="itemtodo.expiring_at" title="Edit" buttons class="">
-                <q-input
-                        filled
-                        v-model="itemtodo.expiring_at"
-                        type="date"
-                        class="myexpired"
-                        format="DD/MM/YY"
-                        @change="val => { model = val }">
-                </q-input>
-            </q-popup-edit>
+            <q-icon name="event" class="cursor-pointer">
+                <q-popup-proxy>
+                    <q-date v-model="itemtodo.expiring_at" today-btn/>
+                </q-popup-proxy>
+            </q-icon>
+            <!--<q-icon name="event" class="cursor-pointer" />-->
+            <!--<q-popup-edit v-model="itemtodo.expiring_at"-->
+            <!--title="Edit"-->
+            <!--buttons class="">-->
+            <!--<q-input-->
+            <!--filled-->
+            <!--v-model="itemtodo.expiring_at"-->
+            <!--type="date"-->
+            <!--class="myexpired"-->
+            <!--format="DD/MM/YYYY"-->
+            <!--&gt;-->
+            <!--</q-input>-->
+            <!--</q-popup-edit>-->
         </div>
         <div v-if="isTodo()" class="flex-item pos-item " @mousedown="clickRiga">
             <q-btn push

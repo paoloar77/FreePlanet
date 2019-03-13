@@ -95,21 +95,19 @@ const messages = {
         descr: '<ul class="mylist" style="padding-left: 20px;">' +
           '<li><strong>Condividendo</strong> il progetto a Gruppi, Comunità, Associazioni No-profit, G.A.S.</li>' +
           '<li>Rispondendo attivamente ai <strong>Sondaggi Popolari</strong> e lasciando <strong>Feedback</strong></li>' +
-          '<li>Effettuando piccole <strong>donazioni</strong> (<strong>anche 1€</strong>).<br>' +
-          'Il ricavato, tolti i costi, verrá ripartito al 50% per il lavoro svolto, ' +
-          'l\'altro per <strong>sostenere Progetti Sociali</strong> votati dalle persone stesse</li>' +
+          '<li>Effettuando piccole <strong>donazioni</strong> (<strong>anche 1€</strong>) per le spese di gestione dei Server.<br>' +
           '</ul>',
       },
       multiplatform: {
         title: 'Multi-piattaforma',
-        descr: 'E\' Compatibile con Google Chrome, Firefox, Safari, iOS, Android. La stessa Applicazione ha le stesse funzionalitá sia sul cellulare che sul PC. ' +
+        descr: 'E\' Compatibile con Google Chrome, Firefox, Safari, iOS, Android e PC. L\'Applicazione s\'installa facilmente, senza passare dallo store. ' +
           'basta condividere il nome del sito <strong>www.freeplanet.app</strong>',
       },
       free: {
         title: 'Gratuita, Open Source e Niente Pubblicità',
         descr: 'Vedo un <strong>futuro</strong> dove non si utilizzerà più denaro. Dove le persone si <strong>aiuteranno</strong> a vicenda e non avranno bisogno di "possedere" cose, ma le <strong>condivideranno</strong> con gli altri.<br>' +
-          'Questa App <strong>non è in vendita</strong>, non ha scopi commerciali, <strong>non ha prezzo</strong> ed appartiene solo al <strong>Popolo</strong>. A me il compito di gestirla e proteggerla. ' +
-          'Sono certo che arriveranno solo i <strong>contributi necessari</strong> per sostenerla. Grazie a Tutti per il sostegno. '
+          'Questa App <strong>non è in vendita</strong>, non ha scopi commerciali, <strong>non ha prezzo</strong> ed appartiene al <strong>Popolo del Nuovo Mondo</strong>. A me il compito di gestirla e proteggerla. ' +
+          'Verranno accettate solo donazioni Libere di privati ed Associazioni no-profit, in linea con i Principi, che serviranno per coprire le spese. <strong>Grazie a Tutti per il sostegno</strong>. '
       },
     },
     pages: {
@@ -205,7 +203,7 @@ const messages = {
     },
     todo: {
       titleprioritymenu: 'Priorità:',
-      inserttop: 'Inserisci il Task in alto',
+      inserttop: 'Inserisci il Task in cima',
       insertbottom: 'Inserisci il Task in basso',
       edit: 'Descrizione Task:',
       completed: 'Ultimi Completati',

@@ -1,12 +1,11 @@
-import menuOne from './menuOne.vue'
+import menuOne from '../menuone/menuOne.vue'
 
-import Vue from 'vue'
-import { Component, Watch, Prop } from 'vue-property-decorator'
-import { Store } from 'vuex'
 import { UserStore } from '@modules'
 import { GlobalStore } from '@modules'
-import { ITodoList } from '../../model'
+import Vue from 'vue'
+import { Component, Prop } from 'vue-property-decorator'
 
+const namespace: string = 'GlobalModule'
 
 @Component({
   components: {
@@ -16,81 +15,9 @@ import { ITodoList } from '../../model'
 
 export default class Drawer extends Vue {
   public $q
-  $t: any
-  public arrlista = GlobalStore.state.listatodo
-  photo = ''
-  user = null
-  links
-
-  created() {
-    let listatodo = []
-
-    this.arrlista.forEach((elem: ITodoList) => {
-      let item = {
-        route: '/todo/' + elem.namecat,
-        faIcon: 'fa fa-list-alt',
-        materialIcon: 'todo',
-        name: 'pages.' + elem.description
-      }
-      listatodo.push(item)
-
-    })
-
-    if (UserStore.state.isAdmin) {
-      this.links = {
-        Dashboard: {
-          routes: [
-            { route: '/', faIcon: 'fa fa-home', materialIcon: 'home', name: 'pages.home' },
-            {
-              route: '/todo', faIcon: 'fa fa-list-alt', materialIcon: 'todo', name: 'pages.Todo',
-              routes2: listatodo
-            },
-            { route: '/category', faIcon: 'fa fa-list-alt', materialIcon: 'category', name: 'pages.Category' },
-            // { route: '/signup', faIcon: 'fa fa-registered', materialIcon: 'home', name: 'pages.SignUp' },
-            { route: '/admin/cfgserv', faIcon: 'fa fa-database', materialIcon: 'admin', name: 'pages.Admin' },
-            { route: '/admin/testp1/par1', faIcon: 'fa fa-database', materialIcon: 'admin', name: 'pages.Test1' },
-            { route: '/admin/testp1/par2', faIcon: 'fa fa-database', materialIcon: 'admin', name: 'pages.Test2' },
-            // { route: '/signin', faIcon: 'fa fa-anchor', materialIcon: 'home', name: 'pages.SignIn' },
-            /* {route: '/vreg?idlink=aaa', faIcon: 'fa fa-login', materialIcon: 'login', name: 'pages.vreg'},*/
-          ],
-          show: true
-        }
-      }
-    } else {
-      // PRODUCTION USER:
-      if (process.env.PROD) {
-        this.links = {
-          Dashboard: {
-            routes: [
-              { route: '/', faIcon: 'fa fa-home', materialIcon: 'home', name: 'pages.home' },
-            ],
-            show: true,
-          }
-        }
-      } else {
-        // SERVER TEST
-        this.links = {
-          Dashboard: {
-            routes: [
-              { route: '/', faIcon: 'fa fa-home', materialIcon: 'home', name: 'pages.home' },
-              {
-                route: '/todo', faIcon: 'fa fa-list-alt', materialIcon: 'todo', name: 'pages.Todo',
-                routes2: listatodo
-              },
-              { route: '/category', faIcon: 'fa fa-list-alt', materialIcon: 'category', name: 'pages.Category' }
-              // { route: '/signup', faIcon: 'fa fa-registered', materialIcon: 'home', name: 'pages.SignUp' },
-              // { route: '/signin', faIcon: 'fa fa-anchor', materialIcon: 'home', name: 'pages.SignIn' },
-              /* {route: '/vreg?idlink=aaa', faIcon: 'fa fa-login', materialIcon: 'login', name: 'pages.vreg'},*/
-            ],
-            show: true,
-          }
-        }
-
-      }
-    }
-
-
-  }
+  public $t: any
+  public photo = ''
+  public user = null
 
 
   get MenuCollapse() {
@@ -110,7 +37,7 @@ export default class Drawer extends Vue {
     return UserStore.state.email
   }
 
-  logoutHandler() {
+  public logoutHandler() {
     UserStore.actions.logout()
       .then(() => {
         this.$router.replace('/logout')
@@ -123,4 +50,3 @@ export default class Drawer extends Vue {
       })
   }
 }
-

@@ -54,6 +54,7 @@ export interface IGlobalState {
   testp1: ITestp1
   connData: IConnData
   posts: IPost[]
+  menulinks: {}
   listatodo: ITodoList[]
   arrConfig: IConfig[]
 }

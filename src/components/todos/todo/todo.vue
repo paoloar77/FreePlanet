@@ -35,9 +35,14 @@
                 </div>
             </div>
 
-            <q-input ref="insertTask" v-model="todotop" inverted :float-label="$t('todo.inserttop')"
+            <q-input ref="insertTask" color="blue-12" v-model="todotop" :label="$t('todo.inserttop')"
+                     style="margin-left: 6px;"
                      :after="[{icon: 'arrow_forward', content: true, handler () {}}]"
-                     v-on:keyup.enter="insertTodo(true)"/>
+                     v-on:keyup.enter="insertTodo(true)">
+                <template v-slot:prepend>
+                    <q-icon name="add" />
+                </template>
+            </q-input>
 
             <div style="display: none">{{ prior = 0, priorcomplet = false }}</div>
             <div>
@@ -87,8 +92,10 @@
             </div>
 
 
-            <q-input v-if="TodosCount > 0" ref="insertTaskBottom" v-model="todobottom" inverted
-                     :float-label="$t('todo.insertbottom')"
+            <q-input v-if="TodosCount > 0" ref="insertTaskBottom" v-model="todobottom"
+                     style="margin-left: 6px;"
+                     color="blue-12"
+                     :label="$t('todo.insertbottom')"
                      :after="[{icon: 'arrow_forward', content: true, handler () {}}]"
                      v-on:keyup.enter="insertTodo(false)"/>
 
@@ -102,8 +109,8 @@
             <!--&lt;!&ndash;<q-btn class="mybtn" round color="" icon="list" @click="reload_fromServer++">Reload</q-btn>&ndash;&gt;-->
             <!--</div>-->
 
-                <!--
-                <!--&lt;!&ndash;<q-input v-model="testPao" float-label="testPao"/>&ndash;&gt;-->
+            <!--
+            <!--&lt;!&ndash;<q-input v-model="testPao" float-label="testPao"/>&ndash;&gt;-->
             <!--<q-input v-model="todos_changed" float-label="todos_changed"/>-->
 
             <!--<q-input v-model="reload_fromServer" float-label="reload_fromServer"/>-->

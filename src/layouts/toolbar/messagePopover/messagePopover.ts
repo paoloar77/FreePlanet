@@ -11,7 +11,7 @@ import './messagePopover.scss'
 export default class MessagePopover extends Vue {
   posts: IPost[] = []
 
-  created() {
+  public created() {
     if (GlobalStore.state.posts.length < 1) {
       this.requestPosts()
     }

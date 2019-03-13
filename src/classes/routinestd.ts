@@ -1,10 +1,15 @@
 export async function askConfirm($q: any, mytitle, mytext, ok, cancel) {
   try {
     return await $q.dialog({
-      title: mytitle,
+      cancel: {
+        label: cancel
+      },
       message: mytext,
-      ok: ok,
-      cancel: cancel
+      ok: {
+        label: ok,
+        push: true
+      },
+      title: mytitle
     }).then((ris) => {
       return true
       // this.$q.notify('Agreed!')

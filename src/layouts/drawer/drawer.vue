@@ -18,7 +18,7 @@
         </div>
 
 
-        <menu-one :links="links"></menu-one>
+        <menu-one></menu-one>
 
         <!--<footer>
             <small>- Small</small>
