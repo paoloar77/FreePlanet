@@ -1,8 +1,6 @@
 <template>
     <div class="list no-border platform-delimiter light-paragraph">
-        <q-icon name="action"/>
-
-        <q-list bordered class="rounded-borders text-primary">
+        <q-list class="rounded-borders text-primary">
             <template v-for="(parent, index) in getmenu">
                 <div class="q-list-header">{{replaceUnderlineToSpace(index)}}</div>
                 <div v-for="item in parent.routes">
@@ -31,7 +29,6 @@
                             <div v-show="true">
                                 <q-item
                                         clickable
-                                        v-ripple
                                         exact
                                         :to="item.route"
                                         active-class="my-menu-link">

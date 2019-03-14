@@ -2,7 +2,7 @@
     <div>
         <q-list separator no-border class="todo-menu">
             <div v-for="field in menuPopupTodo" :key="field.value">
-                <q-item clickable v-ripple v-if="(field.value !== 130) && (field.value !== 100)" :icon="field.icon"
+                <q-item clickable v-if="(field.value !== 130) && (field.value !== 100)" :icon="field.icon"
                         @click.native="clickMenu(field.value)">
                     <q-item-section avatar>
                         <q-icon :name="field.icon"/>

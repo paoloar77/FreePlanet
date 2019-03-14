@@ -5,19 +5,20 @@ import { TimelineLite, Back } from 'gsap'
 
 import $ from 'jquery'
 import Timeout = NodeJS.Timeout
+import { tools } from "@src/store/Modules/tools"
 
 @Component({
 
 })
 export default class Logo extends Vue {
-  logoimg: string = ''
+  public logoimg: string = ''
 
-  created() {
-    this.logoimg = 'statics/images/' + process.env.LOGO_REG
+  public created() {
+    this.logoimg = '../../' + tools.getimglogo()
     this.animate()
   }
 
-  animate () {
+  public animate() {
     const timeline = new TimelineLite()
 
     /*
@@ -31,14 +32,12 @@ export default class Logo extends Vue {
       mysmile.addClass('smile_hide')
     }, 1000)
 
-
     setTimeout(() => {
       mysmile.addClass('smilevisible')
       mysmile.removeClass('smile_hide')
     }, 10000)
 
     */
-
 
     /*
     timeline.to('#smile', 5, {

@@ -230,6 +230,11 @@ $heightdescr: 20px;
   line-height: $heightitem;
   padding-left: 2px;
   padding-right: 0px;
+
+  @media (max-width: 600px) {
+    display: none;
+  }
+
   //height: $heightBtn;
   //line-height: $heightBtn;
 }
@@ -264,6 +269,8 @@ $heightdescr: 20px;
   text-align: left;
   color: blue !important;
   overflow: hidden;
+
+  align-items: center;
 
   vertical-align: middle;
   line-height: 120%;

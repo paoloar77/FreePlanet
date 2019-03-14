@@ -31,6 +31,8 @@ export default class Header extends Vue {
   public clCloudDownload: string = ''
   public clCloudUp_Indexeddb: string = ''
   public clCloudDown_Indexeddb: string = 'clIndexeddbsend'
+  public right: boolean = false
+  public photo = ''
 
   public selectOpLang = [
     { label: 'English', icon: 'fa-flag-us', value: 'enUs', image: '../statics/images/gb.png', short: 'EN' },
@@ -41,6 +43,10 @@ export default class Header extends Vue {
 
   get conn_changed() {
     return GlobalStore.state.stateConnection
+  }
+
+  get isonline() {
+    return GlobalStore.state.stateConnection === 'online'
   }
 
   get isAdmin() {
@@ -97,7 +103,7 @@ export default class Header extends Vue {
   }
 
   set lang(lang) {
-    console.log('set lang(' + this.$i18n.locale)
+    console.log('set lang', this.$i18n.locale)
     this.$i18n.locale = this.snakeToCamel(lang)
     // tools.showNotif(this.$q, 'IMPOSTA LANG= ' + this.$i18n.locale)
     // console.log('IMPOSTA LANG= ' + this.$i18n.locale)
@@ -106,15 +112,9 @@ export default class Header extends Vue {
 
     let mylangtopass = lang
 
+    mylangtopass = tools.checkLangPassed(mylangtopass)
+
     this.setshortlang(mylangtopass)
-
-    if (mylangtopass === 'enUs') {
-      mylangtopass = 'en-us'
-    }
-
-    if (mylangtopass === 'es') {
-      mylangtopass = 'es'
-    }
 
     this.setLangAtt(mylangtopass)
   }
@@ -148,7 +148,7 @@ export default class Header extends Vue {
 
   @Watch('conn_changed', { immediate: true, deep: true })
   public changeconn_changed(value: string, oldValue: string) {
-    if (value != oldValue) {
+    if (value !== oldValue) {
 
       // console.log('SSSSSSSS: ', value, oldValue)
 
@@ -167,7 +167,7 @@ export default class Header extends Vue {
 
   public RefreshApp() {
     // Unregister Service Worker
-    navigator.serviceWorker.getRegistrations().then(function(registrations) {
+    navigator.serviceWorker.getRegistrations().then((registrations) => {
       for (const registration of registrations) {
         registration.unregister()
       }
@@ -208,13 +208,13 @@ export default class Header extends Vue {
 
   public setLangAtt(mylang) {
     console.log('MYLL=', mylang)
-    console.log('PRIMA this.$q.lang.isoName', this.$q.lang.isoName)
+    // console.log('PRIMA this.$q.lang.isoName', this.$q.lang.isoName)
 
     // dynamic import, so loading on demand only
     import(`quasar/lang/${mylang}`).then((lang) => {
       Quasar.lang.set(lang.default)
       import(`../../statics/i18n`).then(() => {
-        console.log('MY LANG DOPO=', this.$q.lang.isoName)
+        // console.log('MY LANG DOPO=', this.$q.lang.isoName)
       })
     })
 
@@ -225,36 +225,23 @@ export default class Header extends Vue {
   public beforeMount() {
     // Estrai la Lang dal Localstorage
 
-    console.log('this.$q.i18n=', this.$q.i18n, 'this.$q.getLocale()=', this.$q.lang.isoName)
-    const my = this.getLangAtt()
+    // console.log('this.$q.i18n=', this.$q.i18n, 'this.$q.getLocale()=', this.$q.lang.isoName)
+    const mybrowserLang = this.getLangAtt()
     // tools.showNotif(this.$q, 'prima: ' + String(my))
 
     let mylang = tools.getItemLS(tools.localStorage.lang)
     if (mylang === '') {
       if (navigator) {
         mylang = navigator.language
-        console.log(`LANG2 NAVIGATOR ${mylang}`)
+        // console.log(`LANG2 NAVIGATOR ${mylang}`)
       } else {
         mylang = this.$q.lang.isoName
       }
 
-      console.log('IMPOSTA LANGMY', mylang)
-    }
-    if (mylang !== '') {
-      if (mylang.toLowerCase() === 'enus') {
-        mylang = 'enUs'
-      }
-      if ((mylang.toLowerCase() === 'es') || (mylang.toLowerCase() === 'es-es')) {
-        mylang = 'es'
-      }
-      if ((mylang.toLowerCase() === 'enus') || (mylang.toLowerCase() === 'en-us')) {
-        mylang = 'enUs'
-      }
+      // console.log('IMPOSTA LANGMY', mylang)
     }
 
-    if (!mylang) {
-      mylang = process.env.LANG_DEFAULT
-    }
+    mylang = tools.checkLangPassed(mylang)
 
     this.setLangAtt(mylang)
     this.setshortlang(mylang)
@@ -269,7 +256,7 @@ export default class Header extends Vue {
     const mythis = this
     // console.log('Event LOAD')
     if (window) {
-      window.addEventListener('load', function() {
+      window.addEventListener('load', () => {
         // console.log('2) ENTERING Event LOAD')
 
         function updateOnlineStatus(event) {
@@ -296,5 +283,39 @@ export default class Header extends Vue {
     return str.replace(/(-\w)/g, (m) => {
       return m[1].toUpperCase()
     })
+  }
+
+  get imglogo() {
+    return '../../' + tools.getimglogo()
+  }
+
+  get MenuCollapse() {
+    return GlobalStore.state.menuCollapse
+    // return true
+  }
+
+  get Username() {
+    return UserStore.state.username
+  }
+
+  get Verificato() {
+    return UserStore.state.verified_email
+  }
+
+  get Email() {
+    return UserStore.state.email
+  }
+
+  public logoutHandler() {
+    UserStore.actions.logout()
+      .then(() => {
+        this.$router.replace('/logout')
+
+        setTimeout(() => {
+          this.$router.replace('/')
+        }, 1000)
+
+        tools.showNotif(this.$q, this.$t('logout.uscito'), {icon: 'exit_to_app'})
+      })
   }
 }

@@ -120,6 +120,7 @@ async function Request(type: string, path: string, payload: any): Promise<Types.
       // console.log('ricevuto=', ricevuto)
       console.log('error.response=', error.response)
     }
+    GlobalStore.mutations.setStateConnection(ricevuto ? 'online' : 'offline')
     let mycode = 0
     if (!ricevuto) {
       mycode = tools.ERR_SERVERFETCH

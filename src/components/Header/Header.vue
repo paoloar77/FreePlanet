@@ -1,28 +1,18 @@
 <template>
     <div>
-
-        <!--
-                <router-link :to="'/'" v-if="$router.currentRoute.meta.backButton">
-                    <button>
-                        <i>arrow_back</i>
-                    </button>
-                </router-link>
-        -->
-        <q-header elevated>
+        <q-header reveal elevated class="bg-primary text-white">
             <q-toolbar
                     color="primary"
                     :glossy="$q.theme === 'mat'"
                     :inverted="$q.theme === 'ios'"
-                    class="toolbar"
-            >
+                    class="toolbar">
 
                 <q-btn
                         flat
                         dense
                         round
                         @click="leftDrawerOpen = !leftDrawerOpen"
-                        aria-label="Menu"
-                >
+                        aria-label="Menu">
                     <q-icon name="menu"/>
                 </q-btn>
 
@@ -39,15 +29,22 @@
                     <!--I'm only rendered on Electron!-->
                 </div>
 
-                <q-btn id="newvers" v-if="isNewVersionAvailable" color="secondary" rounded icon="refresh"
+                <q-btn ripple
+                       size="md"
+                       id="newvers" v-if="isNewVersionAvailable" color="secondary" rounded icon="refresh"
                        class="btnNewVersShow" @click="RefreshApp" :label="$t('notification.newVersionAvailable')"/>
 
 
                 <q-toolbar-title>
+                    <q-avatar>
+                        <img :src="imglogo" height="27">
+                    </q-avatar>
                     {{$t('msg.myAppName')}}
                     <div slot="subtitle">{{$t('msg.myDescriz')}} {{ getAppVersion() }}</div>
                 </q-toolbar-title>
 
+
+<!--
                 <div v-if="isAdmin">
                     <q-btn flat dense round aria-label="">
                         <q-icon :class="clCloudUpload" name="cloud_upload"></q-icon>
@@ -58,8 +55,10 @@
                     </q-btn>
 
                 </div>
+-->
 
                 <q-btn
+                        v-if="!isonline"
                         flat
                         dense
                         round
@@ -102,18 +101,44 @@
                     <label>{{ $t('msg.hello') }}</label> <span v-model="prova"></span> !
                 </div>-->
 
+                <q-btn dense flat round icon="menu" @click="right = !right" />
 
             </q-toolbar>
 
         </q-header>
 
         <q-drawer side="left"
-                         v-model="leftDrawerOpen"
-                         :content-class="['bg-grey-1', 'q-pa-sm']"
-                         :content-style="{padding: '0px'}"
+                  bordered
+                  show-if-above
+                  :breakpoint="500"
+                  v-model="leftDrawerOpen"
+                  :content-class="['bg-grey-1', 'q-pa-sm']"
+                  :content-style="{padding: '0px'}"
         >
             <drawer></drawer>
 
+        </q-drawer>
+
+        <q-drawer v-model="right" side="right" overlay bordered>
+            <div id="profile" v-if="Username">
+                <q-img class="absolute-top" src="https://cdn.quasar-framework.org/img/material.png" style="height: 150px">
+                    <div class="absolute-bottom bg-transparent">
+
+                        <q-avatar class="q-mb-sm">
+                            <img src="../../statics/images/avatar-1.svg">
+                        </q-avatar>
+                        <div class="text-weight-bold">{{ Username }}</div>
+                        <!--<span class="text-white" v-if="Verificato"> {{$t('reg.verificato')}} </span>-->
+                        <!--<span class="text-white background-red" v-else> {{$t('reg.non_verificato')}} </span>-->
+                        <div id="user-actions">
+                            <q-btn round color="primary" icon="person"></q-btn>
+                            <q-btn round color="warning" icon="lock"></q-btn>
+                            <q-btn round color="secondary" icon="exit_to_app" @click='logoutHandler'></q-btn>
+                        </div>
+                    </div>
+                </q-img>
+
+            </div>
         </q-drawer>
     </div>
 </template>

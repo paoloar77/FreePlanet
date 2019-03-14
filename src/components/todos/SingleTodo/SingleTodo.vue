@@ -1,12 +1,5 @@
 <template>
     <div :class="getClassRow()" @click="clickRow">
-        <!--<div v-if="isTodo()" class="flex-item counter-item dragula-container">{{itemtodo.pos}}</div>-->
-        <!--<div v-if="isFirst">-->
-        <!--<q-context-menu ref="contextMenu">-->
-        <!--<SubMenus :menuPopupTodo="menuPopupTodo" :itemtodo="itemtodo" @clickMenu="clickMenu" @setPriority="setPriority"></SubMenus>-->
-        <!--</q-context-menu>-->
-        <!--</div>-->
-
         <div v-if="isTodo()" class="flex-item completed-item donotdrag">
             <q-btn push flat
                    :class="classCompleted"
@@ -19,6 +12,7 @@
             <q-input v-if="sel && !itemtodo.completed" hide-underline type="textarea" ref="inputdescr"
                      v-model.trim="precDescr"
                      autogrow
+                     borderless
                      dense
                      :class="classDescrEdit" :max-height="100"
                      @keydown="keyDownArea" v-on:keydown.esc="exitEdit" @blur="exitEdit(true)" @click="editTodo()"/>

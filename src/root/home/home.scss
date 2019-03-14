@@ -65,7 +65,7 @@ p {
 }
 
 .landing__hero {
-  min-height: 100vh
+  min-height: 50vh
 }
 
 .landing__header {
@@ -146,7 +146,7 @@ h4 {
   opacity: 0.9;
 }
 
-.q-col-gutter-xl {
+.q-col-gutter-sm {
   padding: 50px 50px;
   //margin-left: -48px
 }
@@ -260,12 +260,12 @@ body.mobile .landing:before {
 }
 
 .homep-cover-img-2 {
-  background: #000 url(../../statics/images/mountains.jpg) no-repeat 50% fixed;
+  background: #000 url(../../statics/images/hand_people.jpg) no-repeat 50% fixed;
   //transition: background-image 1s ease-in-out;
 }
 
 .homep-cover-img-3 {
-  background: #000 url(../../statics/images/all_together.jpg) no-repeat 50% fixed;
+  background: #000 url(../../statics/images/cibo_sano.jpg) no-repeat 50% fixed;
   //transition: background-image 1s ease-in-out;
 }
 
@@ -347,7 +347,7 @@ body.mobile .landing:before {
     justify-content: center
   }
 
-  .q-col-gutter-xl {
+  .q-col-gutter-sm {
     padding: 10px 5px;
   }
 

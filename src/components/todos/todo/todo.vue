@@ -10,22 +10,26 @@
                             <q-menu id="popconfig" self="top right">
                                 <q-list link separator no-border class="todo-menu">
                                     <div v-for="field in menuPopupConfigTodo" :key="field.value">
-                                        <q-item :icon="field.icon"
-                                                @click.native="">
-                                            <q-item-section :icon="field.icon"/>
+                                        <q-item clickable>
 
-                                            <q-item-label v-if="showTask(field.value)">
+                                            <q-item-section avatar>
+                                                <q-icon :name="field.icon"/>
+                                            </q-item-section>
 
-                                                <q-select
-                                                        radio
-                                                        color="secondary"
-                                                        :float-label="field.label"
-                                                        v-model="showtype"
-                                                        :options="listOptionShowTask"/>
-                                            </q-item-label>
-                                            <q-item-label v-else>
-                                                <q-item-section label class="item-menu">{{field.label}}</q-item-section>
-                                            </q-item-label>
+                                            <q-item-section>
+                                                <q-item-label v-if="showTask(field.value)">
+
+                                                    <q-select
+                                                            color="secondary"
+                                                            :label="field.label"
+                                                            v-model="showtype"
+                                                            :options="listOptionShowTask"/>
+                                                </q-item-label>
+                                                <q-item-label v-else>
+                                                    <q-item-section label class="item-menu">{{field.label}}
+                                                    </q-item-section>
+                                                </q-item-label>
+                                            </q-item-section>
                                         </q-item>
                                     </div>
                                 </q-list>
@@ -40,7 +44,7 @@
                      :after="[{icon: 'arrow_forward', content: true, handler () {}}]"
                      v-on:keyup.enter="insertTodo(true)">
                 <template v-slot:prepend>
-                    <q-icon name="add" />
+                    <q-icon name="add"/>
                 </template>
             </q-input>
 

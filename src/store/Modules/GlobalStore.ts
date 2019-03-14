@@ -61,7 +61,7 @@ async function getConfig(id) {
 
 async function getstateConnSaved() {
   const config = await getConfig(costanti.CONFIG_ID_CFG)
-  console.log('config', config)
+  // console.log('config', config)
   if (config) {
     if (config.length > 1) {
       const cfgstateconn = config[1]
@@ -219,9 +219,9 @@ namespace Getters {
     },
 
     get isNewVersionAvailable() {
-      console.log('state.cfgServer', state.cfgServer)
+      // console.log('state.cfgServer', state.cfgServer)
       const serversrec = state.cfgServer.find((x) => x.chiave === tools.SERVKEY_VERS)
-      console.log('Record ', serversrec)
+      // console.log('Record ', serversrec)
       if (serversrec) {
         console.log('Vers Server ', serversrec.valore, 'Vers locale:', process.env.APP_VERSION)
         return serversrec.valore !== process.env.APP_VERSION

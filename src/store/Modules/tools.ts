@@ -3,6 +3,7 @@ import { ITodo } from '@src/model'
 import { Todos, UserStore } from '@store'
 import globalroutines from './../../globalroutines/index'
 import { costanti } from './costanti'
+import Quasar from 'quasar'
 
 export interface INotify {
   color?: string | 'primary'
@@ -19,6 +20,8 @@ export const tools = {
   ERR_AUTHENTICATION: -5,
   DUPLICATE_EMAIL_ID: 11000,
   DUPLICATE_USERNAME_ID: 11100,
+
+  arrLangUsed: ['enUs', 'it', 'es'],
 
   LIST_END: '10000000',
   LIST_START: '0',
@@ -383,7 +386,7 @@ export const tools = {
   json2array(json) {
     const result = []
     const keys = Object.keys(json)
-    keys.forEach(function(key) {
+    keys.forEach(function (key) {
       result.push(json[key])
     })
     return result
@@ -401,11 +404,11 @@ export const tools = {
 
     if ('serviceWorker' in navigator) {
       return await navigator.serviceWorker.ready
-        .then(function(sw) {
+        .then(function (sw) {
           // console.log('----------------------      navigator.serviceWorker.ready')
 
           return globalroutines(null, 'write', table, item, id)
-            .then(function(id) {
+            .then(function (id) {
               // console.log('id', id)
               const sep = '|'
 
@@ -424,14 +427,14 @@ export const tools = {
                   return Api.syncAlternative(multiparams)
                   // }
                 })
-                .then(function() {
+                .then(function () {
                   let data = null
                   if (msg !== '') {
                     data = { message: msg, position: 'bottom', timeout: 3000 }
                   }
                   return data
                 })
-                .catch(function(err) {
+                .catch(function (err) {
                   console.error('Errore in globalroutines', table, err)
                 })
             })
@@ -439,7 +442,7 @@ export const tools = {
     }
   },
 
-  showNotif(q: any, msg, data?: INotify | null ) {
+  showNotif(q: any, msg, data?: INotify | null) {
     let myicon = data ? data.icon : 'ion-add'
     if (!myicon)
       myicon = 'ion-add'
@@ -453,6 +456,39 @@ export const tools = {
       color: mycolor,
       timeout: 3000
     })
+  },
+
+  checkLangPassed(mylang) {
+
+    const mybrowserLang = Quasar.lang.isoName
+
+    if (mylang !== '') {
+      if ((mylang.toLowerCase() === 'enus') || (mylang.toLowerCase() === 'en-us')) {
+        mylang = 'enUs'
+      }
+      if ((mylang.toLowerCase() === 'es') || (mylang.toLowerCase() === 'es-es') || (mylang.toLowerCase() === 'eses')) {
+        mylang = 'es'
+      }
+
+      if (!(tools.arrLangUsed.includes(mylang))) {
+        console.log('non incluso ', mylang)
+        mylang = tools.arrLangUsed[0]
+
+        // Metti Inglese come default
+        UserStore.mutations.setlang(mylang)
+      }
+    }
+
+    if (!mylang) {
+      mylang = process.env.LANG_DEFAULT
+    }
+    console.log('mylang calc : ', mylang)
+
+    return mylang
+  },
+
+  getimglogo() {
+    return 'statics/images/' + process.env.LOGO_REG
   }
 
 }

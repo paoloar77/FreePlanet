@@ -171,6 +171,9 @@ module.exports = function (ctx) {
         'QPopupEdit',
         'QCarousel',
         'QCarouselControl',
+        'QPageScroller',
+        'QAvatar',
+        'QImg',
         'QCarouselSlide'
       ],
       directives: [

@@ -5,16 +5,17 @@
                 <div class="landing__hero">
                     <q-carousel
                             animated
-                            :autoplay="7000"
+                            :autoplay="8000"
                             swipeable
                             infinite
+                            navigation
                             transition-next="slide-left"
                             transition-prev="slide-right"
                             v-model="slide"
                             height="100%"
                             width="100%"
                     >
-                        <q-carousel-slide name="first" class="homep-cover-img-1">
+                        <q-carousel-slide name="first" img-src="../../statics/images/cover.jpg">
                             <div class="landing__header"></div>
                             <div class="landing__hero-content row justify-center q-gutter-xs clgutter">
                                 <div class="row">
@@ -101,7 +102,7 @@
                                 <i aria-hidden="true" class="q-icon text-h2 text-white material-icons">expand_more</i>
                             </div>
                         </q-carousel-slide>
-                        <q-carousel-slide name="second" class="homep-cover-img-2">
+                        <q-carousel-slide name="second" img-src="../../statics/images/hand_people.jpg">
                             <div class="landing__header"></div>
                             <div class="landing__hero-content row justify-center q-gutter-xs clgutter">
                                 <div class="row">
@@ -192,7 +193,7 @@
                             <!--<div class="text-subtitle1">Famous City</div>-->
                             <!--</div>-->
                         </q-carousel-slide>
-                        <q-carousel-slide name="third" class="homep-cover-img-3">
+                        <q-carousel-slide name="third" img-src="../../statics/images/cibo_sano.jpg">
                             <div class="landing__header"></div>
                             <div class="landing__hero-content row justify-center q-gutter-xs clgutter">
                                 <div class="row">
@@ -288,7 +289,7 @@
             </section>
 
             <section class="padding bg-white text-grey-10 text-center" v-scroll-reveal.reset>
-                <div class="landing__features row items-start q-col-gutter-xl">
+                <div class="landing__features row items-start q-col-gutter-sm">
                     <div class="col-12 text-center">
                         <div class="feature-item q-mx-md"><img src="statics/images/group-together.jpg"
                                                                class="doc-img"></div>
@@ -300,7 +301,7 @@
                 </div>
             </section>
             <section class="padding bg-primary landing__swirl-bg" v-scroll-reveal.reset>
-                <div class="landing__features row justify-between items-start q-col-gutter-xl">
+                <div class="landing__features row justify-between items-start q-col-gutter-sm">
                     <div class="col-12 col-sm-5">
                         <div class="feature-item"><i aria-hidden="true"
                                                      class="q-icon fas fa-users"> </i><h4>
@@ -328,7 +329,7 @@
                 </div>
             </section>
             <section class="padding bg-indigo-8" v-scroll-reveal.reset>
-                <div class="landing__features row justify-between items-start q-col-gutter-xl">
+                <div class="landing__features row justify-between items-start q-col-gutter-sm">
                     <div class="col-12 col-sm-5">
                         <div class="feature-item"><i aria-hidden="true"
                                                      class="q-icon fas fa-people-carry"> </i><h4>
@@ -396,6 +397,9 @@
                     </div>
 
                 </div>
+                <q-page-scroller position="bottom-right" :scroll-offset="850" :offset="[18, 18]" style="opacity: 0.3">
+                    <q-btn fab icon="keyboard_arrow_up" color="accent" />
+                </q-page-scroller>
             </section>
         </div>
 

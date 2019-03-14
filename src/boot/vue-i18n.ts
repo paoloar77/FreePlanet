@@ -14,27 +14,9 @@ export default ({ app, store, Vue }) => {
     // console.log(`LANG NAVIGATOR ${mylang}`)
   }
 
-  if (mylang === '')
-    mylang = process.env.LANG_DEFAULT;
+  mylang = tools.checkLangPassed(mylang)
 
-  if (mylang.toLowerCase() === 'es-es')
-    mylang = 'es'
-
-  // console.log('MYLANG2=', mylang)
-  // console.log('process.env.LANG_DEFAULT=', process.env.LANG_DEFAULT)
   Vue.config.lang = mylang
-
-  // import(`quasar/lang/${mylang}`).then(lang => {
-  //   console.log(' ... LANGDEFAULT=', lang)
-  //   this.$q.i18n.set(lang.default)
-  //   import(`src/statics/i18n`).then(function () {
-  //   })
-  // })
-
-  // console.log("PLUGINS INIT....");
-
-  // console.log("LANG_DEFAULT: ")
-  // console.log(process.env.LANG_DEFAULT)
 
   // Set i18n instance on app
   app.i18n = new VueI18n({
