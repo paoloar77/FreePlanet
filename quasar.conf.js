@@ -170,6 +170,8 @@ module.exports = function (ctx) {
         'QSlider',
         'QPopupEdit',
         'QCarousel',
+        'QCarouselControl',
+        'QCarouselSlide'
       ],
       directives: [
         'Ripple',

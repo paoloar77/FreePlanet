@@ -25,6 +25,9 @@ p {
 }
 
 .landing {
+}
+
+.landing_background {
   background: #000 url(../../statics/images/cover.jpg) no-repeat 50% fixed;
   background-size: cover
 }
@@ -36,7 +39,7 @@ p {
   -webkit-box-pack: center;
   -ms-flex-pack: center;
   justify-content: center;
-  padding: 0 16px
+  //padding: 0 16px
 }
 
 .landing > section.padding {
@@ -45,7 +48,7 @@ p {
 
 .landing > section > div {
   position: relative;
-  max-width: 1040px;
+  max-width: 1240px;
   width: 100%
 }
 
@@ -91,7 +94,7 @@ p {
   font-size: 64px
 }
 
-h4{
+h4 {
   line-height: 1.5;
   text-shadow: 4px 4px 8px $grayshadow;
 }
@@ -107,10 +110,16 @@ h4{
 }
 
 .landing__footer {
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(65%, rgba(0, 0, 0, .1)), to(#000));
-  background: linear-gradient(180deg, rgba(0, 0, 0, .1) 65%, #000);
+  //background: -webkit-gradient(linear, left top, left bottom, color-stop(65%, rgba(0, 0, 0, .1)), to(#000));
+  background: linear-gradient(180deg, rgba(0, 0, 0, .8) 75%, #FFF);
   padding-top: 72px !important;
   padding-bottom: 72px !important
+}
+
+.icon_contact:hover {
+  color: blue;
+  border-color: white;
+  border-width: 1px;
 }
 
 .landing__footer .doc-link {
@@ -137,12 +146,10 @@ h4{
   opacity: 0.9;
 }
 
-
 .q-col-gutter-xl {
   padding: 50px 50px;
   //margin-left: -48px
 }
-
 
 body.mobile .landing {
   //background: unset
@@ -249,12 +256,17 @@ body.mobile .landing:before {
 
 .homep-cover-img-1 {
   background: #000 url(../../statics/images/cover.jpg) no-repeat 50% fixed;
-  transition: background-image 1s ease-in-out;
+  //transition: background-image 1s ease-in-out;
 }
 
 .homep-cover-img-2 {
+  background: #000 url(../../statics/images/mountains.jpg) no-repeat 50% fixed;
+  //transition: background-image 1s ease-in-out;
+}
+
+.homep-cover-img-3 {
   background: #000 url(../../statics/images/all_together.jpg) no-repeat 50% fixed;
-  transition: background-image 1s ease-in-out;
+  //transition: background-image 1s ease-in-out;
 }
 
 .homep-cover-img.hide-filter:before {
@@ -277,7 +289,7 @@ body.mobile .landing:before {
   color: #e0e0e0
 }
 
-.doc-img{
+.doc-img {
   max-width: 100%;
 }
 
@@ -286,11 +298,10 @@ body.mobile .landing:before {
   padding-left: 20px;
 }
 
-.clgutter{
-  margin-top:20px;
+.clgutter {
+  margin-top: 20px;
   padding: 10px;
 }
-
 
 @media (max-width: 718px) {
   .landing__hero {
@@ -299,7 +310,7 @@ body.mobile .landing:before {
   .landing__header {
     height: 7vh
   }
-  .clgutter{
+  .clgutter {
     margin-top: 0px;
     padding: 0px;
   }
@@ -318,11 +329,10 @@ body.mobile .landing:before {
     margin: 20px 0
   }
 
-  h4{
+  h4 {
     line-height: 1.4;
     text-shadow: 4px 4px 8px $grayshadow;
   }
-
 
   .landing .feature-item {
     text-align: center;
@@ -350,4 +360,11 @@ body.mobile .landing:before {
   .text-subtitle3 {
     font-size: 0.75rem;
   }
+}
+
+.custom-caption {
+  text-align: center;
+  padding: 12px;
+  color: white;
+  background-color: rgba(0, 0, 0, .3);
 }

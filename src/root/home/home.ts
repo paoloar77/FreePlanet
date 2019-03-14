@@ -30,9 +30,11 @@ export default class Home extends Vue {
   public displaycard: string = 'block'
   public svgclass: string = 'svgclass'
   public $t: any
-  public firstClassSection: string = 'landing fade homep-cover-img animate-fade homep-cover-img-1'
+  // public firstClassSection: string = 'landing_background fade homep-cover-img animate-fade homep-cover-img-1'
+  public firstClassSection: string = 'fade homep-cover-img animate-fade homep-cover-img-1'
   public $q
   public polling
+  public slide = 'first'
 
   constructor() {
     super()
@@ -45,7 +47,7 @@ export default class Home extends Vue {
     const mytime = 10000
     this.polling = setInterval(() => {
 
-      this.firstClassSection = 'landing fade homep-cover-img ' + (primo ? 'homep-cover-img-2' : 'homep-cover-img-1')
+      this.firstClassSection = 'landing_background fade homep-cover-img ' + (primo ? 'homep-cover-img-2' : 'homep-cover-img-1')
       primo = !primo
 
       // console.log('this.firstClassSection', this.firstClassSection)

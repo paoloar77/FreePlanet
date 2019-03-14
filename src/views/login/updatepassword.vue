@@ -2,8 +2,11 @@
     <div class="mypanel">
 
         <div v-if="!emailinviata">
-            <q-banner color="primary q-title" style="text-align: center;">
-                {{ $t('reset.title_update_pwd')}}
+            <q-banner
+                    rounded
+                    class="bg-primary text-white"
+                    style="text-align: center;">
+                <span class="mybanner">{{ $t('reset.title_update_pwd')}}</span>
             </q-banner>
             <br>
 
@@ -41,8 +44,11 @@
 
         </div>
         <div v-else>
-            <q-banner color="primary q-title" style="text-align: center;">
-                {{ $t('reset.email_sent')}}
+            <q-banner
+                    rounded
+                    class="bg-primary text-white"
+                    style="text-align: center;">
+                <span class="mybanner">{{ $t('reset.email_sent')}}</span>
             </q-banner>
             <br>
 

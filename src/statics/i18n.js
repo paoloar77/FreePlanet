@@ -474,7 +474,7 @@ const messages = {
     msg: {
       hello: 'Hello!',
       myAppName: 'FreePlanet',
-      underconstruction: 'App in constuction...',
+      underconstruction: 'App in construction...',
       myDescriz: '',
       sottoTitoloApp: 'The first Real Social',
       sottoTitoloApp2: 'Free, Fair and solidarity',

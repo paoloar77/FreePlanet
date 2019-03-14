@@ -6,7 +6,7 @@
                     class="bg-primary text-white"
                     color="primary q-title"
                     style="text-align: center;">
-                {{ $t('reg.title_verif_reg')}}
+                <span class="mybanner">{{ $t('reg.title_verif_reg')}}</span>
             </q-banner>
             <br>
 
