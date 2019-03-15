@@ -384,7 +384,7 @@
                     </div>
 
                     <div class="q-mt-xs text-weight-thin" style="text-shadow: 4px 4px 8px #555;">
-                        Contacts
+                        {{$t('homepage.contacts')}}
                         <!--Released under the-->
                         <!--<a href="https://github.com/quasarframework/quasar/blob/dev/LICENSE" target="_blank"-->
                         <!--rel="noopener noreferrer" class="doc-link">-->
@@ -397,10 +397,10 @@
                     </div>
 
                 </div>
-                <q-page-scroller position="bottom-right" :scroll-offset="850" :offset="[18, 18]" style="opacity: 0.3">
-                    <q-btn fab icon="keyboard_arrow_up" color="accent" />
-                </q-page-scroller>
             </section>
+            <q-page-scroller position="bottom-right" :scroll-offset="850" :offset="[18, 18]" style="opacity: 0.3">
+                <q-btn fab icon="keyboard_arrow_up" color="accent" />
+            </q-page-scroller>
         </div>
 
     </q-page>

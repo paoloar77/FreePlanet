@@ -11,7 +11,7 @@ export async function askConfirm($q: any, mytitle, mytext, ok, cancel) {
       },
       title: mytitle
     }).then((ris) => {
-      return true
+      return ris
     }).catch(() => {
       return false
     })

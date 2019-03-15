@@ -109,6 +109,7 @@ const messages = {
           'Verranno accettate solo donazioni Libere di privati ed Associazioni no-profit, in linea con i Principi, che serviranno per coprire le spese.<br>' +
           '<strong>Grazie a Tutti per il sostegno</strong>. '
       },
+      contacts: 'Contatti'
     },
     pages: {
       home: 'Principale',
@@ -341,6 +342,7 @@ const messages = {
           'Solo se aceptarán donaciones de particulares y asociaciones sin änimo de lucro, en línea con los Principios, que se utilizarán para cubrir los gastos. <br>' +
           '<strong>Gracias a todos por el apoyo</strong>. '
       },
+      contacts: 'Contactos'
     },
     pages: {
       home: 'Principal',
@@ -566,6 +568,7 @@ const messages = {
           'Only donations from private individuals and non-profit associations will be accepted, in line with the Principles, which will be used to cover the expenses. <br>' +
           '<strong>Thanks all for the support</strong>. '
       },
+      contacts: 'Contacts'
     },
     pages: {
       home: 'Dashboard',
