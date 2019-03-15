@@ -149,7 +149,8 @@ const messages = {
       error_doppiologin: 'Rieseguire il Login. Accesso aperto da un altro dispositivo.',
     },
     user: {
-      notregistered: 'Devi registrarti al servizio prima di porter memorizzare i dati'
+      notregistered: 'Devi registrarti al servizio prima di porter memorizzare i dati',
+      loggati: 'Utente non loggato'
     },
     reg: {
       incorso: 'Registrazione in corso...',
@@ -382,7 +383,8 @@ const messages = {
       error_doppiologin: 'Vuelva a iniciar sesión. Acceso abierto por otro dispositivo.',
     },
     user: {
-      notregistered: 'Debe registrarse en el servicio antes de poder almacenar los datos'
+      notregistered: 'Debe registrarse en el servicio antes de poder almacenar los datos',
+      loggati: 'Usuario no ha iniciado sesión'
     },
     reg: {
       incorso: 'Registro en curso...',
@@ -608,7 +610,8 @@ const messages = {
       error_doppiologin: 'Signup again. Another access was made with another device.',
     },
     user: {
-      notregistered: 'You need first to SignUp before storing data'
+      notregistered: 'You need first to SignUp before storing data',
+      loggati: 'User not logged in'
     },
     reg: {
       incorso: 'Registration please wait...',

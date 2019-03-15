@@ -44,18 +44,18 @@
                 </q-toolbar-title>
 
 
-<!--
-                <div v-if="isAdmin">
-                    <q-btn flat dense round aria-label="">
-                        <q-icon :class="clCloudUpload" name="cloud_upload"></q-icon>
-                    </q-btn>
+                <!--
+                                <div v-if="isAdmin">
+                                    <q-btn flat dense round aria-label="">
+                                        <q-icon :class="clCloudUpload" name="cloud_upload"></q-icon>
+                                    </q-btn>
 
-                    <q-btn flat dense round aria-label="">
-                        <q-icon :class="clCloudUp_Indexeddb" name="arrow_upward"></q-icon>
-                    </q-btn>
+                                    <q-btn flat dense round aria-label="">
+                                        <q-icon :class="clCloudUp_Indexeddb" name="arrow_upward"></q-icon>
+                                    </q-btn>
 
-                </div>
--->
+                                </div>
+                -->
 
                 <q-btn
                         v-if="!isonline"
@@ -101,7 +101,7 @@
                     <label>{{ $t('msg.hello') }}</label> <span v-model="prova"></span> !
                 </div>-->
 
-                <q-btn dense flat round icon="menu" @click="right = !right" />
+                <q-btn dense flat round icon="menu" @click="right = !right"/>
 
             </q-toolbar>
 
@@ -120,21 +120,26 @@
         </q-drawer>
 
         <q-drawer v-model="right" side="right" overlay bordered>
-            <div id="profile" v-if="Username">
-                <q-img class="absolute-top" src="https://cdn.quasar-framework.org/img/material.png" style="height: 150px">
+            <div id="profile">
+                <q-img class="absolute-top" src="https://cdn.quasar-framework.org/img/material.png"
+                       style="height: 150px">
                     <div class="absolute-bottom bg-transparent">
 
                         <q-avatar class="q-mb-sm">
                             <img src="../../statics/images/avatar-1.svg">
                         </q-avatar>
-                        <div class="text-weight-bold">{{ Username }}</div>
+                        <div v-if="Username" class="text-weight-bold">{{ Username }}</div>
+                        <div v-else class="text-italic">{{ $t('user.loggati') }}</div>
+
                         <!--<span class="text-white" v-if="Verificato"> {{$t('reg.verificato')}} </span>-->
                         <!--<span class="text-white background-red" v-else> {{$t('reg.non_verificato')}} </span>-->
-                        <div id="user-actions">
+
+                        <div v-if="Username" id="user-actions">
                             <q-btn round color="primary" icon="person"></q-btn>
                             <q-btn round color="warning" icon="lock"></q-btn>
                             <q-btn round color="secondary" icon="exit_to_app" @click='logoutHandler'></q-btn>
                         </div>
+
                     </div>
                 </q-img>
 

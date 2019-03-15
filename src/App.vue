@@ -1,6 +1,6 @@
 <template>
     <div id="q-app">
-        <div class="q-pa-xs">
+        <div>
             <q-layout view="hHh Lpr lff" class="shadow-2 rounded-borders">
                 <app-header></app-header>
                 <q-ajax-bar></q-ajax-bar>

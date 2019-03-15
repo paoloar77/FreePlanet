@@ -33,6 +33,7 @@ export default class Header extends Vue {
   public clCloudDown_Indexeddb: string = 'clIndexeddbsend'
   public right: boolean = false
   public photo = ''
+  public visuimg: boolean = true
 
   public selectOpLang = [
     { label: 'English', icon: 'fa-flag-us', value: 'enUs', image: '../statics/images/gb.png', short: 'EN' },
@@ -287,6 +288,14 @@ export default class Header extends Vue {
 
   get imglogo() {
     return '../../' + tools.getimglogo()
+  }
+
+  public toggleanimation() {
+    console.log('toggleanimation')
+    this.visuimg = false
+    setTimeout(() => {
+      this.visuimg = true
+    }, 100)
   }
 
   get MenuCollapse() {

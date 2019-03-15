@@ -130,7 +130,8 @@ namespace Getters {
         Dashboard: {
           routes: [
             { route: '/', faIcon: 'fa fa-home', materialIcon: 'home', name: 'pages.home' },
-            { route: '/todo', faIcon: 'fa fa-list-alt', materialIcon: 'format_list_numbered', name: 'pages.Todo',
+            {
+              route: '/todo', faIcon: 'fa fa-list-alt', materialIcon: 'format_list_numbered', name: 'pages.Todo',
               routes2: listatodo
             },
             { route: '/category', faIcon: 'fa fa-list-alt', materialIcon: 'category', name: 'pages.Category' },
@@ -334,11 +335,11 @@ namespace Actions {
     const mykey = process.env.PUBLICKEY_PUSH
     const mystate = state
     return navigator.serviceWorker.ready
-      .then(function(swreg) {
+      .then(function (swreg) {
         reg = swreg
         return swreg.pushManager.getSubscription()
       })
-      .then(function(subscription) {
+      .then(function (subscription) {
         mystate.wasAlreadySubscribed = !(subscription === null)
 
         if (mystate.wasAlreadySubscribed) {
@@ -355,10 +356,10 @@ namespace Actions {
           })
         }
       })
-      .then(function(newSub) {
+      .then(function (newSub) {
         saveNewSubscriptionToServer(context, newSub)
       })
-      .catch(function(err) {
+      .catch(function (err) {
         console.log('ERR createPushSubscription:', err)
       })
   }
@@ -408,14 +409,10 @@ namespace Actions {
   async function deleteSubscriptionToServer(context) {
     console.log('DeleteSubscriptionToServer: ')
 
-    return await fetch(process.env.MONGODB_HOST + '/subscribe/del', {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-        'x-auth': UserStore.state.x_auth_token
-      }
-    })
+    return Api.SendReq('/subscribe/del', 'DELETE', null)
+      .then((res) => {
+
+      })
 
   }
 
@@ -454,16 +451,18 @@ namespace Actions {
     if ('serviceWorker' in navigator) {
       // REMOVE ALL SUBSCRIPTION
       console.log('REMOVE ALL SUBSCRIPTION...')
-      await navigator.serviceWorker.ready.then(function(reg) {
+      await navigator.serviceWorker.ready.then(function (reg) {
         console.log('... Ready')
-        reg.pushManager.getSubscription().then(function(subscription) {
+        reg.pushManager.getSubscription().then((subscription) => {
           console.log('    Found Subscription...')
-          subscription.unsubscribe().then(function(successful) {
-            // You've successfully unsubscribed
-            console.log('You\'ve successfully unsubscribed')
-          }).catch(function(e) {
-            // Unsubscription failed
-          })
+          if (subscription) {
+            subscription.unsubscribe().then(function (successful) {
+              // You've successfully unsubscribed
+              console.log('You\'ve successfully unsubscribed')
+            }).catch(function (e) {
+              // Unsubscription failed
+            })
+          }
         })
       })
     }

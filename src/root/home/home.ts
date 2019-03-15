@@ -55,6 +55,10 @@ export default class Home extends Vue {
     }, mytime)
   }
 
+  get appname() {
+    return process.env.APP_NAME
+  }
+
   public beforeDestroy() {
     console.log('beforeDestroy')
     clearInterval(this.polling)
@@ -70,6 +74,10 @@ export default class Home extends Vue {
 
   get TelegramSupport() {
     return process.env.TELEGRAM_SUPPORT
+  }
+
+  get FBPage() {
+    return process.env.URL_FACEBOOK
   }
 
   public meta() {

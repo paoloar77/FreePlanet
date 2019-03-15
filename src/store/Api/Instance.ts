@@ -22,10 +22,16 @@ axiosInstance.interceptors.response.use(
     return response
   },
   (error) => {
+    // console.log('error', error)
     if (error.response) {
       if (process.env.DEBUG === '1')
-        console.log(error.response.status)
+        console.log('Status = ', error.response.status)
       console.log('Request Error: ', error.response)
+      if (error.response.status) {
+        GlobalStore.mutations.setStateConnection('online')
+      }
+    } else {
+      GlobalStore.mutations.setStateConnection('offline')
     }
     return Promise.reject(error)
   }
@@ -97,6 +103,7 @@ async function Request(type: string, path: string, payload: any): Promise<Types.
           'x-auth': UserStore.state.x_auth_token
         }
       })
+      ricevuto = true
       return new Types.AxiosSuccess(response.data, response.status)
     } else if (type === 'postFormData') {
       response = await axiosInstance.post(path, payload, {
@@ -105,6 +112,7 @@ async function Request(type: string, path: string, payload: any): Promise<Types.
           'x-auth': UserStore.state.x_auth_token
         }
       })
+      ricevuto = true
       return new Types.AxiosSuccess(response.data, response.status)
     }
   }
@@ -120,7 +128,6 @@ async function Request(type: string, path: string, payload: any): Promise<Types.
       // console.log('ricevuto=', ricevuto)
       console.log('error.response=', error.response)
     }
-    GlobalStore.mutations.setStateConnection(ricevuto ? 'online' : 'offline')
     let mycode = 0
     if (!ricevuto) {
       mycode = tools.ERR_SERVERFETCH

@@ -23,7 +23,7 @@
                                 </div>
                                 <div class="flex justify-end">
                                     <div class="q-gutter-xs testo-banda clgutter">
-                                        <div class="text-h1 shadow-max">FreePlanet</div>
+                                        <div class="text-h1 shadow-max">{{appname}}</div>
                                         <div class="text-subtitle1 shadow text-italic q-pl-sm">
                                             {{$t('msg.sottoTitoloApp')}}
                                         </div>
@@ -366,7 +366,7 @@
             <section class="landing__footer">
                 <div class="text-center">
                     <div class="landing__footer-icons row flex-center">
-                        <a href="https://www.facebook.com/freeplanetapp" target="_blank">
+                        <a :href="FBPage" target="_blank">
                             <i aria-hidden="true" class="q-icon fab fa-facebook-f icon_contact"> </i></a>
 
                         <a :href="TelegramSupport" target="_blank">
