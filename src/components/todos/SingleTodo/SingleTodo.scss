@@ -219,6 +219,10 @@ $heightdescr: 20px;
 
 .data-item {
   max-width: 78px;
+  @media (max-width: 600px) {
+    max-width: 22px;
+  }
+
   //min-width: 100px;
   //display: flex;
   //visibility: initial;
@@ -231,14 +235,17 @@ $heightdescr: 20px;
   padding-left: 2px;
   padding-right: 0px;
 
-  @media (max-width: 600px) {
-    display: none;
-  }
-
   //height: $heightBtn;
   //line-height: $heightBtn;
 }
 
+
+.data_string {
+  @media (max-width: 600px) {
+    display: none;
+  }
+
+}
 
 .data-item .q-input-target{
   color:red !important;

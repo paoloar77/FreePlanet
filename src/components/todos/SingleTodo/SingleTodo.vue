@@ -36,7 +36,8 @@
         <div v-if="isTodo() && (itemtodo.progress > 0) " class="flex-item progress-item shadow-1">
             <q-linear-progress
                     stripe
-                    :percentage="percentageProgress"
+                    rounded
+                    :value="percentageProgress / 100"
                     class="progrbar-item"
                     :color="colProgress"
             >
@@ -55,8 +56,8 @@
 
 
         <div v-if="itemtodo.enableExpiring" :class="classExpiring">
-            {{getstrDate(itemtodo.expiring_at)}}
-            <q-icon name="event" class="cursor-pointer">
+            <span class="data_string">{{getstrDate(itemtodo.expiring_at)}}</span>
+            <q-icon name="event" class="cursor-pointer" style="padding: 2px;">
                 <q-popup-proxy>
                     <q-date v-model="itemtodo.expiring_at" today-btn/>
                 </q-popup-proxy>

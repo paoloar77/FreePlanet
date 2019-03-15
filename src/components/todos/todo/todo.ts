@@ -340,9 +340,9 @@ export default class Todo extends Vue {
       .then((data) => {
 
         console.log('data', data)
-        if (data !== null) {
-          tools.showNotif(this.$q, data)
-        }
+        // if (data !== null) {
+        //   tools.showNotif(this.$q, data)
+        // }
 
         // empty the field
         if (atfirst) {

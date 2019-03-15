@@ -16,6 +16,7 @@
                     :error="$v.signup.email.$error"
                     :error-message="errorMsg('email', $v.signup.email)"
                     bottom-slots
+                    debounce="1000"
                     :label="$t('reg.email')">
 
                 <template v-slot:prepend>
@@ -30,6 +31,7 @@
                     @blur="$v.signup.username.$touch"
                     :error="$v.signup.username.$error"
                     bottom-slots
+                    debounce="1000"
                     :error-message="errorMsg('username', $v.signup.username)"
                     :label="$t('reg.username')">
 
