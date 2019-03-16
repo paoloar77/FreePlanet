@@ -303,7 +303,17 @@ body.mobile .landing:before {
   padding: 10px;
 }
 
+.carousel_img_3 {
+  //background-image: url(../../statics/images/cibo_sano.jpg);
+  background-size: cover !important;
+  background-position: 50% center !important;
+  background-repeat: no-repeat !important;
+}
+
+
 @media (max-width: 718px) {
+  // PER VERSIONE MOBILE
+
   .landing__hero {
     text-align: center
   }
@@ -360,6 +370,14 @@ body.mobile .landing:before {
   .text-subtitle3 {
     font-size: 0.75rem;
   }
+
+  .carousel_img_3 {
+    //background-image: url(../../statics/images/cibo_sano.jpg);
+    background-size: 620px 620px !important;
+    background-position: 50% top !important;
+    background-repeat: no-repeat !important;
+  }
+
 }
 
 .custom-caption {
@@ -368,3 +386,4 @@ body.mobile .landing:before {
   color: white;
   background-color: rgba(0, 0, 0, .3);
 }
+

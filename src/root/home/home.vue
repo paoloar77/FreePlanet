@@ -5,7 +5,7 @@
                 <div class="landing__hero">
                     <q-carousel
                             animated
-                            :autoplay="8000"
+                            :autoplay="animare"
                             swipeable
                             infinite
                             navigation
@@ -193,7 +193,7 @@
                             <!--<div class="text-subtitle1">Famous City</div>-->
                             <!--</div>-->
                         </q-carousel-slide>
-                        <q-carousel-slide name="third" img-src="../../statics/images/cibo_sano.jpg">
+                        <q-carousel-slide name="third" img-src="../../statics/images/cibo_sano.jpg" class="carousel_img_3">
                             <div class="landing__header"></div>
                             <div class="landing__hero-content row justify-center q-gutter-xs clgutter">
                                 <div class="row">

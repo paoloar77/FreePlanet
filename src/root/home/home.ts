@@ -35,6 +35,7 @@ export default class Home extends Vue {
   public $q
   public polling
   public slide = 'first'
+  public animare: number = 0
 
   constructor() {
     super()
@@ -64,6 +65,7 @@ export default class Home extends Vue {
     clearInterval(this.polling)
   }
   public created() {
+    this.animare = process.env.DEV ? 0 : 8000
 
     GlobalStore.actions.prova()
   }

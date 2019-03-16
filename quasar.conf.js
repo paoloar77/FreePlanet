@@ -54,16 +54,11 @@ const extendHTMLToWebpack = (config) => {
 
 module.exports = function (ctx) {
   return {
-    // Quasar looks for *.js files by default
-    sourceFiles: {
-      router: 'src/router/index.ts',
-      store: 'src/store/index.ts'
+    htmlVariables: {
+      appName: 'FreePlanet',
+      appDescription: 'The first Real Social, Free, Fair and Equitable'
     },
     // Quasar looks for *.js files by default
-    sourceFiles: {
-      router: 'src/router/index.ts',
-      store: 'src/store/index.ts'
-    },
     sourceFiles: {
       router: 'src/router/index.ts',
       store: 'src/store/index.ts'
@@ -103,7 +98,7 @@ module.exports = function (ctx) {
           .alias
           .set('~', __dirname)
           .set('@', helpers.root('src'))
-          // .set('env', helpers.root('config/helpers/env.js'))
+        // .set('env', helpers.root('config/helpers/env.js'))
         config.module
           .rule('template-engine')
           .test(/\.pug$/)
@@ -215,7 +210,7 @@ module.exports = function (ctx) {
         // swSrc: 'src/sw.js',
       },
       manifest: {
-        name: 'Free Planet',
+        name: 'FreePlanet',
         version: '0.0.14',
         short_name: 'freeplanet',
         description: 'Social project in order to connecting people each others (working in progress...)',

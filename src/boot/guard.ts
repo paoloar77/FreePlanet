@@ -1,9 +1,6 @@
 // import something here
 
-// leave the export, even if you don't use it
 export default ({ app, router, store, Vue }) => {
-  // something to do
-
   // ******************************************
   // *** Per non permettere di accedere alle pagine in cui è necessario essere Loggati ! ***
   // ******************************************
@@ -15,7 +12,7 @@ export default ({ app, router, store, Vue }) => {
     const subsequentMiddleware = middleware[index]
     // If no subsequent Middleware exists,
     // the default `next()` callback is returned.
-    if (!subsequentMiddleware) return context.next
+    if (!subsequentMiddleware) { return context.next }
 
     return (...parameters) => {
       // Run the default Vue Router `next()` callback first.
@@ -24,7 +21,7 @@ export default ({ app, router, store, Vue }) => {
       // `nextMiddleware()` callback.
       const nextMiddleware = nextFactory(context, middleware, index + 1)
       subsequentMiddleware({ ...context, next: nextMiddleware })
-    };
+    }
   }
 
   router.beforeEach((to, from, next) => {

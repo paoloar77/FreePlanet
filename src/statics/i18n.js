@@ -481,7 +481,7 @@ const messages = {
       underconstruction: 'App in construction...',
       myDescriz: '',
       sottoTitoloApp: 'The first Real Social',
-      sottoTitoloApp2: 'Free, Fair and solidarity',
+      sottoTitoloApp2: 'Free, Fair and Equitable',
       sottoTitoloApp3: 'Where the conscience and community help live',
       sottoTitoloApp4: 'Free and without advertising',
     },

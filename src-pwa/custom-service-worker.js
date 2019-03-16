@@ -289,6 +289,10 @@ if (workbox) {
     workbox.strategies.networkOnly()
   );
 
+  workbox.routing.registerRoute(
+    new RegExp('/owa/'),
+    workbox.strategies.networkOnly()
+  );
 
 }
 
