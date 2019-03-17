@@ -99,8 +99,9 @@ const messages = {
       },
       multiplatform: {
         title: 'Multi-piattaforma',
-        descr: 'E\' Compatibile con Google Chrome, Firefox, Safari, iOS, Android e PC. L\'Applicazione s\'installa facilmente, senza passare dallo store. ' +
-          'basta condividere il nome del sito <strong>www.freeplanet.app</strong>',
+        descr: 'E\' compatibile con Google Chrome, Firefox, Safari, iOS, Android e PC. L\'Applicazione s\'installa facilmente, senza passare dallo store. ' +
+          'basta condividere il nome del sito <strong>www.freeplanet.app</strong>.<br>' +
+          'Dopo la registrazione chiederà di aggiungerlo alla lista delle applicazioni e sullo sfondo',
       },
       free: {
         title: 'Gratuita, Open Source e Niente Pubblicità',
@@ -334,7 +335,8 @@ const messages = {
       multiplatform: {
         title: 'Multi-plataforma',
         descr: 'Compatible con Google Chrome, Firefox, Safari, iOS, Android y PC. La aplicación se instala fácilmente, sin pasar por el store. ' +
-          'para compartirlo, necesita solo el nombre del sitio web: <strong>www.freeplanet.app</strong>',
+          'para compartirlo, necesita solo el nombre del sitio web: <strong>www.freeplanet.app</strong>.<br>' +
+          'Después del registro, le pedirá que lo agregue a la lista de aplicaciones y en la pantalla.',
       },
       free: {
         title: 'Libre, Código Abierto y Sin Publicidad',
@@ -561,7 +563,8 @@ const messages = {
       multiplatform: {
         title: 'Multi-platform',
         descr: 'It is compatible with Google Chrome, Firefox, Safari, iOS, Android and PC. The Application is easily installed, without going through the store. ' +
-          'just share the name of this site <strong>www.freeplanet.app</strong>',
+          'just share the name of this site <strong>www.freeplanet.app</strong>.<br>' +
+          'After registration it will ask to be added to the application list and in the screen',
       },
       free: {
         title: 'Free, Open Source and No Advertising',
