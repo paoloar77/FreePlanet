@@ -207,6 +207,8 @@ module.exports = function (ctx) {
       // workboxPluginMode: 'GenerateSW',
       workboxPluginMode: 'InjectManifest',
       workboxOptions: {
+        skipWaiting: true,
+        clientsClaim: true
         // swSrc: 'src/sw.js',
       },
       manifest: {

@@ -30,7 +30,7 @@ else
   var owa_cmds = owa_cmds || [];
 owa_cmds.push(['setSiteId', getidtrack()]);
 owa_cmds.push(['trackPageView']);
-owa_cmds.push(['trackClicks']);
+// owa_cmds.push(['trackClicks']);
 
 (function () {
   var _owa = document.createElement('script');
