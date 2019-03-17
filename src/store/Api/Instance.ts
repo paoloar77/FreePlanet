@@ -22,10 +22,16 @@ axiosInstance.interceptors.response.use(
     return response
   },
   (error) => {
+    // console.log('error', error)
     if (error.response) {
       if (process.env.DEBUG === '1')
-        console.log(error.response.status)
+        console.log('Status = ', error.response.status)
       console.log('Request Error: ', error.response)
+      if (error.response.status) {
+        GlobalStore.mutations.setStateConnection('online')
+      }
+    } else {
+      GlobalStore.mutations.setStateConnection('offline')
     }
     return Promise.reject(error)
   }
@@ -39,10 +45,10 @@ export const removeAuthHeaders = () => {
   delete axiosInstance.defaults.headers.Authorization
 }
 
-async function Request(type: string, path: string, payload: any, setAuthToken?: boolean): Promise<Types.AxiosSuccess | Types.AxiosError> {
+async function Request(type: string, path: string, payload: any): Promise<Types.AxiosSuccess | Types.AxiosError> {
   let ricevuto = false
   try {
-    // console.log(`Axios Request [${type}]:`, axiosInstance.defaults)
+    console.log(`Axios Request [${type}]:`, axiosInstance.defaults, 'path:', path)
     let response: AxiosResponse
     if (type === 'post' || type === 'put' || type === 'patch') {
       response = await axiosInstance[type](path, payload, {
@@ -52,7 +58,7 @@ async function Request(type: string, path: string, payload: any, setAuthToken?: 
         }
       })
       ricevuto = true
-      // console.log('Request Response: ', response)
+      console.log('Request Response: ', response)
       // console.log(new Types.AxiosSuccess(response.data, response.status))
 
       const setAuthToken = (path === '/updatepwd')
@@ -97,6 +103,7 @@ async function Request(type: string, path: string, payload: any, setAuthToken?: 
           'x-auth': UserStore.state.x_auth_token
         }
       })
+      ricevuto = true
       return new Types.AxiosSuccess(response.data, response.status)
     } else if (type === 'postFormData') {
       response = await axiosInstance.post(path, payload, {
@@ -105,11 +112,12 @@ async function Request(type: string, path: string, payload: any, setAuthToken?: 
           'x-auth': UserStore.state.x_auth_token
         }
       })
+      ricevuto = true
       return new Types.AxiosSuccess(response.data, response.status)
     }
   }
   catch (error) {
-    setTimeout(function () {
+    setTimeout(() => {
       GlobalStore.state.connData.uploading_server = (GlobalStore.state.connData.uploading_server === 1) ? -1 : GlobalStore.state.connData.uploading_server
       GlobalStore.state.connData.downloading_server = (GlobalStore.state.connData.downloading_server === 1) ? -1 : GlobalStore.state.connData.downloading_server
     }, 1000)

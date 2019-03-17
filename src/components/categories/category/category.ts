@@ -3,6 +3,7 @@ import { Component, Watch } from 'vue-property-decorator'
 
 import { SingleCat } from '../SingleCat'
 import { ICategory } from '@src/model'
+import { tools } from "@src/store/Modules/tools"
 
 
 @Component({
@@ -176,13 +177,10 @@ export default class Category extends Vue {
 
     const seldel = [...this.selectedSecond]
     if (this.deleteCategory(this.selectedSecond)) {
-      this.$q.notify({
+      tools.showNotif(this.$q, `Deleted ` + (seldel.length.toString()) + ' item', {
         color: 'primary',
         icon: 'delete',
-        message: `Deleted ` + (seldel.length.toString()) + ' item'
       })
-
-
     }
 
   }

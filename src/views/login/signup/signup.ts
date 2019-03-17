@@ -14,37 +14,36 @@ import { Logo } from '../../../components/logo'
 
 @Component({
   mixins: [validationMixin],
-  validations: validations,
+  validations,
   components: { Logo }
 })
 
 export default class Signup extends Vue {
   public $v
   public $q
-  $t: any
+  public $t: any
 
-  duplicate_email: boolean = false
-  duplicate_username: boolean = false
+  public duplicate_email: boolean = false
+  public duplicate_username: boolean = false
 
   public signup: ISignupOptions = {
-    email: process.env.TEST_EMAIL,
+    email: process.env.TEST_EMAIL || '',
     username: process.env.TEST_USERNAME || '',
-    password: process.env.TEST_PASSWORD,
-    repeatPassword: process.env.TEST_PASSWORD,
-    terms: true
+    password: process.env.TEST_PASSWORD || '',
+    repeatPassword: process.env.TEST_PASSWORD || '',
+    terms: process.env.PROD ? false : true
   }
 
-
-  created() {
+  public created() {
     this.$v.$reset()
   }
 
-  mounted() {
+  public mounted() {
   }
 
   get allowSubmit() {
 
-    let error = this.$v.$error || this.$v.$invalid
+    const error = this.$v.$error || this.$v.$invalid
     return !error
   }
 
@@ -88,15 +87,10 @@ export default class Signup extends Vue {
     return process.env
   }
 
-  showNotif(params: any) {
-    this.$q.notify(params)
-  }
-
-
   public errorMsg(cosa: string, item: any) {
     try {
-      if (!item.$error) return ''
-      if (item.$params.email && !item.email) return this.$t('reg.err.email')
+      if (!item.$error) { return '' }
+      if (item.$params.email && !item.email) { return this.$t('reg.err.email') }
 
       if (cosa === 'repeatpassword') {
         if (!item.sameAsPassword) {
@@ -104,44 +98,42 @@ export default class Signup extends Vue {
         }
       }
 
-      if (!item.required) return this.$t('reg.err.required')
+      if (!item.required) { return this.$t('reg.err.required') }
       if (cosa === 'email') {
         // console.log("EMAIL " + item.isUnique);
         // console.log(item);
-        if (!item.isUnique) return this.$t('reg.err.duplicate_email')
+        if (!item.isUnique) { return this.$t('reg.err.duplicate_email') }
       } else if (cosa === 'username') {
         // console.log(item);
-        if (!item.isUnique) return this.$t('reg.err.duplicate_username')
+        if (!item.isUnique) { return this.$t('reg.err.duplicate_username') }
       }
 
-      if (!item.complexity) return this.$t('reg.err.complexity')
-      if (!item.minLength) return this.$t('reg.err.atleast') + ` ${item.$params.minLength.min} ` + this.$t('reg.err.char')
-      if (!item.maxLength) return this.$t('reg.err.notmore') + ` ${item.$params.maxLength.max} ` + this.$t('reg.err.char')
+      if (!item.complexity) { return this.$t('reg.err.complexity') }
+      if (!item.minLength) { return this.$t('reg.err.atleast') + ` ${item.$params.minLength.min} ` + this.$t('reg.err.char') }
+      if (!item.maxLength) { return this.$t('reg.err.notmore') + ` ${item.$params.maxLength.max} ` + this.$t('reg.err.char') }
       return ''
     } catch (error) {
       // console.log("ERR : " + error);
     }
   }
 
-  checkErrors(riscode: number) {
+  public checkErrors(riscode: number) {
     console.log('checkErrors', riscode)
     if (riscode === tools.DUPLICATE_EMAIL_ID) {
-      this.showNotif(this.$t('reg.err.duplicate_email'))
+      tools.showNotif(this.$q, this.$t('reg.err.duplicate_email'))
     } else if (riscode === tools.DUPLICATE_USERNAME_ID) {
-      this.showNotif(this.$t('reg.err.duplicate_username'))
+      tools.showNotif(this.$q, this.$t('reg.err.duplicate_username'))
     } else if (riscode === tools.ERR_SERVERFETCH) {
-      this.showNotif(this.$t('fetch.errore_server'))
+      tools.showNotif(this.$q, this.$t('fetch.errore_server'))
     } else if (riscode === tools.ERR_GENERICO) {
-      let msg = this.$t('fetch.errore_generico') + UserStore.mutations.getMsgError(riscode)
-      this.showNotif(msg)
+      const msg = this.$t('fetch.errore_generico') + UserStore.mutations.getMsgError(riscode)
+      tools.showNotif(this.$q, msg)
     } else if (riscode === tools.OK) {
       this.$router.push('/signin')
-      this.showNotif({type: 'warning', textColor: 'black', message: this.$t('components.authentication.email_verification.link_sent')})
+      tools.showNotif(this.$q, this.$t('components.authentication.email_verification.link_sent'), {color: 'warning', textColor: 'black'})
     } else {
-      this.showNotif('Errore num ' + riscode)
+      tools.showNotif(this.$q, 'Errore num ' + riscode)
     }
-
-
 
   }
 
@@ -152,12 +144,12 @@ export default class Signup extends Vue {
     this.duplicate_username = false
 
     if (!this.signup.terms) {
-      this.showNotif(this.$t('reg.err.terms'))
+      tools.showNotif(this.$q, this.$t('reg.err.terms'))
       return
     }
 
     if (this.$v.signup.$error) {
-      this.showNotif(this.$t('reg.err.errore_generico'))
+      tools.showNotif(this.$q, this.$t('reg.err.errore_generico'))
       return
     }
 
@@ -168,7 +160,7 @@ export default class Signup extends Vue {
       .then((riscode) => {
         this.checkErrors(riscode)
         this.$q.loading.hide()
-      }).catch(error => {
+      }).catch((error) => {
       console.log('ERROR = ' + error)
       this.$q.loading.hide()
     })
@@ -176,4 +168,3 @@ export default class Signup extends Vue {
   }
 
 }
-

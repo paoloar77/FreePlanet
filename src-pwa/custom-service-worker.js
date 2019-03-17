@@ -81,7 +81,7 @@ if (workbox) {
 
   workbox.routing.registerRoute(
     new RegExp(/\.(?:png|gif|jpg|jpeg|svg)$/),
-    workbox.strategies.staleWhileRevalidate({
+    new workbox.strategies.CacheFirst({
       cacheName: 'images',
       plugins: [
         new workbox.expiration.Plugin({
@@ -91,6 +91,23 @@ if (workbox) {
       ],
     }),
   );
+
+
+  // Per Articoli....
+  const articleHandler = workbox.strategies.networkFirst({
+    cacheName: 'articles-cache',
+    plugins: [
+      new workbox.expiration.Plugin({
+        maxEntries: 50,
+      })
+    ]
+  });
+
+  workbox.routing.registerRoute(
+    new RegExp(/(.*)article(.*)\.html/), args => {
+    return articleHandler.handle(args);
+  });
+
 
   workbox.routing.registerRoute(
     new RegExp(/.*(?:googleapis|gstatic)\.com.*$/),
@@ -207,7 +224,7 @@ if (workbox) {
 
   workbox.routing.registerRoute(
     new RegExp(/.*\/(?:statics\/icons).*$/),
-    workbox.strategies.cacheFirst({
+    new workbox.strategies.CacheFirst({
       cacheName: 'image-cache',
       plugins: [
         new workbox.expiration.Plugin({
@@ -218,18 +235,13 @@ if (workbox) {
   );
 
   workbox.routing.registerRoute(
-    new RegExp(/.*\/(?:css|font).*/),
-    workbox.strategies.cacheFirst({
-      cacheName: 'css-fonts',
-      plugins: [
-        new workbox.expiration.Plugin({
-          maxAgeSeconds: 30 * 24 * 60 * 60,
-        }),
-      ]
-    })
+    new RegExp(/\.(?:js|css|font)$/),
+    new workbox.strategies.StaleWhileRevalidate( {
+      cacheName: 'js-css-fonts',
+    }),
   );
 
-
+/*
   workbox.routing.registerRoute(
     new RegExp('https://cdnjs.coudflare.com/ajax/libs/material-design-lite/1.3.0/material.indigo-pink.min.css'),
     workbox.strategies.staleWhileRevalidate({
@@ -241,6 +253,7 @@ if (workbox) {
       ]
     })
   );
+*/
 
 // Storage
   workbox.routing.registerRoute(
@@ -259,7 +272,7 @@ if (workbox) {
 
   workbox.routing.registerRoute(
     new RegExp(/.*\/(?:statics).*$/),
-    workbox.strategies.cacheFirst({
+    new workbox.strategies.CacheFirst({
       cacheName: 'statics',
       plugins: [
         new workbox.expiration.Plugin({
@@ -270,6 +283,7 @@ if (workbox) {
     })
   );
 
+/*
   workbox.routing.registerRoute(
     new RegExp(/^http/),
     workbox.strategies.networkFirst({
@@ -282,6 +296,7 @@ if (workbox) {
       ]
     })
   );
+*/
 
 
   workbox.routing.registerRoute(
@@ -289,6 +304,10 @@ if (workbox) {
     workbox.strategies.networkOnly()
   );
 
+  workbox.routing.registerRoute(
+    new RegExp('/owa/'),
+    workbox.strategies.networkOnly()
+  );
 
 }
 

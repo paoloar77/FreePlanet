@@ -1,71 +1,82 @@
 <template>
     <div>
-        <q-list link separator no-border class="todo-menu">
+        <q-list separator no-border class="todo-menu">
             <div v-for="field in menuPopupTodo" :key="field.value">
-                <q-item v-if="(field.value !== 130) && (field.value !== 100)" :icon="field.icon"
+                <q-item clickable v-if="(field.value !== 130) && (field.value !== 100)" :icon="field.icon"
                         @click.native="clickMenu(field.value)">
-                    <q-item-side :icon="field.icon"/>
+                    <q-item-section avatar>
+                        <q-icon :name="field.icon"/>
+                    </q-item-section>
 
-                    <q-item-main v-if="field.value !== 120">
-                        <q-item-tile label class="item-menu">{{field.label}}</q-item-tile>
-                    </q-item-main>
+                    <q-item-section v-if="field.value !== 120" label class="item-menu">
+                        <q-item-label>{{field.label}}</q-item-label>
+                    </q-item-section>
 
-                    <q-item-side v-if="field.value === 101">
+                    <q-item-section side top v-if="field.value === 101">
                         <q-checkbox v-model="itemtodo.enableExpiring"/>
-                    </q-item-side>
-                    <q-item-side v-if="field.value === 110">
+                    </q-item-section>
+                    <q-item-section side v-if="field.value === 110">
                         <q-checkbox v-model="itemtodo.completed"/>
-                    </q-item-side>
+                    </q-item-section>
 
-                    <q-item-main v-if="field.value === 120">
-                        <q-slider :class="$parent.menuProgress" v-model="itemtodo.progress" :min="0" :max="100"
-                                  :step="5"/>
 
-                    </q-item-main>
-                    <q-item-side v-if="field.value === 120" >
+                    <q-item-section v-if="field.value === 120">
+                        <q-slider label
+                                  :class="$parent.menuProgress"
+                                  v-model="itemtodo.progress"
+                                  :min="0"
+                                  :max="100"
+                                  :step="5" @change="val => { lazy = val }"
+                        />
+
+                    </q-item-section>
+                    <q-item-section side v-if="field.value === 120">
                         <div>
-                                <q-input v-model="itemtodo.progress"
-                                         class="menuInputProgress"
-                                         type="number"
-                                         suffix="%"
-                                         @change="val => { model = val }"
-                                         @keydown="KeychangeProgress"
-                                />
+                            <q-item-label style="color: blue">{{itemtodo.progress}} %</q-item-label>
                         </div>
-                    </q-item-side>
-
-                    <!--<q-item-side right v-if="field.value === 120">-->
-                    <!--<div :class="$parent.percProgress">-->
-                    <!--{{$parent.percentageProgress}}%-->
-                    <!--</div>-->
-                    <!--</q-item-side>-->
-
+                    </q-item-section>
                 </q-item>
-                <q-item v-if="(field.value === 100)" :icon="field.icon" v-close-overlay
+                <q-item v-if="(field.value === 100)" :icon="field.icon"
                         @click.native="clickMenu(field.value)">
-                    <q-item-side :icon="field.icon"/>
-                    <q-item-main label class="item-menu">{{field.label}}</q-item-main>
+                    <q-item-section avatar>
+                        <q-icon :name="field.icon" inverted color="primary"/>
+                    </q-item-section>
+                    <q-item-section class="item-menu">
+                        {{field.label}}
+                    </q-item-section>
                 </q-item>
-                <q-item v-if="(field.value === 130)" :icon="field.icon"
-                        @click.native="clickMenu(field.value)">
+                <q-item clickable v-if="(field.value === 130)">
+                    <q-item-section avatar>
+                        <q-icon name="priority_high" inverted color="primary"/>
+                    </q-item-section>
 
-                    <q-item-side :icon="$parent.iconPriority"/>
+                    <q-item-section>{{field.label}}</q-item-section>
+                    <q-item-section side>
+                        <q-icon name="keyboard_arrow_right"/>
+                    </q-item-section>
 
-                    <q-item-main>
-                        <q-btn-dropdown ref="dropdown_priority" flat :label="field.label"
-                        >
-                            <q-list link>
-                                <q-item v-close-overlay v-for="field in selectPriority" :key="field.value"
-                                        @click.native="setPriority(field.value)">
-                                    <q-item-side :icon="field.icon" inverted color="primary"/>
-                                    <q-item-main>
-                                        <q-item-tile label>{{field.label}}</q-item-tile>
-                                    </q-item-main>
-                                </q-item>
-                            </q-list>
-                        </q-btn-dropdown>
-                    </q-item-main>
+                    <q-menu auto-close anchor="bottom middle" self="top middle">
+                        <q-list dense>
+                            <q-item side clickable :icon="field.icon"
+                                    @click="clickMenu(field.value)">
 
+                                <q-item-section>
+                                    <q-list dense>
+                                        <q-item clickable v-ripple v-for="fieldprior in selectPriority"
+                                                :key="fieldprior.value"
+                                                @click="setPriority(fieldprior.value)">
+                                            <q-item-section avatar>
+                                                <q-icon :name="fieldprior.icon" inverted color="primary"/>
+                                            </q-item-section>
+                                            <q-item-section>
+                                                {{fieldprior.label}}
+                                            </q-item-section>
+                                        </q-item>
+                                    </q-list>
+                                </q-item-section>
+                            </q-item>
+                        </q-list>
+                    </q-menu>
                 </q-item>
             </div>
         </q-list>

@@ -1,4 +1,4 @@
-import { ICfgServer, IConfig, IGlobalState, StateConnection } from 'model'
+import { ICfgServer, IConfig, IGlobalState, ITodoList, StateConnection } from 'model'
 import { storeBuilder } from './Store/Store'
 
 import Vue from 'vue'
@@ -7,22 +7,21 @@ import translate from './../../globalroutines/util'
 
 import urlBase64ToUint8Array from '../../js/utility'
 
-import messages from '../../statics/i18n'
-import { GlobalStore, Todos, UserStore } from '@store'
-import globalroutines from './../../globalroutines/index'
 import Api from '@api'
-import { tools } from '@src/store/Modules/tools'
-import { costanti } from '@src/store/Modules/costanti'
 import * as Types from '@src/store/Api/ApiTypes'
+import { costanti } from '@src/store/Modules/costanti'
+import { tools } from '@src/store/Modules/tools'
+import { GlobalStore, Todos, UserStore } from '@store'
+import messages from '../../statics/i18n'
+import globalroutines from './../../globalroutines/index'
 
 const allTables = ['todos', 'categories', 'sync_todos', 'sync_todos_patch', 'delete_todos', 'config', 'swmsg']
 const allTablesAfterLogin = ['todos', 'categories', 'sync_todos', 'sync_todos_patch', 'delete_todos', 'config', 'swmsg']
 
-
 let stateConnDefault = 'online'
 
 getstateConnSaved()
-  .then(conn => {
+  .then((conn) => {
     stateConnDefault = conn
   })
 
@@ -41,6 +40,7 @@ const state: IGlobalState = {
   testp1: { contatore: 0, mioarray: [] },
   category: 'personal',
   posts: [],
+  menulinks: {},
   listatodo: [
     { namecat: 'personal', description: 'personal' },
     { namecat: 'work', description: 'work' },
@@ -61,7 +61,7 @@ async function getConfig(id) {
 
 async function getstateConnSaved() {
   const config = await getConfig(costanti.CONFIG_ID_CFG)
-  console.log('config', config)
+  // console.log('config', config)
   if (config) {
     if (config.length > 1) {
       const cfgstateconn = config[1]
@@ -74,22 +74,21 @@ async function getstateConnSaved() {
   }
 }
 
-
 const b = storeBuilder.module<IGlobalState>('GlobalModule', state)
 
 // Getters
 namespace Getters {
 
-  const conta = b.read(state => state.conta, 'conta')
-  const listatodo = b.read(state => state.listatodo, 'listatodo')
-  const category = b.read(state => state.category, 'category')
+  const conta = b.read((state) => state.conta, 'conta')
+  const listatodo = b.read((state) => state.listatodo, 'listatodo')
+  const category = b.read((state) => state.category, 'category')
 
-  const testpao1_getter_contatore = b.read(state => param1 => state.testp1.contatore + 100 + param1, 'testpao1_getter_contatore')
-  const testpao1_getter_array = b.read(state => param1 => state.testp1.mioarray.filter(item => item).map(item => item.valore), 'testpao1_getter_array')
+  const testpao1_getter_contatore = b.read((state) => (param1) => state.testp1.contatore + 100 + param1, 'testpao1_getter_contatore')
+  const testpao1_getter_array = b.read((state) => (param1) => state.testp1.mioarray.filter((item) => item).map((item) => item.valore), 'testpao1_getter_array')
 
-  const getConfigbyId = b.read(state => id => state.arrConfig.find(item => item._id === id), 'getConfigbyId')
-  const getConfigStringbyId = b.read(state => params => {
-    const config = state.arrConfig.find(item => item._id === params.id)
+  const getConfigbyId = b.read((state) => (id) => state.arrConfig.find((item) => item._id === id), 'getConfigbyId')
+  const getConfigStringbyId = b.read((state) => (params) => {
+    const config = state.arrConfig.find((item) => item._id === params.id)
     if (config) {
       return config.value
     } else {
@@ -97,16 +96,88 @@ namespace Getters {
     }
   }, 'getConfigStringbyId')
 
-  const showtype = b.read(state => {
+  const showtype = b.read((state) => {
     // const config = state.arrConfig.find(item => item._id === cat + costanti.CONFIG_ID_SHOW_TYPE_TODOS)
-    const config = state.arrConfig.find(item => item._id === costanti.CONFIG_ID_SHOW_TYPE_TODOS)
-    if (config)
+    const config = state.arrConfig.find((item) => item._id === costanti.CONFIG_ID_SHOW_TYPE_TODOS)
+    if (config) {
       return config.value
-    else
+    }
+    else {
       return ''
+    }
 
   }, 'showtype')
 
+  const getmenu = b.read((state) => {
+
+    const arrlista = GlobalStore.state.listatodo
+    let listatodo = []
+
+    arrlista.forEach((elem: ITodoList) => {
+      const item = {
+        faIcon: 'fa fa-list-alt',
+        materialIcon: 'todo',
+        name: 'pages.' + elem.description,
+        route: '/todo/' + elem.namecat
+      }
+      listatodo.push(item)
+
+    })
+
+
+    if (UserStore.state.isAdmin) {
+      state.menulinks = {
+        Dashboard: {
+          routes: [
+            { route: '/', faIcon: 'fa fa-home', materialIcon: 'home', name: 'pages.home' },
+            {
+              route: '/todo', faIcon: 'fa fa-list-alt', materialIcon: 'format_list_numbered', name: 'pages.Todo',
+              routes2: listatodo
+            },
+            { route: '/category', faIcon: 'fa fa-list-alt', materialIcon: 'category', name: 'pages.Category' },
+            { route: '/admin/cfgserv', faIcon: 'fa fa-database', materialIcon: 'event_seat', name: 'pages.Admin' },
+            { route: '/admin/testp1/par1', faIcon: 'fa fa-database', materialIcon: 'restore', name: 'pages.Test1' },
+            { route: '/admin/testp1/par2', faIcon: 'fa fa-database', materialIcon: 'restore', name: 'pages.Test2' }
+            /* {route: '/vreg?idlink=aaa', faIcon: 'fa fa-login', materialIcon: 'login', name: 'pages.vreg'},*/
+          ],
+          show: true
+        }
+      }
+    } else {
+      // PRODUCTION USER:
+      if (process.env.PROD) {
+        state.menulinks = {
+          Dashboard: {
+            routes: [
+              { route: '/', faIcon: 'fa fa-home', materialIcon: 'home', name: 'pages.home' }
+            ],
+            show: true
+          }
+        }
+      } else {
+        // SERVER TEST
+        state.menulinks = {
+          Dashboard: {
+            routes: [
+              { route: '/', faIcon: 'fa fa-home', materialIcon: 'home', name: 'pages.home' },
+              {
+                route: '/todo', faIcon: 'fa fa-list-alt', materialIcon: 'format_list_numbered', name: 'pages.Todo',
+                routes2: listatodo
+              },
+              { route: '/category', faIcon: 'fa fa-list-alt', materialIcon: 'category', name: 'pages.Category' }
+              // { route: '/signup', faIcon: 'fa fa-registered', materialIcon: 'home', name: 'pages.SignUp' },
+              // { route: '/signin', faIcon: 'fa fa-anchor', materialIcon: 'home', name: 'pages.SignIn' },
+              /* {route: '/vreg?idlink=aaa', faIcon: 'fa fa-login', materialIcon: 'login', name: 'pages.vreg'},*/
+            ],
+            show: true
+          }
+        }
+      }
+    }
+
+    return state.menulinks
+
+  }, 'getmenu')
 
   export const getters = {
     get testpao1_getter_contatore() {
@@ -139,20 +210,25 @@ namespace Getters {
       return showtype()
     },
 
+    get getmenu() {
+      return getmenu()
+    },
+
     get isOnline() {
       console.log('*********************** isOnline')
       return state.stateConnection === 'online'
     },
 
     get isNewVersionAvailable() {
-      console.log('state.cfgServer', state.cfgServer)
-      const serversrec = state.cfgServer.find(x => x.chiave === tools.SERVKEY_VERS)
-      console.log('Record ', serversrec)
+      // console.log('state.cfgServer', state.cfgServer)
+      const serversrec = state.cfgServer.find((x) => x.chiave === tools.SERVKEY_VERS)
+      // console.log('Record ', serversrec)
       if (serversrec) {
         console.log('Vers Server ', serversrec.valore, 'Vers locale:', process.env.APP_VERSION)
         return serversrec.valore !== process.env.APP_VERSION
-      } else
+      } else {
         return false
+      }
     }
   }
 }
@@ -273,7 +349,7 @@ namespace Actions {
         } else {
           // Create a new subscription
           console.log('Create a new subscription')
-          let convertedVapidPublicKey = urlBase64ToUint8Array(mykey)
+          const convertedVapidPublicKey = urlBase64ToUint8Array(mykey)
           return reg.pushManager.subscribe({
             userVisibleOnly: true,
             applicationServerKey: convertedVapidPublicKey
@@ -291,8 +367,9 @@ namespace Actions {
   // Calling the Server to Save in the MongoDB the Subscriber
   function saveNewSubscriptionToServer(context, newSub) {
     // If already subscribed, exit
-    if (!newSub)
+    if (!newSub) {
       return
+    }
 
     // console.log('saveSubscriptionToServer: ', newSub)
     // console.log('context', context)
@@ -308,7 +385,7 @@ namespace Actions {
       }
     }
 
-    let myres = {
+    const myres = {
       options,
       subs: newSub,
       others: {
@@ -318,13 +395,13 @@ namespace Actions {
     }
 
     return Api.SendReq('/subscribe', 'POST', myres)
-      .then(res => {
+      .then((res) => {
         state.wasAlreadySubscribed = true
         state.wasAlreadySubOnDb = true
 
         localStorage.setItem(tools.localStorage.wasAlreadySubOnDb, String(state.wasAlreadySubOnDb))
       })
-      .catch(e => {
+      .catch((e) => {
         console.log('Error during Subscription!', e)
       })
   }
@@ -332,25 +409,21 @@ namespace Actions {
   async function deleteSubscriptionToServer(context) {
     console.log('DeleteSubscriptionToServer: ')
 
-    return await fetch(process.env.MONGODB_HOST + '/subscribe/del', {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-        'x-auth': UserStore.state.x_auth_token
-      }
-    })
+    return Api.SendReq('/subscribe/del', 'DELETE', null)
+      .then((res) => {
+
+      })
 
   }
 
   function t(params) {
-    let msg = params.split('.')
-    let lang = UserStore.state.lang
+    const msg = params.split('.')
+    const lang = UserStore.state.lang
 
-    let stringa = messages[lang]
+    const stringa = messages[lang]
 
     let ris = stringa
-    msg.forEach(param => {
+    msg.forEach((param) => {
       ris = ris[param]
     })
 
@@ -380,14 +453,16 @@ namespace Actions {
       console.log('REMOVE ALL SUBSCRIPTION...')
       await navigator.serviceWorker.ready.then(function (reg) {
         console.log('... Ready')
-        reg.pushManager.getSubscription().then(function (subscription) {
+        reg.pushManager.getSubscription().then((subscription) => {
           console.log('    Found Subscription...')
-          subscription.unsubscribe().then(function (successful) {
-            // You've successfully unsubscribed
-            console.log('You\'ve successfully unsubscribed')
-          }).catch(function (e) {
-            // Unsubscription failed
-          })
+          if (subscription) {
+            subscription.unsubscribe().then(function (successful) {
+              // You've successfully unsubscribed
+              console.log('You\'ve successfully unsubscribed')
+            }).catch(function (e) {
+              // Unsubscription failed
+            })
+          }
         })
       })
     }
@@ -408,7 +483,6 @@ namespace Actions {
 
   }
 
-
   async function loadAfterLogin(context) {
     console.log('loadAfterLogin')
     actions.clearDataAfterLoginOnlyIfActiveConnection()
@@ -419,8 +493,8 @@ namespace Actions {
   async function saveCfgServerKey(context, dataval: ICfgServer) {
     console.log('saveCfgServerKey dataval', dataval)
 
-    let ris = await Api.SendReq('/admin/updateval', 'POST', { pairval: dataval })
-      .then(res => {
+    const ris = await Api.SendReq('/admin/updateval', 'POST', { pairval: dataval })
+      .then((res) => {
 
       })
 
@@ -434,8 +508,8 @@ namespace Actions {
 
     state.networkDataReceived = false
 
-    let ris = await Api.SendReq('/checkupdates', 'GET', null)
-      .then(res => {
+    const ris = await Api.SendReq('/checkupdates', 'GET', null)
+      .then((res) => {
         state.networkDataReceived = true
 
         console.log('******* checkUpdates RES :', res.data.cfgServer)
@@ -449,7 +523,7 @@ namespace Actions {
 
         return res
       })
-      .catch(error => {
+      .catch((error) => {
         console.log('error checkUpdates', error)
         UserStore.mutations.setErrorCatch(error)
         return error
@@ -477,10 +551,9 @@ const GlobalModule = {
   get state() {
     return stateGetter()
   },
+  actions: Actions.actions,
   getters: Getters.getters,
-  mutations: Mutations.mutations,
-  actions: Actions.actions
+  mutations: Mutations.mutations
 }
-
 
 export default GlobalModule

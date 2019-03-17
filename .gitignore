@@ -2,8 +2,8 @@
 .DS_Store
 .thumbs.db
 .env
-.env.development
 .env.production
+.env.development
 .env.production.bak
 .env.prod.bak
 .env.test

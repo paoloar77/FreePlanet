@@ -1,16 +1,12 @@
 import Vue from 'vue'
 import { Component } from 'vue-property-decorator'
 import { UserStore } from '@store'
-import { EventBus, RootState, storeBuilder, DebugMode } from '@store'
 import router from './router'
 
-import $ from 'jquery'
-
-import Header from './components/Header.vue'
+import { Header } from './components/Header'
 
 import globalroutines from './globalroutines/index'
 import { GlobalStore } from './store/Modules'
-
 
 @Component({
   components: {
@@ -19,25 +15,24 @@ import { GlobalStore } from './store/Modules'
   router
 })
 
-
 export default class App extends Vue {
   public backgroundColor = 'whitesmoke'
   public $q
 
   public listaRoutingNoLogin = ['/vreg?', '/offline']
 
-  meta () {
+  public meta() {
     return {
       keywords: { name: 'keywords', content: 'WebSite' },
       // meta tags
       meta: {
-        mykey: { name: 'mykey', content: 'Key 1' },
-        keywords: { name: 'keywords', content: 'MyKeywords' }
+        keywords: { name: 'keywords', content: 'MyKeywords' },
+        mykey: { name: 'mykey', content: 'Key 1' }
       }
     }
   }
 
-  created() {
+  public created() {
     if (process.env.DEV) {
       console.info('SESSIONE IN SVILUPPO ! (DEV)')
       console.info(process.env)

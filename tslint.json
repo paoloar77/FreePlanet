@@ -1,5 +1,19 @@
 {
+  "defaultSeverity": "error",
+  "extends": [
+    "tslint:recommended"
+  ],
+  "jsRules": {},
   "rules": {
+    "no-console": false,
+    "object-literal-sort-keys": false,
+//    "no-restricted-syntax": [
+//      "error",
+//      {
+//        "selector": "CallExpression[callee.object.name='console'][callee.property.name!=/^(log|warn|error|info|trace)$/]",
+//        "message": "Unexpected property on console object was called"
+//      }
+//    ],
     "class-name": true,
     "comment-format": [
       true,
@@ -9,11 +23,13 @@
       true,
       "spaces"
     ],
+    "ordered-imports": false,
     "no-duplicate-variable": true,
     "no-eval": true,
     "no-internal-module": false,
     "no-trailing-whitespace": false,
     "no-var-keyword": true,
+    "max-line-length": false,
     "one-line": [
       true,
       "check-open-brace",

@@ -54,26 +54,30 @@ const extendHTMLToWebpack = (config) => {
 
 module.exports = function (ctx) {
   return {
+    htmlVariables: {
+      appName: 'FreePlanet',
+      appDescription: 'The first Real Social, Free, Fair and Equitable'
+    },
+    // Quasar looks for *.js files by default
     sourceFiles: {
       router: 'src/router/index.ts',
       store: 'src/store/index.ts'
     },
     // app plugins (/src/plugins)
-    plugins: ['i18n', 'axios', 'vee-validate', 'myconfig', 'local-storage', 'error-handler', 'globalroutines', 'vue-idb', 'dragula', 'guard'],
+    boot: ['vue-i18n', 'axios', 'vee-validate', 'myconfig', 'local-storage', 'error-handler', 'globalroutines', 'vue-idb', 'dragula', 'guard'],
     css: [
       'app.styl'
     ],
     extras: [
-      //ctx.theme.mat ?  : null,
       'roboto-font',
       'material-icons', // optional, you are not bound to it
-      'ionicons',
-      // 'mdi',
-      'fontawesome'
+      'ionicons-v4',
+      // 'mdi-v3',
+      'fontawesome-v5'
     ],
     supportIE: false,
     aliases: {
-      quasar: path.resolve(__dirname, '../node_modules/quasar-framework/'),
+      quasar: path.resolve(__dirname, '../node_modules/@quasar/'),
       src: path.resolve(__dirname, '../src'),
       statics: path.resolve(__dirname, '../src/statics'),
       components: path.resolve(__dirname, '../src/components')
@@ -94,7 +98,7 @@ module.exports = function (ctx) {
           .alias
           .set('~', __dirname)
           .set('@', helpers.root('src'))
-          // .set('env', helpers.root('config/helpers/env.js'))
+        // .set('env', helpers.root('config/helpers/env.js'))
         config.module
           .rule('template-engine')
           .test(/\.pug$/)
@@ -118,57 +122,57 @@ module.exports = function (ctx) {
     framework: {
       components: [
         'QLayout',
-        'QLayoutHeader',
-        'QLayoutDrawer',
+        'QDrawer',
+        'QItemSection',
+        'QHeader',
+        'QFooter',
         'QPageContainer',
         'QPage',
+        'QPopupProxy',
         'QToolbar',
         'QToolbarTitle',
         'QBtn',
         'QBtnDropdown',
         'QIcon',
         'QList',
-        'QListHeader',
+        'QItemLabel',
         'QItem',
-        'QItemMain',
-        'QItemTile',
-        'QItemSide',
         'QCard',
-        'QCardTitle',
-        'QCardMain',
-        'QCardMedia',
-        'QCardSeparator',
+        'QCardSection',
         'QCardActions',
         'QField',
         'QInput',
         'QSelect',
-        'QPopover',
+        'QMenu',
         'QToggle',
         'QFab',
         'QInfiniteScroll',
         'QAjaxBar',
         'QChip',
-        'QCollapsible',
+        'QExpansionItem',
         'QCheckbox',
-        'QAlert',
+        'QBanner',
         'QInnerLoading',
         'QSpinnerGears',
-        'QDatetime',
+        'QDate',
+        'QTime',
         'QSlideTransition',
         'QTable',
-        'QTableColumns',
         'QTh',
         'QTr',
-        'QSearch',
         'QTd',
-        'QContextMenu',
-        'QProgress',
+        'QLinearProgress',
         'QSlider',
         'QPopupEdit',
+        'QCarousel',
+        'QCarouselControl',
+        'QPageScroller',
+        'QAvatar',
+        'QImg',
+        'QCarouselSlide'
       ],
       directives: [
         'Ripple',
-        'CloseOverlay',
       ],
       // Quasar plugins
       plugins: [
@@ -176,12 +180,12 @@ module.exports = function (ctx) {
         'Dialog',
         'Notify',
         'Cookies',
-        'ActionSheet', 'Loading'
+        'Loading'
       ],
-      iconSet: 'fontawesome',
-      i18n: 'it', // Quasar language
+      iconSet: 'fontawesome-v5',
+      lang: 'it', // Quasar language
     },
-    animations: [],
+    animations: 'all',
     ssr: {
       pwa: {
         runtimeCaching: [
@@ -203,10 +207,12 @@ module.exports = function (ctx) {
       // workboxPluginMode: 'GenerateSW',
       workboxPluginMode: 'InjectManifest',
       workboxOptions: {
+        // skipWaiting: true,
+        // clientsClaim: true
         // swSrc: 'src/sw.js',
       },
       manifest: {
-        name: 'Free Planet',
+        name: 'FreePlanet',
         version: '0.0.14',
         short_name: 'freeplanet',
         description: 'Social project in order to connecting people each others (working in progress...)',

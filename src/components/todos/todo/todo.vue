@@ -7,37 +7,58 @@
                     <div class="flex-item">
                         <q-btn push
                                icon="settings">
-                            <q-popover id="popconfig" self="top right">
+                            <q-menu id="popconfig" self="top right">
                                 <q-list link separator no-border class="todo-menu">
-                                    <div v-for="field in menuPopupConfigTodo" :key="field.value">
-                                        <q-item :icon="field.icon"
-                                                @click.native="">
-                                            <q-item-side :icon="field.icon"/>
+                                    <q-item clickable v-for="field in menuPopupConfigTodo" :key="field.value">
+                                        <q-item-section avatar>
+                                            <q-icon :name="field.icon"/>
+                                        </q-item-section>
 
-                                            <q-item-main v-if="showTask(field.value)">
+                                        <q-item-section>{{field.label}}</q-item-section>
 
-                                                <q-select
-                                                        radio
-                                                        color="secondary"
-                                                        :float-label="field.label"
-                                                        v-model="showtype"
-                                                        :options="listOptionShowTask"/>
-                                            </q-item-main>
-                                            <q-item-main v-else>
-                                                <q-item-tile label class="item-menu">{{field.label}}</q-item-tile>
-                                            </q-item-main>
-                                        </q-item>
-                                    </div>
+                                        <q-item-section side v-if="showTask(field.value)">
+                                            <q-item-section side>
+                                                <q-icon name="keyboard_arrow_right"/>
+                                            </q-item-section>
+
+                                            <q-menu auto-close anchor="bottom middle" self="top middle">
+                                                <q-list dense>
+                                                    <q-item side :icon="field.icon">
+
+                                                        <q-item-section>
+                                                            <q-list dense>
+                                                                <q-item clickable v-ripple v-for="opt in listOptionShowTask"
+                                                                        :key="opt.value"
+                                                                        @click="showtype = opt.value">
+                                                                    <q-item-section avatar>
+                                                                        <q-icon :name="opt.icon" inverted color="primary"/>
+                                                                    </q-item-section>
+                                                                    <q-item-section>
+                                                                        {{opt.label}}
+                                                                    </q-item-section>
+                                                                </q-item>
+                                                            </q-list>
+                                                        </q-item-section>
+                                                    </q-item>
+                                                </q-list>
+                                            </q-menu>
+                                        </q-item-section>
+                                    </q-item>
                                 </q-list>
-                            </q-popover>
+                            </q-menu>
                         </q-btn>
                     </div>
                 </div>
             </div>
 
-            <q-input ref="insertTask" v-model="todotop" inverted :float-label="$t('todo.inserttop')"
+            <q-input ref="insertTask" color="blue-12" v-model="todotop" :label="$t('todo.inserttop')"
+                     style="margin-left: 6px;"
                      :after="[{icon: 'arrow_forward', content: true, handler () {}}]"
-                     v-on:keyup.enter="insertTodo(true)"/>
+                     v-on:keyup.enter="insertTodo(true)">
+                <template v-slot:prepend>
+                    <q-icon name="add"/>
+                </template>
+            </q-input>
 
             <div style="display: none">{{ prior = 0, priorcomplet = false }}</div>
             <div>
@@ -87,8 +108,10 @@
             </div>
 
 
-            <q-input v-if="TodosCount > 0" ref="insertTaskBottom" v-model="todobottom" inverted
-                     :float-label="$t('todo.insertbottom')"
+            <q-input v-if="TodosCount > 0" ref="insertTaskBottom" v-model="todobottom"
+                     style="margin-left: 6px;"
+                     color="blue-12"
+                     :label="$t('todo.insertbottom')"
                      :after="[{icon: 'arrow_forward', content: true, handler () {}}]"
                      v-on:keyup.enter="insertTodo(false)"/>
 
@@ -102,8 +125,8 @@
             <!--&lt;!&ndash;<q-btn class="mybtn" round color="" icon="list" @click="reload_fromServer++">Reload</q-btn>&ndash;&gt;-->
             <!--</div>-->
 
-                <!--
-                <!--&lt;!&ndash;<q-input v-model="testPao" float-label="testPao"/>&ndash;&gt;-->
+            <!--
+            <!--&lt;!&ndash;<q-input v-model="testPao" float-label="testPao"/>&ndash;&gt;-->
             <!--<q-input v-model="todos_changed" float-label="todos_changed"/>-->
 
             <!--<q-input v-model="reload_fromServer" float-label="reload_fromServer"/>-->

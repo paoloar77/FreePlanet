@@ -695,7 +695,7 @@ namespace Actions {
     }
 
     // 3) send to the Server
-    await saveItemToSyncAndDb(tools.DB.TABLE_SYNC_TODOS, 'POST', objtodo)
+    return await saveItemToSyncAndDb(tools.DB.TABLE_SYNC_TODOS, 'POST', objtodo)
       .then((ris) => {
         // Check if need to be moved...
         const indelem = getIndexById(objtodo.category, objtodo._id)

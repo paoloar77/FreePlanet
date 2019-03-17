@@ -1,9 +1,9 @@
 import Vue from 'vue'
-import { Component, Prop } from 'vue-property-decorator'
+import { Component, Prop, Watch } from 'vue-property-decorator'
 
-import { ITodo } from '../../../model/index'
 import { tools } from '@src/store/Modules/tools'
 import { UserStore } from '@store'
+import { ITodo } from '../../../model/index'
 
 // Doesn't exist in quasar this ? error TS2305
 // import { format } from 'quasar'
@@ -18,19 +18,19 @@ import { UserStore } from '@store'
 export default class SubMenus extends Vue {
   public selectPriority: [] = tools.selectPriority[UserStore.state.lang]
 
-  @Prop({ required: false }) menuPopupTodo: any[]
-  @Prop({ required: false }) itemtodo: ITodo
-  $q: any
+  @Prop({ required: false }) public menuPopupTodo: any[]
+  @Prop({ required: false }) public itemtodo: ITodo
+  public $q: any
 
-  clickMenu (field) {
+  public clickMenu(field) {
     this.$emit('clickMenu', field)
   }
 
-  setPriority (field) {
+  public setPriority(field) {
     this.$emit('setPriority', field)
   }
 
-  KeychangeProgress (e) {
+  public KeychangeProgress(e) {
     // between(50, 10, 20)
 
     if (this.itemtodo.progress > 100) {
@@ -46,7 +46,7 @@ export default class SubMenus extends Vue {
     }
   }
 
-  create () {
+  public create() {
     this.selectPriority = tools.selectPriority[UserStore.state.lang]
 
     console.log('CREAZIONE')

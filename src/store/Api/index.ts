@@ -16,7 +16,6 @@ import router from '@router'
 import * as Types from '@src/store/Api/ApiTypes'
 import { costanti } from '@src/store/Modules/costanti'
 
-
 // const algoliaApi = new AlgoliaSearch()
 export namespace ApiTool {
   export async function post(path: string, payload?: any) {
@@ -57,7 +56,7 @@ export namespace ApiTool {
       refresh_token
     }, {
       headers: {
-        'Authorization': `Bearer ${token}`
+        Authorization: `Bearer ${token}`
       }
     })
   }
@@ -65,22 +64,21 @@ export namespace ApiTool {
   export async function SendReq(url: string, method: string, mydata: any, setAuthToken: boolean = false): Promise<Types.AxiosSuccess | Types.AxiosError> {
     UserStore.mutations.setServerCode(tools.EMPTY)
     UserStore.mutations.setResStatus(0)
-    return await new Promise(function (resolve, reject) {
-
+    return await new Promise((resolve, reject) =>  {
 
       return sendRequest(url, method, mydata)
-        .then(res => {
+        .then((res) => {
           // console.log('res', res)
 
-          setTimeout(function () {
-            if (method === 'get')
+          setTimeout(() => {
+            if (method === 'get') {
               GlobalStore.state.connData.downloading_server = 0
+            }
             else {
               GlobalStore.state.connData.uploading_server = 0
               GlobalStore.state.connData.downloading_server = 0
             }
           }, 1000)
-
 
           UserStore.mutations.setResStatus(res.status)
           if (res.status === serv_constants.RIS_CODE__HTTP_FORBIDDEN_INVALID_TOKEN) {
@@ -95,10 +93,11 @@ export namespace ApiTool {
           return resolve(res)
 
         })
-        .catch(error => {
-          setTimeout(function () {
-            if (method === 'get')
+        .catch((error) => {
+          setTimeout(() => {
+            if (method === 'get') {
               GlobalStore.state.connData.downloading_server = -1
+            }
             else {
               GlobalStore.state.connData.uploading_server = -1
               GlobalStore.state.connData.downloading_server = -1
@@ -114,13 +113,13 @@ export namespace ApiTool {
   export async function syncAlternative(mystrparam) {
     // console.log('[ALTERNATIVE Background syncing', mystrparam)
 
-    let multiparams = mystrparam.split('|')
+    const multiparams = mystrparam.split('|')
     if (multiparams) {
       if (multiparams.length > 3) {
-        let cmd = multiparams[0]
-        let table = multiparams[1]
-        let method = multiparams[2]
-        let token = multiparams[3]
+        const cmd = multiparams[0]
+        const table = multiparams[1]
+        const method = multiparams[2]
+        const token = multiparams[3]
         // let lang = multiparams[3]
 
         if (cmd === 'sync-todos') {
@@ -136,17 +135,18 @@ export namespace ApiTool {
 
           // console.log('A1) INIZIO.............................................................')
           return globalroutines(null, 'readall', table, null)
-            .then(function (alldata) {
+            .then((alldata) => {
               const myrecs = [...alldata]
               // console.log('----------------------- LEGGO QUALCOSA ')
 
-              const promises = myrecs.map(rec => {
+              const promises = myrecs.map((rec) => {
                 // console.log('syncing', table, '', rec.descr)
                 // let link = String(process.env.MONGODB_HOST) + '/todos'
                 let link = '/todos'
 
-                if (method !== 'POST')
+                if (method !== 'POST') {
                   link += '/' + rec._id
+                }
 
                 // console.log(' [Alternative] ++++++++++++++++++ SYNCING !!!!  ', rec.descr, table, 'FETCH: ', method, link, 'data:')
 
@@ -166,7 +166,7 @@ export namespace ApiTool {
                   .then(() => {
                     return globalroutines(null, 'delete', 'swmsg', null, mystrparam)
                   })
-                  .catch(function (err) {
+                  .catch((err) => {
                     if (err.message === 'Failed to fetch') {
                       errorfromserver = true
                     }
@@ -177,11 +177,11 @@ export namespace ApiTool {
               // CALL ALL THE PROMISES
               return Promise.all(promises).then(() => {
                 return (errorfromserver && !lettoqualcosa)
-              }).catch(err => {
+              }).catch((err) => {
                 return (errorfromserver && !lettoqualcosa)
               })
 
-            }).catch(e => {
+            }).catch((e) => {
               // console.log('ERROR:', e)
               return (errorfromserver && !lettoqualcosa)
             })
@@ -199,7 +199,6 @@ export namespace ApiTool {
       }
     }
   }
-
 
 }
 export default ApiTool

@@ -2,7 +2,7 @@
     <button class="relative-position animate-bounce">
         <i class="fa fa-2x fa-envelope-o"></i>
         <span class="floating label bg-dark">5</span>
-        <q-popover self="top right">
+        <q-menu self="top right">
             <div class="list striped">
                 <p class="caption no-margin text-center text-white bg-teal">Messages from people</p>
                 <div class="item item-link two-lines item-delimiter no-margin"
@@ -18,7 +18,7 @@
           </span>
                 </div>
             </div>
-        </q-popover>
+        </q-menu>
     </button>
 </template>
 

@@ -1,3 +1,6 @@
+import { costanti } from "@src/store/Modules/costanti"
+import { UserStore } from "@store"
+
 export interface IPost {
   title: string
 }
@@ -13,6 +16,13 @@ export interface ICfgServer {
   chiave: string
   userId: string
   valore: string
+}
+
+export interface ICfgData {
+  _id?: string
+  lang?: string
+  token?: string
+  userId?: string
 }
 
 export interface ITestp1 {
@@ -44,6 +54,7 @@ export interface IGlobalState {
   testp1: ITestp1
   connData: IConnData
   posts: IPost[]
+  menulinks: {}
   listatodo: ITodoList[]
   arrConfig: IConfig[]
 }

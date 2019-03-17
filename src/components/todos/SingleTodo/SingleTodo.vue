@@ -1,12 +1,5 @@
 <template>
     <div :class="getClassRow()" @click="clickRow">
-        <!--<div v-if="isTodo()" class="flex-item counter-item dragula-container">{{itemtodo.pos}}</div>-->
-        <!--<div v-if="isFirst">-->
-        <!--<q-context-menu ref="contextMenu">-->
-        <!--<SubMenus :menuPopupTodo="menuPopupTodo" :itemtodo="itemtodo" @clickMenu="clickMenu" @setPriority="setPriority"></SubMenus>-->
-        <!--</q-context-menu>-->
-        <!--</div>-->
-
         <div v-if="isTodo()" class="flex-item completed-item donotdrag">
             <q-btn push flat
                    :class="classCompleted"
@@ -18,6 +11,9 @@
         <div class="flex-item donotdrag divdescrTot">
             <q-input v-if="sel && !itemtodo.completed" hide-underline type="textarea" ref="inputdescr"
                      v-model.trim="precDescr"
+                     autogrow
+                     borderless
+                     dense
                      :class="classDescrEdit" :max-height="100"
                      @keydown="keyDownArea" v-on:keydown.esc="exitEdit" @blur="exitEdit(true)" @click="editTodo()"/>
 
@@ -37,17 +33,22 @@
         <!--<q-field>{{ itemtodo.descr }}</q-field>-->
         <!--</div>-->
 
-        <div v-if="isTodo() && (percentageProgress > 0) " class="flex-item progress-item shadow-1">
-            <q-progress
-                    :percentage="percentageProgress"
+        <div v-if="isTodo() && (itemtodo.progress > 0) " class="flex-item progress-item shadow-1">
+            <q-linear-progress
+                    stripe
+                    rounded
+                    :value="percentageProgress / 100"
                     class="progrbar-item"
                     :color="colProgress"
             >
-            </q-progress>
+            </q-linear-progress>
             <div :class="percProgress">
                 {{percentageProgress}}%
-                <q-popup-edit v-model="itemtodo.progress" title="Progress" buttons class="editProgress">
-                    <q-input type="number" v-model="itemtodo.progress" :max="100" :min="0"/>
+                <q-popup-edit v-model="percentageProgress" title="Progress" buttons class="editProgress"
+                              @change="val => { model = val }"
+                              @save="aggiornaProgress"
+                >
+                    <q-input dense autofocus type="number" v-model="percentageProgress" :max="100" :min="0"/>
                 </q-popup-edit>
 
             </div>
@@ -55,23 +56,34 @@
 
 
         <div v-if="itemtodo.enableExpiring" :class="classExpiring">
-            <q-datetime
-                    type="date"
-                    v-model="itemtodo.expiring_at"
-                    class="myexpired"
-                    format="DD/MM/YY"
-                    @change="val => { model = val }">
-
-            </q-datetime>
+            <span class="data_string">{{getstrDate(itemtodo.expiring_at)}}</span>
+            <q-icon name="event" class="cursor-pointer" style="padding: 2px;">
+                <q-popup-proxy>
+                    <q-date v-model="itemtodo.expiring_at" today-btn/>
+                </q-popup-proxy>
+            </q-icon>
+            <!--<q-icon name="event" class="cursor-pointer" />-->
+            <!--<q-popup-edit v-model="itemtodo.expiring_at"-->
+            <!--title="Edit"-->
+            <!--buttons class="">-->
+            <!--<q-input-->
+            <!--filled-->
+            <!--v-model="itemtodo.expiring_at"-->
+            <!--type="date"-->
+            <!--class="myexpired"-->
+            <!--format="DD/MM/YYYY"-->
+            <!--&gt;-->
+            <!--</q-input>-->
+            <!--</q-popup-edit>-->
         </div>
         <div v-if="isTodo()" class="flex-item pos-item " @mousedown="clickRiga">
             <q-btn push
                    :class="clButtPopover"
                    icon="menu">
-                <q-popover id="popmenu" v-if="true" self="top right">
+                <q-menu id="popmenu" v-if="true" self="top right">
                     <SubMenus :menuPopupTodo="menuPopupTodo" :itemtodo="itemtodo" @clickMenu="clickMenu"
                               @setPriority="setPriority"></SubMenus>
-                </q-popover>
+                </q-menu>
 
             </q-btn>
         </div>

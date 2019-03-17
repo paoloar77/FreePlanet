@@ -1,8 +1,33 @@
+body {
+  font-family: 'Source Sans Pro', 'Helvetica Neue', Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: #a7a7a7;
+  line-height: 1.5;
+  //font-size: 1rem;
+}
+
+$grayshadow: #555;
+
+.testo-banda {
+  //background: -webkit-gradient(linear, left top, left bottom, from(#3144f0), to(transparent));
+  //background: linear-gradient(180deg, #3144f0, transparent);
+  //background: rgba(0, 0, 0, .6)
+}
+
+p {
+  margin: 0 0 16px;
+  text-shadow: 2px 2px 4px $grayshadow;
+}
+
 .mycard {
   visibility: hidden;
 }
 
 .landing {
+}
+
+.landing_background {
   background: #000 url(../../statics/images/cover.jpg) no-repeat 50% fixed;
   background-size: cover
 }
@@ -14,16 +39,16 @@
   -webkit-box-pack: center;
   -ms-flex-pack: center;
   justify-content: center;
-  padding: 0 16px
+  //padding: 0 16px
 }
 
 .landing > section.padding {
-  padding: 180px 16px
+  padding: 90px 16px
 }
 
 .landing > section > div {
   position: relative;
-  max-width: 1040px;
+  max-width: 1240px;
   width: 100%
 }
 
@@ -40,7 +65,7 @@
 }
 
 .landing__hero {
-  min-height: 100vh
+  min-height: 50vh
 }
 
 .landing__header {
@@ -48,7 +73,7 @@
 }
 
 .landing__arrow {
-  bottom: 8px;
+  bottom: 25px;
   opacity: .4
 }
 
@@ -61,12 +86,17 @@
   width: 150px;
   height: 150px;
   margin-top: 21px;
-  -webkit-animation: logo-rotate 240s linear infinite;
-  animation: logo-rotate 240s linear infinite
+  //-webkit-animation: logo-rotate 240s linear infinite;
+  //animation: logo-rotate 240s linear infinite
 }
 
 .landing__features .q-icon {
   font-size: 64px
+}
+
+h4 {
+  line-height: 1.5;
+  text-shadow: 4px 4px 8px $grayshadow;
 }
 
 .landing__features h4, .landing__features h6 {
@@ -74,15 +104,22 @@
 }
 
 .landing__features p {
-  opacity: .6;
-  font-size: 16px
+  opacity: .7;
+  font-size: 1rem;
+  line-height: 1.5;
 }
 
 .landing__footer {
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(65%, rgba(0, 0, 0, .1)), to(#000));
-  background: linear-gradient(180deg, rgba(0, 0, 0, .1) 65%, #000);
+  //background: -webkit-gradient(linear, left top, left bottom, color-stop(65%, rgba(0, 0, 0, .1)), to(#000));
+  background: linear-gradient(180deg, rgba(0, 0, 0, .8) 75%, #FFF);
   padding-top: 72px !important;
-  //padding-bottom: 72px !important
+  padding-bottom: 72px !important
+}
+
+.icon_contact:hover {
+  color: blue;
+  border-color: white;
+  border-width: 1px;
 }
 
 .landing__footer .doc-link {
@@ -97,40 +134,25 @@
   background-repeat: no-repeat !important;
   background-position: top;
   background-size: contain !important;
-  background-image: url(https://cdn.quasar-framework.org/img/landing_first_section.png) !important
+  background-image: url(../../statics/images/landing_first_section.png) !important
 }
 
-@media (max-width: 718px) {
-  .landing__hero {
-    text-align: center
-  }
-  .landing__header {
-    height: 9vh
-  }
-  .landing__hero .text-h1 {
-    font-size: 3rem;
-    line-height: 3.05rem;
-    margin-bottom: 24px
-  }
-  .landing > section.padding {
-    padding-top: 50px;
-    //padding-bottom: 90px
-  }
-  .landing .feature-item {
-    text-align: center
-  }
-  .landing__hero-content {
-    //padding-bottom: 180px
-  }
-  .landing__hero-btns {
-    -webkit-box-pack: center;
-    -ms-flex-pack: center;
-    justify-content: center
-  }
+.feat-descr {
+  font-size: 1.15rem;
+}
+
+.feat-descr:hover {
+  transition: opacity 0.5s ease-in-out;
+  opacity: 0.9;
+}
+
+.q-col-gutter-sm {
+  padding: 50px 50px;
+  //margin-left: -48px
 }
 
 body.mobile .landing {
-  background: unset
+  //background: unset
 }
 
 body.mobile .landing:before {
@@ -142,10 +164,12 @@ body.mobile .landing:before {
   right: 0;
   bottom: 0;
   z-index: -1;
-  background: #000 url(../../statics/images/cover.jpg) 50%;
+  //background: #000 url(../../statics/images/cover.jpg) 50%;
+
   background-size: cover
 }
 
+/*
 @-webkit-keyframes logo-rotate {
   to {
     -webkit-transform: rotate(-1turn);
@@ -159,9 +183,7 @@ body.mobile .landing:before {
     transform: rotate(-1turn)
   }
 }
-
-
-
+*/
 
 .home {
   //background-color: rgb(250, 250, 250);
@@ -179,14 +201,13 @@ body.mobile .landing:before {
 
 .shadow {
   //color: white;
-  text-shadow: 2px 2px 4px #000000;
+  text-shadow: 2px 2px 4px $grayshadow;
 }
 
 .shadow-max {
   //color: white;
-  text-shadow: 4px 4px 8px #000000;
+  text-shadow: 4px 4px 8px $grayshadow;
 }
-
 
 .text-h1 {
   font-size: 6rem;
@@ -195,25 +216,174 @@ body.mobile .landing:before {
   letter-spacing: -.01562em;
 }
 
+.text-h2 {
+  font-size: 3.75rem;
+  font-weight: 300;
+  line-height: 3.75rem;
+  letter-spacing: -.00833em;
+}
+
 .text-weight-bold {
   font-weight: 700;
 }
 
 .text-subtitle1 {
-  font-size: 1.25rem;
+  font-size: 1.35rem;
   font-weight: 400;
   line-height: 1.75rem;
+  text-shadow: 4px 4px 8px $grayshadow;
   letter-spacing: .00937em;
   &.big {
     font-size: 1.5rem;
   }
 }
-.text-subtitle2 {
 
+.text-subtitle2 {
+  font-size: 1.15rem;
+  font-weight: 400;
+  line-height: 1.75rem;
+  letter-spacing: .00937em;
+  text-shadow: 4px 4px 8px $grayshadow;
+}
+
+.text-subtitle3 {
   font-size: 1rem;
   font-weight: 400;
   line-height: 1.75rem;
   letter-spacing: .00937em;
+  text-shadow: 2px 2px 4px $grayshadow;
 }
 
+.homep-cover-img-1 {
+  background: #000 url(../../statics/images/cover.jpg) no-repeat 50% fixed;
+  //transition: background-image 1s ease-in-out;
+}
+
+.homep-cover-img-2 {
+  background: #000 url(../../statics/images/hand_people.jpg) no-repeat 50% fixed;
+  //transition: background-image 1s ease-in-out;
+}
+
+.homep-cover-img-3 {
+  background: #000 url(../../statics/images/cibo_sano.jpg) no-repeat 50% fixed;
+  //transition: background-image 1s ease-in-out;
+}
+
+.homep-cover-img.hide-filter:before {
+  opacity: 0
+}
+
+.landing__footer-icons {
+  font-size: 28px
+}
+
+.landing__footer-icons a {
+  margin: 0 8px 8px;
+  text-decoration: none;
+  outline: 0;
+  color: #fff;
+  transition: color .28s
+}
+
+.landing__footer-icons a:hover {
+  color: #e0e0e0
+}
+
+.doc-img {
+  max-width: 100%;
+}
+
+.mylist {
+  background: #3fdaff;
+  padding-left: 20px;
+}
+
+.clgutter {
+  margin-top: 20px;
+  padding: 10px;
+}
+
+.carousel_img_3 {
+  //background-image: url(../../statics/images/cibo_sano.jpg);
+  background-size: cover !important;
+  background-position: 50% center !important;
+  background-repeat: no-repeat !important;
+}
+
+
+@media (max-width: 718px) {
+  // PER VERSIONE MOBILE
+
+  .landing__hero {
+    text-align: center
+  }
+  .landing__header {
+    height: 7vh
+  }
+  .clgutter {
+    margin-top: 0px;
+    padding: 0px;
+  }
+  .landing__hero .text-h1 {
+    font-size: 3rem;
+    line-height: 3.05rem;
+    margin-bottom: 24px
+  }
+
+  .landing > section.padding {
+    padding: 40px 16px
+    //padding-bottom: 90px
+  }
+
+  .landing__features h4, .landing__features h6 {
+    margin: 20px 0
+  }
+
+  h4 {
+    line-height: 1.4;
+    text-shadow: 4px 4px 8px $grayshadow;
+  }
+
+  .landing .feature-item {
+    text-align: center;
+    margin-top: 20px;
+  }
+  .landing__hero-content {
+    padding-bottom: 180px
+  }
+  .landing__hero-btns {
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center
+  }
+
+  .q-col-gutter-sm {
+    padding: 10px 5px;
+  }
+
+  .text-subtitle1 {
+    font-size: 1.25rem;
+  }
+  .text-subtitle2 {
+    font-size: 1rem;
+  }
+  .text-subtitle3 {
+    font-size: 0.75rem;
+  }
+
+  .carousel_img_3 {
+    //background-image: url(../../statics/images/cibo_sano.jpg);
+    background-size: 620px 620px !important;
+    background-position: 50% top !important;
+    background-repeat: no-repeat !important;
+  }
+
+}
+
+.custom-caption {
+  text-align: center;
+  padding: 12px;
+  color: white;
+  background-color: rgba(0, 0, 0, .3);
+}
 

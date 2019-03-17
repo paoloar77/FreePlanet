@@ -31,7 +31,6 @@ const state: IUserState = {
   isAdmin: false
 }
 
-
 const b = storeBuilder.module<IUserState>('UserModule', state)
 const stateGetter = b.state()
 
@@ -40,7 +39,7 @@ namespace Getters {
   //   return state.userInfos.firstname?capitalize(state.userInfos.firstname) + " " + capitalize(state.userInfos.lastname):null;
   // })
 
-  const lang = b.read(state => {
+  const lang = b.read((state) => {
     if (state.lang !== '') {
       return state.lang
     } else {
@@ -60,11 +59,11 @@ namespace Getters {
   //   }
   // }, 'tok')
 
-  const isServerError = b.read(state => {
+  const isServerError = b.read((state) => {
     return (state.servercode === tools.ERR_SERVERFETCH)
   }, 'isServerError')
 
-  const getServerCode = b.read(state => {
+  const getServerCode = b.read((state) => {
     return state.servercode
   }, 'getServerCode')
 
@@ -84,27 +83,27 @@ namespace Getters {
     // get fullName() { return fullName();},
   }
 
-
 }
-
 
 namespace Mutations {
   function authUser(state: IUserState, data: IUserState ) {
     state.userId = data.userId
     state.username = data.username
-    if (data.verified_email)
+    if (data.verified_email) {
       state.verified_email = data.verified_email
+    }
 
-    if (data.categorySel)
-      state.categorySel = data.categorySel  // ??
-
+    if (data.categorySel) {
+      state.categorySel = data.categorySel
+    }  // ??
 
     resetArrToken(state.tokens)
     state.tokens.push({ access: 'auth', token: state.x_auth_token, data_login: new Date() })
 
     // ++Todo: Settings Users Admin
-    if (state.username === 'paoloar77')
+    if (state.username === 'paoloar77') {
       state.isAdmin = true
+    }
 
     // console.log('state.tokens', state.tokens)
   }
@@ -144,7 +143,6 @@ namespace Mutations {
     state.x_auth_token = x_auth_token
   }
 
-
   function resetArrToken(arrtokens) {
     if (!arrtokens.tokens) {
       arrtokens.tokens = []
@@ -164,7 +162,6 @@ namespace Mutations {
     state.verified_email = false
     state.categorySel = 'personal'
   }
-
 
   function setErrorCatch(state: IUserState, axerr: Types.AxiosError) {
     if (state.servercode !== tools.ERR_SERVERFETCH) {
@@ -192,7 +189,6 @@ namespace Mutations {
     return msgerrore
   }
 
-
   export const mutations = {
     authUser: b.commit(authUser),
     setpassword: b.commit(setpassword),
@@ -206,7 +202,6 @@ namespace Mutations {
     setErrorCatch: b.commit(setErrorCatch),
     getMsgError: b.commit(getMsgError)
   }
-
 
 }
 
@@ -225,7 +220,7 @@ namespace Actions {
 
   async function resetpwd(context, paramquery: IUserState) {
 
-    let usertosend = {
+    const usertosend = {
       keyappid: process.env.PAO_APP_ID,
       idapp: process.env.APP_ID,
       email: paramquery.email,
@@ -237,7 +232,7 @@ namespace Actions {
     Mutations.mutations.setServerCode(tools.CALLING)
 
     return await Api.SendReq('/updatepwd', 'POST', usertosend, true)
-      .then(res => {
+      .then((res) => {
         return { code: res.data.code, msg: res.data.msg }
       })
       .catch((error: Types.AxiosError) => {
@@ -249,7 +244,7 @@ namespace Actions {
 
   async function requestpwd(context, paramquery: IUserState) {
 
-    let usertosend = {
+    const usertosend = {
       keyappid: process.env.PAO_APP_ID,
       idapp: process.env.APP_ID,
       email: paramquery.email
@@ -259,7 +254,7 @@ namespace Actions {
     Mutations.mutations.setServerCode(tools.CALLING)
 
     return await Api.SendReq('/requestnewpwd', 'POST', usertosend)
-      .then(res => {
+      .then((res) => {
         return { code: res.data.code, msg: res.data.msg }
       }).catch((error) => {
         UserStore.mutations.setErrorCatch(error)
@@ -269,7 +264,7 @@ namespace Actions {
   }
 
   async function vreg(context, paramquery: ILinkReg) {
-    let usertosend = {
+    const usertosend = {
       keyappid: process.env.PAO_APP_ID,
       idapp: process.env.APP_ID,
       idlink: paramquery.idlink
@@ -279,7 +274,7 @@ namespace Actions {
     Mutations.mutations.setServerCode(tools.CALLING)
 
     return await Api.SendReq('/vreg', 'POST', usertosend)
-      .then(res => {
+      .then((res) => {
         // console.log("RITORNO 2 ");
         // mutations.setServerCode(myres);
         if (res.data.code === serv_constants.RIS_CODE_EMAIL_VERIFIED) {
@@ -300,12 +295,12 @@ namespace Actions {
 
     // console.log("PASSW: " + authData.password);
 
-    let mylang = state.lang
+    const mylang = state.lang
     console.log('MYLANG: ' + mylang)
 
     return bcrypt.hash(authData.password, bcrypt.genSaltSync(12))
       .then((hashedPassword: string) => {
-        let usertosend = {
+        const usertosend = {
           keyappid: process.env.PAO_APP_ID,
           lang: mylang,
           email: authData.email,
@@ -319,7 +314,7 @@ namespace Actions {
         Mutations.mutations.setServerCode(tools.CALLING)
 
         return Api.SendReq('/users', 'POST', usertosend)
-          .then(res => {
+          .then((res) => {
 
             const newuser = res.data
 
@@ -328,8 +323,8 @@ namespace Actions {
             Mutations.mutations.setServerCode(res.status)
 
             if (res.status === 200) {
-              let userId = newuser._id
-              let username = authData.username
+              const userId = newuser._id
+              const username = authData.username
               if (process.env.DEV) {
                 console.log('USERNAME = ' + username)
                 console.log('IDUSER= ' + userId)
@@ -376,12 +371,12 @@ namespace Actions {
     try {
       if ('serviceWorker' in navigator) {
         sub = await navigator.serviceWorker.ready
-          .then(function (swreg) {
+          .then(function(swreg) {
             console.log('swreg')
-            let sub = swreg.pushManager.getSubscription()
+            const sub = swreg.pushManager.getSubscription()
             return sub
           })
-          .catch(e => {
+          .catch((e) => {
             sub = null
           })
       }
@@ -406,8 +401,9 @@ namespace Actions {
     }
 
     // console.log('PASSO 4')
-    if (process.env.DEBUG === '1')
+    if (process.env.DEBUG === '1') {
       console.log(usertosend)
+    }
 
     Mutations.mutations.setServerCode(tools.CALLING)
 
@@ -416,7 +412,7 @@ namespace Actions {
     console.log('Api.SendReq')
 
     return Api.SendReq('/users/login', 'POST', usertosend, true)
-      .then(res => {
+      .then((res) => {
         myres = res
 
         if (myres.status !== 200) {
@@ -424,16 +420,16 @@ namespace Actions {
         }
         return myres
 
-      }).then(res => {
+      }).then((res) => {
 
         if (res.success) {
           GlobalStore.mutations.SetwasAlreadySubOnDb(res.data.subsExistonDb)
 
-          let myuser: IUserState = res.data.usertosend
+          const myuser: IUserState = res.data.usertosend
           if (myuser) {
-            let userId = myuser.userId
-            let username = authData.username
-            let verified_email = myuser.verified_email
+            const userId = myuser.userId
+            const username = authData.username
+            const verified_email = myuser.verified_email
 
             Mutations.mutations.authUser({
               userId,
@@ -458,7 +454,7 @@ namespace Actions {
 
         return tools.OK
 
-      }).then(code => {
+      }).then((code) => {
         if (code === tools.OK) {
           return setGlobal(true)
             .then(() => {
@@ -491,14 +487,14 @@ namespace Actions {
 
     await GlobalStore.actions.clearDataAfterLogout()
 
-    let usertosend = {
+    const usertosend = {
       keyappid: process.env.PAO_APP_ID,
       idapp: process.env.APP_ID
     }
 
     console.log(usertosend)
     const riscall = await Api.SendReq('/users/me/token', 'DELETE', usertosend)
-      .then(res => {
+      .then((res) => {
         console.log(res)
       }).then(() => {
         Mutations.mutations.clearAuthData()
@@ -525,7 +521,6 @@ namespace Actions {
       })
   }
 
-
   async function autologin_FromLocalStorage(context) {
     try {
       // console.log('*** autologin_FromLocalStorage ***')
@@ -538,7 +533,7 @@ namespace Actions {
         return false
       }
       const expirationDateStr = localStorage.getItem(tools.localStorage.expirationDate)
-      let expirationDate = new Date(String(expirationDateStr))
+      const expirationDate = new Date(String(expirationDateStr))
       const now = new Date()
       if (now >= expirationDate) {
         console.log('!!! Login Expired')
@@ -571,16 +566,14 @@ namespace Actions {
     }
   }
 
-
   export const actions = {
-    resetpwd: b.dispatch(resetpwd),
-    requestpwd: b.dispatch(requestpwd),
-    vreg: b.dispatch(vreg),
-    signup: b.dispatch(signup),
-    signin: b.dispatch(signin),
+    autologin_FromLocalStorage: b.dispatch(autologin_FromLocalStorage),
     logout: b.dispatch(logout),
-    autologin_FromLocalStorage: b.dispatch(autologin_FromLocalStorage)
-
+    requestpwd: b.dispatch(requestpwd),
+    resetpwd: b.dispatch(resetpwd),
+    signin: b.dispatch(signin),
+    signup: b.dispatch(signup),
+    vreg: b.dispatch(vreg)
   }
 }
 
@@ -589,9 +582,9 @@ const UserModule = {
   get state() {
     return stateGetter()
   },
+  actions: Actions.actions,
   getters: Getters.getters,
-  mutations: Mutations.mutations,
-  actions: Actions.actions
+  mutations: Mutations.mutations
 }
 
 export default UserModule

@@ -1,8 +1,15 @@
-import { ITodo } from '@src/model'
-import { costanti } from './costanti'
-import globalroutines from './../../globalroutines/index'
-import { Todos, UserStore } from '@store'
 import Api from '@api'
+import { ITodo } from '@src/model'
+import { Todos, UserStore } from '@store'
+import globalroutines from './../../globalroutines/index'
+import { costanti } from './costanti'
+import Quasar from 'quasar'
+
+export interface INotify {
+  color?: string | 'primary'
+  textColor?: string
+  icon?: string | ''
+}
 
 export const tools = {
   EMPTY: 0,
@@ -13,6 +20,8 @@ export const tools = {
   ERR_AUTHENTICATION: -5,
   DUPLICATE_EMAIL_ID: 11000,
   DUPLICATE_USERNAME_ID: 11100,
+
+  arrLangUsed: ['enUs', 'it', 'es'],
 
   LIST_END: '10000000',
   LIST_START: '0',
@@ -53,12 +62,11 @@ export const tools = {
     COMPLETED: 110,
     PROGRESS_BAR: 120,
     PRIORITY: 130,
-    SHOW_TASK: 150,
+    SHOW_TASK: 150
   },
 
-
   selectPriority: {
-    'it': [
+    it: [
       {
         id: 1,
         label: 'Alta',
@@ -77,7 +85,7 @@ export const tools = {
         value: 0,
         icon: 'expand_more'
       }],
-    'esEs': [
+    es: [
       {
         id: 1,
         label: 'Alta',
@@ -96,7 +104,7 @@ export const tools = {
         value: 0,
         icon: 'expand_more'
       }],
-    'enUs': [
+    enUs: [
       {
         id: 1,
         label: 'High',
@@ -115,7 +123,7 @@ export const tools = {
         value: 0,
         icon: 'expand_more'
       }],
-    'de': [
+    de: [
       {
         id: 1,
         label: 'High',
@@ -135,13 +143,12 @@ export const tools = {
         icon: 'expand_more'
       }]
 
-
   },
 
   INDEX_MENU_DELETE: 4,
 
   menuPopupTodo: {
-    'it': [
+    it: [
       {
         id: 10,
         label: '',
@@ -178,7 +185,7 @@ export const tools = {
         checked: false
       }
     ],
-    'esEs': [
+    es: [
       {
         id: 10,
         label: '',
@@ -215,7 +222,7 @@ export const tools = {
         checked: false
       }
     ],
-    'enUs': [
+    enUs: [
       {
         id: 10,
         label: '',
@@ -255,34 +262,34 @@ export const tools = {
   },
 
   menuPopupConfigTodo: {
-    'it': [
+    it: [
       {
         id: 10,
         label: 'Mostra Task',
         value: 150,  // SHOW_TASK
-        icon: 'rowing',
-      },
+        icon: 'rowing'
+      }
     ],
-    'esEs': [
+    es: [
       {
         id: 10,
         label: 'Mostrar Tareas',
         value: 150,
-        icon: 'rowing',
-      },
+        icon: 'rowing'
+      }
     ],
-    'enUs': [
+    enUs: [
       {
         id: 10,
         label: 'Show Task',
         value: 150,
-        icon: 'rowing',
-      },
+        icon: 'rowing'
+      }
     ]
   },
 
   listOptionShowTask: {
-    'it': [
+    it: [
       {
         id: 10,
         label: 'Mostra gli ultimi N completati',
@@ -305,7 +312,7 @@ export const tools = {
         checked: true
       }
     ],
-    'esEs': [
+    es: [
       {
         id: 10,
         label: 'Mostrar los ultimos N completados',
@@ -328,7 +335,7 @@ export const tools = {
         checked: true
       }
     ],
-    'enUs': [
+    enUs: [
       {
         id: 10,
         label: 'Show last N Completed',
@@ -359,15 +366,17 @@ export const tools = {
 
   getItemLS(item) {
     let ris = localStorage.getItem(item)
-    if ((ris == null) || (ris === '') || (ris === 'null'))
+    if ((ris == null) || (ris === '') || (ris === 'null')) {
       ris = ''
+    }
 
     return ris
   },
 
   notifyarraychanged(array) {
-    if (array.length > 0)
+    if (array.length > 0) {
       array.splice(array.length - 1, 1, array[array.length - 1])
+    }
   },
 
   existArr(x) {
@@ -375,8 +384,8 @@ export const tools = {
   },
 
   json2array(json) {
-    let result = []
-    let keys = Object.keys(json)
+    const result = []
+    const keys = Object.keys(json)
     keys.forEach(function (key) {
       result.push(json[key])
     })
@@ -403,13 +412,13 @@ export const tools = {
               // console.log('id', id)
               const sep = '|'
 
-              let multiparams = cmdSw + sep + table + sep + method + sep + UserStore.state.x_auth_token + sep + UserStore.state.lang
-              let mymsgkey = {
+              const multiparams = cmdSw + sep + table + sep + method + sep + UserStore.state.x_auth_token + sep + UserStore.state.lang
+              const mymsgkey = {
                 _id: multiparams,
                 value: multiparams
               }
               return globalroutines(null, 'write', 'swmsg', mymsgkey, multiparams)
-                .then(ris => {
+                .then((ris) => {
                   // if ('SyncManager' in window) {
                   //   console.log('   SENDING... sw.sync.register', multiparams)
                   //   return sw.sync.register(multiparams)
@@ -431,9 +440,55 @@ export const tools = {
             })
         })
     }
+  },
 
+  showNotif(q: any, msg, data?: INotify | null) {
+    let myicon = data ? data.icon : 'ion-add'
+    if (!myicon)
+      myicon = 'ion-add'
+    let mycolor = data ? data.color : 'primary'
+    if (!mycolor)
+      mycolor = 'primary'
+    q.notify({
+      message: msg,
+      icon: myicon,
+      classes: 'my-notif-class',
+      color: mycolor,
+      timeout: 3000
+    })
+  },
+
+  checkLangPassed(mylang) {
+
+    const mybrowserLang = Quasar.lang.isoName
+
+    if (mylang !== '') {
+      if ((mylang.toLowerCase() === 'enus') || (mylang.toLowerCase() === 'en-us')) {
+        mylang = 'enUs'
+      }
+      if ((mylang.toLowerCase() === 'es') || (mylang.toLowerCase() === 'es-es') || (mylang.toLowerCase() === 'eses')) {
+        mylang = 'es'
+      }
+
+      if (!(tools.arrLangUsed.includes(mylang))) {
+        console.log('non incluso ', mylang)
+        mylang = tools.arrLangUsed[0]
+
+        // Metti Inglese come default
+        UserStore.mutations.setlang(mylang)
+      }
+    }
+
+    if (!mylang) {
+      mylang = process.env.LANG_DEFAULT
+    }
+    console.log('mylang calc : ', mylang)
+
+    return mylang
+  },
+
+  getimglogo() {
+    return 'statics/images/' + process.env.LOGO_REG
   }
-
-
 
 }

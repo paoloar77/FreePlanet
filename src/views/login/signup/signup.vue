@@ -1,4 +1,4 @@
-<template >
+<template>
     <q-page padding class="signup">
         <div class="text-center">
             <p>
@@ -8,80 +8,89 @@
 
         <!--Prova URL :  {{env('PROVA_PAOLO')}}-->
 
-        <q-field
-                :error="$v.signup.email.$error"
-                :error-label="`${errorMsg('email', $v.signup.email)}`"
-        >
+        <div class="q-gutter-xs">
             <q-input
                     v-model="signup.email"
-                    @change="val => { signup.email = val }"
-                    :before="[{icon: 'mail', handler () {}}]"
+                    rounded outlined
                     @blur="$v.signup.email.$touch"
                     :error="$v.signup.email.$error"
-                    :float-label="$t('reg.email')"></q-input>
-        </q-field>
+                    :error-message="errorMsg('email', $v.signup.email)"
+                    bottom-slots
+                    debounce="1000"
+                    :label="$t('reg.email')">
 
+                <template v-slot:prepend>
+                    <q-icon name="email"/>
+                </template>
 
-        <q-field
-                :error="$v.signup.username.$error"
-                :error-label="`${errorMsg('username', $v.signup.username)}`"
-        >
+            </q-input>
+
             <q-input
                     v-model="signup.username"
-                    @change="val => { signup.username = val }"
-                    :before="[{icon: 'person', handler () {}}]"
+                    rounded outlined
                     @blur="$v.signup.username.$touch"
                     :error="$v.signup.username.$error"
-                    :float-label="$t('reg.username')"></q-input>
-        </q-field>
+                    bottom-slots
+                    debounce="1000"
+                    :error-message="errorMsg('username', $v.signup.username)"
+                    :label="$t('reg.username')">
 
+                <template v-slot:prepend>
+                    <q-icon name="person"/>
+                </template>
 
-        <q-field
-                :error="$v.signup.password.$error"
-                :error-label="`${errorMsg('password', $v.signup.password)}`"
-        >
+            </q-input>
+
             <q-input
                     v-model="signup.password"
                     type="password"
-                    :before="[{icon: 'vpn_key', handler () {}}]"
+                    rounded outlined
                     @blur="$v.signup.password.$touch"
                     :error="$v.signup.password.$error"
-                    :float-label="$t('reg.password')"></q-input>
-        </q-field>
+                    :error-message="`${errorMsg('password', $v.signup.password)}`"
+                    bottom-slots
+                    :label="$t('reg.password')">
 
-        <q-field
-                :error="$v.signup.repeatPassword.$error"
-                :error-label="`${errorMsg('repeatpassword', $v.signup.repeatPassword)}`"
-        >
+                <template v-slot:prepend>
+                    <q-icon name="vpn_key"/>
+                </template>
+
+            </q-input>
+
             <q-input
                     v-model="signup.repeatPassword"
                     type="password"
-                    :before="[{icon: 'vpn_key', handler () {}}]"
+                    rounded outlined
                     @blur="$v.signup.repeatPassword.$touch"
                     :error="$v.signup.repeatPassword.$error"
-                    :float-label="$t('reg.repeatPassword')"></q-input>
-        </q-field>
+                    :error-message="`${errorMsg('repeatpassword', $v.signup.repeatPassword)}`"
+                    bottom-slots
+                    :label="$t('reg.repeatPassword')">
 
-        <q-field
-                :error="$v.signup.terms.$error"
-                :error-label="`${errorMsg('terms', $v.signup.terms)}`"
-        >
+                <template v-slot:prepend>
+                    <q-icon name="vpn_key"/>
+                </template>
+
+            </q-input>
+
+            <!--:hint="$t('reg.tips.repeatpassword')"-->
 
             <q-checkbox
                     v-model="signup.terms"
-                    :before="[{icon: 'vpn_key', handler () {}}]"
                     color="secondary"
                     @blur="$v.signup.terms.$touch"
                     :error="$v.signup.terms.$error"
-                    :float-label="$t('reg.terms')"
-                    :label="$t('reg.terms')"></q-checkbox>
-        </q-field>
+                    :error-message="`${errorMsg('terms', $v.signup.terms)}`"
+                    :label="$t('reg.terms')">
 
-        <br>
+            </q-checkbox>
+            <br>
 
-        <div class="wrapper">
-        <q-btn rounded size="lg" color="positive" @click="submitOk" :disabled='!allowSubmit'>{{$t('reg.submit')}}
-        </q-btn>
+            <div class="wrapper">
+                <q-btn rounded size="lg" color="positive" @click="submitOk" :disabled='!allowSubmit'>
+                    {{$t('reg.submit')}}
+                </q-btn>
+            </div>
         </div>
 
         <!--

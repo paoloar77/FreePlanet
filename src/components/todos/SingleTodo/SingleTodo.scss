@@ -25,7 +25,7 @@ $heightdescr: 20px;
 .flex-container2 {
   flex-flow: row wrap;
   justify-content: space-between;
-  margin: 0px 5px 0px 5px;  // top right bottom left
+  margin: 0px 1px 0px 1px;  // top right bottom left
 }
 
 // Set visibility: visible to the icon menu of pos-item-popover
@@ -71,7 +71,7 @@ $heightdescr: 20px;
 
 .pos-item {
   max-width: 24px;
-  min-width: 24px;
+  min-width: 26px;
   margin-left: 1px;
   margin-right: 1px;
   padding-left: 1px;
@@ -121,7 +121,7 @@ $heightdescr: 20px;
   //visibility: hidden;
 }
 
-//.q-popover.animate-scale {
+//.q-menu.animate-scale {
 //  animation: none;
 //}
 
@@ -218,18 +218,34 @@ $heightdescr: 20px;
 }
 
 .data-item {
-  max-width: 84px;
+  max-width: 78px;
+  @media (max-width: 600px) {
+    max-width: 22px;
+  }
+
   //min-width: 100px;
   //display: flex;
   //visibility: initial;
   margin-right: 3px;
-  color: #ccc;
+  color: #585858;
   order: 1;
   flex: 1;
-  height: $heightBtn;
-  line-height: $heightBtn;
+  height: $heightitem;
+  line-height: $heightitem;
+  padding-left: 2px;
+  padding-right: 0px;
+
+  //height: $heightBtn;
+  //line-height: $heightBtn;
 }
 
+
+.data_string {
+  @media (max-width: 600px) {
+    display: none;
+  }
+
+}
 
 .data-item .q-input-target{
   color:red !important;
@@ -261,9 +277,10 @@ $heightdescr: 20px;
   color: blue !important;
   overflow: hidden;
 
+  align-items: center;
+
   vertical-align: middle;
   line-height: 120%;
-  max-height: 40px;
 
   //background-color: #d50000;
 
@@ -279,14 +296,17 @@ $heightdescr: 20px;
 }
 
 .div_descr {
-  display: table-cell;
+  display: -webkit-box;
+  max-height: 45px;
 
 }
 
 
 .div_descr_edit {
+  //display: block;
   max-height: 90px;
   //line-height: 120%;
+  //max-height: 90px;
   line-height: $heightitem;
 }
 

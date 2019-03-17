@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title><%= htmlWebpackPlugin.options.productName %></title>
+    <title><%= htmlWebpackPlugin.options.appName %></title>
 
     <meta charset="utf-8">
-    <meta name="description" content="<%= htmlWebpackPlugin.options.productDescription %>">
+    <meta name="description" content="<%= htmlWebpackPlugin.options.appDescription %>">
     <meta name="format-detection" content="telephone=no">
     <meta name="msapplication-tap-highlight" content="no">
     <meta name="viewport"
@@ -14,12 +14,13 @@
     <link rel="icon" type="image/png" sizes="32x32" href="<%= htmlWebpackPlugin.files.publicPath %>statics/icons/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="<%= htmlWebpackPlugin.files.publicPath %>statics/icons/favicon-16x16.png">
     <link rel="stylesheet" type="text/css" href="<%= htmlWebpackPlugin.files.publicPath %>statics/css/dragula.css">
-    <script defer src="<%= htmlWebpackPlugin.files.publicPath %>statics/js/material.min.js"></script>
+    <!--<script defer src="<%= htmlWebpackPlugin.files.publicPath %>statics/js/material.min.js"></script>-->
     <!--<script src="<%= htmlWebpackPlugin.files.publicPath %>statics/js/promise.js"></script>-->
     <!--<script src="<%= htmlWebpackPlugin.files.publicPath %>statics/js/fetch.js"></script>-->
     <!--<script src="<%= htmlWebpackPlugin.files.publicPath %>statics/js/idb.js"></script>-->
     <!--<script src="<%= htmlWebpackPlugin.files.publicPath %>statics/js/storage.js"></script>-->
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script src="<%= htmlWebpackPlugin.files.publicPath %>statics/js/track.js"></script>
+
 
 </head>
 <body>
