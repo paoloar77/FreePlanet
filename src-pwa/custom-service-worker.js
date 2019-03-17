@@ -81,7 +81,7 @@ if (workbox) {
 
   workbox.routing.registerRoute(
     new RegExp(/\.(?:png|gif|jpg|jpeg|svg)$/),
-    workbox.strategies.CacheFirst({
+    new workbox.strategies.CacheFirst({
       cacheName: 'images',
       plugins: [
         new workbox.expiration.Plugin({
@@ -103,7 +103,8 @@ if (workbox) {
     ]
   });
 
-  workbox.routing.registerRoute(/(.*)article(.*)\.html/, args => {
+  workbox.routing.registerRoute(
+    new RegExp(/(.*)article(.*)\.html/), args => {
     return articleHandler.handle(args);
   });
 
@@ -223,7 +224,7 @@ if (workbox) {
 
   workbox.routing.registerRoute(
     new RegExp(/.*\/(?:statics\/icons).*$/),
-    workbox.strategies.cacheFirst({
+    new workbox.strategies.CacheFirst({
       cacheName: 'image-cache',
       plugins: [
         new workbox.expiration.Plugin({
@@ -271,7 +272,7 @@ if (workbox) {
 
   workbox.routing.registerRoute(
     new RegExp(/.*\/(?:statics).*$/),
-    workbox.strategies.cacheFirst({
+    new workbox.strategies.CacheFirst({
       cacheName: 'statics',
       plugins: [
         new workbox.expiration.Plugin({
