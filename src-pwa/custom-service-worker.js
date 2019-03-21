@@ -153,7 +153,7 @@ if (workbox) {
         })
         .then((clonedRes) => {
           // console.log('  3) ')
-          if (clonedRes !== undefined)
+          if (!!clonedRes)
             return clonedRes.json();
           return null
         })
@@ -514,7 +514,7 @@ self.addEventListener('notificationclick', function (event) {
             return c.visibilityState === 'visible';
           });
 
-          if (client !== undefined) {
+          if (!!client) {
             client.navigate(notification.data.url);
             client.focus();
           } else {

@@ -126,6 +126,7 @@ const messages = {
       Admin: 'Admin',
       Test1: 'Test1',
       Test2: 'Test2',
+      Projects: 'Progetti'
     },
     components: {
       authentication: {
@@ -361,6 +362,7 @@ const messages = {
       Admin: 'Administración',
       Test1: 'Test1',
       Test2: 'Test2',
+      Projects: 'Projectos',
     },
     components: {
       authentication: {
@@ -589,6 +591,7 @@ const messages = {
       Admin: 'Admin',
       Test1: 'Test1',
       Test2: 'Test2',
+      Projects: 'Projects',
     },
     components: {
       authentication: {

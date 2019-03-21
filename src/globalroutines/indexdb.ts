@@ -1,18 +1,19 @@
 import { Todos, UserStore } from '@store'
 import _ from 'lodash'
-import store, { GlobalStore } from '../store'
+import { GlobalStore } from '../store/Modules'
 
 import { idbKeyval as storage } from '../js/storage.js'
 import { costanti } from '../store/Modules/costanti'
-import { ICfgData } from '@src/model'
+import { ICfgData, IGlobalState } from '@src/model'
 
 function saveConfigIndexDb(context) {
 
-  const data: ICfgData = {}
-  data._id = costanti.CONFIG_ID_CFG
-  data.lang = UserStore.state.lang
-  data.token = UserStore.state.x_auth_token
-  data.userId = UserStore.state.userId
+  const data: ICfgData = {
+    _id: costanti.CONFIG_ID_CFG,
+    lang: UserStore.state.lang,
+    token: UserStore.state.x_auth_token,
+    userId: UserStore.state.userId
+  }
 
   writeConfigIndexDb('config', data)
 }
@@ -21,10 +22,6 @@ function writeConfigIndexDb(context, data) {
   // console.log('writeConfigIndexDb', data)
 
   storage.setdata('config', data)
-    .then((ris) => {
-      return true
-    })
-
 }
 
 async function readfromIndexDbToStateTodos(context, table) {

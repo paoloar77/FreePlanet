@@ -155,7 +155,7 @@ export default class Header extends Vue {
 
       const color = (value === 'online') ? 'positive' : 'warning'
 
-      if (oldValue !== undefined) {
+      if (!!oldValue) {
         tools.showNotif(this.$q, this.$t('connection') + ` ${value}`, {
           color,
           icon: 'wifi'

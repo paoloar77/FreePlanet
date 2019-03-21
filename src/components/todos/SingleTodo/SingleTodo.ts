@@ -271,7 +271,7 @@ export default class SingleTodo extends Vue {
         theField = this.$refs[elem] as HTMLInputElement
       }
 
-      if (theField !== undefined) {
+      if (!!theField) {
         theField.focus()
       }
       // console.log('focus()')

@@ -8,7 +8,7 @@ function translate(params) {
   const stringa = messages[lang]
 
   let ris = stringa
-  if (ris !== undefined) {
+  if (!!ris) {
     msg.forEach((param) => {
       ris = ris[param]
     })

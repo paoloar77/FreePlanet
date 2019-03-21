@@ -1,4 +1,4 @@
-export interface ITodo {
+export interface IProject {
   _id?: any,
   userId?: string
   category?: string
@@ -17,14 +17,15 @@ export interface ITodo {
   progress?: number
 }
 
-export interface IParamTodo {
+export interface IParamProject {
   categorySel?: string
   checkPending?: boolean
   id?: string
-  objtodo?: ITodo
+  objtodo?: IProject
   atfirst?: boolean
 }
 
+/*
 export interface IDrag {
   field?: string
   idelemtochange?: string
@@ -34,8 +35,9 @@ export interface IDrag {
   category: string
   atfirst?: boolean
 }
+*/
 
-export interface ITodosState {
+export interface IProjectState {
   showtype: number
   todos: {}
   categories: string[]

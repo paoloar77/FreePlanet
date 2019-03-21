@@ -1,3 +1,5 @@
+const allTables = ['todos', 'categories', 'sync_post_todos', 'sync_patch_todos', 'delete_todos', 'config', 'swmsg']
+
 let idbKeyval = (() => {
   let db;
   // console.log('idbKeyval...')
@@ -14,13 +16,9 @@ let idbKeyval = (() => {
 
         openreq.onupgradeneeded = () => {
           // First time setup: create an empty object store
-          openreq.result.createObjectStore('todos', { keyPath: '_id' });
-          openreq.result.createObjectStore('categories', { keyPath: '_id' });
-          openreq.result.createObjectStore('sync_todos', { keyPath: '_id' });
-          openreq.result.createObjectStore('sync_todos_patch', { keyPath: '_id' });
-          openreq.result.createObjectStore('delete_todos', { keyPath: '_id' });
-          openreq.result.createObjectStore('config', { keyPath: '_id' });
-          openreq.result.createObjectStore('swmsg', { keyPath: '_id' });
+          for (mytab of allTables) {
+            openreq.result.createObjectStore(mytab, { keyPath: '_id' });
+          }
         };
 
         openreq.onsuccess = () => {

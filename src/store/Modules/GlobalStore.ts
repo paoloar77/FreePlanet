@@ -15,9 +15,6 @@ import { GlobalStore, Todos, UserStore } from '@store'
 import messages from '../../statics/i18n'
 import globalroutines from './../../globalroutines/index'
 
-const allTables = ['todos', 'categories', 'sync_todos', 'sync_todos_patch', 'delete_todos', 'config', 'swmsg']
-const allTablesAfterLogin = ['todos', 'categories', 'sync_todos', 'sync_todos_patch', 'delete_todos', 'config', 'swmsg']
-
 let stateConnDefault = 'online'
 
 getstateConnSaved()
@@ -134,6 +131,8 @@ namespace Getters {
               route: '/todo', faIcon: 'fa fa-list-alt', materialIcon: 'format_list_numbered', name: 'pages.Todo',
               routes2: listatodo
             },
+            { route: '/projects', faIcon: 'fa fa-list-alt', materialIcon: 'next_week', name: 'pages.Projects' },
+
             { route: '/category', faIcon: 'fa fa-list-alt', materialIcon: 'category', name: 'pages.Category' },
             { route: '/admin/cfgserv', faIcon: 'fa fa-database', materialIcon: 'event_seat', name: 'pages.Admin' },
             { route: '/admin/testp1/par1', faIcon: 'fa fa-database', materialIcon: 'restore', name: 'pages.Test1' },
@@ -444,22 +443,22 @@ namespace Actions {
     console.log('clearDataAfterLogout')
 
     // Clear all data from the IndexedDB
-    for (const table of allTables) {
+    for (const table of tools.allTables) {
       await globalroutines(null, 'clearalldata', table, null)
     }
 
     if ('serviceWorker' in navigator) {
       // REMOVE ALL SUBSCRIPTION
       console.log('REMOVE ALL SUBSCRIPTION...')
-      await navigator.serviceWorker.ready.then(function (reg) {
+      await navigator.serviceWorker.ready.then((reg) => {
         console.log('... Ready')
         reg.pushManager.getSubscription().then((subscription) => {
           console.log('    Found Subscription...')
           if (subscription) {
-            subscription.unsubscribe().then(function (successful) {
+            subscription.unsubscribe().then((successful) => {
               // You've successfully unsubscribed
               console.log('You\'ve successfully unsubscribed')
-            }).catch(function (e) {
+            }).catch( (e) => {
               // Unsubscription failed
             })
           }

@@ -80,7 +80,7 @@
             <q-btn push
                    :class="clButtPopover"
                    icon="menu">
-                <q-menu id="popmenu" v-if="true" self="top right">
+                <q-menu ref="popmenu" self="top right">
                     <SubMenus :menuPopupTodo="menuPopupTodo" :itemtodo="itemtodo" @clickMenu="clickMenu"
                               @setPriority="setPriority"></SubMenus>
                 </q-menu>

@@ -62,6 +62,15 @@ export namespace ApiTool {
   }
 
   export async function SendReq(url: string, method: string, mydata: any, setAuthToken: boolean = false): Promise<Types.AxiosSuccess | Types.AxiosError> {
+
+    mydata = {
+      ...mydata,
+      keyappid: process.env.PAO_APP_ID,
+      idapp: process.env.APP_ID
+    }
+
+    // console.log('mydata', mydata)
+
     UserStore.mutations.setServerCode(tools.EMPTY)
     UserStore.mutations.setResStatus(0)
     return await new Promise((resolve, reject) =>  {
@@ -122,7 +131,7 @@ export namespace ApiTool {
         const token = multiparams[3]
         // let lang = multiparams[3]
 
-        if (cmd === 'sync-todos') {
+        if (cmd === tools.DB.CMD_SYNC) {
           // console.log('[Alternative] Syncing', cmd, table, method)
 
           // const headers = new Headers()

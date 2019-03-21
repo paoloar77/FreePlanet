@@ -1,12 +1,40 @@
-import { RouteConfig as VueRouteConfig } from 'vue-router'
+import { RouteConfig, Route, RouteRecord } from 'vue-router/types'
 
 import { RouteNames } from './route-names'
 import { tools } from '@src/store/Modules/tools'
 
 import auth from '../middleware/auth'
+import { Todos } from "@store"
 
+interface IMyMeta {
+  title?: string,
+  headerShadow?: boolean,
+  contentProp?: boolean,
+  transparent?: boolean,
+  isModal?: boolean,
+  requiresAuth?: boolean,
+  isTab?: boolean,
+  noAuth?: boolean,
+  asyncData?: (to?: IMyRoute | IMyRouteRecord) => Promise<{title?: string} | void>,
+  isAuthorized?: (to?: any) => boolean
+  middleware?: any[]
+}
 
-export const RouteConfig: VueRouteConfig[] = [
+export interface IMyRoute extends Route {
+  meta: IMyMeta,
+  matched: IMyRouteRecord[]
+}
+
+export interface IMyRouteRecord extends RouteRecord {
+  meta: IMyMeta,
+}
+
+export interface IMyRouteConfig extends RouteConfig {
+  children?: IMyRouteConfig[],
+  meta?: IMyMeta
+}
+
+export const routesList: IMyRouteConfig[] = [
   {
     path: '/',
     name: RouteNames.home,
@@ -32,7 +60,11 @@ export const RouteConfig: VueRouteConfig[] = [
     name: 'Todos',
     component: () => import('@/components/todos/todo/todo.vue'),
     meta: {
-      middleware: [auth]
+      requiresAuth: true,
+      async asyncData() {
+        await Todos.actions.dbLoadTodo({ checkPending: false })
+      }
+      // middleware: [auth]
     }
   },
   {
@@ -45,7 +77,8 @@ export const RouteConfig: VueRouteConfig[] = [
     name: 'cfgserv',
     component: () => import('@/components/admin/cfgServer/cfgServer.vue'),
     meta: {
-      middleware: [auth]
+      requiresAuth: true
+      // middleware: [auth]
     }
   },
   {
@@ -57,8 +90,19 @@ export const RouteConfig: VueRouteConfig[] = [
     path: '/offline',
     name: 'Offline',
     component: () => import('@/components/offline/offline.vue')
+  },
+  {
+    path: '/projects',
+    name: 'progetti',
+    component: () => import('@/components/projects/proj-list/proj-list.vue'),
+    meta: {
+      requiresAuth: true
+      // middleware: [auth]
+    }
   }
+
   /*
+
   {
     path: '/requestresetpwd',
     component: () => import('@/views/login/requestresetpwd.vue'),

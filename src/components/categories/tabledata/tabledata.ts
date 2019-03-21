@@ -120,7 +120,7 @@ export default class Tabledata extends Vue {
 
     for (const myobj of myarrobj) {
 
-      if (myobj.id !== undefined) {
+      if (!!myobj.id) {
         console.log('KEY = ', myobj.id)
 
         // Delete item
