@@ -69,9 +69,9 @@ function getIndexById(cat, id) {
   return myarr.findIndex((elem) => elem._id === id)
 }
 
-function getElemPrevById(cat, id_prev) {
+function getElemPrevById(cat, id) {
   const myarr = gettodosByCategory(cat)
-  return myarr.find((elem) => elem._id === id_prev)
+  return myarr.find((elem) => elem.id_prev === id)
 }
 
 function getLastFirstElemPriority(cat: string, priority: number, atfirst: boolean, escludiId: string) {
@@ -230,10 +230,10 @@ namespace Getters {
 
 namespace Mutations {
 
-  function findTodoById(state: ITodosState, data: IParamTodo) {
+  function findIndTodoById(state: ITodosState, data: IParamTodo) {
     const indcat = state.categories.indexOf(data.categorySel)
     if (indcat >= 0) {
-      return state.todos[indcat].find((elem) => elem._id === data.id)
+      return state.todos[indcat].findIndex((elem) => elem._id === data.id)
     }
 
     return -1
@@ -266,7 +266,7 @@ namespace Mutations {
   function deletemyitem(state: ITodosState, myitem: ITodo) {
     // Find record
     const indcat = state.categories.indexOf(myitem.category)
-    const ind = findTodoById(state, { id: myitem._id, categorySel: myitem.category })
+    const ind = findIndTodoById(state, { id: myitem._id, categorySel: myitem.category })
 
     console.log('PRIMA state.todos', state.todos)
     // Delete Item in to Array
@@ -373,18 +373,22 @@ namespace Actions {
 
   async function deleteItem(context, { cat, idobj }) {
     console.log('deleteItem: KEY = ', idobj)
-
     const myobjtrov = getElemById(cat, idobj)
+
+    console.log('myobjtrov', myobjtrov.descr)
 
     if (!!myobjtrov) {
       const myobjnext = getElemPrevById(cat, myobjtrov._id)
 
       if (!!myobjnext) {
+        // console.log('myobjnext', myobjnext.descr)
         myobjnext.id_prev = myobjtrov.id_prev
         myobjnext.modified = true
-        console.log('calling MODIFY 1')
+        // console.log('calling MODIFY 1 id_prev = ', myobjnext.id_prev)
         await modify(context, { myitem: myobjnext, field: 'id_prev' })
       }
+
+      // console.log('  MODIFY 2')
 
       // 1) Delete from the Todos Array
       Todos.mutations.deletemyitem(myobjtrov)
@@ -424,7 +428,7 @@ namespace Actions {
 
       console.log('lastelem', lastelem)
 
-      objtodo.id_prev = (lastelem !== null) ? lastelem._id : tools.LIST_START
+      objtodo.id_prev = (!!lastelem) ? lastelem._id : tools.LIST_START
       // objtodo.pos = (elemtochange !== null) ? elemtochange.pos + 1 : 1
     }
     console.log('elemtochange TORNATO:', elemtochange)
@@ -441,7 +445,7 @@ namespace Actions {
     let field = ''
     // update also the last elem
     if (atfirst) {
-      if (elemtochange !== null) {
+      if (!!elemtochange) {
         elemtochange.id_prev = id
         console.log('elemtochange', elemtochange)
         field = 'id_prev'
@@ -518,12 +522,12 @@ namespace Actions {
       miorec.completed_at = new Date().getDate()
     }
 
-    fieldtochange.forEach((field) => {
-      setmodifiedIfchanged(miorec, myobjsaved, field)
+    fieldtochange.forEach((myfield) => {
+      setmodifiedIfchanged(miorec, myobjsaved, myfield)
     })
 
     if (miorec.modified) {
-      // console.log('Todo MODIFICATO! ', miorec.descr, miorec.pos, 'SALVALO SULLA IndexedDB todos')
+      console.log('Todo MODIFICATO! ', miorec.descr, miorec.pos, 'SALVALO SULLA IndexedDB todos')
       miorec.modify_at = new Date().getDate()
       miorec.modified = false
 

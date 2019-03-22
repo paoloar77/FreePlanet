@@ -458,15 +458,35 @@ export default class SingleTodo extends Vue {
     const cancelstr = this.$t('dialog.cancel')
 
     const msg = this.$t('dialog.msg.deleteTask', {mytodo : this.itemtodo.descr })
-    await askConfirm(this.$q, this.$t('dialog.msg.titledeleteTask'), msg, deletestr, cancelstr)
-      .then((ris) => {
-        console.log('ris', ris)
-        if (ris) {
-          this.removeitem(this.itemtodo._id)
-        }
-      }).catch((err) => {
 
+    this.$q.dialog({
+      cancel: {
+        label: cancelstr
+      },
+      message: msg,
+      ok: {
+        label: deletestr,
+        push: true
+      },
+      title: this.$t('dialog.msg.titledeleteTask')
+    }).onOk(() => {
+      console.log('OK')
+      this.removeitem(this.itemtodo._id)
+    }).onCancel(() => {
+      console.log('CANCEL')
     })
+
+    /*
+        // return await askConfirm(this.$q, this.$t('dialog.msg.titledeleteTask'), msg, deletestr, cancelstr)
+          .then((ris) => {
+            console.log('ris', ris)
+            if (ris) {
+              this.removeitem(this.itemtodo._id)
+            }
+          }).catch((err) => {
+
+        })
+    */
   }
 
 }

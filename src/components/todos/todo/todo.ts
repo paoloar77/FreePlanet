@@ -306,7 +306,7 @@ export default class Todo extends Vue {
   }
 
   public mydeleteItem(idobj: string) {
-    console.log('mydeleteItem', idobj)
+    // console.log('mydeleteItem', idobj)
     return Todos.actions.deleteItem({ cat: this.categoryAtt, idobj })
   }
 

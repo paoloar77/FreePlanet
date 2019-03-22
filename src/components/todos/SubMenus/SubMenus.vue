@@ -1,13 +1,13 @@
 <template>
     <q-list separator no-border class="todo-menu">
         <div v-for="field in menuPopupTodo" :key="field.value">
-            <q-item clickable v-if="(field.value !== 130) && (field.value !== 100)" :icon="field.icon"
-                    @click.native="clickMenu(field.value)">
+            <q-item v-close-popup clickable v-if="(field.value !== 130) && (field.value !== 120)" :icon="field.icon"
+                    @click="clickMenu(field.value)">
                 <q-item-section avatar>
                     <q-icon :name="field.icon"/>
                 </q-item-section>
 
-                <q-item-section v-if="field.value !== 120" label class="item-menu">
+                <q-item-section label class="item-menu">
                     <q-item-label>{{field.label}}</q-item-label>
                 </q-item-section>
 
@@ -17,9 +17,14 @@
                 <q-item-section side v-if="field.value === 110">
                     <q-checkbox v-model="itemtodo.completed"/>
                 </q-item-section>
+            </q-item>
+            <q-item clickable v-if="(field.value === 120)" :icon="field.icon"
+                    @click="clickMenu(field.value)">
+                <q-item-section avatar>
+                    <q-icon :name="field.icon"/>
+                </q-item-section>
 
-
-                <q-item-section v-if="field.value === 120">
+                <q-item-section>
                     <q-slider label
                               :class="$parent.menuProgress"
                               v-model="itemtodo.progress"
@@ -29,19 +34,10 @@
                     />
 
                 </q-item-section>
-                <q-item-section side v-if="field.value === 120">
+                <q-item-section side>
                     <div>
                         <q-item-label style="color: blue">{{itemtodo.progress}} %</q-item-label>
                     </div>
-                </q-item-section>
-            </q-item>
-            <q-item clickable v-if="(field.value === 100)" :icon="field.icon"
-                    @click.native="clickMenu(field.value)">
-                <q-item-section avatar>
-                    <q-icon :name="field.icon" inverted color="primary"/>
-                </q-item-section>
-                <q-item-section class="item-menu">
-                    {{field.label}}
                 </q-item-section>
             </q-item>
             <q-item clickable v-if="(field.value === 130)">
