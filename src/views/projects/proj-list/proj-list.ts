@@ -65,7 +65,6 @@ export default class ProjList extends Vue {
   public todotop: string = ''
   public todobottom: string = ''
   public drag: boolean = true
-  public startpos: number = 0
   public listPriorityLabel: number[] = []
   public arrPrior: number[] = []
   public itemDragStart: any = null

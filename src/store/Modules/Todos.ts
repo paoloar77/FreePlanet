@@ -103,10 +103,10 @@ function getLastFirstElemPriority(cat: string, priority: number, atfirst: boolea
   if (trovato) {
     return myarr.length - 1
   } else {
-    if (priority === tools.Todos.PRIORITY_LOW) {
+    if (priority === tools.Priority.PRIORITY_LOW) {
       return myarr.length - 1
     }
-    else if (priority === tools.Todos.PRIORITY_HIGH) {
+    else if (priority === tools.Priority.PRIORITY_HIGH) {
       return 0
     }
   }
@@ -150,7 +150,7 @@ function initcat() {
     _id: objectId(),
     userId: UserStore.state.userId,
     descr: '',
-    priority: tools.Todos.PRIORITY_NORMAL,
+    priority: tools.Priority.PRIORITY_NORMAL,
     completed: false,
     created_at: new Date(),
     modify_at: new Date(),

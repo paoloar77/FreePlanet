@@ -36,7 +36,7 @@ export const tools = {
     lang: 'lg'
   },
 
-  Todos: {
+  Priority: {
     PRIORITY_HIGH: 2,
     PRIORITY_NORMAL: 1,
     PRIORITY_LOW: 0
@@ -442,10 +442,27 @@ export const tools = {
     })
   },
 
+  dragula_option($service, dragname) {
+    $service.options(dragname,
+      {
+        moves(el, source, handle, sibling) {
+          return !el.classList.contains('donotdrag') // elements are always draggable by default
+        },
+        accepts(el, target, source, sibling) {
+          return true // elements can be dropped in any of the `containers` by default
+        },
+        invalid(el, handle) {
+          return el.classList.contains('donotdrag') // don't prevent any drags from initiating by default
+        },
+        direction: 'vertical'
+      })
+  },
+
   isLoggedToSystem() {
     const tok = tools.getItemLS(tools.localStorage.token)
     return !!tok
   }
 
+  // _.cloneDeep(  Per clonare un oggetto
 
 }

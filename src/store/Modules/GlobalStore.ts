@@ -122,7 +122,6 @@ namespace Getters {
 
     })
 
-
     if (UserStore.state.isAdmin) {
       state.menulinks = {
         Dashboard: {
@@ -174,6 +173,8 @@ namespace Getters {
         }
       }
     }
+
+    console.log('___ return getMenu ', state.menulinks)
 
     return state.menulinks
 
@@ -284,7 +285,7 @@ namespace Mutations {
     console.log('config', config)
     if (config) {
       config.value = String(showtype)
-      Todos.state.showtype = parseInt(config.value)
+      Todos.state.showtype = parseInt(config.value, 10)
     } else {
       Todos.state.showtype = showtype
     }

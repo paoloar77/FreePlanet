@@ -403,13 +403,13 @@ export default class SingleTodo extends Vue {
       this.iconCompleted = 'check_circle_outline'
     }
 
-    if (this.itemtodo.priority === tools.Todos.PRIORITY_HIGH) {
+    if (this.itemtodo.priority === tools.Priority.PRIORITY_HIGH) {
       this.iconPriority = 'expand_less'
     }  // expand_less
-    else if (this.itemtodo.priority === tools.Todos.PRIORITY_NORMAL) {
+    else if (this.itemtodo.priority === tools.Priority.PRIORITY_NORMAL) {
       this.iconPriority = 'remove'
  }
-    else if (this.itemtodo.priority === tools.Todos.PRIORITY_LOW) {
+    else if (this.itemtodo.priority === tools.Priority.PRIORITY_LOW) {
       this.iconPriority = 'expand_more'
  }  // expand_more
 

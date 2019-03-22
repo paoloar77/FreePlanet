@@ -9,12 +9,6 @@ export const allTables = ['todos', 'categories', 'sync_post_todos', 'sync_patch_
 
 export const LIST_START = '0'
 
-export const Priority = {
-  PRIORITY_HIGH: 2,
-  PRIORITY_NORMAL: 1,
-  PRIORITY_LOW: 0
-}
-
 export const DB = {
   CMD_SYNC: 'sync-',
   CMD_SYNC_NEW: 'sync-new-',
@@ -24,7 +18,7 @@ export const DB = {
   TABLE_DELETE: 'delete_'
 }
 
-export async function dbInsertSave(call, item, method) {
+async function dbInsertSave(call, item, method) {
 
   let ret = true
   if (!('serviceWorker' in navigator)) {
@@ -57,7 +51,7 @@ export async function dbInsertSave(call, item, method) {
   return ret
 }
 
-export async function dbDeleteItem(call, item) {
+async function dbDeleteItem(call, item) {
 
   if (!('serviceWorker' in navigator)) {
     // console.log('dbdeleteItem', item)
@@ -81,7 +75,7 @@ export async function dbDeleteItem(call, item) {
   }
 }
 
-export async function Sync_Execute(cmd, table, method, item: ITodo, id, msg: String) {
+async function Sync_Execute(cmd, table, method, item: ITodo, id, msg: String) {
   // Send to Server to Sync
 
   // console.log('Sync_Execute', cmd, table, method, item.descr, id, msg)
@@ -131,7 +125,7 @@ export async function Sync_Execute(cmd, table, method, item: ITodo, id, msg: Str
   }
 }
 
-export async function Sync_ExecuteCmd(cmd, nametab: string, table, method, item: ITodo, id, msg: String) {
+async function Sync_ExecuteCmd(cmd, nametab: string, table, method, item: ITodo, id, msg: String) {
   // Send to Server to Sync
 
   console.log('Sync_Execute', cmd, table, method, item.descr, id, msg)
@@ -187,7 +181,7 @@ export async function aftercalling(ris, checkPending: boolean, nametabindex: str
   }
 }
 
-export async function checkPendingMsg() {
+async function checkPendingMsg() {
   // console.log('checkPendingMsg')
 
   const config = await globalroutines(null, 'read', 'config', null, '1')
@@ -226,7 +220,7 @@ export async function checkPendingMsg() {
 }
 
 // If something in the call of Service Worker went wrong (Network or Server Down), then retry !
-export async function sendSwMsgIfAvailable() {
+async function sendSwMsgIfAvailable() {
   let something = false
 
   if ('serviceWorker' in navigator) {
@@ -273,7 +267,7 @@ export async function sendSwMsgIfAvailable() {
   })
 }
 
-export async function waitAndRefreshData() {
+async function waitAndRefreshData() {
   return await Todos.actions.dbLoadTodo({ checkPending: false })
 }
 
@@ -299,7 +293,7 @@ export async function waitAndcheckPendingMsg() {
     })
 }
 
-export async function updatefromIndexedDbToStateTodo(nametab) {
+async function updatefromIndexedDbToStateTodo(nametab) {
   await globalroutines(null, 'updatefromIndexedDbToStateTodo', nametab, null)
     .then(() => {
       console.log('updatefromIndexedDbToStateTodo! ')
@@ -340,7 +334,7 @@ sendMessageToSW(recdata, method) {
 }
 */
 
-export function setmodifiedIfchanged(recOut, recIn, field) {
+function setmodifiedIfchanged(recOut, recIn, field) {
   if (String(recOut[field]) !== String(recIn[field])) {
     // console.log('***************  CAMPO ', field, 'MODIFICATO!', recOut[field], recIn[field])
     recOut.modified = true
@@ -406,9 +400,4 @@ export function table_DeleteRecord(nametable, myobjtrov, id) {
   // 3) Delete from the Server (call)
   Sync_DeleteItem(nametable, myobjtrov, id)
 
-}
-
-export function isLoggedToSystem() {
-  const tok = tools.getItemLS(tools.localStorage.token)
-  return !!tok
 }

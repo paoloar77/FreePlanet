@@ -10,13 +10,11 @@ import * as ApiTables from '../../store/Modules/ApiTables'
 import { GlobalStore, Todos } from '@store'
 import { UserStore } from '@store'
 
-// _.cloneDeep(  Per clonare un oggetto
-
-import { costanti } from '../../store/Modules/costanti'
 import { Getter, Mutation, State } from 'vuex-class'
-const namespace: string = 'Todos'
 
 import globalroutines from '../../globalroutines/index'
+
+const namespace: string = 'Todos'
 
 @Component({
 
@@ -30,6 +28,7 @@ import globalroutines from '../../globalroutines/index'
   }
 })
 export default class Todo extends Vue {
+  public dragname: string = 'first'
 
   get showtype() {
     return Todos.state.showtype
@@ -67,15 +66,6 @@ export default class Todo extends Vue {
 
   }
 
-  // get mytodos_dacompletare() {
-  //   return todos_dacompletare(this.categoryAtt)
-  // }
-
-  // @Watch('$route', { immediate: true, deep: true })
-  // onUrlChange(newVal: any) {
-  //   // Some action
-  // }
-
   // Computed:
   get reload_fromServer() {
     return Todos.state.reload_fromServer
@@ -90,7 +80,6 @@ export default class Todo extends Vue {
   public todotop: string = ''
   public todobottom: string = ''
   public drag: boolean = true
-  public startpos: number = 0
   public listPriorityLabel: number[] = []
   public arrPrior: number[] = []
   public itemDragStart: any = null
@@ -102,7 +91,6 @@ export default class Todo extends Vue {
   public scrollable = true
   public tmpstrTodos: string = ''
   public categoryAtt: string = ''
-  // public showtype: number = Todos.state.showtype
 
   public $refs: {
     single: SingleTodo[]
@@ -118,18 +106,6 @@ export default class Todo extends Vue {
     this.categoryAtt = this.$route.params.category
   }
 
-  // clickaggshowtype () {
-  //   console.log('1B) clickaggshowtype Todos.state.showtype=', Todos.state.showtype)
-  //   Todos.state.showtype = costanti.ShowTypeTask.SHOW_ALL
-  //   console.log('2B) Dopo: showtype=', this.showtype)
-  // }
-
-  public loadval(e) {
-    console.log('1) loadval, showtype=', this.showtype)
-    this.showtype = Todos.state.showtype
-    console.log('2) Dopo: showtype=', this.showtype)
-  }
-
   public getmyid(id) {
     return 'row' + id
   }
@@ -140,7 +116,6 @@ export default class Todo extends Vue {
 
   public onStart() {
 
-    this.startpos = 0
     this.itemDragStart = null
   }
 
@@ -155,13 +130,13 @@ export default class Todo extends Vue {
   public getTitlePriority(priority) {
     let cl = ''
 
-    if (priority === tools.Todos.PRIORITY_HIGH) {
+    if (priority === tools.Priority.PRIORITY_HIGH) {
       cl = 'high_priority'
     }
-    else if (priority === tools.Todos.PRIORITY_NORMAL) {
+    else if (priority === tools.Priority.PRIORITY_NORMAL) {
       cl = 'medium_priority'
  }
-    else if (priority === tools.Todos.PRIORITY_LOW) {
+    else if (priority === tools.Priority.PRIORITY_LOW) {
       cl = 'low_priority'
  }
 
@@ -188,25 +163,8 @@ export default class Todo extends Vue {
 
   public created() {
     const $service = this.$dragula.$service
-    $service.options('first',
-      {
-        // isContainer: function (el) {
-        //   return el.classList.contains('dragula-container')
-        // },
-        moves(el, source, handle, sibling) {
-          // console.log('moves')
-          return !el.classList.contains('donotdrag') // elements are always draggable by default
-        },
-        accepts(el, target, source, sibling) {
-          console.log('accepts dragging '+ el.id + ' from ' + source.id + ' to ' + target.id)
-          return true // elements can be dropped in any of the `containers` by default
-        },
-        invalid(el, handle) {
-          // console.log('invalid')
-          return el.classList.contains('donotdrag') // don't prevent any drags from initiating by default
-        },
-        direction: 'vertical'
-      })
+    tools.dragula_option($service, this.dragname)
+
     $service.eventBus.$on('dragend', (args) => {
 
       const itemdragend: IDrag = {
@@ -264,8 +222,8 @@ export default class Todo extends Vue {
     // Set last category selected
     localStorage.setItem(tools.localStorage.categorySel, this.categoryAtt)
 
-    for (const todosKey in ApiTables.Priority) {
-      this.listPriorityLabel.push(ApiTables.Priority[todosKey])
+    for (const todosKey in tools.Priority) {
+      this.listPriorityLabel.push(tools.Priority[todosKey])
     }
     // console.log('Priority:' + this.listPriorityLabel)
     this.setarrPriority()
@@ -348,7 +306,6 @@ export default class Todo extends Vue {
     return Todos.actions.insertTodo({ myobj, atfirst })
   }
 
-
   public async updateitem({ myitem, field }) {
     console.log('calling MODIFY updateitem', myitem, field)
     // Update the others components...
@@ -425,18 +382,5 @@ export default class Todo extends Vue {
   private getElementOldIndex(el: any) {
     return parseInt(el.attributes.index.value, 10)
   }
-
-  // setArrTodos() {
-  //
-  //   let mystr = ''
-  //   let mythis = this
-  //
-  //   mythis.tmpstrTodos = ''
-  //   return globalroutines(null, 'write', 'todos', this.todos_arr[0])
-  //     .then(function (alldata) {
-  //       mythis.getArrTodos()
-  //     })
-  // }
-  //
 
 }

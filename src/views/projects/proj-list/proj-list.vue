@@ -56,9 +56,9 @@
             <div style="display: none">{{ prior = 0, priorcomplet = false }}</div>
             <div>
                 <!--<q-infinite-scroll :handler="loadMoreTodo" :offset="7">-->
-                <div class="container" v-dragula="todos_dacompletare(categoryAtt)" drake="second">
+                <div class="container" v-dragula="proj_dacompletare(categoryAtt)" drake="second">
                     <div :id="getmyid(mytodo._id)" :index="index"
-                         v-for="(mytodo, index) in todos_dacompletare(categoryAtt)"
+                         v-for="(mytodo, index) in proj_dacompletare(categoryAtt)"
                          :key="mytodo._id" class="myitemdrag">
 
                         <div v-if="(prior !== mytodo.priority) && !mytodo.completed"
