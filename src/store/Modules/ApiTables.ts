@@ -1,6 +1,6 @@
 import Api from '@api'
 import { ITodo } from '@src/model'
-import { GlobalStore, Todos, UserStore } from '@store'
+import { GlobalStore, Todos, Projects, UserStore } from '@store'
 import globalroutines from './../../globalroutines/index'
 import { serv_constants } from '@src/store/Modules/serv_constants'
 import { tools } from '@src/store/Modules/tools'
@@ -268,6 +268,7 @@ async function sendSwMsgIfAvailable() {
 }
 
 async function waitAndRefreshData() {
+  return await Projects.actions.dbLoadProjects({ checkPending: false })
   return await Todos.actions.dbLoadTodo({ checkPending: false })
 }
 
@@ -400,4 +401,12 @@ export function table_DeleteRecord(nametable, myobjtrov, id) {
   // 3) Delete from the Server (call)
   Sync_DeleteItem(nametable, myobjtrov, id)
 
+}
+
+export function getLinkByTableName(nametable) {
+  if (nametable === 'todos') {
+    return 'todos'
+  } else if (nametable === 'projects') {
+    return 'projects'
+  }
 }

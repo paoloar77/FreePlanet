@@ -1,35 +1,29 @@
-import { ITodo, ITodosState, IParamTodo, IDrag } from 'model'
+import { IProject, IProjectsState, IParamTodo, IDrag } from 'model'
 import { storeBuilder } from './Store/Store'
 
 import Api from '@api'
 import { tools } from './tools'
 import * as ApiTables from './ApiTables'
-import { GlobalStore, Todos, UserStore } from '@store'
+import { GlobalStore, UserStore } from '@store'
 import globalroutines from './../../globalroutines/index'
-import { Mutation } from 'vuex-module-decorators'
-import { serv_constants } from '@src/store/Modules/serv_constants'
-import { GetterTree } from 'vuex'
 import objectId from '@src/js/objectId'
 import { costanti } from '@src/store/Modules/costanti'
 
-const nametable = 'todos'
+const nametable = 'projs'
 
 // import _ from 'lodash'
 
-const state: ITodosState = {
+const state: IProjectsState = {
   showtype: costanti.ShowTypeTask.SHOW_LAST_N_COMPLETED,
-  todos: {},
+  projs: {},
   categories: [],
-  // todos_changed: 1,
-  reload_fromServer: 0,
-  testpao: 'Test',
   insidePending: false,
   visuLastCompleted: 10
 }
 
 const fieldtochange: string [] = ['descr', 'completed', 'category', 'expiring_at', 'priority', 'id_prev', 'pos', 'enableExpiring', 'progress']
 
-const b = storeBuilder.module<ITodosState>('Todos', state)
+const b = storeBuilder.module<IProjectsState>('Projects', state)
 const stateGetter = b.state()
 
 function getindexbycategory(category: string) {
@@ -38,10 +32,15 @@ function getindexbycategory(category: string) {
 
 function gettodosByCategory(category: string) {
   const indcat = state.categories.indexOf(category)
-  if (!state.todos[indcat]) {
+  if (!state.projs[indcat]) {
     return []
   }
-  return state.todos[indcat]
+  return state.projs[indcat]
+}
+
+function isValidIndex(cat, index) {
+  const myarr = gettodosByCategory(cat)
+  return (index >= 0 && index < myarr.length)
 }
 
 function initcat() {
@@ -49,7 +48,7 @@ function initcat() {
   const tomorrow = new Date()
   tomorrow.setDate(tomorrow.getDate() + 1)
 
-  const objtodo: ITodo = {
+  const objproj: IProject = {
     // _id: new Date().toISOString(),  // Create NEW
     _id: objectId(),
     userId: UserStore.state.userId,
@@ -67,29 +66,29 @@ function initcat() {
     modified: false,
     progress: 0
   }
-  // return this.copy(objtodo)
-  return objtodo
+  // return this.copy(objproj)
+  return objproj
 
 }
 
 namespace Getters {
-  const todos_dacompletare = b.read((state: ITodosState) => (cat: string): ITodo[] => {
+  const projs_dacompletare = b.read((state: IProjectsState) => (cat: string): IProject[] => {
     const indcat = getindexbycategory(cat)
-    if (state.todos[indcat]) {
-      return state.todos[indcat].filter((todo) => !todo.completed)
+    if (state.projs[indcat]) {
+      return state.projs[indcat].filter((proj) => !proj.completed)
     } else {
       return []
     }
-  }, 'todos_dacompletare')
+  }, 'projs_dacompletare')
 
-  const todos_completati = b.read((state: ITodosState) => (cat: string): ITodo[] => {
+  const projs_completati = b.read((state: IProjectsState) => (cat: string): IProject[] => {
     const indcat = getindexbycategory(cat)
-    if (state.todos[indcat]) {
+    if (state.projs[indcat]) {
       if (state.showtype === costanti.ShowTypeTask.SHOW_LAST_N_COMPLETED) {
-        return state.todos[indcat].filter((todo) => todo.completed).slice(0, state.visuLastCompleted)
+        return state.projs[indcat].filter((proj) => proj.completed).slice(0, state.visuLastCompleted)
       }  // Show only the first N completed
       else if (state.showtype === costanti.ShowTypeTask.SHOW_ALL) {
-        return state.todos[indcat].filter((todo) => todo.completed)
+        return state.projs[indcat].filter((proj) => proj.completed)
       }
       else {
         return []
@@ -97,76 +96,76 @@ namespace Getters {
     } else {
       return []
     }
-  }, 'todos_completati')
+  }, 'projs_completati')
 
-  const doneTodosCount = b.read((state: ITodosState) => (cat: string): number => {
-    return getters.todos_completati(cat).length
-  }, 'doneTodosCount')
-  const TodosCount = b.read((state: ITodosState) => (cat: string): number => {
+  const doneProjectsCount = b.read((state: IProjectsState) => (cat: string): number => {
+    return getters.projs_completati(cat).length
+  }, 'doneProjectsCount')
+  const ProjectsCount = b.read((state: IProjectsState) => (cat: string): number => {
     const indcat = getindexbycategory(cat)
-    if (state.todos[indcat]) {
-      return state.todos[indcat].length
+    if (state.projs[indcat]) {
+      return state.projs[indcat].length
     } else {
       return 0
     }
-  }, 'TodosCount')
+  }, 'ProjectsCount')
 
   export const getters = {
-    get todos_dacompletare() {
-      return todos_dacompletare()
+    get projs_dacompletare() {
+      return projs_dacompletare()
     },
-    get todos_completati() {
-      return todos_completati()
+    get projs_completati() {
+      return projs_completati()
     },
-    get doneTodosCount() {
-      return doneTodosCount()
+    get doneProjectsCount() {
+      return doneProjectsCount()
     },
-    get TodosCount() {
-      return TodosCount()
+    get ProjectsCount() {
+      return ProjectsCount()
     }
   }
 }
 
 namespace Mutations {
 
-  function findIndTodoById(state: ITodosState, data: IParamTodo) {
+  function findIndTodoById(state: IProjectsState, data: IParamTodo) {
     const indcat = state.categories.indexOf(data.categorySel)
     if (indcat >= 0) {
-      return state.todos[indcat].findIndex((elem) => elem._id === data.id)
+      return state.projs[indcat].findIndex((elem) => elem._id === data.id)
     }
     return -1
   }
 
-  function createNewItem(state: ITodosState, { objtodo, atfirst, categorySel }) {
+  function createNewItem(state: IProjectsState, { objproj, atfirst, categorySel }) {
     let indcat = state.categories.indexOf(categorySel)
-    if (indcat == -1) {
+    if (indcat === -1) {
       state.categories.push(categorySel)
       indcat = state.categories.indexOf(categorySel)
     }
-    console.log('createNewItem', objtodo, 'cat=', categorySel, 'state.todos[indcat]', state.todos[indcat])
-    if (state.todos[indcat] === undefined) {
-      state.todos[indcat] = []
-      state.todos[indcat].push(objtodo)
-      console.log('push state.todos[indcat]', state.todos)
+    console.log('createNewItem', objproj, 'cat=', categorySel, 'state.projs[indcat]', state.projs[indcat])
+    if (state.projs[indcat] === undefined) {
+      state.projs[indcat] = []
+      state.projs[indcat].push(objproj)
+      console.log('push state.projs[indcat]', state.projs)
       return
     }
     if (atfirst) {
-      state.todos[indcat].unshift(objtodo)
+      state.projs[indcat].unshift(objproj)
     }
     else {
-      state.todos[indcat].push(objtodo)
+      state.projs[indcat].push(objproj)
     }
 
-    console.log('state.todos[indcat]', state.todos[indcat])
+    console.log('state.projs[indcat]', state.projs[indcat])
 
   }
 
-  function deletemyitem(state: ITodosState, myitem: ITodo) {
+  function deletemyitem(state: IProjectsState, myitem: IProject) {
     // Find record
     const indcat = state.categories.indexOf(myitem.category)
     const ind = findIndTodoById(state, { id: myitem._id, categorySel: myitem.category })
 
-    ApiTables.removeitemfromarray(state.todos[indcat], ind)
+    ApiTables.removeitemfromarray(state.projs[indcat], ind)
   }
 
   export const mutations = {
@@ -178,20 +177,20 @@ namespace Mutations {
 
 namespace Actions {
 
-  async function dbLoadTodo(context, { checkPending }) {
-    console.log('dbLoadTodo', checkPending, 'userid=', UserStore.state.userId)
+  async function dbLoadProjects(context, { checkPending }) {
+    console.log('dbLoadProjects', checkPending, 'userid=', UserStore.state.userId)
 
     if (UserStore.state.userId === '') {
       return false  // Login not made
     }
 
-    const ris = await Api.SendReq('/todos/' + UserStore.state.userId, 'GET', null)
+    const ris = await Api.SendReq('/projects/' + UserStore.state.userId, 'GET', null)
       .then((res) => {
-        if (res.data.todos) {  // console.log('RISULTANTE CATEGORIES DAL SERVER = ', res.data.categories)
-          state.todos = res.data.todos
+        if (res.data.projs) {  // console.log('RISULTANTE CATEGORIES DAL SERVER = ', res.data.categories)
+          state.projs = res.data.projs
           state.categories = res.data.categories
         } else {
-          state.todos = [[]]
+          state.projs = [[]]
         }
 
         state.showtype = parseInt(GlobalStore.getters.getConfigStringbyId({
@@ -199,15 +198,15 @@ namespace Actions {
           default: costanti.ShowTypeTask.SHOW_LAST_N_COMPLETED
         }), 10)
 
-        // console.log('ARRAY TODOS = ', state.todos)
+        // console.log('ARRAY TODOS = ', state.projs)
         if (process.env.DEBUG === '1') {
-          console.log('dbLoadTodo', 'state.todos', state.todos, 'state.categories', state.categories)
+          console.log('dbLoadProjects', 'state.projs', state.projs, 'state.categories', state.categories)
         }
 
         return res
       })
       .catch((error) => {
-        console.log('error dbLoadTodo', error)
+        console.log('error dbLoadProjects', error)
         UserStore.mutations.setErrorCatch(error)
         return error
       })
@@ -237,33 +236,33 @@ namespace Actions {
     }
   }
 
-  async function insertTodo(context, { myobj, atfirst }) {
+  async function insertProject(context, { myobj, atfirst }) {
 
-    const objtodo = initcat()
+    const objproj = initcat()
 
-    objtodo.descr = myobj.descr
-    objtodo.category = myobj.category
+    objproj.descr = myobj.descr
+    objproj.category = myobj.category
 
-    let elemtochange: ITodo = null
+    let elemtochange: IProject = null
 
-    const myarr = gettodosByCategory(objtodo.category)
+    const myarr = gettodosByCategory(objproj.category)
 
     if (atfirst) {
       console.log('INSERT AT THE TOP')
       elemtochange = tools.getFirstList(myarr)
-      objtodo.id_prev = ApiTables.LIST_START
+      objproj.id_prev = ApiTables.LIST_START
     } else {
       console.log('INSERT AT THE BOTTOM')
       // INSERT AT THE BOTTOM , so GET LAST ITEM
-      const lastelem = tools.getLastListNotCompleted(nametable, objtodo.category)
+      const lastelem = tools.getLastListNotCompleted(nametable, objproj.category)
 
-      objtodo.id_prev = (!!lastelem) ? lastelem._id : ApiTables.LIST_START
+      objproj.id_prev = (!!lastelem) ? lastelem._id : ApiTables.LIST_START
     }
-    objtodo.modified = false
+    objproj.modified = false
 
-    Todos.mutations.createNewItem({ objtodo, atfirst, categorySel: objtodo.category })    // 1) Create record in Memory
+    Mutations.mutations.createNewItem({ objproj, atfirst, categorySel: objproj.category })    // 1) Create record in Memory
 
-    const id = await globalroutines(context, 'write', nametable, objtodo)           // 2) Insert into the IndexedDb
+    const id = await globalroutines(context, 'write', nametable, objproj)           // 2) Insert into the IndexedDb
 
     let field = ''
     if (atfirst) {    // update also the last elem
@@ -278,23 +277,23 @@ namespace Actions {
     }
 
     // 3) send to the Server
-    return await ApiTables.Sync_SaveItem(nametable, 'POST', objtodo)
+    return await ApiTables.Sync_SaveItem(nametable, 'POST', objproj)
       .then((ris) => {
         // *** Check if need to be moved because of the --- Priority Ordering --- ...
 
-        const indelem = tools.getIndexById(myarr, objtodo._id)
+        const indelem = tools.getIndexById(myarr, objproj._id)
         let itemdragend
         if (atfirst) {
           // Check the second item, if it's different priority, then move to the first position of the priority
           const secondindelem = indelem + 1
           if (tools.isOkIndex(myarr, secondindelem)) {
             const secondelem = tools.getElemByIndex(myarr, secondindelem)
-            if (secondelem.priority !== objtodo.priority) {
+            if (secondelem.priority !== objproj.priority) {
               itemdragend = {
                 field: 'priority',
-                idelemtochange: objtodo._id,
-                prioritychosen: objtodo.priority,
-                category: objtodo.category,
+                idelemtochange: objproj._id,
+                prioritychosen: objproj.priority,
+                category: objproj.category,
                 atfirst
               }
             }
@@ -305,12 +304,12 @@ namespace Actions {
           const prevlastindelem = indelem - 1
           if (tools.isOkIndex(myarr, prevlastindelem)) {
             const prevlastelem = tools.getElemByIndex(myarr, prevlastindelem)
-            if (prevlastelem.priority !== objtodo.priority) {
+            if (prevlastelem.priority !== objproj.priority) {
               itemdragend = {
                 field: 'priority',
-                idelemtochange: objtodo._id,
-                prioritychosen: objtodo.priority,
-                category: objtodo.category,
+                idelemtochange: objproj._id,
+                prioritychosen: objproj.priority,
+                category: objproj.category,
                 atfirst
               }
             }
@@ -331,29 +330,29 @@ namespace Actions {
 
   async function swapElems(context, itemdragend: IDrag) {
     console.log('swapElems', itemdragend)
-    console.log('state.todos', state.todos)
+    console.log('state.projs', state.projs)
     console.log('state.categories', state.categories)
 
     const cat = itemdragend.category
     const indcat = state.categories.indexOf(cat)
-    const myarr = state.todos[indcat]
+    const myarr = state.projs[indcat]
 
     tools.swapGeneralElem(nametable, myarr, itemdragend, fieldtochange)
 
   }
 
   export const actions = {
-    dbLoadTodo: b.dispatch(dbLoadTodo),
+    dbLoadProjects: b.dispatch(dbLoadProjects),
     swapElems: b.dispatch(swapElems),
     deleteItem: b.dispatch(deleteItem),
-    insertTodo: b.dispatch(insertTodo),
+    insertProject: b.dispatch(insertProject),
     modify: b.dispatch(modify)
   }
 
 }
 
 // Module
-const TodosModule = {
+const ProjectsModule = {
   get state() {
     return stateGetter()
   },
@@ -362,4 +361,4 @@ const TodosModule = {
   actions: Actions.actions
 }
 
-export default TodosModule
+export default ProjectsModule

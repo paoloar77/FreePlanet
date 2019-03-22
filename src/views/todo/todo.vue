@@ -69,8 +69,8 @@
                          :key="mytodo._id" class="myitemdrag">
 
                         <div v-if="(prior !== mytodo.priority) && !mytodo.completed"
-                             :class="getTitlePriority(mytodo.priority)">
-                            <label>{{getPriorityByInd(mytodo.priority)}}</label>
+                             :class="tools.getTitlePriority(mytodo.priority)">
+                            <label>{{tools.getPriorityByInd(mytodo.priority)}}</label>
                         </div>
                         <SingleTodo ref="single" @deleteItem="mydeleteItem(mytodo._id)" @eventupdate="updateitem"
                                     @deselectAllRows="deselectAllRows" @onEnd="onEnd"

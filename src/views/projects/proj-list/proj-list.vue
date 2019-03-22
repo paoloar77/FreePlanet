@@ -56,34 +56,34 @@
             <div style="display: none">{{ prior = 0, priorcomplet = false }}</div>
             <div>
                 <!--<q-infinite-scroll :handler="loadMoreTodo" :offset="7">-->
-                <div class="container" v-dragula="proj_dacompletare(categoryAtt)" drake="second">
-                    <div :id="getmyid(mytodo._id)" :index="index"
-                         v-for="(mytodo, index) in proj_dacompletare(categoryAtt)"
-                         :key="mytodo._id" class="myitemdrag">
+                <div class="container" v-dragula="projs_dacompletare(categoryAtt)" drake="second">
+                    <div :id="getmyid(myproj._id)" :index="index"
+                         v-for="(myproj, index) in projs_dacompletare(categoryAtt)"
+                         :key="myproj._id" class="myitemdrag">
 
-                        <div v-if="(prior !== mytodo.priority) && !mytodo.completed"
-                             :class="getTitlePriority(mytodo.priority)">
-                            <label>{{getPriorityByInd(mytodo.priority)}}</label>
+                        <div v-if="(prior !== myproj.priority) && !myproj.completed"
+                             :class="getTitlePriority(myproj.priority)">
+                            <label>{{getPriorityByInd(myproj.priority)}}</label>
                         </div>
-                        <SingleTodo ref="single" @deleteItem="mydeleteItem(mytodo._id)" @eventupdate="updateitem"
+                        <SingleTodo ref="single" @deleteItem="mydeleteItem(myproj._id)" @eventupdate="updateitem"
                                     @deselectAllRows="deselectAllRows" @onEnd="onEnd"
-                                    :itemtodo='mytodo'/>
+                                    :itemtodo='myproj'/>
 
                         <!--<div :name="`REF${index}`" class="divdrag non-draggato"></div>-->
 
-                        <div style="display: none">{{ prior = mytodo.priority, priorcomplet = mytodo.completed }}
+                        <div style="display: none">{{ prior = myproj.priority, priorcomplet = myproj.completed }}
                         </div>
                     </div>
                 </div>
                 <!--</q-infinite-scroll>-->
 
 
-                <q-input v-if="TodosCount > 0" ref="insertTaskBottom" v-model="todobottom"
+                <q-input v-if="ProjectsCount > 0" ref="insertTaskBottom" v-model="todobottom"
                          style="margin-left: 6px;"
                          color="blue-12"
                          :label="$t('todo.insertbottom')"
                          :after="[{icon: 'arrow_forward', content: true, handler () {}}]"
-                         v-on:keyup.enter="insertTodo(false)"/>
+                         v-on:keyup.enter="insertProject(false)"/>
 
                 <br>
 

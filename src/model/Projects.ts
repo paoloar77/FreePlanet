@@ -17,7 +17,7 @@ export interface IProject {
   progress?: number
 }
 
-export interface IParamProject {
+export interface IParamIProject {
   categorySel?: string
   checkPending?: boolean
   id?: string
@@ -37,13 +37,10 @@ export interface IDrag {
 }
 */
 
-export interface IProjectState {
+export interface IProjectsState {
   showtype: number
-  todos: {}
+  projs: {}
   categories: string[]
-  // todos_changed: number
-  reload_fromServer: number
-  testpao: string
   insidePending: boolean
   visuLastCompleted: number
 }

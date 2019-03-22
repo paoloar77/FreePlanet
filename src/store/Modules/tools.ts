@@ -1,7 +1,9 @@
-import { UserStore } from '@store'
+import { Todos, Projects, UserStore } from '@store'
 import globalroutines from './../../globalroutines/index'
 import { costanti } from './costanti'
 import Quasar from 'quasar'
+import { ITodo } from '@src/model'
+import * as ApiTables from '@src/store/Modules/ApiTables'
 
 export interface INotify {
   color?: string | 'primary'
@@ -346,6 +348,66 @@ export const tools = {
     ]
   },
 
+  getTitlePriority(priority) {
+    let cl = ''
+
+    if (priority === tools.Priority.PRIORITY_HIGH) {
+      cl = 'high_priority'
+    }
+    else if (priority === tools.Priority.PRIORITY_NORMAL) {
+      cl = 'medium_priority'
+    }
+    else if (priority === tools.Priority.PRIORITY_LOW) {
+      cl = 'low_priority'
+    }
+
+    return cl + ' titlePriority'
+  },
+
+  getPriorityByInd(index) {
+    // console.log('LANG in PRIOR', UserStore.state.lang)
+    try {
+      const arr = tools.selectPriority[UserStore.state.lang]
+      for (const rec of arr) {
+        if (rec.value === index) {
+          return rec.label
+        }
+      }
+    } catch (e) {
+      console.log('Error: ', e)
+    }
+    return ''
+  },
+
+  logelem(mystr, elem) {
+    console.log(mystr, 'elem [', elem._id, '] ', elem.descr, ' Pr(', tools.getPriorityByInd(elem.priority), ') [', elem.id_prev, '] modif=', elem.modified)
+  },
+
+  getstrelem(elem) {
+    return 'elem [' + elem._id + '] ' + elem.descr + ' Pr(' + tools.getPriorityByInd(elem.priority) + ') [ID_PREV=' + elem.id_prev + '] modif=' + elem.modified + ' '
+  },
+
+  logga_arr(myarr: ITodo[]) {
+    let mystr = '\n'
+    myarr.forEach((item) => {
+      mystr += '[' + item.pos + '] ' + item.descr + ' Pr(' + tools.getPriorityByInd(item.priority) + ') [' + item.id_prev + '] modif=' + item.modified + '\n'
+      // mystr += '[' + item.pos + '] ' + item.descr + '\n'
+    })
+
+    return mystr
+  },
+
+  touchmove(scrollable) {
+    if (window) {
+      window.addEventListener('touchmove', (e) => {
+        // console.log('touchmove')
+        if (!scrollable) {
+          e.preventDefault()
+        }
+      }, { passive: false })
+    }
+  },
+
   jsonCopy(src) {
     return JSON.parse(JSON.stringify(src))
   },
@@ -365,6 +427,156 @@ export const tools = {
     }
   },
 
+  isOkIndex(myarr, index) {
+    return (index >= 0 && index < myarr.length)
+  },
+
+  update_idprev(myarr, indelemchange, indelemId) {
+    if (indelemchange >= 0 && indelemchange < myarr.length) {
+      const id_prev = (indelemId >= 0) ? myarr[indelemId]._id : ApiTables.LIST_START
+      if (myarr[indelemchange].id_prev !== id_prev) {
+        myarr[indelemchange].id_prev = id_prev
+        tools.notifyarraychanged(myarr[indelemchange])
+        // myarr[indelemchange].modified = true
+        console.log('Index=', indelemchange, 'indtoget', indelemId, tools.getstrelem(myarr[indelemchange]))
+        return myarr[indelemchange]
+      }
+    }
+    return null
+  },
+
+  async swapGeneralElem(nametable, myarr, itemdragend, fieldtochange) {
+
+    if (itemdragend.field === 'priority') {
+      // get last elem priority
+      console.log('get last elem priority')
+      itemdragend.newIndex = tools.getLastFirstElemPriority(itemdragend.category, itemdragend.prioritychosen, itemdragend.atfirst, itemdragend.idelemtochange)
+      itemdragend.oldIndex = tools.getIndexById(itemdragend.category, itemdragend.idelemtochange)
+
+      console.log('swapElems PRIORITY', itemdragend)
+    }
+
+    if (tools.isOkIndex(myarr, itemdragend.newIndex) && tools.isOkIndex(myarr, itemdragend.oldIndex)) {
+      myarr.splice(itemdragend.newIndex, 0, myarr.splice(itemdragend.oldIndex, 1)[0])
+      tools.notifyarraychanged(myarr[itemdragend.newIndex])
+      tools.notifyarraychanged(myarr[itemdragend.oldIndex])
+
+      if (itemdragend.field !== 'priority') {
+        const precind = itemdragend.newIndex - 1
+        const nextind = itemdragend.newIndex + 1
+
+        if (tools.isOkIndex(myarr, precind) && tools.isOkIndex(myarr, nextind)) {
+          if ((myarr[precind].priority === myarr[nextind].priority) && (myarr[precind].priority !== myarr[itemdragend.newIndex].priority)) {
+            // console.log('   1)')
+            myarr[itemdragend.newIndex].priority = myarr[precind].priority
+            tools.notifyarraychanged(myarr[itemdragend.newIndex])
+          }
+        } else {
+          if (!tools.isOkIndex(myarr, precind)) {
+            if ((myarr[nextind].priority !== myarr[itemdragend.newIndex].priority)) {
+              // console.log('   2)')
+              myarr[itemdragend.newIndex].priority = myarr[nextind].priority
+              tools.notifyarraychanged(myarr[itemdragend.newIndex])
+            }
+
+          } else {
+            if ((myarr[precind].priority !== myarr[itemdragend.newIndex].priority)) {
+              console.log('   3)')
+              myarr[itemdragend.newIndex].priority = myarr[precind].priority
+              tools.notifyarraychanged(myarr[itemdragend.newIndex])
+            }
+          }
+
+        }
+      }
+
+      // Update the id_prev property
+      const elem1 = tools.update_idprev(myarr, itemdragend.newIndex, itemdragend.newIndex - 1)
+      const elem2 = tools.update_idprev(myarr, itemdragend.newIndex + 1, itemdragend.newIndex)
+      const elem3 = tools.update_idprev(myarr, itemdragend.oldIndex, itemdragend.oldIndex - 1)
+      const elem4 = tools.update_idprev(myarr, itemdragend.oldIndex + 1, itemdragend.oldIndex)
+
+      await ApiTables.table_ModifyRecord(nametable, elem1, fieldtochange)
+      await ApiTables.table_ModifyRecord(nametable, elem2, fieldtochange)
+      await ApiTables.table_ModifyRecord(nametable, elem3, fieldtochange)
+      await ApiTables.table_ModifyRecord(nametable, elem4, fieldtochange)
+
+      // Update the records:
+    }
+  },
+
+  getIndexById(myarr, id) {
+    return myarr.findIndex((elem) => elem._id === id)
+  },
+
+  getElemById(myarr, id) {
+    return myarr.find((elem) => elem._id === id)
+  },
+
+  getElemPrevById(myarr, id) {
+    return myarr.find((elem) => elem.id_prev === id)
+  },
+
+  getLastFirstElemPriority(myarr, priority: number, atfirst: boolean, escludiId: string) {
+    if (myarr === null) {
+      return -1
+    }
+
+    let trovato: boolean = false
+
+    console.log('priority', priority)
+
+    for (let indrec = 0; indrec < myarr.length; indrec++) {
+      if ((myarr[indrec].priority === priority) && (myarr[indrec]._id !== escludiId)) {
+        trovato = true
+        if (atfirst) {
+          return indrec - 1
+        }
+      } else {
+        if (trovato) {
+          return indrec
+        }
+      }
+    }
+
+    console.log('trovato?', trovato, 'indrec')
+
+    if (trovato) {
+      return myarr.length - 1
+    } else {
+      if (priority === tools.Priority.PRIORITY_LOW) {
+        return myarr.length - 1
+      }
+      else if (priority === tools.Priority.PRIORITY_HIGH) {
+        return 0
+      }
+    }
+  },
+
+  getFirstList(myarr) {
+    return myarr.find((elem) => elem.id_prev === ApiTables.LIST_START)
+  },
+
+  getLastListNotCompleted(nametable, cat) {
+    let arr
+    if (nametable === 'todos') {
+      arr = Todos.getters.todos_dacompletare(cat)
+    } else if (nametable === 'projects') {
+      arr = Projects.getters.projs_dacompletare(cat)
+    }
+
+    return (arr.length > 0) ? arr[arr.length - 1] : null
+  },
+
+  getElemByIndex(myarr, index) {
+    if (index >= 0 && index < myarr.length) {
+      return myarr[index]
+    }
+    else {
+      return null
+    }
+  },
+
   existArr(x) {
     return x = (typeof x !== 'undefined' && x instanceof Array) ? x : []
   },
@@ -378,7 +590,7 @@ export const tools = {
     return result
   },
 
-  showNotif(q: any, msg, data?: INotify | null) {
+  showNotif(q: any, msg, data ?: INotify | null) {
     let myicon = data ? data.icon : 'ion-add'
     if (!myicon) {
       myicon = 'ion-add'
@@ -396,6 +608,26 @@ export const tools = {
     })
   },
 
+  isRegistered() {
+    return localStorage.getItem(tools.localStorage.userId) !== ''
+  },
+
+  checkIfUserExist(mythis) {
+
+    if (UserStore.state.userId === undefined) {
+      tools.showNotif(mythis.$q, mythis.$t('todo.usernotdefined'))
+      return false
+    }
+
+    if (!tools.isRegistered()) {
+      // Not logged
+      tools.showNotif(mythis.$q, mythis.$t('user.notregistered'))
+      return false
+    }
+
+    return true
+  },
+
   checkLangPassed(mylang) {
 
     const mybrowserLang = Quasar.lang.isoName
@@ -407,7 +639,6 @@ export const tools = {
       if ((mylang.toLowerCase() === 'es') || (mylang.toLowerCase() === 'es-es') || (mylang.toLowerCase() === 'eses')) {
         mylang = 'es'
       }
-
 
       if (!(tools.arrLangUsed.includes(mylang))) {
         console.log('non incluso ', mylang)
@@ -434,6 +665,38 @@ export const tools = {
     globalroutines(null, 'log', strlog + ' ' + strlog2 + ' ' + strlog3, null)
   },
 
+  /*
+  get todos_vista() {
+    let mystr = ''
+    const arr = Todos.getters.todos_dacompletare(this.categoryAtt)
+    for (const ind in arr) {
+      mystr += this.getstrelem(arr[ind]) + '\n'
+    }
+
+    return mystr + ''
+
+  }
+
+*/
+
+  /*
+    public getArrTodos() {
+
+      let mystr = ''
+
+      return globalroutines(null, 'readall', 'todos', null)
+        .then((alldata) => {
+          const myrecs = [...alldata]
+
+          myrecs.forEach((rec) => {
+            mystr = mystr + rec.descr + rec.completed + ']   ['
+          })
+
+          // this.tmpstrTodos = 'TODOS: ' + mystr
+        })
+    }
+  */
+
   aspettansec(numsec) {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
@@ -458,11 +721,11 @@ export const tools = {
       })
   },
 
+  // _.cloneDeep(  Per clonare un oggetto
+
   isLoggedToSystem() {
     const tok = tools.getItemLS(tools.localStorage.token)
     return !!tok
   }
-
-  // _.cloneDeep(  Per clonare un oggetto
 
 }

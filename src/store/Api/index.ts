@@ -142,7 +142,7 @@ export namespace ApiTool {
               // console.log('----------------------- LEGGO QUALCOSA ')
 
               const promises = myrecs.map((rec) => {
-                let link = '/todos'
+                let link = '/' + ApiTables.getLinkByTableName(table)
 
                 if (method !== 'POST') {
                   link += '/' + rec._id
