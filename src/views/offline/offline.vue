@@ -7,5 +7,5 @@
 </script>
 
 <style lang="scss" scoped>
-    @import './offline.scss';
+    @import './offline';
 </style>

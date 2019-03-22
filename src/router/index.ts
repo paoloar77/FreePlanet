@@ -129,7 +129,7 @@ Router.beforeEach(async (to: IMyRoute, from: IMyRoute, next) => {
         } else if (to.matched.some((m) => m.meta.noAuth) && UserStore.state.isLogged) {
           next('/')
         } else {
-          if (to.meta.asyncData) {
+          if (!!to.meta.asyncData) {
             await getRouteData(to)
           }
         }

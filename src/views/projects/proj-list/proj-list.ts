@@ -1,21 +1,17 @@
 import Vue from 'vue'
 import { Component, Watch } from 'vue-property-decorator'
 
-import { ICfgServer, IDrag, IGlobalState, ITodo, ITodosState } from '@src/model'
-import { SingleTodo } from '../SingleTodo'
+import { IDrag, ITodo, ITodosState } from '../../../model/index'
+import { SingleTodo } from '../../../components/todos/SingleTodo/index'
 
 import { tools } from '../../../store/Modules/tools'
+import * as ApiTables from '../../../store/Modules/ApiTables'
 
 import { GlobalStore, Todos } from '@store'
 import { UserStore } from '@store'
 
-// _.cloneDeep(  Per clonare un oggetto
-
-import { costanti } from '@src/store/Modules/costanti'
 import { Getter, Mutation, State } from 'vuex-class'
 const namespace: string = 'Todos'
-
-import globalroutines from './../../../globalroutines/index'
 
 @Component({
 
@@ -28,7 +24,7 @@ import globalroutines from './../../../globalroutines/index'
     }
   }
 })
-export default class Todo extends Vue {
+export default class ProjList extends Vue {
 
   get showtype() {
     return Todos.state.showtype
@@ -54,26 +50,6 @@ export default class Todo extends Vue {
   get TodosCount() {
     return Todos.getters.TodosCount(this.categoryAtt)
   }
-
-  get todos_vista() {
-    let mystr = ''
-    const arr = Todos.getters.todos_dacompletare(this.categoryAtt)
-    for (const ind in arr) {
-      mystr += this.getstrelem(arr[ind]) + '\n'
-    }
-
-    return mystr + ''
-
-  }
-
-  // get mytodos_dacompletare() {
-  //   return todos_dacompletare(this.categoryAtt)
-  // }
-
-  // @Watch('$route', { immediate: true, deep: true })
-  // onUrlChange(newVal: any) {
-  //   // Some action
-  // }
 
   // Computed:
   get reload_fromServer() {
@@ -107,75 +83,8 @@ export default class Todo extends Vue {
     single: SingleTodo[]
   }
 
-  @Getter('todos_dacompletare', { namespace })
-  public todos_dacompletare: (state: ITodosState, category: string) => ITodo[]
-
-  @Getter('todos_completati', { namespace })
-  public todos_completati: (state: ITodosState, category: string) => ITodo[]
-
-  @Watch('$route.params.category') public changecat() {
-    this.categoryAtt = this.$route.params.category
-  }
-
-  // clickaggshowtype () {
-  //   console.log('1B) clickaggshowtype Todos.state.showtype=', Todos.state.showtype)
-  //   Todos.state.showtype = costanti.ShowTypeTask.SHOW_ALL
-  //   console.log('2B) Dopo: showtype=', this.showtype)
-  // }
-
-  public loadval(e) {
-    console.log('1) loadval, showtype=', this.showtype)
-    this.showtype = Todos.state.showtype
-    console.log('2) Dopo: showtype=', this.showtype)
-  }
-
-  public getmyid(id) {
-    return 'row' + id
-  }
-
-  public showTask(field_value) {
-    return field_value === tools.MenuAction.SHOW_TASK
-  }
-
-  public onStart() {
-
-    this.startpos = 0
-    this.itemDragStart = null
-  }
-
-  public logelem(mystr, elem) {
-    console.log(mystr, 'elem [', elem._id, '] ', elem.descr, ' Pr(', this.getPriorityByInd(elem.priority), ') [', elem.id_prev, '] modif=', elem.modified)
-  }
-
-  public getstrelem(elem) {
-    return 'elem [' + elem._id + '] ' + elem.descr + ' Pr(' + this.getPriorityByInd(elem.priority) + ') [ID_PREV=' + elem.id_prev + '] modif=' + elem.modified + ' '
-  }
-
-  public getTitlePriority(priority) {
-    let cl = ''
-
-    if (priority === tools.Todos.PRIORITY_HIGH) {
-      cl = 'high_priority'
-    }
-    else if (priority === tools.Todos.PRIORITY_NORMAL) {
-      cl = 'medium_priority'
- }
-    else if (priority === tools.Todos.PRIORITY_LOW) {
-      cl = 'low_priority'
- }
-
-    return cl + ' titlePriority'
-  }
-
-  public logga_arr(myarr: ITodo[]) {
-    let mystr = '\n'
-    myarr.forEach((item) => {
-      mystr += '[' + item.pos + '] ' + item.descr + ' Pr(' + this.getPriorityByInd(item.priority) + ') [' + item.id_prev + '] modif=' + item.modified + '\n'
-      // mystr += '[' + item.pos + '] ' + item.descr + '\n'
-    })
-
-    return mystr
-  }
+  @Getter('projList', { namespace })
+  public projList: (state: ITodosState, category: string) => ITodo[]
 
   public async onEnd(itemdragend) {
     console.log('************  END DRAG: ', itemdragend)
@@ -257,57 +166,11 @@ export default class Todo extends Vue {
   }
 
   public async load() {
-    console.log('LOAD TODO....')
-    this.categoryAtt = this.$route.params.category
 
-    // Set last category selected
-    localStorage.setItem(tools.localStorage.categorySel, this.categoryAtt)
-
-    for (const todosKey in tools.Todos) {
-      this.listPriorityLabel.push(tools.Todos[todosKey])
-    }
-    // console.log('Priority:' + this.listPriorityLabel)
-    this.setarrPriority()
-
-    this.loadDone = true
-
-    this.checkUpdate_everytime()
-
-  }
-
-  // Call to check if need to refresh
-  public checkUpdate_everytime() {
-    this.polling = setInterval(() => {
-      this.checkUpdate()
-    }, 60000)
   }
 
   public beforeDestroy() {
-    clearInterval(this.polling)
-  }
 
-  public getPriorityByInd(index) {
-    // console.log('LANG in PRIOR', UserStore.state.lang)
-    try {
-      const arr = tools.selectPriority[UserStore.state.lang]
-      for (const rec of arr) {
-        if (rec.value === index) {
-          return rec.label
-        }
-      }
-    } catch (e) {
-
-    }
-    return ''
-  }
-
-  public isRegistered() {
-    return localStorage.getItem(tools.localStorage.userId) !== ''
-  }
-
-  public mydeleteItem(idobj: string) {
-    // console.log('mydeleteItem', idobj)
-    return Todos.actions.deleteItem({ cat: this.categoryAtt, idobj })
   }
 
   public insertTodo(atfirst: boolean = false) {
@@ -325,11 +188,11 @@ export default class Todo extends Vue {
       return
     }
 
-    if (!this.isRegistered()) {
-      // Not logged
-      tools.showNotif(this.$q, this.$t('user.notregistered'))
-      return
-    }
+    // if (!this.isRegistered()) {
+    //   // Not logged
+    //   tools.showNotif(this.$q, this.$t('user.notregistered'))
+    //   return
+    // }
 
     const myobj: ITodo = {
       descr,
@@ -353,20 +216,6 @@ export default class Todo extends Vue {
         }
       })
   }
-
-  /*
-    sendMessageToSW(recdata, method) {
-
-      navigator.serviceWorker.controller.postMessage({
-        type: 'sync',
-        recdata,
-        method,
-        cmd: 'sync-new-todos',
-        token: UserStore.state.idToken,
-        lang: UserStore.state.lang
-      })
-    }
-  */
 
   public async updateitem({ myitem, field }) {
     console.log('calling MODIFY updateitem', myitem, field)
@@ -408,35 +257,6 @@ export default class Todo extends Vue {
     }
   }
 
-  public checkUpdate() {
-    tools.waitAndcheckPendingMsg()
-  }
-
-  public loadMoreTodo(index, done) {
-    setTimeout(() => {
-      this.actualMaxPosition += 15
-      done()
-    }, 100)
-
-  }
-
-  public getArrTodos() {
-
-    let mystr = ''
-
-    this.tmpstrTodos = ''
-    return globalroutines(null, 'readall', 'todos', null)
-      .then((alldata) => {
-        const myrecs = [...alldata]
-
-        myrecs.forEach((rec) => {
-          mystr = mystr + rec.descr + rec.completed + ']   ['
-        })
-
-        this.tmpstrTodos = 'TODOS: ' + mystr
-      })
-  }
-
   private getElementIndex(el: any) {
     return [].slice.call(el.parentElement.children).indexOf(el)
   }
@@ -444,18 +264,5 @@ export default class Todo extends Vue {
   private getElementOldIndex(el: any) {
     return parseInt(el.attributes.index.value, 10)
   }
-
-  // setArrTodos() {
-  //
-  //   let mystr = ''
-  //   let mythis = this
-  //
-  //   mythis.tmpstrTodos = ''
-  //   return globalroutines(null, 'write', 'todos', this.todos_arr[0])
-  //     .then(function (alldata) {
-  //       mythis.getArrTodos()
-  //     })
-  // }
-  //
 
 }

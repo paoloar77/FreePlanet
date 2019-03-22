@@ -58,7 +58,7 @@ export const routesList: IMyRouteConfig[] = [
   {
     path: '/todo/:category',
     name: 'Todos',
-    component: () => import('@/components/todos/todo/todo.vue'),
+    component: () => import('@/views/todo/todo.vue'),
     meta: {
       requiresAuth: true,
       async asyncData() {
@@ -70,12 +70,12 @@ export const routesList: IMyRouteConfig[] = [
   {
     path: '/category',
     name: 'category',
-    component: () => import('@/components/categories/category/category.vue')
+    component: () => import('@/views/categories/category/category.vue')
   },
   {
     path: '/admin/cfgserv',
     name: 'cfgserv',
-    component: () => import('@/components/admin/cfgServer/cfgServer.vue'),
+    component: () => import('@/views/admin/cfgServer/cfgServer.vue'),
     meta: {
       requiresAuth: true
       // middleware: [auth]
@@ -84,17 +84,17 @@ export const routesList: IMyRouteConfig[] = [
   {
     path: '/admin/testp1/:category',
     name: 'Categories',
-    component: () => import('@/components/admin/testp1/testp1.vue')
+    component: () => import('@/views/admin/testp1/testp1.vue')
   },
   {
     path: '/offline',
     name: 'Offline',
-    component: () => import('@/components/offline/offline.vue')
+    component: () => import('@/views/offline/offline.vue')
   },
   {
     path: '/projects',
     name: 'progetti',
-    component: () => import('@/components/projects/proj-list/proj-list.vue'),
+    component: () => import('@/views/projects/proj-list/proj-list.vue'),
     meta: {
       requiresAuth: true
       // middleware: [auth]

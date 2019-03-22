@@ -14,7 +14,7 @@ const extendTypescriptToWebpack = (config) => {
     .alias
     .set('@components', helpers.root('src/components/index.ts'))
     // .set('@components', helpers.root('src/components'))
-    .set('@views', helpers.root('src/components/views/index.ts'))
+    .set('@views', helpers.root('src/views/index.ts'))
     // .set('@views', helpers.root('src/components/views'))
     .set('@src', helpers.root('src'))
     .set('@css', helpers.root('src/statics/css/variables.scss'))

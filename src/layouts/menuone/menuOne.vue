@@ -2,7 +2,7 @@
     <div class="no-border">
         <q-list class="rounded-borders text-primary">
             <template v-for="(parent, index) in getmenu">
-                <div class="q-list-header">{{replaceUnderlineToSpace(index)}}</div>
+                <!--<div class="q-list-header">{{replaceUnderlineToSpace(index)}}</div>-->
                 <div v-for="item in parent.routes">
                     <div v-if="item.routes2">
                         <q-expansion-item

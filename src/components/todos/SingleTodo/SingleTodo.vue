@@ -77,7 +77,7 @@
             <!--</q-popup-edit>-->
         </div>
         <div v-if="isTodo()" class="flex-item pos-item " @mousedown="clickRiga">
-            <q-btn push
+            <q-btn flat
                    :class="clButtPopover"
                    icon="menu">
                 <q-menu ref="popmenu" self="top right">

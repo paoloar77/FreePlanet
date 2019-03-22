@@ -15,6 +15,7 @@ import { serv_constants } from '@src/store/Modules/serv_constants'
 import router from '@router'
 import * as Types from '@src/store/Api/ApiTypes'
 import { costanti } from '@src/store/Modules/costanti'
+import * as ApiTables from '@src/store/Modules/ApiTables'
 
 // const algoliaApi = new AlgoliaSearch()
 export namespace ApiTool {
@@ -129,16 +130,8 @@ export namespace ApiTool {
         const table = multiparams[1]
         const method = multiparams[2]
         const token = multiparams[3]
-        // let lang = multiparams[3]
 
-        if (cmd === tools.DB.CMD_SYNC) {
-          // console.log('[Alternative] Syncing', cmd, table, method)
-
-          // const headers = new Headers()
-          // headers.append('content-Type', 'application/json')
-          // headers.append('Accept', 'application/json')
-          // headers.append('x-auth', token)
-
+        if (cmd === ApiTables.DB.CMD_SYNC) {
           let errorfromserver = false
           let lettoqualcosa = false
 
@@ -149,25 +142,14 @@ export namespace ApiTool {
               // console.log('----------------------- LEGGO QUALCOSA ')
 
               const promises = myrecs.map((rec) => {
-                // console.log('syncing', table, '', rec.descr)
-                // let link = String(process.env.MONGODB_HOST) + '/todos'
                 let link = '/todos'
 
                 if (method !== 'POST') {
                   link += '/' + rec._id
                 }
 
-                // console.log(' [Alternative] ++++++++++++++++++ SYNCING !!!!  ', rec.descr, table, 'FETCH: ', method, link, 'data:')
-
                 // Insert/Delete/Update table to the server
                 return SendReq(link, method, rec)
-                // return fetch(link, {
-                //   method: method,
-                //   headers: headers,
-                //   cache: 'no-cache',
-                //   mode: 'cors',   // 'no-cors',
-                //   body: JSON.stringify(rec)
-                // })
                   .then(() => {
                     lettoqualcosa = true
                     return globalroutines(null, 'delete', table, null, rec._id)
@@ -191,23 +173,18 @@ export namespace ApiTool {
               })
 
             }).catch((e) => {
-              // console.log('ERROR:', e)
               return (errorfromserver && !lettoqualcosa)
             })
-            .then((errorfromserver) => {
+            .then((error) => {
               // console.log('¨¨¨¨¨¨¨¨¨¨¨¨¨¨  errorfromserver:', errorfromserver)
-              const mystate = errorfromserver ? 'offline' : 'online'
+              const mystate = error ? 'offline' : 'online'
               GlobalStore.mutations.setStateConnection(mystate)
               GlobalStore.mutations.saveConfig( { _id: costanti.CONFIG_ID_STATE_CONN, value: mystate })
 
             })
-
-          // console.log(' [Alternative] A2) ?????????????????????????? ESCO DAL LOOP !!!!!!!!!')
-
         }
       }
     }
   }
-
 }
 export default ApiTool

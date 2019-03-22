@@ -285,7 +285,7 @@ export default class SingleTodo extends Vue {
       }
       // console.log('exitEdit')
       this.inEdit = false
-      this.updateClasses
+      this.updateClasses()
       this.$emit('deselectAllRows', this.itemtodo, false, singola)
     }
   }

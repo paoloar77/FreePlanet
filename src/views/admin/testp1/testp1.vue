@@ -39,5 +39,5 @@
 </script>
 
 <style lang="scss" scoped>
-    @import './testp1.scss';
+    @import './testp1';
 </style>

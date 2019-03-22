@@ -23,6 +23,4 @@ async function sendRequest(url: string, method: string, mydata: any) {
   return req
 }
 
-
-
 export default sendRequest

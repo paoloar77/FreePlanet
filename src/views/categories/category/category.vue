@@ -63,5 +63,5 @@
 </script>
 
 <style lang="scss" scoped>
-    @import './category.scss';
+    @import './category';
 </style>

@@ -33,8 +33,7 @@ export default class TableOnlyView extends Vue {
     this.loading = true
     setTimeout(() => {
       this.serverPagination = props.pagination
-      let
-        table = this.$refs.table,
+      let table = this.$refs.table,
         rows = GlobalStore.state.cfgServer.slice(),
         { page, rowsPerPage, sortBy, descending } = props.pagination
 

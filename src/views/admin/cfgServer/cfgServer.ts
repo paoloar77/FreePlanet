@@ -3,7 +3,6 @@ import { Component } from 'vue-property-decorator'
 
 import { GlobalStore } from '@store'
 
-
 @Component({})
 export default class CfgServer extends Vue {
   public loading: boolean = false
@@ -39,21 +38,20 @@ export default class CfgServer extends Vue {
   public keysel: string = ''
   public userIdsel: string = ''
 
-
-  get tableClass () {
+  get tableClass() {
     if (this.dark) {
       return 'bg-black'
     }
   }
 
-  selItem(item) {
+  public selItem(item) {
     console.log('item', item)
     this.keysel = item.chiave
     this.userIdsel = item.userid
     console.log('this.keysel', this.keysel)
   }
 
-  SaveValue(newVal, valinitial) {
+  public SaveValue(newVal, valinitial) {
     console.log('SaveValue', newVal, 'selected', this.selected)
 
     const mydata = {
@@ -65,9 +63,8 @@ export default class CfgServer extends Vue {
     GlobalStore.actions.saveCfgServerKey(mydata)
   }
 
-  created() {
+  public created() {
     this.serverData = GlobalStore.state.cfgServer.slice() // [{ chiave: 'chiave1', valore: 'valore 1' }]
     // this.serverData = GlobalStore.state.cfgServer.slice()
   }
-
 }

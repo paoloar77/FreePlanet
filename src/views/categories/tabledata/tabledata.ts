@@ -1,15 +1,13 @@
 import Vue from 'vue'
 import { Component, Watch } from 'vue-property-decorator'
 
-import { SingleCat } from '../SingleCat'
-import { ICategory } from '@src/model'
-import { tools } from "@src/store/Modules/tools"
-
+import { ICategory } from '../../../model/index'
+import globalroutines from "../../../globalroutines/index"
+import { tools } from "../../../store/Modules/tools"
 
 @Component({
-  components: { SingleCat }
 })
-export default class Category extends Vue {
+export default class Tabledata extends Vue {
   $q: any
 
   filter: boolean = false
@@ -24,15 +22,13 @@ export default class Category extends Vue {
     id: 0,
     descr_it: 'Frozen Yogurt',
     descr_en: '',
-    descr_es: '',
-    campo2bool: true
+    descr_es: ''
   },
     {
       id: 1,
       descr_it: 'Secondo',
       descr_en: '',
-      descr_es: '',
-      campo2bool: false
+      descr_es: ''
     }]
 
   columns: any [] = [
@@ -81,7 +77,7 @@ export default class Category extends Vue {
   }
 
   async loadCat() {
-    // await this.$db.categories.toArray().then(ris => this.categories_loc = ris)
+    await this.$db.categories.toArray().then(ris => this.categories_loc = ris)
 
     this.updatetable()
   }
@@ -92,7 +88,7 @@ export default class Category extends Vue {
       descr_it: '',
       descr_en: '',
       descr_es: '',
-      campo2bool: true
+      campo2bool: false
     }
     return objcat
 
@@ -106,7 +102,7 @@ export default class Category extends Vue {
     objcat.descr_it = this.category
 
     // Add to Indexdb
-    await this.$db.categories.add(objcat
+    await this.$db.categories.put(objcat
     ).then(ris => {
       myid = ris
     })
@@ -124,7 +120,7 @@ export default class Category extends Vue {
 
     for (const myobj of myarrobj) {
 
-      if (myobj.id !== undefined) {
+      if (!!myobj.id) {
         console.log('KEY = ', myobj.id)
 
         // Delete item
@@ -135,7 +131,7 @@ export default class Category extends Vue {
         console.log('deleteCount = ', deleteCount)
         if (deleteCount > 0) {
           // Remove into the memory
-          this.categories_loc.slice(this.categories_loc.indexOf(myobj), 1)
+          this.categories_loc.splice(this.categories_loc.indexOf(myobj), 1)
 
           this.updatetable()
 
@@ -179,8 +175,10 @@ export default class Category extends Vue {
     if (this.deleteCategory(this.selectedSecond)) {
       tools.showNotif(this.$q, `Deleted ` + (seldel.length.toString()) + ' item', {
         color: 'primary',
-        icon: 'delete',
+        icon: 'delete'
       })
+
+
     }
 
   }

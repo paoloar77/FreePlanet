@@ -3,6 +3,7 @@ import { storeBuilder } from './Store/Store'
 
 import Api from '@api'
 import { tools } from './tools'
+import * as ApiTables from './ApiTables'
 import { GlobalStore, Todos, UserStore } from '@store'
 import globalroutines from './../../globalroutines/index'
 import { Mutation } from 'vuex-module-decorators'
@@ -113,18 +114,12 @@ function getLastFirstElemPriority(cat: string, priority: number, atfirst: boolea
 
 function getFirstList(cat) {
   const myarr = gettodosByCategory(cat)
-  return myarr.find((elem) => elem.id_prev === tools.LIST_START)
+  return myarr.find((elem) => elem.id_prev === ApiTables.LIST_START)
 }
 
 function getLastListNotCompleted(cat) {
   const arr = Todos.getters.todos_dacompletare(cat)
-  // console.log('cat', cat, 'arr', arr)
-  if (arr.length > 0) {
-    return arr[arr.length - 1]
-  }
-  else {
-    return null
-  }
+  return (arr.length > 0) ? arr[arr.length - 1] : null
 }
 
 function getstrelem(elem) {
@@ -133,7 +128,7 @@ function getstrelem(elem) {
 
 function update_idprev(indcat, indelemchange, indelemId) {
   if (indelemchange >= 0 && indelemchange < state.todos[indcat].length) {
-    const id_prev = (indelemId >= 0) ? state.todos[indcat][indelemId]._id : tools.LIST_START
+    const id_prev = (indelemId >= 0) ? state.todos[indcat][indelemId]._id : ApiTables.LIST_START
     if (state.todos[indcat][indelemchange].id_prev !== id_prev) {
       state.todos[indcat][indelemchange].id_prev = id_prev
       tools.notifyarraychanged(state.todos[indcat][indelemchange])
@@ -235,7 +230,6 @@ namespace Mutations {
     if (indcat >= 0) {
       return state.todos[indcat].findIndex((elem) => elem._id === data.id)
     }
-
     return -1
   }
 
@@ -268,18 +262,10 @@ namespace Mutations {
     const indcat = state.categories.indexOf(myitem.category)
     const ind = findIndTodoById(state, { id: myitem._id, categorySel: myitem.category })
 
-    console.log('PRIMA state.todos', state.todos)
-    // Delete Item in to Array
-    if (ind >= 0) {
-      state.todos[indcat].splice(ind, 1)
-    }
-
-    console.log('DOPO state.todos', state.todos, 'ind', ind)
-
+    ApiTables.removeitemfromarray(state.todos[indcat], ind)
   }
 
   export const mutations = {
-    // setTestpao: b.commit(setTestpao),
     deletemyitem: b.commit(deletemyitem),
     createNewItem: b.commit(createNewItem)
   }
@@ -292,20 +278,17 @@ namespace Actions {
     console.log('dbLoadTodo', checkPending, 'userid=', UserStore.state.userId)
 
     if (UserStore.state.userId === '') {
-      return false
-    } // Login not made
+      return false  // Login not made
+    }
 
     const ris = await Api.SendReq('/todos/' + UserStore.state.userId, 'GET', null)
       .then((res) => {
-        if (res.data.todos) {
-          // console.log('RISULTANTE CATEGORIES DAL SERVER = ', res.data.categories)
+        if (res.data.todos) {  // console.log('RISULTANTE CATEGORIES DAL SERVER = ', res.data.categories)
           state.todos = res.data.todos
           state.categories = res.data.categories
         } else {
           state.todos = [[]]
         }
-
-        // console.log('PRIMA showtype = ', state.showtype)
 
         state.showtype = parseInt(GlobalStore.getters.getConfigStringbyId({
           id: costanti.CONFIG_ID_SHOW_TYPE_TODOS,
@@ -325,50 +308,7 @@ namespace Actions {
         return error
       })
 
-    if (ris.status !== 200) {
-      if (process.env.DEBUG === '1') {
-        console.log('ris.status', ris.status)
-      }
-      if (ris.status === serv_constants.RIS_CODE__HTTP_FORBIDDEN_INVALID_TOKEN) {
-        tools.consolelogpao('UNAUTHORIZING... TOKEN EXPIRED... !! ')
-      } else {
-        tools.consolelogpao('NETWORK UNREACHABLE ! (Error in fetch)', UserStore.getters.getServerCode, ris.status)
-      }
-      if ('serviceWorker' in navigator) {
-        // Read all data from IndexedDB Store into Memory
-        await tools.updatefromIndexedDbToStateTodo('categories')
-      }
-    } else {
-      if (ris.status === tools.OK && checkPending) {
-        tools.waitAndcheckPendingMsg()
-      }
-    }
-  }
-
-  function aspettansec(numsec) {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        resolve('anything')
-      }, numsec)
-    })
-  }
-
-  async function testfunc() {
-    while (true) {
-      tools.consolelogpao('testfunc')
-      // console.log('Todos.state.todos_changed:', Todos.state.todos_changed)
-      await aspettansec(5000)
-    }
-  }
-
-  function setmodifiedIfchanged(recOut, recIn, field) {
-    if (String(recOut[field]) !== String(recIn[field])) {
-      // console.log('***************  CAMPO ', field, 'MODIFICATO!', recOut[field], recIn[field])
-      recOut.modified = true
-      recOut[field] = recIn[field]
-      return true
-    }
-    return false
+    ApiTables.aftercalling(ris, checkPending, 'categories')
   }
 
   async function deleteItem(context, { cat, idobj }) {
@@ -381,30 +321,13 @@ namespace Actions {
       const myobjnext = getElemPrevById(cat, myobjtrov._id)
 
       if (!!myobjnext) {
-        // console.log('myobjnext', myobjnext.descr)
         myobjnext.id_prev = myobjtrov.id_prev
         myobjnext.modified = true
-        // console.log('calling MODIFY 1 id_prev = ', myobjnext.id_prev)
         await modify(context, { myitem: myobjnext, field: 'id_prev' })
       }
 
-      // console.log('  MODIFY 2')
-
-      // 1) Delete from the Todos Array
-      Todos.mutations.deletemyitem(myobjtrov)
-
-      // 2) Delete from the IndexedDb
-      globalroutines(context, 'delete', nametable, null, idobj)
-        .catch((error) => {
-          console.log('err: ', error)
-        })
-
-      // 3) Delete from the Server (call)
-      tools.deleteItemToSyncAndDb(nametable, myobjtrov, idobj)
-
+      ApiTables.table_DeleteRecord(nametable, myobjtrov, idobj)
     }
-
-    // console.log('FINE deleteItem')
   }
 
   async function insertTodo(context, { myobj, atfirst }) {
@@ -419,8 +342,7 @@ namespace Actions {
     if (atfirst) {
       console.log('INSERT AT THE TOP')
       elemtochange = getFirstList(objtodo.category)
-      objtodo.id_prev = tools.LIST_START
-      // objtodo.pos = (elemtochange !== null) ? elemtochange.pos - 1 : 1
+      objtodo.id_prev = ApiTables.LIST_START
     } else {
       console.log('INSERT AT THE BOTTOM')
       // INSERT AT THE BOTTOM , so GET LAST ITEM
@@ -428,13 +350,11 @@ namespace Actions {
 
       console.log('lastelem', lastelem)
 
-      objtodo.id_prev = (!!lastelem) ? lastelem._id : tools.LIST_START
-      // objtodo.pos = (elemtochange !== null) ? elemtochange.pos + 1 : 1
+      objtodo.id_prev = (!!lastelem) ? lastelem._id : ApiTables.LIST_START
     }
-    console.log('elemtochange TORNATO:', elemtochange)
     objtodo.modified = false
 
-    console.log('objtodo', objtodo, 'ID_PREV=', objtodo.id_prev)
+    // console.log('objtodo', objtodo, 'ID_PREV=', objtodo.id_prev)
 
     // 1) Create record in Memory
     Todos.mutations.createNewItem({ objtodo, atfirst, categorySel: objtodo.category })
@@ -443,8 +363,7 @@ namespace Actions {
     const id = await globalroutines(context, 'write', nametable, objtodo)
 
     let field = ''
-    // update also the last elem
-    if (atfirst) {
+    if (atfirst) {    // update also the last elem
       if (!!elemtochange) {
         elemtochange.id_prev = id
         console.log('elemtochange', elemtochange)
@@ -456,7 +375,7 @@ namespace Actions {
     }
 
     // 3) send to the Server
-    return await tools.saveItemToSyncAndDb(nametable, 'POST', objtodo)
+    return await ApiTables.Sync_SaveItem(nametable, 'POST', objtodo)
       .then((ris) => {
         // Check if need to be moved...
         const indelem = getIndexById(objtodo.category, objtodo._id)
@@ -497,55 +416,13 @@ namespace Actions {
         if (itemdragend) {
           swapElems(context, itemdragend)
         }
-
         return ris
-
       })
 
   }
 
   async function modify(context, { myitem, field }) {
-    if (myitem === null) {
-      return new Promise((resolve, reject) => {
-        resolve()
-      })
-    }
-    const myobjsaved = tools.jsonCopy(myitem)
-    // get record from IndexedDb
-    const miorec = await globalroutines(context, 'read', nametable, null, myobjsaved._id)
-    if (miorec === undefined) {
-      console.log('~~~~~~~~~~~~~~~~~~~~ !!!!!!!!!!!!!!!!!!  Record not Found !!!!!! id=', myobjsaved._id)
-      return
-    }
-
-    if (setmodifiedIfchanged(miorec, myobjsaved, 'completed')) {
-      miorec.completed_at = new Date().getDate()
-    }
-
-    fieldtochange.forEach((myfield) => {
-      setmodifiedIfchanged(miorec, myobjsaved, myfield)
-    })
-
-    if (miorec.modified) {
-      console.log('Todo MODIFICATO! ', miorec.descr, miorec.pos, 'SALVALO SULLA IndexedDB todos')
-      miorec.modify_at = new Date().getDate()
-      miorec.modified = false
-
-      // 1) Permit to Update the Views
-      tools.notifyarraychanged(miorec)
-
-      // Todos.mutations.modifymyItem(miorec)
-
-      // this.logelem('modify', miorec)
-      // 2) Modify on IndexedDb
-      return globalroutines(context, 'write', nametable, miorec)
-        .then((ris) => {
-
-          // 3) Modify on the Server (call)
-          tools.saveItemToSyncAndDb(nametable, 'PATCH', miorec)
-
-        })
-    }
+    return await ApiTables.table_ModifyRecord(nametable, myitem, fieldtochange)
   }
 
   async function swapElems(context, itemdragend: IDrag) {

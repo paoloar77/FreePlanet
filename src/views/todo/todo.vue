@@ -150,5 +150,5 @@
 <script lang="ts" src="./todo.ts">
 </script>
 <style lang="scss" scoped>
-    @import './todo.scss';
+    @import './todo';
 </style>

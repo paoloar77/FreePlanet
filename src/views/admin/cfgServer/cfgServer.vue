@@ -36,5 +36,5 @@
 </script>
 
 <style lang="scss" scoped>
-    @import './cfgServer.scss';
+    @import './cfgServer';
 </style>

@@ -19,5 +19,5 @@
 </script>
 
 <style lang="scss" scoped>
-    @import './SingleCat.scss';
+    @import './SingleCat';
 </style>

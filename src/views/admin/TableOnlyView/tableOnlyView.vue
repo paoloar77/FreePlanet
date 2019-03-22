@@ -21,9 +21,9 @@
         </q-table>
     </q-page>
 </template>
-<script lang="ts" src="./tableOnlyView.ts">
+<script lang="ts" src="tableOnlyView.ts">
 </script>
 
 <style lang="scss" scoped>
-    @import './tableOnlyView.scss';
+    @import 'tableOnlyView';
 </style>

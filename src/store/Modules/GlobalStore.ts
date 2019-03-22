@@ -11,6 +11,7 @@ import Api from '@api'
 import * as Types from '@src/store/Api/ApiTypes'
 import { costanti } from '@src/store/Modules/costanti'
 import { tools } from '@src/store/Modules/tools'
+import * as ApiTables from '@src/store/Modules/ApiTables'
 import { GlobalStore, Todos, UserStore } from '@store'
 import messages from '../../statics/i18n'
 import globalroutines from './../../globalroutines/index'
@@ -443,7 +444,7 @@ namespace Actions {
     console.log('clearDataAfterLogout')
 
     // Clear all data from the IndexedDB
-    for (const table of tools.allTables) {
+    for (const table of ApiTables.allTables) {
       await globalroutines(null, 'clearalldata', table, null)
     }
 

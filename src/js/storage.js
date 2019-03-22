@@ -13,7 +13,7 @@ export let idbKeyval = (() => {
 
         openreq.onupgradeneeded = () => {
           // First time setup: create an empty object store
-          for (mytab of tools.allTables) {
+          for (mytab of ApiTables.allTables) {
             openreq.result.createObjectStore(mytab, { keyPath: '_id' });
           }
         };
