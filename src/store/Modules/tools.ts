@@ -21,6 +21,8 @@ export const tools = {
   DUPLICATE_EMAIL_ID: 11000,
   DUPLICATE_USERNAME_ID: 11100,
 
+  FIRST_PROJ: '__FIRSTPROJ',
+
   arrLangUsed: ['enUs', 'it', 'es'],
 
   SERVKEY_VERS: 'vers',
@@ -249,7 +251,85 @@ export const tools = {
     ]
   },
 
+  menuPopupProj: {
+    it: [
+      {
+        id: 40,
+        label: 'Imposta Scadenza',
+        value: 101, // TOGGLE_EXPIRING
+        icon: 'date_range',
+        checked: true
+      },
+      {
+        id: 50,
+        label: 'Elimina',
+        value: 100, // DELETE
+        icon: 'delete',
+        checked: false
+      }
+    ],
+    es: [
+      {
+        id: 40,
+        label: 'Establecer expiración',
+        value: 101, // TOGGLE_EXPIRING
+        icon: 'date_range',
+        checked: true
+      },
+      {
+        id: 50,
+        label: 'Borrar',
+        value: 100, // DELETE
+        icon: 'delete',
+        checked: false
+      }
+    ],
+    enUs: [
+      {
+        id: 40,
+        label: 'Set Expiring',
+        value: 101, // TOGGLE_EXPIRING
+        icon: 'date_range',
+        checked: true
+      },
+      {
+        id: 50,
+        label: 'Delete',
+        value: 100, // DELETE
+        icon: 'trash',
+        checked: false
+      }
+    ]
+  },
+
   menuPopupConfigTodo: {
+    it: [
+      {
+        id: 10,
+        label: 'Mostra Task',
+        value: 150,  // SHOW_TASK
+        icon: 'rowing'
+      }
+    ],
+    es: [
+      {
+        id: 10,
+        label: 'Mostrar Tareas',
+        value: 150,
+        icon: 'rowing'
+      }
+    ],
+    enUs: [
+      {
+        id: 10,
+        label: 'Show Task',
+        value: 150,
+        icon: 'rowing'
+      }
+    ]
+  },
+
+  menuPopupConfigProject: {
     it: [
       {
         id: 10,
@@ -456,6 +536,9 @@ export const tools = {
       console.log('swapElems PRIORITY', itemdragend)
     }
 
+    if (itemdragend.newIndex === itemdragend.oldIndex)
+      return
+
     if (tools.isOkIndex(myarr, itemdragend.newIndex) && tools.isOkIndex(myarr, itemdragend.oldIndex)) {
       myarr.splice(itemdragend.newIndex, 0, myarr.splice(itemdragend.oldIndex, 1)[0])
       tools.notifyarraychanged(myarr[itemdragend.newIndex])
@@ -506,7 +589,7 @@ export const tools = {
   },
 
   getIndexById(myarr, id) {
-    return myarr.findIndex((elem) => elem._id === id)
+    return myarr.indexOf(tools.getElemById(myarr, id))
   },
 
   getElemById(myarr, id) {
@@ -557,13 +640,17 @@ export const tools = {
     return myarr.find((elem) => elem.id_prev === ApiTables.LIST_START)
   },
 
-  getLastListNotCompleted(nametable, cat) {
-    let arr
+  getModulesByTable(nametable) {
     if (nametable === 'todos') {
-      arr = Todos.getters.todos_dacompletare(cat)
+      return Todos
     } else if (nametable === 'projects') {
-      arr = Projects.getters.projs_dacompletare(cat)
+      return Projects
     }
+  },
+
+  getLastListNotCompleted(nametable, cat) {
+    const module = tools.getModulesByTable(nametable)
+    let arr = module.getters.items_dacompletare(cat)
 
     return (arr.length > 0) ? arr[arr.length - 1] : null
   },
@@ -668,7 +755,7 @@ export const tools = {
   /*
   get todos_vista() {
     let mystr = ''
-    const arr = Todos.getters.todos_dacompletare(this.categoryAtt)
+    const arr = Todos.getters.items_dacompletare(this.categoryAtt)
     for (const ind in arr) {
       mystr += this.getstrelem(arr[ind]) + '\n'
     }

@@ -5,17 +5,37 @@ import globalroutines from './../../globalroutines/index'
 import { serv_constants } from '@src/store/Modules/serv_constants'
 import { tools } from '@src/store/Modules/tools'
 
-export const allTables = ['todos', 'categories', 'sync_post_todos', 'sync_patch_todos', 'delete_todos', 'config', 'swmsg']
+export const OtherTables = ['categories', 'config', 'swmsg']
+export const MainTables = ['todos', 'projects']
+export const allMethod = ['sync_post_', 'sync_patch_', 'delete_']
+
+export function getLinkByTableName(nametable) {
+  if (nametable === 'todos') {
+    return 'todos'
+  } else if (nametable === 'projects') {
+    return 'projects'
+  }
+}
 
 export const LIST_START = '0'
 
 export const DB = {
-  CMD_SYNC: 'sync-',
-  CMD_SYNC_NEW: 'sync-new-',
-  CMD_DELETE: 'sync-delete-',
+  CMD_SYNC: 'sync',
+  CMD_SYNC_NEW: 'sync-new',
+  CMD_DELETE: 'sync-delete',
   TABLE_SYNC_POST: 'sync_post_',
   TABLE_SYNC_PATCH: 'sync_patch_',
   TABLE_DELETE: 'delete_'
+}
+
+export function allTables() {
+  const myarr = OtherTables
+  for (const tab of MainTables) {
+    for (const method of allMethod) {
+      myarr.push(method + tab)
+    }
+  }
+  return myarr
 }
 
 async function dbInsertSave(call, item, method) {
@@ -75,10 +95,10 @@ async function dbDeleteItem(call, item) {
   }
 }
 
-async function Sync_Execute(cmd, table, method, item: ITodo, id, msg: String) {
+async function Sync_Execute(cmd, tablesync, nametab, method, item: ITodo, id, msg: String) {
   // Send to Server to Sync
 
-  // console.log('Sync_Execute', cmd, table, method, item.descr, id, msg)
+  console.log('Sync_Execute', cmd, tablesync, nametab, method, item.descr, id, msg)
 
   let cmdSw = cmd
   if ((cmd === DB.CMD_SYNC_NEW) || (cmd === DB.CMD_DELETE)) {
@@ -88,18 +108,19 @@ async function Sync_Execute(cmd, table, method, item: ITodo, id, msg: String) {
   if ('serviceWorker' in navigator) {
     return await navigator.serviceWorker.ready
       .then((sw) => {
-        // console.log('----------------------      navigator.serviceWorker.ready')
+        console.log('----------------------      navigator.serviceWorker.ready')
 
-        return globalroutines(null, 'write', table, item, id)
+        return globalroutines(null, 'write', tablesync, item, id)
           .then((id) => {
             // console.log('id', id)
             const sep = '|'
 
-            const multiparams = cmdSw + sep + table + sep + method + sep + UserStore.state.x_auth_token + sep + UserStore.state.lang
+            const multiparams = cmdSw + sep + tablesync + sep + nametab + sep + method + sep + UserStore.state.x_auth_token + sep + UserStore.state.lang
             const mymsgkey = {
               _id: multiparams,
               value: multiparams
             }
+            console.log('*** swmsg')
             return globalroutines(null, 'write', 'swmsg', mymsgkey, multiparams)
               .then((ris) => {
                 // if ('SyncManager' in window) {
@@ -118,19 +139,26 @@ async function Sync_Execute(cmd, table, method, item: ITodo, id, msg: String) {
                 return data
               })
               .catch((err) => {
-                console.error('Errore in globalroutines', table, err)
+                console.error('Errore in globalroutines', tablesync, nametab, err)
               })
           })
       })
   }
 }
 
-async function Sync_ExecuteCmd(cmd, nametab: string, table, method, item: ITodo, id, msg: String) {
+async function Sync_ExecuteCmd(cmd, nametab: string, method, item: ITodo, id, msg: String) {
   // Send to Server to Sync
 
-  console.log('Sync_Execute', cmd, table, method, item.descr, id, msg)
+  let tablesync = ''
+  if (method === 'POST') {
+    tablesync = DB.TABLE_SYNC_POST + nametab
+  } else if (method === 'PATCH') {
+    tablesync = DB.TABLE_SYNC_PATCH + nametab
+  } else if (method === 'DELETE') {
+    tablesync = DB.TABLE_DELETE + nametab
+  }
 
-  const risdata = await Sync_Execute(cmd, table, method, item, id, msg)
+  const risdata = await Sync_Execute(cmd, tablesync, nametab, method, item, id, msg)
 
   if (cmd === DB.CMD_SYNC_NEW) {
     if ((method === 'POST') || (method === 'PATCH')) {
@@ -144,19 +172,11 @@ async function Sync_ExecuteCmd(cmd, nametab: string, table, method, item: ITodo,
 }
 
 export async function Sync_SaveItem(nametab: string, method, item) {
-  let table = ''
-  if (method === 'POST') {
-    table = DB.TABLE_SYNC_POST
-  }
-  else if (method === 'PATCH') {
-    table = DB.TABLE_SYNC_PATCH
-  }
-
-  return await Sync_ExecuteCmd(DB.CMD_SYNC_NEW, nametab, table + nametab, method, item, 0, '')
+  return await Sync_ExecuteCmd(DB.CMD_SYNC_NEW, nametab, method, item, 0, '')
 }
 
 export function Sync_DeleteItem(nametab: string, item, id) {
-  Sync_ExecuteCmd(DB.CMD_DELETE, nametab, DB.TABLE_DELETE + nametab, 'DELETE', item, id, '')
+  Sync_ExecuteCmd(DB.CMD_DELETE, nametab, 'DELETE', item, id, '')
 }
 
 export async function aftercalling(ris, checkPending: boolean, nametabindex: string) {
@@ -268,8 +288,8 @@ async function sendSwMsgIfAvailable() {
 }
 
 async function waitAndRefreshData() {
-  return await Projects.actions.dbLoadProjects({ checkPending: false })
-  return await Todos.actions.dbLoadTodo({ checkPending: false })
+  return await Projects.actions.dbLoad({ checkPending: false })
+  return await Todos.actions.dbLoad({ checkPending: false })
 }
 
 export async function waitAndcheckPendingMsg() {
@@ -372,7 +392,7 @@ export async function table_ModifyRecord(nametable, myitem, fieldtochange) {
   })
 
   if (miorec.modified) {
-    console.log('Todo MODIFICATO! ', miorec.descr, miorec.pos, 'SALVALO SULLA IndexedDB todos')
+    console.log(nametable + ' MODIFICATO! ', miorec.descr, miorec.pos, 'SALVALO SULLA IndexedDB')
     miorec.modify_at = new Date().getDate()
     miorec.modified = false
 
@@ -392,8 +412,10 @@ export async function table_ModifyRecord(nametable, myitem, fieldtochange) {
 
 export function table_DeleteRecord(nametable, myobjtrov, id) {
 
+  const mymodule = tools.getModulesByTable(nametable)
+
   // 1) Delete from the Todos Array
-  Todos.mutations.deletemyitem(myobjtrov)
+  mymodule.mutations.deletemyitem(myobjtrov)
 
   // 2) Delete from the IndexedDb
   globalroutines(null, 'delete', nametable, null, id)
@@ -403,10 +425,3 @@ export function table_DeleteRecord(nametable, myobjtrov, id) {
 
 }
 
-export function getLinkByTableName(nametable) {
-  if (nametable === 'todos') {
-    return 'todos'
-  } else if (nametable === 'projects') {
-    return 'projects'
-  }
-}

@@ -1,0 +1,18 @@
+.todo-menu {
+  min-width: 202px;
+
+}
+
+.item-menu {
+  font-size: 1rem;
+}
+
+.item-menu:hover {
+  cursor: pointer;
+}
+
+.menuInputProgress > div > div > div > input {
+  min-width: 30px;
+  max-width: 30px;
+  width: 30px;
+}

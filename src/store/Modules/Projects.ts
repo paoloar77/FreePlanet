@@ -9,14 +9,13 @@ import globalroutines from './../../globalroutines/index'
 import objectId from '@src/js/objectId'
 import { costanti } from '@src/store/Modules/costanti'
 
-const nametable = 'projs'
+const nametable = 'projects'
 
 // import _ from 'lodash'
 
 const state: IProjectsState = {
   showtype: costanti.ShowTypeTask.SHOW_LAST_N_COMPLETED,
-  projs: {},
-  categories: [],
+  projects: [],
   insidePending: false,
   visuLastCompleted: 10
 }
@@ -26,21 +25,16 @@ const fieldtochange: string [] = ['descr', 'completed', 'category', 'expiring_at
 const b = storeBuilder.module<IProjectsState>('Projects', state)
 const stateGetter = b.state()
 
-function getindexbycategory(category: string) {
-  return state.categories.indexOf(category)
-}
+// function getindexbycategory(category: string) {
+//   return state.categories.indexOf(category)
+// }
 
-function gettodosByCategory(category: string) {
-  const indcat = state.categories.indexOf(category)
-  if (!state.projs[indcat]) {
+function getarrByCategory(category: string) {
+  // const indcat = state.categories.indexOf(category)
+  if (!state.projects) {
     return []
   }
-  return state.projs[indcat]
-}
-
-function isValidIndex(cat, index) {
-  const myarr = gettodosByCategory(cat)
-  return (index >= 0 && index < myarr.length)
+  return state.projects
 }
 
 function initcat() {
@@ -64,7 +58,7 @@ function initcat() {
     id_prev: '',
     pos: 0,
     modified: false,
-    progress: 0
+    progressCalc: 0
   }
   // return this.copy(objproj)
   return objproj
@@ -72,23 +66,21 @@ function initcat() {
 }
 
 namespace Getters {
-  const projs_dacompletare = b.read((state: IProjectsState) => (cat: string): IProject[] => {
-    const indcat = getindexbycategory(cat)
-    if (state.projs[indcat]) {
-      return state.projs[indcat].filter((proj) => !proj.completed)
+  const items_dacompletare = b.read((state: IProjectsState) => (cat: string): IProject[] => {
+    if (state.projects) {
+      return state.projects.filter((proj) => !proj.completed)
     } else {
       return []
     }
-  }, 'projs_dacompletare')
+  }, 'items_dacompletare')
 
   const projs_completati = b.read((state: IProjectsState) => (cat: string): IProject[] => {
-    const indcat = getindexbycategory(cat)
-    if (state.projs[indcat]) {
+    if (state.projects) {
       if (state.showtype === costanti.ShowTypeTask.SHOW_LAST_N_COMPLETED) {
-        return state.projs[indcat].filter((proj) => proj.completed).slice(0, state.visuLastCompleted)
+        return state.projects.filter((proj) => proj.completed).slice(0, state.visuLastCompleted)
       }  // Show only the first N completed
       else if (state.showtype === costanti.ShowTypeTask.SHOW_ALL) {
-        return state.projs[indcat].filter((proj) => proj.completed)
+        return state.projects.filter((proj) => proj.completed)
       }
       else {
         return []
@@ -102,17 +94,16 @@ namespace Getters {
     return getters.projs_completati(cat).length
   }, 'doneProjectsCount')
   const ProjectsCount = b.read((state: IProjectsState) => (cat: string): number => {
-    const indcat = getindexbycategory(cat)
-    if (state.projs[indcat]) {
-      return state.projs[indcat].length
+    if (state.projects) {
+      return state.projects.length
     } else {
       return 0
     }
   }, 'ProjectsCount')
 
   export const getters = {
-    get projs_dacompletare() {
-      return projs_dacompletare()
+    get items_dacompletare() {
+      return items_dacompletare()
     },
     get projs_completati() {
       return projs_completati()
@@ -128,44 +119,30 @@ namespace Getters {
 
 namespace Mutations {
 
-  function findIndTodoById(state: IProjectsState, data: IParamTodo) {
-    const indcat = state.categories.indexOf(data.categorySel)
-    if (indcat >= 0) {
-      return state.projs[indcat].findIndex((elem) => elem._id === data.id)
-    }
-    return -1
-  }
-
   function createNewItem(state: IProjectsState, { objproj, atfirst, categorySel }) {
-    let indcat = state.categories.indexOf(categorySel)
-    if (indcat === -1) {
-      state.categories.push(categorySel)
-      indcat = state.categories.indexOf(categorySel)
-    }
-    console.log('createNewItem', objproj, 'cat=', categorySel, 'state.projs[indcat]', state.projs[indcat])
-    if (state.projs[indcat] === undefined) {
-      state.projs[indcat] = []
-      state.projs[indcat].push(objproj)
-      console.log('push state.projs[indcat]', state.projs)
+    console.log('createNewItem', objproj, 'cat=', categorySel, 'state.projects', state.projects)
+    if (state.projects === undefined) {
+      state.projects = []
+      state.projects.push(objproj)
+      console.log('push state.projects', state.projects)
       return
     }
     if (atfirst) {
-      state.projs[indcat].unshift(objproj)
+      state.projects.unshift(objproj)
     }
     else {
-      state.projs[indcat].push(objproj)
+      state.projects.push(objproj)
     }
 
-    console.log('state.projs[indcat]', state.projs[indcat])
+    console.log('state.projects', state.projects)
 
   }
 
   function deletemyitem(state: IProjectsState, myitem: IProject) {
     // Find record
-    const indcat = state.categories.indexOf(myitem.category)
-    const ind = findIndTodoById(state, { id: myitem._id, categorySel: myitem.category })
+    const ind = tools.getIndexById(state.projects, myitem._id)
 
-    ApiTables.removeitemfromarray(state.projs[indcat], ind)
+    ApiTables.removeitemfromarray(state.projects, ind)
   }
 
   export const mutations = {
@@ -177,8 +154,8 @@ namespace Mutations {
 
 namespace Actions {
 
-  async function dbLoadProjects(context, { checkPending }) {
-    console.log('dbLoadProjects', checkPending, 'userid=', UserStore.state.userId)
+  async function dbLoad(context, { checkPending }) {
+    console.log('dbLoad', nametable, checkPending, 'userid=', UserStore.state.userId)
 
     if (UserStore.state.userId === '') {
       return false  // Login not made
@@ -186,11 +163,10 @@ namespace Actions {
 
     const ris = await Api.SendReq('/projects/' + UserStore.state.userId, 'GET', null)
       .then((res) => {
-        if (res.data.projs) {  // console.log('RISULTANTE CATEGORIES DAL SERVER = ', res.data.categories)
-          state.projs = res.data.projs
-          state.categories = res.data.categories
+        if (res.data.projects) {  // console.log('RISULTANTE CATEGORIES DAL SERVER = ', res.data.categories)
+          state.projects = res.data.projects
         } else {
-          state.projs = [[]]
+          state.projects = []
         }
 
         state.showtype = parseInt(GlobalStore.getters.getConfigStringbyId({
@@ -198,15 +174,15 @@ namespace Actions {
           default: costanti.ShowTypeTask.SHOW_LAST_N_COMPLETED
         }), 10)
 
-        // console.log('ARRAY TODOS = ', state.projs)
+        // console.log('ARRAY TODOS = ', state.projects)
         if (process.env.DEBUG === '1') {
-          console.log('dbLoadProjects', 'state.projs', state.projs, 'state.categories', state.categories)
+          console.log('dbLoad', 'state.projects', state.projects)
         }
 
         return res
       })
       .catch((error) => {
-        console.log('error dbLoadProjects', error)
+        console.log('error dbLoad', error)
         UserStore.mutations.setErrorCatch(error)
         return error
       })
@@ -217,7 +193,7 @@ namespace Actions {
   async function deleteItem(context, { cat, idobj }) {
     console.log('deleteItem: KEY = ', idobj)
 
-    const myarr = gettodosByCategory(cat)
+    const myarr = getarrByCategory(cat)
 
     const myobjtrov = tools.getElemById(myarr, idobj)
 
@@ -236,7 +212,7 @@ namespace Actions {
     }
   }
 
-  async function insertProject(context, { myobj, atfirst }) {
+  async function dbInsert(context, { myobj, atfirst }) {
 
     const objproj = initcat()
 
@@ -245,7 +221,7 @@ namespace Actions {
 
     let elemtochange: IProject = null
 
-    const myarr = gettodosByCategory(objproj.category)
+    const myarr = getarrByCategory(objproj.category)
 
     if (atfirst) {
       console.log('INSERT AT THE TOP')
@@ -329,23 +305,20 @@ namespace Actions {
   }
 
   async function swapElems(context, itemdragend: IDrag) {
-    console.log('swapElems', itemdragend)
-    console.log('state.projs', state.projs)
-    console.log('state.categories', state.categories)
+    console.log('PROJECT swapElems', itemdragend, state.projects)
 
     const cat = itemdragend.category
-    const indcat = state.categories.indexOf(cat)
-    const myarr = state.projs[indcat]
+    const myarr = state.projects
 
     tools.swapGeneralElem(nametable, myarr, itemdragend, fieldtochange)
 
   }
 
   export const actions = {
-    dbLoadProjects: b.dispatch(dbLoadProjects),
+    dbLoad: b.dispatch(dbLoad),
     swapElems: b.dispatch(swapElems),
     deleteItem: b.dispatch(deleteItem),
-    insertProject: b.dispatch(insertProject),
+    dbInsert: b.dispatch(dbInsert),
     modify: b.dispatch(modify)
   }
 

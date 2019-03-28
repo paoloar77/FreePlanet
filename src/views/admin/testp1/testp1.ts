@@ -13,8 +13,8 @@ export default class Testp1 extends Vue {
   public paramcategory: string = ''
   public mioobj: any
 
-  // @Getter('todos_dacompletare', { namespace })
-  // public todos_dacompletare: (state: ITodosState, category: string) => ITodo[]
+  // @Getter('items_dacompletare', { namespace })
+  // public items_dacompletare: (state: ITodosState, category: string) => ITodo[]
 
   @Getter('testpao1_getter_contatore', { namespace })
   public testpao1: (state: IGlobalState, param1: number) => number

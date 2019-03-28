@@ -502,7 +502,7 @@ namespace Actions {
 
     await GlobalStore.actions.loadAfterLogin()
       .then(() => {
-        Todos.actions.dbLoadTodo({ checkPending: true })
+        Todos.actions.dbLoad({ checkPending: true })
       })
   }
 

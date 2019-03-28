@@ -70,8 +70,8 @@ export default class Todo extends Vue {
     return Todos.getters.TodosCount(this.categoryAtt)
   }
 
-  @Getter('todos_dacompletare', { namespace })
-  public todos_dacompletare: (state: ITodosState, category: string) => ITodo[]
+  @Getter('items_dacompletare', { namespace })
+  public items_dacompletare: (state: ITodosState, category: string) => ITodo[]
 
   @Getter('todos_completati', { namespace })
   public todos_completati: (state: ITodosState, category: string) => ITodo[]
@@ -150,7 +150,7 @@ export default class Todo extends Vue {
     return Todos.actions.deleteItem({ cat: this.categoryAtt, idobj })
   }
 
-  public insertTodo(atfirst: boolean = false) {
+  public dbInsert(atfirst: boolean = false) {
     let descr = this.todobottom.trim()
     if (atfirst) {
       descr = this.todotop.trim()
@@ -177,7 +177,7 @@ export default class Todo extends Vue {
       this.todobottom = ''
     }
 
-    return Todos.actions.insertTodo({ myobj, atfirst })
+    return Todos.actions.dbInsert({ myobj, atfirst })
   }
 
   public async updateitem({ myitem, field }) {

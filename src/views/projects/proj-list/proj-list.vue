@@ -9,7 +9,7 @@
                                icon="settings">
                             <q-menu id="popconfig" self="top right">
                                 <q-list link separator no-border class="todo-menu">
-                                    <q-item clickable v-for="field in menuPopupConfigTodo" :key="field.value">
+                                    <q-item clickable v-for="field in menuPopupConfigProject" :key="field.value">
                                         <q-item-section avatar>
                                             <q-icon :name="field.icon"/>
                                         </q-item-section>
@@ -56,18 +56,14 @@
             <div style="display: none">{{ prior = 0, priorcomplet = false }}</div>
             <div>
                 <!--<q-infinite-scroll :handler="loadMoreTodo" :offset="7">-->
-                <div class="container" v-dragula="projs_dacompletare(categoryAtt)" drake="second">
+                <div class="container" v-dragula="items_dacompletare(categoryAtt)" drake="second">
                     <div :id="getmyid(myproj._id)" :index="index"
-                         v-for="(myproj, index) in projs_dacompletare(categoryAtt)"
+                         v-for="(myproj, index) in items_dacompletare(categoryAtt)"
                          :key="myproj._id" class="myitemdrag">
 
-                        <div v-if="(prior !== myproj.priority) && !myproj.completed"
-                             :class="getTitlePriority(myproj.priority)">
-                            <label>{{getPriorityByInd(myproj.priority)}}</label>
-                        </div>
-                        <SingleTodo ref="single" @deleteItem="mydeleteItem(myproj._id)" @eventupdate="updateitem"
-                                    @deselectAllRows="deselectAllRows" @onEnd="onEnd"
-                                    :itemtodo='myproj'/>
+                        <SingleProject ref="single" @deleteItem="mydeleteItem(myproj._id)" @eventupdate="updateitem"
+                                    @deselectAllRows="deselectAllRows" @onEnd="onEnd2"
+                                    :itemproject='myproj'/>
 
                         <!--<div :name="`REF${index}`" class="divdrag non-draggato"></div>-->
 
@@ -78,12 +74,12 @@
                 <!--</q-infinite-scroll>-->
 
 
-                <q-input v-if="ProjectsCount > 0" ref="insertTaskBottom" v-model="todobottom"
+                <q-input ref="insertTaskBottom" v-model="projbottom"
                          style="margin-left: 6px;"
                          color="blue-12"
                          :label="$t('todo.insertbottom')"
                          :after="[{icon: 'arrow_forward', content: true, handler () {}}]"
-                         v-on:keyup.enter="insertProject(false)"/>
+                         v-on:keyup.enter="dbInsert(false)"/>
 
                 <br>
 

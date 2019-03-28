@@ -90,14 +90,16 @@ export namespace ApiTool {
             }
           }, 1000)
 
-          UserStore.mutations.setResStatus(res.status)
-          if (res.status === serv_constants.RIS_CODE__HTTP_FORBIDDEN_INVALID_TOKEN) {
-            // Forbidden
-            // You probably is connectiong with other page...
-            UserStore.mutations.setServerCode(tools.ERR_AUTHENTICATION)
-            UserStore.mutations.setAuth('')
-            router.push('/signin')
-            return reject({ code: tools.ERR_AUTHENTICATION })
+          if (!!res.status) {
+            UserStore.mutations.setResStatus(res.status)
+            if (res.status === serv_constants.RIS_CODE__HTTP_FORBIDDEN_INVALID_TOKEN) {
+              // Forbidden
+              // You probably is connectiong with other page...
+              UserStore.mutations.setServerCode(tools.ERR_AUTHENTICATION)
+              UserStore.mutations.setAuth('')
+              router.push('/signin')
+              return reject({ code: tools.ERR_AUTHENTICATION })
+            }
           }
 
           return resolve(res)
@@ -121,38 +123,41 @@ export namespace ApiTool {
   }
 
   export async function syncAlternative(mystrparam) {
-    // console.log('[ALTERNATIVE Background syncing', mystrparam)
+    console.log('[ALTERNATIVE Background syncing', mystrparam)
 
     const multiparams = mystrparam.split('|')
     if (multiparams) {
       if (multiparams.length > 3) {
         const cmd = multiparams[0]
-        const table = multiparams[1]
-        const method = multiparams[2]
-        const token = multiparams[3]
+        const tablesync = multiparams[1]
+        const nametab = multiparams[2]
+        const method = multiparams[3]
+        // const token = multiparams[3]
 
         if (cmd === ApiTables.DB.CMD_SYNC) {
           let errorfromserver = false
           let lettoqualcosa = false
 
           // console.log('A1) INIZIO.............................................................')
-          return globalroutines(null, 'readall', table, null)
+          return globalroutines(null, 'readall', tablesync, null)
             .then((alldata) => {
               const myrecs = [...alldata]
-              // console.log('----------------------- LEGGO QUALCOSA ')
 
               const promises = myrecs.map((rec) => {
-                let link = '/' + ApiTables.getLinkByTableName(table)
+                let link = '/' + ApiTables.getLinkByTableName(nametab)
+
 
                 if (method !== 'POST') {
                   link += '/' + rec._id
                 }
 
+                // console.log('----------------------- LEGGO QUALCOSA ', link)
+
                 // Insert/Delete/Update table to the server
                 return SendReq(link, method, rec)
                   .then(() => {
                     lettoqualcosa = true
-                    return globalroutines(null, 'delete', table, null, rec._id)
+                    return globalroutines(null, 'delete', tablesync, null, rec._id)
                   })
                   .then(() => {
                     return globalroutines(null, 'delete', 'swmsg', null, mystrparam)

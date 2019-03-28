@@ -4,7 +4,7 @@ import { RouteNames } from './route-names'
 import { tools } from '@src/store/Modules/tools'
 
 import auth from '../middleware/auth'
-import { Todos } from "@store"
+import { Projects, Todos } from "@store"
 
 interface IMyMeta {
   title?: string,
@@ -62,7 +62,7 @@ export const routesList: IMyRouteConfig[] = [
     meta: {
       requiresAuth: true,
       async asyncData() {
-        await Todos.actions.dbLoadTodo({ checkPending: false })
+        await Todos.actions.dbLoad({ checkPending: false })
       }
       // middleware: [auth]
     }
@@ -96,7 +96,10 @@ export const routesList: IMyRouteConfig[] = [
     name: 'progetti',
     component: () => import('@/views/projects/proj-list/proj-list.vue'),
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      async asyncData() {
+        await Projects.actions.dbLoad({ checkPending: false })
+      }
       // middleware: [auth]
     }
   }

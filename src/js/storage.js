@@ -1,3 +1,5 @@
+import * as ApiTables from '@src/store/Modules/ApiTables'
+
 export let idbKeyval = (() => {
   let db;
 
@@ -13,7 +15,14 @@ export let idbKeyval = (() => {
 
         openreq.onupgradeneeded = () => {
           // First time setup: create an empty object store
-          for (mytab of ApiTables.allTables) {
+          for (let mytab of ApiTables.MainTables) {
+            openreq.result.createObjectStore(mytab, { keyPath: '_id' });
+            for (let mymeth of ApiTables.allMethod) {
+              const tab = mymeth + mytab
+              openreq.result.createObjectStore(tab, { keyPath: '_id' });
+            }
+          }
+          for (let mytab of ApiTables.OtherTables) {
             openreq.result.createObjectStore(mytab, { keyPath: '_id' });
           }
         };

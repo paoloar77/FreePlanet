@@ -1,8 +1,8 @@
 import Vue from 'vue'
 import { Component, Watch } from 'vue-property-decorator'
 
-import { IDrag, ITodo, IProjectsState } from '../../../model/index'
-import { SingleTodo } from '../../../components/todos/SingleTodo/index'
+import { IDrag, IProject, IProjectsState } from '../../../model/index'
+import { SingleProject } from '../../../components/projects/SingleProject/index'
 
 import { tools } from '../../../store/Modules/tools'
 import * as ApiTables from '../../../store/Modules/ApiTables'
@@ -16,7 +16,7 @@ const namespace: string = 'Projects'
 
 @Component({
 
-  components: { SingleTodo },
+  components: { SingleProject },
   filters: {
     capitalize(value) {
       if (!value) {
@@ -30,16 +30,15 @@ const namespace: string = 'Projects'
 
 export default class ProjList extends Vue {
   public $q: any
-  public todotop: string = ''
-  public todobottom: string = ''
+  public projbottom: string = ''
   public polling = null
   public service: any
   public scrollable = true
-  public categoryAtt: string = ''
+  public categoryAtt: string = tools.FIRST_PROJ
   public dragname: string = 'second'
 
   public $refs: {
-    single: SingleTodo[]
+    single: SingleProject[]
   }
 
   get tools() {
@@ -59,8 +58,8 @@ export default class ProjList extends Vue {
     return Projects.getters.doneProjectsCount(this.categoryAtt)
   }
 
-  get menuPopupConfigTodo() {
-    return tools.menuPopupConfigTodo[UserStore.state.lang]
+  get menuPopupConfigProject() {
+    return tools.menuPopupConfigProject[UserStore.state.lang]
   }
 
   get listOptionShowTask() {
@@ -71,11 +70,11 @@ export default class ProjList extends Vue {
     return Projects.getters.ProjectsCount(this.categoryAtt)
   }
 
-  @Getter('projs_dacompletare', { namespace })
-  public projs_dacompletare: (state: IProjectsState, category: string) => ITodo[]
+  @Getter('items_dacompletare', { namespace })
+  public items_dacompletare: (state: IProjectsState, category: string) => IProject[]
 
   @Getter('projs_completati', { namespace })
-  public projs_completati: (state: IProjectsState, category: string) => ITodo[]
+  public projs_completati: (state: IProjectsState, category: string) => IProject[]
 
   @Watch('$route.params.category')
   public changecat() {
@@ -90,7 +89,7 @@ export default class ProjList extends Vue {
     return field_value === tools.MenuAction.SHOW_TASK
   }
 
-  public async onEnd(itemdragend) {
+  public async onEnd2(itemdragend) {
     await Projects.actions.swapElems(itemdragend)
   }
 
@@ -106,7 +105,8 @@ export default class ProjList extends Vue {
         oldIndex: this.getElementOldIndex(args.el)
       }
 
-      this.onEnd(itemdragend)
+      // console.log('args', args, itemdragend)
+      this.onEnd2(itemdragend)
     })
 
     $service.eventBus.$on('drag', (el, source) => {
@@ -126,8 +126,10 @@ export default class ProjList extends Vue {
   }
 
   public async load() {
-    console.log('LOAD TODO....')
-    this.categoryAtt = this.$route.params.category
+    console.log('LOAD PROJECTS....')
+    if (!!this.$route.params.category) {
+      this.categoryAtt = this.$route.params.category
+    }
 
     // Set last category selected
     localStorage.setItem(tools.localStorage.categorySel, this.categoryAtt)
@@ -151,11 +153,8 @@ export default class ProjList extends Vue {
     return Projects.actions.deleteItem({ cat: this.categoryAtt, idobj })
   }
 
-  public insertProject(atfirst: boolean = false) {
-    let descr = this.todobottom.trim()
-    if (atfirst) {
-      descr = this.todotop.trim()
-    }
+  public dbInsert(atfirst: boolean = false) {
+    let descr = this.projbottom.trim()
 
     if (descr === '') {
       return
@@ -165,20 +164,14 @@ export default class ProjList extends Vue {
       return
     }
 
-    const myobj: ITodo = {
+    const myobj: IProject = {
       descr,
       category: this.categoryAtt
     }
 
-    // empty the field
-    if (atfirst) {
-      this.todotop = ''
-    }
-    else {
-      this.todobottom = ''
-    }
+    this.projbottom = ''
 
-    return Projects.actions.insertProject({ myobj, atfirst })
+    return Projects.actions.dbInsert({ myobj, atfirst })
   }
 
   public async updateitem({ myitem, field }) {
@@ -198,14 +191,14 @@ export default class ProjList extends Vue {
 
   }
 
-  public deselectAllRows(item: ITodo, check, onlythis: boolean = false) {
+  public deselectAllRows(item: IProject, check, onlythis: boolean = false) {
     // console.log('deselectAllRows : ', item)
 
     for (let i = 0; i < this.$refs.single.length; i++) {
 
-      const contr = this.$refs.single[i] as SingleTodo
+      const contr = this.$refs.single[i] as SingleProject
       // @ts-ignore
-      const id = contr.itemtodo._id
+      const id = contr.itemproject._id
       // Don't deselect the actual clicked!
       let des = false
       if (onlythis) {

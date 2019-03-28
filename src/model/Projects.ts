@@ -14,7 +14,7 @@ export interface IProject {
   modified?: boolean,
   pos?: number,
   order?: number,
-  progress?: number
+  progressCalc?: number
 }
 
 export interface IParamIProject {
@@ -39,8 +39,7 @@ export interface IDrag {
 
 export interface IProjectsState {
   showtype: number
-  projs: {}
-  categories: string[]
+  projects: IProject[]
   insidePending: boolean
   visuLastCompleted: number
 }

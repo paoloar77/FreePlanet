@@ -445,7 +445,7 @@ namespace Actions {
     console.log('clearDataAfterLogout')
 
     // Clear all data from the IndexedDB
-    for (const table of ApiTables.allTables) {
+    for (const table of ApiTables.allTables()) {
       await globalroutines(null, 'clearalldata', table, null)
     }
 
@@ -473,14 +473,6 @@ namespace Actions {
   }
 
   async function clearDataAfterLoginOnlyIfActiveConnection(context) {
-
-    // if (Getters.getters.isOnline) {
-    //   console.log('clearDataAfterLoginOnlyIfActiveConnection')
-    //   // Clear all data from the IndexedDB
-    //   allTablesAfterLogin.forEach(table => {
-    //     globalroutines(null, 'clearalldata', table, null)
-    //   })
-    // }
 
   }
 

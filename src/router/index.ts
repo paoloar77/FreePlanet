@@ -50,7 +50,7 @@ Router.beforeEach(async (to: IMyRoute, from: IMyRoute, next) => {
       //   await LoginStore.actions.checkUserSession();
       // }
 
-      console.log(to, from)
+      // console.log(to, from)
 
       if (from.name && from.matched[0].name === to.name && from.meta.isModal) {
         next()

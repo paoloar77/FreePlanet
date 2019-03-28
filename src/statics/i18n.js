@@ -85,6 +85,7 @@ const messages = {
           '<li><strong>Associazioni no-profit, Ecovillaggi, Comunità</strong></li>' +
           '<li>Gruppi che intendono promuovere <strong>Progetti Sociali Innovativi</strong> per una <strong>Decrescita Felice</strong></li>' +
           '<li>Chi gestisce un <strong>Gruppo di Acquisto Solidale (G.A.S.)</strong></li>' +
+          '<li><strong>Produttori Locali Etici</strong></li>' +
           '<li>Chi gestisce una <strong>Banca del Tempo</strong></li>' +
           '<li><strong>Chiunque voglia partecipare</strong>, nella forma che ritiene più opportuna.</li>' +
           '</ul>',
@@ -95,7 +96,8 @@ const messages = {
           '<li><strong>Condividendolo</strong> a tutti coloro che vogliono far parte insieme della crescita e sviluppo di una Nuova Era</li>' +
           '<li>Rispondendo ai <strong>Sondaggi Popolari</strong> e lasciando <strong>Feedback</strong></li>' +
           '<li>Tramite una <strong>donazione</strong> (<strong>anche 1€</strong> ) per le spese.<br>' +
-          '</ul>',
+          '</ul>' +
+          'Vedo un <strong>futuro</strong> dove non si utilizzerà più denaro. Dove le persone si <strong>aiuteranno</strong> a vicenda e non avranno bisogno di "possedere" cose, ma le <strong>condivideranno</strong> con gli altri.<br>',
       },
       multiplatform: {
         title: 'Multi-piattaforma',
@@ -105,8 +107,7 @@ const messages = {
       },
       free: {
         title: 'Gratuita, Open Source e Niente Pubblicità',
-        descr: 'Vedo un <strong>futuro</strong> dove non si utilizzerà più denaro. Dove le persone si <strong>aiuteranno</strong> a vicenda e non avranno bisogno di "possedere" cose, ma le <strong>condivideranno</strong> con gli altri.<br>' +
-          'Questa App <strong>non è in vendita</strong>, non ha scopi commerciali, <strong>non ha prezzo</strong> ed appartiene al <strong>Popolo del Nuovo Mondo</strong>. A me il compito di gestirla e proteggerla. ' +
+        descr: 'Questa App <strong>non è in vendita</strong>, non ha scopi commerciali, <strong>non ha prezzo</strong> ed appartiene al <strong>Popolo del Nuovo Mondo</strong>.<br>Chiunque potrá utilizzarla e beneficiarne.<br>A me il compito di gestirla e proteggerla. ' +
           'Verranno accettate solo donazioni Libere di privati ed Associazioni no-profit, in linea con i Principi, che serviranno per coprire le spese.<br>' +
           '<strong>Grazie a Tutti per il sostegno</strong>. '
       },
@@ -321,6 +322,7 @@ const messages = {
           '<li> <strong>Asociaciones sin ánimo de lucro, Ecoaldeas, Comunidades</strong> </li>' +
           '<li> Grupos que desean promover <strong>Proyectos sociales innovadores</strong> para <strong>Feliz Decrecimiento</strong> </li>' +
           '<li> Quién administra un <strong>Grupo de Compra Solidario (G.C.S.)</strong> </li>' +
+          '<li><strong>Productores locales Éticos</strong></li>' +
           '<li> Quién administra un <strong>Banco de Tiempo</strong> </li>' +
           '<li> <strong>Cualquier persona que quiera participar</strong>, en la forma que considere más apropiada. </li>' +
           '</ul>',
@@ -331,7 +333,8 @@ const messages = {
           '<li> <strong>Compartiéndolo</strong> a todos aquellos que quieran unirse en el crecimiento y desarrollo de una Nueva Era </li> ' +
           '<li> Respondiendo a <strong>Encuestas populares</strong> y dejando <strong>Comentarios</strong> </li>' +
           '<li> A través de una <strong>donación</strong> (<strong>incluso € 1</strong>) para los gastos. <br>' +
-          '</ul>',
+          '</ul>' +
+          '<br>Veo un <strong>futuro</strong> en el que ya no usarás dinero. Donde las personas <strong>se ayudarán unos a otros</strong> y no necesiten "poseer" cosas, pero <strong>compartirán</strong> con otros. <br> ',
       },
       multiplatform: {
         title: 'Multi-plataforma',
@@ -341,8 +344,8 @@ const messages = {
       },
       free: {
         title: 'Libre, Código Abierto y Sin Publicidad',
-        descr: 'Veo un <strong>futuro</strong> en el que ya no usarás dinero. Donde las personas <strong>se ayudarán unos a otros</strong> y no necesiten "poseer" cosas, pero <strong>compartirán</strong> con otros. <br> ' +
-          'Esta aplicación <strong>no está a la venta</strong>, no tiene un propósito comercial, <strong>no tiene precio</strong> y pertenece a <strong>la Gente del Nuevo Mundo</strong>. A mí la tarea de gestionarlo y protegerlo. ' +
+        descr: 'Esta aplicación <strong>no está a la venta</strong>, no tiene un propósito comercial, <strong>no tiene precio</strong> y pertenece a <strong>la Gente del Nuevo Mundo</strong>.<br>' +
+          'Cualquiera puede usarla y beneficiarse.<br> A mí la tarea de gestionarlo y protegerlo. ' +
           'Solo se aceptarán donaciones de particulares y asociaciones sin änimo de lucro, en línea con los Principios, que se utilizarán para cubrir los gastos. <br>' +
           '<strong>Gracias a todos por el apoyo</strong>. '
       },
@@ -550,6 +553,7 @@ const messages = {
           '<li> <strong>Non-profit associations, Ecovillages, Communities</strong> </li>' +
           '<li> Groups that want to promote <strong>Innovative Social Projects</strong> for <strong>Happy Degrowth</strong> </li>' +
           '<li> Who manages a <strong>Solidarity Purchase Group</strong> </li>' +
+          '<li><strong>Local Ethical Producers</strong></li>' +
           '<li> Who manages a <strong>Time Bank</strong> </li>' +
           '<li> <strong>Anyone who wants to participate</strong>, in the form it considers most appropriate. </li>' +
           '</ul>',
@@ -560,7 +564,8 @@ const messages = {
           '<li> <strong>Sharing it</strong> to all those who want to join together in the growth and development of a New Era </li> ' +
           '<li> Answering to <strong>Popular Polls</strong> and leaving <strong>Feedback</strong> </li>' +
           '<li> Through a <strong>donation</strong> (<strong>even $ 1</strong>) for expenses. <br>' +
-          '</ul>',
+          '</ul><br>' +
+          'I see a <strong>future</strong> where you will no longer use money. Where people <strong>will help each other</strong> and won\'t need to "own" things, but <strong>will share</strong> with others. <br> ',
       },
       multiplatform: {
         title: 'Multi-platform',
@@ -570,8 +575,8 @@ const messages = {
       },
       free: {
         title: 'Free, Open Source and No Advertising',
-        descr: 'I see a <strong>future</strong> where you will no longer use money. Where people <strong>will help each other</strong> and won\'t need to "own" things, but <strong>will share</strong> with others. <br> ' +
-          'This App <strong>is not for sale</strong>, has no commercial purpose, <strong>is priceless</strong> and belongs to the <strong>New World People</strong>. To me the task of managing it and protecting it. ' +
+        descr: 'This App <strong>is not for sale</strong>, has no commercial purpose, <strong>is priceless</strong> and belongs to the <strong>New World People</strong>.' +
+          '<br>Anyone can use it and benefit from it.<br>To me the task of managing it and protecting it. ' +
           'Only donations from private individuals and non-profit associations will be accepted, in line with the Principles, which will be used to cover the expenses. <br>' +
           '<strong>Thanks all for the support</strong>. '
       },

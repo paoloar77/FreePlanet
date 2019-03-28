@@ -73,14 +73,14 @@ function initcat() {
 }
 
 namespace Getters {
-  const todos_dacompletare = b.read((state: ITodosState) => (cat: string): ITodo[] => {
+  const items_dacompletare = b.read((state: ITodosState) => (cat: string): ITodo[] => {
     const indcat = getindexbycategory(cat)
     if (state.todos[indcat]) {
       return state.todos[indcat].filter((todo) => !todo.completed)
     } else {
       return []
     }
-  }, 'todos_dacompletare')
+  }, 'items_dacompletare')
 
   const todos_completati = b.read((state: ITodosState) => (cat: string): ITodo[] => {
     const indcat = getindexbycategory(cat)
@@ -112,8 +112,8 @@ namespace Getters {
   }, 'TodosCount')
 
   export const getters = {
-    get todos_dacompletare() {
-      return todos_dacompletare()
+    get items_dacompletare() {
+      return items_dacompletare()
     },
     get todos_completati() {
       return todos_completati()
@@ -132,7 +132,7 @@ namespace Mutations {
   function findIndTodoById(state: ITodosState, data: IParamTodo) {
     const indcat = state.categories.indexOf(data.categorySel)
     if (indcat >= 0) {
-      return state.todos[indcat].findIndex((elem) => elem._id === data.id)
+      return tools.getIndexById(state.todos[indcat], data.id)
     }
     return -1
   }
@@ -178,8 +178,8 @@ namespace Mutations {
 
 namespace Actions {
 
-  async function dbLoadTodo(context, { checkPending }) {
-    console.log('dbLoadTodo', checkPending, 'userid=', UserStore.state.userId)
+  async function dbLoad(context, { checkPending }) {
+    console.log('dbLoad', nametable, checkPending, 'userid=', UserStore.state.userId)
 
     if (UserStore.state.userId === '') {
       return false  // Login not made
@@ -201,13 +201,13 @@ namespace Actions {
 
         // console.log('ARRAY TODOS = ', state.todos)
         if (process.env.DEBUG === '1') {
-          console.log('dbLoadTodo', 'state.todos', state.todos, 'state.categories', state.categories)
+          console.log('dbLoad', 'state.todos', state.todos, 'state.categories', state.categories)
         }
 
         return res
       })
       .catch((error) => {
-        console.log('error dbLoadTodo', error)
+        console.log('error dbLoad', error)
         UserStore.mutations.setErrorCatch(error)
         return error
       })
@@ -237,7 +237,7 @@ namespace Actions {
     }
   }
 
-  async function insertTodo(context, { myobj, atfirst }) {
+  async function dbInsert(context, { myobj, atfirst }) {
 
     const objtodo = initcat()
 
@@ -330,9 +330,7 @@ namespace Actions {
   }
 
   async function swapElems(context, itemdragend: IDrag) {
-    console.log('swapElems', itemdragend)
-    console.log('state.todos', state.todos)
-    console.log('state.categories', state.categories)
+    console.log('TODOS swapElems', itemdragend, state.todos, state.categories)
 
     const cat = itemdragend.category
     const indcat = state.categories.indexOf(cat)
@@ -343,10 +341,10 @@ namespace Actions {
   }
 
   export const actions = {
-    dbLoadTodo: b.dispatch(dbLoadTodo),
+    dbLoad: b.dispatch(dbLoad),
     swapElems: b.dispatch(swapElems),
     deleteItem: b.dispatch(deleteItem),
-    insertTodo: b.dispatch(insertTodo),
+    dbInsert: b.dispatch(dbInsert),
     modify: b.dispatch(modify)
   }
 

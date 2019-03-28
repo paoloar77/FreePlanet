@@ -1,7 +1,14 @@
-const allTables = ['todos', 'categories', 'sync_post_todos', 'sync_patch_todos', 'delete_todos', 'config', 'swmsg']
+const OtherTables = ['categories', 'config', 'swmsg']
+const MainTables = ['todos', 'projects']
+const allMethod = ['sync_post_', 'sync_patch_', 'delete_']
+
+
+// -------------------------------------
+
 
 let idbKeyval = (() => {
   let db;
+
   // console.log('idbKeyval...')
 
   function getDB() {
@@ -16,7 +23,14 @@ let idbKeyval = (() => {
 
         openreq.onupgradeneeded = () => {
           // First time setup: create an empty object store
-          for (mytab of allTables) {
+          for (let mytab of MainTables) {
+            openreq.result.createObjectStore(mytab, { keyPath: '_id' });
+            for (let mymeth of allMethod) {
+              const tab = mymeth + mytab
+              openreq.result.createObjectStore(tab, { keyPath: '_id' });
+            }
+          }
+          for (let mytab of OtherTables) {
             openreq.result.createObjectStore(mytab, { keyPath: '_id' });
           }
         };
@@ -29,7 +43,7 @@ let idbKeyval = (() => {
     return db;
   }
 
-  async function withStore(type, table, callback, ) {
+  async function withStore(type, table, callback,) {
     const db = await getDB();
     return new Promise((resolve, reject) => {
       const transaction = db.transaction(table, type);
@@ -40,6 +54,14 @@ let idbKeyval = (() => {
   }
 
   return {
+    getArrayByTable(nametable, data) {
+      if (nametable === 'todos') {
+        return data.todos
+      } else if (nametable === 'projects') {
+        return data.projects
+      }
+    },
+
     async get(key) {
       let req;
       await withStore('readonly', 'keyval', store => {
@@ -89,7 +111,7 @@ let idbKeyval = (() => {
       let req;
       // console.log('setdata', table, value)
 
-      await withStore('readwrite', table, store  => {
+      await withStore('readwrite', table, store => {
         req = store.put(value);
       });
       return req.result;

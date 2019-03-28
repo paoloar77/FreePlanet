@@ -11,7 +11,6 @@ export class AxiosSuccess {
   }
 }
 
-
 export class AxiosError {
   public success: boolean = false
   public status: number = 0
