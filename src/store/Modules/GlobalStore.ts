@@ -131,7 +131,7 @@ namespace Getters {
               route: '/todo', faIcon: 'fa fa-list-alt', materialIcon: 'format_list_numbered', name: 'pages.Todo',
               routes2: listatodo
             },
-            { route: '/projects', faIcon: 'fa fa-list-alt', materialIcon: 'next_week', name: 'pages.Projects' },
+            { route: '/projects/' + tools.FIRST_PROJ, faIcon: 'fa fa-list-alt', materialIcon: 'next_week', name: 'pages.Projects' },
 
             { route: '/category', faIcon: 'fa fa-list-alt', materialIcon: 'category', name: 'pages.Category' },
             { route: '/admin/cfgserv', faIcon: 'fa fa-database', materialIcon: 'event_seat', name: 'pages.Admin' },

@@ -12,11 +12,14 @@ import { UserStore } from '@store'
 
 import { Getter } from 'vuex-class'
 
+import { Screen } from 'quasar'
+import { CProgress } from '@src/components/CProgress'
+
 const namespace: string = 'Projects'
 
 @Component({
 
-  components: { SingleProject },
+  components: { SingleProject, CProgress },
   filters: {
     capitalize(value) {
       if (!value) {
@@ -34,11 +37,22 @@ export default class ProjList extends Vue {
   public polling = null
   public service: any
   public scrollable = true
-  public categoryAtt: string = tools.FIRST_PROJ
   public dragname: string = 'second'
+  public idProjAtt: string = tools.FIRST_PROJ
+  public idProjParentAtt: string = ''
+  public splitterModel = 50 // start at 50%
+  public itemproj: IProject = null
+  public idsel: string = ''
+  public itemsel: IProject = Projects.getters.getRecordEmpty()
+  public colProgress: string = 'blue'
+  public percProgress: string = 'percProgress'
 
   public $refs: {
     single: SingleProject[]
+  }
+
+  get getrouteup() {
+    return '/projects/' + this.idProjParentAtt
   }
 
   get tools() {
@@ -54,10 +68,6 @@ export default class ProjList extends Vue {
     GlobalStore.mutations.setShowType(value)
   }
 
-  get doneProjectsCount() {
-    return Projects.getters.doneProjectsCount(this.categoryAtt)
-  }
-
   get menuPopupConfigProject() {
     return tools.menuPopupConfigProject[UserStore.state.lang]
   }
@@ -66,19 +76,30 @@ export default class ProjList extends Vue {
     return tools.listOptionShowTask[UserStore.state.lang]
   }
 
-  get ProjectsCount() {
-    return Projects.getters.ProjectsCount(this.categoryAtt)
+  get descrParent() {
+    return Projects.getters.getDescrById(this.idProjParentAtt)
   }
 
+  get descrProject() {
+    return Projects.getters.getDescrById(this.idProjAtt)
+  }
+
+  // get ProjectsCount() {
+  //   return Projects.getters.ProjectsCount(this.idProjParentAtt)
+  // }
+
   @Getter('items_dacompletare', { namespace })
-  public items_dacompletare: (state: IProjectsState, category: string) => IProject[]
+  public items_dacompletare: (state: IProjectsState, id_parent: string) => IProject[]
 
-  @Getter('projs_completati', { namespace })
-  public projs_completati: (state: IProjectsState, category: string) => IProject[]
+  @Watch('$route.params.idProj')
+  public changeparent() {
+    this.idProjAtt = this.$route.params.idProj
+    this.idProjParentAtt = Projects.getters.getParentById(this.idProjAtt)
+  }
 
-  @Watch('$route.params.category')
-  public changecat() {
-    this.categoryAtt = this.$route.params.category
+  @Watch('itemsel.progressCalc')
+  public changeprogress() {
+    this.updateclasses()
   }
 
   public getmyid(id) {
@@ -97,10 +118,13 @@ export default class ProjList extends Vue {
     const $service = this.$dragula.$service
     tools.dragula_option($service, this.dragname)
 
+    this.updateclasses()
+
     $service.eventBus.$on('dragend', (args) => {
 
       const itemdragend: IDrag = {
-        category: this.categoryAtt,
+        field: '',
+        id_proj: this.idProjAtt,
         newIndex: this.getElementIndex(args.el),
         oldIndex: this.getElementOldIndex(args.el)
       }
@@ -120,19 +144,32 @@ export default class ProjList extends Vue {
   }
 
   public mounted() {
-    this.categoryAtt = this.$route.params.category
+
+    console.log('Screen.width', Screen.width)
+
+    if (Screen.width < 400) {
+      this.splitterModel = 100
+    } else {
+      this.splitterModel = 50
+    }
+    this.idProjAtt = this.$route.params.idProj
+    this.idProjParentAtt = Projects.getters.getParentById(this.idProjAtt)
 
     tools.touchmove(this.scrollable)
   }
 
   public async load() {
     console.log('LOAD PROJECTS....')
-    if (!!this.$route.params.category) {
-      this.categoryAtt = this.$route.params.category
+    if (!!this.$route.params.idProj) {
+      this.idProjAtt = this.$route.params.idProj
+      this.idProjParentAtt = Projects.getters.getParentById(this.idProjAtt)
+      this.itemproj = Projects.getters.getRecordById(this.idProjAtt)
     }
 
+    // console.log('this.idProjAtt', this.idProjAtt, this.idProjParentAtt)
+
     // Set last category selected
-    localStorage.setItem(tools.localStorage.categorySel, this.categoryAtt)
+    // localStorage.setItem(tools.localStorage.categorySel, this.categoryAtt)
 
     this.checkUpdate_everytime()
   }
@@ -150,7 +187,7 @@ export default class ProjList extends Vue {
 
   public mydeleteItem(idobj: string) {
     // console.log('mydeleteItem', idobj)
-    return Projects.actions.deleteItem({ cat: this.categoryAtt, idobj })
+    return Projects.actions.deleteItem({ idobj })
   }
 
   public dbInsert(atfirst: boolean = false) {
@@ -166,7 +203,7 @@ export default class ProjList extends Vue {
 
     const myobj: IProject = {
       descr,
-      category: this.categoryAtt
+      id_parent: this.idProjAtt
     }
 
     this.projbottom = ''
@@ -174,18 +211,22 @@ export default class ProjList extends Vue {
     return Projects.actions.dbInsert({ myobj, atfirst })
   }
 
+  public setidsel(id: string) {
+    this.idsel = id
+    this.itemsel = Projects.getters.getRecordById(this.idsel)
+  }
+
   public async updateitem({ myitem, field }) {
     console.log('calling MODIFY updateitem', myitem, field)
 
     const itemdragend: IDrag = {
-      category: this.categoryAtt,
+      id_proj: this.idProjAtt,
       field,
       idelemtochange: myitem._id,
-      prioritychosen: myitem.priority,
       atfirst: false
     }
 
-    await Projects.actions.swapElems(itemdragend)
+    // await Projects.actions.swapElems(itemdragend)
 
     await Projects.actions.modify({ myitem, field })
 
@@ -213,6 +254,10 @@ export default class ProjList extends Vue {
     }
   }
 
+  public updateclasses() {
+    this.colProgress = tools.getProgressColor(this.itemsel.progressCalc)
+  }
+
   public checkUpdate() {
     ApiTables.waitAndcheckPendingMsg()
   }
@@ -223,6 +268,13 @@ export default class ProjList extends Vue {
 
   private getElementOldIndex(el: any) {
     return parseInt(el.attributes.index.value, 10)
+  }
+
+  get getCalcHoursWorked() {
+    let myperc = Math.round(this.itemsel.hoursworked / this.itemsel.hoursplanned * 100)
+
+    return myperc
+
   }
 
 }

@@ -2,7 +2,7 @@ import { Todos, Projects, UserStore } from '@store'
 import globalroutines from './../../globalroutines/index'
 import { costanti } from './costanti'
 import Quasar from 'quasar'
-import { ITodo } from '@src/model'
+import { IProject, ITodo } from '@src/model'
 import * as ApiTables from '@src/store/Modules/ApiTables'
 
 export interface INotify {
@@ -21,7 +21,7 @@ export const tools = {
   DUPLICATE_EMAIL_ID: 11000,
   DUPLICATE_USERNAME_ID: 11100,
 
-  FIRST_PROJ: '__FIRSTPROJ',
+  FIRST_PROJ: '__PROJECTS',
 
   arrLangUsed: ['enUs', 'it', 'es'],
 
@@ -52,7 +52,8 @@ export const tools = {
     COMPLETED: 110,
     PROGRESS_BAR: 120,
     PRIORITY: 130,
-    SHOW_TASK: 150
+    SHOW_TASK: 150,
+    EDIT: 160
   },
 
   selectPriority: {
@@ -254,6 +255,12 @@ export const tools = {
   menuPopupProj: {
     it: [
       {
+        id: 10,
+        label: 'Modifica',
+        value: 160, // EDIT
+        icon: 'create'
+      },
+      {
         id: 40,
         label: 'Imposta Scadenza',
         value: 101, // TOGGLE_EXPIRING
@@ -270,6 +277,12 @@ export const tools = {
     ],
     es: [
       {
+        id: 10,
+        label: 'Editar',
+        value: 160, // EDIT
+        icon: 'create'
+      },
+      {
         id: 40,
         label: 'Establecer expiración',
         value: 101, // TOGGLE_EXPIRING
@@ -285,6 +298,12 @@ export const tools = {
       }
     ],
     enUs: [
+      {
+        id: 10,
+        label: 'Edit',
+        value: 160, // EDIT
+        icon: 'create'
+      },
       {
         id: 40,
         label: 'Set Expiring',
@@ -463,6 +482,23 @@ export const tools = {
     console.log(mystr, 'elem [', elem._id, '] ', elem.descr, ' Pr(', tools.getPriorityByInd(elem.priority), ') [', elem.id_prev, '] modif=', elem.modified)
   },
 
+  getelemprojstr(elem) {
+    return 'elem [id= ' + elem._id + '] ' + elem.descr + ' [id_prev= ' + elem.id_prev + '] '
+  },
+
+  logga_arrproj(myarr: IProject[]) {
+    let mystr = '\n'
+    myarr.forEach((item) => {
+      mystr += tools.getelemprojstr(item) + '   '
+    })
+
+    return mystr
+  },
+
+  logelemprj(mystr, elem) {
+    console.log(mystr, tools.getelemprojstr(elem))
+  },
+
   getstrelem(elem) {
     return 'elem [' + elem._id + '] ' + elem.descr + ' Pr(' + tools.getPriorityByInd(elem.priority) + ') [ID_PREV=' + elem.id_prev + '] modif=' + elem.modified + ' '
   },
@@ -512,13 +548,15 @@ export const tools = {
   },
 
   update_idprev(myarr, indelemchange, indelemId) {
-    if (indelemchange >= 0 && indelemchange < myarr.length) {
+    if (tools.isOkIndex(myarr, indelemchange)) {
       const id_prev = (indelemId >= 0) ? myarr[indelemId]._id : ApiTables.LIST_START
+      console.log('update_idprev [', indelemchange, ']', '[id_prev=', id_prev, ']')
       if (myarr[indelemchange].id_prev !== id_prev) {
-        myarr[indelemchange].id_prev = id_prev
-        tools.notifyarraychanged(myarr[indelemchange])
+        // tools.notifyarraychanged(myarr)
         // myarr[indelemchange].modified = true
-        console.log('Index=', indelemchange, 'indtoget', indelemId, tools.getstrelem(myarr[indelemchange]))
+        // console.log('update_idprev Index=', indelemchange, 'indtoget', indelemId, tools.getstrelem(myarr[indelemchange]))
+        console.log('   MODIFICATO! ', myarr[indelemchange].descr , ' PRIMA:', myarr[indelemchange].id_prev, 'DOPO: ', id_prev)
+        myarr[indelemchange].id_prev = id_prev
         return myarr[indelemchange]
       }
     }
@@ -536,53 +574,70 @@ export const tools = {
       console.log('swapElems PRIORITY', itemdragend)
     }
 
-    if (itemdragend.newIndex === itemdragend.oldIndex)
+    console.log('swapGeneralElem', 'new =', itemdragend.newIndex, 'Old =', itemdragend.oldIndex, itemdragend)
+
+    if (itemdragend.newIndex === itemdragend.oldIndex) {
       return
+    }
 
     if (tools.isOkIndex(myarr, itemdragend.newIndex) && tools.isOkIndex(myarr, itemdragend.oldIndex)) {
+
+      console.log('SPLICE!')
+      console.log('   PRIMA!', tools.logga_arrproj(myarr))
       myarr.splice(itemdragend.newIndex, 0, myarr.splice(itemdragend.oldIndex, 1)[0])
-      tools.notifyarraychanged(myarr[itemdragend.newIndex])
-      tools.notifyarraychanged(myarr[itemdragend.oldIndex])
+      console.log('   DOPO!', tools.logga_arrproj(myarr))
 
-      if (itemdragend.field !== 'priority') {
-        const precind = itemdragend.newIndex - 1
-        const nextind = itemdragend.newIndex + 1
+      // Ora inverti gli indici
+      const indold = itemdragend.oldIndex
+      itemdragend.oldIndex = itemdragend.newIndex
+      itemdragend.newIndex = indold
 
-        if (tools.isOkIndex(myarr, precind) && tools.isOkIndex(myarr, nextind)) {
-          if ((myarr[precind].priority === myarr[nextind].priority) && (myarr[precind].priority !== myarr[itemdragend.newIndex].priority)) {
-            // console.log('   1)')
-            myarr[itemdragend.newIndex].priority = myarr[precind].priority
-            tools.notifyarraychanged(myarr[itemdragend.newIndex])
-          }
-        } else {
-          if (!tools.isOkIndex(myarr, precind)) {
-            if ((myarr[nextind].priority !== myarr[itemdragend.newIndex].priority)) {
-              // console.log('   2)')
-              myarr[itemdragend.newIndex].priority = myarr[nextind].priority
-              tools.notifyarraychanged(myarr[itemdragend.newIndex])
-            }
+      if (nametable === 'todos') {
+        if (itemdragend.field !== 'priority') {
+          const precind = itemdragend.newIndex - 1
+          const nextind = itemdragend.newIndex + 1
 
-          } else {
-            if ((myarr[precind].priority !== myarr[itemdragend.newIndex].priority)) {
-              console.log('   3)')
+          if (tools.isOkIndex(myarr, precind) && tools.isOkIndex(myarr, nextind)) {
+            if ((myarr[precind].priority === myarr[nextind].priority) && (myarr[precind].priority !== myarr[itemdragend.newIndex].priority)) {
+              console.log('   1)')
               myarr[itemdragend.newIndex].priority = myarr[precind].priority
-              tools.notifyarraychanged(myarr[itemdragend.newIndex])
+              tools.notifyarraychanged(myarr)
             }
-          }
+          } else {
+            if (!tools.isOkIndex(myarr, precind)) {
+              if ((myarr[nextind].priority !== myarr[itemdragend.newIndex].priority)) {
+                console.log('   2)')
+                myarr[itemdragend.newIndex].priority = myarr[nextind].priority
+                tools.notifyarraychanged(myarr)
+              }
 
+            } else {
+              if ((myarr[precind].priority !== myarr[itemdragend.newIndex].priority)) {
+                console.log('   3)')
+                myarr[itemdragend.newIndex].priority = myarr[precind].priority
+                tools.notifyarraychanged(myarr)
+              }
+            }
+
+          }
         }
       }
 
       // Update the id_prev property
-      const elem1 = tools.update_idprev(myarr, itemdragend.newIndex, itemdragend.newIndex - 1)
-      const elem2 = tools.update_idprev(myarr, itemdragend.newIndex + 1, itemdragend.newIndex)
-      const elem3 = tools.update_idprev(myarr, itemdragend.oldIndex, itemdragend.oldIndex - 1)
-      const elem4 = tools.update_idprev(myarr, itemdragend.oldIndex + 1, itemdragend.oldIndex)
+      const elem1 = tools.update_idprev(myarr, itemdragend.newIndex, itemdragend.newIndex - 1)       // 0, -1
+      const elem2 = tools.update_idprev(myarr, itemdragend.newIndex + 1, itemdragend.newIndex)   // 1, 0
+      const elem3 = tools.update_idprev(myarr, itemdragend.oldIndex, itemdragend.oldIndex - 1)       // 1, 0
+      const elem4 = tools.update_idprev(myarr, itemdragend.oldIndex + 1, itemdragend.oldIndex)   // 2, 1
 
       await ApiTables.table_ModifyRecord(nametable, elem1, fieldtochange)
       await ApiTables.table_ModifyRecord(nametable, elem2, fieldtochange)
       await ApiTables.table_ModifyRecord(nametable, elem3, fieldtochange)
       await ApiTables.table_ModifyRecord(nametable, elem4, fieldtochange)
+
+
+      tools.notifyarraychanged(myarr)
+
+      console.log('arr FINALE', tools.logga_arrproj(myarr))
 
       // Update the records:
     }
@@ -650,7 +705,7 @@ export const tools = {
 
   getLastListNotCompleted(nametable, cat) {
     const module = tools.getModulesByTable(nametable)
-    let arr = module.getters.items_dacompletare(cat)
+    const arr = module.getters.items_dacompletare(cat)
 
     return (arr.length > 0) ? arr[arr.length - 1] : null
   },
@@ -813,6 +868,75 @@ export const tools = {
   isLoggedToSystem() {
     const tok = tools.getItemLS(tools.localStorage.token)
     return !!tok
+  },
+
+  mapSort(linkedList) {
+    const sortedList = []
+    const map = new Map()
+    let currentId = null
+
+    // console.log('linkedList', linkedList)
+
+    // index the linked list by previous_item_id
+    for (let i = 0; i < linkedList.length; i++) {
+      const item = linkedList[i]
+      // tools.logelemprj(i, item)
+      if (item.id_prev === ApiTables.LIST_START) {
+        // first item
+        currentId = String(item._id)
+        // console.log('currentId', currentId);
+        sortedList.push(item)
+      } else {
+        map.set(item.id_prev, i)
+      }
+    }
+
+    let i = 0
+    while (sortedList.length < linkedList.length) {
+      // get the item with a previous item ID referencing the current item
+      const nextItem = linkedList[map.get(currentId)]
+      if (nextItem === undefined) {
+        break
+      }
+      sortedList.push(nextItem)
+      // tools.logelemprj('FATTO:' + i, nextItem)
+      currentId = String(nextItem._id)
+      i++
+    }
+
+    if (sortedList.length < linkedList.length) {
+      console.log('!!!!! NON CI SONO TUTTI !!!!!', sortedList.length, linkedList.length)
+      // Forget something not in a List !
+      for (const itemsorted of sortedList) {
+        if (linkedList.filter((item) => item._id === itemsorted._id)) {
+
+        }
+      }
+    }
+
+    // console.log('DOPO sortedList', sortedList);
+
+    return sortedList
+  },
+
+  getProgressClassColor(progress) {
+    if (progress > 66) {
+      return 'highperc'
+    } else if (progress > 33) {
+      return 'medperc'
+    } else {
+      return 'lowperc'
+    }
+  },
+
+  getProgressColor(progress) {
+    if (progress > 66) {
+      return 'green'
+    } else if (progress > 33) {
+      return 'blue'
+    } else {
+      return 'red'
+    }
   }
 
 }

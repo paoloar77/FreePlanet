@@ -31,7 +31,8 @@ export interface IDrag {
   prioritychosen?: number
   oldIndex?: number
   newIndex?: number
-  category: string
+  category?: string
+  id_proj?: string
   atfirst?: boolean
 }
 

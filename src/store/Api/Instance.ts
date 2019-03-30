@@ -48,7 +48,7 @@ export const removeAuthHeaders = () => {
 async function Request(type: string, path: string, payload: any): Promise<Types.AxiosSuccess | Types.AxiosError> {
   let ricevuto = false
   try {
-    console.log('Axios Request', path, type, axiosInstance.defaults)
+    console.log('Axios Request', path, type)
     let response: AxiosResponse
     if (type === 'post' || type === 'put' || type === 'patch') {
       response = await axiosInstance[type](path, payload, {
@@ -58,7 +58,7 @@ async function Request(type: string, path: string, payload: any): Promise<Types.
         }
       })
       ricevuto = true
-      console.log('Request Response: ', response)
+      // console.log('Request Response: ', response)
       // console.log(new Types.AxiosSuccess(response.data, response.status))
 
       const setAuthToken = (path === '/updatepwd')

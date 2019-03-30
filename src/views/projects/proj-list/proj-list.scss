@@ -1,6 +1,11 @@
+.clMain {
+  min-width: 350px;
+}
+
 .flex-container{
   background-color: rgb(250, 250, 250);
-  padding: 2px;
+  padding: 4px;
+  margin: 2px;
   display: flex;
   align-items: center;
   flex-direction: row;
@@ -60,10 +65,6 @@
   min-height: 10px;
 }
 
-.divtitlecat {
-  margin: 5px;
-  padding: 5px;
-}
 
 .categorytitle{
   color:blue;
@@ -72,6 +73,40 @@
   font-weight: bold;
   text-align: center;
   flex: 1;
+}
+
+.projecttitle{
+  color: white;
+  // color:blue;
+  background-color: rgba(65, 152, 239, 0.6);
+  font-size: 1.25rem;
+  font-weight: bold;
+  text-align: center;
+  flex: 1;
+}
+
+.itemdescr{
+  font-size: 1rem;
+  flex: 1;
+}
+
+.progress-item {
+  margin: 1px;
+  padding: 2px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  flex: 1;
+  order: 1;
+}
+
+.progrbar-item {
+  //height: 10px
+  padding-top: 7px;
+  height: 10px;
+}
+
+.flex-icon{
+  padding: 3px;
 }
 
 .titleSubMenu {
@@ -107,4 +142,12 @@
 .menuInputCompleted > div:nth-child(2) > div > input {
   min-width: 30px;
   width: 30px;
+}
+
+.percProgress {
+  padding-top: 3px;
+  color: #888;
+  vertical-align: middle;
+  text-align: center;
+  //line-height: $heightitem;
 }

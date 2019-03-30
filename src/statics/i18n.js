@@ -235,6 +235,13 @@ const messages = {
       newVersionAvailable: 'Aggiorna'
     },
     connection: 'Connessione',
+    proj: {
+      longdescr: 'Descrizione',
+      hoursplanned: 'Ore Preventivate',
+      hoursadded: 'Ore Aggiuntive',
+      hoursworked: 'Ore Lavorate',
+      progresstask: 'Progressione Compiti'
+    }
   },
   'es': {
     dialog: {
@@ -466,6 +473,13 @@ const messages = {
       newVersionAvailable: 'Actualiza'
     },
     connection: 'Connection',
+    proj: {
+      longdescr: 'Descripción',
+      hoursplanned: 'Horas Estimadas',
+      hoursadded: 'Horas Adicional',
+      hoursworked: 'Horas Trabajadas',
+      progresstask: 'Progresion Tareas'
+    }
   },
   'enUs': {
     dialog: {
@@ -697,6 +711,13 @@ const messages = {
       newVersionAvailable: 'Upgrade'
     },
     connection: 'Conexión',
+    proj: {
+      longdescr: 'Description',
+      hoursplanned: 'Estimated Hours',
+      hoursadded: 'Additional Hours',
+      hoursworked: 'Worked Hours',
+      progresstask: 'Todos progression'
+    }
   },
 };
 

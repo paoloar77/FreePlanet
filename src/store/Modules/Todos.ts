@@ -1,4 +1,4 @@
-import { ITodo, ITodosState, IParamTodo, IDrag } from 'model'
+import { ITodo, ITodosState, IParamTodo, IDrag, IProjectsState, IProject } from 'model'
 import { storeBuilder } from './Store/Store'
 
 import Api from '@api'
@@ -111,6 +111,14 @@ namespace Getters {
     }
   }, 'TodosCount')
 
+  const getRecordById = b.read((state: ITodosState) => (id: string, cat: string): ITodo => {
+    const indcat = getindexbycategory(cat)
+    if (state.todos) {
+      return state.todos[indcat].find((item) => item._id === id)
+    }
+    return null
+  }, 'getRecordById')
+
   export const getters = {
     get items_dacompletare() {
       return items_dacompletare()
@@ -123,6 +131,9 @@ namespace Getters {
     },
     get TodosCount() {
       return TodosCount()
+    },
+    get getRecordById() {
+      return getRecordById()
     }
   }
 }

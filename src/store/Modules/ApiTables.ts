@@ -98,7 +98,7 @@ async function dbDeleteItem(call, item) {
 async function Sync_Execute(cmd, tablesync, nametab, method, item: ITodo, id, msg: String) {
   // Send to Server to Sync
 
-  console.log('Sync_Execute', cmd, tablesync, nametab, method, item.descr, id, msg)
+  // console.log('Sync_Execute', cmd, tablesync, nametab, method, item.descr, id, msg)
 
   let cmdSw = cmd
   if ((cmd === DB.CMD_SYNC_NEW) || (cmd === DB.CMD_DELETE)) {
@@ -108,7 +108,7 @@ async function Sync_Execute(cmd, tablesync, nametab, method, item: ITodo, id, ms
   if ('serviceWorker' in navigator) {
     return await navigator.serviceWorker.ready
       .then((sw) => {
-        console.log('----------------------      navigator.serviceWorker.ready')
+        // console.log('----------------------      navigator.serviceWorker.ready')
 
         return globalroutines(null, 'write', tablesync, item, id)
           .then((id) => {
@@ -120,7 +120,7 @@ async function Sync_Execute(cmd, tablesync, nametab, method, item: ITodo, id, ms
               _id: multiparams,
               value: multiparams
             }
-            console.log('*** swmsg')
+            // console.log('*** swmsg')
             return globalroutines(null, 'write', 'swmsg', mymsgkey, multiparams)
               .then((ris) => {
                 // if ('SyncManager' in window) {
@@ -288,7 +288,8 @@ async function sendSwMsgIfAvailable() {
 }
 
 async function waitAndRefreshData() {
-  return await Projects.actions.dbLoad({ checkPending: false })
+  // #Todo++ Check if is OK
+  await Projects.actions.dbLoad({ checkPending: false, onlyiffirsttime: false })
   return await Todos.actions.dbLoad({ checkPending: false })
 }
 
@@ -357,7 +358,7 @@ sendMessageToSW(recdata, method) {
 
 function setmodifiedIfchanged(recOut, recIn, field) {
   if (String(recOut[field]) !== String(recIn[field])) {
-    // console.log('***************  CAMPO ', field, 'MODIFICATO!', recOut[field], recIn[field])
+    console.log('***************  CAMPO ', field, 'MODIFICATO!', recOut[field], recIn[field])
     recOut.modified = true
     recOut[field] = recIn[field]
     return true
@@ -366,13 +367,24 @@ function setmodifiedIfchanged(recOut, recIn, field) {
 }
 
 export async function table_ModifyRecord(nametable, myitem, fieldtochange) {
-
   if (myitem === null) {
     return new Promise((resolve, reject) => {
       resolve()
     })
   }
+
+  console.log('--> table_ModifyRecord', nametable, myitem.descr)
+
   const myobjsaved = tools.jsonCopy(myitem)
+
+/*
+  const mymodule = tools.getModulesByTable(nametable)
+  let param2 = ''
+  if (nametable === 'todos') {
+    param2 = myitem.category
+  }
+  const miorec = mymodule.getters.getRecordById(myobjsaved._id, param2)
+*/
 
   // get record from IndexedDb
   const miorec = await globalroutines(null, 'read', nametable, null, myobjsaved._id)
@@ -380,6 +392,8 @@ export async function table_ModifyRecord(nametable, myitem, fieldtochange) {
     console.log('~~~~~~~~~~~~~~~~~~~~ !!!!!!!!!!!!!!!!!!  Record not Found !!!!!! id=', myobjsaved._id)
     return
   }
+
+  console.log('miorec', miorec.descr, miorec.id_prev)
 
   if (nametable === 'todos') {
     if (setmodifiedIfchanged(miorec, myobjsaved, 'completed')) {
@@ -392,7 +406,7 @@ export async function table_ModifyRecord(nametable, myitem, fieldtochange) {
   })
 
   if (miorec.modified) {
-    console.log(nametable + ' MODIFICATO! ', miorec.descr, miorec.pos, 'SALVALO SULLA IndexedDB')
+    console.log('    ' + nametable + ' MODIFICATO! ', miorec.descr, miorec.pos, 'SALVALO SULLA IndexedDB')
     miorec.modify_at = new Date().getDate()
     miorec.modified = false
 
@@ -407,6 +421,8 @@ export async function table_ModifyRecord(nametable, myitem, fieldtochange) {
         Sync_SaveItem(nametable, 'PATCH', miorec)
 
       })
+  } else {
+    console.log('      ', miorec.descr, 'NON MODIF!')
   }
 }
 

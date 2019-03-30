@@ -6,7 +6,7 @@ import router from '@router'
 
 import { serv_constants } from '../Modules/serv_constants'
 import { tools } from '../Modules/tools'
-import { GlobalStore, UserStore, Todos } from '@store'
+import { GlobalStore, UserStore, Todos, Projects } from '@store'
 import globalroutines from './../../globalroutines/index'
 
 import translate from './../../globalroutines/util'
@@ -503,6 +503,7 @@ namespace Actions {
     await GlobalStore.actions.loadAfterLogin()
       .then(() => {
         Todos.actions.dbLoad({ checkPending: true })
+        Projects.actions.dbLoad({ checkPending: true, onlyiffirsttime: true })
       })
   }
 

@@ -1,4 +1,4 @@
-import { IProject, IProjectsState, IParamTodo, IDrag } from 'model'
+import { IProject, IProjectsState, IDrag } from 'model'
 import { storeBuilder } from './Store/Store'
 
 import Api from '@api'
@@ -20,7 +20,7 @@ const state: IProjectsState = {
   visuLastCompleted: 10
 }
 
-const fieldtochange: string [] = ['descr', 'completed', 'category', 'expiring_at', 'priority', 'id_prev', 'pos', 'enableExpiring', 'progress']
+const fieldtochange: string [] = ['descr', 'longdescr', 'hoursplanned', 'hoursworked', 'id_parent', 'completed', 'category', 'expiring_at', 'priority', 'id_prev', 'pos', 'enableExpiring', 'progress']
 
 const b = storeBuilder.module<IProjectsState>('Projects', state)
 const stateGetter = b.state()
@@ -39,81 +39,94 @@ function getarrByCategory(category: string) {
 
 function initcat() {
 
-  const tomorrow = new Date()
-  tomorrow.setDate(tomorrow.getDate() + 1)
-
-  const objproj: IProject = {
-    // _id: new Date().toISOString(),  // Create NEW
-    _id: objectId(),
-    userId: UserStore.state.userId,
-    descr: '',
-    priority: tools.Priority.PRIORITY_NORMAL,
-    completed: false,
-    created_at: new Date(),
-    modify_at: new Date(),
-    completed_at: new Date(),
-    category: '',
-    expiring_at: tomorrow,
-    enableExpiring: false,
-    id_prev: '',
-    pos: 0,
-    modified: false,
-    progressCalc: 0
-  }
   // return this.copy(objproj)
-  return objproj
+  let rec = Getters.getters.getRecordEmpty()
+  rec.userId = UserStore.state.userId
+
+  return rec
 
 }
 
 namespace Getters {
-  const items_dacompletare = b.read((state: IProjectsState) => (cat: string): IProject[] => {
+  const getRecordEmpty = b.read((state: IProjectsState) => (): IProject => {
+    // const tomorrow = new Date()
+    // tomorrow.setDate(tomorrow.getDate() + 1)
+
+    const obj: IProject = {
+      _id: objectId(),
+      descr: '',
+      id_parent: '',
+      priority: tools.Priority.PRIORITY_NORMAL,
+      completed: false,
+      created_at: new Date(),
+      modify_at: new Date(),
+      completed_at: new Date(),
+      category: '',
+      // expiring_at: tomorrow,
+      enableExpiring: false,
+      id_prev: '',
+      pos: 0,
+      modified: false,
+      progressCalc: 0
+    }
+
+    return obj
+  }, 'getRecordEmpty')
+
+  const items_dacompletare = b.read((state: IProjectsState) => (id_parent: string): IProject[] => {
     if (state.projects) {
-      return state.projects.filter((proj) => !proj.completed)
+      return tools.mapSort(state.projects.filter((proj) => proj.id_parent === id_parent))
     } else {
       return []
     }
   }, 'items_dacompletare')
 
-  const projs_completati = b.read((state: IProjectsState) => (cat: string): IProject[] => {
+  const getDescrById = b.read((state: IProjectsState) => (id: string): string => {
+    if (id === tools.FIRST_PROJ)
+      return 'Projects'
     if (state.projects) {
-      if (state.showtype === costanti.ShowTypeTask.SHOW_LAST_N_COMPLETED) {
-        return state.projects.filter((proj) => proj.completed).slice(0, state.visuLastCompleted)
-      }  // Show only the first N completed
-      else if (state.showtype === costanti.ShowTypeTask.SHOW_ALL) {
-        return state.projects.filter((proj) => proj.completed)
-      }
-      else {
-        return []
-      }
-    } else {
-      return []
+      const item = state.projects.find((item) => item._id === id)
+      if (!!item)
+        return item.descr
     }
-  }, 'projs_completati')
 
-  const doneProjectsCount = b.read((state: IProjectsState) => (cat: string): number => {
-    return getters.projs_completati(cat).length
-  }, 'doneProjectsCount')
-  const ProjectsCount = b.read((state: IProjectsState) => (cat: string): number => {
+    return ''
+  }, 'getDescrById')
+
+  const getParentById = b.read((state: IProjectsState) => (id: string): string => {
     if (state.projects) {
-      return state.projects.length
-    } else {
-      return 0
+      const item = state.projects.find((item) => item._id === id)
+      if (!!item)
+        return item.id_parent
     }
-  }, 'ProjectsCount')
+
+    return ''
+  }, 'getParentById')
+
+  const getRecordById = b.read((state: IProjectsState) => (id: string): IProject => {
+    if (state.projects) {
+      return state.projects.find((item) => item._id === id)
+    }
+    return null
+  }, 'getRecordById')
 
   export const getters = {
+    get getRecordEmpty() {
+      return getRecordEmpty()
+    },
     get items_dacompletare() {
       return items_dacompletare()
     },
-    get projs_completati() {
-      return projs_completati()
+    get getDescrById() {
+      return getDescrById()
     },
-    get doneProjectsCount() {
-      return doneProjectsCount()
+    get getParentById() {
+      return getParentById()
     },
-    get ProjectsCount() {
-      return ProjectsCount()
+    get getRecordById() {
+      return getRecordById()
     }
+
   }
 }
 
@@ -154,12 +167,20 @@ namespace Mutations {
 
 namespace Actions {
 
-  async function dbLoad(context, { checkPending }) {
-    console.log('dbLoad', nametable, checkPending, 'userid=', UserStore.state.userId)
+  async function dbLoad(context, { checkPending, onlyiffirsttime }) {
+
+    if (onlyiffirsttime) {
+      if (state.projects.length > 0) {
+        // if already set, then exit.
+        return false
+      }
+    }
 
     if (UserStore.state.userId === '') {
       return false  // Login not made
     }
+
+    console.log('dbLoad', nametable, checkPending, 'userid=', UserStore.state.userId)
 
     const ris = await Api.SendReq('/projects/' + UserStore.state.userId, 'GET', null)
       .then((res) => {
@@ -190,10 +211,10 @@ namespace Actions {
     ApiTables.aftercalling(ris, checkPending, 'categories')
   }
 
-  async function deleteItem(context, { cat, idobj }) {
+  async function deleteItem(context, { idobj }) {
     console.log('deleteItem: KEY = ', idobj)
 
-    const myarr = getarrByCategory(cat)
+    const myarr = getarrByCategory('')
 
     const myobjtrov = tools.getElemById(myarr, idobj)
 
@@ -218,6 +239,7 @@ namespace Actions {
 
     objproj.descr = myobj.descr
     objproj.category = myobj.category
+    objproj.id_parent = myobj.id_parent
 
     let elemtochange: IProject = null
 
@@ -230,7 +252,7 @@ namespace Actions {
     } else {
       console.log('INSERT AT THE BOTTOM')
       // INSERT AT THE BOTTOM , so GET LAST ITEM
-      const lastelem = tools.getLastListNotCompleted(nametable, objproj.category)
+      const lastelem = tools.getLastListNotCompleted(nametable, objproj.id_parent)
 
       objproj.id_prev = (!!lastelem) ? lastelem._id : ApiTables.LIST_START
     }
@@ -254,50 +276,6 @@ namespace Actions {
 
     // 3) send to the Server
     return await ApiTables.Sync_SaveItem(nametable, 'POST', objproj)
-      .then((ris) => {
-        // *** Check if need to be moved because of the --- Priority Ordering --- ...
-
-        const indelem = tools.getIndexById(myarr, objproj._id)
-        let itemdragend
-        if (atfirst) {
-          // Check the second item, if it's different priority, then move to the first position of the priority
-          const secondindelem = indelem + 1
-          if (tools.isOkIndex(myarr, secondindelem)) {
-            const secondelem = tools.getElemByIndex(myarr, secondindelem)
-            if (secondelem.priority !== objproj.priority) {
-              itemdragend = {
-                field: 'priority',
-                idelemtochange: objproj._id,
-                prioritychosen: objproj.priority,
-                category: objproj.category,
-                atfirst
-              }
-            }
-          }
-
-        } else {
-          // get previous of the last
-          const prevlastindelem = indelem - 1
-          if (tools.isOkIndex(myarr, prevlastindelem)) {
-            const prevlastelem = tools.getElemByIndex(myarr, prevlastindelem)
-            if (prevlastelem.priority !== objproj.priority) {
-              itemdragend = {
-                field: 'priority',
-                idelemtochange: objproj._id,
-                prioritychosen: objproj.priority,
-                category: objproj.category,
-                atfirst
-              }
-            }
-          }
-        }
-
-        if (itemdragend) {
-          swapElems(context, itemdragend)
-        }
-        return ris
-      })
-
   }
 
   async function modify(context, { myitem, field }) {
@@ -307,8 +285,7 @@ namespace Actions {
   async function swapElems(context, itemdragend: IDrag) {
     console.log('PROJECT swapElems', itemdragend, state.projects)
 
-    const cat = itemdragend.category
-    const myarr = state.projects
+    const myarr = Getters.getters.items_dacompletare(itemdragend.id_proj)
 
     tools.swapGeneralElem(nametable, myarr, itemdragend, fieldtochange)
 

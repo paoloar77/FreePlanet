@@ -1,8 +1,11 @@
 <template>
-    <div :class="getClassRow()" @click="clickRow">
+    <div :class="getClassRow()" @click="clickProject">
+
+        <q-btn class="flex-item donotdrag " size="sm" push color="primary" round icon="arrow_forward"
+        :to="getrouteto" />
 
         <div class="flex-item donotdrag divdescrTot">
-            <q-input v-if="(sel)" hide-underline type="textarea" ref="inputdescr"
+            <q-input v-if="(sel && inEdit)" hide-underline type="textarea" ref="inputdescr"
                      v-model.trim="precDescr"
                      autogrow
                      borderless

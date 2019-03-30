@@ -112,6 +112,7 @@ let idbKeyval = (() => {
       // console.log('setdata', table, value)
 
       await withStore('readwrite', table, store => {
+
         req = store.put(value);
       });
       return req.result;

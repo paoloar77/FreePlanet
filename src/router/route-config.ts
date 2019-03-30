@@ -92,13 +92,13 @@ export const routesList: IMyRouteConfig[] = [
     component: () => import('@/views/offline/offline.vue')
   },
   {
-    path: '/projects',
+    path: '/projects/:idProj',
     name: 'progetti',
     component: () => import('@/views/projects/proj-list/proj-list.vue'),
     meta: {
       requiresAuth: true,
       async asyncData() {
-        await Projects.actions.dbLoad({ checkPending: false })
+        await Projects.actions.dbLoad({ checkPending: false, onlyiffirsttime: true })
       }
       // middleware: [auth]
     }

@@ -2,7 +2,7 @@ import Vue from 'vue'
 import { Component, Watch } from 'vue-property-decorator'
 
 import { GlobalStore, UserStore } from '@store'
-import { Getter } from "vuex-class"
+import { Getter } from 'vuex-class'
 import { ICfgServer, IGlobalState, ITodo, ITodosState } from '../../../model/index'
 
 const namespace: string = 'GlobalModule'

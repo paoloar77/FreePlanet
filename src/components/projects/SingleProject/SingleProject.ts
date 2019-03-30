@@ -54,6 +54,16 @@ export default class SingleProject extends Vue {
     this.precDescr = this.itemproject.descr
   }
 
+  @Watch('itemproject.longdescr') public valueChangedlongdescr() {
+    this.watchupdate('longdescr')
+  }
+
+  @Watch('itemproject.hoursplanned') public valueChangedhoursplanned() {
+    this.watchupdate('hoursplanned')
+  }
+  @Watch('itemproject.hoursworked') public valueChangedhoursworked() {
+    this.watchupdate('hoursworked')
+  }
   @Watch('itemproject.progressCalc') public valueChanged6() {
     console.log('itemproject.progressCalc')
     this.updateClasses()
@@ -106,18 +116,9 @@ export default class SingleProject extends Vue {
 
     this.percProgress = 'percProgress'
 
-    let mycolcl = ''
-    if (this.itemproject.progressCalc < 33) {
-      mycolcl = ' lowperc'
-    } else if (this.itemproject.progressCalc < 66) {
-      mycolcl = ' medperc'
-    } else {
-      mycolcl = ' highperc'
-    }
+    this.colProgress = tools.getProgressColor(this.itemproject.progressCalc)
 
-    this.colProgress = mycolcl
-
-    this.percProgress += mycolcl
+    this.percProgress += ' ' + tools.getProgressClassColor(this.itemproject.progressCalc)
 
     this.clButtPopover = this.sel ? 'pos-item-popover comp_selected' : 'pos-item-popover'
 
@@ -165,7 +166,7 @@ export default class SingleProject extends Vue {
 
     if (!this.sel) {
       if (!this.inEdit) {
-        this.attivaEdit = true
+        // this.attivaEdit = true
         this.$emit('deselectAllRows', this.itemproject, true)
 
         if (!this.sel) {
@@ -209,8 +210,23 @@ export default class SingleProject extends Vue {
     }
   }
 
-  public clickRow() {
+  public clickProject() {
+    this.$emit('idsel', this.itemproject._id)
     this.clickRiga()
+  }
+
+  public activeEdit(){
+    console.log('Attiva Edit')
+    this.attivaEdit = true
+    this.editProject()
+  }
+
+  get getrouteto(){
+    return '/projects/' + this.itemproject._id
+  }
+
+  public goIntoTheProject() {
+    this.$router.replace('/projects/' + this.itemproject._id)
   }
 
   public editProject() {
@@ -269,7 +285,7 @@ export default class SingleProject extends Vue {
       this.deselectRiga()
       this.clickMenu(tools.MenuAction.DELETE)
         .then(() => {
-          this.faiFocus('insertTask', true)
+          this.faiFocus('insertProjectBottom', true)
           return
         })
     }
@@ -297,7 +313,7 @@ export default class SingleProject extends Vue {
       this.deselectRiga()
       this.clickMenu(tools.MenuAction.DELETE)
         .then(() => {
-          this.faiFocus('insertTask', true)
+          this.faiFocus('insertProjectBottom', true)
           return
         })
     }
@@ -310,14 +326,14 @@ export default class SingleProject extends Vue {
       } else {
         e.preventDefault()
         this.deselectRiga()
-        this.faiFocus('insertTask', false)
+        this.faiFocus('insertProjectBottom', false)
       }
     }
 
     // console.log('keyDownArea', e)
     if (e.key === 'Escape') {
       this.deselectRiga()
-      // this.faiFocus('insertTask', true)
+      // this.faiFocus('insertProject', true)
       console.log('LOAD this.precDescr', this.precDescr)
       this.precDescr = this.itemproject.descr
     }
@@ -397,10 +413,8 @@ export default class SingleProject extends Vue {
       return await this.askConfirmDelete()
     } else if (action === tools.MenuAction.TOGGLE_EXPIRING) {
       return await this.enableExpiring()
-    } else if (action === tools.MenuAction.COMPLETED) {
-      return await this.setCompleted()
-    } else if (action === tools.MenuAction.PROGRESS_BAR) {
-      return await this.updatedata('progressCalc')
+    } else if (action === tools.MenuAction.EDIT) {
+      this.activeEdit()
     } else if (action === 0) {
       this.deselectAndExitEdit()
     }

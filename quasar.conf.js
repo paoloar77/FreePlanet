@@ -170,6 +170,8 @@ module.exports = function (ctx) {
         'QPageScroller',
         'QAvatar',
         'QImg',
+        'QSplitter',
+        'QSeparator',
         'QCarouselSlide'
       ],
       directives: [

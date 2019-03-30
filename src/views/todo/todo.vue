@@ -6,6 +6,7 @@
                     <div class="flex-item categorytitle">{{categoryAtt | capitalize}}</div>
                     <div class="flex-item">
                         <q-btn push
+                               size="sm"
                                icon="settings">
                             <q-menu id="popconfig" self="top right">
                                 <q-list link separator no-border class="todo-menu">

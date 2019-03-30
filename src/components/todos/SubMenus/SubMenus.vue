@@ -80,6 +80,6 @@
 <script lang="ts" src="./SubMenus.ts">
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
     @import './SubMenus.scss';
 </style>

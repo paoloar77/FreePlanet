@@ -9,8 +9,8 @@ $heightdescr: 20px;
 
 .flex-item{
    // background-color: #d5e2eb;
-  padding: 0px;
-  margin: 1px;
+  padding: 2px;
+  margin: 2px;
   margin-left: 3px;
   margin-right: 3px;
   color: #000;
@@ -195,16 +195,6 @@ $heightdescr: 20px;
 .colProgress {
 }
 
-.lowperc {
-  color: red;
-}
-.medperc {
-  color: blue;
-}
-.highperc {
-  color: green;
-}
-
 .percompleted {
   color: $colcompleted
 }
@@ -264,6 +254,7 @@ $heightdescr: 20px;
 
 .divdescrTot, .divdescrTot > div > div > div > div > textarea {
   font-size: 1rem;
+  cursor: pointer;
 }
 
 .divdescrTot {

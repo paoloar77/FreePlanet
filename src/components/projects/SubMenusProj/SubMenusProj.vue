@@ -77,6 +77,6 @@
 <script lang="ts" src="./SubMenusProj.ts">
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
     @import './SubMenusProj.scss';
 </style>

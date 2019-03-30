@@ -172,24 +172,24 @@ if (workbox) {
             console.log('*********+++++++++++++++++**********    Records ', table + ' Received from Server [', myarr.length, 'record]', myarr)
 
             if (table === 'todos') {
-              for (let cat in data.categories) {
+              for (const cat in data.categories) {
                 promiseChain = promiseChain.then(() => {
                   return writeData('categories', { _id: cat, valore: data.categories[cat] })
                 })
               }
 
-              for (let indrecCat in myarr) {
-                for (let indrec in myarr[indrecCat]) {
+              for (const arrsing of myarr) {
+                for (const rec of arrsing) {
                   promiseChain = promiseChain.then(() => {
-                    return writeData(table, myarr[indrecCat][indrec])
+                    return writeData(table, rec)
                   })
                 }
               }
             } else {
               // Others tables
-              for (let indrec in myarr) {
+              for (const rec of myarr) {
                 promiseChain = promiseChain.then(() => {
-                  return writeData(table, myarr[indrec])
+                  return writeData(table, rec)
                 })
               }
             }

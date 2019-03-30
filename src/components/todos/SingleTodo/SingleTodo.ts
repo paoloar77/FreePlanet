@@ -126,20 +126,15 @@ export default class SingleTodo extends Vue {
     this.menuProgress = 'menuProgress'
     this.percProgress = 'percProgress'
 
-    let mycolcl = ''
-    if (this.itemtodo.progress < 33) {
-      mycolcl = ' lowperc'
-    } else if (this.itemtodo.progress < 66) {
-      mycolcl = ' medperc'
-    } else {
-      mycolcl = ' highperc'
-    }
+    let mycolcl = ' ' + tools.getProgressClassColor(this.itemtodo.progress)
+    this.colProgress = tools.getProgressColor(this.itemtodo.progress)
 
     if (this.itemtodo.completed) {
       mycolcl = ' percompleted'
+      this.colProgress = 'gray'
     }
 
-    this.colProgress = mycolcl
+    this.colProgress = tools.getProgressColor(this.itemtodo.progress)
 
     this.menuProgress += mycolcl
     this.percProgress += mycolcl
