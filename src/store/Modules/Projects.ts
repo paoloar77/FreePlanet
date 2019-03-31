@@ -1,4 +1,4 @@
-import { IProject, IProjectsState, IDrag } from 'model'
+import { IProject, IProjectsState, IDrag, IMenuList } from 'model'
 import { storeBuilder } from './Store/Store'
 
 import Api from '@api'
@@ -81,6 +81,20 @@ namespace Getters {
     }
   }, 'items_dacompletare')
 
+  const listaprojects = b.read((state: IProjectsState) => (): IMenuList[] => {
+    if (state.projects) {
+      const listaproj = tools.mapSort(state.projects.filter((proj) => proj.id_parent === tools.FIRST_PROJ))
+      const myarr: IMenuList[] = []
+      for (const proj of listaproj) {
+        myarr.push({name: proj.descr, description: proj.descr, idelem: proj._id})
+      }
+      return myarr
+
+    } else {
+      return []
+    }
+  }, 'listaprojects')
+
   const getDescrById = b.read((state: IProjectsState) => (id: string): string => {
     if (id === tools.FIRST_PROJ)
       return 'Projects'
@@ -116,6 +130,9 @@ namespace Getters {
     },
     get items_dacompletare() {
       return items_dacompletare()
+    },
+    get listaprojects() {
+      return listaprojects()
     },
     get getDescrById() {
       return getDescrById()

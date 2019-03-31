@@ -1,4 +1,4 @@
-import { ICfgServer, IConfig, IGlobalState, ITodoList, StateConnection } from 'model'
+import { ICfgServer, IConfig, IGlobalState, IListRoutes, IMenuList, StateConnection } from 'model'
 import { storeBuilder } from './Store/Store'
 
 import Vue from 'vue'
@@ -12,7 +12,7 @@ import * as Types from '@src/store/Api/ApiTypes'
 import { costanti } from '@src/store/Modules/costanti'
 import { tools } from '@src/store/Modules/tools'
 import * as ApiTables from '@src/store/Modules/ApiTables'
-import { GlobalStore, Todos, UserStore } from '@store'
+import { GlobalStore, Projects, Todos, UserStore } from '@store'
 import messages from '../../statics/i18n'
 import globalroutines from './../../globalroutines/index'
 
@@ -40,9 +40,9 @@ const state: IGlobalState = {
   posts: [],
   menulinks: {},
   listatodo: [
-    { namecat: 'personal', description: 'personal' },
-    { namecat: 'work', description: 'work' },
-    { namecat: 'shopping', description: 'shopping' }
+    { name: 'personal', description: 'personal' },
+    { name: 'work', description: 'work' },
+    { name: 'shopping', description: 'shopping' }
   ],
   connData: {
     uploading_server: 0,
@@ -70,6 +70,10 @@ async function getstateConnSaved() {
   } else {
     return 'offline'
   }
+}
+
+function addRoute(myarr, values) {
+  myarr.push(values)
 }
 
 const b = storeBuilder.module<IGlobalState>('GlobalModule', state)
@@ -109,72 +113,62 @@ namespace Getters {
   const getmenu = b.read((state) => {
 
     const arrlista = GlobalStore.state.listatodo
-    let listatodo = []
+    const listatodo = []
 
-    arrlista.forEach((elem: ITodoList) => {
+    arrlista.forEach((elem: IMenuList) => {
       const item = {
         faIcon: 'fa fa-list-alt',
         materialIcon: 'todo',
         name: 'pages.' + elem.description,
-        route: '/todo/' + elem.namecat
+        route: '/todo/' + elem.name
       }
       listatodo.push(item)
 
     })
 
-    if (UserStore.state.isAdmin) {
-      state.menulinks = {
-        Dashboard: {
-          routes: [
-            { route: '/', faIcon: 'fa fa-home', materialIcon: 'home', name: 'pages.home' },
-            {
-              route: '/todo', faIcon: 'fa fa-list-alt', materialIcon: 'format_list_numbered', name: 'pages.Todo',
-              routes2: listatodo
-            },
-            { route: '/projects/' + tools.FIRST_PROJ, faIcon: 'fa fa-list-alt', materialIcon: 'next_week', name: 'pages.Projects' },
+    const arrlistaproj = Projects.getters.listaprojects()
+    const listaprojects = []
 
-            { route: '/category', faIcon: 'fa fa-list-alt', materialIcon: 'category', name: 'pages.Category' },
-            { route: '/admin/cfgserv', faIcon: 'fa fa-database', materialIcon: 'event_seat', name: 'pages.Admin' },
-            { route: '/admin/testp1/par1', faIcon: 'fa fa-database', materialIcon: 'restore', name: 'pages.Test1' },
-            { route: '/admin/testp1/par2', faIcon: 'fa fa-database', materialIcon: 'restore', name: 'pages.Test2' }
-            /* {route: '/vreg?idlink=aaa', faIcon: 'fa fa-login', materialIcon: 'login', name: 'pages.vreg'},*/
-          ],
-          show: true
-        }
+    for (const elem of arrlistaproj) {
+      const item = {
+        materialIcon: 'next_week',
+        name: elem.description,
+        route: '/projects/' + elem.idelem
       }
-    } else {
-      // PRODUCTION USER:
-      if (process.env.PROD) {
-        state.menulinks = {
-          Dashboard: {
-            routes: [
-              { route: '/', faIcon: 'fa fa-home', materialIcon: 'home', name: 'pages.home' }
-            ],
-            show: true
-          }
-        }
-      } else {
-        // SERVER TEST
-        state.menulinks = {
-          Dashboard: {
-            routes: [
-              { route: '/', faIcon: 'fa fa-home', materialIcon: 'home', name: 'pages.home' },
-              {
-                route: '/todo', faIcon: 'fa fa-list-alt', materialIcon: 'format_list_numbered', name: 'pages.Todo',
-                routes2: listatodo
-              },
-              { route: '/category', faIcon: 'fa fa-list-alt', materialIcon: 'category', name: 'pages.Category' }
-              // { route: '/signup', faIcon: 'fa fa-registered', materialIcon: 'home', name: 'pages.SignUp' },
-              // { route: '/signin', faIcon: 'fa fa-anchor', materialIcon: 'home', name: 'pages.SignIn' },
-              /* {route: '/vreg?idlink=aaa', faIcon: 'fa fa-login', materialIcon: 'login', name: 'pages.vreg'},*/
-            ],
-            show: true
-          }
-        }
-      }
+      listaprojects.push(item)
     }
 
-    console.log('___ return getMenu ', state.menulinks)
+    const arrroutes: IListRoutes[] = []
+
+    addRoute(arrroutes, { route: '/', faIcon: 'fa fa-home', materialIcon: 'home', name: 'pages.home' })   // HOME
+
+    if (!process.env.PROD) {
+      addRoute(arrroutes, { route: '/todo', faIcon: 'fa fa-list-alt', materialIcon: 'format_list_numbered', name: 'pages.Todo',
+        routes2: listatodo,
+        level_parent: '0.5',
+        level_child: '0.5'
+      })
+
+      addRoute(arrroutes,{ route: '/projects/' + tools.FIRST_PROJ, faIcon: 'fa fa-list-alt', materialIcon: 'next_week', name: 'pages.Projects',
+        routes2: listaprojects,
+        level_parent: '0',
+        level_child: '0.5'
+      })
+    }
+
+    if (UserStore.state.isAdmin) {
+      addRoute(arrroutes, { route: '/category', faIcon: 'fa fa-list-alt', materialIcon: 'category', name: 'pages.Category' })
+      addRoute(arrroutes, { route: '/admin/cfgserv', faIcon: 'fa fa-database', materialIcon: 'event_seat', name: 'pages.Admin' })
+      addRoute(arrroutes, { route: '/admin/testp1/par1', faIcon: 'fa fa-database', materialIcon: 'restore', name: 'pages.Test1' })
+      addRoute(arrroutes, { route: '/admin/testp1/par2', faIcon: 'fa fa-database', materialIcon: 'restore', name: 'pages.Test2' })
+    }
+
+    state.menulinks = {
+      Dashboard: {
+        routes: arrroutes,
+        show: true
+      }
+    }
 
     return state.menulinks
 

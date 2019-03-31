@@ -235,7 +235,7 @@ namespace Actions {
       })
       .catch((error: Types.AxiosError) => {
         UserStore.mutations.setErrorCatch(error)
-        return { code: UserStore.getters.getServerCode, msg: error.getMsgError() }
+        return { code: UserStore.getters.getServerCode(), msg: error.getMsgError() }
       })
 
   }
@@ -254,7 +254,7 @@ namespace Actions {
         return { code: res.data.code, msg: res.data.msg }
       }).catch((error) => {
         UserStore.mutations.setErrorCatch(error)
-        return UserStore.getters.getServerCode
+        return UserStore.getters.getServerCode()
       })
 
   }
@@ -280,7 +280,7 @@ namespace Actions {
         return { code: res.data.code, msg: res.data.msg }
       }).catch((error) => {
         UserStore.mutations.setErrorCatch(error)
-        return UserStore.getters.getServerCode
+        return UserStore.getters.getServerCode()
       })
   }
 
@@ -348,7 +348,7 @@ namespace Actions {
           })
           .catch((error) => {
             UserStore.mutations.setErrorCatch(error)
-            return UserStore.getters.getServerCode
+            return UserStore.getters.getServerCode()
           })
       })
   }
@@ -456,7 +456,7 @@ namespace Actions {
       })
       .catch((error) => {
         UserStore.mutations.setErrorCatch(error)
-        return UserStore.getters.getServerCode
+        return UserStore.getters.getServerCode()
       })
   }
 
@@ -484,7 +484,7 @@ namespace Actions {
         Mutations.mutations.clearAuthData()
       }).catch((error) => {
         UserStore.mutations.setErrorCatch(error)
-        return UserStore.getters.getServerCode
+        return UserStore.getters.getServerCode()
       })
 
     return riscall

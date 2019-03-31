@@ -88,7 +88,7 @@ async function dbDeleteItem(call, item) {
       })
       .catch((error) => {
         UserStore.mutations.setErrorCatch(error)
-        return UserStore.getters.getServerCode
+        return UserStore.getters.getServerCode()
       })
 
     return res
@@ -188,7 +188,7 @@ export async function aftercalling(ris, checkPending: boolean, nametabindex: str
     if (ris.status === serv_constants.RIS_CODE__HTTP_FORBIDDEN_INVALID_TOKEN) {
       tools.consolelogpao('UNAUTHORIZING... TOKEN EXPIRED... !! ')
     } else {
-      tools.consolelogpao('NETWORK UNREACHABLE ! (Error in fetch)', UserStore.getters.getServerCode, ris.status)
+      tools.consolelogpao('NETWORK UNREACHABLE ! (Error in fetch)', UserStore.getters.getServerCode(), ris.status)
     }
     if ('serviceWorker' in navigator) {
       // Read all data from IndexedDB Store into Memory

@@ -278,9 +278,9 @@ export default class SingleProject extends Vue {
   }
 
   public keyDownRow(e) {
-    console.log('keyDownRow')
+    console.log('keyDownRow', e.keyCode)
     // Delete Key or Backspage
-    if (((e.keyCode === 8) || (e.keyCode === 46)) && (this.precDescr === '') && !e.shiftKey) {
+    if (((e.keyCode === 46)) && (this.precDescr === '') && !e.shiftKey) {
       e.preventDefault()
       this.deselectRiga()
       this.clickMenu(tools.MenuAction.DELETE)
@@ -308,7 +308,7 @@ export default class SingleProject extends Vue {
     }
 */
     // Delete Key or Backspage
-    if (((e.keyCode === 8) || (e.keyCode === 46)) && (this.precDescr === '') && !e.shiftKey) {
+    if (((e.keyCode === 46)) && (this.precDescr === '') && !e.shiftKey) {
       e.preventDefault()
       this.deselectRiga()
       this.clickMenu(tools.MenuAction.DELETE)

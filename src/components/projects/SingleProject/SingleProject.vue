@@ -1,5 +1,5 @@
 <template>
-    <div :class="getClassRow()" @click="clickProject">
+    <div :class="getClassRow()" @click="clickProject" >
 
         <q-btn class="flex-item donotdrag " size="sm" push color="primary" round icon="arrow_forward"
         :to="getrouteto" />
@@ -63,7 +63,6 @@
                     <SubMenusProj :menuPopupProj="menuPopupProj" :itemproject="itemproject" @clickMenu="clickMenu"
                               @setPriority="setPriority"></SubMenusProj>
                 </q-menu>
-
             </q-btn>
         </div>
         <!--clButtPopover: {{ clButtPopover }}-->

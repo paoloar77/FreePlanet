@@ -55,13 +55,23 @@ export interface IGlobalState {
   connData: IConnData
   posts: IPost[]
   menulinks: {}
-  listatodo: ITodoList[]
+  listatodo: IMenuList[]
   arrConfig: IConfig[]
 }
 
-
-export interface ITodoList {
-  namecat: string
+export interface IMenuList {
+  name: string
   description: string
+  idelem?: string
+  icon?: string
 }
 
+export interface IListRoutes {
+  route: string
+  faIcon: string
+  materialIcon: string
+  name: string
+  routes2: []
+  level_parent: string
+  level_child: string
+}
