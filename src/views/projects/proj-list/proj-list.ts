@@ -48,7 +48,7 @@ export default class ProjList extends Vue {
   public percProgress: string = 'percProgress'
 
   public $refs: {
-    single: SingleProject[]
+    singleproject: SingleProject[]
   }
 
   get getrouteup() {
@@ -102,15 +102,11 @@ export default class ProjList extends Vue {
     this.updateclasses()
   }
 
-  public getmyid(id) {
-    return 'row' + id
-  }
-
   public showTask(field_value) {
     return field_value === tools.MenuAction.SHOW_TASK
   }
 
-  public async onEnd2(itemdragend) {
+  public async onEndproj(itemdragend) {
     await Projects.actions.swapElems(itemdragend)
   }
 
@@ -130,7 +126,7 @@ export default class ProjList extends Vue {
       }
 
       // console.log('args', args, itemdragend)
-      this.onEnd2(itemdragend)
+      this.onEndproj(itemdragend)
     })
 
     $service.eventBus.$on('drag', (el, source) => {
@@ -178,37 +174,60 @@ export default class ProjList extends Vue {
   public checkUpdate_everytime() {
     this.polling = setInterval(() => {
       this.checkUpdate()
-    }, 60000)
+    }, tools.NUMSEC_CHECKUPDATE)
   }
 
   public beforeDestroy() {
     clearInterval(this.polling)
   }
 
-  public mydeleteItem(idobj: string) {
-    // console.log('mydeleteItem', idobj)
+  public mydeleteitemproj(idobj: string) {
+    // console.log('mydeleteitemtodo', idobj)
     return Projects.actions.deleteItem({ idobj })
   }
 
-  public dbInsert(atfirst: boolean = false) {
-    let descr = this.projbottom.trim()
+  public dbInsert() {
+    const descr = this.projbottom.trim()
 
-    if (descr === '') {
-      return
+    this.projbottom = ''
+
+    return this.addProject(descr)
+  }
+
+  public async clickMenuProjList(action) {
+    console.log('clickMenuProjList: ', action)
+    if (action === tools.MenuAction.ADD_PROJECT) {
+      const idnewelem = await this.addProject('')
+      // get element by id
+      const elem = this.getCompProjectById(idnewelem)
+      // @ts-ignore
+      elem.activeEdit()
+      // console.log('idnewelem', idnewelem, 'Elem Trovato', elem)
+    }
+  }
+
+  public getCompProjectById(id): SingleProject {
+    console.log('this.$refs.singleproject', this.$refs.singleproject)
+    for (const elem of this.$refs.singleproject) {
+      // @ts-ignore
+      if (elem.itemproject._id === id)
+        return elem
+    }
+  }
+
+  // const descr = this.$t('project.newproj').toString()
+
+  public async addProject(descr) {
+    const myobj: IProject = {
+      descr,
+      id_parent: this.idProjAtt
     }
 
     if (!tools.checkIfUserExist(this)) {
       return
     }
 
-    const myobj: IProject = {
-      descr,
-      id_parent: this.idProjAtt
-    }
-
-    this.projbottom = ''
-
-    return Projects.actions.dbInsert({ myobj, atfirst })
+    return await Projects.actions.dbInsert({ myobj, atfirst: false })
   }
 
   public setidsel(id: string) {
@@ -216,8 +235,8 @@ export default class ProjList extends Vue {
     this.itemsel = Projects.getters.getRecordById(this.idsel)
   }
 
-  public async updateitem({ myitem, field }) {
-    console.log('calling MODIFY updateitem', myitem, field)
+  public async updateitemproj({ myitem, field }) {
+    console.log('calling MODIFY updateitemproj', myitem, field)
 
     const itemdragend: IDrag = {
       id_proj: this.idProjAtt,
@@ -232,12 +251,12 @@ export default class ProjList extends Vue {
 
   }
 
-  public deselectAllRows(item: IProject, check, onlythis: boolean = false) {
-    // console.log('deselectAllRows : ', item)
+  public deselectAllRowsproj(item: IProject, check, onlythis: boolean = false) {
+    // console.log('deselectAllRowsproj : ', item)
 
-    for (let i = 0; i < this.$refs.single.length; i++) {
+    for (let i = 0; i < this.$refs.singleproject.length; i++) {
 
-      const contr = this.$refs.single[i] as SingleProject
+      const contr = this.$refs.singleproject[i] as SingleProject
       // @ts-ignore
       const id = contr.itemproject._id
       // Don't deselect the actual clicked!
@@ -271,6 +290,8 @@ export default class ProjList extends Vue {
   }
 
   get getCalcHoursWorked() {
+    if (this.itemsel.hoursplanned <= 0)
+      return 0
     let myperc = Math.round(this.itemsel.hoursworked / this.itemsel.hoursplanned * 100)
 
     return myperc

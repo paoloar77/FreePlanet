@@ -40,9 +40,9 @@ const state: IGlobalState = {
   posts: [],
   menulinks: {},
   listatodo: [
-    { name: 'personal', description: 'personal' },
-    { name: 'work', description: 'work' },
-    { name: 'shopping', description: 'shopping' }
+    { nametranslate: 'personal', description: 'personal' },
+    { nametranslate: 'work', description: 'work' },
+    { nametranslate: 'shopping', description: 'shopping' }
   ],
   connData: {
     uploading_server: 0,
@@ -120,7 +120,7 @@ namespace Getters {
         faIcon: 'fa fa-list-alt',
         materialIcon: 'todo',
         name: 'pages.' + elem.description,
-        route: '/todo/' + elem.name
+        route: '/todo/' + elem.nametranslate
       }
       listatodo.push(item)
 
@@ -132,7 +132,8 @@ namespace Getters {
     for (const elem of arrlistaproj) {
       const item = {
         materialIcon: 'next_week',
-        name: elem.description,
+        name: elem.nametranslate,
+        text: elem.description,
         route: '/projects/' + elem.idelem
       }
       listaprojects.push(item)
@@ -145,14 +146,14 @@ namespace Getters {
     if (!process.env.PROD) {
       addRoute(arrroutes, { route: '/todo', faIcon: 'fa fa-list-alt', materialIcon: 'format_list_numbered', name: 'pages.Todo',
         routes2: listatodo,
-        level_parent: '0.5',
-        level_child: '0.5'
+        level_parent: 0.5,
+        level_child: 0.5
       })
 
       addRoute(arrroutes,{ route: '/projects/' + tools.FIRST_PROJ, faIcon: 'fa fa-list-alt', materialIcon: 'next_week', name: 'pages.Projects',
         routes2: listaprojects,
-        level_parent: '0',
-        level_child: '0.5'
+        level_parent: 0,
+        level_child: 0.5
       })
     }
 
@@ -210,7 +211,7 @@ namespace Getters {
     },
 
     get isOnline() {
-      console.log('*********************** isOnline')
+      // console.log('*********************** isOnline')
       return state.stateConnection === 'online'
     },
 

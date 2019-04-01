@@ -236,10 +236,13 @@ const messages = {
     },
     connection: 'Connessione',
     proj: {
+      newproj: 'Titolo Progetto',
       longdescr: 'Descrizione',
       hoursplanned: 'Ore Preventivate',
       hoursadded: 'Ore Aggiuntive',
       hoursworked: 'Ore Lavorate',
+      begin_development: 'Inizio Sviluppo',
+      begin_test: 'Inizio Test',
       progresstask: 'Progressione Compiti'
     }
   },
@@ -474,10 +477,13 @@ const messages = {
     },
     connection: 'Connection',
     proj: {
+      newproj: 'Título Projecto',
       longdescr: 'Descripción',
       hoursplanned: 'Horas Estimadas',
       hoursadded: 'Horas Adicional',
       hoursworked: 'Horas Trabajadas',
+      begin_development: 'Comienzo desarrollo',
+      begin_test: 'Comienzo Prueba',
       progresstask: 'Progresion Tareas'
     }
   },
@@ -584,7 +590,7 @@ const messages = {
       multiplatform: {
         title: 'Multi-platform',
         descr: 'It is compatible with Google Chrome, Firefox, Safari, iOS, Android and PC. The Application is easily installed, without going through the store. ' +
-          'just share the name of this site <strong>www.freeplanet.app</strong>.<br>' +
+          'just share the nametranslate of this site <strong>www.freeplanet.app</strong>.<br>' +
           'After registration it will ask to be added to the application list and in the screen',
       },
       free: {
@@ -712,10 +718,13 @@ const messages = {
     },
     connection: 'Conexión',
     proj: {
+      newproj: 'Project Title',
       longdescr: 'Description',
       hoursplanned: 'Estimated Hours',
       hoursadded: 'Additional Hours',
       hoursworked: 'Worked Hours',
+      begin_development: 'Start Dev',
+      begin_test: 'Start Test',
       progresstask: 'Todos progression'
     }
   },

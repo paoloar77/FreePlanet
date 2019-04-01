@@ -5,6 +5,7 @@ import { GlobalStore } from '../store/Modules'
 import { idbKeyval as storage } from '../js/storage.js'
 import { costanti } from '../store/Modules/costanti'
 import { ICfgData, IGlobalState } from '@src/model'
+import { tools } from '@src/store/Modules/tools'
 
 function saveConfigIndexDb(context) {
 
@@ -25,7 +26,7 @@ function writeConfigIndexDb(context, data) {
 }
 
 async function readfromIndexDbToState(context, table) {
-  console.log('*** readfromIndexDbToState ***')
+  console.log('*** readfromIndexDbToState ***', table)
 
   return await storage.getalldata(table)
     .then((reccat) => {
@@ -45,30 +46,31 @@ async function readfromIndexDbToState(context, table) {
             console.log(table + ' records', records)
             // console.log('&&&&&&& readfromIndexDbToState OK: Num RECORD: ', records.length)
 
+            const arrinit = []
+
             for (const mytodo of records) {
               const cat = mytodo.category
               const indcat = Todos.state.categories.indexOf(cat)
-              if (Todos.state.todos[indcat] === undefined) {
-                Todos.state.todos[indcat] = {}
+              if (arrinit.indexOf(indcat) < 0) {
+                Todos.state.todos[indcat] = []
+                arrinit.push(indcat)
               }
 
-              // add to the right array
               Todos.state.todos[indcat].push(mytodo)
+
             }
 
-            console.log('************  ARRAYS SALVATI IN MEMORIA ', records)
+            console.log('************  ARRAYS SALVATI IN MEMORIA ', table, records)
           })
 
-      } else if (table === 'projects') {
-        Projects.state.projects = []
-        for (const elem of reccat) {
-          Projects.state.projects.push(elem.valore)
-        }
+      } else {
+        const arrris = tools.setArrayMainByTable(table, reccat)
+        // console.log('************  ARRAYS SALVATI IN MEMORIA ', table, arrris)
+
       }
 
-
     }).catch((error) => {
-      console.log('err: ', error)
+      console.log('err readfromIndexDbToState: ', error)
     })
 
 }
@@ -95,7 +97,7 @@ export default async (context, cmd, table, datakey = null, id = '') => {
       GlobalStore.state.connData.uploading_indexeddb = 1
     }
     return await storage.setdata(table, datakey)
-  } else if (cmd === 'updatefromIndexedDbToStateTodo') {
+  } else if (cmd === 'updatefromIndexedDbToState') {
     return await readfromIndexDbToState(context, table)
   } else if (cmd === 'readall') {
     if (GlobalStore) {

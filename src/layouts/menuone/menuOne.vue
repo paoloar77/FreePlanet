@@ -8,7 +8,7 @@
                         <q-expansion-item
                                 :header-inset-level="item.level_parent"
                                 :content-inset-level="item.level_parent"
-                                :label="$t(item.name)"
+                                :label="getLabelByItem(item)"
                                 :icon="item.materialIcon"
                                 expand-icon-class="my-menu-separat"
                                 header-class="my-menu"
@@ -21,7 +21,7 @@
                                               expand-icon="map"
                                               active-class="my-menu-active"
                                               class="item item-link drawer-closer cursor-pointer my-menu"
-                                              :label="$t(child2.name)">
+                                              :label="getLabelByItem(child2)">
                             </q-expansion-item>
 
                         </q-expansion-item>

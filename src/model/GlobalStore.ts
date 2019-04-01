@@ -60,7 +60,7 @@ export interface IGlobalState {
 }
 
 export interface IMenuList {
-  name: string
+  nametranslate: string
   description: string
   idelem?: string
   icon?: string
@@ -71,7 +71,8 @@ export interface IListRoutes {
   faIcon: string
   materialIcon: string
   name: string
+  text?: string
   routes2: []
-  level_parent: string
-  level_child: string
+  level_parent: number
+  level_child: number
 }

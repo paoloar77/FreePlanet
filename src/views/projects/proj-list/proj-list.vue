@@ -21,22 +21,20 @@
                                            icon="settings">
                                         <q-menu id="popconfig" self="top right">
                                             <q-list link separator no-border class="todo-menu">
-                                                <q-item clickable v-for="field in menuPopupConfigProject"
-                                                        :key="field.value">
-                                                    <q-item-section avatar>
-                                                        <q-icon :name="field.icon"/>
-                                                    </q-item-section>
+                                                <div v-for="field in menuPopupConfigProject" :key="field.value">
+                                                    <q-item clickable v-if="(field.value === 150)">
+                                                        <q-item-section avatar>
+                                                            <q-icon :name="field.icon"/>
+                                                        </q-item-section>
 
-                                                    <q-item-section>{{field.label}}</q-item-section>
-
-                                                    <q-item-section side v-if="showTask(field.value)">
+                                                        <q-item-section>{{field.label}}</q-item-section>
                                                         <q-item-section side>
                                                             <q-icon name="keyboard_arrow_right"/>
                                                         </q-item-section>
 
                                                         <q-menu auto-close anchor="bottom middle" self="top middle">
                                                             <q-list dense>
-                                                                <q-item side :icon="field.icon">
+                                                                <q-item side clickable :icon="field.icon">
 
                                                                     <q-item-section>
                                                                         <q-list dense>
@@ -45,8 +43,7 @@
                                                                                     :key="opt.value"
                                                                                     @click="showtype = opt.value">
                                                                                 <q-item-section avatar>
-                                                                                    <q-icon :name="opt.icon"
-                                                                                            inverted
+                                                                                    <q-icon :name="opt.icon" inverted
                                                                                             color="primary"/>
                                                                                 </q-item-section>
                                                                                 <q-item-section>
@@ -58,8 +55,17 @@
                                                                 </q-item>
                                                             </q-list>
                                                         </q-menu>
-                                                    </q-item-section>
-                                                </q-item>
+                                                    </q-item>
+                                                    <q-item v-else v-close-popup clickable :icon="field.icon"
+                                                            @click="clickMenuProjList(field.value)">
+
+                                                        <q-item-section avatar>
+                                                            <q-icon :name="field.icon"/>
+                                                        </q-item-section>
+
+                                                        <q-item-section>{{field.label}}</q-item-section>
+                                                    </q-item>
+                                                </div>
                                             </q-list>
                                         </q-menu>
                                     </q-btn>
@@ -71,15 +77,17 @@
                         <div>
                             <!--<q-infinite-scroll :handler="loadMoreTodo" :offset="7">-->
                             <div class="container" v-dragula="items_dacompletare(idProjAtt)" drake="second">
-                                <div :id="getmyid(myproj._id)" :index="index"
+                                <div :id="tools.getmyid(myproj._id)" :index="index"
                                      v-for="(myproj, index) in items_dacompletare(idProjAtt)"
                                      :key="myproj._id" class="myitemdrag">
 
-                                    <SingleProject ref="single" @deleteItem="mydeleteItem(myproj._id)"
-                                                   @eventupdate="updateitem"
+                                    <SingleProject ref="singleproject" @deleteItemproj="mydeleteitemproj(myproj._id)"
+                                                   @eventupdateproj="updateitemproj"
                                                    @idsel="setidsel"
-                                                   @deselectAllRows="deselectAllRows" @onEnd="onEnd2"
-                                                   :itemproject='myproj'/>
+                                                   @deselectAllRowsproj="deselectAllRowsproj" @onEnd="onEndproj"
+                                                   :itemproject='myproj'>
+
+                                    </SingleProject>
 
                                 </div>
                             </div>
@@ -91,7 +99,9 @@
                                      color="blue-12"
                                      :label="$t('todo.insertbottom')"
                                      :after="[{icon: 'arrow_forward', content: true, handler () {}}]"
-                                     v-on:keyup.enter="dbInsert(false)"/>
+                                     v-on:keyup.enter="dbInsert()">
+
+                            </q-input>
 
                             <br>
                         </div>
@@ -135,7 +145,7 @@
 
                             </div>
                             <q-icon class="flex-item flex-icon" name="watch_later"/>
-                            <div class="flex-item itemdescr content-center">
+                            <div class="flex-item itemdata content-center">
                                 <q-input
                                         ref="input"
                                         type="number"
@@ -144,7 +154,32 @@
                                         :label="$t('proj.hoursplanned')"
                                         debounce="500"
                                 />
-                                <CProgress :descr="$t('proj.progresstask')" :progressval="itemsel.progressCalc"></CProgress>
+                                <CProgress :descr="$t('proj.progresstask')"
+                                           :progressval="itemsel.progressCalc"></CProgress>
+                            </div>
+                        </div>
+                        <div class="flex-container clMain">
+                            <div style="margin: 10px;"></div>
+                            <div class="flex-item itemdata">
+                                <q-input v-model="itemsel.begin_development" mask="date" :hint="$t('proj.begin_development')">
+                                    <!--<span class="data_string">{{tools.getstrDate(itemsel.begin_development)}}</span>-->
+                                    <q-icon name="event" class="cursor-pointer">
+                                        <q-popup-proxy>
+                                            <q-date v-model="itemsel.begin_development" today-btn/>
+                                        </q-popup-proxy>
+                                    </q-icon>
+                                </q-input>
+                            </div>
+                            <div style="margin: 10px;"></div>
+                            <div class="flex-item itemdata">
+                                <q-input v-model="itemsel.begin_test" mask="date" :hint="$t('proj.begin_test')">
+                                    <!--<span class="data_string">{{tools.getstrDate(itemsel.begin_development)}}</span>-->
+                                    <q-icon name="event" class="cursor-pointer">
+                                        <q-popup-proxy>
+                                            <q-date v-model="itemsel.begin_test" today-btn/>
+                                        </q-popup-proxy>
+                                    </q-icon>
+                                </q-input>
                             </div>
                         </div>
                     </div>

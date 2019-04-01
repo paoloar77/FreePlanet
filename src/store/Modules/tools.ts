@@ -1,7 +1,7 @@
 import { Todos, Projects, UserStore } from '@store'
 import globalroutines from './../../globalroutines/index'
 import { costanti } from './costanti'
-import Quasar from 'quasar'
+import Quasar, { date } from 'quasar'
 import { IProject, ITodo } from '@src/model'
 import * as ApiTables from '@src/store/Modules/ApiTables'
 
@@ -20,6 +20,8 @@ export const tools = {
   ERR_AUTHENTICATION: -5,
   DUPLICATE_EMAIL_ID: 11000,
   DUPLICATE_USERNAME_ID: 11100,
+
+  NUMSEC_CHECKUPDATE: 20000,
 
   FIRST_PROJ: '__PROJECTS',
 
@@ -46,6 +48,12 @@ export const tools = {
     PRIORITY_LOW: 0
   },
 
+  Status: {
+    NONE: 0,
+    OPENED: 1,
+    COMPLETED: 10,
+  },
+
   MenuAction: {
     DELETE: 100,
     TOGGLE_EXPIRING: 101,
@@ -53,7 +61,8 @@ export const tools = {
     PROGRESS_BAR: 120,
     PRIORITY: 130,
     SHOW_TASK: 150,
-    EDIT: 160
+    EDIT: 160,
+    ADD_PROJECT: 200
   },
 
   selectPriority: {
@@ -351,6 +360,12 @@ export const tools = {
   menuPopupConfigProject: {
     it: [
       {
+        id: 5,
+        label: 'Nuovo Progetto',
+        value: 200,  // ADD_PROJECT
+        icon: 'next_week'
+      },
+      {
         id: 10,
         label: 'Mostra Task',
         value: 150,  // SHOW_TASK
@@ -359,6 +374,12 @@ export const tools = {
     ],
     es: [
       {
+        id: 5,
+        label: 'Nuevo Projecto',
+        value: 200,  // ADD_PROJECT
+        icon: 'next_week'
+      },
+      {
         id: 10,
         label: 'Mostrar Tareas',
         value: 150,
@@ -366,6 +387,12 @@ export const tools = {
       }
     ],
     enUs: [
+      {
+        id: 5,
+        label: 'New Project',
+        value: 200,  // ADD_PROJECT
+        icon: 'next_week'
+      },
       {
         id: 10,
         label: 'Show Task',
@@ -555,7 +582,7 @@ export const tools = {
         // tools.notifyarraychanged(myarr)
         // myarr[indelemchange].modified = true
         // console.log('update_idprev Index=', indelemchange, 'indtoget', indelemId, tools.getstrelem(myarr[indelemchange]))
-        console.log('   MODIFICATO! ', myarr[indelemchange].descr , ' PRIMA:', myarr[indelemchange].id_prev, 'DOPO: ', id_prev)
+        console.log('   MODIFICATO! ', myarr[indelemchange].descr, ' PRIMA:', myarr[indelemchange].id_prev, 'DOPO: ', id_prev)
         myarr[indelemchange].id_prev = id_prev
         return myarr[indelemchange]
       }
@@ -701,6 +728,20 @@ export const tools = {
     } else if (nametable === 'projects') {
       return Projects
     }
+  },
+
+  setArrayMainByTable(nametable, myarr) {
+    if (nametable === 'todos') {
+      Todos.state.todos = tools.jsonCopy(myarr)
+      return Todos.state.todos
+    } else if (nametable === 'projects') {
+      Projects.state.projects = tools.jsonCopy(myarr)
+      return Projects.state.projects
+    }
+  },
+
+  getmyid(id) {
+    return 'row' + id
   },
 
   getLastListNotCompleted(nametable, cat) {
@@ -937,6 +978,11 @@ export const tools = {
     } else {
       return 'red'
     }
-  }
+  },
+
+  getstrDate(mytimestamp) {
+    return date.formatDate(mytimestamp, 'DD-MM-YY')
+  },
+
 
 }

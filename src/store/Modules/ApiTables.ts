@@ -88,7 +88,7 @@ async function dbDeleteItem(call, item) {
       })
       .catch((error) => {
         UserStore.mutations.setErrorCatch(error)
-        return UserStore.getters.getServerCode()
+        return UserStore.getters.getServerCode
       })
 
     return res
@@ -188,11 +188,11 @@ export async function aftercalling(ris, checkPending: boolean, nametabindex: str
     if (ris.status === serv_constants.RIS_CODE__HTTP_FORBIDDEN_INVALID_TOKEN) {
       tools.consolelogpao('UNAUTHORIZING... TOKEN EXPIRED... !! ')
     } else {
-      tools.consolelogpao('NETWORK UNREACHABLE ! (Error in fetch)', UserStore.getters.getServerCode(), ris.status)
+      tools.consolelogpao('NETWORK UNREACHABLE ! (Error in fetch)', UserStore.getters.getServerCode, ris.status)
     }
     if ('serviceWorker' in navigator) {
       // Read all data from IndexedDB Store into Memory
-      await updatefromIndexedDbToStateTodo(nametabindex)
+      await updatefromIndexedDbToState(nametabindex)
     }
   } else {
     if (ris.status === tools.OK && checkPending) {
@@ -210,7 +210,7 @@ async function checkPendingMsg() {
   try {
     if (config) {
       if (!!config[1].stateconn) {
-        // console.log('config.stateconn', config[1].stateconn)
+        console.log('config.stateconn', config[1].stateconn)
 
         if (config[1].stateconn !== GlobalStore.state.stateConnection) {
           GlobalStore.mutations.setStateConnection(config[1].stateconn)
@@ -288,7 +288,7 @@ async function sendSwMsgIfAvailable() {
 }
 
 async function waitAndRefreshData() {
-  // #Todo++ Check if is OK
+  // #Todo++ waitAndRefreshData: Check if is OK
   await Projects.actions.dbLoad({ checkPending: false, onlyiffirsttime: false })
   return await Todos.actions.dbLoad({ checkPending: false })
 }
@@ -300,6 +300,10 @@ export async function waitAndcheckPendingMsg() {
   return await checkPendingMsg()
     .then((ris) => {
       if (ris) {
+        if (!GlobalStore.getters.isOnline) {   // If is Offline, then check
+
+        }
+
         // console.log('risPending = ', ris)
         return sendSwMsgIfAvailable()
           .then((something) => {
@@ -315,10 +319,10 @@ export async function waitAndcheckPendingMsg() {
     })
 }
 
-async function updatefromIndexedDbToStateTodo(nametab) {
-  await globalroutines(null, 'updatefromIndexedDbToStateTodo', nametab, null)
+async function updatefromIndexedDbToState(nametab) {
+  await globalroutines(null, 'updatefromIndexedDbToState', nametab, null)
     .then(() => {
-      console.log('updatefromIndexedDbToStateTodo! ')
+      console.log('updatefromIndexedDbToState! ')
       return true
     })
 }
@@ -377,14 +381,14 @@ export async function table_ModifyRecord(nametable, myitem, fieldtochange) {
 
   const myobjsaved = tools.jsonCopy(myitem)
 
-/*
-  const mymodule = tools.getModulesByTable(nametable)
-  let param2 = ''
-  if (nametable === 'todos') {
-    param2 = myitem.category
-  }
-  const miorec = mymodule.getters.getRecordById(myobjsaved._id, param2)
-*/
+  /*
+    const mymodule = tools.getModulesByTable(nametable)
+    let param2 = ''
+    if (nametable === 'todos') {
+      param2 = myitem.category
+    }
+    const miorec = mymodule.getters.getRecordById(myobjsaved._id, param2)
+  */
 
   // get record from IndexedDb
   const miorec = await globalroutines(null, 'read', nametable, null, myobjsaved._id)
@@ -396,7 +400,7 @@ export async function table_ModifyRecord(nametable, myitem, fieldtochange) {
   console.log('miorec', miorec.descr, miorec.id_prev)
 
   if (nametable === 'todos') {
-    if (setmodifiedIfchanged(miorec, myobjsaved, 'completed')) {
+    if (setmodifiedIfchanged(miorec, myobjsaved, 'status')) {
       miorec.completed_at = new Date().getDate()
     }
   }

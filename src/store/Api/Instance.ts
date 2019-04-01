@@ -27,8 +27,10 @@ axiosInstance.interceptors.response.use(
       if (process.env.DEBUG === '1')
         console.log('Status = ', error.response.status)
       console.log('Request Error: ', error.response)
-      if (error.response.status) {
+      if (error.response.status !== 0) {
         GlobalStore.mutations.setStateConnection('online')
+      } else {
+        GlobalStore.mutations.setStateConnection('offline')
       }
     } else {
       GlobalStore.mutations.setStateConnection('offline')

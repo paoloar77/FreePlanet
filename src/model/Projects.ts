@@ -12,7 +12,7 @@ export interface IProject {
   hoursplanned?: number
   hoursworked?: number
   priority?: number
-  completed?: boolean
+  status?: number
   created_at?: Date
   modify_at?: Date
   completed_at?: Date
@@ -23,8 +23,11 @@ export interface IProject {
   pos?: number
   order?: number
   progressCalc?: number
+  live_url?: string
+  test_url?: string
+  begin_development?: Date
+  begin_test?: Date
 }
-
 
 export interface IParamIProject {
   categorySel?: string

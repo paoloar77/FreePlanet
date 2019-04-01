@@ -20,7 +20,7 @@ const state: IProjectsState = {
   visuLastCompleted: 10
 }
 
-const fieldtochange: string [] = ['descr', 'longdescr', 'hoursplanned', 'hoursworked', 'id_parent', 'completed', 'category', 'expiring_at', 'priority', 'id_prev', 'pos', 'enableExpiring', 'progress']
+const fieldtochange: string [] = ['descr', 'longdescr', 'hoursplanned', 'hoursworked', 'id_parent', 'status', 'category', 'expiring_at', 'priority', 'id_prev', 'pos', 'enableExpiring', 'progress', 'live_url', 'test_url', 'begin_development', 'begin_test']
 
 const b = storeBuilder.module<IProjectsState>('Projects', state)
 const stateGetter = b.state()
@@ -55,19 +55,27 @@ namespace Getters {
     const obj: IProject = {
       _id: objectId(),
       descr: '',
+      longdescr: '',
       id_parent: '',
       priority: tools.Priority.PRIORITY_NORMAL,
-      completed: false,
+      status: tools.Status.OPENED,
       created_at: new Date(),
       modify_at: new Date(),
       completed_at: new Date(),
+      begin_development: new Date(0),
+      begin_test: new Date(0),
       category: '',
       // expiring_at: tomorrow,
       enableExpiring: false,
       id_prev: '',
       pos: 0,
       modified: false,
+      hoursworked: 0,
+      hoursplanned: 0,
+      live_url: '',
+      test_url: '',
       progressCalc: 0
+
     }
 
     return obj
@@ -75,6 +83,7 @@ namespace Getters {
 
   const items_dacompletare = b.read((state: IProjectsState) => (id_parent: string): IProject[] => {
     if (state.projects) {
+      // console.log('state.projects', state.projects)
       return tools.mapSort(state.projects.filter((proj) => proj.id_parent === id_parent))
     } else {
       return []
@@ -83,10 +92,11 @@ namespace Getters {
 
   const listaprojects = b.read((state: IProjectsState) => (): IMenuList[] => {
     if (state.projects) {
+      // console.log('state.projects', state.projects)
       const listaproj = tools.mapSort(state.projects.filter((proj) => proj.id_parent === tools.FIRST_PROJ))
       const myarr: IMenuList[] = []
       for (const proj of listaproj) {
-        myarr.push({name: proj.descr, description: proj.descr, idelem: proj._id})
+        myarr.push({nametranslate: '', description: proj.descr, idelem: proj._id})
       }
       return myarr
 
@@ -150,7 +160,7 @@ namespace Getters {
 namespace Mutations {
 
   function createNewItem(state: IProjectsState, { objproj, atfirst, categorySel }) {
-    console.log('createNewItem', objproj, 'cat=', categorySel, 'state.projects', state.projects)
+    // console.log('createNewItem', objproj, 'cat=', categorySel, 'state.projects', state.projects)
     if (state.projects === undefined) {
       state.projects = []
       state.projects.push(objproj)
@@ -164,7 +174,7 @@ namespace Mutations {
       state.projects.push(objproj)
     }
 
-    console.log('state.projects', state.projects)
+    // console.log('state.projects', state.projects)
 
   }
 
@@ -212,7 +222,6 @@ namespace Actions {
           default: costanti.ShowTypeTask.SHOW_LAST_N_COMPLETED
         }), 10)
 
-        // console.log('ARRAY TODOS = ', state.projects)
         if (process.env.DEBUG === '1') {
           console.log('dbLoad', 'state.projects', state.projects)
         }
@@ -225,7 +234,7 @@ namespace Actions {
         return error
       })
 
-    ApiTables.aftercalling(ris, checkPending, 'categories')
+    ApiTables.aftercalling(ris, checkPending, nametable)
   }
 
   async function deleteItem(context, { idobj }) {
@@ -292,7 +301,9 @@ namespace Actions {
     }
 
     // 3) send to the Server
-    return await ApiTables.Sync_SaveItem(nametable, 'POST', objproj)
+    await ApiTables.Sync_SaveItem(nametable, 'POST', objproj)
+
+    return id
   }
 
   async function modify(context, { myitem, field }) {

@@ -109,23 +109,23 @@ export const routesList: IMyRouteConfig[] = [
   {
     path: '/requestresetpwd',
     component: () => import('@/views/login/requestresetpwd.vue'),
-    meta: { name: 'Reset your Password' }
+    meta: { nametranslate: 'Reset your Password' }
   },
   {
     path: '/updatepwd',
     component: () => import('@/views/login/updatepassword.vue'),
-    meta: { name: 'Update your Password' }
+    meta: { nametranslate: 'Update your Password' }
   }
 
 
   {
     path: '/simpleform',
     component: () => import('@/views/form/simpleForm/simpleForm.vue'),
-    meta: { name: 'SimpleForm' }
+    meta: { nametranslate: 'SimpleForm' }
   },
   {
     path: '/embeeded',
     component: () => import('@/views/form/embeeded/embeeded.vue'),
-    meta: { name: 'Embeeded' }
+    meta: { nametranslate: 'Embeeded' }
   }*/
 ]

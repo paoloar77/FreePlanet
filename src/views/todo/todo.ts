@@ -81,15 +81,11 @@ export default class Todo extends Vue {
     this.categoryAtt = this.$route.params.category
   }
 
-  public getmyid(id) {
-    return 'row' + id
-  }
-
   public showTask(field_value) {
     return field_value === tools.MenuAction.SHOW_TASK
   }
 
-  public async onEnd(itemdragend) {
+  public async onEndtodo(itemdragend) {
     await Todos.actions.swapElems(itemdragend)
   }
 
@@ -105,7 +101,7 @@ export default class Todo extends Vue {
         oldIndex: this.getElementOldIndex(args.el)
       }
 
-      this.onEnd(itemdragend)
+      this.onEndtodo(itemdragend)
     })
 
     $service.eventBus.$on('drag', (el, source) => {
@@ -138,19 +134,19 @@ export default class Todo extends Vue {
   public checkUpdate_everytime() {
     this.polling = setInterval(() => {
       this.checkUpdate()
-    }, 60000)
+    }, tools.NUMSEC_CHECKUPDATE)
   }
 
   public beforeDestroy() {
     clearInterval(this.polling)
   }
 
-  public mydeleteItem(idobj: string) {
-    // console.log('mydeleteItem', idobj)
-    return Todos.actions.deleteItem({ cat: this.categoryAtt, idobj })
+  public mydeleteitemtodo(idobj: string) {
+    // console.log('mydeleteitemtodo', idobj)
+    return Todos.actions.deleteItemtodo({ cat: this.categoryAtt, idobj })
   }
 
-  public dbInsert(atfirst: boolean = false) {
+  public async dbInsert(atfirst: boolean = false) {
     let descr = this.todobottom.trim()
     if (atfirst) {
       descr = this.todotop.trim()
@@ -177,11 +173,11 @@ export default class Todo extends Vue {
       this.todobottom = ''
     }
 
-    return Todos.actions.dbInsert({ myobj, atfirst })
+    return await Todos.actions.dbInsert({ myobj, atfirst })
   }
 
-  public async updateitem({ myitem, field }) {
-    console.log('calling MODIFY updateitem', myitem, field)
+  public async updateitemtodo({ myitem, field }) {
+    console.log('calling MODIFY updateitemtodo', myitem, field)
 
     const itemdragend: IDrag = {
       category: this.categoryAtt,
@@ -197,8 +193,8 @@ export default class Todo extends Vue {
 
   }
 
-  public deselectAllRows(item: ITodo, check, onlythis: boolean = false) {
-    // console.log('deselectAllRows : ', item)
+  public deselectAllRowstodo(item: ITodo, check, onlythis: boolean = false) {
+    // console.log('deselectAllRowstodo : ', item)
 
     for (let i = 0; i < this.$refs.single.length; i++) {
 

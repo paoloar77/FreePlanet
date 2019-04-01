@@ -15,7 +15,7 @@
                     <q-checkbox v-model="itemtodo.enableExpiring"/>
                 </q-item-section>
                 <q-item-section side v-if="field.value === 110">
-                    <q-checkbox v-model="itemtodo.completed"/>
+                    <q-checkbox v-model="itemtodo.status"/>
                 </q-item-section>
             </q-item>
             <q-item clickable v-if="(field.value === 120)" :icon="field.icon"

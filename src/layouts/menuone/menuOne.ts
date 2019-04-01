@@ -19,6 +19,13 @@ export default class MenuOne extends Vue {
     return GlobalStore.getters.getmenu
   }
 
+  public getLabelByItem(item) {
+    if (!!item.name)
+      return this.$t(item.name)
+    else
+      return item.text
+  }
+
   public setParentVisibilityBasedOnRoute(parent) {
     parent.routes.forEach((item) => {
       if (this.$route.path === item.route) {

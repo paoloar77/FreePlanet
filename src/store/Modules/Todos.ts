@@ -27,7 +27,7 @@ const state: ITodosState = {
   visuLastCompleted: 10
 }
 
-const fieldtochange: string [] = ['descr', 'completed', 'category', 'expiring_at', 'priority', 'id_prev', 'pos', 'enableExpiring', 'progress']
+const fieldtochange: string [] = ['descr', 'status', 'category', 'expiring_at', 'priority', 'id_prev', 'pos', 'enableExpiring', 'progress']
 
 const b = storeBuilder.module<ITodosState>('Todos', state)
 const stateGetter = b.state()
@@ -55,7 +55,7 @@ function initcat() {
     userId: UserStore.state.userId,
     descr: '',
     priority: tools.Priority.PRIORITY_NORMAL,
-    completed: false,
+    status: tools.Status.OPENED,
     created_at: new Date(),
     modify_at: new Date(),
     completed_at: new Date(),
@@ -76,7 +76,7 @@ namespace Getters {
   const items_dacompletare = b.read((state: ITodosState) => (cat: string): ITodo[] => {
     const indcat = getindexbycategory(cat)
     if (state.todos[indcat]) {
-      return state.todos[indcat].filter((todo) => !todo.completed)
+      return state.todos[indcat].filter((todo) => todo.status !== tools.Status.COMPLETED)
     } else {
       return []
     }
@@ -86,10 +86,10 @@ namespace Getters {
     const indcat = getindexbycategory(cat)
     if (state.todos[indcat]) {
       if (state.showtype === costanti.ShowTypeTask.SHOW_LAST_N_COMPLETED) {
-        return state.todos[indcat].filter((todo) => todo.completed).slice(0, state.visuLastCompleted)
+        return state.todos[indcat].filter((todo) => todo.status === tools.Status.COMPLETED).slice(0, state.visuLastCompleted)
       }  // Show only the first N completed
       else if (state.showtype === costanti.ShowTypeTask.SHOW_ALL) {
-        return state.todos[indcat].filter((todo) => todo.completed)
+        return state.todos[indcat].filter((todo) => todo.completed === tools.Status.COMPLETED)
       }
       else {
         return []
@@ -226,8 +226,8 @@ namespace Actions {
     ApiTables.aftercalling(ris, checkPending, 'categories')
   }
 
-  async function deleteItem(context, { cat, idobj }) {
-    console.log('deleteItem: KEY = ', idobj)
+  async function deleteItemtodo(context, { cat, idobj }) {
+    console.log('deleteItemtodo: KEY = ', idobj)
 
     const myarr = gettodosByCategory(cat)
 
@@ -354,7 +354,7 @@ namespace Actions {
   export const actions = {
     dbLoad: b.dispatch(dbLoad),
     swapElems: b.dispatch(swapElems),
-    deleteItem: b.dispatch(deleteItem),
+    deleteItemtodo: b.dispatch(deleteItemtodo),
     dbInsert: b.dispatch(dbInsert),
     modify: b.dispatch(modify)
   }

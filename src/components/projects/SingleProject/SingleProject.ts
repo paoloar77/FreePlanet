@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import { Component, Prop, Watch } from 'vue-property-decorator'
 
-import { UserStore } from '@modules'
+import { Projects, UserStore } from '@modules'
 import { tools } from '../../../store/Modules/tools'
 
 import { IProject } from '../../../model/index'
@@ -39,7 +39,7 @@ export default class SingleProject extends Vue {
   @Prop({ required: true }) public itemproject: IProject
 
   // @Watch('itemproject.completed') valueChanged() {
-  //   this.watchupdate('completed')
+  //   this.watchupdate('status')
   // }
 
   @Watch('itemproject.enableExpiring') public valueChanged4() {
@@ -64,12 +64,22 @@ export default class SingleProject extends Vue {
   @Watch('itemproject.hoursworked') public valueChangedhoursworked() {
     this.watchupdate('hoursworked')
   }
+  @Watch('itemproject.begin_development') public valueChangedbegin_development() {
+    this.watchupdate('begin_development')
+  }
+  @Watch('itemproject.begin_test') public valueChangedbegin_test() {
+    this.watchupdate('begin_test')
+  }
   @Watch('itemproject.progressCalc') public valueChanged6() {
     console.log('itemproject.progressCalc')
     this.updateClasses()
 
     console.log('this.percentageProgress', this.percentageProgress, 'this.itemproject.progressCalc', this.itemproject.progressCalc)
     this.watchupdate('progressCalc')
+  }
+
+  get getlabeltext() {
+    return this.$t('proj.newproj')
   }
 
 /*
@@ -93,7 +103,7 @@ export default class SingleProject extends Vue {
   }
 
   public watchupdate(field = '') {
-    this.$emit('eventupdate', {myitem: this.itemproject, field } )
+    this.$emit('eventupdateproj', {myitem: this.itemproject, field } )
     this.updateicon()
   }
 
@@ -122,10 +132,9 @@ export default class SingleProject extends Vue {
 
     this.clButtPopover = this.sel ? 'pos-item-popover comp_selected' : 'pos-item-popover'
 
-    if (!this.itemproject.completed) {
+    if (this.itemproject.status !== tools.Status.COMPLETED) {
       this.clButtPopover += ' pos-item-popover_cursor'
     }
-
 
     // this.getinputdescr = 'inputdescr' + this.itemproject._id
 
@@ -141,10 +150,6 @@ export default class SingleProject extends Vue {
       this.menuPopupProj.push(tools.menuPopupProj[UserStore.state.lang][tools.INDEX_MENU_DELETE])
     }
 
-  }
-
-  public getstrDate(mytimestamp) {
-    return date.formatDate(mytimestamp, 'DD-MM-YY')
   }
 
   public created() {
@@ -167,7 +172,7 @@ export default class SingleProject extends Vue {
     if (!this.sel) {
       if (!this.inEdit) {
         // this.attivaEdit = true
-        this.$emit('deselectAllRows', this.itemproject, true)
+        this.$emit('deselectAllRowsproj', this.itemproject, true)
 
         if (!this.sel) {
           this.selectRiga()
@@ -230,9 +235,9 @@ export default class SingleProject extends Vue {
   }
 
   public editProject() {
-    console.log('INIZIO - editProject')
+    // console.log('INIZIO - editProject')
     if (this.attivaEdit) {
-      this.$emit('click')
+      // this.$emit('click')
       this.precDescr = this.itemproject.descr
       this.inEdit = true
       if (!this.sel) {
@@ -242,12 +247,12 @@ export default class SingleProject extends Vue {
         this.updateClasses()
       }
 
-      this.faiFocus('inputdescr')
+      this.faiFocus('inputdescr', false, true)
     }
     // console.log('FINE - editProject')
   }
 
-  public faiFocus(elem, isparent: boolean = false) {
+  public faiFocus(elem, isparent: boolean = false, select: boolean = false) {
     setTimeout(() => {
       let theField = null
       if (isparent) {
@@ -260,8 +265,13 @@ export default class SingleProject extends Vue {
       if (!!theField) {
         theField.focus()
       }
+
       // console.log('focus()')
     }, 100)
+  }
+
+  public getFocus(e) {
+    e.target.select()
   }
 
   public exitEdit(singola: boolean = false) {
@@ -273,7 +283,7 @@ export default class SingleProject extends Vue {
       this.inEdit = false
       this.attivaEdit = false
       this.updateClasses()
-      this.$emit('deselectAllRows', this.itemproject, false, singola)
+      this.$emit('deselectAllRowsproj', this.itemproject, false, singola)
     }
   }
 
@@ -367,19 +377,24 @@ export default class SingleProject extends Vue {
 
   public setCompleted() {
     // console.log('setCompleted')
-    this.itemproject.completed = !this.itemproject.completed
+
+    if (this.itemproject.status === tools.Status.COMPLETED) {
+      this.itemproject.status = tools.Status.OPENED
+    } else {
+      this.itemproject.status = tools.Status.COMPLETED
+    }
 
     this.updateicon()
 
-    this.updatedata('completed')
+    this.updatedata('status')
 
     this.deselectAndExitEdit()
   }
 
   public updatedata(field: string) {
     // const myitem = tools.jsonCopy(this.itemproject)
-    console.log('calling this.$emit(eventupdate)', this.itemproject)
-    this.$emit('eventupdate', { myitem: this.itemproject, field } )
+    console.log('calling this.$emit(eventupdateproj)', this.itemproject)
+    this.$emit('eventupdateproj', { myitem: this.itemproject, field } )
   }
 
   public updateicon() {

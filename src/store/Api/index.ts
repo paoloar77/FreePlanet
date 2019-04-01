@@ -163,10 +163,12 @@ export namespace ApiTool {
                     return globalroutines(null, 'delete', 'swmsg', null, mystrparam)
                   })
                   .catch((err) => {
-                    if (err.message === 'Failed to fetch') {
-                      errorfromserver = true
+                    if (!!err.msgerr) {
+                      if (err.msgerr.message.includes('Failed to fetch') || err.msgerr.message.includes('Network Error')) {
+                        errorfromserver = true
+                      }
                     }
-                    // console.log(' [Alternative] !!!!!!!!!!!!!!!   Error while sending data', err, errorfromserver, 'lettoqualcosa', lettoqualcosa)
+                    console.log(' [Alternative] !!!!!!!!!!!!!!!   Error while sending data', err, errorfromserver, 'lettoqualcosa', lettoqualcosa)
                   })
               })
 
@@ -181,8 +183,8 @@ export namespace ApiTool {
               return (errorfromserver && !lettoqualcosa)
             })
             .then((error) => {
-              // console.log('¨¨¨¨¨¨¨¨¨¨¨¨¨¨  errorfromserver:', errorfromserver)
-              const mystate = error ? 'offline' : 'online'
+              console.log('¨¨¨¨¨¨¨¨¨¨¨¨¨¨  errorfromserver:', errorfromserver, error)
+              const mystate = (error || errorfromserver) ? 'offline' : 'online'
               GlobalStore.mutations.setStateConnection(mystate)
               GlobalStore.mutations.saveConfig( { _id: costanti.CONFIG_ID_STATE_CONN, value: mystate })
 

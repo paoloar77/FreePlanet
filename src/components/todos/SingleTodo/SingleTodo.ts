@@ -45,7 +45,7 @@ export default class SingleTodo extends Vue {
   @Prop({ required: true }) public itemtodo: ITodo
 
   // @Watch('itemtodo.completed') valueChanged() {
-  //   this.watchupdate('completed')
+  //   this.watchupdate('status')
   // }
 
   @Watch('itemtodo.enableExpiring') public valueChanged4() {
@@ -112,7 +112,7 @@ export default class SingleTodo extends Vue {
 
     this.classExpiring = 'flex-item data-item shadow-1'
     this.classExpiringEx = ''
-    if (this.itemtodo.completed) {
+    if (this.itemtodo.status === tools.Status.COMPLETED) {
       this.percentageProgress = 100
       this.classCompleted += ' icon_completed'
       this.classDescr += ' status_completed'
@@ -129,7 +129,7 @@ export default class SingleTodo extends Vue {
     let mycolcl = ' ' + tools.getProgressClassColor(this.itemtodo.progress)
     this.colProgress = tools.getProgressColor(this.itemtodo.progress)
 
-    if (this.itemtodo.completed) {
+    if (this.itemtodo.status === tools.Status.COMPLETED) {
       mycolcl = ' percompleted'
       this.colProgress = 'gray'
     }
@@ -141,7 +141,7 @@ export default class SingleTodo extends Vue {
 
     this.clButtPopover = this.sel ? 'pos-item-popover comp_selected' : 'pos-item-popover'
 
-    if (!this.itemtodo.completed) {
+    if (this.itemtodo.status !== tools.Status.COMPLETED) {
       this.clButtPopover += ' pos-item-popover_cursor'
     }
 
@@ -169,10 +169,6 @@ export default class SingleTodo extends Vue {
 
   }
 
-  public getstrDate(mytimestamp) {
-    return date.formatDate(mytimestamp, 'DD-MM-YY')
-  }
-
   public created() {
     this.precDescr = this.itemtodo.descr
     this.updateicon()
@@ -192,7 +188,7 @@ export default class SingleTodo extends Vue {
 
     if (!this.sel) {
       if (!this.inEdit) {
-        this.$emit('deselectAllRows', this.itemtodo, true)
+        this.$emit('deselectAllRowstodo', this.itemtodo, true)
 
         if (!this.sel) {
           this.selectRiga()
@@ -239,7 +235,7 @@ export default class SingleTodo extends Vue {
   }
 
   public editTodo() {
-    if (!this.itemtodo.completed) {
+    if (this.itemtodo.status !== tools.Status.COMPLETED) {
       // console.log('INIZIO - editTodo')
       this.$emit('click')
       this.precDescr = this.itemtodo.descr
@@ -281,7 +277,7 @@ export default class SingleTodo extends Vue {
       // console.log('exitEdit')
       this.inEdit = false
       this.updateClasses()
-      this.$emit('deselectAllRows', this.itemtodo, false, singola)
+      this.$emit('deselectAllRowstodo', this.itemtodo, false, singola)
     }
   }
 
@@ -374,11 +370,15 @@ export default class SingleTodo extends Vue {
 
   public setCompleted() {
     // console.log('setCompleted')
-    this.itemtodo.completed = !this.itemtodo.completed
+    if (this.itemtodo.status === tools.Status.COMPLETED) {
+      this.itemtodo.status = tools.Status.OPENED
+    } else {
+      this.itemtodo.status = tools.Status.COMPLETED
+    }
 
     this.updateicon()
 
-    this.updatedata('completed')
+    this.updatedata('status')
 
     this.deselectAndExitEdit()
   }
@@ -391,7 +391,7 @@ export default class SingleTodo extends Vue {
 
   public updateicon() {
     // console.log('updateicon')
-    if (this.itemtodo.completed) {
+    if (this.itemtodo.status === tools.Status.COMPLETED) {
       this.iconCompleted = 'check_circle'
     }
     else {
@@ -412,7 +412,7 @@ export default class SingleTodo extends Vue {
   }
 
   public removeitem(id) {
-    this.$emit('deleteItem', id)
+    this.$emit('deleteItemtodo', id)
   }
 
   public enableExpiring() {

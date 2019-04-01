@@ -4,7 +4,7 @@ export interface ITodo {
   category?: string
   descr?: string,
   priority?: number,
-  completed?: boolean,
+  status?: number,
   created_at?: Date,
   modify_at?: Date,
   completed_at?: Date,

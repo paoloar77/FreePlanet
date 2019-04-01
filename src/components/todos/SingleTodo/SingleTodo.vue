@@ -9,7 +9,7 @@
         </div>
 
         <div class="flex-item donotdrag divdescrTot">
-            <q-input v-if="sel && !itemtodo.completed" hide-underline type="textarea" ref="inputdescr"
+            <q-input v-if="sel && itemtodo.status !== tools.Status.COMPLETED" hide-underline type="textarea" ref="inputdescr"
                      v-model.trim="precDescr"
                      autogrow
                      borderless
@@ -56,13 +56,13 @@
 
 
         <div v-if="itemtodo.enableExpiring" :class="classExpiring">
-            <span class="data_string">{{getstrDate(itemtodo.expiring_at)}}</span>
+            <span class="data_string">{{tools.getstrDate(itemtodo.expiring_at)}}</span>
             <q-icon name="event" class="cursor-pointer" style="padding: 2px;">
                 <q-popup-proxy>
                     <q-date v-model="itemtodo.expiring_at" today-btn/>
                 </q-popup-proxy>
             </q-icon>
-            <!--<q-icon name="event" class="cursor-pointer" />-->
+            <!--<q-icon nametranslate="event" class="cursor-pointer" />-->
             <!--<q-popup-edit v-model="itemtodo.expiring_at"-->
             <!--title="Edit"-->
             <!--buttons class="">-->

@@ -14,7 +14,7 @@ const baseConfig = {
     'bundle': helpers.root('/src/main.ts'),
   },
   output: {
-    filename: '[name].js',
+    filename: '[nametranslate].js',
     publicPath: '/',
     path: helpers.root('dist'),
   },
@@ -80,10 +80,10 @@ const baseConfig = {
       }
     }, {
       test: /\.(jpe?g|png|ttf|eot|woff(2)?)(\?[a-z0-9=&.]+)?$/,
-      use: 'base64-inline-loader?limit=1000&name=[name].[ext]'
+      use: 'base64-inline-loader?limit=1000&nametranslate=[nametranslate].[ext]'
     },{
       test: /\.(svg)(\?[a-z0-9=&.]+)?$/,
-      use: 'base64-inline-loader?limit=4000&name=[name].[ext]'
+      use: 'base64-inline-loader?limit=4000&nametranslate=[nametranslate].[ext]'
     }
   ]
   },

@@ -65,21 +65,21 @@
             <div>
                 <!--<q-infinite-scroll :handler="loadMoreTodo" :offset="7">-->
                 <div class="container" v-dragula="items_dacompletare(categoryAtt)" :drake="dragname">
-                    <div :id="getmyid(mytodo._id)" :index="index"
+                    <div :id="tools.getmyid(mytodo._id)" :index="index"
                          v-for="(mytodo, index) in items_dacompletare(categoryAtt)"
                          :key="mytodo._id" class="myitemdrag">
 
-                        <div v-if="(prior !== mytodo.priority) && !mytodo.completed"
+                        <div v-if="(prior !== mytodo.priority) && mytodo.status !== tools.Status.COMPLETED"
                              :class="tools.getTitlePriority(mytodo.priority)">
                             <label>{{tools.getPriorityByInd(mytodo.priority)}}</label>
                         </div>
-                        <SingleTodo ref="single" @deleteItem="mydeleteItem(mytodo._id)" @eventupdate="updateitem"
-                                    @deselectAllRows="deselectAllRows" @onEnd="onEnd"
+                        <SingleTodo ref="single" @deleteItemtodo="mydeleteitemtodo(mytodo._id)" @eventupdate="updateitemtodo"
+                                    @deselectAllRowstodo="deselectAllRowstodo" @onEnd="onEndtodo"
                                     :itemtodo='mytodo'/>
 
-                        <!--<div :name="`REF${index}`" class="divdrag non-draggato"></div>-->
+                        <!--<div :nametranslate="`REF${index}`" class="divdrag non-draggato"></div>-->
 
-                        <div style="display: none">{{ prior = mytodo.priority, priorcomplet = mytodo.completed }}
+                        <div style="display: none">{{ prior = mytodo.priority, priorcomplet = (mytodo.status === tools.Status.COMPLETED) }}
                         </div>
                     </div>
                 </div>
@@ -91,17 +91,17 @@
 
                 <!--<q-infinite-scroll :handler="loadMoreTodo" :offset="7">-->
                 <div class="container">
-                    <div :id="getmyid(mytodo._id)" :index="index"
+                    <div :id="tools.getmyid(mytodo._id)" :index="index"
                          v-for="(mytodo, index) in todos_completati(categoryAtt)"
                          :key="mytodo._id" class="myitemdrag">
 
-                        <SingleTodo ref="single" @deleteItem="mydeleteItem(mytodo._id)" @eventupdate="updateitem"
-                                    @deselectAllRows="deselectAllRows" @onEnd="onEnd"
+                        <SingleTodo ref="single" @deleteItemtodo="mydeleteItemtodo(mytodo._id)" @eventupdate="updateitemtodo"
+                                    @deselectAllRows="deselectAllRowstodo" @onEndtodo="onEndtodo"
                                     :itemtodo='mytodo'/>
 
-                        <!--<div :name="`REF${index}`" class="divdrag non-draggato"></div>-->
+                        <!--<div :nametranslate="`REF${index}`" class="divdrag non-draggato"></div>-->
 
-                        <div style="display: none">{{ prior = mytodo.priority, priorcomplet = mytodo.completed }}
+                        <div style="display: none">{{ prior = mytodo.priority, priorcomplet = (mytodo.status === tools.Status.COMPLETED) }}
                         </div>
                     </div>
                 </div>

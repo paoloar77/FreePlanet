@@ -21,10 +21,10 @@
 
                 <q-tr slot="body" slot-scope="props" :props="props">
                     <q-td key="desc" :props="props">
-                      {{ props.row.name }}
-                      <q-popup-edit v-model="props.row.name">
+                      {{ props.row.nametranslate }}
+                      <q-popup-edit v-model="props.row.nametranslate">
                         <q-field count>
-                          <q-input v-model="props.row.name" />
+                          <q-input v-model="props.row.nametranslate" />
                         </q-field>
                       </q-popup-edit>
                     </q-td>

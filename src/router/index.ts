@@ -78,7 +78,7 @@ Router.beforeEach(async (to: IMyRoute, from: IMyRoute, next) => {
         /*
                   if (to.matched[0] && to.meta.isModal) {
                     console.log('Route interceptor log: <7>')
-                    if (!from.name) {
+                    if (!from.nametranslate) {
                       getRouteData(to.matched[0])
                       GlobalStore.mutations.setPreviousModalRoute(to.matched[0].path)
                     } else {
@@ -108,7 +108,7 @@ Router.beforeEach(async (to: IMyRoute, from: IMyRoute, next) => {
                             message: `Vous n'avez pas accès à cette page`
                           })
                           ProgressBar.mutations.fail()
-                          if (from.name) {
+                          if (from.nametranslate) {
                             return
                           } else {
                             next('/')

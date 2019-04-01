@@ -9,7 +9,9 @@
                      v-model.trim="precDescr"
                      autogrow
                      borderless
+                     :label="getlabeltext"
                      dense
+                     @focus="getFocus($event)"
                      :class="classDescrEdit" :max-height="100"
                      @keydown="keyDownArea" v-on:keydown.esc="exitEdit" @blur="exitEdit(true)" @click="editProject()"/>
 
@@ -35,13 +37,13 @@
 
 
         <div v-if="itemproject.enableExpiring" :class="classExpiring">
-            <span class="data_string">{{getstrDate(itemproject.expiring_at)}}</span>
+            <span class="data_string">{{tools.getstrDate(itemproject.expiring_at)}}</span>
             <q-icon name="event" class="cursor-pointer" style="padding: 2px;">
                 <q-popup-proxy>
                     <q-date v-model="itemproject.expiring_at" today-btn/>
                 </q-popup-proxy>
             </q-icon>
-            <!--<q-icon name="event" class="cursor-pointer" />-->
+            <!--<q-icon nametranslate="event" class="cursor-pointer" />-->
             <!--<q-popup-edit v-model="itemproject.expiring_at"-->
             <!--title="Edit"-->
             <!--buttons class="">-->
