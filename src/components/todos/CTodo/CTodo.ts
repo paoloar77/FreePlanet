@@ -1,41 +1,42 @@
 import Vue from 'vue'
-import { Component, Watch } from 'vue-property-decorator'
+import { Component, Prop, Watch } from 'vue-property-decorator'
 
-import { IDrag, ITodo, ITodosState } from '../../model/index'
-import { SingleTodo } from '../../components/todos/SingleTodo/index'
+import { IDrag, IProject, ITodo, ITodosState } from '../../../model/index'
 
-import { tools } from '../../store/Modules/tools'
-import * as ApiTables from '../../store/Modules/ApiTables'
+import { tools } from '../../../store/Modules/tools'
+import * as ApiTables from '../../../store/Modules/ApiTables'
 
 import { GlobalStore, Todos } from '@store'
 import { UserStore } from '@store'
 
 import { Getter } from 'vuex-class'
+import { SingleTodo } from '../SingleTodo'
+
 
 const namespace: string = 'Todos'
 
 @Component({
-
   components: { SingleTodo },
   filters: {
     capitalize(value) {
-      if (!value) {
-        return ''
-      }
-      value = value.toString()
-      return value.charAt(0).toUpperCase() + value.slice(1)
+      return tools.capitalize(value)
     }
   }
 })
-export default class Todo extends Vue {
+export default class CTodo extends Vue {
   public $q: any
   public todotop: string = ''
   public todobottom: string = ''
   public polling = null
   public service: any
   public scrollable = true
-  public categoryAtt: string = ''
   public dragname: string = 'first'
+
+  @Prop({ required: true }) public categoryAtt: string
+  @Prop({ required: true }) public title: string
+  @Prop({ required: false, default: 'blue' }) public forecolor: string
+  @Prop({ required: false, default: 'lightblue' }) public backcolor: string
+  @Prop({ required: false, default: true }) public viewtaskTop: boolean
 
   public $refs: {
     single: SingleTodo[]
@@ -76,11 +77,6 @@ export default class Todo extends Vue {
   @Getter('todos_completati', { namespace })
   public todos_completati: (state: ITodosState, category: string) => ITodo[]
 
-  @Watch('$route.params.category')
-  public changecat() {
-    this.categoryAtt = this.$route.params.category
-  }
-
   public showTask(field_value) {
     return field_value === tools.MenuAction.SHOW_TASK
   }
@@ -115,14 +111,11 @@ export default class Todo extends Vue {
   }
 
   public mounted() {
-    this.categoryAtt = this.$route.params.category
-
     tools.touchmove(this.scrollable)
   }
 
-  public async load() {
+  public load() {
     console.log('LOAD TODO....')
-    this.categoryAtt = this.$route.params.category
 
     // Set last category selected
     localStorage.setItem(tools.localStorage.categorySel, this.categoryAtt)
@@ -193,8 +186,16 @@ export default class Todo extends Vue {
 
   }
 
+  public deselectAllRowsproj(item: IProject, check, onlythis: boolean = false) {
+    this.$emit('deselectAllRowsproj', item, check, onlythis)
+  }
+
+  public setitemsel(item: ITodo) {
+    this.$emit('setitemsel', item)
+  }
+
   public deselectAllRowstodo(item: ITodo, check, onlythis: boolean = false) {
-    // console.log('deselectAllRowstodo : ', item)
+    console.log('CTODO deselectAllRowstodo : ', item)
 
     for (let i = 0; i < this.$refs.single.length; i++) {
 
@@ -206,7 +207,11 @@ export default class Todo extends Vue {
       if (onlythis) {
         des = item._id === id
       } else {
-        des = ((check && (item._id !== id)) || (!check))
+        if (!!check) {
+          des = ((check && (item._id !== id)) || (!check))
+        } else {
+          des = !check
+        }
       }
       if (des) {
         // @ts-ignore

@@ -2,23 +2,21 @@ import Vue from 'vue'
 import { Component, Watch } from 'vue-property-decorator'
 
 import { ICategory } from '../../../model/index'
-import globalroutines from "../../../globalroutines/index"
-import { tools } from "../../../store/Modules/tools"
+import { tools } from '../../../store/Modules/tools'
 
 @Component({
 })
-export default class Tabledata extends Vue {
-  $q: any
+export default class TableData extends Vue {
+  public $q: any
+  public filter: boolean = false
+  public title: string = ''
+  public category: string = ''
+  public categories_loc: any[] = [{}]
+  public categories_arr: any[] = [{}]
+  public selected: any [] = []
+  public selectedSecond: any [] = []
 
-  filter: boolean = false
-  title: string = ''
-  category: string = ''
-  categories_loc: any[] = [{}]
-  categories_arr: any[] = [{}]
-  selected: any [] = []
-  selectedSecond: any [] = []
-
-  data: any [] = [{
+  public data: any [] = [{
     id: 0,
     descr_it: 'Frozen Yogurt',
     descr_en: '',
@@ -31,7 +29,7 @@ export default class Tabledata extends Vue {
       descr_es: ''
     }]
 
-  columns: any [] = [
+  public columns: any [] = [
     {
       name: 'descr_it',
       required: true,
@@ -39,7 +37,7 @@ export default class Tabledata extends Vue {
       align: 'left',
       field: 'descr_it',
       sortable: true,
-      classes: 'my-class',
+      classes: 'my-class'
     },
     {
       name: 'descr_en',
@@ -47,7 +45,7 @@ export default class Tabledata extends Vue {
       align: 'left',
       field: 'descr_en',
       sortable: true,
-      classes: 'my-class',
+      classes: 'my-class'
     },
     {
       name: 'descr_es',
@@ -55,7 +53,7 @@ export default class Tabledata extends Vue {
       align: 'left',
       field: 'descr_es',
       sortable: true,
-      classes: 'my-class',
+      classes: 'my-class'
     },
     {
       name: 'campo2bool',
@@ -63,26 +61,25 @@ export default class Tabledata extends Vue {
       align: 'left',
       field: 'campo2bool',
       sortable: true,
-      classes: 'my-class',
+      classes: 'my-class'
     }
   ]
 
-  @Watch('categories_loc') valueChanged() {
+  @Watch('categories_loc') public valueChanged() {
     this.updatetable()
   }
 
-
-  created() {
+  public created() {
     this.loadCat()
   }
 
-  async loadCat() {
-    await this.$db.categories.toArray().then(ris => this.categories_loc = ris)
+  public async loadCat() {
+    await this.$db.categories.toArray().then((ris) => this.categories_loc = ris)
 
     this.updatetable()
   }
 
-  initcat() {
+  public initcat() {
 
     const objcat: ICategory = {
       descr_it: '',
@@ -94,7 +91,7 @@ export default class Tabledata extends Vue {
 
   }
 
-  async insertCategory() {
+  public async insertCategory() {
 
     const objcat = this.initcat()
 
@@ -116,7 +113,7 @@ export default class Tabledata extends Vue {
     this.category = ''
   }
 
-  async deleteCategory(myarrobj) {
+  public async deleteCategory(myarrobj) {
 
     for (const myobj of myarrobj) {
 
@@ -142,14 +139,14 @@ export default class Tabledata extends Vue {
 
   }
 
-  updatetable() {
+  public updatetable() {
 
     this.filterCategories()
     this.categories_arr = [...this.categories_loc]
 
   }
 
-  async filterCategories() {
+  public async filterCategories() {
 
     if (this.filter) {
       // #Todo If need to filter the output database ...
@@ -168,7 +165,7 @@ export default class Tabledata extends Vue {
     }
   }
 
-  deleteRow() {
+  public deleteRow() {
     console.log('SEL = ', this.selectedSecond)
 
     const seldel = [...this.selectedSecond]
@@ -191,7 +188,7 @@ export default class Tabledata extends Vue {
   });
    */
 
-  async modify() {
+  public async modify() {
     // esempio da sistemare
     await this.$db.transaction('rw', [this.$db.categories], async () => {
       const friend = await this.$db.get(1)

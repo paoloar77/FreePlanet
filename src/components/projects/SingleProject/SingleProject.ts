@@ -36,6 +36,10 @@ export default class SingleProject extends Vue {
 
   public $q: any
 
+  get tools() {
+    return tools
+  }
+
   @Prop({ required: true }) public itemproject: IProject
 
   // @Watch('itemproject.completed') valueChanged() {
@@ -103,6 +107,7 @@ export default class SingleProject extends Vue {
   }
 
   public watchupdate(field = '') {
+    console.log('watchupdate')
     this.$emit('eventupdateproj', {myitem: this.itemproject, field } )
     this.updateicon()
   }
@@ -172,6 +177,7 @@ export default class SingleProject extends Vue {
     if (!this.sel) {
       if (!this.inEdit) {
         // this.attivaEdit = true
+        this.$emit('deselectAllRowstodo', null, false)
         this.$emit('deselectAllRowsproj', this.itemproject, true)
 
         if (!this.sel) {
@@ -283,6 +289,7 @@ export default class SingleProject extends Vue {
       this.inEdit = false
       this.attivaEdit = false
       this.updateClasses()
+      this.$emit('deselectAllRowstodo', null, false, false)
       this.$emit('deselectAllRowsproj', this.itemproject, false, singola)
     }
   }
@@ -414,7 +421,7 @@ export default class SingleProject extends Vue {
   }
 
   public removeitem(id) {
-    this.$emit('deleteItem', id)
+    this.$emit('deleteItemproj', id)
   }
 
   public enableExpiring() {

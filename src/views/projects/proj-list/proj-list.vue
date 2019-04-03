@@ -84,30 +84,23 @@
                                     <SingleProject ref="singleproject" @deleteItemproj="mydeleteitemproj(myproj._id)"
                                                    @eventupdateproj="updateitemproj"
                                                    @idsel="setidsel"
-                                                   @deselectAllRowsproj="deselectAllRowsproj" @onEnd="onEndproj"
+                                                   @deselectAllRowsproj="deselectAllRowsproj" @deselectAllRowstodo="deselectAllRowstodo" @onEnd="onEndproj"
                                                    :itemproject='myproj'>
 
                                     </SingleProject>
 
                                 </div>
                             </div>
-                            <!--</q-infinite-scroll>-->
-
-
-                            <q-input ref="insertProjectBottom" v-model="projbottom"
-                                     style="margin-left: 6px;"
-                                     color="blue-12"
-                                     :label="$t('todo.insertbottom')"
-                                     :after="[{icon: 'arrow_forward', content: true, handler () {}}]"
-                                     v-on:keyup.enter="dbInsert()">
-
-                            </q-input>
-
-                            <br>
                         </div>
+                        <q-separator></q-separator>
+
+                        <CTodo ref="ctodo" @setitemsel="setitemsel" :categoryAtt="idProjAtt" title="" backcolor="white" forecolor="black" :viewtaskTop="false" @deselectAllRowsproj="deselectAllRowsproj" @deselectAllRowstodo="deselectAllRowstodo"
+                                >
+                        </CTodo>
+
                     </div>
                 </template>
-                <template v-if="!!itemsel.descr" v-slot:after>
+                <template v-if="(whatisSel === tools.WHAT_PROJECT) && (!!itemsel.descr)" v-slot:after>
                     <div class="q-pa-xs clMain">
                         <div class="flex-container clMain">
                             <q-icon class="flex-item flex-icon" name="format_align_center"/>
@@ -142,7 +135,6 @@
                                         debounce="500"
                                 />
                                 <CProgress descr="" :progressval="getCalcHoursWorked"></CProgress>
-
                             </div>
                             <q-icon class="flex-item flex-icon" name="watch_later"/>
                             <div class="flex-item itemdata content-center">
@@ -159,11 +151,11 @@
                             </div>
                         </div>
                         <div class="flex-container clMain">
-                            <div style="margin: 10px;"></div>
+                            <q-icon class="flex-item flex-icon" name="developer_mode"/>
                             <div class="flex-item itemdata">
-                                <q-input v-model="itemsel.begin_development" mask="date" :hint="$t('proj.begin_development')">
+                                <q-input dense v-model="itemsel.begin_development" mask="date" :hint="$t('proj.begin_development')">
                                     <!--<span class="data_string">{{tools.getstrDate(itemsel.begin_development)}}</span>-->
-                                    <q-icon name="event" class="cursor-pointer">
+                                    <q-icon name="event" class="cursor-pointer" style="font-size: 1.5rem;">
                                         <q-popup-proxy>
                                             <q-date v-model="itemsel.begin_development" today-btn/>
                                         </q-popup-proxy>
@@ -172,14 +164,32 @@
                             </div>
                             <div style="margin: 10px;"></div>
                             <div class="flex-item itemdata">
-                                <q-input v-model="itemsel.begin_test" mask="date" :hint="$t('proj.begin_test')">
+                                <q-input dense v-model="itemsel.begin_test" mask="date" :hint="$t('proj.begin_test')">
                                     <!--<span class="data_string">{{tools.getstrDate(itemsel.begin_development)}}</span>-->
-                                    <q-icon name="event" class="cursor-pointer">
+                                    <q-icon name="event" class="cursor-pointer" style="font-size: 1.5rem;">
                                         <q-popup-proxy>
                                             <q-date v-model="itemsel.begin_test" today-btn/>
                                         </q-popup-proxy>
                                     </q-icon>
                                 </q-input>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+                <template v-else-if="(whatisSel === tools.WHAT_TODO) && (!!itemtodosel.descr)" v-slot:after>
+                    <div class="q-pa-xs clMain">
+                        <div class="flex-container clMain">
+                            <q-icon class="flex-item flex-icon" name="border_color"/>
+                            <div class="flex-item itemdescr">
+                                <q-input
+                                        ref="input"
+                                        v-model="itemtodosel.descr"
+                                        :label="$t('proj.longdescr')"
+                                        outlined
+                                        debounce="500"
+                                        autogrow
+                                />
+
                             </div>
                         </div>
                     </div>

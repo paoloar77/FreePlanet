@@ -58,7 +58,7 @@ export const routesList: IMyRouteConfig[] = [
   {
     path: '/todo/:category',
     name: 'Todos',
-    component: () => import('@/views/todo/todo.vue'),
+    component: () => import('@/views/todo-list/todo-list.vue'),
     meta: {
       requiresAuth: true,
       async asyncData() {

@@ -25,6 +25,9 @@ export const tools = {
 
   FIRST_PROJ: '__PROJECTS',
 
+  WHAT_TODO: 1,
+  WHAT_PROJECT: 2,
+
   arrLangUsed: ['enUs', 'it', 'es'],
 
   SERVKEY_VERS: 'vers',
@@ -595,8 +598,8 @@ export const tools = {
     if (itemdragend.field === 'priority') {
       // get last elem priority
       console.log('get last elem priority')
-      itemdragend.newIndex = tools.getLastFirstElemPriority(itemdragend.category, itemdragend.prioritychosen, itemdragend.atfirst, itemdragend.idelemtochange)
-      itemdragend.oldIndex = tools.getIndexById(itemdragend.category, itemdragend.idelemtochange)
+      itemdragend.newIndex = tools.getLastFirstElemPriority(myarr, itemdragend.prioritychosen, itemdragend.atfirst, itemdragend.idelemtochange)
+      itemdragend.oldIndex = tools.getIndexById(myarr, itemdragend.idelemtochange)
 
       console.log('swapElems PRIORITY', itemdragend)
     }
@@ -675,6 +678,7 @@ export const tools = {
   },
 
   getElemById(myarr, id) {
+    console.log('getElemById', myarr, id)
     return myarr.find((elem) => elem._id === id)
   },
 
@@ -984,5 +988,12 @@ export const tools = {
     return date.formatDate(mytimestamp, 'DD-MM-YY')
   },
 
+  capitalize(value) {
+    if (!value) {
+      return ''
+    }
+    value = value.toString()
+    return value.charAt(0).toUpperCase() + value.slice(1)
+  }
 
 }

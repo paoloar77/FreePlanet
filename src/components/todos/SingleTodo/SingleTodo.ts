@@ -42,6 +42,10 @@ export default class SingleTodo extends Vue {
 
   public $q: any
 
+  get tools() {
+    return tools
+  }
+
   @Prop({ required: true }) public itemtodo: ITodo
 
   // @Watch('itemtodo.completed') valueChanged() {
@@ -188,6 +192,7 @@ export default class SingleTodo extends Vue {
 
     if (!this.sel) {
       if (!this.inEdit) {
+        this.$emit('deselectAllRowsproj', null, false, false)
         this.$emit('deselectAllRowstodo', this.itemtodo, true)
 
         if (!this.sel) {
@@ -231,6 +236,7 @@ export default class SingleTodo extends Vue {
   }
 
   public clickRow() {
+    this.$emit('setitemsel', this.itemtodo)
     this.clickRiga()
   }
 
@@ -277,6 +283,7 @@ export default class SingleTodo extends Vue {
       // console.log('exitEdit')
       this.inEdit = false
       this.updateClasses()
+      this.$emit('deselectAllRowsproj', null, false, false)
       this.$emit('deselectAllRowstodo', this.itemtodo, false, singola)
     }
   }

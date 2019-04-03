@@ -38,13 +38,10 @@ function getarrByCategory(category: string) {
 }
 
 function initcat() {
-
-  // return this.copy(objproj)
-  let rec = Getters.getters.getRecordEmpty()
+  const rec = Getters.getters.getRecordEmpty()
   rec.userId = UserStore.state.userId
 
   return rec
-
 }
 
 namespace Getters {

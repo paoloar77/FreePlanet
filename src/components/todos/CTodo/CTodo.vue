@@ -1,9 +1,9 @@
 <template>
     <q-page>
         <div class="panel">
-            <div class="divtitlecat">
+            <div v-if="!!title" class="divtitlecat">
                 <div class="flex-container">
-                    <div class="flex-item categorytitle">{{categoryAtt | capitalize}}</div>
+                    <div class="flex-item categorytitle" :style="`background-color: ${backcolor} !important; color: ${forecolor} !important;`">{{title | capitalize}}</div>
                     <div class="flex-item">
                         <q-btn push
                                size="sm"
@@ -52,7 +52,7 @@
                 </div>
             </div>
 
-            <q-input ref="insertTask" color="blue-12" v-model="todotop" :label="$t('todo.inserttop')"
+            <q-input v-if="viewtaskTop" ref="insertTask" color="blue-12" v-model="todotop" :label="$t('todo.inserttop')"
                      style="margin-left: 6px;"
                      :after="[{icon: 'arrow_forward', content: true, handler () {}}]"
                      v-on:keyup.enter="dbInsert(true)">
@@ -74,7 +74,7 @@
                             <label>{{tools.getPriorityByInd(mytodo.priority)}}</label>
                         </div>
                         <SingleTodo ref="single" @deleteItemtodo="mydeleteitemtodo(mytodo._id)" @eventupdate="updateitemtodo"
-                                    @deselectAllRowstodo="deselectAllRowstodo" @onEnd="onEndtodo"
+                                    @setitemsel="setitemsel" @deselectAllRowstodo="deselectAllRowstodo" @deselectAllRowsproj="deselectAllRowsproj" @onEnd="onEndtodo"
                                     :itemtodo='mytodo'/>
 
                         <!--<div :nametranslate="`REF${index}`" class="divdrag non-draggato"></div>-->
@@ -96,7 +96,7 @@
                          :key="mytodo._id" class="myitemdrag">
 
                         <SingleTodo ref="single" @deleteItemtodo="mydeleteItemtodo(mytodo._id)" @eventupdate="updateitemtodo"
-                                    @deselectAllRows="deselectAllRowstodo" @onEndtodo="onEndtodo"
+                                    @deselectAllRows="deselectAllRowstodo" @deselectAllRowsproj="deselectAllRowsproj" @onEndtodo="onEndtodo"
                                     :itemtodo='mytodo'/>
 
                         <!--<div :nametranslate="`REF${index}`" class="divdrag non-draggato"></div>-->
@@ -109,7 +109,7 @@
             </div>
 
 
-            <q-input v-if="TodosCount > 0" ref="insertTaskBottom" v-model="todobottom"
+            <q-input v-if="TodosCount > 0 || !viewtaskTop" ref="insertTaskBottom" v-model="todobottom"
                      style="margin-left: 6px;"
                      color="blue-12"
                      :label="$t('todo.insertbottom')"
@@ -148,8 +148,8 @@
 
 
 </template>
-<script lang="ts" src="./todo.ts">
+<script lang="ts" src="./CTodo.ts">
 </script>
 <style lang="scss" scoped>
-    @import './todo';
+    @import './CTodo.scss';
 </style>

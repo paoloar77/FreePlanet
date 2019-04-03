@@ -1,3 +1,3 @@
 export * from './SingleTodo'
 export * from './SubMenus'
-export * from '../../views/todo'
+export * from './CTodo'

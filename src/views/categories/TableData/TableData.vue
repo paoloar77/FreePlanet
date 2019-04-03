@@ -57,9 +57,9 @@
 
 
 </template>
-<script lang="ts" src="tabledata.ts">
+<script lang="ts" src="./TableData.ts">
 </script>
 
 <style lang="scss" scoped>
-    @import 'tabledata';
+    @import './TableData.scss';
 </style>

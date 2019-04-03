@@ -1,25 +1,26 @@
 import Vue from 'vue'
 import { Component, Watch } from 'vue-property-decorator'
 
-import { IDrag, IProject, IProjectsState } from '../../../model/index'
+import { IDrag, IProject, IProjectsState, ITodo } from '../../../model/index'
 import { SingleProject } from '../../../components/projects/SingleProject/index'
+import { CTodo } from '../../../components/todos/CTodo'
 
 import { tools } from '../../../store/Modules/tools'
 import * as ApiTables from '../../../store/Modules/ApiTables'
 
-import { GlobalStore, Projects } from '@store'
+import { GlobalStore, Projects, Todos } from '@store'
 import { UserStore } from '@store'
 
 import { Getter } from 'vuex-class'
 
 import { Screen } from 'quasar'
-import { CProgress } from '@src/components/CProgress'
+import { CProgress } from '@components'
 
 const namespace: string = 'Projects'
 
 @Component({
 
-  components: { SingleProject, CProgress },
+  components: { SingleProject, CProgress, CTodo },
   filters: {
     capitalize(value) {
       if (!value) {
@@ -44,11 +45,14 @@ export default class ProjList extends Vue {
   public itemproj: IProject = null
   public idsel: string = ''
   public itemsel: IProject = Projects.getters.getRecordEmpty()
+  public itemtodosel: ITodo = Todos.getters.getRecordEmpty()
+  public whatisSel: number = 0
   public colProgress: string = 'blue'
   public percProgress: string = 'percProgress'
 
   public $refs: {
-    singleproject: SingleProject[]
+    singleproject: SingleProject[],
+    ctodo: CTodo
   }
 
   get getrouteup() {
@@ -210,8 +214,9 @@ export default class ProjList extends Vue {
     console.log('this.$refs.singleproject', this.$refs.singleproject)
     for (const elem of this.$refs.singleproject) {
       // @ts-ignore
-      if (elem.itemproject._id === id)
+      if (elem.itemproject._id === id) {
         return elem
+      }
     }
   }
 
@@ -232,7 +237,12 @@ export default class ProjList extends Vue {
 
   public setidsel(id: string) {
     this.idsel = id
+    this.whatisSel = tools.WHAT_PROJECT
     this.itemsel = Projects.getters.getRecordById(this.idsel)
+  }
+  public setitemsel(item: ITodo) {
+    this.whatisSel = tools.WHAT_TODO
+    this.itemtodosel = item
   }
 
   public async updateitemproj({ myitem, field }) {
@@ -251,10 +261,25 @@ export default class ProjList extends Vue {
 
   }
 
-  public deselectAllRowsproj(item: IProject, check, onlythis: boolean = false) {
-    // console.log('deselectAllRowsproj : ', item)
+  public deselectAllRowstodo(item: ITodo, check, onlythis: boolean = false) {
+    console.log('PROJ-LIST deselectAllRowstodo : ', item)
 
-    for (let i = 0; i < this.$refs.singleproject.length; i++) {
+    // @ts-ignore
+    for (const i in this.$refs.ctodo.$refs.single) {
+    // @ts-ignore
+      const contr = this.$refs.ctodo.$refs.single[i] as SingleTodo
+      const des = !check
+      if (des) {
+        // @ts-ignore
+        contr.deselectAndExitEdit()
+      }
+    }
+  }
+
+  public deselectAllRowsproj(item: IProject, check, onlythis: boolean = false) {
+    console.log('deselectAllRowsproj: ', item)
+
+    for (const i in this.$refs.singleproject) {
 
       const contr = this.$refs.singleproject[i] as SingleProject
       // @ts-ignore
@@ -264,7 +289,11 @@ export default class ProjList extends Vue {
       if (onlythis) {
         des = item._id === id
       } else {
-        des = ((check && (item._id !== id)) || (!check))
+        if (!!item) {
+          des = ((check && (item._id !== id)) || (!check))
+        } else {
+          des = !check
+        }
       }
       if (des) {
         // @ts-ignore
@@ -290,9 +319,10 @@ export default class ProjList extends Vue {
   }
 
   get getCalcHoursWorked() {
-    if (this.itemsel.hoursplanned <= 0)
+    if (this.itemsel.hoursplanned <= 0) {
       return 0
-    let myperc = Math.round(this.itemsel.hoursworked / this.itemsel.hoursplanned * 100)
+    }
+    const myperc = Math.round(this.itemsel.hoursworked / this.itemsel.hoursplanned * 100)
 
     return myperc
 

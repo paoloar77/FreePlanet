@@ -111,9 +111,10 @@ namespace Getters {
   }, 'showtype')
 
   const getmenu = b.read((state) => {
+    console.log('getmenu')
 
     const arrlista = GlobalStore.state.listatodo
-    const listatodo = []
+    const lista = []
 
     arrlista.forEach((elem: IMenuList) => {
       const item = {
@@ -122,7 +123,7 @@ namespace Getters {
         name: 'pages.' + elem.description,
         route: '/todo/' + elem.nametranslate
       }
-      listatodo.push(item)
+      lista.push(item)
 
     })
 
@@ -145,7 +146,7 @@ namespace Getters {
 
     if (!process.env.PROD) {
       addRoute(arrroutes, { route: '/todo', faIcon: 'fa fa-list-alt', materialIcon: 'format_list_numbered', name: 'pages.Todo',
-        routes2: listatodo,
+        routes2: lista,
         level_parent: 0.5,
         level_child: 0.5
       })
@@ -172,6 +173,8 @@ namespace Getters {
     }
 
     return state.menulinks
+
+    console.log('state.menulinks', state.menulinks)
 
   }, 'getmenu')
 

@@ -36,7 +36,7 @@ function getindexbycategory(category: string) {
   return state.categories.indexOf(category)
 }
 
-function gettodosByCategory(category: string) {
+function gettodosByCategory(category: string): [] {
   const indcat = state.categories.indexOf(category)
   if (!state.todos[indcat]) {
     return []
@@ -46,33 +46,40 @@ function gettodosByCategory(category: string) {
 
 function initcat() {
 
-  const tomorrow = new Date()
-  tomorrow.setDate(tomorrow.getDate() + 1)
+  let rec = Getters.getters.getRecordEmpty()
+  rec.userId = UserStore.state.userId
 
-  const objtodo: ITodo = {
-    // _id: new Date().toISOString(),  // Create NEW
-    _id: objectId(),
-    userId: UserStore.state.userId,
-    descr: '',
-    priority: tools.Priority.PRIORITY_NORMAL,
-    status: tools.Status.OPENED,
-    created_at: new Date(),
-    modify_at: new Date(),
-    completed_at: new Date(),
-    category: '',
-    expiring_at: tomorrow,
-    enableExpiring: false,
-    id_prev: '',
-    pos: 0,
-    modified: false,
-    progress: 0
-  }
-  // return this.copy(objtodo)
-  return objtodo
+  return rec
 
 }
 
 namespace Getters {
+  const getRecordEmpty = b.read((state: ITodosState) => (): ITodo => {
+
+    const tomorrow = new Date()
+    tomorrow.setDate(tomorrow.getDate() + 1)
+
+    const objtodo: ITodo = {
+      // _id: new Date().toISOString(),  // Create NEW
+      _id: objectId(),
+      userId: UserStore.state.userId,
+      descr: '',
+      priority: tools.Priority.PRIORITY_NORMAL,
+      status: tools.Status.OPENED,
+      created_at: new Date(),
+      modify_at: new Date(),
+      completed_at: new Date(),
+      category: '',
+      expiring_at: tomorrow,
+      enableExpiring: false,
+      id_prev: '',
+      pos: 0,
+      modified: false,
+      progress: 0
+    }
+    // return this.copy(objtodo)
+    return objtodo
+  }, 'getRecordEmpty')
   const items_dacompletare = b.read((state: ITodosState) => (cat: string): ITodo[] => {
     const indcat = getindexbycategory(cat)
     if (state.todos[indcat]) {
@@ -85,11 +92,14 @@ namespace Getters {
   const todos_completati = b.read((state: ITodosState) => (cat: string): ITodo[] => {
     const indcat = getindexbycategory(cat)
     if (state.todos[indcat]) {
-      if (state.showtype === costanti.ShowTypeTask.SHOW_LAST_N_COMPLETED) {
+      if (state.showtype === costanti.ShowTypeTask.SHOW_LAST_N_COMPLETED) {   // Show only the first N completed
         return state.todos[indcat].filter((todo) => todo.status === tools.Status.COMPLETED).slice(0, state.visuLastCompleted)
-      }  // Show only the first N completed
+      }
+      else if (state.showtype === costanti.ShowTypeTask.SHOW_ONLY_TOCOMPLETE) {
+        return []
+      }
       else if (state.showtype === costanti.ShowTypeTask.SHOW_ALL) {
-        return state.todos[indcat].filter((todo) => todo.completed === tools.Status.COMPLETED)
+        return state.todos[indcat].filter((todo) => todo.status === tools.Status.COMPLETED)
       }
       else {
         return []
@@ -120,6 +130,9 @@ namespace Getters {
   }, 'getRecordById')
 
   export const getters = {
+    get getRecordEmpty() {
+      return getRecordEmpty()
+    },
     get items_dacompletare() {
       return items_dacompletare()
     },
