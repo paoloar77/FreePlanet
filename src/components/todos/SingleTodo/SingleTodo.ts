@@ -10,9 +10,10 @@ import { SubMenus } from '../SubMenus'
 
 import { date } from 'quasar'
 import { askConfirm } from '../../../classes/routinestd'
+import { CDate } from '../../CDate'
 
 @Component({
-  components: { SubMenus },
+  components: { SubMenus, CDate },
   name: 'SingleTodo'
 })
 export default class SingleTodo extends Vue {
@@ -22,7 +23,7 @@ export default class SingleTodo extends Vue {
   public classCompleted: string = ''
   public classDescr: string = ''
   public classDescrEdit: string = ''
-  public classExpiring: string = 'flex-item data-item shadow-1'
+  public classExpiring: string = 'flex-item data-item shadow-1 hide-if-small'
   public classExpiringEx: string = ''
   public iconPriority: string = ''
   public popover: boolean = false
@@ -66,6 +67,33 @@ export default class SingleTodo extends Vue {
 
   @Watch('itemtodo.descr') public valueChanged5() {
     this.precDescr = this.itemtodo.descr
+    this.watchupdate('descr')
+  }
+
+  @Watch('itemtodo.hoursplanned') public valueChangedhoursplanned() {
+    console.log('itemtodo.hoursplanned', this.itemtodo.hoursplanned)
+    this.watchupdate('hoursplanned')
+  }
+  @Watch('itemtodo.status', { immediate: true, deep: true }) public valueChangedstatus() {
+    console.log('itemtodo.status', this.itemtodo.status)
+    this.watchupdate('status')
+  }
+  @Watch('itemtodo.completed_at') public valueChangedcompleted_at() {
+    console.log('itemtodo.completed_at', this.itemtodo.completed_at)
+    this.watchupdate('completed_at')
+  }
+  @Watch('itemtodo.hoursworked') public valueChangedhoursworked() {
+    console.log('itemtodo.hoursworked', this.itemtodo.hoursworked)
+    this.watchupdate('hoursworked')
+  }
+  @Watch('itemtodo.start_date') public valueChangedstart_date() {
+    this.watchupdate('start_date')
+  }
+  @Watch('itemtodo.assigned_to_userId') public valueChangedend_assigned_to_userId() {
+    this.watchupdate('assigned_to_userId')
+  }
+  @Watch('itemtodo.phase') public valueChangedend_phase() {
+    this.watchupdate('phase')
   }
 
   @Watch('itemtodo.progress') public valueChanged6() {
@@ -114,7 +142,7 @@ export default class SingleTodo extends Vue {
     if (this.itemtodo.progress > 100)
       this.itemtodo.progress = 100
 
-    this.classExpiring = 'flex-item data-item shadow-1'
+    this.classExpiring = 'flex-item data-item shadow-1 hide-if-small'
     this.classExpiringEx = ''
     if (this.itemtodo.status === tools.Status.COMPLETED) {
       this.percentageProgress = 100
@@ -236,6 +264,7 @@ export default class SingleTodo extends Vue {
   }
 
   public clickRow() {
+    this.$emit('setitemsel', null)
     this.$emit('setitemsel', this.itemtodo)
     this.clickRiga()
   }
@@ -382,10 +411,6 @@ export default class SingleTodo extends Vue {
     } else {
       this.itemtodo.status = tools.Status.COMPLETED
     }
-
-    this.updateicon()
-
-    this.updatedata('status')
 
     this.deselectAndExitEdit()
   }

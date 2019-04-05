@@ -14,13 +14,14 @@ import { UserStore } from '@store'
 import { Getter } from 'vuex-class'
 
 import { Screen } from 'quasar'
-import { CProgress } from '@components'
+import { CProgress } from '../../../components/CProgress'
+import { CDate } from '../../../components/CDate'
 
 const namespace: string = 'Projects'
 
 @Component({
 
-  components: { SingleProject, CProgress, CTodo },
+  components: { SingleProject, CProgress, CTodo, CDate },
   filters: {
     capitalize(value) {
       if (!value) {
@@ -50,9 +51,16 @@ export default class ProjList extends Vue {
   public colProgress: string = 'blue'
   public percProgress: string = 'percProgress'
 
+  public selectStatus: [] = tools.selectStatus[UserStore.state.lang]
+
   public $refs: {
     singleproject: SingleProject[],
     ctodo: CTodo
+  }
+
+  public watchupdatetodo(field = '') {
+    console.log('watchupdate', field)
+    this.$emit('eventupdate', {myitem: this.itemtodosel, field } )
   }
 
   get getrouteup() {
@@ -245,6 +253,11 @@ export default class ProjList extends Vue {
     this.itemtodosel = item
   }
 
+  public cambiadata(value) {
+    // console.log('*******   cambiadata', value)
+    this.itemtodosel.start_date = new Date(arguments[0])
+  }
+
   public async updateitemproj({ myitem, field }) {
     console.log('calling MODIFY updateitemproj', myitem, field)
 
@@ -268,7 +281,20 @@ export default class ProjList extends Vue {
     for (const i in this.$refs.ctodo.$refs.single) {
     // @ts-ignore
       const contr = this.$refs.ctodo.$refs.single[i] as SingleTodo
-      const des = !check
+      let des = true
+      if (check) {
+        const id = contr.itemtodo._id
+        // Don't deselect the actual clicked!
+        if (onlythis) {
+          des = item._id === id
+        } else {
+          if (!!item) {
+            des = ((check && (item._id !== id)) || (!check))
+          } else {
+            des = !check
+          }
+        }
+      }
       if (des) {
         // @ts-ignore
         contr.deselectAndExitEdit()
@@ -277,7 +303,7 @@ export default class ProjList extends Vue {
   }
 
   public deselectAllRowsproj(item: IProject, check, onlythis: boolean = false) {
-    console.log('deselectAllRowsproj: ', item)
+    // console.log('deselectAllRowsproj: ', item)
 
     for (const i in this.$refs.singleproject) {
 

@@ -7,12 +7,13 @@ import { tools } from '../../../store/Modules/tools'
 import { IProject } from '../../../model/index'
 
 import { SubMenusProj } from '../SubMenusProj'
+import { CDate } from '../../CDate'
 
 import { date } from 'quasar'
 import { askConfirm } from '../../../classes/routinestd'
 
 @Component({
-  components: { SubMenusProj },
+  components: { SubMenusProj, CDate },
   name: 'SingleProject'
 })
 export default class SingleProject extends Vue {
@@ -20,7 +21,7 @@ export default class SingleProject extends Vue {
   public menuPopupProj: any[] = []
   public classDescr: string = ''
   public classDescrEdit: string = ''
-  public classExpiring: string = 'flex-item data-item shadow-1'
+  public classExpiring: string = 'flex-item data-item shadow-1 hide-if-small'
   public classExpiringEx: string = ''
   public iconPriority: string = ''
   public classRow: string = ''
@@ -107,7 +108,7 @@ export default class SingleProject extends Vue {
   }
 
   public watchupdate(field = '') {
-    console.log('watchupdate')
+    console.log('watchupdate', field)
     this.$emit('eventupdateproj', {myitem: this.itemproject, field } )
     this.updateicon()
   }
@@ -124,7 +125,7 @@ export default class SingleProject extends Vue {
     if (this.itemproject.progressCalc > 100)
       this.itemproject.progressCalc = 100
 
-    this.classExpiring = 'flex-item data-item shadow-1'
+    this.classExpiring = 'flex-item data-item shadow-1 hide-if-small'
     this.classExpiringEx = ''
 
     this.percentageProgress = this.itemproject.progressCalc

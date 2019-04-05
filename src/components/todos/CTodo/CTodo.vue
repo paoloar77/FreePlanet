@@ -95,8 +95,8 @@
                          v-for="(mytodo, index) in todos_completati(categoryAtt)"
                          :key="mytodo._id" class="myitemdrag">
 
-                        <SingleTodo ref="single" @deleteItemtodo="mydeleteItemtodo(mytodo._id)" @eventupdate="updateitemtodo"
-                                    @deselectAllRows="deselectAllRowstodo" @deselectAllRowsproj="deselectAllRowsproj" @onEndtodo="onEndtodo"
+                        <SingleTodo ref="single" @deleteItemtodo="mydeleteitemtodo(mytodo._id)" @eventupdate="updateitemtodo"
+                                    @setitemsel="setitemsel" @deselectAllRowstodo="deselectAllRowstodo" @deselectAllRowsproj="deselectAllRowsproj" @onEnd="onEndtodo"
                                     :itemtodo='mytodo'/>
 
                         <!--<div :nametranslate="`REF${index}`" class="divdrag non-draggato"></div>-->

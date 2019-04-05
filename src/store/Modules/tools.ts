@@ -67,7 +67,69 @@ export const tools = {
     EDIT: 160,
     ADD_PROJECT: 200
   },
+  selectStatus: {
+    it: [
+      {
+        id: 1,
+        label: 'Nessuno',
+        value: 0,  //   Status.NONE
+        icon: 'expand_less'
+      },
+      {
+        id: 2,
+        label: 'Aperto',
+        value: 1,  //   Status.OPENED
+        icon: 'expand_less'
+      },
+      {
+        id: 2,
+        label: 'Completato',
+        value: 10,   //   Status.COMPLETED
+        icon: 'expand_less'
+      }
+    ],
+    es: [
+      {
+        id: 1,
+        label: 'Ninguno',
+        value: 0,  //   Status.NONE
+        icon: 'expand_less'
+      },
+      {
+        id: 2,
+        label: 'Abierto',
+        value: 1,  //   Status.OPENED
+        icon: 'expand_less'
+      },
+      {
+        id: 2,
+        label: 'Completado',
+        value: 10,   //   Status.COMPLETED
+        icon: 'expand_less'
+      }
+    ],
+    enUs: [
+      {
+        id: 1,
+        label: 'None',
+        value: 0,  //   Status.NONE
+        icon: 'expand_less'
+      },
+      {
+        id: 2,
+        label: 'Opened',
+        value: 1,  //   Status.OPENED
+        icon: 'expand_less'
+      },
+      {
+        id: 2,
+        label: 'Completed',
+        value: 10,   //   Status.COMPLETED
+        icon: 'expand_less'
+      }
+    ]
 
+  },
   selectPriority: {
     it: [
       {
@@ -491,6 +553,20 @@ export const tools = {
     }
 
     return cl + ' titlePriority'
+  },
+
+  getStatusListByInd(index) {
+    try {
+      const arr = tools.selectStatus[UserStore.state.lang]
+      for (const rec of arr) {
+        if (rec.value === index) {
+          return rec.label
+        }
+      }
+    } catch (e) {
+      console.log('Error: ', e)
+    }
+    return ''
   },
 
   getPriorityByInd(index) {
@@ -985,7 +1061,32 @@ export const tools = {
   },
 
   getstrDate(mytimestamp) {
-    return date.formatDate(mytimestamp, 'DD-MM-YY')
+    console.log('getstrDate', mytimestamp)
+    if (!!mytimestamp)
+      return date.formatDate(mytimestamp, 'DD/MM/YYYY')
+    else
+      return ''
+  },
+  getstrYYMMDDDate(mytimestamp) {
+    return date.formatDate(mytimestamp, 'YYYY-MM-DD')
+  },
+
+  // mystrdate "26.04.2013"
+  convertstrtoDate(mystrdate: string) {
+    if (mystrdate.length < 10) {
+      return null
+    }
+
+    const pattern = /(\d{2})\/(\d{2})\/(\d{4})/
+    const strdate = mystrdate.replace(pattern, '$3-$2-$1')
+    let mydate = null
+    if (date.isValid(strdate)) {
+      mydate = new Date(strdate)
+    } else {
+      return null
+    }
+    console.log('mystrdate', mystrdate, strdate, mydate)
+    return mydate
   },
 
   capitalize(value) {
@@ -994,6 +1095,22 @@ export const tools = {
     }
     value = value.toString()
     return value.charAt(0).toUpperCase() + value.slice(1)
+  },
+
+  getDateNow() {
+    const mydate = new Date()
+    console.log('mydate', mydate, mydate.getDate(), mydate.getUTCDate())
+    return mydate
+  },
+  getDateNull() {
+    const mydate = new Date(0)
+    return mydate
+  },
+  getTimeNow() {
+    return new Date().getTime()
+  },
+  getTimestampsNow() {
+    return new Date().valueOf()
   }
 
 }

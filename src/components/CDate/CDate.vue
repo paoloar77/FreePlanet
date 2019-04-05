@@ -1,14 +1,13 @@
 <template>
-    <div>
-        <q-input dense v-model="mydate" mask="date" :hint="myhint">
-            <!--<span class="data_string">{{tools.getstrDate(itemsel.begin_development)}}</span>-->
-            <q-icon name="event" class="cursor-pointer" style="font-size: 1.5rem;">
-                <!--<q-popup-proxy>-->
-                    <!--<q-date v-model="mydate" today-btn/>-->
-                <!--</q-popup-proxy>-->
+    <q-input :class="data_class" debounce="1000" dense :value="getdatestring" stack-label :label="label" @input="changedate">
+        <template v-slot:append>
+            <q-icon name="event" class="cursor-pointer" :style="mystyleicon">
+                <q-popup-proxy ref="datePicker">
+                    <q-date :value="getdateyymmddstring" today-btn @input="changedate"></q-date>
+                </q-popup-proxy>
             </q-icon>
-        </q-input>
-    </div>
+        </template>
+    </q-input>
 </template>
 
 <script lang="ts" src="./CDate.ts">

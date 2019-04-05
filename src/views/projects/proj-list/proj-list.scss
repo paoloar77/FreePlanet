@@ -1,3 +1,5 @@
+$heightBtn: 100%;
+
 .clMain {
   min-width: 350px;
 }
@@ -88,15 +90,34 @@
   flex: 1;
 }
 
+.flex-item{
+  // background-color: #d5e2eb;
+  padding: 0px;
+  margin: 1px;
+  margin-left: 3px;
+  margin-right: 3px;
+  color: #000;
+  font-size: 0.85rem;
+  height: $heightBtn;
+  line-height: $heightBtn;
+  vertical-align: middle;
+  //flex: 0 0 100%;
+}
+
 .itemdescr{
   font-size: 1rem;
   flex: 1;
 }
 
+.itemstatus{
+  flex: 1;
+  padding: 2px;
+}
+
 .itemdata{
   font-size: 1rem;
   flex: 1;
-  padding: 4px;
+  padding: 2px;
 }
 
 .progress-item {

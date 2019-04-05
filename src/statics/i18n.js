@@ -219,7 +219,11 @@ const messages = {
       insertbottom: 'Inserisci il Task in basso',
       edit: 'Descrizione Task:',
       completed: 'Ultimi Completati',
-      usernotdefined: 'Attenzione, occorre essere Loggati per poter aggiungere un Todo'
+      usernotdefined: 'Attenzione, occorre essere Loggati per poter aggiungere un Todo',
+      start_date: 'Data Inizio',
+      status: 'Stato',
+      completed_at: 'Data Completamento',
+      expiring_at: 'Data Scadenza',
     },
     notification: {
       status: 'Stato',
@@ -243,7 +247,7 @@ const messages = {
       hoursworked: 'Ore Lavorate',
       begin_development: 'Inizio Sviluppo',
       begin_test: 'Inizio Test',
-      progresstask: 'Progressione Compiti'
+      progresstask: 'Progressione'
     }
   },
   'es': {
@@ -460,7 +464,11 @@ const messages = {
       insertbottom: 'Ingrese una nueva Tarea abajo',
       edit: 'Descripción Tarea:',
       completed: 'Ultimos Completados',
-      usernotdefined: 'Atención, debes iniciar sesión para agregar una Tarea'
+      usernotdefined: 'Atención, debes iniciar sesión para agregar una Tarea',
+      start_date: 'Fecha inicio',
+      status: 'Estado',
+      completed_at: 'Fecha de finalización',
+      expiring_at: 'Fecha de Caducidad',
     },
     notification: {
       status: 'Estado',
@@ -484,7 +492,7 @@ const messages = {
       hoursworked: 'Horas Trabajadas',
       begin_development: 'Comienzo desarrollo',
       begin_test: 'Comienzo Prueba',
-      progresstask: 'Progresion Tareas'
+      progresstask: 'Progresion'
     }
   },
   'enUs': {
@@ -701,7 +709,11 @@ const messages = {
       insertbottom: 'Insert Task at the bottom',
       edit: 'Task Description:',
       completed: 'Lasts Completed',
-      usernotdefined: 'Attention, you need to be Signed In to add a new Task'
+      usernotdefined: 'Attention, you need to be Signed In to add a new Task',
+      start_date: 'Start Date',
+      status: 'Status',
+      completed_at: 'Completition Date',
+      expiring_at: 'Expiring Date',
     },
     notification: {
       status: 'Status',
@@ -725,7 +737,7 @@ const messages = {
       hoursworked: 'Worked Hours',
       begin_development: 'Start Dev',
       begin_test: 'Start Test',
-      progresstask: 'Todos progression'
+      progresstask: 'Progression'
     }
   },
 };

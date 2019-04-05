@@ -38,3 +38,11 @@ $heightBtn: 100%;
   text-align: center;
   //line-height: $heightitem;
 }
+
+.data_string {
+  font-size: 0.85rem;
+  @media (max-width: 600px) {
+    max-width: 22px;
+    // display: none;
+  }
+}

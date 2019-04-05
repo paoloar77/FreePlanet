@@ -98,7 +98,7 @@ namespace Mutations {
     }  // ??
 
     resetArrToken(state.tokens)
-    state.tokens.push({ access: 'auth', token: state.x_auth_token, data_login: new Date() })
+    state.tokens.push({ access: 'auth', token: state.x_auth_token, data_login: tools.getDateNow() })
 
     // ++Todo: Settings Users Admin
     if (state.username === 'paoloar77') {
@@ -127,7 +127,7 @@ namespace Mutations {
     if (!state.tokens) {
       state.tokens = []
     }
-    state.tokens.push({ access: 'auth', token: x_auth_token, data_login: new Date() })
+    state.tokens.push({ access: 'auth', token: x_auth_token, data_login: tools.getDateNow() })
   }
 
   function setServerCode(state: IUserState, num: number) {
@@ -328,7 +328,7 @@ namespace Actions {
                 verified_email: false
               })
 
-              const now = new Date()
+              const now = tools.getDateNow()
               // const expirationDate = new Date(now.getTime() + myres.data.expiresIn * 1000);
               const expirationDate = new Date(now.getTime() * 1000)
               localStorage.setItem(tools.localStorage.lang, state.lang)
@@ -427,7 +427,7 @@ namespace Actions {
               verified_email
             })
 
-            const now = new Date()
+            const now = tools.getDateNow()
             // const expirationDate = new Date(now.getTime() + myres.data.expiresIn * 1000);
             const expirationDate = new Date(now.getTime() * 1000)
             localStorage.setItem(tools.localStorage.lang, state.lang)
@@ -520,7 +520,7 @@ namespace Actions {
       }
       const expirationDateStr = localStorage.getItem(tools.localStorage.expirationDate)
       const expirationDate = new Date(String(expirationDateStr))
-      const now = new Date()
+      const now = tools.getDateNow()
       if (now >= expirationDate) {
         console.log('!!! Login Expired')
         return false

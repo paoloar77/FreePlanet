@@ -1,4 +1,4 @@
-<template>
+<template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
     <q-page>
         <div class="panel">
 
@@ -84,7 +84,8 @@
                                     <SingleProject ref="singleproject" @deleteItemproj="mydeleteitemproj(myproj._id)"
                                                    @eventupdateproj="updateitemproj"
                                                    @idsel="setidsel"
-                                                   @deselectAllRowsproj="deselectAllRowsproj" @deselectAllRowstodo="deselectAllRowstodo" @onEnd="onEndproj"
+                                                   @deselectAllRowsproj="deselectAllRowsproj"
+                                                   @deselectAllRowstodo="deselectAllRowstodo" @onEnd="onEndproj"
                                                    :itemproject='myproj'>
 
                                     </SingleProject>
@@ -94,8 +95,10 @@
                         </div>
                         <q-separator></q-separator>
 
-                        <CTodo ref="ctodo" @setitemsel="setitemsel" :categoryAtt="idProjAtt" title="" backcolor="white" forecolor="black" :viewtaskTop="false" @deselectAllRowsproj="deselectAllRowsproj" @deselectAllRowstodo="deselectAllRowstodo"
-                                >
+                        <CTodo ref="ctodo" @setitemsel="setitemsel" :categoryAtt="idProjAtt" title="" backcolor="white"
+                               forecolor="black" :viewtaskTop="false" @deselectAllRowsproj="deselectAllRowsproj"
+                               @deselectAllRowstodo="deselectAllRowstodo"
+                        >
                         </CTodo>
 
                     </div>
@@ -108,7 +111,6 @@
                                 {{itemsel.descr}}
                             </div>
                         </div>
-                        <q-separator/>
                         <div class="flex-container clMain">
                             <q-icon class="flex-item flex-icon" name="border_color"/>
                             <div class="flex-item itemdescr">
@@ -153,25 +155,15 @@
                         <div class="flex-container clMain">
                             <q-icon class="flex-item flex-icon" name="developer_mode"/>
                             <div class="flex-item itemdata">
-                                <q-input dense v-model="itemsel.begin_development" mask="date" :hint="$t('proj.begin_development')">
-                                    <!--<span class="data_string">{{tools.getstrDate(itemsel.begin_development)}}</span>-->
-                                    <q-icon name="event" class="cursor-pointer" style="font-size: 1.5rem;">
-                                        <q-popup-proxy>
-                                            <q-date v-model="itemsel.begin_development" today-btn/>
-                                        </q-popup-proxy>
-                                    </q-icon>
-                                </q-input>
+                                <CDate :mydate="itemsel.begin_development" @input="itemsel.begin_development = new Date(arguments[0])"
+                                       :label="$t('proj.begin_development')">
+                                </CDate>
                             </div>
                             <div style="margin: 10px;"></div>
                             <div class="flex-item itemdata">
-                                <q-input dense v-model="itemsel.begin_test" mask="date" :hint="$t('proj.begin_test')">
-                                    <!--<span class="data_string">{{tools.getstrDate(itemsel.begin_development)}}</span>-->
-                                    <q-icon name="event" class="cursor-pointer" style="font-size: 1.5rem;">
-                                        <q-popup-proxy>
-                                            <q-date v-model="itemsel.begin_test" today-btn/>
-                                        </q-popup-proxy>
-                                    </q-icon>
-                                </q-input>
+                                <CDate :mydate="itemsel.begin_test" @input="itemsel.begin_test = new Date(arguments[0])"
+                                       :label="$t('proj.begin_test')">
+                                </CDate>
                             </div>
                         </div>
                     </div>
@@ -186,20 +178,76 @@
                                         v-model="itemtodosel.descr"
                                         :label="$t('proj.longdescr')"
                                         outlined
-                                        debounce="500"
-                                        autogrow
-                                />
+                                        debounce="1000"
+                                        autogrow>
 
+                                </q-input>
                             </div>
+                        </div>
+                    </div>
+                    <div class="flex-container clMain">
+                        <q-icon class="flex-item flex-icon" name="done_outline"/>
+                        <div class="flex-item itemstatus">
+                            <q-select rounded outlined v-model="itemtodosel.status" :options="selectStatus"
+                                      :label="$t('todo.status')" emit-value map-options
+                                      @input="watchupdatetodo('status')">
+                            </q-select>
+                        </div>
+                        <q-icon class="flex-item flex-icon" name="event"/>
+                        <div class="flex-item itemdata">
+                            <CDate v-if="itemtodosel.status === tools.Status.COMPLETED"
+                                   :mydate="itemtodosel.completed_at" @input="itemtodosel.completed_at = new Date(arguments[0])"
+                                   :label="$t('todo.completed_at')">
+                            </CDate>
+                        </div>
+                    </div>
+                    <div class="flex-container clMain">
+                        <q-icon class="flex-item flex-icon" name="work_outline"/>
+                        <div class="flex-item itemdescr">
+                            <q-input
+                                    ref="input"
+                                    v-model="itemtodosel.hoursworked"
+                                    type="number"
+                                    rounded outlined
+                                    :label="$t('proj.hoursworked')"
+                                    debounce="500">
+
+                            </q-input>
+                            <CProgress descr="" :progressval="getCalcHoursWorked"></CProgress>
+                        </div>
+                        <q-icon class="flex-item flex-icon" name="watch_later"/>
+                        <div class="flex-item itemdata content-center">
+                            <q-input
+                                    ref="input"
+                                    type="number"
+                                    v-model="itemtodosel.hoursplanned"
+                                    rounded outlined
+                                    :label="$t('proj.hoursplanned')"
+                                    debounce="500">
+
+                            </q-input>
+                            <CProgress :descr="$t('proj.progresstask')"
+                                       :progressval="itemtodosel.progressCalc"></CProgress>
+                        </div>
+                    </div>
+                    <div class="flex-container clMain">
+                        <q-icon class="flex-item flex-icon" name="developer_mode"/>
+                        <div class="flex-item itemdata">
+                            <CDate :mydate="itemtodosel.start_date" @input="itemtodosel.start_date = new Date(arguments[0])"
+                                   :label="$t('todo.start_date')">
+
+                            </CDate>
+                        </div>
+                        <div style="margin: 10px;"></div>
+                        <div class="flex-item itemdata">
                         </div>
                     </div>
                 </template>
             </q-splitter>
         </div>
     </q-page>
-
-
 </template>
+
 <script lang="ts" src="./proj-list.ts">
 </script>
 <style lang="scss" scoped>

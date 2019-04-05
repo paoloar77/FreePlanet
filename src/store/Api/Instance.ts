@@ -50,7 +50,7 @@ export const removeAuthHeaders = () => {
 async function Request(type: string, path: string, payload: any): Promise<Types.AxiosSuccess | Types.AxiosError> {
   let ricevuto = false
   try {
-    console.log('Axios Request', path, type)
+    console.log('Axios Request', path, type, payload)
     let response: AxiosResponse
     if (type === 'post' || type === 'put' || type === 'patch') {
       response = await axiosInstance[type](path, payload, {

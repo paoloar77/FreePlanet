@@ -27,7 +27,7 @@ const state: ITodosState = {
   visuLastCompleted: 10
 }
 
-const fieldtochange: string [] = ['descr', 'status', 'category', 'expiring_at', 'priority', 'id_prev', 'pos', 'enableExpiring', 'progress']
+const fieldtochange: string [] = ['descr', 'status', 'category', 'expiring_at', 'priority', 'id_prev', 'pos', 'enableExpiring', 'progress', 'phase', 'assigned_to_userId', 'hoursplanned', 'hoursworked', 'start_date', 'completed_at']
 
 const b = storeBuilder.module<ITodosState>('Todos', state)
 const stateGetter = b.state()
@@ -56,26 +56,32 @@ function initcat() {
 namespace Getters {
   const getRecordEmpty = b.read((state: ITodosState) => (): ITodo => {
 
-    const tomorrow = new Date()
+    const tomorrow = tools.getDateNow()
     tomorrow.setDate(tomorrow.getDate() + 1)
 
     const objtodo: ITodo = {
-      // _id: new Date().toISOString(),  // Create NEW
+      // _id: tools.getDateNow().toISOString(),  // Create NEW
       _id: objectId(),
       userId: UserStore.state.userId,
       descr: '',
       priority: tools.Priority.PRIORITY_NORMAL,
       status: tools.Status.OPENED,
-      created_at: new Date(),
-      modify_at: new Date(),
-      completed_at: new Date(),
+      created_at: tools.getDateNow(),
+      modify_at: tools.getDateNow(),
+      completed_at: tools.getDateNull(),
       category: '',
       expiring_at: tomorrow,
       enableExpiring: false,
       id_prev: '',
       pos: 0,
       modified: false,
-      progress: 0
+      progress: 0,
+      progressCalc: 0,
+      phase: 0,
+      assigned_to_userId: '',
+      hoursplanned: 0,
+      hoursworked: 0,
+      start_date: tools.getDateNull(),
     }
     // return this.copy(objtodo)
     return objtodo

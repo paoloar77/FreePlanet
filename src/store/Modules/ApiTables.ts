@@ -400,8 +400,9 @@ export async function table_ModifyRecord(nametable, myitem, fieldtochange) {
   console.log('miorec', miorec.descr, miorec.id_prev)
 
   if (nametable === 'todos') {
-    if (setmodifiedIfchanged(miorec, myobjsaved, 'status')) {
-      miorec.completed_at = new Date().getDate()
+    if (setmodifiedIfchanged(miorec, myobjsaved, 'status') && (miorec.status === tools.Status.COMPLETED)) {
+      miorec.completed_at = tools.getDateNow()
+      console.log('miorec.completed_at', miorec.completed_at)
     }
   }
 
@@ -411,7 +412,7 @@ export async function table_ModifyRecord(nametable, myitem, fieldtochange) {
 
   if (miorec.modified) {
     console.log('    ' + nametable + ' MODIFICATO! ', miorec.descr, miorec.pos, 'SALVALO SULLA IndexedDB')
-    miorec.modify_at = new Date().getDate()
+    miorec.modify_at = tools.getDateNow()
     miorec.modified = false
 
     // 1) Permit to Update the Views

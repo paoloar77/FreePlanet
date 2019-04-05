@@ -15,6 +15,12 @@ export interface ITodo {
   pos?: number,
   order?: number,
   progress?: number
+  progressCalc?: number
+  phase?: number
+  assigned_to_userId?: string
+  hoursplanned?: number
+  hoursworked?: number
+  start_date?: Date
 }
 
 export interface IParamTodo {

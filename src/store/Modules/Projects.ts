@@ -46,7 +46,7 @@ function initcat() {
 
 namespace Getters {
   const getRecordEmpty = b.read((state: IProjectsState) => (): IProject => {
-    // const tomorrow = new Date()
+    // const tomorrow = tools.getDateNow()
     // tomorrow.setDate(tomorrow.getDate() + 1)
 
     const obj: IProject = {
@@ -56,11 +56,9 @@ namespace Getters {
       id_parent: '',
       priority: tools.Priority.PRIORITY_NORMAL,
       status: tools.Status.OPENED,
-      created_at: new Date(),
-      modify_at: new Date(),
-      completed_at: new Date(),
-      begin_development: new Date(0),
-      begin_test: new Date(0),
+      created_at: tools.getDateNow(),
+      modify_at: tools.getDateNow(),
+      completed_at: tools.getDateNull(),
       category: '',
       // expiring_at: tomorrow,
       enableExpiring: false,
@@ -71,8 +69,9 @@ namespace Getters {
       hoursplanned: 0,
       live_url: '',
       test_url: '',
-      progressCalc: 0
-
+      progressCalc: 0,
+      begin_development: tools.getDateNull(),
+      begin_test: tools.getDateNull()
     }
 
     return obj

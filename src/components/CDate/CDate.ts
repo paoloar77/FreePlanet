@@ -1,39 +1,58 @@
 import Vue from 'vue'
-import { Component, Emit, Inject, Model, Prop, Provide } from 'vue-property-decorator'
+import { Component, Prop, Watch } from 'vue-property-decorator'
 import { tools } from '@src/store/Modules/tools'
-import * as moment from 'moment'
+
+import { date } from 'quasar'
 
 @Component({
   name: 'CDate'
 })
 
 export default class CDate extends Vue {
-  // ************* IS NOT WORKING WELL ! ************
-  // @Model('input', {
-  //   default: ''
-  // })
-  // public mydate!: Date
-  @Prop() public myhint: string
-  @Model('input', {
-    default: '1999/01/01'
-  })
-  public mydate!: string
+  @Prop() public mydate!: Date
+  @Prop({ required: false }) public label: string
+  @Prop({ required: false, default: '' }) public data_class!: string
 
-  private valueInternal: string = '1988/01/01'
+  public mystyleicon: string = 'font-size: 1.5rem;'
 
-  @Emit('input')
-  public onValueChanged(value: string) {
+  @Watch('mydate')
+  public valchanged(value) {
     this.valueInternal = value
   }
 
-  // get getmydate() {
-  //   console.log('getmydate', this.mydate)
-  //   return tools.getstrDate(this.mydate)
-  // }
-  //
-  // public updatedate(mydate) {
-  //   console.log('updatedate', mydate)
-  //   this.mydate = mydate
-  // }
+  public $refs: {
+    datePicker
+  }
+  private valueInternal: Date = tools.getDateNull()
+
+  public created() {
+    this.valueInternal = this.mydate
+
+    if (this.data_class !== '') {
+      this.mystyleicon = 'font-size: 1rem;'
+    }
+  }
+
+  public changedate(value) {
+    const datavalida = tools.convertstrtoDate(value)
+    if (!!datavalida) {
+      this.valueInternal = datavalida
+      console.log('EMIT: changedate', datavalida)
+      this.$emit('input', this.getDate())
+    } else {
+      console.log('   DATA NON VALIDAAAAAAAAAAAAA ', value, datavalida)
+    }
+    this.$refs.datePicker.hide()
+  }
+
+  get getdatestring() {
+    return tools.getstrDate(this.valueInternal)
+  }
+  get getdateyymmddstring() {
+    return tools.getstrYYMMDDDate(this.valueInternal)
+  }
+  private getDate() {
+    return this.valueInternal
+  }
 
 }
