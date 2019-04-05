@@ -193,12 +193,12 @@
                                       @input="watchupdatetodo('status')">
                             </q-select>
                         </div>
-                        <q-icon class="flex-item flex-icon" name="event"/>
-                        <div class="flex-item itemdata">
-                            <CDate v-if="itemtodosel.status === tools.Status.COMPLETED"
-                                   :mydate="itemtodosel.completed_at" @input="itemtodosel.completed_at = new Date(arguments[0])"
-                                   :label="$t('todo.completed_at')">
-                            </CDate>
+                        <q-icon class="flex-item flex-icon" name="outlined_flag"/>
+                        <div class="flex-item itemstatus">
+                            <q-select rounded outlined v-model="itemtodosel.phase" :options="selectPhase"
+                                      :label="$t('todo.phase')" emit-value map-options
+                                      @input="watchupdatetodo('phase')">
+                            </q-select>
                         </div>
                     </div>
                     <div class="flex-container clMain">
@@ -239,7 +239,12 @@
                             </CDate>
                         </div>
                         <div style="margin: 10px;"></div>
+                        <q-icon class="flex-item flex-icon" name="event"/>
                         <div class="flex-item itemdata">
+                            <CDate :readonly="itemtodosel.status !== tools.Status.COMPLETED"
+                                   :mydate="itemtodosel.completed_at" @input="itemtodosel.completed_at = new Date(arguments[0])"
+                                   :label="$t('todo.completed_at')">
+                            </CDate>
                         </div>
                     </div>
                 </template>

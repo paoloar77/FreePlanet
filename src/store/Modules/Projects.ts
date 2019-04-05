@@ -20,7 +20,7 @@ const state: IProjectsState = {
   visuLastCompleted: 10
 }
 
-const fieldtochange: string [] = ['descr', 'longdescr', 'hoursplanned', 'hoursworked', 'id_parent', 'status', 'category', 'expiring_at', 'priority', 'id_prev', 'pos', 'enableExpiring', 'progress', 'live_url', 'test_url', 'begin_development', 'begin_test']
+const listFieldsToChange: string [] = ['descr', 'longdescr', 'hoursplanned', 'hoursworked', 'id_parent', 'status', 'category', 'expiring_at', 'priority', 'id_prev', 'pos', 'enableExpiring', 'progress', 'live_url', 'test_url', 'begin_development', 'begin_test']
 
 const b = storeBuilder.module<IProjectsState>('Projects', state)
 const stateGetter = b.state()
@@ -302,8 +302,8 @@ namespace Actions {
     return id
   }
 
-  async function modify(context, { myitem, field }) {
-    return await ApiTables.table_ModifyRecord(nametable, myitem, fieldtochange)
+  async function modify(context, { myitem, field } ) {
+    return await ApiTables.table_ModifyRecord(nametable, myitem, listFieldsToChange, field)
   }
 
   async function swapElems(context, itemdragend: IDrag) {
@@ -311,7 +311,7 @@ namespace Actions {
 
     const myarr = Getters.getters.items_dacompletare(itemdragend.id_proj)
 
-    tools.swapGeneralElem(nametable, myarr, itemdragend, fieldtochange)
+    tools.swapGeneralElem(nametable, myarr, itemdragend, listFieldsToChange)
 
   }
 

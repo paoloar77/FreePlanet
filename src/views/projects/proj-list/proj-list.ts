@@ -52,6 +52,7 @@ export default class ProjList extends Vue {
   public percProgress: string = 'percProgress'
 
   public selectStatus: [] = tools.selectStatus[UserStore.state.lang]
+  public selectPhase: [] = tools.selectPhase[UserStore.state.lang]
 
   public $refs: {
     singleproject: SingleProject[],
@@ -260,15 +261,6 @@ export default class ProjList extends Vue {
 
   public async updateitemproj({ myitem, field }) {
     console.log('calling MODIFY updateitemproj', myitem, field)
-
-    const itemdragend: IDrag = {
-      id_proj: this.idProjAtt,
-      field,
-      idelemtochange: myitem._id,
-      atfirst: false
-    }
-
-    // await Projects.actions.swapElems(itemdragend)
 
     await Projects.actions.modify({ myitem, field })
 

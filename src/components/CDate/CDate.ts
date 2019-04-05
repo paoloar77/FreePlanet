@@ -12,6 +12,7 @@ export default class CDate extends Vue {
   @Prop() public mydate!: Date
   @Prop({ required: false }) public label: string
   @Prop({ required: false, default: '' }) public data_class!: string
+  @Prop({ required: false, default: false }) public readonly!: boolean
 
   public mystyleicon: string = 'font-size: 1.5rem;'
 

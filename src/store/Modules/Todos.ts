@@ -27,7 +27,7 @@ const state: ITodosState = {
   visuLastCompleted: 10
 }
 
-const fieldtochange: string [] = ['descr', 'status', 'category', 'expiring_at', 'priority', 'id_prev', 'pos', 'enableExpiring', 'progress', 'phase', 'assigned_to_userId', 'hoursplanned', 'hoursworked', 'start_date', 'completed_at']
+const listFieldsToChange: string [] = ['descr', 'status', 'category', 'expiring_at', 'priority', 'id_prev', 'pos', 'enableExpiring', 'progress', 'phase', 'assigned_to_userId', 'hoursplanned', 'hoursworked', 'start_date', 'completed_at']
 
 const b = storeBuilder.module<ITodosState>('Todos', state)
 const stateGetter = b.state()
@@ -356,7 +356,7 @@ namespace Actions {
   }
 
   async function modify(context, { myitem, field }) {
-    return await ApiTables.table_ModifyRecord(nametable, myitem, fieldtochange)
+    return await ApiTables.table_ModifyRecord(nametable, myitem, listFieldsToChange, field)
   }
 
   async function swapElems(context, itemdragend: IDrag) {
@@ -366,7 +366,7 @@ namespace Actions {
     const indcat = state.categories.indexOf(cat)
     const myarr = state.todos[indcat]
 
-    tools.swapGeneralElem(nametable, myarr, itemdragend, fieldtochange)
+    tools.swapGeneralElem(nametable, myarr, itemdragend, listFieldsToChange)
 
   }
 

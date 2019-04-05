@@ -1,4 +1,4 @@
-import { UserStore } from '../store/Modules'
+import { UserStore } from '@modules'
 import messages from '../statics/i18n'
 
 function translate(params) {

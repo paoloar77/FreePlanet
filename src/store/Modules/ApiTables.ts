@@ -98,7 +98,10 @@ async function dbDeleteItem(call, item) {
 async function Sync_Execute(cmd, tablesync, nametab, method, item: ITodo, id, msg: String) {
   // Send to Server to Sync
 
-  // console.log('Sync_Execute', cmd, tablesync, nametab, method, item.descr, id, msg)
+  console.log('Sync_Execute', cmd, tablesync, nametab, method, id, msg)
+  if (nametab === 'todos') {
+    console.log('   TODO: ', item.descr)
+  }
 
   let cmdSw = cmd
   if ((cmd === DB.CMD_SYNC_NEW) || (cmd === DB.CMD_DELETE)) {
@@ -370,7 +373,7 @@ function setmodifiedIfchanged(recOut, recIn, field) {
   return false
 }
 
-export async function table_ModifyRecord(nametable, myitem, fieldtochange) {
+export async function table_ModifyRecord(nametable, myitem, listFieldsToChange, field) {
   if (myitem === null) {
     return new Promise((resolve, reject) => {
       resolve()
@@ -379,16 +382,13 @@ export async function table_ModifyRecord(nametable, myitem, fieldtochange) {
 
   console.log('--> table_ModifyRecord', nametable, myitem.descr)
 
-  const myobjsaved = tools.jsonCopy(myitem)
+  if ((field === 'status') && (nametable === 'todos') && (myitem.status === tools.Status.COMPLETED)) {
+    console.log('AAAAAAAAAAAAAAAAAAAAAAAA  ', myitem.completed_at)
+    myitem.completed_at = tools.getDateNow()
+    console.log('   DOPO ', myitem.completed_at)
+  }
 
-  /*
-    const mymodule = tools.getModulesByTable(nametable)
-    let param2 = ''
-    if (nametable === 'todos') {
-      param2 = myitem.category
-    }
-    const miorec = mymodule.getters.getRecordById(myobjsaved._id, param2)
-  */
+  const myobjsaved = tools.jsonCopy(myitem)
 
   // get record from IndexedDb
   const miorec = await globalroutines(null, 'read', nametable, null, myobjsaved._id)
@@ -397,16 +397,17 @@ export async function table_ModifyRecord(nametable, myitem, fieldtochange) {
     return
   }
 
-  console.log('miorec', miorec.descr, miorec.id_prev)
+  console.log(' 0-> ')
 
-  if (nametable === 'todos') {
-    if (setmodifiedIfchanged(miorec, myobjsaved, 'status') && (miorec.status === tools.Status.COMPLETED)) {
-      miorec.completed_at = tools.getDateNow()
-      console.log('miorec.completed_at', miorec.completed_at)
-    }
-  }
+  console.log('myobjsaved.completed_at', myobjsaved.completed_at)
+  console.log('miorec.completed_at', miorec.completed_at)
 
-  fieldtochange.forEach((myfield) => {
+  console.log('miorec', miorec.descr, miorec.id_prev, nametable)
+  console.log('status', miorec.status, myobjsaved.status)
+
+  console.log(' 3-> ')
+
+  listFieldsToChange.forEach((myfield) => {
     setmodifiedIfchanged(miorec, myobjsaved, myfield)
   })
 
@@ -415,15 +416,21 @@ export async function table_ModifyRecord(nametable, myitem, fieldtochange) {
     miorec.modify_at = tools.getDateNow()
     miorec.modified = false
 
+    console.log(' 0)  ARR MIOREC PRIMA ', miorec.completed_at, miorec)
+
     // 1) Permit to Update the Views
     tools.notifyarraychanged(miorec)
+
+    console.log(' 1)  MIOREC CALL WRITE: ', miorec.completed_at, miorec)
 
     // 2) Modify on IndexedDb
     return globalroutines(null, 'write', nametable, miorec)
       .then((ris) => {
 
+        console.log(' 2)  MIOREC !: ', miorec.completed_at)
+
         // 3) Modify on the Server (call)
-        Sync_SaveItem(nametable, 'PATCH', miorec)
+        return Sync_SaveItem(nametable, 'PATCH', miorec)
 
       })
   } else {

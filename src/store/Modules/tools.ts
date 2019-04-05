@@ -1,9 +1,11 @@
 import { Todos, Projects, UserStore } from '@store'
 import globalroutines from './../../globalroutines/index'
 import { costanti } from './costanti'
+import { translation } from './translation'
 import Quasar, { date } from 'quasar'
 import { IProject, ITodo } from '@src/model'
 import * as ApiTables from '@src/store/Modules/ApiTables'
+import translate from '@src/globalroutines/util'
 
 export interface INotify {
   color?: string | 'primary'
@@ -54,7 +56,7 @@ export const tools = {
   Status: {
     NONE: 0,
     OPENED: 1,
-    COMPLETED: 10,
+    COMPLETED: 10
   },
 
   MenuAction: {
@@ -66,6 +68,75 @@ export const tools = {
     SHOW_TASK: 150,
     EDIT: 160,
     ADD_PROJECT: 200
+  },
+  selectPhase: {
+    it: [
+      {
+        id: 1,
+        label: translation.it.fase + ' 0',
+        value: 0
+      },
+      {
+        id: 2,
+        label: translation.it.fase + ' 1',
+        value: 1
+      },
+      {
+        id: 3,
+        label: translation.it.fase + ' 2',
+        value: 2
+      },
+      {
+        id: 4,
+        label: translation.it.fase + ' 3',
+        value: 3
+      }
+    ],
+    es: [
+      {
+        id: 1,
+        label: translation.es.fase + ' 0',
+        value: 0
+      },
+      {
+        id: 2,
+        label: translation.es.fase + ' 1',
+        value: 1
+      },
+      {
+        id: 3,
+        label: translation.es.fase + ' 2',
+        value: 2
+      },
+      {
+        id: 4,
+        label: translation.es.fase + ' 3',
+        value: 3
+      }
+    ],
+    enUs: [
+      {
+        id: 1,
+        label: translation.enUs.fase + ' 0',
+        value: 0
+      },
+      {
+        id: 2,
+        label: translation.enUs.fase + ' 1',
+        value: 1
+      },
+      {
+        id: 3,
+        label: translation.enUs.fase + ' 2',
+        value: 2
+      },
+      {
+        id: 4,
+        label: translation.enUs.fase + ' 3',
+        value: 3
+      }
+    ]
+
   },
   selectStatus: {
     it: [
@@ -88,48 +159,51 @@ export const tools = {
         icon: 'expand_less'
       }
     ],
-    es: [
-      {
-        id: 1,
-        label: 'Ninguno',
-        value: 0,  //   Status.NONE
-        icon: 'expand_less'
-      },
-      {
-        id: 2,
-        label: 'Abierto',
-        value: 1,  //   Status.OPENED
-        icon: 'expand_less'
-      },
-      {
-        id: 2,
-        label: 'Completado',
-        value: 10,   //   Status.COMPLETED
-        icon: 'expand_less'
-      }
-    ],
-    enUs: [
-      {
-        id: 1,
-        label: 'None',
-        value: 0,  //   Status.NONE
-        icon: 'expand_less'
-      },
-      {
-        id: 2,
-        label: 'Opened',
-        value: 1,  //   Status.OPENED
-        icon: 'expand_less'
-      },
-      {
-        id: 2,
-        label: 'Completed',
-        value: 10,   //   Status.COMPLETED
-        icon: 'expand_less'
-      }
-    ]
+    es:
+      [
+        {
+          id: 1,
+          label: 'Ninguno',
+          value: 0,  //   Status.NONE
+          icon: 'expand_less'
+        },
+        {
+          id: 2,
+          label: 'Abierto',
+          value: 1,  //   Status.OPENED
+          icon: 'expand_less'
+        },
+        {
+          id: 2,
+          label: 'Completado',
+          value: 10,   //   Status.COMPLETED
+          icon: 'expand_less'
+        }
+      ],
+    enUs:
+      [
+        {
+          id: 1,
+          label: 'None',
+          value: 0,  //   Status.NONE
+          icon: 'expand_less'
+        },
+        {
+          id: 2,
+          label: 'Opened',
+          value: 1,  //   Status.OPENED
+          icon: 'expand_less'
+        },
+        {
+          id: 2,
+          label: 'Completed',
+          value: 10,   //   Status.COMPLETED
+          icon: 'expand_less'
+        }
+      ]
 
-  },
+  }
+  ,
   selectPriority: {
     it: [
       {
@@ -150,181 +224,189 @@ export const tools = {
         value: 0,
         icon: 'expand_more'
       }],
-    es: [
-      {
-        id: 1,
-        label: 'Alta',
-        value: 2,
-        icon: 'expand_less'
-      },
-      {
-        id: 2,
-        label: 'Normal',
-        value: 1,
-        icon: 'remove'
-      },
-      {
-        id: 3,
-        label: 'Baja',
-        value: 0,
-        icon: 'expand_more'
-      }],
-    enUs: [
-      {
-        id: 1,
-        label: 'High',
-        value: 2,
-        icon: 'expand_less'
-      },
-      {
-        id: 2,
-        label: 'Normal',
-        value: 1,
-        icon: 'remove'
-      },
-      {
-        id: 3,
-        label: 'Low',
-        value: 0,
-        icon: 'expand_more'
-      }],
-    de: [
-      {
-        id: 1,
-        label: 'High',
-        value: 2,
-        icon: 'expand_less'
-      },
-      {
-        id: 2,
-        label: 'Normal',
-        value: 1,
-        icon: 'remove'
-      },
-      {
-        id: 3,
-        label: 'Low',
-        value: 0,
-        icon: 'expand_more'
-      }]
+    es:
+      [
+        {
+          id: 1,
+          label: 'Alta',
+          value: 2,
+          icon: 'expand_less'
+        },
+        {
+          id: 2,
+          label: 'Normal',
+          value: 1,
+          icon: 'remove'
+        },
+        {
+          id: 3,
+          label: 'Baja',
+          value: 0,
+          icon: 'expand_more'
+        }],
+    enUs:
+      [
+        {
+          id: 1,
+          label: 'High',
+          value: 2,
+          icon: 'expand_less'
+        },
+        {
+          id: 2,
+          label: 'Normal',
+          value: 1,
+          icon: 'remove'
+        },
+        {
+          id: 3,
+          label: 'Low',
+          value: 0,
+          icon: 'expand_more'
+        }],
+    de:
+      [
+        {
+          id: 1,
+          label: 'High',
+          value: 2,
+          icon: 'expand_less'
+        },
+        {
+          id: 2,
+          label: 'Normal',
+          value: 1,
+          icon: 'remove'
+        },
+        {
+          id: 3,
+          label: 'Low',
+          value: 0,
+          icon: 'expand_more'
+        }]
 
-  },
+  }
+  ,
 
   INDEX_MENU_DELETE: 4,
 
-  menuPopupTodo: {
-    it: [
-      {
-        id: 10,
-        label: '',
-        value: 120, // PROGRESS_BAR
-        icon: 'rowing',
-        checked: true
-      },
-      {
-        id: 20,
-        label: 'Imposta Priorità',
-        value: 130, // PRIORITY
-        icon: 'rowing',
-        checked: false
-      },
-      {
-        id: 30,
-        label: 'Completato',
-        value: 110, // COMPLETED
-        icon: 'check_circle',
-        checked: true
-      },
-      {
-        id: 40,
-        label: 'Imposta Scadenza',
-        value: 101, // TOGGLE_EXPIRING
-        icon: 'date_range',
-        checked: true
-      },
-      {
-        id: 50,
-        label: 'Elimina',
-        value: 100, // DELETE
-        icon: 'delete',
-        checked: false
-      }
-    ],
-    es: [
-      {
-        id: 10,
-        label: '',
-        value: 120, // PROGRESS_BAR
-        icon: 'rowing',
-        checked: true
-      },
-      {
-        id: 20,
-        label: 'Establecer Prioridad',
-        value: 130, // PRIORITY
-        icon: 'rowing',
-        checked: false
-      },
-      {
-        id: 30,
-        label: 'Completado',
-        value: 110, // COMPLETED
-        icon: 'check_circle',
-        checked: true
-      },
-      {
-        id: 40,
-        label: 'Establecer expiración',
-        value: 101, // TOGGLE_EXPIRING
-        icon: 'date_range',
-        checked: true
-      },
-      {
-        id: 50,
-        label: 'Borrar',
-        value: 100, // DELETE
-        icon: 'delete',
-        checked: false
-      }
-    ],
-    enUs: [
-      {
-        id: 10,
-        label: '',
-        value: 120, // PROGRESS_BAR
-        icon: 'check_circle',
-        checked: true
-      },
-      {
-        id: 20,
-        label: 'Set Priority',
-        value: 130, // PRIORITY
-        icon: 'high_priority',
-        checked: false
-      },
-      {
-        id: 30,
-        label: 'Completed',
-        value: 110, // COMPLETED
-        icon: 'check_circle',
-        checked: true
-      },
-      {
-        id: 40,
-        label: 'Set Expiring',
-        value: 101, // TOGGLE_EXPIRING
-        icon: 'date_range',
-        checked: true
-      },
-      {
-        id: 50,
-        label: 'Delete',
-        value: 100, // DELETE
-        icon: 'trash',
-        checked: false
-      }
-    ]
-  },
+  menuPopupTodo:
+    {
+      it: [
+        {
+          id: 10,
+          label: '',
+          value: 120, // PROGRESS_BAR
+          icon: 'rowing',
+          checked: true
+        },
+        {
+          id: 20,
+          label: 'Imposta Priorità',
+          value: 130, // PRIORITY
+          icon: 'rowing',
+          checked: false
+        },
+        {
+          id: 30,
+          label: 'Completato',
+          value: 110, // COMPLETED
+          icon: 'check_circle',
+          checked: true
+        },
+        {
+          id: 40,
+          label: 'Imposta Scadenza',
+          value: 101, // TOGGLE_EXPIRING
+          icon: 'date_range',
+          checked: true
+        },
+        {
+          id: 50,
+          label: 'Elimina',
+          value: 100, // DELETE
+          icon: 'delete',
+          checked: false
+        }
+      ],
+      es:
+        [
+          {
+            id: 10,
+            label: '',
+            value: 120, // PROGRESS_BAR
+            icon: 'rowing',
+            checked: true
+          },
+          {
+            id: 20,
+            label: 'Establecer Prioridad',
+            value: 130, // PRIORITY
+            icon: 'rowing',
+            checked: false
+          },
+          {
+            id: 30,
+            label: 'Completado',
+            value: 110, // COMPLETED
+            icon: 'check_circle',
+            checked: true
+          },
+          {
+            id: 40,
+            label: 'Establecer expiración',
+            value: 101, // TOGGLE_EXPIRING
+            icon: 'date_range',
+            checked: true
+          },
+          {
+            id: 50,
+            label: 'Borrar',
+            value: 100, // DELETE
+            icon: 'delete',
+            checked: false
+          }
+        ],
+      enUs:
+        [
+          {
+            id: 10,
+            label: '',
+            value: 120, // PROGRESS_BAR
+            icon: 'check_circle',
+            checked: true
+          },
+          {
+            id: 20,
+            label: 'Set Priority',
+            value: 130, // PRIORITY
+            icon: 'high_priority',
+            checked: false
+          },
+          {
+            id: 30,
+            label: 'Completed',
+            value: 110, // COMPLETED
+            icon: 'check_circle',
+            checked: true
+          },
+          {
+            id: 40,
+            label: 'Set Expiring',
+            value: 101, // TOGGLE_EXPIRING
+            icon: 'date_range',
+            checked: true
+          },
+          {
+            id: 50,
+            label: 'Delete',
+            value: 100, // DELETE
+            icon: 'trash',
+            checked: false
+          }
+        ]
+    }
+  ,
 
   menuPopupProj: {
     it: [
@@ -349,51 +431,54 @@ export const tools = {
         checked: false
       }
     ],
-    es: [
-      {
-        id: 10,
-        label: 'Editar',
-        value: 160, // EDIT
-        icon: 'create'
-      },
-      {
-        id: 40,
-        label: 'Establecer expiración',
-        value: 101, // TOGGLE_EXPIRING
-        icon: 'date_range',
-        checked: true
-      },
-      {
-        id: 50,
-        label: 'Borrar',
-        value: 100, // DELETE
-        icon: 'delete',
-        checked: false
-      }
-    ],
-    enUs: [
-      {
-        id: 10,
-        label: 'Edit',
-        value: 160, // EDIT
-        icon: 'create'
-      },
-      {
-        id: 40,
-        label: 'Set Expiring',
-        value: 101, // TOGGLE_EXPIRING
-        icon: 'date_range',
-        checked: true
-      },
-      {
-        id: 50,
-        label: 'Delete',
-        value: 100, // DELETE
-        icon: 'trash',
-        checked: false
-      }
-    ]
-  },
+    es:
+      [
+        {
+          id: 10,
+          label: 'Editar',
+          value: 160, // EDIT
+          icon: 'create'
+        },
+        {
+          id: 40,
+          label: 'Establecer expiración',
+          value: 101, // TOGGLE_EXPIRING
+          icon: 'date_range',
+          checked: true
+        },
+        {
+          id: 50,
+          label: 'Borrar',
+          value: 100, // DELETE
+          icon: 'delete',
+          checked: false
+        }
+      ],
+    enUs:
+      [
+        {
+          id: 10,
+          label: 'Edit',
+          value: 160, // EDIT
+          icon: 'create'
+        },
+        {
+          id: 40,
+          label: 'Set Expiring',
+          value: 101, // TOGGLE_EXPIRING
+          icon: 'date_range',
+          checked: true
+        },
+        {
+          id: 50,
+          label: 'Delete',
+          value: 100, // DELETE
+          icon: 'trash',
+          checked: false
+        }
+      ]
+  }
+  ,
 
   menuPopupConfigTodo: {
     it: [
@@ -404,23 +489,26 @@ export const tools = {
         icon: 'rowing'
       }
     ],
-    es: [
-      {
-        id: 10,
-        label: 'Mostrar Tareas',
-        value: 150,
-        icon: 'rowing'
-      }
-    ],
-    enUs: [
-      {
-        id: 10,
-        label: 'Show Task',
-        value: 150,
-        icon: 'rowing'
-      }
-    ]
-  },
+    es:
+      [
+        {
+          id: 10,
+          label: 'Mostrar Tareas',
+          value: 150,
+          icon: 'rowing'
+        }
+      ],
+    enUs:
+      [
+        {
+          id: 10,
+          label: 'Show Task',
+          value: 150,
+          icon: 'rowing'
+        }
+      ]
+  }
+  ,
 
   menuPopupConfigProject: {
     it: [
@@ -437,35 +525,38 @@ export const tools = {
         icon: 'rowing'
       }
     ],
-    es: [
-      {
-        id: 5,
-        label: 'Nuevo Projecto',
-        value: 200,  // ADD_PROJECT
-        icon: 'next_week'
-      },
-      {
-        id: 10,
-        label: 'Mostrar Tareas',
-        value: 150,
-        icon: 'rowing'
-      }
-    ],
-    enUs: [
-      {
-        id: 5,
-        label: 'New Project',
-        value: 200,  // ADD_PROJECT
-        icon: 'next_week'
-      },
-      {
-        id: 10,
-        label: 'Show Task',
-        value: 150,
-        icon: 'rowing'
-      }
-    ]
-  },
+    es:
+      [
+        {
+          id: 5,
+          label: 'Nuevo Projecto',
+          value: 200,  // ADD_PROJECT
+          icon: 'next_week'
+        },
+        {
+          id: 10,
+          label: 'Mostrar Tareas',
+          value: 150,
+          icon: 'rowing'
+        }
+      ],
+    enUs:
+      [
+        {
+          id: 5,
+          label: 'New Project',
+          value: 200,  // ADD_PROJECT
+          icon: 'next_week'
+        },
+        {
+          id: 10,
+          label: 'Show Task',
+          value: 150,
+          icon: 'rowing'
+        }
+      ]
+  }
+  ,
 
   listOptionShowTask: {
     it: [
@@ -491,53 +582,56 @@ export const tools = {
         checked: true
       }
     ],
-    es: [
-      {
-        id: 10,
-        label: 'Mostrar los ultimos N completados',
-        value: costanti.ShowTypeTask.SHOW_LAST_N_COMPLETED,
-        icon: 'rowing',
-        checked: true
-      },
-      {
-        id: 20,
-        label: 'Tareas para completar',
-        value: costanti.ShowTypeTask.SHOW_ONLY_TOCOMPLETE,
-        icon: 'rowing',
-        checked: false
-      },
-      {
-        id: 30,
-        label: 'Todos las Tareas',
-        value: costanti.ShowTypeTask.SHOW_ALL,
-        icon: 'check_circle',
-        checked: true
-      }
-    ],
-    enUs: [
-      {
-        id: 10,
-        label: 'Show last N Completed',
-        value: costanti.ShowTypeTask.SHOW_LAST_N_COMPLETED,
-        icon: 'rowing',
-        checked: true
-      },
-      {
-        id: 20,
-        label: 'Task to complete',
-        value: costanti.ShowTypeTask.SHOW_ONLY_TOCOMPLETE,
-        icon: 'rowing',
-        checked: false
-      },
-      {
-        id: 30,
-        label: 'All Tasks',
-        value: costanti.ShowTypeTask.SHOW_ALL,
-        icon: 'check_circle',
-        checked: true
-      }
-    ]
-  },
+    es:
+      [
+        {
+          id: 10,
+          label: 'Mostrar los ultimos N completados',
+          value: costanti.ShowTypeTask.SHOW_LAST_N_COMPLETED,
+          icon: 'rowing',
+          checked: true
+        },
+        {
+          id: 20,
+          label: 'Tareas para completar',
+          value: costanti.ShowTypeTask.SHOW_ONLY_TOCOMPLETE,
+          icon: 'rowing',
+          checked: false
+        },
+        {
+          id: 30,
+          label: 'Todos las Tareas',
+          value: costanti.ShowTypeTask.SHOW_ALL,
+          icon: 'check_circle',
+          checked: true
+        }
+      ],
+    enUs:
+      [
+        {
+          id: 10,
+          label: 'Show last N Completed',
+          value: costanti.ShowTypeTask.SHOW_LAST_N_COMPLETED,
+          icon: 'rowing',
+          checked: true
+        },
+        {
+          id: 20,
+          label: 'Task to complete',
+          value: costanti.ShowTypeTask.SHOW_ONLY_TOCOMPLETE,
+          icon: 'rowing',
+          checked: false
+        },
+        {
+          id: 30,
+          label: 'All Tasks',
+          value: costanti.ShowTypeTask.SHOW_ALL,
+          icon: 'check_circle',
+          checked: true
+        }
+      ]
+  }
+  ,
 
   getTitlePriority(priority) {
     let cl = ''
@@ -553,7 +647,8 @@ export const tools = {
     }
 
     return cl + ' titlePriority'
-  },
+  }
+  ,
 
   getStatusListByInd(index) {
     try {
@@ -567,7 +662,8 @@ export const tools = {
       console.log('Error: ', e)
     }
     return ''
-  },
+  }
+  ,
 
   getPriorityByInd(index) {
     // console.log('LANG in PRIOR', UserStore.state.lang)
@@ -582,34 +678,46 @@ export const tools = {
       console.log('Error: ', e)
     }
     return ''
-  },
+  }
+  ,
 
   logelem(mystr, elem) {
     console.log(mystr, 'elem [', elem._id, '] ', elem.descr, ' Pr(', tools.getPriorityByInd(elem.priority), ') [', elem.id_prev, '] modif=', elem.modified)
-  },
+  }
+  ,
 
   getelemprojstr(elem) {
     return 'elem [id= ' + elem._id + '] ' + elem.descr + ' [id_prev= ' + elem.id_prev + '] '
-  },
+  }
+  ,
 
-  logga_arrproj(myarr: IProject[]) {
+  logga_arrproj(myarr
+                  :
+                  IProject[]
+  ) {
     let mystr = '\n'
     myarr.forEach((item) => {
       mystr += tools.getelemprojstr(item) + '   '
     })
 
     return mystr
-  },
+  }
+  ,
 
   logelemprj(mystr, elem) {
     console.log(mystr, tools.getelemprojstr(elem))
-  },
+  }
+  ,
 
   getstrelem(elem) {
     return 'elem [' + elem._id + '] ' + elem.descr + ' Pr(' + tools.getPriorityByInd(elem.priority) + ') [ID_PREV=' + elem.id_prev + '] modif=' + elem.modified + ' '
-  },
+  }
+  ,
 
-  logga_arr(myarr: ITodo[]) {
+  logga_arr(myarr
+              :
+              ITodo[]
+  ) {
     let mystr = '\n'
     myarr.forEach((item) => {
       mystr += '[' + item.pos + '] ' + item.descr + ' Pr(' + tools.getPriorityByInd(item.priority) + ') [' + item.id_prev + '] modif=' + item.modified + '\n'
@@ -617,7 +725,8 @@ export const tools = {
     })
 
     return mystr
-  },
+  }
+  ,
 
   touchmove(scrollable) {
     if (window) {
@@ -628,11 +737,13 @@ export const tools = {
         }
       }, { passive: false })
     }
-  },
+  }
+  ,
 
   jsonCopy(src) {
     return JSON.parse(JSON.stringify(src))
-  },
+  }
+  ,
 
   getItemLS(item) {
     let ris = localStorage.getItem(item)
@@ -641,17 +752,20 @@ export const tools = {
     }
 
     return ris
-  },
+  }
+  ,
 
   notifyarraychanged(array) {
     if (array.length > 0) {
       array.splice(array.length - 1, 1, array[array.length - 1])
     }
-  },
+  }
+  ,
 
   isOkIndex(myarr, index) {
     return (index >= 0 && index < myarr.length)
-  },
+  }
+  ,
 
   update_idprev(myarr, indelemchange, indelemId) {
     if (tools.isOkIndex(myarr, indelemchange)) {
@@ -667,9 +781,10 @@ export const tools = {
       }
     }
     return null
-  },
+  }
+  ,
 
-  async swapGeneralElem(nametable, myarr, itemdragend, fieldtochange) {
+  async swapGeneralElem(nametable, myarr, itemdragend, listFieldsToChange) {
 
     if (itemdragend.field === 'priority') {
       // get last elem priority
@@ -735,11 +850,14 @@ export const tools = {
       const elem3 = tools.update_idprev(myarr, itemdragend.oldIndex, itemdragend.oldIndex - 1)       // 1, 0
       const elem4 = tools.update_idprev(myarr, itemdragend.oldIndex + 1, itemdragend.oldIndex)   // 2, 1
 
-      await ApiTables.table_ModifyRecord(nametable, elem1, fieldtochange)
-      await ApiTables.table_ModifyRecord(nametable, elem2, fieldtochange)
-      await ApiTables.table_ModifyRecord(nametable, elem3, fieldtochange)
-      await ApiTables.table_ModifyRecord(nametable, elem4, fieldtochange)
-
+      await
+        ApiTables.table_ModifyRecord(nametable, elem1, listFieldsToChange, 'id_prev')
+      await
+        ApiTables.table_ModifyRecord(nametable, elem2, listFieldsToChange, 'id_prev')
+      await
+        ApiTables.table_ModifyRecord(nametable, elem3, listFieldsToChange, 'id_prev')
+      await
+        ApiTables.table_ModifyRecord(nametable, elem4, listFieldsToChange, 'id_prev')
 
       tools.notifyarraychanged(myarr)
 
@@ -747,22 +865,33 @@ export const tools = {
 
       // Update the records:
     }
-  },
+  }
+  ,
 
   getIndexById(myarr, id) {
     return myarr.indexOf(tools.getElemById(myarr, id))
-  },
+  }
+  ,
 
   getElemById(myarr, id) {
     console.log('getElemById', myarr, id)
     return myarr.find((elem) => elem._id === id)
-  },
+  }
+  ,
 
   getElemPrevById(myarr, id) {
     return myarr.find((elem) => elem.id_prev === id)
-  },
+  }
+  ,
 
-  getLastFirstElemPriority(myarr, priority: number, atfirst: boolean, escludiId: string) {
+  getLastFirstElemPriority(myarr, priority
+    :
+    number, atfirst
+                             :
+                             boolean, escludiId
+                             :
+                             string
+  ) {
     if (myarr === null) {
       return -1
     }
@@ -796,11 +925,13 @@ export const tools = {
         return 0
       }
     }
-  },
+  }
+  ,
 
   getFirstList(myarr) {
     return myarr.find((elem) => elem.id_prev === ApiTables.LIST_START)
-  },
+  }
+  ,
 
   getModulesByTable(nametable) {
     if (nametable === 'todos') {
@@ -808,7 +939,8 @@ export const tools = {
     } else if (nametable === 'projects') {
       return Projects
     }
-  },
+  }
+  ,
 
   setArrayMainByTable(nametable, myarr) {
     if (nametable === 'todos') {
@@ -818,18 +950,21 @@ export const tools = {
       Projects.state.projects = tools.jsonCopy(myarr)
       return Projects.state.projects
     }
-  },
+  }
+  ,
 
   getmyid(id) {
     return 'row' + id
-  },
+  }
+  ,
 
   getLastListNotCompleted(nametable, cat) {
     const module = tools.getModulesByTable(nametable)
     const arr = module.getters.items_dacompletare(cat)
 
     return (arr.length > 0) ? arr[arr.length - 1] : null
-  },
+  }
+  ,
 
   getElemByIndex(myarr, index) {
     if (index >= 0 && index < myarr.length) {
@@ -838,11 +973,13 @@ export const tools = {
     else {
       return null
     }
-  },
+  }
+  ,
 
   existArr(x) {
     return x = (typeof x !== 'undefined' && x instanceof Array) ? x : []
-  },
+  }
+  ,
 
   json2array(json) {
     const result = []
@@ -851,9 +988,13 @@ export const tools = {
       result.push(json[key])
     })
     return result
-  },
+  }
+  ,
 
-  showNotif(q: any, msg, data ?: INotify | null) {
+  showNotif(q
+              :
+              any, msg, data ?: INotify | null
+  ) {
     let myicon = data ? data.icon : 'ion-add'
     if (!myicon) {
       myicon = 'ion-add'
@@ -869,11 +1010,13 @@ export const tools = {
       color: mycolor,
       timeout: 3000
     })
-  },
+  }
+  ,
 
   isRegistered() {
     return localStorage.getItem(tools.localStorage.userId) !== ''
-  },
+  }
+  ,
 
   checkIfUserExist(mythis) {
 
@@ -889,7 +1032,8 @@ export const tools = {
     }
 
     return true
-  },
+  }
+  ,
 
   checkLangPassed(mylang) {
 
@@ -918,15 +1062,18 @@ export const tools = {
     console.log('mylang calc : ', mylang)
 
     return mylang
-  },
+  }
+  ,
 
   getimglogo() {
     return 'statics/images/' + process.env.LOGO_REG
-  },
+  }
+  ,
 
   consolelogpao(strlog, strlog2 = '', strlog3 = '') {
     globalroutines(null, 'log', strlog + ' ' + strlog2 + ' ' + strlog3, null)
-  },
+  }
+  ,
 
   /*
   get todos_vista() {
@@ -940,7 +1087,7 @@ export const tools = {
 
   }
 
-*/
+  */
 
   /*
     public getArrTodos() {
@@ -966,7 +1113,8 @@ export const tools = {
         resolve('anything')
       }, numsec)
     })
-  },
+  }
+  ,
 
   dragula_option($service, dragname) {
     $service.options(dragname,
@@ -982,14 +1130,16 @@ export const tools = {
         },
         direction: 'vertical'
       })
-  },
+  }
+  ,
 
-  // _.cloneDeep(  Per clonare un oggetto
+// _.cloneDeep(  Per clonare un oggetto
 
   isLoggedToSystem() {
     const tok = tools.getItemLS(tools.localStorage.token)
     return !!tok
-  },
+  }
+  ,
 
   mapSort(linkedList) {
     const sortedList = []
@@ -1038,7 +1188,8 @@ export const tools = {
     // console.log('DOPO sortedList', sortedList);
 
     return sortedList
-  },
+  }
+  ,
 
   getProgressClassColor(progress) {
     if (progress > 66) {
@@ -1048,7 +1199,8 @@ export const tools = {
     } else {
       return 'lowperc'
     }
-  },
+  }
+  ,
 
   getProgressColor(progress) {
     if (progress > 66) {
@@ -1058,7 +1210,8 @@ export const tools = {
     } else {
       return 'red'
     }
-  },
+  }
+  ,
 
   getstrDate(mytimestamp) {
     console.log('getstrDate', mytimestamp)
@@ -1066,13 +1219,18 @@ export const tools = {
       return date.formatDate(mytimestamp, 'DD/MM/YYYY')
     else
       return ''
-  },
+  }
+  ,
   getstrYYMMDDDate(mytimestamp) {
     return date.formatDate(mytimestamp, 'YYYY-MM-DD')
-  },
+  }
+  ,
 
-  // mystrdate "26.04.2013"
-  convertstrtoDate(mystrdate: string) {
+// mystrdate "26.04.2013"
+  convertstrtoDate(mystrdate
+                     :
+                     string
+  ) {
     if (mystrdate.length < 10) {
       return null
     }
@@ -1087,7 +1245,8 @@ export const tools = {
     }
     console.log('mystrdate', mystrdate, strdate, mydate)
     return mydate
-  },
+  }
+  ,
 
   capitalize(value) {
     if (!value) {
@@ -1099,16 +1258,18 @@ export const tools = {
 
   getDateNow() {
     const mydate = new Date()
-    console.log('mydate', mydate, mydate.getDate(), mydate.getUTCDate())
+    console.log('mydate', mydate)
     return mydate
-  },
+  }
+  ,
   getDateNull() {
-    const mydate = new Date(0)
-    return mydate
-  },
+    return new Date(0)
+  }
+  ,
   getTimeNow() {
     return new Date().getTime()
-  },
+  }
+  ,
   getTimestampsNow() {
     return new Date().valueOf()
   }

@@ -224,6 +224,7 @@ const messages = {
       status: 'Stato',
       completed_at: 'Data Completamento',
       expiring_at: 'Data Scadenza',
+      phase: 'Fase',
     },
     notification: {
       status: 'Stato',
@@ -469,6 +470,7 @@ const messages = {
       status: 'Estado',
       completed_at: 'Fecha de finalización',
       expiring_at: 'Fecha de Caducidad',
+      phase: 'Fase',
     },
     notification: {
       status: 'Estado',
@@ -714,6 +716,7 @@ const messages = {
       status: 'Status',
       completed_at: 'Completition Date',
       expiring_at: 'Expiring Date',
+      phase: 'Phase',
     },
     notification: {
       status: 'Status',
