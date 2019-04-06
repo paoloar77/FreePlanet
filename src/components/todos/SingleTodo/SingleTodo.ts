@@ -74,7 +74,7 @@ export default class SingleTodo extends Vue {
     console.log('itemtodo.hoursplanned', this.itemtodo.hoursplanned)
     this.watchupdate('hoursplanned')
   }
-  @Watch('itemtodo.status', { immediate: true, deep: true }) public valueChangedstatus() {
+  @Watch('itemtodo.status') public valueChangedstatus() {
     console.log('itemtodo.status', this.itemtodo.status)
     this.watchupdate('status')
   }
@@ -125,6 +125,7 @@ export default class SingleTodo extends Vue {
   }
 
   public watchupdate(field = '') {
+    console.log('watchupdate', field)
     this.$emit('eventupdate', {myitem: this.itemtodo, field } )
     this.updateicon()
   }
@@ -396,9 +397,9 @@ export default class SingleTodo extends Vue {
     this.updateClasses()
   }
 
-  public aggiornaProgress(value, initialval){
+  public aggiornaProgress(value, initialval) {
     if (value !== initialval) {
-      this.itemtodo.progress = value
+      this.itemtodo.progress = parseInt(value, 10)
       this.updatedata('progress')
       this.deselectAndExitEdit()
     }

@@ -13,7 +13,7 @@ const nametable = 'projects'
 
 // import _ from 'lodash'
 
-const state: IProjectsState = {
+const stateglob: IProjectsState = {
   showtype: costanti.ShowTypeTask.SHOW_LAST_N_COMPLETED,
   projects: [],
   insidePending: false,
@@ -22,19 +22,14 @@ const state: IProjectsState = {
 
 const listFieldsToChange: string [] = ['descr', 'longdescr', 'hoursplanned', 'hoursworked', 'id_parent', 'status', 'category', 'expiring_at', 'priority', 'id_prev', 'pos', 'enableExpiring', 'progress', 'live_url', 'test_url', 'begin_development', 'begin_test']
 
-const b = storeBuilder.module<IProjectsState>('Projects', state)
+const b = storeBuilder.module<IProjectsState>('Projects', stateglob)
 const stateGetter = b.state()
 
-// function getindexbycategory(category: string) {
-//   return state.categories.indexOf(category)
-// }
-
 function getarrByCategory(category: string) {
-  // const indcat = state.categories.indexOf(category)
-  if (!state.projects) {
+  if (!stateglob.projects) {
     return []
   }
-  return state.projects
+  return stateglob.projects
 }
 
 function initcat() {
@@ -89,7 +84,7 @@ namespace Getters {
   const listaprojects = b.read((state: IProjectsState) => (): IMenuList[] => {
     if (state.projects) {
       // console.log('state.projects', state.projects)
-      const listaproj = tools.mapSort(state.projects.filter((proj) => proj.id_parent === tools.FIRST_PROJ))
+      const listaproj = tools.mapSort(state.projects.filter((proj) => proj.id_parent === process.env.PROJECT_ID_MAIN))
       const myarr: IMenuList[] = []
       for (const proj of listaproj) {
         myarr.push({nametranslate: '', description: proj.descr, idelem: proj._id})
@@ -102,12 +97,12 @@ namespace Getters {
   }, 'listaprojects')
 
   const getDescrById = b.read((state: IProjectsState) => (id: string): string => {
-    if (id === tools.FIRST_PROJ)
+    if (id === process.env.PROJECT_ID_MAIN)
       return 'Projects'
     if (state.projects) {
-      const item = state.projects.find((item) => item._id === id)
-      if (!!item)
-        return item.descr
+      const itemtrov = state.projects.find((item) => item._id === id)
+      if (!!itemtrov)
+        return itemtrov.descr
     }
 
     return ''
@@ -115,9 +110,10 @@ namespace Getters {
 
   const getParentById = b.read((state: IProjectsState) => (id: string): string => {
     if (state.projects) {
-      const item = state.projects.find((item) => item._id === id)
-      if (!!item)
-        return item.id_parent
+      const itemfound = state.projects.find((item) => item._id === id)
+      if (!!itemfound) {
+        return itemfound.id_parent
+      }
     }
 
     return ''
@@ -193,7 +189,7 @@ namespace Actions {
   async function dbLoad(context, { checkPending, onlyiffirsttime }) {
 
     if (onlyiffirsttime) {
-      if (state.projects.length > 0) {
+      if (stateglob.projects.length > 0) {
         // if already set, then exit.
         return false
       }
@@ -208,18 +204,18 @@ namespace Actions {
     const ris = await Api.SendReq('/projects/' + UserStore.state.userId, 'GET', null)
       .then((res) => {
         if (res.data.projects) {  // console.log('RISULTANTE CATEGORIES DAL SERVER = ', res.data.categories)
-          state.projects = res.data.projects
+          stateglob.projects = res.data.projects
         } else {
-          state.projects = []
+          stateglob.projects = []
         }
 
-        state.showtype = parseInt(GlobalStore.getters.getConfigStringbyId({
+        stateglob.showtype = parseInt(GlobalStore.getters.getConfigStringbyId({
           id: costanti.CONFIG_ID_SHOW_TYPE_TODOS,
           default: costanti.ShowTypeTask.SHOW_LAST_N_COMPLETED
         }), 10)
 
         if (process.env.DEBUG === '1') {
-          console.log('dbLoad', 'state.projects', state.projects)
+          console.log('dbLoad', 'state.projects', stateglob.projects)
         }
 
         return res
@@ -307,7 +303,7 @@ namespace Actions {
   }
 
   async function swapElems(context, itemdragend: IDrag) {
-    console.log('PROJECT swapElems', itemdragend, state.projects)
+    console.log('PROJECT swapElems', itemdragend, stateglob.projects)
 
     const myarr = Getters.getters.items_dacompletare(itemdragend.id_proj)
 

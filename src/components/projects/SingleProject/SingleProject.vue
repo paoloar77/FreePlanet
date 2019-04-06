@@ -2,7 +2,7 @@
     <div :class="getClassRow()" @click="clickProject" >
 
         <q-btn class="flex-item donotdrag " size="sm" push color="primary" round icon="arrow_forward"
-        :to="getrouteto" />
+        :to="getrouteto"/>
 
         <div class="flex-item donotdrag divdescrTot">
             <q-input v-if="(sel && inEdit)" hide-underline type="textarea" ref="inputdescr"

@@ -383,9 +383,7 @@ export async function table_ModifyRecord(nametable, myitem, listFieldsToChange, 
   console.log('--> table_ModifyRecord', nametable, myitem.descr)
 
   if ((field === 'status') && (nametable === 'todos') && (myitem.status === tools.Status.COMPLETED)) {
-    console.log('AAAAAAAAAAAAAAAAAAAAAAAA  ', myitem.completed_at)
     myitem.completed_at = tools.getDateNow()
-    console.log('   DOPO ', myitem.completed_at)
   }
 
   const myobjsaved = tools.jsonCopy(myitem)
@@ -397,44 +395,28 @@ export async function table_ModifyRecord(nametable, myitem, listFieldsToChange, 
     return
   }
 
-  console.log(' 0-> ')
-
-  console.log('myobjsaved.completed_at', myobjsaved.completed_at)
-  console.log('miorec.completed_at', miorec.completed_at)
-
-  console.log('miorec', miorec.descr, miorec.id_prev, nametable)
-  console.log('status', miorec.status, myobjsaved.status)
-
-  console.log(' 3-> ')
-
   listFieldsToChange.forEach((myfield) => {
     setmodifiedIfchanged(miorec, myobjsaved, myfield)
   })
 
   if (miorec.modified) {
-    console.log('    ' + nametable + ' MODIFICATO! ', miorec.descr, miorec.pos, 'SALVALO SULLA IndexedDB')
+    // console.log('    ' + nametable + ' MODIFICATO! ', miorec.descr, miorec.pos, 'SALVALO SULLA IndexedDB')
     miorec.modify_at = tools.getDateNow()
     miorec.modified = false
 
-    console.log(' 0)  ARR MIOREC PRIMA ', miorec.completed_at, miorec)
-
     // 1) Permit to Update the Views
     tools.notifyarraychanged(miorec)
-
-    console.log(' 1)  MIOREC CALL WRITE: ', miorec.completed_at, miorec)
 
     // 2) Modify on IndexedDb
     return globalroutines(null, 'write', nametable, miorec)
       .then((ris) => {
 
-        console.log(' 2)  MIOREC !: ', miorec.completed_at)
-
         // 3) Modify on the Server (call)
         return Sync_SaveItem(nametable, 'PATCH', miorec)
 
       })
-  } else {
-    console.log('      ', miorec.descr, 'NON MODIF!')
+  // } else {
+    //   console.log('      ', miorec.descr, 'NON MODIF!')
   }
 }
 
@@ -450,6 +432,5 @@ export function table_DeleteRecord(nametable, myobjtrov, id) {
 
   // 3) Delete from the Server (call)
   Sync_DeleteItem(nametable, myobjtrov, id)
-
+  
 }
-

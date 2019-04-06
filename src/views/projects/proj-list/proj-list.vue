@@ -11,9 +11,11 @@
                     <div>
                         <div class="divtitlecat clMain">
                             <div class="flex-container clMain">
-                                <q-btn v-if="!!idProjParentAtt" size="sm" push color="secondary" round
+                                <q-btn v-if="!!getidProjParentAtt" size="sm" push color="secondary" round
                                        icon="arrow_back"
-                                       :to="getrouteup"/>
+                                       :to="getrouteup">
+
+                                </q-btn>
                                 <div class="flex-item categorytitle shadow-4">{{descrProject | capitalize}}</div>
                                 <div class="flex-item">
                                     <q-btn push
@@ -130,12 +132,12 @@
                             <div class="flex-item itemdescr">
                                 <q-input
                                         ref="input"
+                                        readonly
                                         v-model="itemsel.hoursworked"
                                         type="number"
                                         rounded outlined
                                         :label="$t('proj.hoursworked')"
-                                        debounce="500"
-                                />
+                                        debounce="500"></q-input>
                                 <CProgress descr="" :progressval="getCalcHoursWorked"></CProgress>
                             </div>
                             <q-icon class="flex-item flex-icon" name="watch_later"/>
@@ -143,11 +145,13 @@
                                 <q-input
                                         ref="input"
                                         type="number"
+                                        readonly
                                         v-model="itemsel.hoursplanned"
                                         rounded outlined
                                         :label="$t('proj.hoursplanned')"
-                                        debounce="500"
-                                />
+                                        debounce="500">
+
+                                </q-input>
                                 <CProgress :descr="$t('proj.progresstask')"
                                            :progressval="itemsel.progressCalc"></CProgress>
                             </div>
@@ -213,7 +217,7 @@
                                     debounce="500">
 
                             </q-input>
-                            <CProgress descr="" :progressval="getCalcHoursWorked"></CProgress>
+                            <CProgress descr="" :progressval="getCalcTodoHoursWorked"></CProgress>
                         </div>
                         <q-icon class="flex-item flex-icon" name="watch_later"/>
                         <div class="flex-item itemdata content-center">
@@ -226,8 +230,10 @@
                                     debounce="500">
 
                             </q-input>
+
                             <CProgress :descr="$t('proj.progresstask')"
-                                       :progressval="itemtodosel.progressCalc"></CProgress>
+                                       :progressval="itemtodosel.progress"
+                                        :slider="true" @input="itemtodosel.progress = arguments[0]"></CProgress>
                         </div>
                     </div>
                     <div class="flex-container clMain">

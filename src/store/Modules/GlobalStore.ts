@@ -151,7 +151,7 @@ namespace Getters {
         level_child: 0.5
       })
 
-      addRoute(arrroutes,{ route: '/projects/' + tools.FIRST_PROJ, faIcon: 'fa fa-list-alt', materialIcon: 'next_week', name: 'pages.Projects',
+      addRoute(arrroutes,{ route: '/projects/' + process.env.PROJECT_ID_MAIN, faIcon: 'fa fa-list-alt', materialIcon: 'next_week', name: 'pages.Projects',
         routes2: listaprojects,
         level_parent: 0,
         level_child: 0.5

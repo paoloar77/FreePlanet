@@ -25,7 +25,7 @@ export const tools = {
 
   NUMSEC_CHECKUPDATE: 20000,
 
-  FIRST_PROJ: '__PROJECTS',
+  FIRST_PROJ: '5ca8f17fcd40dc5012f53346',
 
   WHAT_TODO: 1,
   WHAT_PROJECT: 2,
@@ -1258,7 +1258,6 @@ export const tools = {
 
   getDateNow() {
     const mydate = new Date()
-    console.log('mydate', mydate)
     return mydate
   }
   ,

@@ -251,19 +251,21 @@ namespace Actions {
     const myarr = gettodosByCategory(cat)
 
     const myobjtrov = tools.getElemById(myarr, idobj)
-
-    console.log('myobjtrov', myobjtrov.descr)
-
     if (!!myobjtrov) {
-      const myobjnext = tools.getElemPrevById(myarr, myobjtrov._id)
 
-      if (!!myobjnext) {
-        myobjnext.id_prev = myobjtrov.id_prev
-        myobjnext.modified = true
-        await modify(context, { myitem: myobjnext, field: 'id_prev' })
+      console.log('myobjtrov', myobjtrov.descr)
+
+      if (!!myobjtrov) {
+        const myobjnext = tools.getElemPrevById(myarr, myobjtrov._id)
+
+        if (!!myobjnext) {
+          myobjnext.id_prev = myobjtrov.id_prev
+          myobjnext.modified = true
+          await modify(context, { myitem: myobjnext, field: 'id_prev' })
+        }
+
+        ApiTables.table_DeleteRecord(nametable, myobjtrov, idobj)
       }
-
-      ApiTables.table_DeleteRecord(nametable, myobjtrov, idobj)
     }
   }
 

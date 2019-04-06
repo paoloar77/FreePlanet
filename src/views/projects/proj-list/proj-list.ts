@@ -40,7 +40,7 @@ export default class ProjList extends Vue {
   public service: any
   public scrollable = true
   public dragname: string = 'second'
-  public idProjAtt: string = tools.FIRST_PROJ
+  public idProjAtt: string = process.env.PROJECT_ID_MAIN
   public idProjParentAtt: string = ''
   public splitterModel = 50 // start at 50%
   public itemproj: IProject = null
@@ -59,6 +59,10 @@ export default class ProjList extends Vue {
     ctodo: CTodo
   }
 
+  get getidProjParentAtt() {
+    return this.idProjParentAtt
+  }
+
   public watchupdatetodo(field = '') {
     console.log('watchupdate', field)
     this.$emit('eventupdate', {myitem: this.itemtodosel, field } )
@@ -66,6 +70,12 @@ export default class ProjList extends Vue {
 
   get getrouteup() {
     return '/projects/' + this.idProjParentAtt
+  }
+
+  public selproj() {
+    this.deselectAllRowsproj(null, false, false)
+    this.deselectAllRowstodo(null, false, false)
+    this.setidsel(this.idProjAtt)
   }
 
   get tools() {
@@ -89,25 +99,23 @@ export default class ProjList extends Vue {
     return tools.listOptionShowTask[UserStore.state.lang]
   }
 
-  get descrParent() {
-    return Projects.getters.getDescrById(this.idProjParentAtt)
-  }
-
   get descrProject() {
     return Projects.getters.getDescrById(this.idProjAtt)
   }
 
-  // get ProjectsCount() {
-  //   return Projects.getters.ProjectsCount(this.idProjParentAtt)
-  // }
-
   @Getter('items_dacompletare', { namespace })
   public items_dacompletare: (state: IProjectsState, id_parent: string) => IProject[]
+
+  @Watch('items_dacompletare')
+  public changeitems() {
+    this.idProjParentAtt = Projects.getters.getParentById(this.idProjAtt)
+  }
 
   @Watch('$route.params.idProj')
   public changeparent() {
     this.idProjAtt = this.$route.params.idProj
     this.idProjParentAtt = Projects.getters.getParentById(this.idProjAtt)
+    this.selproj()
   }
 
   @Watch('itemsel.progressCalc')
@@ -163,6 +171,8 @@ export default class ProjList extends Vue {
     }
     this.idProjAtt = this.$route.params.idProj
     this.idProjParentAtt = Projects.getters.getParentById(this.idProjAtt)
+
+    console.log('this.idProjParentAtt', this.idProjParentAtt, 'idproj', this.idProjAtt, 'params' , this.$route.params)
 
     tools.touchmove(this.scrollable)
   }
@@ -341,6 +351,16 @@ export default class ProjList extends Vue {
       return 0
     }
     const myperc = Math.round(this.itemsel.hoursworked / this.itemsel.hoursplanned * 100)
+
+    return myperc
+
+  }
+
+  get getCalcTodoHoursWorked() {
+    if (this.itemtodosel.hoursplanned <= 0) {
+      return 0
+    }
+    const myperc = Math.round(this.itemtodosel.hoursworked / this.itemtodosel.hoursplanned * 100)
 
     return myperc
 

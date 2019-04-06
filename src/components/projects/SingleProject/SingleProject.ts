@@ -233,7 +233,7 @@ export default class SingleProject extends Vue {
     this.editProject()
   }
 
-  get getrouteto(){
+  get getrouteto() {
     return '/projects/' + this.itemproject._id
   }
 
