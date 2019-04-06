@@ -43,10 +43,6 @@ export default class SingleProject extends Vue {
 
   @Prop({ required: true }) public itemproject: IProject
 
-  // @Watch('itemproject.completed') valueChanged() {
-  //   this.watchupdate('status')
-  // }
-
   @Watch('itemproject.enableExpiring') public valueChanged4() {
     this.watchupdate('enableExpiring')
   }
@@ -108,7 +104,7 @@ export default class SingleProject extends Vue {
   }
 
   public watchupdate(field = '') {
-    console.log('watchupdate', field)
+    console.log('watchupdate PROJ', field)
     this.$emit('eventupdateproj', {myitem: this.itemproject, field } )
     this.updateicon()
   }
@@ -138,7 +134,7 @@ export default class SingleProject extends Vue {
 
     this.clButtPopover = this.sel ? 'pos-item-popover comp_selected' : 'pos-item-popover'
 
-    if (this.itemproject.status !== tools.Status.COMPLETED) {
+    if (this.itemproject.statusproj !== tools.Status.COMPLETED) {
       this.clButtPopover += ' pos-item-popover_cursor'
     }
 
@@ -386,15 +382,13 @@ export default class SingleProject extends Vue {
   public setCompleted() {
     // console.log('setCompleted')
 
-    if (this.itemproject.status === tools.Status.COMPLETED) {
-      this.itemproject.status = tools.Status.OPENED
+    if (this.itemproject.statusproj === tools.Status.COMPLETED) {
+      this.itemproject.statusproj = tools.Status.OPENED
     } else {
-      this.itemproject.status = tools.Status.COMPLETED
+      this.itemproject.statusproj = tools.Status.COMPLETED
     }
 
     this.updateicon()
-
-    this.updatedata('status')
 
     this.deselectAndExitEdit()
   }

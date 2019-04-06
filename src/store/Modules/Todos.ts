@@ -27,7 +27,7 @@ const state: ITodosState = {
   visuLastCompleted: 10
 }
 
-const listFieldsToChange: string [] = ['descr', 'status', 'category', 'expiring_at', 'priority', 'id_prev', 'pos', 'enableExpiring', 'progress', 'phase', 'assigned_to_userId', 'hoursplanned', 'hoursworked', 'start_date', 'completed_at']
+const listFieldsToChange: string [] = ['descr', 'statustodo', 'category', 'expiring_at', 'priority', 'id_prev', 'pos', 'enableExpiring', 'progress', 'phase', 'assigned_to_userId', 'hoursplanned', 'hoursworked', 'start_date', 'completed_at']
 
 const b = storeBuilder.module<ITodosState>('Todos', state)
 const stateGetter = b.state()
@@ -65,7 +65,7 @@ namespace Getters {
       userId: UserStore.state.userId,
       descr: '',
       priority: tools.Priority.PRIORITY_NORMAL,
-      status: tools.Status.OPENED,
+      statustodo: tools.Status.OPENED,
       created_at: tools.getDateNow(),
       modify_at: tools.getDateNow(),
       completed_at: tools.getDateNull(),
@@ -89,7 +89,7 @@ namespace Getters {
   const items_dacompletare = b.read((state: ITodosState) => (cat: string): ITodo[] => {
     const indcat = getindexbycategory(cat)
     if (state.todos[indcat]) {
-      return state.todos[indcat].filter((todo) => todo.status !== tools.Status.COMPLETED)
+      return state.todos[indcat].filter((todo) => todo.statustodo !== tools.Status.COMPLETED)
     } else {
       return []
     }
@@ -99,13 +99,13 @@ namespace Getters {
     const indcat = getindexbycategory(cat)
     if (state.todos[indcat]) {
       if (state.showtype === costanti.ShowTypeTask.SHOW_LAST_N_COMPLETED) {   // Show only the first N completed
-        return state.todos[indcat].filter((todo) => todo.status === tools.Status.COMPLETED).slice(0, state.visuLastCompleted)
+        return state.todos[indcat].filter((todo) => todo.statustodo === tools.Status.COMPLETED).slice(0, state.visuLastCompleted)
       }
       else if (state.showtype === costanti.ShowTypeTask.SHOW_ONLY_TOCOMPLETE) {
         return []
       }
       else if (state.showtype === costanti.ShowTypeTask.SHOW_ALL) {
-        return state.todos[indcat].filter((todo) => todo.status === tools.Status.COMPLETED)
+        return state.todos[indcat].filter((todo) => todo.statustodo === tools.Status.COMPLETED)
       }
       else {
         return []

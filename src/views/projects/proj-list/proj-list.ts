@@ -64,7 +64,7 @@ export default class ProjList extends Vue {
   }
 
   public watchupdatetodo(field = '') {
-    console.log('watchupdate', field)
+    console.log('watchupdatetodo', field)
     this.$emit('eventupdate', {myitem: this.itemtodosel, field } )
   }
 

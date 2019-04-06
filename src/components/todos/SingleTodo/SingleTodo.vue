@@ -4,12 +4,12 @@
             <q-btn push flat
                    :class="classCompleted"
                    :icon="iconCompleted"
-                   @click.native="setCompleted">
+                   @click="setCompleted">
             </q-btn>
         </div>
 
         <div class="flex-item donotdrag divdescrTot">
-            <q-input v-if="sel && itemtodo.status !== tools.Status.COMPLETED" hide-underline type="textarea" ref="inputdescr"
+            <q-input v-if="sel && itemtodo.statustodo !== tools.Status.COMPLETED" hide-underline type="textarea" ref="inputdescr"
                      v-model.trim="precDescr"
                      autogrow
                      borderless

@@ -131,7 +131,7 @@
                             <q-icon class="flex-item flex-icon" name="work_outline"/>
                             <div class="flex-item itemdescr">
                                 <q-input
-                                        ref="input"
+                                        ref="input2"
                                         readonly
                                         v-model="itemsel.hoursworked"
                                         type="number"
@@ -143,7 +143,7 @@
                             <q-icon class="flex-item flex-icon" name="watch_later"/>
                             <div class="flex-item itemdata content-center">
                                 <q-input
-                                        ref="input"
+                                        ref="input3"
                                         type="number"
                                         readonly
                                         v-model="itemsel.hoursplanned"
@@ -178,7 +178,7 @@
                             <q-icon class="flex-item flex-icon" name="border_color"/>
                             <div class="flex-item itemdescr">
                                 <q-input
-                                        ref="input"
+                                        ref="input4"
                                         v-model="itemtodosel.descr"
                                         :label="$t('proj.longdescr')"
                                         outlined
@@ -192,9 +192,9 @@
                     <div class="flex-container clMain">
                         <q-icon class="flex-item flex-icon" name="done_outline"/>
                         <div class="flex-item itemstatus">
-                            <q-select rounded outlined v-model="itemtodosel.status" :options="selectStatus"
+                            <q-select rounded outlined v-model="itemtodosel.statustodo" :options="selectStatus"
                                       :label="$t('todo.status')" emit-value map-options
-                                      @input="watchupdatetodo('status')">
+                                      @input="watchupdatetodo('statustodo')">
                             </q-select>
                         </div>
                         <q-icon class="flex-item flex-icon" name="outlined_flag"/>
@@ -209,7 +209,7 @@
                         <q-icon class="flex-item flex-icon" name="work_outline"/>
                         <div class="flex-item itemdescr">
                             <q-input
-                                    ref="input"
+                                    ref="input5"
                                     v-model="itemtodosel.hoursworked"
                                     type="number"
                                     rounded outlined
@@ -222,7 +222,7 @@
                         <q-icon class="flex-item flex-icon" name="watch_later"/>
                         <div class="flex-item itemdata content-center">
                             <q-input
-                                    ref="input"
+                                    ref="input6"
                                     type="number"
                                     v-model="itemtodosel.hoursplanned"
                                     rounded outlined
@@ -247,7 +247,7 @@
                         <div style="margin: 10px;"></div>
                         <q-icon class="flex-item flex-icon" name="event"/>
                         <div class="flex-item itemdata">
-                            <CDate :readonly="itemtodosel.status !== tools.Status.COMPLETED"
+                            <CDate :readonly="itemtodosel.statustodo !== tools.Status.COMPLETED"
                                    :mydate="itemtodosel.completed_at" @input="itemtodosel.completed_at = new Date(arguments[0])"
                                    :label="$t('todo.completed_at')">
                             </CDate>

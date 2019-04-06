@@ -12,7 +12,7 @@ export interface IProject {
   hoursplanned?: number
   hoursworked?: number
   priority?: number
-  status?: number
+  statusproj?: number
   created_at?: Date
   modify_at?: Date
   completed_at?: Date

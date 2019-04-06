@@ -49,10 +49,6 @@ export default class SingleTodo extends Vue {
 
   @Prop({ required: true }) public itemtodo: ITodo
 
-  // @Watch('itemtodo.completed') valueChanged() {
-  //   this.watchupdate('status')
-  // }
-
   @Watch('itemtodo.enableExpiring') public valueChanged4() {
     this.watchupdate('enableExpiring')
   }
@@ -74,9 +70,10 @@ export default class SingleTodo extends Vue {
     console.log('itemtodo.hoursplanned', this.itemtodo.hoursplanned)
     this.watchupdate('hoursplanned')
   }
-  @Watch('itemtodo.status') public valueChangedstatus() {
-    console.log('itemtodo.status', this.itemtodo.status)
-    this.watchupdate('status')
+  // ++TODO: FIX! STATUSTODO WILL NOT UPDATE IF I DON'T PUT { immediate: true } parameter. ! WHY???
+  @Watch('itemtodo.statustodo', {immediate: true}) public valueChangedstatus() {
+    console.log('itemtodo.statustodo', this.itemtodo.statustodo)
+    this.watchupdate('statustodo')
   }
   @Watch('itemtodo.completed_at') public valueChangedcompleted_at() {
     console.log('itemtodo.completed_at', this.itemtodo.completed_at)
@@ -145,7 +142,7 @@ export default class SingleTodo extends Vue {
 
     this.classExpiring = 'flex-item data-item shadow-1 hide-if-small'
     this.classExpiringEx = ''
-    if (this.itemtodo.status === tools.Status.COMPLETED) {
+    if (this.itemtodo.statustodo === tools.Status.COMPLETED) {
       this.percentageProgress = 100
       this.classCompleted += ' icon_completed'
       this.classDescr += ' status_completed'
@@ -162,7 +159,7 @@ export default class SingleTodo extends Vue {
     let mycolcl = ' ' + tools.getProgressClassColor(this.itemtodo.progress)
     this.colProgress = tools.getProgressColor(this.itemtodo.progress)
 
-    if (this.itemtodo.status === tools.Status.COMPLETED) {
+    if (this.itemtodo.statustodo === tools.Status.COMPLETED) {
       mycolcl = ' percompleted'
       this.colProgress = 'gray'
     }
@@ -174,7 +171,7 @@ export default class SingleTodo extends Vue {
 
     this.clButtPopover = this.sel ? 'pos-item-popover comp_selected' : 'pos-item-popover'
 
-    if (this.itemtodo.status !== tools.Status.COMPLETED) {
+    if (this.itemtodo.statustodo !== tools.Status.COMPLETED) {
       this.clButtPopover += ' pos-item-popover_cursor'
     }
 
@@ -271,7 +268,7 @@ export default class SingleTodo extends Vue {
   }
 
   public editTodo() {
-    if (this.itemtodo.status !== tools.Status.COMPLETED) {
+    if (this.itemtodo.statustodo !== tools.Status.COMPLETED) {
       // console.log('INIZIO - editTodo')
       this.$emit('click')
       this.precDescr = this.itemtodo.descr
@@ -407,11 +404,12 @@ export default class SingleTodo extends Vue {
 
   public setCompleted() {
     // console.log('setCompleted')
-    if (this.itemtodo.status === tools.Status.COMPLETED) {
-      this.itemtodo.status = tools.Status.OPENED
+    if (this.itemtodo.statustodo === tools.Status.COMPLETED) {
+      this.itemtodo.statustodo = tools.Status.OPENED
     } else {
-      this.itemtodo.status = tools.Status.COMPLETED
+      this.itemtodo.statustodo = tools.Status.COMPLETED
     }
+    this.watchupdate('statustodo')
 
     this.deselectAndExitEdit()
   }
@@ -424,7 +422,7 @@ export default class SingleTodo extends Vue {
 
   public updateicon() {
     // console.log('updateicon')
-    if (this.itemtodo.status === tools.Status.COMPLETED) {
+    if (this.itemtodo.statustodo === tools.Status.COMPLETED) {
       this.iconCompleted = 'check_circle'
     }
     else {

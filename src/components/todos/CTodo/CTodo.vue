@@ -69,7 +69,7 @@
                          v-for="(mytodo, index) in items_dacompletare(categoryAtt)"
                          :key="mytodo._id" class="myitemdrag">
 
-                        <div v-if="(prior !== mytodo.priority) && mytodo.status !== tools.Status.COMPLETED"
+                        <div v-if="(prior !== mytodo.priority) && mytodo.statustodo !== tools.Status.COMPLETED"
                              :class="tools.getTitlePriority(mytodo.priority)">
                             <label>{{tools.getPriorityByInd(mytodo.priority)}}</label>
                         </div>
@@ -79,7 +79,7 @@
 
                         <!--<div :nametranslate="`REF${index}`" class="divdrag non-draggato"></div>-->
 
-                        <div style="display: none">{{ prior = mytodo.priority, priorcomplet = (mytodo.status === tools.Status.COMPLETED) }}
+                        <div style="display: none">{{ prior = mytodo.priority, priorcomplet = (mytodo.statustodo === tools.Status.COMPLETED) }}
                         </div>
                     </div>
                 </div>
@@ -101,7 +101,7 @@
 
                         <!--<div :nametranslate="`REF${index}`" class="divdrag non-draggato"></div>-->
 
-                        <div style="display: none">{{ prior = mytodo.priority, priorcomplet = (mytodo.status === tools.Status.COMPLETED) }}
+                        <div style="display: none">{{ prior = mytodo.priority, priorcomplet = (mytodo.statustodo === tools.Status.COMPLETED) }}
                         </div>
                     </div>
                 </div>

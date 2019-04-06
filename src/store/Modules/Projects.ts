@@ -20,7 +20,7 @@ const stateglob: IProjectsState = {
   visuLastCompleted: 10
 }
 
-const listFieldsToChange: string [] = ['descr', 'longdescr', 'hoursplanned', 'hoursworked', 'id_parent', 'status', 'category', 'expiring_at', 'priority', 'id_prev', 'pos', 'enableExpiring', 'progress', 'live_url', 'test_url', 'begin_development', 'begin_test']
+const listFieldsToChange: string [] = ['descr', 'longdescr', 'hoursplanned', 'hoursworked', 'id_parent', 'statusproj', 'category', 'expiring_at', 'priority', 'id_prev', 'pos', 'enableExpiring', 'progress', 'live_url', 'test_url', 'begin_development', 'begin_test']
 
 const b = storeBuilder.module<IProjectsState>('Projects', stateglob)
 const stateGetter = b.state()
@@ -50,7 +50,7 @@ namespace Getters {
       longdescr: '',
       id_parent: '',
       priority: tools.Priority.PRIORITY_NORMAL,
-      status: tools.Status.OPENED,
+      statusproj: tools.Status.OPENED,
       created_at: tools.getDateNow(),
       modify_at: tools.getDateNow(),
       completed_at: tools.getDateNull(),
