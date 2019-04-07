@@ -50,3 +50,26 @@
   font-size: 1.1rem;
   text-align: center;
 }
+
+.lowperc {
+  color: red;
+}
+.medperc {
+  color: blue;
+}
+.highperc {
+  color: green;
+}
+
+
+.hide-if-small {
+  @media (max-width: 600px) {
+    display: none;
+  }
+}
+
+.thiny-if-small {
+  @media (max-width: 600px) {
+    max-width: 22px;
+  }
+}

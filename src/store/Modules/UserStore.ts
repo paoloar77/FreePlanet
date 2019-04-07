@@ -6,7 +6,7 @@ import router from '@router'
 
 import { serv_constants } from '../Modules/serv_constants'
 import { tools } from '../Modules/tools'
-import { GlobalStore, UserStore, Todos } from '@store'
+import { GlobalStore, UserStore, Todos, Projects } from '@store'
 import globalroutines from './../../globalroutines/index'
 
 import translate from './../../globalroutines/util'
@@ -19,7 +19,6 @@ const state: IUserState = {
   userId: '',
   email: '',
   username: '',
-  idapp: process.env.APP_ID,
   password: '',
   lang: '',
   repeatPassword: '',
@@ -28,6 +27,7 @@ const state: IUserState = {
   categorySel: 'personal',
   servercode: 0,
   x_auth_token: '',
+  isLogged: false,
   isAdmin: false
 }
 
@@ -79,14 +79,14 @@ namespace Getters {
     },
     get getServerCode() {
       return getServerCode()
-    }
+    },
     // get fullName() { return fullName();},
   }
 
 }
 
 namespace Mutations {
-  function authUser(state: IUserState, data: IUserState ) {
+  function authUser(state: IUserState, data: IUserState) {
     state.userId = data.userId
     state.username = data.username
     if (data.verified_email) {
@@ -98,7 +98,7 @@ namespace Mutations {
     }  // ??
 
     resetArrToken(state.tokens)
-    state.tokens.push({ access: 'auth', token: state.x_auth_token, data_login: new Date() })
+    state.tokens.push({ access: 'auth', token: state.x_auth_token, data_login: tools.getDateNow() })
 
     // ++Todo: Settings Users Admin
     if (state.username === 'paoloar77') {
@@ -127,7 +127,7 @@ namespace Mutations {
     if (!state.tokens) {
       state.tokens = []
     }
-    state.tokens.push({ access: 'auth', token: x_auth_token, data_login: new Date() })
+    state.tokens.push({ access: 'auth', token: x_auth_token, data_login: tools.getDateNow() })
   }
 
   function setServerCode(state: IUserState, num: number) {
@@ -221,8 +221,6 @@ namespace Actions {
   async function resetpwd(context, paramquery: IUserState) {
 
     const usertosend = {
-      keyappid: process.env.PAO_APP_ID,
-      idapp: process.env.APP_ID,
       email: paramquery.email,
       password: paramquery.password,
       tokenforgot: paramquery.tokenforgot
@@ -245,8 +243,6 @@ namespace Actions {
   async function requestpwd(context, paramquery: IUserState) {
 
     const usertosend = {
-      keyappid: process.env.PAO_APP_ID,
-      idapp: process.env.APP_ID,
       email: paramquery.email
     }
     console.log(usertosend)
@@ -265,8 +261,6 @@ namespace Actions {
 
   async function vreg(context, paramquery: ILinkReg) {
     const usertosend = {
-      keyappid: process.env.PAO_APP_ID,
-      idapp: process.env.APP_ID,
       idlink: paramquery.idlink
     }
     console.log(usertosend)
@@ -301,12 +295,10 @@ namespace Actions {
     return bcrypt.hash(authData.password, bcrypt.genSaltSync(12))
       .then((hashedPassword: string) => {
         const usertosend = {
-          keyappid: process.env.PAO_APP_ID,
           lang: mylang,
           email: authData.email,
           password: String(hashedPassword),
           username: authData.username,
-          idapp: process.env.APP_ID
         }
 
         console.log(usertosend)
@@ -336,7 +328,7 @@ namespace Actions {
                 verified_email: false
               })
 
-              const now = new Date()
+              const now = tools.getDateNow()
               // const expirationDate = new Date(now.getTime() + myres.data.expiresIn * 1000);
               const expirationDate = new Date(now.getTime() * 1000)
               localStorage.setItem(tools.localStorage.lang, state.lang)
@@ -371,7 +363,7 @@ namespace Actions {
     try {
       if ('serviceWorker' in navigator) {
         sub = await navigator.serviceWorker.ready
-          .then(function(swreg) {
+          .then(function (swreg) {
             console.log('swreg')
             const sub = swreg.pushManager.getSubscription()
             return sub
@@ -393,8 +385,6 @@ namespace Actions {
     const usertosend = {
       username: authData.username,
       password: authData.password,
-      idapp: process.env.APP_ID,
-      keyappid: process.env.PAO_APP_ID,
       lang: state.lang,
       subs: sub,
       options
@@ -437,7 +427,7 @@ namespace Actions {
               verified_email
             })
 
-            const now = new Date()
+            const now = tools.getDateNow()
             // const expirationDate = new Date(now.getTime() + myres.data.expiresIn * 1000);
             const expirationDate = new Date(now.getTime() * 1000)
             localStorage.setItem(tools.localStorage.lang, state.lang)
@@ -487,13 +477,7 @@ namespace Actions {
 
     await GlobalStore.actions.clearDataAfterLogout()
 
-    const usertosend = {
-      keyappid: process.env.PAO_APP_ID,
-      idapp: process.env.APP_ID
-    }
-
-    console.log(usertosend)
-    const riscall = await Api.SendReq('/users/me/token', 'DELETE', usertosend)
+    const riscall = await Api.SendReq('/users/me/token', 'DELETE', null)
       .then((res) => {
         console.log(res)
       }).then(() => {
@@ -510,6 +494,7 @@ namespace Actions {
 
   async function setGlobal(loggedWithNetwork: boolean) {
     state.isLogged = true
+    console.log('state.isLogged')
     GlobalStore.mutations.setleftDrawerOpen(localStorage.getItem(tools.localStorage.leftDrawerOpen) === 'true')
     GlobalStore.mutations.setCategorySel(localStorage.getItem(tools.localStorage.categorySel))
 
@@ -517,13 +502,14 @@ namespace Actions {
 
     await GlobalStore.actions.loadAfterLogin()
       .then(() => {
-        Todos.actions.dbLoadTodo({ checkPending: true })
+        Todos.actions.dbLoad({ checkPending: true })
+        Projects.actions.dbLoad({ checkPending: true, onlyiffirsttime: true })
       })
   }
 
   async function autologin_FromLocalStorage(context) {
     try {
-      // console.log('*** autologin_FromLocalStorage ***')
+      console.log('*** autologin_FromLocalStorage ***')
       // INIT
 
       UserStore.state.lang = tools.getItemLS(tools.localStorage.lang)
@@ -534,7 +520,7 @@ namespace Actions {
       }
       const expirationDateStr = localStorage.getItem(tools.localStorage.expirationDate)
       const expirationDate = new Date(String(expirationDateStr))
-      const now = new Date()
+      const now = tools.getDateNow()
       if (now >= expirationDate) {
         console.log('!!! Login Expired')
         return false
@@ -565,6 +551,22 @@ namespace Actions {
       return false
     }
   }
+
+  /*
+    async function refreshUserInfos(){
+      let {token, refresh_token} = JWT.fetch();
+      if (!!token) {
+        try {
+          let { data } = await Api.checkSession({token, refresh_token});
+          JWT.set(data);
+          let userData = await jwtDecode(data.token);
+          LoginModule.mutations.updateUserInfos({userData, token: data.token});
+        } catch(e) {
+          Mutations.mutations.disconnectUser();
+        }
+      }
+    }
+  */
 
   export const actions = {
     autologin_FromLocalStorage: b.dispatch(autologin_FromLocalStorage),

@@ -155,7 +155,7 @@ export default class Header extends Vue {
 
       const color = (value === 'online') ? 'positive' : 'warning'
 
-      if (oldValue !== undefined) {
+      if (!!oldValue) {
         tools.showNotif(this.$q, this.$t('connection') + ` ${value}`, {
           color,
           icon: 'wifi'
@@ -262,12 +262,12 @@ export default class Header extends Vue {
 
         function updateOnlineStatus(event) {
           if (navigator.onLine) {
-            // console.log('EVENT ONLINE!')
+            console.log('EVENT ONLINE!')
             // handle online status
             GlobalStore.mutations.setStateConnection('online')
             mythis.changeIconConn()
           } else {
-            // console.log('EVENT OFFLINE!')
+            console.log('EVENT OFFLINE!')
             // handle offline status
             GlobalStore.mutations.setStateConnection('offline')
             mythis.changeIconConn()

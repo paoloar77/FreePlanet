@@ -1,12 +1,40 @@
-import { RouteConfig as VueRouteConfig } from 'vue-router'
+import { RouteConfig, Route, RouteRecord } from 'vue-router/types'
 
 import { RouteNames } from './route-names'
 import { tools } from '@src/store/Modules/tools'
 
 import auth from '../middleware/auth'
+import { Projects, Todos } from "@store"
 
+interface IMyMeta {
+  title?: string,
+  headerShadow?: boolean,
+  contentProp?: boolean,
+  transparent?: boolean,
+  isModal?: boolean,
+  requiresAuth?: boolean,
+  isTab?: boolean,
+  noAuth?: boolean,
+  asyncData?: (to?: IMyRoute | IMyRouteRecord) => Promise<{title?: string} | void>,
+  isAuthorized?: (to?: any) => boolean
+  middleware?: any[]
+}
 
-export const RouteConfig: VueRouteConfig[] = [
+export interface IMyRoute extends Route {
+  meta: IMyMeta,
+  matched: IMyRouteRecord[]
+}
+
+export interface IMyRouteRecord extends RouteRecord {
+  meta: IMyMeta,
+}
+
+export interface IMyRouteConfig extends RouteConfig {
+  children?: IMyRouteConfig[],
+  meta?: IMyMeta
+}
+
+export const routesList: IMyRouteConfig[] = [
   {
     path: '/',
     name: RouteNames.home,
@@ -30,55 +58,74 @@ export const RouteConfig: VueRouteConfig[] = [
   {
     path: '/todo/:category',
     name: 'Todos',
-    component: () => import('@/components/todos/todo/todo.vue'),
+    component: () => import('@/views/todo-list/todo-list.vue'),
     meta: {
-      middleware: [auth]
+      requiresAuth: true,
+      async asyncData() {
+        await Todos.actions.dbLoad({ checkPending: false })
+      }
+      // middleware: [auth]
     }
   },
   {
     path: '/category',
     name: 'category',
-    component: () => import('@/components/categories/category/category.vue')
+    component: () => import('@/views/categories/category/category.vue')
   },
   {
     path: '/admin/cfgserv',
     name: 'cfgserv',
-    component: () => import('@/components/admin/cfgServer/cfgServer.vue'),
+    component: () => import('@/views/admin/cfgServer/cfgServer.vue'),
     meta: {
-      middleware: [auth]
+      requiresAuth: true
+      // middleware: [auth]
     }
   },
   {
     path: '/admin/testp1/:category',
     name: 'Categories',
-    component: () => import('@/components/admin/testp1/testp1.vue')
+    component: () => import('@/views/admin/testp1/testp1.vue')
   },
   {
     path: '/offline',
     name: 'Offline',
-    component: () => import('@/components/offline/offline.vue')
+    component: () => import('@/views/offline/offline.vue')
+  },
+  {
+    path: '/projects/:idProj',
+    name: 'progetti',
+    component: () => import('@/views/projects/proj-list/proj-list.vue'),
+    meta: {
+      requiresAuth: true,
+      async asyncData() {
+        await Projects.actions.dbLoad({ checkPending: false, onlyiffirsttime: true })
+      }
+      // middleware: [auth]
+    }
   }
+
   /*
+
   {
     path: '/requestresetpwd',
     component: () => import('@/views/login/requestresetpwd.vue'),
-    meta: { name: 'Reset your Password' }
+    meta: { nametranslate: 'Reset your Password' }
   },
   {
     path: '/updatepwd',
     component: () => import('@/views/login/updatepassword.vue'),
-    meta: { name: 'Update your Password' }
+    meta: { nametranslate: 'Update your Password' }
   }
 
 
   {
     path: '/simpleform',
     component: () => import('@/views/form/simpleForm/simpleForm.vue'),
-    meta: { name: 'SimpleForm' }
+    meta: { nametranslate: 'SimpleForm' }
   },
   {
     path: '/embeeded',
     component: () => import('@/views/form/embeeded/embeeded.vue'),
-    meta: { name: 'Embeeded' }
+    meta: { nametranslate: 'Embeeded' }
   }*/
 ]

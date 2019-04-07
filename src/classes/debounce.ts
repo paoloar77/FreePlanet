@@ -29,7 +29,7 @@ export function debounce<F extends Procedure>(
 
     const shouldCallNow = options.isImmediate && timeoutId === undefined
 
-    if (timeoutId !== undefined) {
+    if (!!timeoutId) {
       clearTimeout(timeoutId)
     }
 

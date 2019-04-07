@@ -2,13 +2,13 @@
     <div class="no-border">
         <q-list class="rounded-borders text-primary">
             <template v-for="(parent, index) in getmenu">
-                <div class="q-list-header">{{replaceUnderlineToSpace(index)}}</div>
+                <!--<div class="q-list-header">{{replaceUnderlineToSpace(index)}}</div>-->
                 <div v-for="item in parent.routes">
                     <div v-if="item.routes2">
                         <q-expansion-item
-                                :header-inset-level="0.5"
-                                :content-inset-level="0.5"
-                                :label="$t(item.name)"
+                                :header-inset-level="item.level_parent"
+                                :content-inset-level="item.level_parent"
+                                :label="getLabelByItem(item)"
                                 :icon="item.materialIcon"
                                 expand-icon-class="my-menu-separat"
                                 header-class="my-menu"
@@ -16,12 +16,12 @@
                         >
 
                             <q-expansion-item v-for="(child2, index) in item.routes2" :to="child2.route" :key="index"
-                                              :header-inset-level="0.5"
+                                              :header-inset-level="item.level_child"
                                               :duration="300"
                                               expand-icon="map"
                                               active-class="my-menu-active"
                                               class="item item-link drawer-closer cursor-pointer my-menu"
-                                              :label="$t(child2.name)">
+                                              :label="getLabelByItem(child2)">
                             </q-expansion-item>
 
                         </q-expansion-item>

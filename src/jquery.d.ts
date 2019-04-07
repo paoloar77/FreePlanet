@@ -225,7 +225,7 @@ interface JQueryStatic<TElement extends Node = HTMLElement> {
     contains(container: Element, contained: Element): boolean
     css(elem: Element, unknown: any): any
     /**
-     * Returns value at named data store for the element, as set by jQuery.data(element, name, value), or
+     * Returns value at named data store for the element, as set by jQuery.data(element, nametranslate, value), or
      * the full data store for the element.
      *
      * @param element The DOM element to query for the data.
@@ -246,7 +246,7 @@ interface JQueryStatic<TElement extends Node = HTMLElement> {
      */
     data<T>(element: Element, key: string, value: T): T
     /**
-     * Returns value at named data store for the element, as set by jQuery.data(element, name, value), or
+     * Returns value at named data store for the element, as set by jQuery.data(element, nametranslate, value), or
      * the full data store for the element.
      *
      * @param element The DOM element to query for the data.
@@ -260,7 +260,7 @@ interface JQueryStatic<TElement extends Node = HTMLElement> {
      * Execute the next function on the queue for the matched element.
      *
      * @param element A DOM element from which to remove and execute a queued function.
-     * @param queueName A string containing the name of the queue. Defaults to fx, the standard effects queue.
+     * @param queueName A string containing the nametranslate of the queue. Defaults to fx, the standard effects queue.
      * @see {@link https://api.jquery.com/jQuery.dequeue/}
      * @since 1.3
      */
@@ -695,7 +695,7 @@ interface JQueryStatic<TElement extends Node = HTMLElement> {
     /**
      * Create a serialized representation of an array, a plain object, or a jQuery object suitable for use
      * in a URL query string or Ajax request. In case a jQuery object is passed, it should contain input
-     * elements with name/value properties.
+     * elements with nametranslate/value properties.
      *
      * @param obj An array, a plain object, or a jQuery object to serialize.
      * @param traditional A Boolean indicating whether to perform a traditional "shallow" serialization.
@@ -2772,14 +2772,14 @@ interface JQueryStatic<TElement extends Node = HTMLElement> {
 
     // endregion
 
-    // region (context, name)
+    // region (context, nametranslate)
 
     /**
      * Takes a function and returns a new one that will always have a particular context.
      *
      * @param context The object to which the context of the function should be set.
-     * @param name The name of the function whose context will be changed (should be a property of the context object).
-     * @param additionalArguments Any number of arguments to be passed to the function named in the name argument.
+     * @param name The nametranslate of the function whose context will be changed (should be a property of the context object).
+     * @param additionalArguments Any number of arguments to be passed to the function named in the nametranslate argument.
      * @see {@link https://api.jquery.com/jQuery.proxy/}
      * @since 1.4
      * @since 1.6
@@ -2796,7 +2796,7 @@ interface JQueryStatic<TElement extends Node = HTMLElement> {
      * Manipulate the queue of functions to be executed on the matched element.
      *
      * @param element A DOM element where the array of queued functions is attached.
-     * @param queueName A string containing the name of the queue. Defaults to fx, the standard effects queue.
+     * @param queueName A string containing the nametranslate of the queue. Defaults to fx, the standard effects queue.
      * @param newQueue The new function to add to the queue.
      *                 An array of functions to replace the current queue contents.
      * @see {@link https://api.jquery.com/jQuery.queue/}
@@ -3004,7 +3004,7 @@ interface JQuery<TElement extends Node = HTMLElement> extends Iterable<TElement>
      *
      * @param className One or more space-separated classes to be added to the class attribute of each matched element.
      *                  A function returning one or more space-separated class names to be added to the existing class
-     *                  name(s). Receives the index position of the element in the set and the existing class name(s) as
+     *                  nametranslate(s). Receives the index position of the element in the set and the existing class nametranslate(s) as
      *                  arguments. Within the function, this refers to the current element in the set.
      * @see {@link https://api.jquery.com/addClass/}
      * @since 1.0
@@ -3159,7 +3159,7 @@ interface JQuery<TElement extends Node = HTMLElement> extends Iterable<TElement>
     /**
      * Set one or more attributes for the set of matched elements.
      *
-     * @param attributeName The name of the attribute to set.
+     * @param attributeName The nametranslate of the attribute to set.
      * @param value A value to set for the attribute. If null, the specified attribute will be removed (as in .removeAttr()).
      *              A function returning the value to set. this is the current element. Receives the index position of
      *              the element in the set and the old attribute value as arguments.
@@ -3180,7 +3180,7 @@ interface JQuery<TElement extends Node = HTMLElement> extends Iterable<TElement>
     /**
      * Get the value of an attribute for the first element in the set of matched elements.
      *
-     * @param attributeName The name of the attribute to get.
+     * @param attributeName The nametranslate of the attribute to get.
      * @see {@link https://api.jquery.com/attr/}
      * @since 1.0
      */
@@ -3291,7 +3291,7 @@ interface JQuery<TElement extends Node = HTMLElement> extends Iterable<TElement>
     /**
      * Remove from the queue all items that have not yet been run.
      *
-     * @param queueName A string containing the name of the queue. Defaults to fx, the standard effects queue.
+     * @param queueName A string containing the nametranslate of the queue. Defaults to fx, the standard effects queue.
      * @see {@link https://api.jquery.com/clearQueue/}
      * @since 1.4
      */
@@ -3377,7 +3377,7 @@ interface JQuery<TElement extends Node = HTMLElement> extends Iterable<TElement>
     /**
      * Set one or more CSS properties for the set of matched elements.
      *
-     * @param propertyName A CSS property name.
+     * @param propertyName A CSS property nametranslate.
      * @param value A value to set for the property.
      *              A function returning the value to set. this is the current element. Receives the index position of
      *              the element in the set and the old value as arguments.
@@ -3414,7 +3414,7 @@ interface JQuery<TElement extends Node = HTMLElement> extends Iterable<TElement>
     css(propertyNames: string[]): JQuery.PlainObject<string>
     /**
      * Return the value at the named data store for the first element in the jQuery collection, as set by
-     * data(name, value) or by an HTML5 data-* attribute.
+     * data(nametranslate, value) or by an HTML5 data-* attribute.
      *
      * @param key Name of the data stored.
      * @param undefined
@@ -3441,7 +3441,7 @@ interface JQuery<TElement extends Node = HTMLElement> extends Iterable<TElement>
     data(obj: JQuery.PlainObject): this
     /**
      * Return the value at the named data store for the first element in the jQuery collection, as set by
-     * data(name, value) or by an HTML5 data-* attribute.
+     * data(nametranslate, value) or by an HTML5 data-* attribute.
      *
      * @param key Name of the data stored.
      * @see {@link https://api.jquery.com/data/}
@@ -3450,7 +3450,7 @@ interface JQuery<TElement extends Node = HTMLElement> extends Iterable<TElement>
     data(key: string): any
     /**
      * Return the value at the named data store for the first element in the jQuery collection, as set by
-     * data(name, value) or by an HTML5 data-* attribute.
+     * data(nametranslate, value) or by an HTML5 data-* attribute.
      *
      * @see {@link https://api.jquery.com/data/}
      * @since 1.4
@@ -3478,7 +3478,7 @@ interface JQuery<TElement extends Node = HTMLElement> extends Iterable<TElement>
      * Set a timer to delay execution of subsequent items in the queue.
      *
      * @param duration An integer indicating the number of milliseconds to delay execution of the next item in the queue.
-     * @param queueName A string containing the name of the queue. Defaults to fx, the standard effects queue.
+     * @param queueName A string containing the nametranslate of the queue. Defaults to fx, the standard effects queue.
      * @see {@link https://api.jquery.com/delay/}
      * @since 1.4
      */
@@ -3530,7 +3530,7 @@ interface JQuery<TElement extends Node = HTMLElement> extends Iterable<TElement>
     /**
      * Execute the next function on the queue for the matched elements.
      *
-     * @param queueName A string containing the name of the queue. Defaults to fx, the standard effects queue.
+     * @param queueName A string containing the nametranslate of the queue. Defaults to fx, the standard effects queue.
      * @see {@link https://api.jquery.com/dequeue/}
      * @since 1.2
      */
@@ -3731,7 +3731,7 @@ interface JQuery<TElement extends Node = HTMLElement> extends Iterable<TElement>
      * Stop the currently-running animation, remove all queued animations, and complete all animations for
      * the matched elements.
      *
-     * @param queue The name of the queue in which to stop animations.
+     * @param queue The nametranslate of the queue in which to stop animations.
      * @see {@link https://api.jquery.com/finish/}
      * @since 1.9
      */
@@ -3824,7 +3824,7 @@ interface JQuery<TElement extends Node = HTMLElement> extends Iterable<TElement>
     /**
      * Determine whether any of the matched elements are assigned the given class.
      *
-     * @param className The class name to search for.
+     * @param className The class nametranslate to search for.
      * @see {@link https://api.jquery.com/hasClass/}
      * @since 1.2
      */
@@ -4678,7 +4678,7 @@ interface JQuery<TElement extends Node = HTMLElement> extends Iterable<TElement>
     /**
      * Set one or more properties for the set of matched elements.
      *
-     * @param propertyName The name of the property to set.
+     * @param propertyName The nametranslate of the property to set.
      * @param value A function returning the value to set. Receives the index position of the element in the set and the
      *              old property value as arguments. Within the function, the keyword this refers to the current element.
      * @see {@link https://api.jquery.com/prop/}
@@ -4688,7 +4688,7 @@ interface JQuery<TElement extends Node = HTMLElement> extends Iterable<TElement>
     /**
      * Set one or more properties for the set of matched elements.
      *
-     * @param propertyName The name of the property to set.
+     * @param propertyName The nametranslate of the property to set.
      * @param value A value to set for the property.
      * @see {@link https://api.jquery.com/prop/}
      * @since 1.6
@@ -4705,7 +4705,7 @@ interface JQuery<TElement extends Node = HTMLElement> extends Iterable<TElement>
     /**
      * Get the value of a property for the first element in the set of matched elements.
      *
-     * @param propertyName The name of the property to get.
+     * @param propertyName The nametranslate of the property to get.
      * @see {@link https://api.jquery.com/prop/}
      * @since 1.6
      */
@@ -4714,7 +4714,7 @@ interface JQuery<TElement extends Node = HTMLElement> extends Iterable<TElement>
      * Add a collection of DOM elements onto the jQuery stack.
      *
      * @param elements An array of elements to push onto the stack and make into a new jQuery object.
-     * @param name The name of a jQuery method that generated the array of elements.
+     * @param name The nametranslate of a jQuery method that generated the array of elements.
      * @param args The arguments that were passed in to the jQuery method (for serialization).
      * @see {@link https://api.jquery.com/pushStack/}
      * @since 1.3
@@ -4731,7 +4731,7 @@ interface JQuery<TElement extends Node = HTMLElement> extends Iterable<TElement>
     /**
      * Manipulate the queue of functions to be executed, once for each matched element.
      *
-     * @param queueName A string containing the name of the queue. Defaults to fx, the standard effects queue.
+     * @param queueName A string containing the nametranslate of the queue. Defaults to fx, the standard effects queue.
      * @param newQueue The new function to add to the queue, with a function to call that will dequeue the next item.
      *                 An array of functions to replace the current queue contents.
      * @see {@link https://api.jquery.com/queue/}
@@ -4750,7 +4750,7 @@ interface JQuery<TElement extends Node = HTMLElement> extends Iterable<TElement>
     /**
      * Show the queue of functions to be executed on the matched elements.
      *
-     * @param queueName A string containing the name of the queue. Defaults to fx, the standard effects queue.
+     * @param queueName A string containing the nametranslate of the queue. Defaults to fx, the standard effects queue.
      * @see {@link https://api.jquery.com/queue/}
      * @since 1.2
      */
@@ -4804,7 +4804,7 @@ interface JQuery<TElement extends Node = HTMLElement> extends Iterable<TElement>
     /**
      * Remove a property for the set of matched elements.
      *
-     * @param propertyName The name of the property to remove.
+     * @param propertyName The nametranslate of the property to remove.
      * @see {@link https://api.jquery.com/removeProp/}
      * @since 1.6
      */
@@ -5079,7 +5079,7 @@ interface JQuery<TElement extends Node = HTMLElement> extends Iterable<TElement>
     /**
      * Stop the currently-running animation on the matched elements.
      *
-     * @param queue The name of the queue in which to stop animations.
+     * @param queue The nametranslate of the queue in which to stop animations.
      * @param clearQueue A Boolean indicating whether to remove queued animation as well. Defaults to false.
      * @param jumpToEnd A Boolean indicating whether to complete the current animation immediately. Defaults to false.
      * @see {@link https://api.jquery.com/stop/}
@@ -5584,7 +5584,7 @@ declare namespace JQuery {
              */
             isLocal?: boolean
             /**
-             * Override the callback function name in a JSONP request. This value will be used instead of
+             * Override the callback function nametranslate in a JSONP request. This value will be used instead of
              * 'callback' in the 'callback=?' part of the query string in the url. So {jsonp:'onJSONPLoad'} would
              * result in 'onJSONPLoad=?' passed to the server. As of jQuery 1.5, setting the jsonp option to false
              * prevents jQuery from adding the "?callback" string to the URL or attempting to use "=?" for
@@ -5594,8 +5594,8 @@ declare namespace JQuery {
              */
             jsonp?: string | false
             /**
-             * Specify the callback function name for a JSONP request. This value will be used instead of the
-             * random name automatically generated by jQuery. It is preferable to let jQuery generate a unique name
+             * Specify the callback function nametranslate for a JSONP request. This value will be used instead of the
+             * random nametranslate automatically generated by jQuery. It is preferable to let jQuery generate a unique nametranslate
              * as it'll make it easier to manage the requests and provide callbacks and error handling. You may
              * want to specify the callback when you want to enable better browser caching of GET requests. As of
              * jQuery 1.5, you can also use a function for this setting, in which case the value of jsonpCallback
@@ -7436,7 +7436,7 @@ declare namespace JQuery {
         /**
          * A Boolean indicating whether to place the animation in the effects queue. If false, the animation
          * will begin immediately. As of jQuery 1.7, the queue option can also accept a string, in which case
-         * the animation is added to the queue represented by that string. When a custom queue name is used the
+         * the animation is added to the queue represented by that string. When a custom queue nametranslate is used the
          * animation does not automatically start; you must call .dequeue("queuename") to start it.
          */
         queue?: boolean | string

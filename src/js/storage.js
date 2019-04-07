@@ -1,6 +1,7 @@
+import * as ApiTables from '@src/store/Modules/ApiTables'
+
 export let idbKeyval = (() => {
   let db;
-  const fieldsData = ['completed_at', 'created_at', 'expiring_at', 'modify_at']
 
   function getDB() {
     if (!db) {
@@ -14,13 +15,16 @@ export let idbKeyval = (() => {
 
         openreq.onupgradeneeded = () => {
           // First time setup: create an empty object store
-          openreq.result.createObjectStore('todos', { keyPath: '_id' });
-          openreq.result.createObjectStore('categories', { keyPath: '_id' });
-          openreq.result.createObjectStore('sync_todos', { keyPath: '_id' });
-          openreq.result.createObjectStore('sync_todos_patch', { keyPath: '_id' });
-          openreq.result.createObjectStore('delete_todos', { keyPath: '_id' });
-          openreq.result.createObjectStore('config', { keyPath: '_id' });
-          openreq.result.createObjectStore('swmsg', { keyPath: '_id' });
+          for (let mytab of ApiTables.MainTables) {
+            openreq.result.createObjectStore(mytab, { keyPath: '_id' });
+            for (let mymeth of ApiTables.allMethod) {
+              const tab = mymeth + mytab
+              openreq.result.createObjectStore(tab, { keyPath: '_id' });
+            }
+          }
+          for (let mytab of ApiTables.OtherTables) {
+            openreq.result.createObjectStore(mytab, { keyPath: '_id' });
+          }
         };
 
         openreq.onsuccess = () => {

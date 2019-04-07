@@ -5,6 +5,7 @@ import { GlobalStore } from '@store'
 import { IPost } from '../../../model/index'
 
 import './messagePopover.scss'
+import { tools } from '@src/store/Modules/tools'
 
 @Component({
 })
@@ -27,7 +28,7 @@ export default class MessagePopover extends Vue {
 
   public randomDate(): Date {
     let myval = Math.floor(Math.random() * 10000000000)
-    return new Date(new Date().valueOf() - myval)
+    return new Date(tools.getTimestampsNow() - myval)
   }
 
   public randomAvatarUrl() {

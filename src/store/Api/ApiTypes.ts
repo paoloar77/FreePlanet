@@ -1,7 +1,7 @@
 // import { NotificationsStore, LoginStore } from '@store'
 
 export class AxiosSuccess {
-  public success: boolean = true
+  public success: any = true
   public status: number
   public data: any
 
@@ -18,7 +18,7 @@ export class AxiosError {
   public code: any = 0
   public msgerr: string = ''
 
-  constructor(status: number, data?: any, code?: any, msgerr?: string) {
+  constructor(status: number, data?: any, code?: any, msgerr: string = '') {
     this.status = status
     this.data = data
     this.code = code
@@ -88,10 +88,6 @@ export class ApiResponse {
     else return <any>Promise.reject(returnData)
   }
 }
-
-
-
-
 
 export class ApiSuccess extends ApiResponse {
   constructor(fields: {message?: string, data?: any} = {}) {

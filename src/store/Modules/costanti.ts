@@ -6,5 +6,7 @@ export const costanti = {
   },
   CONFIG_ID_CFG: '1',
   CONFIG_ID_STATE_CONN: '2',
-  CONFIG_ID_SHOW_TYPE_TODOS: '3'
+  CONFIG_ID_SHOW_TYPE_TODOS: '3',
+
+  MAX_PHASES: 5
 }

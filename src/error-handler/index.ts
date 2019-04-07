@@ -4,7 +4,7 @@ import Graphql from './graphql'
 
 export default (context, error) => {
   /*
-  if (error.constructor.name === 'FirebaseError') {
+  if (error.constructor.nametranslate === 'FirebaseError') {
     Firebase(error)
     return
   }

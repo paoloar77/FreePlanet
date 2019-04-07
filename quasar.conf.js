@@ -14,10 +14,10 @@ const extendTypescriptToWebpack = (config) => {
     .alias
     .set('@components', helpers.root('src/components/index.ts'))
     // .set('@components', helpers.root('src/components'))
-    .set('@views', helpers.root('src/components/views/index.ts'))
+    .set('@views', helpers.root('src/views/index.ts'))
     // .set('@views', helpers.root('src/components/views'))
     .set('@src', helpers.root('src'))
-    .set('@css', helpers.root('src/statics/css/*'))
+    .set('@css', helpers.root('src/statics/css/variables.scss'))
     .set('@icons', helpers.root('src/statics/icons/*'))
     .set('@images', helpers.root('src/statics/images/*'))
     .set('@classes', helpers.root('src/classes/index.ts'))
@@ -25,6 +25,7 @@ const extendTypescriptToWebpack = (config) => {
     .set('@utils', helpers.root('src/utils/*'))
     .set('@router', helpers.root('src/router/index.ts'))
     .set('@validators', helpers.root('src/utils/validators.ts'))
+    .set('@methods', helpers.root('src/utils/methods.ts'))
     .set('@api', helpers.root('src/store/Api/index.ts'))
     .set('@paths', helpers.root('src/store/Api/ApiRoutes.ts'))
     .set('@types', helpers.root('src/typings/index.ts'))
@@ -169,10 +170,13 @@ module.exports = function (ctx) {
         'QPageScroller',
         'QAvatar',
         'QImg',
+        'QSplitter',
+        'QSeparator',
         'QCarouselSlide'
       ],
       directives: [
         'Ripple',
+        'ClosePopup'
       ],
       // Quasar plugins
       plugins: [

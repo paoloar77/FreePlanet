@@ -1,5 +1,6 @@
 import { costanti } from "@src/store/Modules/costanti"
 import { UserStore } from "@store"
+import { tools } from '@src/store/Modules/tools'
 
 export interface IPost {
   title: string
@@ -55,13 +56,24 @@ export interface IGlobalState {
   connData: IConnData
   posts: IPost[]
   menulinks: {}
-  listatodo: ITodoList[]
+  listatodo: IMenuList[]
   arrConfig: IConfig[]
 }
 
-
-export interface ITodoList {
-  namecat: string
+export interface IMenuList {
+  nametranslate: string
   description: string
+  idelem?: string
+  icon?: string
 }
 
+export interface IListRoutes {
+  route: string
+  faIcon: string
+  materialIcon: string
+  name: string
+  text?: string
+  routes2: []
+  level_parent: number
+  level_child: number
+}

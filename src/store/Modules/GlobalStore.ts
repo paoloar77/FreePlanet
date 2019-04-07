@@ -1,4 +1,4 @@
-import { ICfgServer, IConfig, IGlobalState, ITodoList, StateConnection } from 'model'
+import { ICfgServer, IConfig, IGlobalState, IListRoutes, IMenuList, StateConnection } from 'model'
 import { storeBuilder } from './Store/Store'
 
 import Vue from 'vue'
@@ -11,12 +11,10 @@ import Api from '@api'
 import * as Types from '@src/store/Api/ApiTypes'
 import { costanti } from '@src/store/Modules/costanti'
 import { tools } from '@src/store/Modules/tools'
-import { GlobalStore, Todos, UserStore } from '@store'
+import * as ApiTables from '@src/store/Modules/ApiTables'
+import { GlobalStore, Projects, Todos, UserStore } from '@store'
 import messages from '../../statics/i18n'
 import globalroutines from './../../globalroutines/index'
-
-const allTables = ['todos', 'categories', 'sync_todos', 'sync_todos_patch', 'delete_todos', 'config', 'swmsg']
-const allTablesAfterLogin = ['todos', 'categories', 'sync_todos', 'sync_todos_patch', 'delete_todos', 'config', 'swmsg']
 
 let stateConnDefault = 'online'
 
@@ -42,9 +40,9 @@ const state: IGlobalState = {
   posts: [],
   menulinks: {},
   listatodo: [
-    { namecat: 'personal', description: 'personal' },
-    { namecat: 'work', description: 'work' },
-    { namecat: 'shopping', description: 'shopping' }
+    { nametranslate: 'personal', description: 'personal' },
+    { nametranslate: 'work', description: 'work' },
+    { nametranslate: 'shopping', description: 'shopping' }
   ],
   connData: {
     uploading_server: 0,
@@ -72,6 +70,10 @@ async function getstateConnSaved() {
   } else {
     return 'offline'
   }
+}
+
+function addRoute(myarr, values) {
+  myarr.push(values)
 }
 
 const b = storeBuilder.module<IGlobalState>('GlobalModule', state)
@@ -109,73 +111,70 @@ namespace Getters {
   }, 'showtype')
 
   const getmenu = b.read((state) => {
+    console.log('getmenu')
 
     const arrlista = GlobalStore.state.listatodo
-    let listatodo = []
+    const lista = []
 
-    arrlista.forEach((elem: ITodoList) => {
+    arrlista.forEach((elem: IMenuList) => {
       const item = {
         faIcon: 'fa fa-list-alt',
         materialIcon: 'todo',
         name: 'pages.' + elem.description,
-        route: '/todo/' + elem.namecat
+        route: '/todo/' + elem.nametranslate
       }
-      listatodo.push(item)
+      lista.push(item)
 
     })
 
+    const arrlistaproj = Projects.getters.listaprojects()
+    const listaprojects = []
+
+    for (const elem of arrlistaproj) {
+      const item = {
+        materialIcon: 'next_week',
+        name: elem.nametranslate,
+        text: elem.description,
+        route: '/projects/' + elem.idelem
+      }
+      listaprojects.push(item)
+    }
+
+    const arrroutes: IListRoutes[] = []
+
+    addRoute(arrroutes, { route: '/', faIcon: 'fa fa-home', materialIcon: 'home', name: 'pages.home' })   // HOME
+
+    if (!process.env.PROD) {
+      addRoute(arrroutes, { route: '/todo', faIcon: 'fa fa-list-alt', materialIcon: 'format_list_numbered', name: 'pages.Todo',
+        routes2: lista,
+        level_parent: 0.5,
+        level_child: 0.5
+      })
+
+      addRoute(arrroutes,{ route: '/projects/' + process.env.PROJECT_ID_MAIN, faIcon: 'fa fa-list-alt', materialIcon: 'next_week', name: 'pages.Projects',
+        routes2: listaprojects,
+        level_parent: 0,
+        level_child: 0.5
+      })
+    }
 
     if (UserStore.state.isAdmin) {
-      state.menulinks = {
-        Dashboard: {
-          routes: [
-            { route: '/', faIcon: 'fa fa-home', materialIcon: 'home', name: 'pages.home' },
-            {
-              route: '/todo', faIcon: 'fa fa-list-alt', materialIcon: 'format_list_numbered', name: 'pages.Todo',
-              routes2: listatodo
-            },
-            { route: '/category', faIcon: 'fa fa-list-alt', materialIcon: 'category', name: 'pages.Category' },
-            { route: '/admin/cfgserv', faIcon: 'fa fa-database', materialIcon: 'event_seat', name: 'pages.Admin' },
-            { route: '/admin/testp1/par1', faIcon: 'fa fa-database', materialIcon: 'restore', name: 'pages.Test1' },
-            { route: '/admin/testp1/par2', faIcon: 'fa fa-database', materialIcon: 'restore', name: 'pages.Test2' }
-            /* {route: '/vreg?idlink=aaa', faIcon: 'fa fa-login', materialIcon: 'login', name: 'pages.vreg'},*/
-          ],
-          show: true
-        }
-      }
-    } else {
-      // PRODUCTION USER:
-      if (process.env.PROD) {
-        state.menulinks = {
-          Dashboard: {
-            routes: [
-              { route: '/', faIcon: 'fa fa-home', materialIcon: 'home', name: 'pages.home' }
-            ],
-            show: true
-          }
-        }
-      } else {
-        // SERVER TEST
-        state.menulinks = {
-          Dashboard: {
-            routes: [
-              { route: '/', faIcon: 'fa fa-home', materialIcon: 'home', name: 'pages.home' },
-              {
-                route: '/todo', faIcon: 'fa fa-list-alt', materialIcon: 'format_list_numbered', name: 'pages.Todo',
-                routes2: listatodo
-              },
-              { route: '/category', faIcon: 'fa fa-list-alt', materialIcon: 'category', name: 'pages.Category' }
-              // { route: '/signup', faIcon: 'fa fa-registered', materialIcon: 'home', name: 'pages.SignUp' },
-              // { route: '/signin', faIcon: 'fa fa-anchor', materialIcon: 'home', name: 'pages.SignIn' },
-              /* {route: '/vreg?idlink=aaa', faIcon: 'fa fa-login', materialIcon: 'login', name: 'pages.vreg'},*/
-            ],
-            show: true
-          }
-        }
+      addRoute(arrroutes, { route: '/category', faIcon: 'fa fa-list-alt', materialIcon: 'category', name: 'pages.Category' })
+      addRoute(arrroutes, { route: '/admin/cfgserv', faIcon: 'fa fa-database', materialIcon: 'event_seat', name: 'pages.Admin' })
+      addRoute(arrroutes, { route: '/admin/testp1/par1', faIcon: 'fa fa-database', materialIcon: 'restore', name: 'pages.Test1' })
+      addRoute(arrroutes, { route: '/admin/testp1/par2', faIcon: 'fa fa-database', materialIcon: 'restore', name: 'pages.Test2' })
+    }
+
+    state.menulinks = {
+      Dashboard: {
+        routes: arrroutes,
+        show: true
       }
     }
 
     return state.menulinks
+
+    console.log('state.menulinks', state.menulinks)
 
   }, 'getmenu')
 
@@ -215,7 +214,7 @@ namespace Getters {
     },
 
     get isOnline() {
-      console.log('*********************** isOnline')
+      // console.log('*********************** isOnline')
       return state.stateConnection === 'online'
     },
 
@@ -284,7 +283,7 @@ namespace Mutations {
     console.log('config', config)
     if (config) {
       config.value = String(showtype)
-      Todos.state.showtype = parseInt(config.value)
+      Todos.state.showtype = parseInt(config.value, 10)
     } else {
       Todos.state.showtype = showtype
     }
@@ -444,22 +443,22 @@ namespace Actions {
     console.log('clearDataAfterLogout')
 
     // Clear all data from the IndexedDB
-    for (const table of allTables) {
+    for (const table of ApiTables.allTables()) {
       await globalroutines(null, 'clearalldata', table, null)
     }
 
     if ('serviceWorker' in navigator) {
       // REMOVE ALL SUBSCRIPTION
       console.log('REMOVE ALL SUBSCRIPTION...')
-      await navigator.serviceWorker.ready.then(function (reg) {
+      await navigator.serviceWorker.ready.then((reg) => {
         console.log('... Ready')
         reg.pushManager.getSubscription().then((subscription) => {
           console.log('    Found Subscription...')
           if (subscription) {
-            subscription.unsubscribe().then(function (successful) {
+            subscription.unsubscribe().then((successful) => {
               // You've successfully unsubscribed
               console.log('You\'ve successfully unsubscribed')
-            }).catch(function (e) {
+            }).catch( (e) => {
               // Unsubscription failed
             })
           }
@@ -472,14 +471,6 @@ namespace Actions {
   }
 
   async function clearDataAfterLoginOnlyIfActiveConnection(context) {
-
-    // if (Getters.getters.isOnline) {
-    //   console.log('clearDataAfterLoginOnlyIfActiveConnection')
-    //   // Clear all data from the IndexedDB
-    //   allTablesAfterLogin.forEach(table => {
-    //     globalroutines(null, 'clearalldata', table, null)
-    //   })
-    // }
 
   }
 

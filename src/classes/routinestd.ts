@@ -10,9 +10,11 @@ export async function askConfirm($q: any, mytitle, mytext, ok, cancel) {
         push: true
       },
       title: mytitle
-    }).then((ris) => {
-      return ris
-    }).catch(() => {
+    }).onOk(() => {
+      console.log('OK')
+      return true
+    }).onCancel(() => {
+      console.log('CANCEL')
       return false
     })
   } catch (e) {

@@ -85,7 +85,7 @@ declare module 'vuelidate' {
     */
     required?: boolean
     /**
-    * Checks for equality with a given property. Locator might be either a sibling property name or a function, that will get your component as this and nested model which sibling properties under second parameter.
+    * Checks for equality with a given property. Locator might be either a sibling property nametranslate or a function, that will get your component as this and nested model which sibling properties under second parameter.
     */
     sameAs?: boolean
     /**
@@ -155,7 +155,7 @@ declare module 'vuelidate' {
   /**
    * Represents Vuelidate mixin data extending a Vue component instance. Have your Vue component options implement this
    * @param {Type} T - The interface or type being used to store model data requiring validation
-   * 
+   *
    * @example
    * export class Foo implements IVuelidate<IBar> {
    *  data() {
@@ -231,7 +231,7 @@ declare module 'vuelidate/lib/validators' {
   */
   function required(value: any): boolean
   /**
-   * Checks for equality with a given property. Locator might be either a sibling property name or a function, that will get your component as this and nested model which sibling properties under second parameter.
+   * Checks for equality with a given property. Locator might be either a sibling property nametranslate or a function, that will get your component as this and nested model which sibling properties under second parameter.
   */
   function sameAs(locator: any): (value: any, vm?: any) => boolean
   /**

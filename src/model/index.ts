@@ -7,3 +7,4 @@ export * from './key-value'
 
 export * from './Categories'
 export * from './Todos'
+export * from './Projects'
