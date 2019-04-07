@@ -70,8 +70,7 @@ export default class SingleTodo extends Vue {
     console.log('itemtodo.hoursplanned', this.itemtodo.hoursplanned)
     this.watchupdate('hoursplanned')
   }
-  // ++TODO: FIX! STATUSTODO WILL NOT UPDATE IF I DON'T PUT { immediate: true } parameter. ! WHY???
-  @Watch('itemtodo.statustodo', {immediate: true}) public valueChangedstatus() {
+  @Watch('itemtodo.statustodo') public valueChangedstatus() {
     console.log('itemtodo.statustodo', this.itemtodo.statustodo)
     this.watchupdate('statustodo')
   }

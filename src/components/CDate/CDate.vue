@@ -1,5 +1,5 @@
 <template>
-    <q-input :class="data_class" :readonly="readonly" :disable="readonly" debounce="1000" dense :value="getdatestring" stack-label :label="label" @input="changedate">
+    <q-input :class="data_class" :bg-color="color" :readonly="readonly" :disable="disable" debounce="1000" dense :value="getdatestring" stack-label :label="label" @input="changedate">
         <template v-slot:append>
             <q-icon name="event" class="cursor-pointer" :style="mystyleicon">
                 <q-popup-proxy v-if="!readonly" ref="datePicker">

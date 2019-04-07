@@ -20,7 +20,9 @@ const stateglob: IProjectsState = {
   visuLastCompleted: 10
 }
 
-const listFieldsToChange: string [] = ['descr', 'longdescr', 'hoursplanned', 'hoursworked', 'id_parent', 'statusproj', 'category', 'expiring_at', 'priority', 'id_prev', 'pos', 'enableExpiring', 'progress', 'live_url', 'test_url', 'begin_development', 'begin_test']
+const listFieldsToChange: string [] = ['descr', 'longdescr', 'hoursplanned', 'hoursworked', 'id_parent', 'statusproj', 'category', 'expiring_at', 'priority', 'id_prev', 'pos', 'enableExpiring', 'progressCalc', 'live_url', 'test_url', 'begin_development', 'begin_test', 'actualphase', 'totalphases', 'hoursweeky_plannedtowork', 'endwork_estimate']
+
+const listFieldsUpdateCalculation: string [] = ['hoursplanned', 'hoursworked', 'progressCalc', 'endwork_estimate']
 
 const b = storeBuilder.module<IProjectsState>('Projects', stateglob)
 const stateGetter = b.state()
@@ -37,6 +39,12 @@ function initcat() {
   rec.userId = UserStore.state.userId
 
   return rec
+}
+
+function updateDataCalculated(projout, projin) {
+  listFieldsUpdateCalculation.forEach((field) => {
+    projout[field] = projin[field];
+  });
 }
 
 namespace Getters {
@@ -60,13 +68,17 @@ namespace Getters {
       id_prev: '',
       pos: 0,
       modified: false,
-      hoursworked: 0,
-      hoursplanned: 0,
       live_url: '',
       test_url: '',
+      totalphases: 1,
+      actualphase: 1,
+      hoursworked: 0,
+      hoursplanned: 0,
       progressCalc: 0,
       begin_development: tools.getDateNull(),
-      begin_test: tools.getDateNull()
+      begin_test: tools.getDateNull(),
+      hoursweeky_plannedtowork: 0,
+      endwork_estimate: tools.getDateNull()
     }
 
     return obj
@@ -87,7 +99,7 @@ namespace Getters {
       const listaproj = tools.mapSort(state.projects.filter((proj) => proj.id_parent === process.env.PROJECT_ID_MAIN))
       const myarr: IMenuList[] = []
       for (const proj of listaproj) {
-        myarr.push({nametranslate: '', description: proj.descr, idelem: proj._id})
+        myarr.push({ nametranslate: '', description: proj.descr, idelem: proj._id })
       }
       return myarr
 
@@ -165,9 +177,20 @@ namespace Mutations {
     else {
       state.projects.push(objproj)
     }
+  }
 
-    // console.log('state.projects', state.projects)
+  function updateProject(state: IProjectsState, { objproj }) {
+    if (!!objproj) {
+      console.log('updateProject', objproj)
+      const index = tools.getIndexById(state.projects, objproj._id)
+      console.log('index', index)
+      if (index >= 0) {
+        updateDataCalculated(state.projects[index], objproj)
 
+        // state.projects.splice(index, 1, objproj)
+        // tools.notifyarraychanged(state.projects)
+      }
+    }
   }
 
   function deletemyitem(state: IProjectsState, myitem: IProject) {
@@ -179,7 +202,8 @@ namespace Mutations {
 
   export const mutations = {
     deletemyitem: b.commit(deletemyitem),
-    createNewItem: b.commit(createNewItem)
+    createNewItem: b.commit(createNewItem),
+    updateProject: b.commit(updateProject)
   }
 
 }
@@ -298,7 +322,7 @@ namespace Actions {
     return id
   }
 
-  async function modify(context, { myitem, field } ) {
+  async function modify(context, { myitem, field }) {
     return await ApiTables.table_ModifyRecord(nametable, myitem, listFieldsToChange, field)
   }
 

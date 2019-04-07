@@ -248,7 +248,11 @@ const messages = {
       hoursworked: 'Ore Lavorate',
       begin_development: 'Inizio Sviluppo',
       begin_test: 'Inizio Test',
-      progresstask: 'Progressione'
+      progresstask: 'Progressione',
+      actualphase: 'Fase Attuale',
+      hoursweeky_plannedtowork: 'Ore settimanali previste',
+      endwork_estimate: 'Data fine lavori stimata',
+      totalphases: 'Totale Fasi'
     }
   },
   'es': {
@@ -494,7 +498,11 @@ const messages = {
       hoursworked: 'Horas Trabajadas',
       begin_development: 'Comienzo desarrollo',
       begin_test: 'Comienzo Prueba',
-      progresstask: 'Progresion'
+      progresstask: 'Progresion',
+      actualphase: 'Fase Actual',
+      hoursweeky_plannedtowork: 'Horarios semanales programados',
+      endwork_estimate: 'Fecha estimada de finalización',
+      totalphases: 'Fases totales'
     }
   },
   'enUs': {
@@ -740,7 +748,11 @@ const messages = {
       hoursworked: 'Worked Hours',
       begin_development: 'Start Dev',
       begin_test: 'Start Test',
-      progresstask: 'Progression'
+      progresstask: 'Progression',
+      actualphase: 'Actual Phase',
+      hoursweeky_plannedtowork: 'Scheduled weekly hours',
+      endwork_estimate: 'Estimated completion date',
+      totalphases: 'Total Phase'
     }
   },
 };

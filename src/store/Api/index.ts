@@ -9,7 +9,7 @@ export { addAuthHeaders, removeAuthHeaders, API_URL } from './Instance'
 import Paths from '@paths'
 import { tools } from '@src/store/Modules/tools'
 
-import { GlobalStore, UserStore } from '@modules'
+import { GlobalStore, Projects, UserStore } from '@modules'
 import globalroutines from './../../globalroutines/index'
 import { serv_constants } from '@src/store/Modules/serv_constants'
 import router from '@router'
@@ -122,6 +122,21 @@ export namespace ApiTool {
     })
   }
 
+  function ReceiveResponsefromServer(tablesync, nametab, method, risdata) {
+    // console.log('ReceiveResponsefromServer', nametab, method, risdata)
+    if (!!risdata) {
+      // Updated somw data after Server arrived data.
+      if (method === 'PATCH') {
+        if (nametab === 'projects') {
+          if (!!risdata.projectris) {
+            const copyrec = tools.jsonCopy(risdata.projectris)
+            Projects.mutations.updateProject({ objproj: copyrec })
+          }
+        }
+      }
+    }
+  }
+
   export async function syncAlternative(mystrparam) {
     // console.log('[ALTERNATIVE Background syncing', mystrparam)
 
@@ -155,7 +170,8 @@ export namespace ApiTool {
 
                 // Insert/Delete/Update table to the server
                 return SendReq(link, method, rec)
-                  .then(() => {
+                  .then((ris) => {
+                    ReceiveResponsefromServer(tablesync, nametab, method, ris.data)
                     lettoqualcosa = true
                     return globalroutines(null, 'delete', tablesync, null, rec._id)
                   })

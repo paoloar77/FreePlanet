@@ -9,8 +9,6 @@ export interface IProject {
   id_parent?: string
   descr?: string
   longdescr?: string
-  hoursplanned?: number
-  hoursworked?: number
   priority?: number
   statusproj?: number
   created_at?: Date
@@ -22,32 +20,18 @@ export interface IProject {
   modified?: boolean
   pos?: number
   order?: number
-  progressCalc?: number
   live_url?: string
   test_url?: string
+  hoursplanned?: number
+  hoursworked?: number
+  progressCalc?: number
   begin_development?: Date
+  hoursweeky_plannedtowork?: number
+  endwork_estimate?: Date
   begin_test?: Date
+  totalphases?: number
+  actualphase?: number
 }
-
-export interface IParamIProject {
-  categorySel?: string
-  checkPending?: boolean
-  id?: string
-  objtodo?: IProject
-  atfirst?: boolean
-}
-
-/*
-export interface IDrag {
-  field?: string
-  idelemtochange?: string
-  prioritychosen?: number
-  oldIndex?: number
-  newIndex?: number
-  category: string
-  atfirst?: boolean
-}
-*/
 
 export interface IProjectsState {
   showtype: number

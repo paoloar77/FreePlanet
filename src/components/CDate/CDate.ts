@@ -10,9 +10,11 @@ import { date } from 'quasar'
 
 export default class CDate extends Vue {
   @Prop() public mydate!: Date
-  @Prop({ required: false }) public label: string
+  @Prop({ required: false, default: '' }) public label: string
   @Prop({ required: false, default: '' }) public data_class!: string
   @Prop({ required: false, default: false }) public readonly!: boolean
+  @Prop({ required: false, default: false }) public disable!: boolean
+  @Prop({ required: false, default: '' }) public color!: string
 
   public mystyleicon: string = 'font-size: 1.5rem;'
 

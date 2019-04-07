@@ -68,14 +68,23 @@ export default class SingleProject extends Vue {
   @Watch('itemproject.begin_development') public valueChangedbegin_development() {
     this.watchupdate('begin_development')
   }
+  @Watch('itemproject.hoursweeky_plannedtowork') public valueChangedhoursweeky_plannedtowork() {
+    this.watchupdate('hoursweeky_plannedtowork')
+  }
   @Watch('itemproject.begin_test') public valueChangedbegin_test() {
     this.watchupdate('begin_test')
+  }
+  @Watch('itemproject.actualphase') public valueChangedactualphase() {
+    this.watchupdate('actualphase')
+  }
+  @Watch('itemproject.totalphases') public valueChangedtotalphases() {
+    this.watchupdate('totalphases')
   }
   @Watch('itemproject.progressCalc') public valueChanged6() {
     console.log('itemproject.progressCalc')
     this.updateClasses()
 
-    console.log('this.percentageProgress', this.percentageProgress, 'this.itemproject.progressCalc', this.itemproject.progressCalc)
+    // console.log('this.percentageProgress', this.percentageProgress, 'this.itemproject.progressCalc', this.itemproject.progressCalc)
     this.watchupdate('progressCalc')
   }
 

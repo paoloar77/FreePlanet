@@ -153,7 +153,7 @@ export const tools = {
         icon: 'expand_less'
       },
       {
-        id: 2,
+        id: 3,
         label: 'Completato',
         value: 10,   //   Status.COMPLETED
         icon: 'expand_less'
@@ -174,7 +174,7 @@ export const tools = {
           icon: 'expand_less'
         },
         {
-          id: 2,
+          id: 3,
           label: 'Completado',
           value: 10,   //   Status.COMPLETED
           icon: 'expand_less'
@@ -195,7 +195,7 @@ export const tools = {
           icon: 'expand_less'
         },
         {
-          id: 2,
+          id: 3,
           label: 'Completed',
           value: 10,   //   Status.COMPLETED
           icon: 'expand_less'
@@ -691,10 +691,7 @@ export const tools = {
   }
   ,
 
-  logga_arrproj(myarr
-                  :
-                  IProject[]
-  ) {
+  logga_arrproj(myarr: IProject[]) {
     let mystr = '\n'
     myarr.forEach((item) => {
       mystr += tools.getelemprojstr(item) + '   '
@@ -795,18 +792,18 @@ export const tools = {
       console.log('swapElems PRIORITY', itemdragend)
     }
 
-    console.log('swapGeneralElem', 'new =', itemdragend.newIndex, 'Old =', itemdragend.oldIndex, itemdragend)
-
     if (itemdragend.newIndex === itemdragend.oldIndex) {
       return
     }
 
+    console.log('swapGeneralElem', 'new =', itemdragend.newIndex, 'Old =', itemdragend.oldIndex, itemdragend)
+
     if (tools.isOkIndex(myarr, itemdragend.newIndex) && tools.isOkIndex(myarr, itemdragend.oldIndex)) {
 
       console.log('SPLICE!')
-      console.log('   PRIMA!', tools.logga_arrproj(myarr))
+      // console.log('   PRIMA!', tools.logga_arrproj(myarr))
       myarr.splice(itemdragend.newIndex, 0, myarr.splice(itemdragend.oldIndex, 1)[0])
-      console.log('   DOPO!', tools.logga_arrproj(myarr))
+      // console.log('   DOPO!', tools.logga_arrproj(myarr))
 
       // Ora inverti gli indici
       const indold = itemdragend.oldIndex
@@ -874,7 +871,7 @@ export const tools = {
   ,
 
   getElemById(myarr, id) {
-    console.log('getElemById', myarr, id)
+    // console.log('getElemById', myarr, id)
     return myarr.find((elem) => elem._id === id)
   }
   ,
@@ -1271,6 +1268,7 @@ export const tools = {
   ,
   getTimestampsNow() {
     return new Date().valueOf()
-  }
+  },
+
 
 }
