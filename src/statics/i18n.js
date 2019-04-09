@@ -242,6 +242,7 @@ const messages = {
     connection: 'Connessione',
     proj: {
       newproj: 'Titolo Progetto',
+      newsubproj: 'Titolo Sotto-Progetto',
       longdescr: 'Descrizione',
       hoursplanned: 'Ore Preventivate',
       hoursadded: 'Ore Aggiuntive',
@@ -252,6 +253,8 @@ const messages = {
       actualphase: 'Fase Attuale',
       hoursweeky_plannedtowork: 'Ore settimanali previste',
       endwork_estimate: 'Data fine lavori stimata',
+      privacyread:'Chi lo puo vedere:',
+      privacywrite:'Chi lo puo modificare:',
       totalphases: 'Totale Fasi'
     }
   },
@@ -492,6 +495,7 @@ const messages = {
     connection: 'Connection',
     proj: {
       newproj: 'Título Projecto',
+      newsubproj: 'Título Sub-Projecto',
       longdescr: 'Descripción',
       hoursplanned: 'Horas Estimadas',
       hoursadded: 'Horas Adicional',
@@ -502,6 +506,8 @@ const messages = {
       actualphase: 'Fase Actual',
       hoursweeky_plannedtowork: 'Horarios semanales programados',
       endwork_estimate: 'Fecha estimada de finalización',
+      privacyread:'Quien puede verlo:',
+      privacywrite:'Quien puede modificarlo:',
       totalphases: 'Fases totales'
     }
   },
@@ -742,6 +748,7 @@ const messages = {
     connection: 'Conexión',
     proj: {
       newproj: 'Project Title',
+      newsubproj: 'SubProject Title',
       longdescr: 'Description',
       hoursplanned: 'Estimated Hours',
       hoursadded: 'Additional Hours',
@@ -752,6 +759,8 @@ const messages = {
       actualphase: 'Actual Phase',
       hoursweeky_plannedtowork: 'Scheduled weekly hours',
       endwork_estimate: 'Estimated completion date',
+      privacyread:'Who can see it:',
+      privacywrite:'Who can modify if:',
       totalphases: 'Total Phase'
     }
   },

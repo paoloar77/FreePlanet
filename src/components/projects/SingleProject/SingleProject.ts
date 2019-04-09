@@ -77,6 +77,12 @@ export default class SingleProject extends Vue {
   @Watch('itemproject.actualphase') public valueChangedactualphase() {
     this.watchupdate('actualphase')
   }
+  @Watch('itemproject.privacyread') public valueChanged_privacyread() {
+    this.watchupdate('privacyread')
+  }
+  @Watch('itemproject.privacywrite') public valueChanged_privacywrite() {
+    this.watchupdate('privacywrite')
+  }
   @Watch('itemproject.totalphases') public valueChangedtotalphases() {
     this.watchupdate('totalphases')
   }
@@ -88,8 +94,15 @@ export default class SingleProject extends Vue {
     this.watchupdate('progressCalc')
   }
 
+  get isMainProject() {
+    return tools.isMainProject(this.itemproject.id_parent)
+  }
+
   get getlabeltext() {
-    return this.$t('proj.newproj')
+    if (this.isMainProject)
+      return this.$t('proj.newproj')
+    else
+      return this.$t('proj.newsubproj')
   }
 
 /*

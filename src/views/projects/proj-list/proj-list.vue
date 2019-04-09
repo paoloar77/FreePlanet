@@ -11,7 +11,7 @@
                     <div>
                         <div class="divtitlecat clMain">
                             <div class="flex-container clMain">
-                                <q-btn v-if="!!getidProjParentAtt" size="sm" push color="secondary" round
+                                <q-btn v-if="!!getIdParent && CanISeeProject" size="sm" push color="secondary" round
                                        icon="arrow_back"
                                        :to="getrouteup">
 
@@ -122,95 +122,112 @@
                                         :label="$t('proj.longdescr')"
                                         outlined
                                         debounce="1000"
-                                        autogrow
-                                />
-
-                            </div>
-                        </div>
-                        <div class="flex-container clMain">
-                            <q-icon class="flex-item flex-icon" name="work_outline"/>
-                            <div class="flex-item itemdescr">
-                                <q-input
-                                        ref="input2"
-                                        readonly
-                                        v-model="itemselproj.hoursworked"
-                                        type="number"
-                                        rounded outlined
-                                        :label="$t('proj.hoursworked')"
-                                        debounce="500"></q-input>
-                                <CProgress descr="" :progressval="getCalcHoursWorked"></CProgress>
-                            </div>
-                            <q-icon class="flex-item flex-icon" name="watch_later"/>
-                            <div class="flex-item itemdata content-center">
-                                <q-input
-                                        ref="input3"
-                                        type="number"
-                                        readonly
-                                        v-model="itemselproj.hoursplanned"
-                                        rounded outlined
-                                        :label="$t('proj.hoursplanned')"
-                                        debounce="500">
-
+                                        autogrow>
                                 </q-input>
-                                <CProgress :descr="$t('proj.progresstask')"
-                                           :progressval="itemselproj.progressCalc"></CProgress>
+
                             </div>
                         </div>
-                        <div class="flex-container clMain">
-                            <q-icon class="flex-item flex-icon" name="developer_mode"/>
-                            <div class="flex-item itemdata">
-                                <CDate :mydate="itemselproj.begin_development"
-                                       @input="itemselproj.begin_development = new Date(arguments[0])"
-                                       :label="$t('proj.begin_development')">
-                                </CDate>
-                            </div>
-                            <div style="margin: 10px;"></div>
-                            <div class="flex-item itemdata">
-                                <CDate :mydate="itemselproj.begin_test" @input="itemselproj.begin_test = new Date(arguments[0])"
-                                       :label="$t('proj.begin_test')">
-                                </CDate>
-                            </div>
-                        </div>
-                        <div class="flex-container clMain">
-                            <q-icon class="flex-item flex-icon" name="outlined_flag"/>
+                        <div v-if="isMainProject" class="flex-container clMain">
+                            <q-icon class="flex-item flex-icon" name="lock"/>
                             <div class="flex-item itemstatus">
-                                <q-select rounded outlined v-model="itemselproj.actualphase" :options="selectPhase"
-                                          :label="$t('proj.actualphase')" emit-value map-options>
+                                <q-select :readonly="readonly_PanelPrivacy"
+                                          rounded outlined v-model="itemselproj.privacyread" :options="selectPrivacy"
+                                          :label="$t('proj.privacyread')" emit-value map-options>
                                 </q-select>
                             </div>
-                            <q-icon class="flex-item flex-icon" name="outlined_flag"/>
+                            <q-icon class="flex-item flex-icon" name="edit"/>
                             <div class="flex-item itemstatus">
-                                <q-select rounded outlined v-model="itemselproj.totalphases" :options="selectPhase"
-                                          :label="$t('proj.totalphases')" emit-value map-options>
+                                <q-select :readonly="readonly_PanelPrivacy" rounded outlined
+                                          v-model="itemselproj.privacywrite" :options="selectPrivacy"
+                                          :label="$t('proj.privacywrite')" emit-value map-options>
                                 </q-select>
                             </div>
                         </div>
+                        <div v-if="CanISeeProject">
+                            <div class="flex-container clMain">
+                                <q-icon class="flex-item flex-icon" name="work_outline"/>
+                                <div class="flex-item itemdescr">
+                                    <q-input
+                                            ref="input2"
+                                            readonly
+                                            v-model="itemselproj.hoursworked"
+                                            type="number"
+                                            rounded outlined
+                                            :label="$t('proj.hoursworked')"
+                                            debounce="500"></q-input>
+                                    <CProgress descr="" :progressval="getCalcHoursWorked"></CProgress>
+                                </div>
+                                <q-icon class="flex-item flex-icon" name="watch_later"/>
+                                <div class="flex-item itemdata content-center">
+                                    <q-input
+                                            ref="input3"
+                                            type="number"
+                                            readonly
+                                            v-model="itemselproj.hoursplanned"
+                                            rounded outlined
+                                            :label="$t('proj.hoursplanned')"
+                                            debounce="500">
 
-                        <div class="flex-container clMain">
-                            <q-icon class="flex-item flex-icon" name="watch_later"/>
-                            <div class="flex-item itemdata content-center">
-                                <q-input
-                                        ref="input3"
-                                        type="number"
-                                        v-model="itemselproj.hoursweeky_plannedtowork"
-                                        rounded outlined
-                                        maxlength="2"
-                                        :label="$t('proj.hoursweeky_plannedtowork')"
-                                        debounce="500">
-
-                                </q-input>
-                                <CProgress :progressval="calcprogressWeekly"></CProgress>
+                                    </q-input>
+                                    <CProgress :descr="$t('proj.progresstask')"
+                                               :progressval="itemselproj.progressCalc"></CProgress>
+                                </div>
                             </div>
-                            <q-icon class="flex-item flex-icon" name="developer_mode"/>
-                            <div class="flex-item itemdata">
-                                <CDate color="green-2" :mydate="calcEndWork_Estimate" :readonly="true"
-                                       :label="$t('proj.endwork_estimate')">
-                                </CDate>
+                            <div class="flex-container clMain">
+                                <q-icon class="flex-item flex-icon" name="developer_mode"/>
+                                <div class="flex-item itemdata">
+                                    <CDate :mydate="itemselproj.begin_development"
+                                           @input="itemselproj.begin_development = new Date(arguments[0])"
+                                           :label="$t('proj.begin_development')">
+                                    </CDate>
+                                </div>
+                                <div style="margin: 10px;"></div>
+                                <div class="flex-item itemdata">
+                                    <CDate :mydate="itemselproj.begin_test"
+                                           @input="itemselproj.begin_test = new Date(arguments[0])"
+                                           :label="$t('proj.begin_test')">
+                                    </CDate>
+                                </div>
+                            </div>
+                            <div class="flex-container clMain">
+                                <q-icon class="flex-item flex-icon" name="outlined_flag"/>
+                                <div class="flex-item itemstatus">
+                                    <q-select rounded outlined v-model="itemselproj.actualphase" :options="selectPhase"
+                                              :label="$t('proj.actualphase')" emit-value map-options>
+                                    </q-select>
+                                </div>
+                                <q-icon class="flex-item flex-icon" name="outlined_flag"/>
+                                <div class="flex-item itemstatus">
+                                    <q-select rounded outlined v-model="itemselproj.totalphases" :options="selectPhase"
+                                              :label="$t('proj.totalphases')" emit-value map-options>
+                                    </q-select>
+                                </div>
+                            </div>
+
+                            <div class="flex-container clMain">
+                                <q-icon class="flex-item flex-icon" name="watch_later"/>
+                                <div class="flex-item itemdata content-center">
+                                    <q-input
+                                            ref="input3"
+                                            type="number"
+                                            v-model="itemselproj.hoursweeky_plannedtowork"
+                                            rounded outlined
+                                            maxlength="2"
+                                            :label="$t('proj.hoursweeky_plannedtowork')"
+                                            debounce="500">
+
+                                    </q-input>
+                                    <CProgress :progressval="calcprogressWeekly"></CProgress>
+                                </div>
+                                <q-icon class="flex-item flex-icon" name="developer_mode"/>
+                                <div class="flex-item itemdata">
+                                    <CDate color="green-2" :mydate="calcEndWork_Estimate" :readonly="true"
+                                           :label="$t('proj.endwork_estimate')">
+                                    </CDate>
+                                </div>
                             </div>
                         </div>
-
                     </div>
-
                 </template>
                 <template v-else-if="(whatisSel === tools.WHAT_TODO) && (!!itemtodosel.descr)" v-slot:after>
                     <div class="q-pa-xs clMain">

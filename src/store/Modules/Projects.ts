@@ -20,7 +20,10 @@ const stateglob: IProjectsState = {
   visuLastCompleted: 10
 }
 
-const listFieldsToChange: string [] = ['descr', 'longdescr', 'hoursplanned', 'hoursworked', 'id_parent', 'statusproj', 'category', 'expiring_at', 'priority', 'id_prev', 'pos', 'enableExpiring', 'progressCalc', 'live_url', 'test_url', 'begin_development', 'begin_test', 'actualphase', 'totalphases', 'hoursweeky_plannedtowork', 'endwork_estimate']
+const listFieldsToChange: string [] = ['descr', 'longdescr', 'hoursplanned', 'hoursworked', 'id_parent', 'statusproj',
+  'category', 'expiring_at', 'priority', 'id_prev', 'pos', 'enableExpiring', 'progressCalc', 'live_url', 'test_url',
+  'begin_development', 'begin_test', 'actualphase', 'totalphases', 'hoursweeky_plannedtowork', 'endwork_estimate',
+  'privacyread', 'privacywrite', 'id_main_project', 'typeproj']
 
 const listFieldsUpdateCalculation: string [] = ['hoursplanned', 'hoursworked', 'progressCalc', 'endwork_estimate']
 
@@ -43,8 +46,8 @@ function initcat() {
 
 function updateDataCalculated(projout, projin) {
   listFieldsUpdateCalculation.forEach((field) => {
-    projout[field] = projin[field];
-  });
+    projout[field] = projin[field]
+  })
 }
 
 namespace Getters {
@@ -56,7 +59,9 @@ namespace Getters {
       _id: objectId(),
       descr: '',
       longdescr: '',
+      typeproj: 0,
       id_parent: '',
+      id_main_project: '',
       priority: tools.Priority.PRIORITY_NORMAL,
       statusproj: tools.Status.OPENED,
       created_at: tools.getDateNow(),
@@ -75,6 +80,8 @@ namespace Getters {
       hoursworked: 0,
       hoursplanned: 0,
       progressCalc: 0,
+      privacyread: '',
+      privacywrite: '',
       begin_development: tools.getDateNull(),
       begin_test: tools.getDateNull(),
       hoursweeky_plannedtowork: 0,
@@ -95,12 +102,13 @@ namespace Getters {
 
   const listaprojects = b.read((state: IProjectsState) => (): IMenuList[] => {
     if (state.projects) {
-      // console.log('state.projects', state.projects)
+      console.log('state.projects', state.projects)
       const listaproj = tools.mapSort(state.projects.filter((proj) => proj.id_parent === process.env.PROJECT_ID_MAIN))
       const myarr: IMenuList[] = []
       for (const proj of listaproj) {
         myarr.push({ nametranslate: '', description: proj.descr, idelem: proj._id })
       }
+      console.log('   myarr', myarr, listaproj)
       return myarr
 
     } else {
@@ -119,17 +127,6 @@ namespace Getters {
 
     return ''
   }, 'getDescrById')
-
-  const getParentById = b.read((state: IProjectsState) => (id: string): string => {
-    if (state.projects) {
-      const itemfound = state.projects.find((item) => item._id === id)
-      if (!!itemfound) {
-        return itemfound.id_parent
-      }
-    }
-
-    return ''
-  }, 'getParentById')
 
   const getRecordById = b.read((state: IProjectsState) => (id: string): IProject => {
     if (state.projects) {
@@ -151,13 +148,9 @@ namespace Getters {
     get getDescrById() {
       return getDescrById()
     },
-    get getParentById() {
-      return getParentById()
-    },
     get getRecordById() {
       return getRecordById()
     }
-
   }
 }
 
@@ -282,6 +275,8 @@ namespace Actions {
     objproj.descr = myobj.descr
     objproj.category = myobj.category
     objproj.id_parent = myobj.id_parent
+    objproj.id_main_project = myobj.id_main_project
+    objproj.typeproj = myobj.typeproj
 
     let elemtochange: IProject = null
 

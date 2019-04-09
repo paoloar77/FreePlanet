@@ -6,6 +6,8 @@ export interface IProject {
   _id?: any,
   userId?: string
   category?: string
+  typeproj?: number
+  id_main_project?: string
   id_parent?: string
   descr?: string
   longdescr?: string
@@ -31,6 +33,8 @@ export interface IProject {
   begin_test?: Date
   totalphases?: number
   actualphase?: number
+  privacyread?: string
+  privacywrite?: string
 }
 
 export interface IProjectsState {
@@ -38,4 +42,16 @@ export interface IProjectsState {
   projects: IProject[]
   insidePending: boolean
   visuLastCompleted: number
+}
+
+export const Privacy = {
+  all: 'all',
+  friends: 'friends',
+  mygroup: 'mygroup',
+  onlyme: 'onlyme'
+}
+
+export const TypeProj = {
+  TYPE_PROJECT: 1,
+  TYPE_SUBDIR: 2
 }

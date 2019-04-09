@@ -67,6 +67,18 @@ namespace Getters {
     return state.servercode
   }, 'getServerCode')
 
+  const IsMyFriend = b.read((state) => (userIdOwner) => {
+    // ++TODO Check if userIdOwner is my friend
+    // userIdOwner is my friend ?
+    return true
+  }, 'IsMyFriend')
+
+  const IsMyGroup = b.read((state) => (userIdOwner) => {
+    // ++TODO Check if userIdOwner is on my groups
+    // userIdOwner is on my groups ?
+    return true
+  }, 'IsMyGroup')
+
   export const getters = {
     get lang() {
       return lang()
@@ -80,6 +92,12 @@ namespace Getters {
     get getServerCode() {
       return getServerCode()
     },
+    get IsMyFriend() {
+      return IsMyFriend()
+    },
+    get IsMyGroup() {
+      return IsMyGroup()
+    }
     // get fullName() { return fullName();},
   }
 
