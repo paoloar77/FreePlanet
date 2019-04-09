@@ -4,7 +4,7 @@ export interface ITodo {
   category?: string
   descr?: string,
   priority?: number,
-  completed?: boolean,
+  statustodo?: number,
   created_at?: Date,
   modify_at?: Date,
   completed_at?: Date,
@@ -15,6 +15,12 @@ export interface ITodo {
   pos?: number,
   order?: number,
   progress?: number
+  progressCalc?: number
+  phase?: number
+  assigned_to_userId?: string
+  hoursplanned?: number
+  hoursworked?: number
+  start_date?: Date
 }
 
 export interface IParamTodo {
@@ -31,7 +37,8 @@ export interface IDrag {
   prioritychosen?: number
   oldIndex?: number
   newIndex?: number
-  category: string
+  category?: string
+  id_proj?: string
   atfirst?: boolean
 }
 
@@ -41,7 +48,7 @@ export interface ITodosState {
   categories: string[]
   // todos_changed: number
   reload_fromServer: number
-  testpao: String
+  testpao: string
   insidePending: boolean
   visuLastCompleted: number
 }

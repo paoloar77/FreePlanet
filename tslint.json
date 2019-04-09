@@ -6,11 +6,12 @@
   "jsRules": {},
   "rules": {
     "no-console": false,
+    "curly": [false],
     "object-literal-sort-keys": false,
 //    "no-restricted-syntax": [
 //      "error",
 //      {
-//        "selector": "CallExpression[callee.object.name='console'][callee.property.name!=/^(log|warn|error|info|trace)$/]",
+//        "selector": "CallExpression[callee.object.nametranslate='console'][callee.property.nametranslate!=/^(log|warn|error|info|trace)$/]",
 //        "message": "Unexpected property on console object was called"
 //      }
 //    ],

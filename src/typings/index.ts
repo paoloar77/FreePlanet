@@ -2,7 +2,7 @@
 
 // export * from './GlobalState.d'
 
-
+export * from './ProgressBar.d'
 
 export interface IResponse<T> {
   success?: boolean,

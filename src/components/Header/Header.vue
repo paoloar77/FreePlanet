@@ -47,11 +47,11 @@
                 <!--
                                 <div v-if="isAdmin">
                                     <q-btn flat dense round aria-label="">
-                                        <q-icon :class="clCloudUpload" name="cloud_upload"></q-icon>
+                                        <q-icon :class="clCloudUpload" nametranslate="cloud_upload"></q-icon>
                                     </q-btn>
 
                                     <q-btn flat dense round aria-label="">
-                                        <q-icon :class="clCloudUp_Indexeddb" name="arrow_upward"></q-icon>
+                                        <q-icon :class="clCloudUp_Indexeddb" nametranslate="arrow_upward"></q-icon>
                                     </q-btn>
 
                                 </div>

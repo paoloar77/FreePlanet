@@ -28,7 +28,6 @@ export default class Home extends Vue {
   public visibile: boolean = false
   public cardvisible: string = 'hidden'
   public displaycard: string = 'block'
-  public svgclass: string = 'svgclass'
   public $t: any
   // public firstClassSection: string = 'landing_background fade homep-cover-img animate-fade homep-cover-img-1'
   public firstClassSection: string = 'fade homep-cover-img animate-fade homep-cover-img-1'

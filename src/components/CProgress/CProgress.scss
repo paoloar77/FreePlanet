@@ -1,0 +1,45 @@
+$heightBtn: 100%;
+
+.flex-item{
+  // background-color: #d5e2eb;
+  display: flex;
+  padding: 2px;
+  margin: 2px;
+  margin-left: 3px;
+  margin-right: 3px;
+  color: #000;
+  font-size: 1rem;
+  height: $heightBtn;
+  line-height: $heightBtn;
+  vertical-align: middle;
+  //flex: 0 0 100%;
+}
+
+.progress-item {
+  margin: 1px;
+  padding: 2px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  flex: 1;
+  flex-direction: column;
+  order: 1;
+}
+
+.cpr-progrbar-item {
+  //height: 10px
+  margin-top: 11px;
+  margin-bottom: 11px;
+  height:15px;
+}
+
+.cpr-slider-item {
+  //height: 10px
+}
+
+.cpr-percProgress {
+  padding-top: 3px;
+  color: #888;
+  vertical-align: middle;
+  text-align: center;
+  //line-height: $heightitem;
+}

@@ -10,9 +10,10 @@ import { SubMenus } from '../SubMenus'
 
 import { date } from 'quasar'
 import { askConfirm } from '../../../classes/routinestd'
+import { CDate } from '../../CDate'
 
 @Component({
-  components: { SubMenus },
+  components: { SubMenus, CDate },
   name: 'SingleTodo'
 })
 export default class SingleTodo extends Vue {
@@ -22,7 +23,7 @@ export default class SingleTodo extends Vue {
   public classCompleted: string = ''
   public classDescr: string = ''
   public classDescrEdit: string = ''
-  public classExpiring: string = 'flex-item data-item shadow-1'
+  public classExpiring: string = 'flex-item data-item shadow-1 hide-if-small'
   public classExpiringEx: string = ''
   public iconPriority: string = ''
   public popover: boolean = false
@@ -42,11 +43,11 @@ export default class SingleTodo extends Vue {
 
   public $q: any
 
-  @Prop({ required: true }) public itemtodo: ITodo
+  get tools() {
+    return tools
+  }
 
-  // @Watch('itemtodo.completed') valueChanged() {
-  //   this.watchupdate('completed')
-  // }
+  @Prop({ required: true }) public itemtodo: ITodo
 
   @Watch('itemtodo.enableExpiring') public valueChanged4() {
     this.watchupdate('enableExpiring')
@@ -62,6 +63,33 @@ export default class SingleTodo extends Vue {
 
   @Watch('itemtodo.descr') public valueChanged5() {
     this.precDescr = this.itemtodo.descr
+    this.watchupdate('descr')
+  }
+
+  @Watch('itemtodo.hoursplanned') public valueChangedhoursplanned() {
+    console.log('itemtodo.hoursplanned', this.itemtodo.hoursplanned)
+    this.watchupdate('hoursplanned')
+  }
+  @Watch('itemtodo.statustodo') public valueChangedstatus() {
+    console.log('itemtodo.statustodo', this.itemtodo.statustodo)
+    this.watchupdate('statustodo')
+  }
+  @Watch('itemtodo.completed_at') public valueChangedcompleted_at() {
+    console.log('itemtodo.completed_at', this.itemtodo.completed_at)
+    this.watchupdate('completed_at')
+  }
+  @Watch('itemtodo.hoursworked') public valueChangedhoursworked() {
+    console.log('itemtodo.hoursworked', this.itemtodo.hoursworked)
+    this.watchupdate('hoursworked')
+  }
+  @Watch('itemtodo.start_date') public valueChangedstart_date() {
+    this.watchupdate('start_date')
+  }
+  @Watch('itemtodo.assigned_to_userId') public valueChangedend_assigned_to_userId() {
+    this.watchupdate('assigned_to_userId')
+  }
+  @Watch('itemtodo.phase') public valueChangedend_phase() {
+    this.watchupdate('phase')
   }
 
   @Watch('itemtodo.progress') public valueChanged6() {
@@ -93,6 +121,7 @@ export default class SingleTodo extends Vue {
   }
 
   public watchupdate(field = '') {
+    console.log('watchupdate', field)
     this.$emit('eventupdate', {myitem: this.itemtodo, field } )
     this.updateicon()
   }
@@ -110,9 +139,9 @@ export default class SingleTodo extends Vue {
     if (this.itemtodo.progress > 100)
       this.itemtodo.progress = 100
 
-    this.classExpiring = 'flex-item data-item shadow-1'
+    this.classExpiring = 'flex-item data-item shadow-1 hide-if-small'
     this.classExpiringEx = ''
-    if (this.itemtodo.completed) {
+    if (this.itemtodo.statustodo === tools.Status.COMPLETED) {
       this.percentageProgress = 100
       this.classCompleted += ' icon_completed'
       this.classDescr += ' status_completed'
@@ -126,27 +155,22 @@ export default class SingleTodo extends Vue {
     this.menuProgress = 'menuProgress'
     this.percProgress = 'percProgress'
 
-    let mycolcl = ''
-    if (this.itemtodo.progress < 33) {
-      mycolcl = ' lowperc'
-    } else if (this.itemtodo.progress < 66) {
-      mycolcl = ' medperc'
-    } else {
-      mycolcl = ' highperc'
-    }
+    let mycolcl = ' ' + tools.getProgressClassColor(this.itemtodo.progress)
+    this.colProgress = tools.getProgressColor(this.itemtodo.progress)
 
-    if (this.itemtodo.completed) {
+    if (this.itemtodo.statustodo === tools.Status.COMPLETED) {
       mycolcl = ' percompleted'
+      this.colProgress = 'gray'
     }
 
-    this.colProgress = mycolcl
+    this.colProgress = tools.getProgressColor(this.itemtodo.progress)
 
     this.menuProgress += mycolcl
     this.percProgress += mycolcl
 
     this.clButtPopover = this.sel ? 'pos-item-popover comp_selected' : 'pos-item-popover'
 
-    if (!this.itemtodo.completed) {
+    if (this.itemtodo.statustodo !== tools.Status.COMPLETED) {
       this.clButtPopover += ' pos-item-popover_cursor'
     }
 
@@ -174,10 +198,6 @@ export default class SingleTodo extends Vue {
 
   }
 
-  public getstrDate(mytimestamp) {
-    return date.formatDate(mytimestamp, 'DD-MM-YY')
-  }
-
   public created() {
     this.precDescr = this.itemtodo.descr
     this.updateicon()
@@ -197,7 +217,8 @@ export default class SingleTodo extends Vue {
 
     if (!this.sel) {
       if (!this.inEdit) {
-        this.$emit('deselectAllRows', this.itemtodo, true)
+        this.$emit('deselectAllRowsproj', null, false, false)
+        this.$emit('deselectAllRowstodo', this.itemtodo, true)
 
         if (!this.sel) {
           this.selectRiga()
@@ -240,11 +261,13 @@ export default class SingleTodo extends Vue {
   }
 
   public clickRow() {
+    this.$emit('setitemsel', null)
+    this.$emit('setitemsel', this.itemtodo)
     this.clickRiga()
   }
 
   public editTodo() {
-    if (!this.itemtodo.completed) {
+    if (this.itemtodo.statustodo !== tools.Status.COMPLETED) {
       // console.log('INIZIO - editTodo')
       this.$emit('click')
       this.precDescr = this.itemtodo.descr
@@ -271,7 +294,7 @@ export default class SingleTodo extends Vue {
         theField = this.$refs[elem] as HTMLInputElement
       }
 
-      if (theField !== undefined) {
+      if (!!theField) {
         theField.focus()
       }
       // console.log('focus()')
@@ -285,8 +308,9 @@ export default class SingleTodo extends Vue {
       }
       // console.log('exitEdit')
       this.inEdit = false
-      this.updateClasses
-      this.$emit('deselectAllRows', this.itemtodo, false, singola)
+      this.updateClasses()
+      this.$emit('deselectAllRowsproj', null, false, false)
+      this.$emit('deselectAllRowstodo', this.itemtodo, false, singola)
     }
   }
 
@@ -369,9 +393,9 @@ export default class SingleTodo extends Vue {
     this.updateClasses()
   }
 
-  public aggiornaProgress(value, initialval){
+  public aggiornaProgress(value, initialval) {
     if (value !== initialval) {
-      this.itemtodo.progress = value
+      this.itemtodo.progress = parseInt(value, 10)
       this.updatedata('progress')
       this.deselectAndExitEdit()
     }
@@ -379,11 +403,12 @@ export default class SingleTodo extends Vue {
 
   public setCompleted() {
     // console.log('setCompleted')
-    this.itemtodo.completed = !this.itemtodo.completed
-
-    this.updateicon()
-
-    this.updatedata('completed')
+    if (this.itemtodo.statustodo === tools.Status.COMPLETED) {
+      this.itemtodo.statustodo = tools.Status.OPENED
+    } else {
+      this.itemtodo.statustodo = tools.Status.COMPLETED
+    }
+    this.watchupdate('statustodo')
 
     this.deselectAndExitEdit()
   }
@@ -396,20 +421,20 @@ export default class SingleTodo extends Vue {
 
   public updateicon() {
     // console.log('updateicon')
-    if (this.itemtodo.completed) {
+    if (this.itemtodo.statustodo === tools.Status.COMPLETED) {
       this.iconCompleted = 'check_circle'
     }
     else {
       this.iconCompleted = 'check_circle_outline'
     }
 
-    if (this.itemtodo.priority === tools.Todos.PRIORITY_HIGH) {
+    if (this.itemtodo.priority === tools.Priority.PRIORITY_HIGH) {
       this.iconPriority = 'expand_less'
     }  // expand_less
-    else if (this.itemtodo.priority === tools.Todos.PRIORITY_NORMAL) {
+    else if (this.itemtodo.priority === tools.Priority.PRIORITY_NORMAL) {
       this.iconPriority = 'remove'
  }
-    else if (this.itemtodo.priority === tools.Todos.PRIORITY_LOW) {
+    else if (this.itemtodo.priority === tools.Priority.PRIORITY_LOW) {
       this.iconPriority = 'expand_more'
  }  // expand_more
 
@@ -417,7 +442,7 @@ export default class SingleTodo extends Vue {
   }
 
   public removeitem(id) {
-    this.$emit('deleteItem', id)
+    this.$emit('deleteItemtodo', id)
   }
 
   public enableExpiring() {
@@ -458,15 +483,35 @@ export default class SingleTodo extends Vue {
     const cancelstr = this.$t('dialog.cancel')
 
     const msg = this.$t('dialog.msg.deleteTask', {mytodo : this.itemtodo.descr })
-    await askConfirm(this.$q, this.$t('dialog.msg.titledeleteTask'), msg, deletestr, cancelstr)
-      .then((ris) => {
-        console.log('ris', ris)
-        if (ris) {
-          this.removeitem(this.itemtodo._id)
-        }
-      }).catch((err) => {
 
+    this.$q.dialog({
+      cancel: {
+        label: cancelstr
+      },
+      message: msg,
+      ok: {
+        label: deletestr,
+        push: true
+      },
+      title: this.$t('dialog.msg.titledeleteTask')
+    }).onOk(() => {
+      console.log('OK')
+      this.removeitem(this.itemtodo._id)
+    }).onCancel(() => {
+      console.log('CANCEL')
     })
+
+    /*
+        // return await askConfirm(this.$q, this.$t('dialog.msg.titledeleteTask'), msg, deletestr, cancelstr)
+          .then((ris) => {
+            console.log('ris', ris)
+            if (ris) {
+              this.removeitem(this.itemtodo._id)
+            }
+          }).catch((err) => {
+
+        })
+    */
   }
 
 }

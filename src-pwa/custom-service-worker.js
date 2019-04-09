@@ -26,11 +26,11 @@ const cfgenv = {
 
 // console.log('serverweb', cfgenv.serverweb)
 
-
 async function writeData(table, data) {
   // console.log('writeData', table, data);
   await idbKeyval.setdata(table, data);
 }
+
 
 async function readAllData(table) {
   // console.log('readAllData', table);
@@ -105,8 +105,8 @@ if (workbox) {
 
   workbox.routing.registerRoute(
     new RegExp(/(.*)article(.*)\.html/), args => {
-    return articleHandler.handle(args);
-  });
+      return articleHandler.handle(args);
+    });
 
 
   workbox.routing.registerRoute(
@@ -123,78 +123,100 @@ if (workbox) {
 
   // console.log('  routing.registerRoute function declaration:')
 
-  workbox.routing.registerRoute(
-    new RegExp(cfgenv.serverweb + '/todos/'),
-    function (args) {
-      console.log('registerRoute! ', cfgenv.serverweb + '/todos/')
-      // console.log('DATABODY:', args.event.request.body)
-      let myres = null
-      // return fetch(args.event.request, args.event.headers)
-      return fetch(args.event.request, args.event.headers)
-        .then(function (res) {
-          myres = res
-          // console.log('1° *******  [[[ SERVICE-WORKER ]]] registerRoute fetch: -> ', args.event.request, res)
-          // LOAD FROM SERVER , AND SAVE INTO INDEXEDDB
-          // console.log('res.status', res.status)
-          if (res.status === 200) {
-            const clonedRes = res.clone();
+  function Execute_Fetch(table, args) {
+    console.log('Execute_Fetch registerRoute! ', cfgenv.serverweb + '/' + table + '/')
+    // console.log('DATABODY:', args.event.request.body)
+    let myres = null
+    // return fetch(args.event.request, args.event.headers)
+    return fetch(args.event.request, args.event.headers)
+      .then(function (res) {
+        myres = res
+        if (res.status === 200) {
+          const clonedRes = res.clone();
 
-            // console.log('1) clearAllData(categories)')
-            return clearAllData('categories')
-              .then(() => {
+          let secondatab = ''
+          if (table === 'todos') {
+            secondatab = 'categories'
+          }
+          console.log('1) clearAllData: ', table)
+          return clearAllData(table)
+            .then(() => {
+              if (secondatab !== '') {
                 // console.log('2) clearAllData(todos)')
-                return clearAllData('todos')
+                return clearAllData(secondatab)
                   .then(() => {
                     // console.log('3)  ....return clonedRes')
                     return clonedRes
                   })
-              })
-          }
-        })
-        .then((clonedRes) => {
-          // console.log('  3) ')
-          if (clonedRes !== undefined)
-            return clonedRes.json();
-          return null
-        })
-        .then(data => {
-          // console.log('  4) data = ', data)
-          if (data) {
-            if (data.todos) {
+              } else {
+                return clonedRes
+              }
+            })
+        }
+      })
+      .then((clonedRes) => {
+        // console.log('  3) ')
+        if (!!clonedRes)
+          return clonedRes.json();
+        return null
+      })
+      .then(data => {
+        // console.log('  4) data = ', data)
+        if (data) {
 
-              let promiseChain = Promise.resolve();
+          myarr = idbKeyval.getArrayByTable(table, data)
+          if (myarr) {
 
-              console.log('*********+++++++++++++++++**********    Records TODOS Received from Server [', data.todos.length, 'record]', data.todos)
+            let promiseChain = Promise.resolve();
 
-              for (let cat in data.categories) {
+            console.log('*********+++++++++++++++++**********    Records ', table + ' Received from Server [', myarr.length, 'record]', myarr)
+
+            if (table === 'todos') {
+              for (const cat in data.categories) {
                 promiseChain = promiseChain.then(() => {
-                  return writeData('categories', { _id: cat, valore: data.categories[cat] } )
+                  return writeData('categories', { _id: cat, valore: data.categories[cat] })
                 })
               }
 
-              for (let indrecCat in data.todos) {
-                for (let indrec in data.todos[indrecCat]) {
+              for (const arrsing of myarr) {
+                for (const rec of arrsing) {
                   promiseChain = promiseChain.then(() => {
-                    return writeData('todos', data.todos[indrecCat][indrec])
+                    return writeData(table, rec)
                   })
                 }
               }
-
-              // console.log('promiseChain', promiseChain)
-
-              return promiseChain
+            } else {
+              // Others tables
+              for (const rec of myarr) {
+                promiseChain = promiseChain.then(() => {
+                  return writeData(table, rec)
+                })
+              }
             }
-          }
-        })
-        .then(() => {
-          return myres
-        })
-        .catch(err => {
-          console.log('ERROR registerRoute FETCH:', err)
-          return myres
-        })
-    })
 
+            // console.log('promiseChain', promiseChain)
+
+            return promiseChain
+          }
+        }
+      })
+      .then(() => {
+        return myres
+      })
+      .catch(err => {
+        console.log('ERROR registerRoute FETCH:', err)
+        return myres
+      })
+  }
+
+  for (let table of MainTables) {
+    workbox.routing.registerRoute(
+      new RegExp(cfgenv.serverweb + '/' + table + '/'),
+      function (args) {
+        Execute_Fetch(table, args)
+      })
+
+  }
 
   workbox.routing.registerRoute(function (routeData) {
     return (routeData.event.request.headers.get('accept').includes('text/html'));
@@ -236,24 +258,24 @@ if (workbox) {
 
   workbox.routing.registerRoute(
     new RegExp(/\.(?:js|css|font)$/),
-    new workbox.strategies.StaleWhileRevalidate( {
+    new workbox.strategies.StaleWhileRevalidate({
       cacheName: 'js-css-fonts',
     }),
   );
 
-/*
-  workbox.routing.registerRoute(
-    new RegExp('https://cdnjs.coudflare.com/ajax/libs/material-design-lite/1.3.0/material.indigo-pink.min.css'),
-    workbox.strategies.staleWhileRevalidate({
-      cacheName: 'material-css',
-      plugins: [
-        new workbox.expiration.Plugin({
-          maxAgeSeconds: 30 * 24 * 60 * 60,
-        }),
-      ]
-    })
-  );
-*/
+  /*
+    workbox.routing.registerRoute(
+      new RegExp('https://cdnjs.coudflare.com/ajax/libs/material-design-lite/1.3.0/material.indigo-pink.min.css'),
+      workbox.strategies.staleWhileRevalidate({
+        cacheName: 'material-css',
+        plugins: [
+          new workbox.expiration.Plugin({
+            maxAgeSeconds: 30 * 24 * 60 * 60,
+          }),
+        ]
+      })
+    );
+  */
 
 // Storage
   workbox.routing.registerRoute(
@@ -283,20 +305,20 @@ if (workbox) {
     })
   );
 
-/*
-  workbox.routing.registerRoute(
-    new RegExp(/^http/),
-    workbox.strategies.networkFirst({
-      cacheName: 'all-stuff',
-      plugins: [
-        new workbox.expiration.Plugin({
-          maxAgeSeconds: 10 * 24 * 60 * 60,
-          // Only cache 10 requests.
-        }),
-      ]
-    })
-  );
-*/
+  /*
+    workbox.routing.registerRoute(
+      new RegExp(/^http/),
+      workbox.strategies.networkFirst({
+        cacheName: 'all-stuff',
+        plugins: [
+          new workbox.expiration.Plugin({
+            maxAgeSeconds: 10 * 24 * 60 * 60,
+            // Only cache 10 requests.
+          }),
+        ]
+      })
+    );
+  */
 
 
   workbox.routing.registerRoute(
@@ -514,7 +536,7 @@ self.addEventListener('notificationclick', function (event) {
             return c.visibilityState === 'visible';
           });
 
-          if (client !== undefined) {
+          if (!!client) {
             client.navigate(notification.data.url);
             client.focus();
           } else {

@@ -1,4 +1,4 @@
-import { UserStore } from '../store/Modules'
+import { UserStore } from '@modules'
 import messages from '../statics/i18n'
 
 function translate(params) {
@@ -8,7 +8,7 @@ function translate(params) {
   const stringa = messages[lang]
 
   let ris = stringa
-  if (ris !== undefined) {
+  if (!!ris) {
     msg.forEach((param) => {
       ris = ris[param]
     })

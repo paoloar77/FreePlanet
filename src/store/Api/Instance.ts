@@ -27,8 +27,10 @@ axiosInstance.interceptors.response.use(
       if (process.env.DEBUG === '1')
         console.log('Status = ', error.response.status)
       console.log('Request Error: ', error.response)
-      if (error.response.status) {
+      if (error.response.status !== 0) {
         GlobalStore.mutations.setStateConnection('online')
+      } else {
+        GlobalStore.mutations.setStateConnection('offline')
       }
     } else {
       GlobalStore.mutations.setStateConnection('offline')
@@ -48,7 +50,7 @@ export const removeAuthHeaders = () => {
 async function Request(type: string, path: string, payload: any): Promise<Types.AxiosSuccess | Types.AxiosError> {
   let ricevuto = false
   try {
-    console.log(`Axios Request [${type}]:`, axiosInstance.defaults, 'path:', path)
+    console.log('Axios Request', path, type, payload)
     let response: AxiosResponse
     if (type === 'post' || type === 'put' || type === 'patch') {
       response = await axiosInstance[type](path, payload, {
@@ -58,10 +60,12 @@ async function Request(type: string, path: string, payload: any): Promise<Types.
         }
       })
       ricevuto = true
-      console.log('Request Response: ', response)
+      // console.log('Request Response: ', response)
       // console.log(new Types.AxiosSuccess(response.data, response.status))
 
       const setAuthToken = (path === '/updatepwd')
+
+      // console.log('--------- 0 ')
 
       if (response && (response.status === 200)) {
         let x_auth_token = ''

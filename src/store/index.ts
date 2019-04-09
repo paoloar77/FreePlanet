@@ -5,6 +5,7 @@ import { IGlobalState } from 'model'
 import { Route } from 'vue-router'
 import { getStoreBuilder } from 'vuex-typex'
 
+import { IProgressState } from '@types'
 
 export interface RootState {
   GlobalModule: IGlobalState

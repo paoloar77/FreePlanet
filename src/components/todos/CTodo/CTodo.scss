@@ -1,0 +1,110 @@
+.flex-container{
+  background-color: rgb(250, 250, 250);
+  padding: 2px;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+
+
+.mycard {
+  visibility: hidden;
+}
+
+.myitemdrag {
+  padding: 2px;
+  //margin-top: 4px;
+  border-width: 1px 0px 0px 0px;
+  //border: solid 1px #ccc;
+  border-style: solid;
+  border-color: #ccc;
+  transition: all .4s;
+}
+
+.titlePriority, .titleCompleted{
+  border-width: 0px 0px 1px 0px;
+  border-style: solid;
+  border-color: #ccc;
+  color:white;
+}
+
+.titleCompleted {
+  background-color: #ccc;
+}
+
+.high_priority {
+  background-color: #4caf50;
+}
+
+.medium_priority {
+  background-color: #3846af;
+}
+
+.low_priority {
+  background-color: #af2218;
+}
+
+
+
+.myitemdrag-enter, .myitemdrag-leave-active {
+  opacity: 0;
+}
+
+.drag {
+  //background-color: green;
+}
+
+.dragArea {
+  min-height: 10px;
+}
+
+.divtitlecat {
+  margin: 5px;
+  padding: 5px;
+}
+
+.categorytitle{
+  color:blue;
+  background-color: lightblue;
+  font-size: 1.25rem;
+  font-weight: bold;
+  text-align: center;
+  flex: 1;
+}
+
+.titleSubMenu {
+  font-size: 0.7rem;
+  font-weight: 350;
+}
+
+.draggatodraggato2 {
+  display: inline-block;
+}
+
+.non-draggato {
+  display: none;
+}
+
+@keyframes fadeIn {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 0.3;
+  }
+}
+
+.divdrag{
+  animation: fadeIn 0.2s ease-in 1 forwards;
+  min-height: 50px;
+  background-color: #9f9f9f;
+}
+
+.menuInputCompleted > div:nth-child(2) > div > input {
+  min-width: 30px;
+  width: 30px;
+}

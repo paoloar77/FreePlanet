@@ -4,7 +4,6 @@ import { UserStore } from '@modules'
 import { GlobalStore } from '@modules'
 import Vue from 'vue'
 import { Component, Prop } from 'vue-property-decorator'
-import { tools } from '@src/store/Modules/tools'
 
 const namespace: string = 'GlobalModule'
 

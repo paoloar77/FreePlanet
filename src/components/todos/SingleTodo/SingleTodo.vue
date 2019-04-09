@@ -4,12 +4,12 @@
             <q-btn push flat
                    :class="classCompleted"
                    :icon="iconCompleted"
-                   @click.native="setCompleted">
+                   @click="setCompleted">
             </q-btn>
         </div>
 
         <div class="flex-item donotdrag divdescrTot">
-            <q-input v-if="sel && !itemtodo.completed" hide-underline type="textarea" ref="inputdescr"
+            <q-input v-if="sel && itemtodo.statustodo !== tools.Status.COMPLETED" hide-underline type="textarea" ref="inputdescr"
                      v-model.trim="precDescr"
                      autogrow
                      borderless
@@ -56,45 +56,21 @@
 
 
         <div v-if="itemtodo.enableExpiring" :class="classExpiring">
-            <span class="data_string">{{getstrDate(itemtodo.expiring_at)}}</span>
-            <q-icon name="event" class="cursor-pointer" style="padding: 2px;">
-                <q-popup-proxy>
-                    <q-date v-model="itemtodo.expiring_at" today-btn/>
-                </q-popup-proxy>
-            </q-icon>
-            <!--<q-icon name="event" class="cursor-pointer" />-->
-            <!--<q-popup-edit v-model="itemtodo.expiring_at"-->
-            <!--title="Edit"-->
-            <!--buttons class="">-->
-            <!--<q-input-->
-            <!--filled-->
-            <!--v-model="itemtodo.expiring_at"-->
-            <!--type="date"-->
-            <!--class="myexpired"-->
-            <!--format="DD/MM/YYYY"-->
-            <!--&gt;-->
-            <!--</q-input>-->
-            <!--</q-popup-edit>-->
+            <CDate :mydate="itemtodo.expiring_at" @input="itemtodo.expiring_at = new Date(arguments[0])"
+                   data_class="data_string">
+            </CDate>
         </div>
         <div v-if="isTodo()" class="flex-item pos-item " @mousedown="clickRiga">
-            <q-btn push
+            <q-btn flat
                    :class="clButtPopover"
                    icon="menu">
-                <q-menu id="popmenu" v-if="true" self="top right">
+                <q-menu ref="popmenu" self="top right">
                     <SubMenus :menuPopupTodo="menuPopupTodo" :itemtodo="itemtodo" @clickMenu="clickMenu"
                               @setPriority="setPriority"></SubMenus>
                 </q-menu>
 
             </q-btn>
         </div>
-        <!--clButtPopover: {{ clButtPopover }}-->
-        <!--Sel: {{ sel }}-->
-        <!--<div class="flex-item btn-item">-->
-        <!--{{itemtodo.expiring_at}}-->
-        <!--</div>-->
-        <!--<div class="flex-item btn-item">-->
-        <!--<q-btn class="mybtn" round color="" icon="delete" @click.native="removeitem(itemtodo._id)"></q-btn>-->
-        <!--</div>-->
     </div>
 
 </template>

@@ -1,18 +1,20 @@
-import { Todos, UserStore } from '@store'
+import { Projects, Todos, UserStore } from '@store'
 import _ from 'lodash'
-import store, { GlobalStore } from '../store'
+import { GlobalStore } from '../store/Modules'
 
 import { idbKeyval as storage } from '../js/storage.js'
 import { costanti } from '../store/Modules/costanti'
-import { ICfgData } from '@src/model'
+import { ICfgData, IGlobalState } from '@src/model'
+import { tools } from '@src/store/Modules/tools'
 
 function saveConfigIndexDb(context) {
 
-  const data: ICfgData = {}
-  data._id = costanti.CONFIG_ID_CFG
-  data.lang = UserStore.state.lang
-  data.token = UserStore.state.x_auth_token
-  data.userId = UserStore.state.userId
+  const data: ICfgData = {
+    _id: costanti.CONFIG_ID_CFG,
+    lang: UserStore.state.lang,
+    token: UserStore.state.x_auth_token,
+    userId: UserStore.state.userId
+  }
 
   writeConfigIndexDb('config', data)
 }
@@ -21,52 +23,54 @@ function writeConfigIndexDb(context, data) {
   // console.log('writeConfigIndexDb', data)
 
   storage.setdata('config', data)
-    .then((ris) => {
-      return true
-    })
-
 }
 
-async function readfromIndexDbToStateTodos(context, table) {
-  console.log('*** readfromIndexDbToStateTodos ***')
+async function readfromIndexDbToState(context, table) {
+  console.log('*** readfromIndexDbToState ***', table)
 
   return await storage.getalldata(table)
     .then((reccat) => {
-      // console.log('&&&&&&& readfromIndexDbToStateTodos OK: Num RECORD: ', records.length)
+      // console.log('&&&&&&& readfromIndexDbToState OK: Num RECORD: ', records.length)
       if (table === 'categories') {
         console.log('reccat', reccat)
         Todos.state.categories = []
-        for (const indcat in reccat) {
-          Todos.state.categories.push(reccat[indcat].valore)
+        for (const elem of reccat) {
+          Todos.state.categories.push(elem.valore)
         }
 
         console.log('ARRAY Categories', Todos.state.categories)
+        table = 'todos'
 
-        return storage.getalldata('todos')
+        return storage.getalldata(table)
           .then((records) => {
-            console.log('todos records', records)
-            // console.log('&&&&&&& readfromIndexDbToStateTodos OK: Num RECORD: ', records.length)
+            console.log(table + ' records', records)
+            // console.log('&&&&&&& readfromIndexDbToState OK: Num RECORD: ', records.length)
 
-/*
-            for (const myrec in records) {
-              const cat = myrec.category
-              const indcat = state.categories.indexOf(cat)
-              if (Todos.state.todos[indcat] === undefined) {
-                Todos.state.todos[indcat] = {}
+            const arrinit = []
+
+            for (const mytodo of records) {
+              const cat = mytodo.category
+              const indcat = Todos.state.categories.indexOf(cat)
+              if (arrinit.indexOf(indcat) < 0) {
+                Todos.state.todos[indcat] = []
+                arrinit.push(indcat)
               }
 
-              // add to the right array
-              Todos.state.todos[indcat].push(myrec)
+              Todos.state.todos[indcat].push(mytodo)
 
             }
-*/
 
-            console.log('************  ARRAYS SALVATI IN MEMORIA Todos.state.todos ', Todos.state.todos)
+            console.log('************  ARRAYS SALVATI IN MEMORIA ', table, records)
           })
+
+      } else {
+        const arrris = tools.setArrayMainByTable(table, reccat)
+        // console.log('************  ARRAYS SALVATI IN MEMORIA ', table, arrris)
+
       }
 
     }).catch((error) => {
-      console.log('err: ', error)
+      console.log('err readfromIndexDbToState: ', error)
     })
 
 }
@@ -93,8 +97,8 @@ export default async (context, cmd, table, datakey = null, id = '') => {
       GlobalStore.state.connData.uploading_indexeddb = 1
     }
     return await storage.setdata(table, datakey)
-  } else if (cmd === 'updatefromIndexedDbToStateTodo') {
-    return await readfromIndexDbToStateTodos(context, table)
+  } else if (cmd === 'updatefromIndexedDbToState') {
+    return await readfromIndexDbToState(context, table)
   } else if (cmd === 'readall') {
     if (GlobalStore) {
       GlobalStore.state.connData.downloading_indexeddb = 1
