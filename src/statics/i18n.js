@@ -256,6 +256,56 @@ const messages = {
       privacyread:'Chi lo puo vedere:',
       privacywrite:'Chi lo puo modificare:',
       totalphases: 'Totale Fasi'
+    },
+    piso: {
+      affittasi:'Affittasi 2 Camere a Malaga',
+      quando: 'da Maggio a Settembre',
+      costo: '220€ singola, 320€ matrimoniale',
+      descrizione:'Appartamento situato in Carrettera de Cadiz - Quartiere Las Delicias',
+      descrapp_pag1: 'Si sub-affittano 2 camere in un modesto appartamento di 90m2, composto da 3 camere totali, 1 bagno con vasca + bide, sala, cucina, terrazzino coperto per ripostiglio e biciclette.<br>' +
+        'L\'appartamento è a 700m dalla spiaggia.<br>' +
+        'A 3,5 km dal centro.<br>' +
+        'E\' al 2° piano, con ascensore. <br>' +
+        'Spazi condivisi: Cucina, sala, bagno, TV, Wifi.<br>' +
+        '<h5>Regole</h5>' +
+        'Si cerca persona tranquilla, educata e silenziosa, rispettosa degli altri, nel condominio ci abitano persone locali, e non vogliono che si faccia rumore o feste.<br>' +
+        'L\'appartamento infatti é molto silenzioso, nonostante sia in un palazzo di 9 piani, ci abitano diverse persone anziane.' +
+        '' +
+        '<h5>Chi ci abiterà con voi?</h5>' +
+        'Attualmente ci abita fissa una studentessa spagnola.' +
+        '<h5>Periodo</h5>' +
+        ' Da maggio fino ai primi di Settembre (poi da decidere insieme)' +
+        '<h5>Costi</h5>' +
+        ' - 1 Camera Singola: <strong>220 €</strong><br>' +
+        ' - 1 Camera Matrimoniale: <strong>320 €</strong>' +
+        '<h5>Caparra</h5>' +
+        'La caparra da pagare in anticipo è di 300€<br>' +
+        'che verrá restituita alla fine della stagione, a Settembre.' +
+        '<h5>Vedere l\'appartamento</h5>' +
+        'Contattatemi per venire a vedere l\'appartamento.' +
+        '<h5>Quanto devo pagare per entrare?</h5>' +
+        'La Caparra + 1 mese anticipato:<br>' +
+        '- per la singola: 300€ + 220€ = 520€<br>' +
+        '- per la matrimoniale: 300€ + 320€ = 620€<br>' +
+        '<h5>Uscita anticipata dall\'appartamento</h5>' +
+        'Nel caso in cui si debba lasciare l\'appartamento prima della scadenza, è buona norma <strong>avvertire</strong> con 30 giorni di preavviso, per permetterci di trovare un\'altra persona fidata, ' +
+        'altrimenti parte della caparra verrá usata come indennizzo, salvo per motivazioni veramente importanti.' +
+        '<h5>Spese Aggiuntive:</h5>' +
+        'Le <strong>spese</strong> di luce, acqua, gas e internet Wifi con Fibra ottica, sono <strong>da pagare a parte</strong>, da dividere tra i coinquilini, (mediamente circa <strong>50€/mese a testa</strong>)<br><br>' +
+        'Opzionale: A disposizione una <strong>Bicicietta</strong> MTB (costo 25€ al mese per l\'usura).<br><br>' +
+        '' +
+        'P.S: I prezzi sono bassi perchè le camere vengono sub-affittate e non vogliamo lucrarci sopra, ma semplicemente mantenere l\'appartamento per ritornarci poi a Settembre<br>' +
+        '<h5>Contratto</h5>' +
+        'Per stare tranquilli, verrà richiesto di firmare un contratto (scrittura privata), in cui si confermano queste condizioni scritte qui sopra.<br>' +
+        'Necessita di foto documenti d\'identità (carta d\'identità o passaporto). ' +
+        '<h5>Per contattarci</h5>' +
+        'Paolo: su Whatsapp +34 644932796 <br>' +
+        'Inviare anche contatto Facebook' +
+        '' +
+        '' +
+        ''
+
+
     }
   },
   'es': {

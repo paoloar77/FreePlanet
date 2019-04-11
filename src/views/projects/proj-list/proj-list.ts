@@ -306,7 +306,7 @@ export default class ProjList extends Vue {
     clearInterval(this.polling)
   }
 
-  public static mydeleteitemproj(idobj: string) {
+  public mydeleteitemproj(idobj: string) {
     console.log('mydeleteitemtodo', idobj)
     return Projects.actions.deleteItem({ idobj })
   }
@@ -348,6 +348,9 @@ export default class ProjList extends Vue {
       descr,
       id_parent: this.idProjAtt
     }
+
+    if (this.itemproj === undefined)
+      this.itemproj = Projects.getters.getRecordById(this.idProjAtt)
 
     if (this.isRootProject) {
       myobj.typeproj = TypeProj.TYPE_PROJECT
