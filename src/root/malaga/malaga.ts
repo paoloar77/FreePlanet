@@ -35,48 +35,49 @@ export default class Malaga extends Vue {
   public polling
   public slide2 = 0
   public animare: number = 0
+  public test1 = GlobalStore.getters.t('piso.matr1')
   public getImmagini = [
-    {title: 'Camera matrimoniale', subtitle: '320€ al mese: da maggio fino a settembre',
+    {title: GlobalStore.getters.t('piso.cameramatr'), subtitle: GlobalStore.getters.t('piso.matr1'),
      img: '../../statics/images/piso/camera_matrimoniale.jpg'},
-    {title: 'Scrivania - matrimoniale', subtitle: '',
+    {title: GlobalStore.getters.t('piso.mat_scrivania'), subtitle: '',
       img: '../../statics/images/piso/matrimoniale_scrivania.jpg'},
-    {title: 'Finestra - matrimoniale', subtitle: '',
+    {title: GlobalStore.getters.t('piso.mat_finestra'), subtitle: '',
       img: '../../statics/images/piso/matrimoniale_finestra.jpg'},
-    {title: 'Armadio - matrimoniale', subtitle: '',
+    {title: GlobalStore.getters.t('piso.mat_armadio'), subtitle: '',
       img: '../../statics/images/piso/matrimoniale_armadio.jpg'},
-    {title: 'Finestra dalla camera matrimoniale', subtitle: '',
+    {title: GlobalStore.getters.t('piso.mat_fin2'), subtitle: '',  // 'Finestra dalla camera matrimoniale'
       img: '../../statics/images/piso/finestra_della_camera_matrimoniale.jpg'},
-    {title: 'Camera singola', subtitle: '220€ al mese: da maggio fino a settembre',
+    {title: GlobalStore.getters.t('piso.mat_singola'), subtitle: GlobalStore.getters.t('piso.singola1'), // 'Camera singola'
       img: '../../statics/images/piso/singola_1.jpg'},
-    {title: 'Scrivania singola', subtitle: '',
+    {title: GlobalStore.getters.t('piso.sing_scrivania'), subtitle: '', // 'Scrivania singola'
       img: '../../statics/images/piso/singola_scrivania.jpg'},
-    {title: 'Finestra singola', subtitle: '',
+    {title: GlobalStore.getters.t('piso.sing_'), subtitle: '', // 'Finestra singola'
       img: '../../statics/images/piso/singola_finestra.jpg'},
-    {title: 'Armadio singola', subtitle: '',
+    {title: GlobalStore.getters.t('piso.sing_armadio'), subtitle: '', // 'Armadio singola'
       img: '../../statics/images/piso/singola_armadio.jpg'},
-    {title: 'Cucina', subtitle: '',
+    {title: GlobalStore.getters.t('piso.cucina'), subtitle: '',  // 'Cucina'
       img: '../../statics/images/piso/cucina.jpg'},
-    {title: 'Cucina', subtitle: '',
+    {title: GlobalStore.getters.t('piso.cucina'), subtitle: '',  // 'Cucina'
       img: '../../statics/images/piso/cucina2.jpg'},
-    {title: 'Corridoio', subtitle: '',
+    {title: GlobalStore.getters.t('piso.corridoio'), subtitle: '',  // 'Corridoio'
       img: '../../statics/images/piso/corridoio.jpg'},
-    {title: 'Televisore e Wifi', subtitle: '',
+    {title: GlobalStore.getters.t('piso.tv'), subtitle: '', // 'Televisore e Wifi'
       img: '../../statics/images/piso/televisore.jpg'},
-    {title: 'Terrazza', subtitle: '',
+    {title: GlobalStore.getters.t('piso.terrazza'), subtitle: '',  // 'Terrazza'
       img: '../../statics/images/piso/terrazza.jpg'},
-    {title: 'Vista dalla terrazza', subtitle: '',
+    {title: GlobalStore.getters.t('piso.terrazza_vista'), subtitle: '',  // 'Vista dalla terrazza'
       img: '../../statics/images/piso/fuori_dalla_terrazza.jpg'},
-    {title: 'Sala', subtitle: '',
+    {title: GlobalStore.getters.t('piso.sala'), subtitle: '',  // 'Sala'
       img: '../../statics/images/piso/sala.jpg'},
-    {title: 'Divano', subtitle: '',
+    {title: GlobalStore.getters.t('piso.divano'), subtitle: '',  // 'Divano'
       img: '../../statics/images/piso/divano.jpg'},
-    {title: 'Corridoio', subtitle: '',
+    {title: GlobalStore.getters.t('piso.corridoio'), subtitle: '',  // 'Corridoio'
       img: '../../statics/images/piso/corridoio2.jpg'},
-    {title: 'Tavolo della sala', subtitle: '',
+    {title: GlobalStore.getters.t('piso.tavolo_sala'), subtitle: '',  // 'Tavolo della sala'
       img: '../../statics/images/piso/tavolo_sala.jpg'},
-    {title: 'Bagno', subtitle: '',
+    {title: GlobalStore.getters.t('piso.bagno'), subtitle: '',  // 'Bagno'
       img: '../../statics/images/piso/bagno.jpg'},
-    {title: 'Vasca con Doccia', subtitle: '',
+    {title: GlobalStore.getters.t('piso.vasca'), subtitle: '',  // 'Vasca con Doccia'
       img: '../../statics/images/piso/bagno2.jpg'}
   ]
 

@@ -178,6 +178,20 @@ namespace Getters {
 
   }, 'getmenu')
 
+  const t = b.read((state) => (params) => {
+    const msg = params.split('.')
+    const lang = UserStore.state.lang
+
+    const stringa = messages[lang]
+
+    let ris = stringa
+    msg.forEach((param) => {
+      ris = ris[param]
+    })
+
+    return ris
+  }, 't')
+
   export const getters = {
     get testpao1_getter_contatore() {
       return testpao1_getter_contatore()
@@ -211,6 +225,10 @@ namespace Getters {
 
     get getmenu() {
       return getmenu()
+    },
+
+    get t() {
+      return t()
     },
 
     get isOnline() {
@@ -413,20 +431,6 @@ namespace Actions {
 
       })
 
-  }
-
-  function t(params) {
-    const msg = params.split('.')
-    const lang = UserStore.state.lang
-
-    const stringa = messages[lang]
-
-    let ris = stringa
-    msg.forEach((param) => {
-      ris = ris[param]
-    })
-
-    return ris
   }
 
   function prova(context) {

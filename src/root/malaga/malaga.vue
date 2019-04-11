@@ -27,7 +27,7 @@
             <section class="padding bg-white text-grey-10 text-center">
                 <div class="landing__features row items-start q-col-gutter-sm">
                     <div class="col-12 text-center"><h4>{{$t('piso.descrizione')}}</h4>
-                        <p v-html="$t('piso.descrapp_pag1')"></p>
+                        <p v-html="$t('piso.descrpiso')"></p>
                     </div>
                 </div>
             </section>
