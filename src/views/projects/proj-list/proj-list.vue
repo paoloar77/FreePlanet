@@ -176,14 +176,14 @@
                             <div class="flex-container clMain">
                                 <q-icon class="flex-item flex-icon" name="developer_mode"/>
                                 <div class="flex-item itemdata">
-                                    <CDate :mydate="itemselproj.begin_development"
+                                    <CDate :readonly="readonly_PanelPrivacy" :mydate="itemselproj.begin_development"
                                            @input="itemselproj.begin_development = new Date(arguments[0])"
                                            :label="$t('proj.begin_development')">
                                     </CDate>
                                 </div>
                                 <div style="margin: 10px;"></div>
                                 <div class="flex-item itemdata">
-                                    <CDate :mydate="itemselproj.begin_test"
+                                    <CDate :readonly="readonly_PanelPrivacy" :mydate="itemselproj.begin_test"
                                            @input="itemselproj.begin_test = new Date(arguments[0])"
                                            :label="$t('proj.begin_test')">
                                     </CDate>
@@ -192,13 +192,13 @@
                             <div class="flex-container clMain">
                                 <q-icon class="flex-item flex-icon" name="outlined_flag"/>
                                 <div class="flex-item itemstatus">
-                                    <q-select rounded outlined v-model="itemselproj.actualphase" :options="selectPhase"
+                                    <q-select :readonly="readonly_PanelPrivacy" rounded outlined v-model="itemselproj.actualphase" :options="selectPhase"
                                               :label="$t('proj.actualphase')" emit-value map-options>
                                     </q-select>
                                 </div>
                                 <q-icon class="flex-item flex-icon" name="outlined_flag"/>
                                 <div class="flex-item itemstatus">
-                                    <q-select rounded outlined v-model="itemselproj.totalphases" :options="selectPhase"
+                                    <q-select :readonly="readonly_PanelPrivacy" rounded outlined v-model="itemselproj.totalphases" :options="selectPhase"
                                               :label="$t('proj.totalphases')" emit-value map-options>
                                     </q-select>
                                 </div>
@@ -208,6 +208,7 @@
                                 <q-icon class="flex-item flex-icon" name="watch_later"/>
                                 <div class="flex-item itemdata content-center">
                                     <q-input
+                                            :readonly="readonly_PanelPrivacy"
                                             ref="input3"
                                             type="number"
                                             v-model="itemselproj.hoursweeky_plannedtowork"

@@ -160,12 +160,6 @@ export default class SingleProject extends Vue {
       this.clButtPopover += ' pos-item-popover_cursor'
     }
 
-    // this.getinputdescr = 'inputdescr' + this.itemproject._id
-
-    // console.log('classDescrEdit = ', this.classDescrEdit)
-    // console.log('classDescr', this.classDescr)
-
-    // console.log('UserStore.state.lang', UserStore.state.lang)
     if (this.isProject()) {
       this.menuPopupProj = tools.menuPopupProj[UserStore.state.lang]
     }
@@ -191,7 +185,7 @@ export default class SingleProject extends Vue {
   }
 
   public clickRiga(clickmenu: boolean = false) {
-    // console.log('CLICK RIGA ************')
+    console.log('CLICK RIGA PROJ************')
 
     if (!this.sel) {
       if (!this.inEdit) {
@@ -272,7 +266,7 @@ export default class SingleProject extends Vue {
         this.updateClasses()
       }
 
-      this.faiFocus('inputdescr', false, true)
+     this.faiFocus('inputprojdescr', false, true)
     }
     // console.log('FINE - editProject')
   }
@@ -288,11 +282,12 @@ export default class SingleProject extends Vue {
       }
 
       if (!!theField) {
+        console.log('FOCUS PROJ', theField)
         theField.focus()
       }
 
       // console.log('focus()')
-    }, 100)
+    }, 300)
   }
 
   public getFocus(e) {

@@ -510,13 +510,15 @@ namespace Actions {
     // this.$router.push('/signin')
   }
 
-  async function setGlobal(loggedWithNetwork: boolean) {
+  async function setGlobal(isLogged: boolean) {
     state.isLogged = true
     console.log('state.isLogged')
-    GlobalStore.mutations.setleftDrawerOpen(localStorage.getItem(tools.localStorage.leftDrawerOpen) === 'true')
-    GlobalStore.mutations.setCategorySel(localStorage.getItem(tools.localStorage.categorySel))
+    if (isLogged) {
+      GlobalStore.mutations.setleftDrawerOpen(localStorage.getItem(tools.localStorage.leftDrawerOpen) === 'true')
+      GlobalStore.mutations.setCategorySel(localStorage.getItem(tools.localStorage.categorySel))
 
-    GlobalStore.actions.checkUpdates()
+      GlobalStore.actions.checkUpdates()
+    }
 
     await GlobalStore.actions.loadAfterLogin()
       .then(() => {
@@ -530,36 +532,37 @@ namespace Actions {
       console.log('*** autologin_FromLocalStorage ***')
       // INIT
 
+      let isLogged = false
+
       UserStore.state.lang = tools.getItemLS(tools.localStorage.lang)
 
       const token = localStorage.getItem(tools.localStorage.token)
-      if (!token) {
-        return false
+      if (token) {
+        const expirationDateStr = localStorage.getItem(tools.localStorage.expirationDate)
+        const expirationDate = new Date(String(expirationDateStr))
+        const now = tools.getDateNow()
+        if (now < expirationDate) {
+          const userId = String(localStorage.getItem(tools.localStorage.userId))
+          const username = String(localStorage.getItem(tools.localStorage.username))
+          const verified_email = localStorage.getItem(tools.localStorage.verified_email) === 'true'
+
+          GlobalStore.state.wasAlreadySubOnDb = localStorage.getItem(tools.localStorage.wasAlreadySubOnDb) === 'true'
+
+          console.log('*************  autologin userId', userId)
+
+          UserStore.mutations.setAuth(token)
+
+          Mutations.mutations.authUser({
+            userId,
+            username,
+            verified_email
+          })
+
+          isLogged = true
+        }
       }
-      const expirationDateStr = localStorage.getItem(tools.localStorage.expirationDate)
-      const expirationDate = new Date(String(expirationDateStr))
-      const now = tools.getDateNow()
-      if (now >= expirationDate) {
-        console.log('!!! Login Expired')
-        return false
-      }
-      const userId = String(localStorage.getItem(tools.localStorage.userId))
-      const username = String(localStorage.getItem(tools.localStorage.username))
-      const verified_email = localStorage.getItem(tools.localStorage.verified_email) === 'true'
 
-      GlobalStore.state.wasAlreadySubOnDb = localStorage.getItem(tools.localStorage.wasAlreadySubOnDb) === 'true'
-
-      console.log('*************  autologin userId', userId)
-
-      UserStore.mutations.setAuth(token)
-
-      Mutations.mutations.authUser({
-        userId,
-        username,
-        verified_email
-      })
-
-      await setGlobal(false)
+      await setGlobal(isLogged)
 
       console.log('autologin userId STATE ', state.userId)
 

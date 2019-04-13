@@ -102,7 +102,7 @@ export default class ProjList extends Vue {
 
   get CanIModifyPanelPrivacy() {
 
-    if (UserStore.state.userId === this.itemselproj.userId)  // If it's the owner
+    if ((UserStore.state.userId === this.itemselproj.userId) || (this.itemselproj.privacywrite === Privacy.all))  // If it's the owner
       return true
   }
 
@@ -357,7 +357,10 @@ export default class ProjList extends Vue {
       myobj.id_main_project = this.idProjAtt
     } else {
       myobj.typeproj = TypeProj.TYPE_SUBDIR
-      myobj.id_main_project = this.itemproj.id_main_project
+      if (this.itemproj.id_main_project === process.env.PROJECT_ID_MAIN)
+        myobj.id_main_project = this.itemproj._id
+      else
+        myobj.id_main_project = this.itemproj.id_main_project
     }
 
     if (!tools.checkIfUserExist(this)) {
@@ -392,6 +395,8 @@ export default class ProjList extends Vue {
   public deselectAllRowstodo(item: ITodo, check, onlythis: boolean = false) {
     console.log('PROJ-LIST deselectAllRowstodo : ', item)
 
+    return false
+
     // @ts-ignore
     for (const i in this.$refs.ctodo.$refs.single) {
     // @ts-ignore
@@ -418,7 +423,7 @@ export default class ProjList extends Vue {
   }
 
   public deselectAllRowsproj(item: IProject, check, onlythis: boolean = false) {
-    // console.log('deselectAllRowsproj: ', item)
+    console.log('deselectAllRowsproj: ', item)
 
     for (const i in this.$refs.singleproject) {
 

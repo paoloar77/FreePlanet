@@ -174,20 +174,6 @@ export default class SingleTodo extends Vue {
       this.clButtPopover += ' pos-item-popover_cursor'
     }
 
-    // if (this.inEdit) {
-    //   this.classDescr += ' hide'
-    //   this.classDescrEdit += ' show'
-    // } else {
-    //   this.classDescrEdit += ' hide'
-    //   this.classDescr += ' show'
-    // }
-
-    // this.getinputdescr = 'inputdescr' + this.itemtodo._id
-
-    // console.log('classDescrEdit = ', this.classDescrEdit)
-    // console.log('classDescr', this.classDescr)
-
-    // console.log('UserStore.state.lang', UserStore.state.lang)
     if (this.isTodo()) {
       this.menuPopupTodo = tools.menuPopupTodo[UserStore.state.lang]
     }
@@ -295,10 +281,11 @@ export default class SingleTodo extends Vue {
       }
 
       if (!!theField) {
+        console.log('FOCUS TODO', theField)
         theField.focus()
       }
       // console.log('focus()')
-    }, 100)
+    }, 300)
   }
 
   public exitEdit(singola: boolean = false) {
@@ -408,6 +395,8 @@ export default class SingleTodo extends Vue {
     } else {
       this.itemtodo.statustodo = tools.Status.COMPLETED
     }
+    this.itemtodo.progress = 100
+
     this.watchupdate('statustodo')
 
     this.deselectAndExitEdit()

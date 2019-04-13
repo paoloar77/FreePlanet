@@ -5,7 +5,7 @@
         :to="getrouteto"/>
 
         <div class="flex-item donotdrag divdescrTot">
-            <q-input v-if="(sel && inEdit)" hide-underline type="textarea" ref="inputdescr"
+            <q-input v-if="(sel && inEdit)" hide-underline type="textarea" ref="inputprojdescr"
                      v-model.trim="precDescr"
                      autogrow
                      borderless

@@ -102,7 +102,7 @@ namespace Getters {
 
   const listaprojects = b.read((state: IProjectsState) => (): IMenuList[] => {
     if (state.projects) {
-      console.log('state.projects', state.projects)
+      // console.log('state.projects', state.projects)
       const listaproj = tools.mapSort(state.projects.filter((proj) => proj.id_parent === process.env.PROJECT_ID_MAIN))
       const myarr: IMenuList[] = []
       for (const proj of listaproj) {
@@ -212,9 +212,9 @@ namespace Actions {
       }
     }
 
-    if (UserStore.state.userId === '') {
-      return false  // Login not made
-    }
+    // if (UserStore.state.userId === '') {
+    //   return false  // Login not made
+    // }
 
     console.log('dbLoad', nametable, checkPending, 'userid=', UserStore.state.userId)
 

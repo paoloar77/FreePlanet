@@ -192,6 +192,9 @@ export namespace ApiTool {
                       }
                     }
                     console.log(' [Alternative] !!!!!!!!!!!!!!!   Error while sending data', err, errorfromserver, 'lettoqualcosa', lettoqualcosa)
+                    if (!errorfromserver) {
+                      return globalroutines(null, 'delete', 'swmsg', null, mystrparam)
+                    }
                   })
               })
 

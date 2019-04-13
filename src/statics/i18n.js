@@ -263,8 +263,8 @@ const messages = {
       costo: '220€ singola, 320€ matrimoniale',
       descrizione: 'Affittasi 2 Camere a Málaga - Las Delicias',
       cameramatr: 'Camera matrimoniale (per 1 persona)',
-      matr1: '320€ al mese: da maggio fino a settembre',
-      singola1: '220€ al mese: da maggio fino a settembre',
+      matr1: '320€ al mese: da maggio fino a settembre (10,50 mq)',
+      singola1: '220€ al mese: da maggio fino a settembre (6,50 mq)',
       descrpiso: 'Si sub-affittano 2 camere in un modesto appartamento di 90m2, composto da 3 camere totali, 1 bagno con vasca + bide, sala, cucina, terrazzino coperto per ripostiglio e biciclette.<br>' +
         'L\'appartamento è a <strong>700m dalla spiaggia</strong>.<br>' +
         'A 3,5 km dal centro.<br>' +
@@ -279,9 +279,9 @@ const messages = {
         '<h5>Periodo</h5>' +
         ' Da maggio fino ai primi di Settembre (poi da decidere insieme)' +
         '<h5>Costi</h5>' +
-        ' - 1 Camera Singola: <strong>220 €</strong><br>' +
-        ' - 1 Camera Matrimoniale: <strong>320 €</strong> (solo per 1 persona)<br><br>' +
-        'P.S: Per <strong>Vegani</strong>, sconto extra per la matrimoniale!' +
+        ' - 1 Camera Singola: <strong>220 €</strong> (6,50 mq) <br>' +
+        ' - 1 Camera Matrimoniale: <strong>320 €</strong> (solo per 1 persona) (10,50 mq)<br><br>' +
+        'P.S: Per <strong>Vegani</strong>, sconto extra del 10% per la matrimoniale !' +
         '<h5>Caparra</h5>' +
         'La caparra da pagare in anticipo è di 300€<br>' +
         'che verrá restituita alla fine della stagione, a Settembre.' +
@@ -295,15 +295,16 @@ const messages = {
         'Nel caso in cui si debba lasciare l\'appartamento prima della scadenza, è buona norma <strong>avvertire</strong> con 30 giorni di preavviso, per permetterci di trovare un\'altra persona fidata, ' +
         'altrimenti parte della caparra verrá usata come indennizzo, salvo per motivazioni veramente importanti.' +
         '<h5>Spese Aggiuntive:</h5>' +
-        'Le <strong>spese</strong> di luce, acqua, gas e internet Wifi con Fibra ottica, sono <strong>da pagare a parte</strong>, da dividere tra i coinquilini, (mediamente circa <strong>50€/mese a testa</strong>)<br><br>' +
-        'Opzionale: A disposizione una <strong>Bicicietta</strong> MTB (costo 25€ al mese per l\'usura).<br><br>' +
+        'Le <strong>spese</strong> di luce, acqua, gas e internet Wifi con Fibra ottica, sono <strong>da pagare a parte</strong>, da dividere tra i coinquilini, (circa <strong>35 € al mese a testa</strong>)<br><br>' +
+        'Opzionale: A disposizione una <strong>Bicicietta</strong> MTB (costo 20€ al mese per l\'usura).<br><br>' +
         '' +
         'P.S: I prezzi sono bassi perchè le camere vengono sub-affittate e non vogliamo lucrarci sopra, ma semplicemente mantenere l\'appartamento per ritornarci poi a Settembre<br>' +
         '<h5>Contratto</h5>' +
         'Per stare tranquilli, verrà richiesto di firmare un contratto (scrittura privata), in cui si confermano queste condizioni scritte qui sopra.<br>' +
         'Necessita di foto documenti d\'identità (carta d\'identità o passaporto). ' +
         '<h5>Per contattarci</h5>' +
-        'Paolo: su Whatsapp +34 644932796 <br>' +
+        'Paolo: Whatsapp +34 644.93.27.96 <br>' +
+        'Karla: Whatsapp +34 603.24.41.00<br>' +
         'Inviare anche contatto Facebook',
       mat_scrivania: 'Scrivania - matrimoniale',
       mat_finestra: 'Finestra - matrimoniale',
@@ -582,8 +583,8 @@ const messages = {
       costo: '220 € single, € 320 doble',
       descrizione: 'Alquiler de 2 habitaciones en Málaga - Las Delicias',
       cameramatr: 'Habitacion doble',
-      matr1: '320 € al mes: de mayo a septiembre.',
-      singola1: '220 € al mes: de mayo a septiembre.',
+      matr1: '320 € al mes: de mayo a septiembre. (10,50 mq)',
+      singola1: '220 € al mes: de mayo a septiembre. (6,50 mq)',
       descrpiso: 'Sub-alquilamos 2 habitaciones en un modesto apartamento de 90 m2, que consta de 3 habitaciones en total, 1 baño con bañera + bidet, sala de estar, cocina, terraza cubierta para almacenamiento y bicicletas. <br>' +
         'El apartamento está a <strong>700m de la playa</strong>. <br>' +
         'A 3.5 km del centro. <br>' +
@@ -595,15 +596,15 @@ const messages = {
         'No fumadores, no mascotas (el propietario lo prohíbe)' +
         '<h5> ¿Quién vivirá contigo en el piso? </h5>' +
         'Una estudiante española vive actualmente aquí' +
-        '<h5> Periodo </h5>' +
+        '<h5> Temporada </h5>' +
         'Desde mayo hasta principios de septiembre (luego se decidirá en conjunto)' +
         '<h5> Costos </h5>' +
-        '- 1 habitación individual: <strong> 220 € </strong> <br>' +
-        '- 1 Habitación Doble: <strong> 320 € </strong><br><br>' +
-        'P.S: Para <strong>Veganos</strong>, ¡descuento extra para la Doble!' +
+        '- 1 habitación individual: <strong> 220 € </strong> (6,50 mq) <br>' +
+        '- 1 Habitación Doble: <strong> 320 € </strong> (10,50 mq)<br><br>' +
+        'P.S: Para <strong>Veganos</strong>, ¡descuento extra del 10% para la Doble!' +
         '<h5> Fianza </h5>' +
-        'El anticipo a pagar por adelantado es de € 300 +' +
-        'Que se devolverá al final de la temporada, en septiembre.' +
+        'El anticipo a pagar por adelantado es de € 300 <br>' +
+        'que se devolverá al final de la temporada, en septiembre.' +
         '<h5> Ver el apartamento </h5>' +
         'Ponte en contacto conmigo para venir a ver el apartamento.' +
         '<h5> ¿Cuánto tengo que pagar para ingresar? </h5>' +
@@ -614,14 +615,15 @@ const messages = {
         'En caso de que tenga que abandonar el apartamento antes de la fecha límite, es una buena práctica <strong> avisar </strong> con <strong>30 días de antelación</strong>, para permitirnos encontrar a otra persona de confianza,' +
         'De lo contrario, parte del depósito se utilizará como compensación, excepto por razones muy importantes.' +
         '<h5> Gastos adicionales: </h5>' +
-        'Los <strong> gastos </strong> de electricidad, agua, gas y internet wifi con fibra óptica, se <strong> pagarán por separado </strong>, se dividirán entre los compañeros de habitación (aproximadamente <strong> 50 € / mes cada uno</strong>) <br> <br> ' +
-        'Opcional: hay un Bicicietta <strong> </strong> disponible (25 € al mes por desgaste). <br> <br> ' +
+        'Los <strong> gastos </strong> de electricidad, agua, gas y internet wifi con fibra óptica, se <strong> pagarán por separado </strong>, se dividirán entre los compañeros de habitación (aproximadamente <strong> 35 € / mes cada uno</strong>) <br> <br> ' +
+        'Opcional: hay un Bicicietta <strong> </strong> disponible (20 € al mes por desgaste). <br> <br> ' +
         'P.S: Los precios son bajos porque las habitaciones están sub-alquiladas y no queremos ganar dinero con esto, simplemente mantenemos el apartamento y luego regresamos a septiembre <br>' +
         '<h5> Contrato </h5>' +
         'Para seguridad, se le pedirá que firme un contrato (acuerdo privado), que confirme las condiciones escritas arriba. <br> ' +
         'Se requieren documentos de identificación con foto (documento de identidad o pasaporte). ' +
         '<h5> Para contactarnos </h5>' +
-        'Paolo: su Whatsapp +34 644932796 <br>' +
+        'Paolo: Whatsapp +34 644.93.27.96 <br>' +
+        'Karla: Whatsapp +34 603.24.41.00<br>' +
         'Enviar también contacto de Facebook',
       mat_scrivania: 'Escritorio - cama matrimonial',
       mat_finestra: 'Ventana - matrimonial',
@@ -901,8 +903,8 @@ const messages = {
       costo: '220 € single, € 320 double',
       descrizione: 'Rent 2 Rooms in Málaga - Las Delicias district',
       cameramatr: 'Double room (for 1 person)',
-      matr1: '€ 320 per month: from May until September',
-      singola1: '€ 220 per month: from May until September',
+      matr1: '€ 320 per month: from May until September (10,50 mq)',
+      singola1: '€ 220 per month: from May until September (6,50 mq)',
       descrpiso: 'We sub-rent 2 rooms in a modest 90m2 apartment, consisting of 3 total bedrooms, 1 bathroom with bath + bidet, living room, kitchen, covered terrace for storage and bicycles. <br> ' +
         'The apartment is <strong>700m from the beach</strong>. <br>' +
         '3.5 km from the center. <br>' +
@@ -917,11 +919,11 @@ const messages = {
         '<h5> Period </h5>' +
         'From May until the beginning of September (later to be decided together)' +
         '<h5> Costs </h5>' +
-        '- 1 Single Room: <strong> 220 € </strong> <br>' +
-        '- 1 Double Room: <strong> 320 € </strong> (only for 1 person)<br><br>' +
-        'P.S: For <strong> Vegans </strong>, extra discount for the double room!' +
+        '- 1 Single Room: <strong> 220 € </strong> (6,50 mq)<br>' +
+        '- 1 Double Room: <strong> 320 € </strong> (only for 1 person) (10,5 mq) <br><br>' +
+        'P.S: For <strong> Vegans </strong>, 10% extra discount for the double room!' +
         '<h5> Deposit </h5>' +
-        'The down payment to be paid in advance is € 300 +' +
+        'The down payment to be paid in advance is € 300 <br>' +
         'which will be returned at the end of the season, in September.' +
         '<h5> See the apartment </h5>' +
         'Contact me to come and see the apartment.' +
@@ -933,15 +935,16 @@ const messages = {
         'In case you have to leave the apartment before the deadline, it is good practice <strong> to warn </strong> with <strong>30 days notice</strong>, to allow us to find another trusted person,' +
         'otherwise part of the deposit will be used as compensation, except for very important reasons.' +
         '<h5> Additional Expenses: </h5>' +
-        'The <strong> expenses </strong> of electricity, water, gas and internet Wifi with fiber optics, are <strong> to be paid separately </strong>, to be divided among the roommates, (on average about <strong> 50 € / month each </strong>) <br> <br> ' +
-        'Optional: A <strong> MTB Bike </strong> is available (€ 25 per month). <br> <br>' +
+        'The <strong> expenses </strong> of electricity, water, gas and internet Wifi with fiber optics, are <strong> to be paid separately </strong>, to be divided among the roommates, (about <strong> 35 € / month each </strong>) <br> <br> ' +
+        'Optional: A <strong> MTB Bike </strong> is available (€ 20 per month). <br> <br>' +
         '' +
         'P.S: The prices are low because the rooms are sub-rented and we don\'t want to make money from them, but simply keep the apartment and then return to September <br>' +
         '<h5> Contract </h5>' +
         'To be safe, you will be asked to sign a contract (private agreement), confirming these conditions written above. <br>' +
         'Photo identification documents (identity card or passport) are required. ' +
         '<h5> To contact us </h5>' +
-        'Paolo: on Whatsapp +34 644932796 <br>' +
+        'Paolo: Whatsapp +34 644.93.27.96 <br>' +
+        'Karla: Whatsapp +34 603.24.41.00<br>' +
         'Send also Facebook contact',
       mat_scrivania: 'Desk - double bed',
       mat_finestra: 'Window - double bed',
