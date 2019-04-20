@@ -91,11 +91,11 @@ export const routesList: IMyRouteConfig[] = [
     name: 'Offline',
     component: () => import('@/views/offline/offline.vue')
   },
-  {
-    path: '/malaga',
-    name: 'malaga',
-    component: () => import('@/root/malaga/malaga.vue')
-  },
+  // {
+  //   path: '/malaga',
+  //   name: 'malaga',
+  //   component: () => import('@/root/malaga/malaga.vue')
+  // },
   {
     path: '/projects/:idProj',
     name: 'progetti',

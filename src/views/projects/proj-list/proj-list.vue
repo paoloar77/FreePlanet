@@ -11,7 +11,7 @@
                     <div>
                         <div class="divtitlecat clMain">
                             <div class="flex-container clMain">
-                                <q-btn v-if="!!getIdParent && CanISeeProject" size="sm" push color="secondary" round
+                                <q-btn v-if="!!getIdParent && CanISeeProjectParent" size="sm" push color="secondary" round
                                        icon="arrow_back"
                                        :to="getrouteup">
 
@@ -97,15 +97,22 @@
                         </div>
                         <q-separator></q-separator>
 
+                        CanIModifyPanelPrivacy = {{CanIModifyPanelPrivacy}}<br>
+                        CanIModifyPanelPrivacySel = {{CanIModifyPanelPrivacySel}}<br>
+                        CanISeeProject = {{CanISeeProject}}<br>
+                        CanISeeProjectSel = {{CanISeeProjectSel}}
+
                         <CTodo ref="ctodo" @setitemsel="setitemsel" :categoryAtt="idProjAtt" title="" backcolor="white"
                                forecolor="black" :viewtaskTop="false" @deselectAllRowsproj="deselectAllRowsproj"
                                @deselectAllRowstodo="deselectAllRowstodo"
+                               :CanIModifyTodo="CanIModifyPanelPrivacy"
                         >
                         </CTodo>
 
                     </div>
                 </template>
                 <template v-if="(whatisSel === tools.WHAT_PROJECT) && (!!itemselproj.descr)" v-slot:after>
+                    ID = {{itemselproj._id}}
                     <div class="q-pa-xs clMain">
                         <div class="flex-container clMain">
                             <q-icon class="flex-item flex-icon" name="format_align_center"/>
@@ -127,23 +134,23 @@
 
                             </div>
                         </div>
-                        <div v-if="isMainProject" class="flex-container clMain">
+                        <div v-if="isMainProject || true" class="flex-container clMain">
                             <q-icon class="flex-item flex-icon" name="lock"/>
                             <div class="flex-item itemstatus">
-                                <q-select :readonly="readonly_PanelPrivacy"
+                                <q-select :readonly="readonly_PanelPrivacySel"
                                           rounded outlined v-model="itemselproj.privacyread" :options="selectPrivacy"
                                           :label="$t('proj.privacyread')" emit-value map-options>
                                 </q-select>
                             </div>
                             <q-icon class="flex-item flex-icon" name="edit"/>
                             <div class="flex-item itemstatus">
-                                <q-select :readonly="readonly_PanelPrivacy" rounded outlined
+                                <q-select :readonly="readonly_PanelPrivacySel" rounded outlined
                                           v-model="itemselproj.privacywrite" :options="selectPrivacy"
                                           :label="$t('proj.privacywrite')" emit-value map-options>
                                 </q-select>
                             </div>
                         </div>
-                        <div v-if="CanISeeProject">
+                        <div v-if="CanISeeProjectSel">
                             <div class="flex-container clMain">
                                 <q-icon class="flex-item flex-icon" name="work_outline"/>
                                 <div class="flex-item itemdescr">
@@ -176,14 +183,14 @@
                             <div class="flex-container clMain">
                                 <q-icon class="flex-item flex-icon" name="developer_mode"/>
                                 <div class="flex-item itemdata">
-                                    <CDate :readonly="readonly_PanelPrivacy" :mydate="itemselproj.begin_development"
+                                    <CDate :readonly="readonly_PanelPrivacySel" :mydate="itemselproj.begin_development"
                                            @input="itemselproj.begin_development = new Date(arguments[0])"
                                            :label="$t('proj.begin_development')">
                                     </CDate>
                                 </div>
                                 <div style="margin: 10px;"></div>
                                 <div class="flex-item itemdata">
-                                    <CDate :readonly="readonly_PanelPrivacy" :mydate="itemselproj.begin_test"
+                                    <CDate :readonly="readonly_PanelPrivacySel" :mydate="itemselproj.begin_test"
                                            @input="itemselproj.begin_test = new Date(arguments[0])"
                                            :label="$t('proj.begin_test')">
                                     </CDate>
@@ -192,13 +199,13 @@
                             <div class="flex-container clMain">
                                 <q-icon class="flex-item flex-icon" name="outlined_flag"/>
                                 <div class="flex-item itemstatus">
-                                    <q-select :readonly="readonly_PanelPrivacy" rounded outlined v-model="itemselproj.actualphase" :options="selectPhase"
+                                    <q-select :readonly="readonly_PanelPrivacySel" rounded outlined v-model="itemselproj.actualphase" :options="selectPhase"
                                               :label="$t('proj.actualphase')" emit-value map-options>
                                     </q-select>
                                 </div>
                                 <q-icon class="flex-item flex-icon" name="outlined_flag"/>
                                 <div class="flex-item itemstatus">
-                                    <q-select :readonly="readonly_PanelPrivacy" rounded outlined v-model="itemselproj.totalphases" :options="selectPhase"
+                                    <q-select :readonly="readonly_PanelPrivacySel" rounded outlined v-model="itemselproj.totalphases" :options="selectPhase"
                                               :label="$t('proj.totalphases')" emit-value map-options>
                                     </q-select>
                                 </div>
@@ -208,7 +215,7 @@
                                 <q-icon class="flex-item flex-icon" name="watch_later"/>
                                 <div class="flex-item itemdata content-center">
                                     <q-input
-                                            :readonly="readonly_PanelPrivacy"
+                                            :readonly="readonly_PanelPrivacySel"
                                             ref="input3"
                                             type="number"
                                             v-model="itemselproj.hoursweeky_plannedtowork"

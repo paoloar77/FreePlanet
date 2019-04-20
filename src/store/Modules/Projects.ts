@@ -1,4 +1,5 @@
 import { IProject, IProjectsState, IDrag, IMenuList } from 'model'
+import { Privacy } from '@src/model'
 import { storeBuilder } from './Store/Store'
 
 import Api from '@api'
@@ -80,8 +81,8 @@ namespace Getters {
       hoursworked: 0,
       hoursplanned: 0,
       progressCalc: 0,
-      privacyread: '',
-      privacywrite: '',
+      privacyread: 'onlyme',
+      privacywrite: 'onlyme',
       begin_development: tools.getDateNull(),
       begin_test: tools.getDateNull(),
       hoursweeky_plannedtowork: 0,
@@ -135,7 +136,30 @@ namespace Getters {
     return null
   }, 'getRecordById')
 
+  const getifCanISeeProj = b.read((state: IProjectsState) => (proj: IProject): boolean => {
+    if (proj === null)
+      return false
+
+    if (UserStore.state.userId === proj.userId)  // If it's the owner
+      return true
+
+    return (proj.privacyread === Privacy.all) ||
+      (proj.privacyread === Privacy.friends) && (UserStore.getters.IsMyFriend(proj.userId))
+      || ((proj.privacyread === Privacy.mygroup) && (UserStore.getters.IsMyGroup(proj.userId)))
+
+  }, 'getifCanISeeProj')
+
+  const CanIModifyPanelPrivacy = b.read((state: IProjectsState) => (proj: IProject): boolean => {
+    return ((UserStore.state.userId === proj.userId) || (proj.privacywrite === Privacy.all))  // If it's the owner
+  }, 'CanIModifyPanelPrivacy')
+
   export const getters = {
+    get getifCanISeeProj() {
+      return getifCanISeeProj()
+    },
+    get CanIModifyPanelPrivacy() {
+      return CanIModifyPanelPrivacy()
+    },
     get getRecordEmpty() {
       return getRecordEmpty()
     },

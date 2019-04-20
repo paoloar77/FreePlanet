@@ -107,9 +107,9 @@
                 </div>
                 <!--</q-infinite-scroll>-->
             </div>
+            CanIModifyTodo : {{CanIModifyTodo}}
 
-
-            <q-input v-if="TodosCount > 0 || !viewtaskTop" ref="insertTaskBottom" v-model="todobottom"
+            <q-input v-if="(TodosCount > 0 || !viewtaskTop) && CanIModifyTodo" ref="insertTaskBottom" v-model="todobottom"
                      style="margin-left: 6px;"
                      color="blue-12"
                      :label="$t('todo.insertbottom')"

@@ -257,6 +257,69 @@ const messages = {
       privacywrite: 'Chi lo puo modificare:',
       totalphases: 'Totale Fasi'
     },
+    piso: {
+      affittasi: '',
+      quando: 'da Maggio a Settembre',
+      costo: '280€ matrimoniale',
+      descrizione: 'Affittasi 2 Camere a Málaga - Las Delicias',
+      cameramatr: 'Camera matrimoniale (per 1 persona)',
+      matr1: '280€ al mese: da maggio fino a settembre (10,50 mq)',
+      singola1: '220€ al mese: da maggio fino a settembre (6,50 mq)',
+      descrpiso: 'Si affitta 1 camera in un modesto appartamento di 90m2, composto da 3 camere totali, 1 bagno con vasca + bide, sala, cucina, terrazzino coperto per ripostiglio e biciclette.<br>' +
+        'L\'appartamento è a <strong>700m dalla spiaggia</strong>.<br>' +
+        'A 3,5 km dal centro.<br>' +
+        'E\' al 2° piano, con ascensore. <br>' +
+        'Spazi condivisi: Cucina con lavatrice, forno, forno a microonde, fuochi cottura a gas, sala con TV, Wifi, bagno con bidet.<br>' +
+        '<h5>Regole</h5>' +
+        'Si cerca una ragazza tranquilla, educata e silenziosa, rispettosa degli altri, nel condominio ci abitano persone locali, e non vogliono che si faccia rumore o feste.<br>' +
+        'L\'appartamento infatti é molto silenzioso, nonostante sia in un palazzo di 9 piani, ci abitano diverse persone anziane.<br>' +
+        'No fumatori, no animali (la proprietaria lo vieta)' +
+        '<h5>Chi ci abiterà con voi nell\'appartamento?</h5>' +
+        'Attualmente ci abitano 2 ragazze.' +
+        '<h5>Periodo</h5>' +
+        ' Da maggio fino ai primi di Settembre (poi da decidere insieme)' +
+        '<h5>Costi</h5>' +
+        ' - 1 Camera Matrimoniale: <strong>280 €</strong> (solo per 1 persona) (10,50 mq)<br><br>' +
+        'P.S: Per <strong>Vegani</strong>, sconto extra del 10% per la matrimoniale !' +
+        '<h5>Caparra</h5>' +
+        'La caparra da pagare in anticipo è di 200€<br>' +
+        'che verrá restituita alla fine della stagione, a Settembre.' +
+        '<h5>Vedere l\'appartamento</h5>' +
+        'Contattatemi per venire a vedere l\'appartamento.' +
+        '<h5>Quanto devo pagare per entrare?</h5>' +
+        'La Caparra + 1 mese anticipato:<br>' +
+        '- per la matrimoniale: 200€ + 280€ = 480€<br>' +
+        '<h5>Uscita anticipata dall\'appartamento</h5>' +
+        'Nel caso in cui si debba lasciare l\'appartamento prima della scadenza, è buona norma <strong>avvertire</strong> con 30 giorni di preavviso, per permetterci di trovare un\'altra persona fidata, ' +
+        'altrimenti parte della caparra verrá usata come indennizzo, salvo per motivazioni veramente importanti.' +
+        '<h5>Spese Aggiuntive:</h5>' +
+        'Le <strong>spese</strong> di luce, acqua, gas e internet Wifi con Fibra ottica, sono <strong>da pagare a parte</strong>, da dividere tra i coinquilini, (circa <strong>35 € al mese a testa</strong>)<br><br>' +
+        'Opzionale: A disposizione una <strong>Bicicietta</strong> MTB (costo 20€ al mese per l\'usura).<br><br>' +
+        '' +
+        'P.S: I prezzi sono bassi perchè le camere vengono sub-affittate e non vogliamo lucrarci sopra, ma semplicemente mantenere l\'appartamento per ritornarci poi a Settembre<br>' +
+        '<h5>Per contattarci</h5>' +
+        'Paolo: Whatsapp +34 644.93.27.96 <br>' +
+        'Karla: Whatsapp +34 603.24.41.00<br>' +
+        'Inviare anche contatto Facebook',
+      mat_scrivania: 'Scrivania - matrimoniale',
+      mat_finestra: 'Finestra - matrimoniale',
+      mat_armadio: 'Armadio -matrimoniale',
+      mat_fin2: 'Finestra dalla camera matrimoniale',
+      mat_singola: 'Camera singola',
+      sing_scrivania: 'Scrivania singola',
+      sing_: 'Finestra singola',
+      sing_armadio: 'Armadio singola',
+      cucina: 'Cucina',
+      corridoio: 'Corridoio',
+      tv: 'Televisore e Wifi',
+      terrazza: 'Terrazza',
+      terrazza_vista: 'Vista dalla terrazza',
+      sala: 'Sala',
+      divano: 'Divano',
+      tavolo_sala: 'Tavolo della sala',
+      bagno: 'Bagno',
+      vasca: 'Vasca con Doccia',
+    }
   },
   'es': {
     dialog: {
@@ -510,6 +573,71 @@ const messages = {
       privacywrite: 'Quien puede modificarlo:',
       totalphases: 'Fases totales'
     },
+    piso: {
+      quando: 'desde los primeros dias de mayo 2019 hasta septiembre',
+      costo: '€ 280 doble',
+      descrizione: 'Alquiler 1 habitacion en Málaga - Las Delicias',
+      cameramatr: 'Habitacion doble',
+      matr1: '280 € al mes: de mayo a septiembre. (10,50 mq)',
+      singola1: '220 € al mes: de mayo a septiembre. (6,50 mq)',
+      descrpiso: 'Se alquilas 1 habitacion en un modesto apartamento de 90 m2, que consta de 3 habitaciones en total, 1 baño con bañera + bidet, sala de estar, cocina, terraza cubierta para almacenamiento y bicicletas. <br>' +
+        'El apartamento está a <strong>700m de la playa</strong>. <br>' +
+        'A 3.5 km del centro. <br>' +
+        'Está en el segundo piso, con ascensor. <br> ' +
+        'Espacios compartidos: cocina con lavadora, horno, microondas, cocina a gas, sala de TV, wifi, baño con bidet. <br>' +
+        '<h5> Reglas </h5>' +
+        'Estamos buscando a una chica tranquila, educada y silenciosa, respetuosa con los demás, la gente local vive en el condominio y no queremos que se hagan ruidos o fiestas. <br> ' +
+        'De hecho, el apartamento es muy tranquilo, aunque está en un edificio de 9 pisos, hay varias personas mayores que viven allí.<br>' +
+        'No fumadores, no mascotas (el propietario lo prohíbe)' +
+        '<h5> ¿Quién vivirá contigo en el piso? </h5>' +
+        '2 chicas viven actualmente aquí' +
+        '<h5> Temporada </h5>' +
+        'Desde mayo hasta principios de septiembre (luego se decidirá en conjunto)' +
+        '<h5> Costos </h5>' +
+        '- 1 Habitación Doble: <strong> 280 € </strong> (10,50 mq)<br><br>' +
+        'P.S: Para <strong>Veganos</strong>, ¡descuento extra del 10% para la Doble!' +
+        '<h5> Fianza </h5>' +
+        'El anticipo a pagar por adelantado es de € 200 <br>' +
+        'que se devolverá al final de la temporada, en septiembre.' +
+        '<h5> Ver el apartamento </h5>' +
+        'Ponte en contacto conmigo para venir a ver el apartamento.' +
+        '<h5> ¿Cuánto tengo que pagar para ingresar? </h5>' +
+        'La fianza + 1 mes por adelantado: <br>' +
+        '- para la doble: 200 € + 280 € = 480 € <br>' +
+        '<h5> Salida anticipada del apartamento </h5>' +
+        'En caso de que tenga que abandonar el apartamento antes de la fecha límite, es una buena práctica <strong> avisar </strong> con <strong>30 días de antelación</strong>, para permitirnos encontrar a otra persona de confianza,' +
+        'De lo contrario, parte del depósito se utilizará como compensación, excepto por razones muy importantes.' +
+        '<h5> Gastos adicionales: </h5>' +
+        'Los <strong> gastos </strong> de electricidad, agua, gas y internet wifi con fibra óptica, se <strong> pagarán por separado </strong>, se dividirán entre los compañeros de habitación (aproximadamente <strong> 35 € / mes cada uno</strong>) <br> <br> ' +
+        'Opcional: hay un Bicicietta <strong> </strong> disponible (20 € al mes por desgaste). <br> <br> ' +
+        'P.S: Los precios son bajos porque las habitaciones están sub-alquiladas y no queremos ganar dinero con esto, simplemente mantenemos el apartamento y luego regresamos a septiembre <br>' +
+        '<h5> Contrato </h5>' +
+        'Para seguridad, se le pedirá que firme un contrato (acuerdo privado), que confirme las condiciones escritas arriba. <br> ' +
+        'Se requieren documentos de identificación con foto (documento de identidad o pasaporte). ' +
+        '<h5> Para contactarnos </h5>' +
+        'Paolo: Whatsapp +34 644.93.27.96 <br>' +
+        'Karla: Whatsapp +34 603.24.41.00<br>' +
+        'Enviar también contacto de Facebook',
+      mat_scrivania: 'Escritorio - cama matrimonial',
+      mat_finestra: 'Ventana - matrimonial',
+      mat_armadio: 'Armario -matrimoniale',
+      mat_fin2: 'Ventana - matrimonial',
+      mat_singola: 'Habitacion individual',
+      sing_scrivania: 'Escritorio - H. individual',
+      sing_: 'Ventana - H. individual',
+      sing_armadio: 'Armario - H. individual',
+      cucina: 'Cocina',
+      corridoio: 'Corredor',
+      tv: 'TV y Wifi fibra óptica',
+      terrazza: 'terraza',
+      terrazza_vista: 'Vista desde la terraza',
+      sala: 'Sala',
+      divano: 'Sofá',
+      tavolo_sala: 'Mesa de la habitacion',
+      bagno: 'cuarto de baño con bidé',
+      vasca: 'Bañera con ducha',
+    }
+
   },
   'enUs': {
     dialog: {
@@ -763,6 +891,71 @@ const messages = {
       privacywrite: 'Who can modify if:',
       totalphases: 'Total Phase'
     },
+    piso: {
+      quando: 'from May to September',
+      costo: '€ 280 double',
+      descrizione: 'Rent 1 Room in Málaga - Las Delicias district',
+      cameramatr: 'Double room (for 1 person)',
+      matr1: '€ 280 per month: from May until September (10,50 mq)',
+      singola1: '€ 220 per month: from May until September (6,50 mq)',
+      descrpiso: 'We rent 1 room in a modest 90m2 apartment, consisting of 3 total bedrooms, 1 bathroom with bath + bidet, living room, kitchen, covered terrace for storage and bicycles. <br> ' +
+        'The apartment is <strong>700m from the beach</strong>. <br>' +
+        '3.5 km from the center. <br>' +
+        'It is on the 2nd floor, with a lift. <br> ' +
+        'Shared spaces: Kitchen with washing machine, oven, microwave oven, gas cooking stove, TV, Wifi, bathroom with bidet. <br>' +
+        '<h5> Rules </h5>' +
+        'We are looking for a quiet girl, polite and silent person, respectful of others, local people live in the condominium, and do not want noise or parties to be made. <br>' +
+        'In fact, the apartment is very quiet, although it is in a building of 9 floors, there are several elderly people living there.<br>' +
+        'No smoking, no pets (the owner forbids it)' +
+        '<h5> Who will live inside the apartment? </h5>' +
+        '2 student girls currently lives there.' +
+        '<h5> Period </h5>' +
+        'From May until the beginning of September (later to be decided together)' +
+        '<h5> Costs </h5>' +
+        '- 1 Double Room: <strong> 280 € </strong> (only for 1 person) (10,5 mq) <br><br>' +
+        'P.S: For <strong> Vegans </strong>, 10% extra discount for the double room!' +
+        '<h5> Deposit </h5>' +
+        'The down payment to be paid in advance is € 200 <br>' +
+        'which will be returned at the end of the season, in September.' +
+        '<h5> See the apartment </h5>' +
+        'Contact me to come and see the apartment.' +
+        '<h5> How much do I have to pay to enter? </h5>' +
+        'The deposit + 1 month in advance: <br>' +
+        '- for the matrimonial: 200 € + 280 € = 480 € <br>' +
+        '<h5> Early departure from the apartment </h5>' +
+        'In case you have to leave the apartment before the deadline, it is good practice <strong> to warn </strong> with <strong>30 days notice</strong>, to allow us to find another trusted person,' +
+        'otherwise part of the deposit will be used as compensation, except for very important reasons.' +
+        '<h5> Additional Expenses: </h5>' +
+        'The <strong> expenses </strong> of electricity, water, gas and internet Wifi with fiber optics, are <strong> to be paid separately </strong>, to be divided among the roommates, (about <strong> 35 € / month each </strong>) <br> <br> ' +
+        'Optional: A <strong> MTB Bike </strong> is available (€ 20 per month). <br> <br>' +
+        '' +
+        'P.S: The prices are low because the rooms are sub-rented and we don\'t want to make money from them, but simply keep the apartment and then return to September <br>' +
+        '<h5> Contract </h5>' +
+        'To be safe, you will be asked to sign a contract (private agreement), confirming these conditions written above. <br>' +
+        'Photo identification documents (identity card or passport) are required. ' +
+        '<h5> To contact us </h5>' +
+        'Paolo: Whatsapp +34 644.93.27.96 <br>' +
+        'Karla: Whatsapp +34 603.24.41.00<br>' +
+        'Send also Facebook contact',
+      mat_scrivania: 'Desk - double bed',
+      mat_finestra: 'Window - double bed',
+      mat_armadio: 'Wardrobe - double bed',
+      mat_fin2: 'Window from the bedroom',
+      mat_singola: 'Single Room',
+      sing_scrivania: 'Desk single room',
+      sing_: 'Window single room',
+      sing_armadio: 'Wardrobe single room',
+      cucina: 'Kitchen',
+      corridoio: 'Corridor',
+      tv: 'TV and Wifi',
+      terrazza: 'Terrace',
+      terrazza_vista: 'View from the terrace',
+      sala: 'Room',
+      divano: 'Sofá',
+      tavolo_sala: 'Room table',
+      bagno: 'Bathroom',
+      vasca: 'Bathtub with shower',
+    }
   },
 };
 

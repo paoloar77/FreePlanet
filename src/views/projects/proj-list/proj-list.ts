@@ -43,6 +43,7 @@ export default class ProjList extends Vue {
   public idProjAtt: string = process.env.PROJECT_ID_MAIN
   public splitterModel = 50 // start at 50%
   public itemproj: IProject = null
+  public itemprojparent: IProject = null
   public idsel: string = ''
   public itemselproj: IProject = Projects.getters.getRecordEmpty()
   public itemtodosel: ITodo = Todos.getters.getRecordEmpty()
@@ -82,6 +83,7 @@ export default class ProjList extends Vue {
   private updateindexProj() {
     console.log('idProjAtt', this.idProjAtt)
     this.itemproj = Projects.getters.getRecordById(this.idProjAtt)
+    this.itemprojparent = Projects.getters.getRecordById(this.itemproj.id_parent)
     console.log('this.itemproj', this.itemproj)
     // console.log('idproj', this.idProjAtt, 'params' , this.$route.params)
   }
@@ -90,37 +92,32 @@ export default class ProjList extends Vue {
     return !this.CanIModifyPanelPrivacy
   }
 
+  get readonly_PanelPrivacySel() {
+    return !this.CanIModifyPanelPrivacySel
+  }
+
   get CanISeeProject() {
+    return Projects.getters.getifCanISeeProj(this.itemproj)
+  }
 
-    if (UserStore.state.userId === this.itemselproj.userId)  // If it's the owner
-      return true
+  get CanISeeProjectParent() {
+    return Projects.getters.getifCanISeeProj(this.itemprojparent)
+  }
 
-    return (this.itemselproj.privacyread === Privacy.all) ||
-      (this.itemselproj.privacyread === Privacy.friends) && (UserStore.getters.IsMyFriend(this.itemselproj.userId))
-      || ((this.itemselproj.privacyread === Privacy.mygroup) && (UserStore.getters.IsMyGroup(this.itemselproj.userId)))
+  get CanISeeProjectSel() {
+    return Projects.getters.getifCanISeeProj(this.itemselproj)
   }
 
   get CanIModifyPanelPrivacy() {
-
-    if ((UserStore.state.userId === this.itemselproj.userId) || (this.itemselproj.privacywrite === Privacy.all))  // If it's the owner
-      return true
+    return Projects.getters.CanIModifyPanelPrivacy(this.itemproj)
   }
 
-  // I use this because the statustodo will disappear from the UI, so it won't call the status changed...
-  // in this case I need to call manually the modify.
-  public modifyfieldtodo(field) {
-    console.log('modifyfieldtodo', field)
-    Todos.actions.modify({ myitem: this.itemtodosel, field })
+  get CanIModifyPanelPrivacySel() {
+    return Projects.getters.CanIModifyPanelPrivacy(this.itemselproj)
   }
 
   get getrouteup() {
     return '/projects/' + this.itemproj.id_parent
-  }
-
-  public selproj() {
-    this.deselectAllRowsproj(null, false, false)
-    this.deselectAllRowstodo(null, false, false)
-    this.setidsel(this.idProjAtt)
   }
 
   get tools() {
@@ -228,6 +225,19 @@ export default class ProjList extends Vue {
 
     return myperc
 
+  }
+
+  // I use this because the statustodo will disappear from the UI, so it won't call the status changed...
+  // in this case I need to call manually the modify.
+  public modifyfieldtodo(field) {
+    console.log('modifyfieldtodo', field)
+    Todos.actions.modify({ myitem: this.itemtodosel, field })
+  }
+
+  public selproj() {
+    this.deselectAllRowsproj(null, false, false)
+    this.deselectAllRowstodo(null, false, false)
+    this.setidsel(this.idProjAtt)
   }
 
   public showTask(field_value) {

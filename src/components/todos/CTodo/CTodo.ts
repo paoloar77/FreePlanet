@@ -12,7 +12,6 @@ import { UserStore } from '@store'
 import { Getter } from 'vuex-class'
 import { SingleTodo } from '../SingleTodo'
 
-
 const namespace: string = 'Todos'
 
 @Component({
@@ -33,6 +32,7 @@ export default class CTodo extends Vue {
   public dragname: string = 'first'
 
   @Prop({ required: true }) public categoryAtt: string
+  @Prop({ required: false, default: true }) public CanIModifyTodo: boolean
   @Prop({ required: true }) public title: string
   @Prop({ required: false, default: 'blue' }) public forecolor: string
   @Prop({ required: false, default: 'lightblue' }) public backcolor: string

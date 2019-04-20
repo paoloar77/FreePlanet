@@ -47,14 +47,6 @@ export default class Malaga extends Vue {
       img: '../../statics/images/piso/matrimoniale_armadio.jpg'},
     {title: GlobalStore.getters.t('piso.mat_fin2'), subtitle: '',  // 'Finestra dalla camera matrimoniale'
       img: '../../statics/images/piso/finestra_della_camera_matrimoniale.jpg'},
-    {title: GlobalStore.getters.t('piso.mat_singola'), subtitle: GlobalStore.getters.t('piso.singola1'), // 'Camera singola'
-      img: '../../statics/images/piso/singola_1.jpg'},
-    {title: GlobalStore.getters.t('piso.sing_scrivania'), subtitle: '', // 'Scrivania singola'
-      img: '../../statics/images/piso/singola_scrivania.jpg'},
-    {title: GlobalStore.getters.t('piso.sing_'), subtitle: '', // 'Finestra singola'
-      img: '../../statics/images/piso/singola_finestra.jpg'},
-    {title: GlobalStore.getters.t('piso.sing_armadio'), subtitle: '', // 'Armadio singola'
-      img: '../../statics/images/piso/singola_armadio.jpg'},
     {title: GlobalStore.getters.t('piso.cucina'), subtitle: '',  // 'Cucina'
       img: '../../statics/images/piso/cucina.jpg'},
     {title: GlobalStore.getters.t('piso.cucina'), subtitle: '',  // 'Cucina'

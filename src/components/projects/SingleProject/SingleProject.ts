@@ -10,7 +10,6 @@ import { SubMenusProj } from '../SubMenusProj'
 import { CDate } from '../../CDate'
 
 import { date } from 'quasar'
-import { askConfirm } from '../../../classes/routinestd'
 
 @Component({
   components: { SubMenusProj, CDate },
@@ -39,6 +38,10 @@ export default class SingleProject extends Vue {
 
   get tools() {
     return tools
+  }
+
+  get isDisable() {
+    return !Projects.getters.getifCanISeeProj(this.itemproject)
   }
 
   @Prop({ required: true }) public itemproject: IProject

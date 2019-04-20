@@ -1,4 +1,4 @@
-import { ITodo, ITodosState, IParamTodo, IDrag, IProjectsState, IProject } from 'model'
+import { ITodo, ITodosState, IParamTodo, IDrag, IProjectsState, IProject, Privacy } from 'model'
 import { storeBuilder } from './Store/Store'
 
 import Api from '@api'
