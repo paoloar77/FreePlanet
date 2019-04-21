@@ -62,7 +62,7 @@ Router.beforeEach(async (to: IMyRoute, from: IMyRoute, next) => {
         next()
       } else {
         if (!to.meta.transparent && !to.meta.isModal) {
-          console.log('Route interceptor log: <4>')
+          // console.log('Route interceptor log: <4>')
           ProgressBar.mutations.start()
         }
         else if (to.meta.transparent && !from.name) {

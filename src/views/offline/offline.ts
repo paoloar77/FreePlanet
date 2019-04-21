@@ -5,6 +5,6 @@ import { Component } from 'vue-property-decorator'
 })
 export default class Offline extends Vue {
   get logoimg() {
-    return '/statics/images/' + process.env.LOGO_REG
+    return 'º' + process.env.LOGO_REG
   }
 }

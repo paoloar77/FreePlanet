@@ -1,11 +1,11 @@
 <template>
     <div :class="getClassRow()" @click="clickProject" >
 
-        <q-btn class="flex-item donotdrag " size="sm" push color="primary" round icon="arrow_forward"
-        :to="getrouteto"/>
+        <q-btn :disable="isDisable" class="flex-item donotdrag " size="sm" push color="primary" round icon="arrow_forward"
+               :to="getrouteto"></q-btn>
 
         <div class="flex-item donotdrag divdescrTot">
-            <q-input v-if="(sel && inEdit)" hide-underline type="textarea" ref="inputdescr"
+            <q-input v-if="(sel && inEdit)" hide-underline type="textarea" ref="inputprojdescr"
                      v-model.trim="precDescr"
                      autogrow
                      borderless
@@ -13,7 +13,8 @@
                      dense
                      @focus="getFocus($event)"
                      :class="classDescrEdit" :max-height="100"
-                     @keydown="keyDownArea" v-on:keydown.esc="exitEdit" @blur="exitEdit(true)" @click="editProject()"/>
+                     @keydown="keyDownArea" v-on:keydown.esc="exitEdit" @blur="exitEdit(true)" @click="editProject()">
+            </q-input>
 
             <div v-else :class="classDescr"
                  @keydown="keyDownRow">{{itemproject.descr}}
@@ -44,6 +45,8 @@
         <div v-if="isProject()" class="flex-item pos-item " @mousedown="clickRiga">
             <q-btn flat
                    :class="clButtPopover"
+                   :readonly="!CanIModifyProject"
+                   :disable="!CanIModifyProject"
                    icon="menu">
                 <q-menu ref="popmenu" self="top right">
                     <SubMenusProj :menuPopupProj="menuPopupProj" :itemproject="itemproject" @clickMenu="clickMenu"

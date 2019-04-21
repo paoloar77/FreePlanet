@@ -17,7 +17,7 @@ export function getLinkByTableName(nametable) {
   }
 }
 
-export const LIST_START = '0'
+export const LIST_START = null
 
 export const DB = {
   CMD_SYNC: 'sync',
@@ -432,5 +432,5 @@ export function table_DeleteRecord(nametable, myobjtrov, id) {
 
   // 3) Delete from the Server (call)
   Sync_DeleteItem(nametable, myobjtrov, id)
-  
+
 }

@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import { Component, Watch } from 'vue-property-decorator'
 
-import { IDrag, IProject, IProjectsState, ITodo } from '../../../model/index'
+import { IDrag, IProject, IProjectsState, ITodo, Privacy, TypeProj } from '../../../model/index'
 import { SingleProject } from '../../../components/projects/SingleProject/index'
 import { CTodo } from '../../../components/todos/CTodo'
 
@@ -16,6 +16,7 @@ import { Getter } from 'vuex-class'
 import { date, Screen } from 'quasar'
 import { CProgress } from '../../../components/CProgress'
 import { CDate } from '../../../components/CDate'
+import { RouteNames } from '@src/router/route-names'
 
 const namespace: string = 'Projects'
 
@@ -41,9 +42,9 @@ export default class ProjList extends Vue {
   public scrollable = true
   public dragname: string = 'second'
   public idProjAtt: string = process.env.PROJECT_ID_MAIN
-  public idProjParentAtt: string = ''
   public splitterModel = 50 // start at 50%
   public itemproj: IProject = null
+  public itemprojparent: IProject = null
   public idsel: string = ''
   public itemselproj: IProject = Projects.getters.getRecordEmpty()
   public itemtodosel: ITodo = Todos.getters.getRecordEmpty()
@@ -53,24 +54,30 @@ export default class ProjList extends Vue {
 
   public selectStatus: [] = tools.selectStatus[UserStore.state.lang]
   public selectPhase: [] = tools.selectPhase[UserStore.state.lang]
+  public selectPrivacy: [] = tools.selectPrivacy[UserStore.state.lang]
 
   public $refs: {
     singleproject: SingleProject[],
     ctodo: CTodo
   }
 
-  @Getter('items_dacompletare', { namespace })
-  public items_dacompletare: (state: IProjectsState, id_parent: string) => IProject[]
+  @Getter('projs_dacompletare', { namespace })
+  public projs_dacompletare: (state: IProjectsState, id_parent: string, miei: boolean) => IProject[]
 
-  @Watch('items_dacompletare')
+  @Watch('projs_dacompletare')
   public changeitems() {
-    this.idProjParentAtt = Projects.getters.getParentById(this.idProjAtt)
+    this.updateindexProj()
+  }
+
+  @Watch('$route.name')
+  public changename() {
+    console.log('tools.getUrlByTipoProj(this.areMyProjects)', tools.getUrlByTipoProj(this.areMyProjects))
   }
 
   @Watch('$route.params.idProj')
   public changeparent() {
     this.idProjAtt = this.$route.params.idProj
-    this.idProjParentAtt = Projects.getters.getParentById(this.idProjAtt)
+    this.updateindexProj()
     this.selproj()
   }
 
@@ -79,25 +86,51 @@ export default class ProjList extends Vue {
     this.updateclasses()
   }
 
-  get getidProjParentAtt() {
-    return this.idProjParentAtt
+  private updateindexProj() {
+    // console.log('idProjAtt', this.idProjAtt)
+    this.itemproj = Projects.getters.getRecordById(this.idProjAtt)
+    if (!!this.itemproj) {
+      this.itemprojparent = Projects.getters.getRecordById(this.itemproj.id_parent)
+      console.log('this.itemproj.descr', this.itemproj.descr)
+    }
+    // console.log('idproj', this.idProjAtt, 'params' , this.$route.params)
   }
 
-  // I use this because the statustodo will disappear from the UI, so it won't call the status changed...
-  // in this case I need to call manually the modify.
-  public modifyfieldtodo(field) {
-    console.log('modifyfieldtodo', field)
-    Todos.actions.modify({ myitem: this.itemtodosel, field })
+  get areMyProjects() {
+    console.log('this.$route.name', this.$route.name)
+    return this.$route.name === RouteNames.myprojects
+  }
+
+  get readonly_PanelPrivacy() {
+    return !this.CanIModifyPanelPrivacy
+  }
+
+  get readonly_PanelPrivacySel() {
+    return !this.CanIModifyPanelPrivacySel
+  }
+
+  get CanISeeProject() {
+    return Projects.getters.getifCanISeeProj(this.itemproj)
+  }
+
+  get CanISeeProjectParent() {
+    return Projects.getters.getifCanISeeProj(this.itemprojparent)
+  }
+
+  get CanISeeProjectSel() {
+    return Projects.getters.getifCanISeeProj(this.itemselproj)
+  }
+
+  get CanIModifyPanelPrivacy() {
+    return Projects.getters.CanIModifyPanelPrivacy(this.itemproj)
+  }
+
+  get CanIModifyPanelPrivacySel() {
+    return Projects.getters.CanIModifyPanelPrivacy(this.itemselproj)
   }
 
   get getrouteup() {
-    return '/projects/' + this.idProjParentAtt
-  }
-
-  public selproj() {
-    this.deselectAllRowsproj(null, false, false)
-    this.deselectAllRowstodo(null, false, false)
-    this.setidsel(this.idProjAtt)
+    return tools.getUrlByTipoProj(this.areMyProjects) + this.itemproj.id_parent
   }
 
   get tools() {
@@ -113,8 +146,26 @@ export default class ProjList extends Vue {
     GlobalStore.mutations.setShowType(value)
   }
 
+  get isRootProject() {
+    return this.idProjAtt === process.env.PROJECT_ID_MAIN
+  }
+
+  get getIdParent() {
+    if (!!this.itemproj)
+      return this.itemproj.id_parent
+    else
+      return ''
+  }
+
+  get isMainProject() {
+    return tools.isMainProject(this.idProjAtt)
+  }
+
   get menuPopupConfigProject() {
-    return tools.menuPopupConfigProject[UserStore.state.lang]
+    if (this.isMainProject)
+      return tools.menuPopupConfigMAINProject[UserStore.state.lang]
+    else
+      return tools.menuPopupConfigProject[UserStore.state.lang]
   }
 
   get listOptionShowTask() {
@@ -125,11 +176,89 @@ export default class ProjList extends Vue {
     return Projects.getters.getDescrById(this.idProjAtt)
   }
 
+  get getCalcHoursWorked() {
+
+    if (this.itemselproj.hoursplanned <= 0) {
+      return 0
+    }
+    return Math.round(this.itemselproj.hoursworked / this.itemselproj.hoursplanned * 100)
+
+  }
+
+  get calcprogressWeekly() {
+
+    if (this.itemselproj.hoursplanned <= 0) {
+      return 0
+    }
+    return Math.round(this.itemselproj.hoursworked / this.itemselproj.hoursplanned * 100)
+  }
+
+  get calcEndWork_Estimate() {
+    if (date.isValid(this.itemselproj.begin_development) && (this.itemselproj.hoursweeky_plannedtowork > 0)) {
+      const hoursw = this.itemselproj.hoursweeky_plannedtowork
+
+      try {
+
+        let orerimaste = this.itemselproj.hoursplanned - this.itemselproj.hoursworked
+        if (orerimaste < 0) {
+          orerimaste = 0
+        }
+
+        const weeks = orerimaste / hoursw
+        const days = Math.round(weeks * 7)
+
+        let mydate = this.itemselproj.begin_development
+        const datenow = tools.getDateNow()
+        // if begin is in the past, take the day now
+        if (date.getDateDiff(mydate, datenow) < 0) {
+          mydate = datenow
+        }
+        console.log('mydate', mydate)
+        this.itemselproj.endwork_estimate = date.addToDate(mydate, { days })
+
+        console.log('   days', days, 'weeks', weeks, 'orerimaste', orerimaste, 'dateestimated', this.itemselproj.endwork_estimate)
+
+        return this.itemselproj.endwork_estimate
+      }catch (e) {
+        this.itemselproj.endwork_estimate = tools.getDateNull()
+      }
+
+      return tools.getDateNull()
+
+    } else {
+      return tools.getDateNull()
+    }
+  }
+
+  get getCalcTodoHoursWorked() {
+    if (this.itemtodosel.hoursplanned <= 0) {
+      return 0
+    }
+    const myperc = Math.round(this.itemtodosel.hoursworked / this.itemtodosel.hoursplanned * 100)
+
+    return myperc
+
+  }
+
+  // I use this because the statustodo will disappear from the UI, so it won't call the status changed...
+  // in this case I need to call manually the modify.
+  public modifyfieldtodo(field) {
+    console.log('modifyfieldtodo', field)
+    Todos.actions.modify({ myitem: this.itemtodosel, field })
+  }
+
+  public selproj() {
+    this.deselectAllRowsproj(null, false, false)
+    this.deselectAllRowstodo(null, false, false)
+    this.setidsel(this.idProjAtt)
+  }
+
   public showTask(field_value) {
     return field_value === tools.MenuAction.SHOW_TASK
   }
 
   public async onEndproj(itemdragend) {
+    console.log('onEndproj...')
     await Projects.actions.swapElems(itemdragend)
   }
 
@@ -141,15 +270,19 @@ export default class ProjList extends Vue {
 
     $service.eventBus.$on('dragend', (args) => {
 
-      const itemdragend: IDrag = {
-        field: '',
-        id_proj: this.idProjAtt,
-        newIndex: this.getElementIndex(args.el),
-        oldIndex: this.getElementOldIndex(args.el)
-      }
+      // console.log('args proj-list', args)
+      if (args.name === this.dragname) {
+        const itemdragend: IDrag = {
+          field: '',
+          id_proj: this.idProjAtt,
+          newIndex: this.getElementIndex(args.el),
+          oldIndex: this.getElementOldIndex(args.el),
+          mieiproj: this.areMyProjects
+        }
 
-      // console.log('args', args, itemdragend)
-      this.onEndproj(itemdragend)
+        // console.log('args', args, itemdragend)
+        this.onEndproj(itemdragend)
+      }
     })
 
     $service.eventBus.$on('drag', (el, source) => {
@@ -164,7 +297,8 @@ export default class ProjList extends Vue {
 
   public mounted() {
 
-    console.log('Screen.width', Screen.width)
+    // console.log('Screen.width', Screen.width)
+    // console.log('this.$route', this.$route)
 
     if (Screen.width < 400) {
       this.splitterModel = 100
@@ -172,9 +306,7 @@ export default class ProjList extends Vue {
       this.splitterModel = 50
     }
     this.idProjAtt = this.$route.params.idProj
-    this.idProjParentAtt = Projects.getters.getParentById(this.idProjAtt)
-
-    console.log('this.idProjParentAtt', this.idProjParentAtt, 'idproj', this.idProjAtt, 'params' , this.$route.params)
+    this.updateindexProj()
 
     tools.touchmove(this.scrollable)
   }
@@ -183,11 +315,8 @@ export default class ProjList extends Vue {
     console.log('LOAD PROJECTS....')
     if (!!this.$route.params.idProj) {
       this.idProjAtt = this.$route.params.idProj
-      this.idProjParentAtt = Projects.getters.getParentById(this.idProjAtt)
-      this.itemproj = Projects.getters.getRecordById(this.idProjAtt)
+      this.updateindexProj()
     }
-
-    // console.log('this.idProjAtt', this.idProjAtt, this.idProjParentAtt)
 
     // Set last category selected
     // localStorage.setItem(tools.localStorage.categorySel, this.categoryAtt)
@@ -207,7 +336,7 @@ export default class ProjList extends Vue {
   }
 
   public mydeleteitemproj(idobj: string) {
-    // console.log('mydeleteitemtodo', idobj)
+    console.log('mydeleteitemtodo', idobj)
     return Projects.actions.deleteItem({ idobj })
   }
 
@@ -249,6 +378,20 @@ export default class ProjList extends Vue {
       id_parent: this.idProjAtt
     }
 
+    if (this.itemproj === undefined)
+      this.itemproj = Projects.getters.getRecordById(this.idProjAtt)
+
+    if (this.isRootProject) {
+      myobj.typeproj = TypeProj.TYPE_PROJECT
+      myobj.id_main_project = this.idProjAtt
+    } else {
+      myobj.typeproj = TypeProj.TYPE_SUBDIR
+      if (this.itemproj.id_main_project === process.env.PROJECT_ID_MAIN)
+        myobj.id_main_project = this.itemproj._id
+      else
+        myobj.id_main_project = this.itemproj.id_main_project
+    }
+
     if (!tools.checkIfUserExist(this)) {
       return
     }
@@ -279,7 +422,9 @@ export default class ProjList extends Vue {
   }
 
   public deselectAllRowstodo(item: ITodo, check, onlythis: boolean = false) {
-    console.log('PROJ-LIST deselectAllRowstodo : ', item)
+    // console.log('PROJ-LIST deselectAllRowstodo : ', item)
+
+    return false
 
     // @ts-ignore
     for (const i in this.$refs.ctodo.$refs.single) {
@@ -340,54 +485,6 @@ export default class ProjList extends Vue {
     ApiTables.waitAndcheckPendingMsg()
   }
 
-  get getCalcHoursWorked() {
-
-    if (this.itemselproj.hoursplanned <= 0) {
-      return 0
-    }
-    return Math.round(this.itemselproj.hoursworked / this.itemselproj.hoursplanned * 100)
-
-  }
-
-  get calcprogressWeekly() {
-
-    if (this.itemselproj.hoursplanned <= 0) {
-      return 0
-    }
-    return Math.round(this.itemselproj.hoursworked / this.itemselproj.hoursplanned * 100)
-  }
-
-  get calcEndWork_Estimate() {
-    if (date.isValid(this.itemselproj.begin_development) && (this.itemselproj.hoursweeky_plannedtowork > 0)) {
-      const hoursw = this.itemselproj.hoursweeky_plannedtowork
-
-      try {
-
-        let orerimaste = this.itemselproj.hoursplanned - this.itemselproj.hoursworked
-        if (orerimaste < 0) {
-          orerimaste = 0
-        }
-
-        const weeks = orerimaste / hoursw
-        const days = Math.round(weeks * 7)
-
-        const mydate = this.itemselproj.begin_development
-        this.itemselproj.endwork_estimate = date.addToDate(mydate, { days })
-
-        console.log('   days', days, 'weeks', weeks, 'orerimaste', orerimaste, 'dateestimated', this.itemselproj.endwork_estimate)
-
-        return this.itemselproj.endwork_estimate
-      }catch (e) {
-        this.itemselproj.endwork_estimate = tools.getDateNull()
-      }
-
-      return tools.getDateNull()
-
-    } else {
-      return tools.getDateNull()
-    }
-  }
-
   private getElementIndex(el: any) {
     return [].slice.call(el.parentElement.children).indexOf(el)
   }
@@ -396,14 +493,5 @@ export default class ProjList extends Vue {
     return parseInt(el.attributes.index.value, 10)
   }
 
-  get getCalcTodoHoursWorked() {
-    if (this.itemtodosel.hoursplanned <= 0) {
-      return 0
-    }
-    const myperc = Math.round(this.itemtodosel.hoursworked / this.itemtodosel.hoursplanned * 100)
-
-    return myperc
-
-  }
 
 }

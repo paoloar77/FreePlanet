@@ -10,7 +10,6 @@ import { SubMenusProj } from '../SubMenusProj'
 import { CDate } from '../../CDate'
 
 import { date } from 'quasar'
-import { askConfirm } from '../../../classes/routinestd'
 
 @Component({
   components: { SubMenusProj, CDate },
@@ -39,6 +38,14 @@ export default class SingleProject extends Vue {
 
   get tools() {
     return tools
+  }
+
+  get isDisable() {
+    return !Projects.getters.getifCanISeeProj(this.itemproject)
+  }
+
+  get CanIModifyProject() {
+    return Projects.getters.CanIModifyPanelPrivacy(this.itemproject)
   }
 
   @Prop({ required: true }) public itemproject: IProject
@@ -77,6 +84,12 @@ export default class SingleProject extends Vue {
   @Watch('itemproject.actualphase') public valueChangedactualphase() {
     this.watchupdate('actualphase')
   }
+  @Watch('itemproject.privacyread') public valueChanged_privacyread() {
+    this.watchupdate('privacyread')
+  }
+  @Watch('itemproject.privacywrite') public valueChanged_privacywrite() {
+    this.watchupdate('privacywrite')
+  }
   @Watch('itemproject.totalphases') public valueChangedtotalphases() {
     this.watchupdate('totalphases')
   }
@@ -88,8 +101,15 @@ export default class SingleProject extends Vue {
     this.watchupdate('progressCalc')
   }
 
+  get isMainProject() {
+    return tools.isMainProject(this.itemproject.id_parent)
+  }
+
   get getlabeltext() {
-    return this.$t('proj.newproj')
+    if (this.isMainProject)
+      return this.$t('proj.newproj')
+    else
+      return this.$t('proj.newsubproj')
   }
 
 /*
@@ -147,12 +167,6 @@ export default class SingleProject extends Vue {
       this.clButtPopover += ' pos-item-popover_cursor'
     }
 
-    // this.getinputdescr = 'inputdescr' + this.itemproject._id
-
-    // console.log('classDescrEdit = ', this.classDescrEdit)
-    // console.log('classDescr', this.classDescr)
-
-    // console.log('UserStore.state.lang', UserStore.state.lang)
     if (this.isProject()) {
       this.menuPopupProj = tools.menuPopupProj[UserStore.state.lang]
     }
@@ -178,7 +192,7 @@ export default class SingleProject extends Vue {
   }
 
   public clickRiga(clickmenu: boolean = false) {
-    // console.log('CLICK RIGA ************')
+    console.log('CLICK RIGA PROJ************')
 
     if (!this.sel) {
       if (!this.inEdit) {
@@ -238,12 +252,16 @@ export default class SingleProject extends Vue {
     this.editProject()
   }
 
+  get isMyProject() {
+    return this.itemproject.userId === UserStore.state.userId
+  }
+
   get getrouteto() {
-    return '/projects/' + this.itemproject._id
+    return tools.getUrlByTipoProj(this.isMyProject) + this.itemproject._id
   }
 
   public goIntoTheProject() {
-    this.$router.replace('/projects/' + this.itemproject._id)
+    this.$router.replace(tools.getUrlByTipoProj(this.isMyProject) + this.itemproject._id)
   }
 
   public editProject() {
@@ -259,7 +277,7 @@ export default class SingleProject extends Vue {
         this.updateClasses()
       }
 
-      this.faiFocus('inputdescr', false, true)
+     this.faiFocus('inputprojdescr', false, true)
     }
     // console.log('FINE - editProject')
   }
@@ -275,11 +293,12 @@ export default class SingleProject extends Vue {
       }
 
       if (!!theField) {
+        console.log('FOCUS PROJ', theField)
         theField.focus()
       }
 
       // console.log('focus()')
-    }, 100)
+    }, 500)
   }
 
   public getFocus(e) {

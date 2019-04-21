@@ -1,4 +1,5 @@
 import { IProject, IProjectsState, IDrag, IMenuList } from 'model'
+import { Privacy } from '@src/model'
 import { storeBuilder } from './Store/Store'
 
 import Api from '@api'
@@ -20,7 +21,10 @@ const stateglob: IProjectsState = {
   visuLastCompleted: 10
 }
 
-const listFieldsToChange: string [] = ['descr', 'longdescr', 'hoursplanned', 'hoursworked', 'id_parent', 'statusproj', 'category', 'expiring_at', 'priority', 'id_prev', 'pos', 'enableExpiring', 'progressCalc', 'live_url', 'test_url', 'begin_development', 'begin_test', 'actualphase', 'totalphases', 'hoursweeky_plannedtowork', 'endwork_estimate']
+const listFieldsToChange: string [] = ['descr', 'longdescr', 'hoursplanned', 'hoursworked', 'id_parent', 'statusproj',
+  'category', 'expiring_at', 'priority', 'id_prev', 'pos', 'enableExpiring', 'progressCalc', 'live_url', 'test_url',
+  'begin_development', 'begin_test', 'actualphase', 'totalphases', 'hoursweeky_plannedtowork', 'endwork_estimate',
+  'privacyread', 'privacywrite', 'id_main_project', 'typeproj']
 
 const listFieldsUpdateCalculation: string [] = ['hoursplanned', 'hoursworked', 'progressCalc', 'endwork_estimate']
 
@@ -43,8 +47,16 @@ function initcat() {
 
 function updateDataCalculated(projout, projin) {
   listFieldsUpdateCalculation.forEach((field) => {
-    projout[field] = projin[field];
-  });
+    projout[field] = projin[field]
+  })
+}
+
+function getproj(projects, idproj, miei: boolean) {
+  if (miei) {
+    return tools.mapSort(projects.filter((proj) => (proj.id_parent === idproj) && proj.userId === UserStore.state.userId))
+  } else {
+    return tools.mapSort(projects.filter((proj) => (proj.id_parent === idproj) && proj.userId !== UserStore.state.userId ))
+  }
 }
 
 namespace Getters {
@@ -56,7 +68,9 @@ namespace Getters {
       _id: objectId(),
       descr: '',
       longdescr: '',
+      typeproj: 0,
       id_parent: '',
+      id_main_project: '',
       priority: tools.Priority.PRIORITY_NORMAL,
       statusproj: tools.Status.OPENED,
       created_at: tools.getDateNow(),
@@ -75,6 +89,8 @@ namespace Getters {
       hoursworked: 0,
       hoursplanned: 0,
       progressCalc: 0,
+      privacyread: 'onlyme',
+      privacywrite: 'onlyme',
       begin_development: tools.getDateNull(),
       begin_test: tools.getDateNull(),
       hoursweeky_plannedtowork: 0,
@@ -84,23 +100,25 @@ namespace Getters {
     return obj
   }, 'getRecordEmpty')
 
-  const items_dacompletare = b.read((state: IProjectsState) => (id_parent: string): IProject[] => {
+  const projs_dacompletare = b.read((state: IProjectsState) => (id_parent: string, miei: boolean): IProject[] => {
+    // console.log('projs_dacompletare', miei)
     if (state.projects) {
       // console.log('state.projects', state.projects)
-      return tools.mapSort(state.projects.filter((proj) => proj.id_parent === id_parent))
+      return getproj(state.projects, id_parent, miei)
     } else {
       return []
     }
-  }, 'items_dacompletare')
+  }, 'projs_dacompletare')
 
-  const listaprojects = b.read((state: IProjectsState) => (): IMenuList[] => {
+  const listaprojects = b.read((state: IProjectsState) => (miei: boolean): IMenuList[] => {
     if (state.projects) {
       // console.log('state.projects', state.projects)
-      const listaproj = tools.mapSort(state.projects.filter((proj) => proj.id_parent === process.env.PROJECT_ID_MAIN))
+      const listaproj = getproj(state.projects, process.env.PROJECT_ID_MAIN, miei)
       const myarr: IMenuList[] = []
       for (const proj of listaproj) {
         myarr.push({ nametranslate: '', description: proj.descr, idelem: proj._id })
       }
+      console.log('   myarr', myarr, listaproj)
       return myarr
 
     } else {
@@ -120,17 +138,6 @@ namespace Getters {
     return ''
   }, 'getDescrById')
 
-  const getParentById = b.read((state: IProjectsState) => (id: string): string => {
-    if (state.projects) {
-      const itemfound = state.projects.find((item) => item._id === id)
-      if (!!itemfound) {
-        return itemfound.id_parent
-      }
-    }
-
-    return ''
-  }, 'getParentById')
-
   const getRecordById = b.read((state: IProjectsState) => (id: string): IProject => {
     if (state.projects) {
       return state.projects.find((item) => item._id === id)
@@ -138,12 +145,49 @@ namespace Getters {
     return null
   }, 'getRecordById')
 
+  const getifCanISeeProj = b.read((state: IProjectsState) => (proj: IProject): boolean => {
+    if (proj === undefined)
+      return false
+
+    if (!!UserStore.state) {
+
+      if (UserStore.state.userId === proj.userId)  // If it's the owner
+        return true
+
+      return (proj.privacyread === Privacy.all) ||
+        (proj.privacyread === Privacy.friends) && (UserStore.getters.IsMyFriend(proj.userId))
+        || ((proj.privacyread === Privacy.mygroup) && (UserStore.getters.IsMyGroup(proj.userId)))
+    } else {
+      return false
+    }
+
+  }, 'getifCanISeeProj')
+
+  const CanIModifyPanelPrivacy = b.read((state: IProjectsState) => (proj: IProject): boolean => {
+    if (proj === undefined)
+      return false
+
+    if (!!UserStore) {
+      if (!!UserStore.state)
+        return ((UserStore.state.userId === proj.userId) || (proj.privacywrite === Privacy.all))  // If it's the owner
+      else
+        return false
+    }
+    return false
+  }, 'CanIModifyPanelPrivacy')
+
   export const getters = {
+    get getifCanISeeProj() {
+      return getifCanISeeProj()
+    },
+    get CanIModifyPanelPrivacy() {
+      return CanIModifyPanelPrivacy()
+    },
     get getRecordEmpty() {
       return getRecordEmpty()
     },
-    get items_dacompletare() {
-      return items_dacompletare()
+    get projs_dacompletare() {
+      return projs_dacompletare()
     },
     get listaprojects() {
       return listaprojects()
@@ -151,13 +195,9 @@ namespace Getters {
     get getDescrById() {
       return getDescrById()
     },
-    get getParentById() {
-      return getParentById()
-    },
     get getRecordById() {
       return getRecordById()
     }
-
   }
 }
 
@@ -219,9 +259,9 @@ namespace Actions {
       }
     }
 
-    if (UserStore.state.userId === '') {
-      return false  // Login not made
-    }
+    // if (UserStore.state.userId === '') {
+    //   return false  // Login not made
+    // }
 
     console.log('dbLoad', nametable, checkPending, 'userid=', UserStore.state.userId)
 
@@ -282,6 +322,8 @@ namespace Actions {
     objproj.descr = myobj.descr
     objproj.category = myobj.category
     objproj.id_parent = myobj.id_parent
+    objproj.id_main_project = myobj.id_main_project
+    objproj.typeproj = myobj.typeproj
 
     let elemtochange: IProject = null
 
@@ -329,7 +371,7 @@ namespace Actions {
   async function swapElems(context, itemdragend: IDrag) {
     console.log('PROJECT swapElems', itemdragend, stateglob.projects)
 
-    const myarr = Getters.getters.items_dacompletare(itemdragend.id_proj)
+    const myarr = Getters.getters.projs_dacompletare(itemdragend.id_proj, itemdragend.mieiproj)
 
     tools.swapGeneralElem(nametable, myarr, itemdragend, listFieldsToChange)
 

@@ -3,7 +3,7 @@ import globalroutines from './../../globalroutines/index'
 import { costanti } from './costanti'
 import { translation } from './translation'
 import Quasar, { date } from 'quasar'
-import { IProject, ITodo } from '@src/model'
+import { IProject, ITodo, Privacy } from '@src/model'
 import * as ApiTables from '@src/store/Modules/ApiTables'
 import translate from '@src/globalroutines/util'
 
@@ -136,8 +136,77 @@ export const tools = {
         value: 3
       }
     ]
-
   },
+
+  selectPrivacy: {
+    it: [
+      {
+        id: 1,
+        label: translation.it.privacy.all,
+        value: Privacy.all
+      },
+      {
+        id: 2,
+        label: translation.it.privacy.friends,
+        value: Privacy.friends
+      },
+      {
+        id: 3,
+        label: translation.it.privacy.mygroup,
+        value: Privacy.mygroup
+      },
+      {
+        id: 4,
+        label: translation.it.privacy.onlyme,
+        value: Privacy.onlyme
+      }
+    ],
+    es: [
+      {
+        id: 1,
+        label: translation.es.privacy.all,
+        value: Privacy.all
+      },
+      {
+        id: 2,
+        label: translation.es.privacy.friends,
+        value: Privacy.friends
+      },
+      {
+        id: 3,
+        label: translation.es.privacy.mygroup,
+        value: Privacy.mygroup
+      },
+      {
+        id: 4,
+        label: translation.es.privacy.onlyme,
+        value: Privacy.onlyme
+      }
+    ],
+    enUs: [
+      {
+        id: 1,
+        label: translation.enUs.privacy.all,
+        value: Privacy.all
+      },
+      {
+        id: 2,
+        label: translation.enUs.privacy.friends,
+        value: Privacy.friends
+      },
+      {
+        id: 3,
+        label: translation.enUs.privacy.mygroup,
+        value: Privacy.mygroup
+      },
+      {
+        id: 4,
+        label: translation.enUs.privacy.onlyme,
+        value: Privacy.onlyme
+      }
+    ]
+  },
+
   selectStatus: {
     it: [
       {
@@ -514,13 +583,13 @@ export const tools = {
     it: [
       {
         id: 5,
-        label: 'Nuovo Progetto',
+        label: translation.it.proj.newsubproj,
         value: 200,  // ADD_PROJECT
         icon: 'next_week'
       },
       {
         id: 10,
-        label: 'Mostra Task',
+        label: translation.it.task.showtask,
         value: 150,  // SHOW_TASK
         icon: 'rowing'
       }
@@ -529,13 +598,13 @@ export const tools = {
       [
         {
           id: 5,
-          label: 'Nuevo Projecto',
+          label: translation.es.proj.newsubproj,
           value: 200,  // ADD_PROJECT
           icon: 'next_week'
         },
         {
           id: 10,
-          label: 'Mostrar Tareas',
+          label: translation.es.task.showtask,
           value: 150,
           icon: 'rowing'
         }
@@ -544,19 +613,47 @@ export const tools = {
       [
         {
           id: 5,
-          label: 'New Project',
+          label: translation.it.proj.newsubproj,
           value: 200,  // ADD_PROJECT
           icon: 'next_week'
         },
         {
           id: 10,
-          label: 'Show Task',
+          label: translation.enUs.task.showtask,
           value: 150,
           icon: 'rowing'
         }
       ]
-  }
-  ,
+  },
+
+  menuPopupConfigMAINProject: {
+    it: [
+      {
+        id: 5,
+        label: translation.it.proj.newproj,
+        value: 200,  // ADD_PROJECT
+        icon: 'next_week'
+      }
+    ],
+    es:
+      [
+        {
+          id: 5,
+          label: translation.es.proj.newproj,
+          value: 200,  // ADD_PROJECT
+          icon: 'next_week'
+        }
+      ],
+    enUs:
+      [
+        {
+          id: 5,
+          label: translation.it.proj.newproj,
+          value: 200,  // ADD_PROJECT
+          icon: 'next_week'
+        }
+      ]
+  },
 
   listOptionShowTask: {
     it: [
@@ -866,29 +963,28 @@ export const tools = {
   ,
 
   getIndexById(myarr, id) {
+    if (myarr === undefined)
+      return -1
     return myarr.indexOf(tools.getElemById(myarr, id))
   }
   ,
 
   getElemById(myarr, id) {
+    if (myarr === undefined)
+      return null
     // console.log('getElemById', myarr, id)
     return myarr.find((elem) => elem._id === id)
   }
   ,
 
   getElemPrevById(myarr, id) {
+    if (myarr === undefined)
+      return null
     return myarr.find((elem) => elem.id_prev === id)
   }
   ,
 
-  getLastFirstElemPriority(myarr, priority
-    :
-    number, atfirst
-                             :
-                             boolean, escludiId
-                             :
-                             string
-  ) {
+  getLastFirstElemPriority(myarr, priority: number, atfirst: boolean, escludiId: string) {
     if (myarr === null) {
       return -1
     }
@@ -955,9 +1051,13 @@ export const tools = {
   }
   ,
 
-  getLastListNotCompleted(nametable, cat) {
-    const module = tools.getModulesByTable(nametable)
-    const arr = module.getters.items_dacompletare(cat)
+  getLastListNotCompleted(nametable, cat, isproj = false, miei = false) {
+    // const module = tools.getModulesByTable(nametable)
+    let arr = []
+    if (nametable === 'projects')
+      arr = Projects.getters.projs_dacompletare(cat, miei)
+    else if (nametable === 'todos')
+      arr = Todos.getters.items_dacompletare(cat)
 
     return (arr.length > 0) ? arr[arr.length - 1] : null
   }
@@ -1175,9 +1275,10 @@ export const tools = {
     if (sortedList.length < linkedList.length) {
       console.log('!!!!! NON CI SONO TUTTI !!!!!', sortedList.length, linkedList.length)
       // Forget something not in a List !
-      for (const itemsorted of sortedList) {
-        if (linkedList.filter((item) => item._id === itemsorted._id)) {
-
+      for (const itemlinked of linkedList) {
+        const elemtrov = sortedList.find((item) => item._id === itemlinked._id)
+        if (elemtrov === undefined) {
+          sortedList.push(itemlinked)
         }
       }
     }
@@ -1211,7 +1312,7 @@ export const tools = {
   ,
 
   getstrDate(mytimestamp) {
-    console.log('getstrDate', mytimestamp)
+    // console.log('getstrDate', mytimestamp)
     if (!!mytimestamp)
       return date.formatDate(mytimestamp, 'DD/MM/YYYY')
     else
@@ -1270,5 +1371,15 @@ export const tools = {
     return new Date().valueOf()
   },
 
+  isMainProject(idproj) {
+    return idproj === process.env.PROJECT_ID_MAIN
+  },
+
+  getUrlByTipoProj(miei) {
+    if (miei)
+      return '/myprojects/'
+    else
+      return '/projects/'
+  }
 
 }

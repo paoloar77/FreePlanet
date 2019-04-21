@@ -127,7 +127,8 @@ const messages = {
       Admin: 'Admin',
       Test1: 'Test1',
       Test2: 'Test2',
-      Projects: 'Progetti'
+      Projects: 'Progetti Condivisi',
+      MyProjects: 'Progetti Personali'
     },
     components: {
       authentication: {
@@ -242,6 +243,7 @@ const messages = {
     connection: 'Connessione',
     proj: {
       newproj: 'Titolo Progetto',
+      newsubproj: 'Titolo Sotto-Progetto',
       longdescr: 'Descrizione',
       hoursplanned: 'Ore Preventivate',
       hoursadded: 'Ore Aggiuntive',
@@ -252,8 +254,10 @@ const messages = {
       actualphase: 'Fase Attuale',
       hoursweeky_plannedtowork: 'Ore settimanali previste',
       endwork_estimate: 'Data fine lavori stimata',
+      privacyread: 'Chi lo puo vedere:',
+      privacywrite: 'Chi lo puo modificare:',
       totalphases: 'Totale Fasi'
-    }
+    },
   },
   'es': {
     dialog: {
@@ -323,7 +327,7 @@ const messages = {
       },
       freeliving: {
         title: 'Free Co-Living',
-        descr: 'Para unir más realidad, compartiendo la experiencia de vivir juntos, por un período definido: <br> '+
+        descr: 'Para unir más realidad, compartiendo la experiencia de vivir juntos, por un período definido: <br> ' +
           '1) Hay quien <strong>vive solo</strong> y tiene un hogar. <br>' +
           '2) Quién necesita un alojamiento <strong>temporal</strong>. <br><br>' +
           'Hoy en día, más y más personas <strong>viven solas</strong> y les gustaría seguir viviendo en sus propios hogares. <br>' +
@@ -384,7 +388,8 @@ const messages = {
       Admin: 'Administración',
       Test1: 'Test1',
       Test2: 'Test2',
-      Projects: 'Projectos',
+      Projects: 'Proyectos Compartidos',
+      MyProjects: 'Proyectos Personales',
     },
     components: {
       authentication: {
@@ -492,6 +497,7 @@ const messages = {
     connection: 'Connection',
     proj: {
       newproj: 'Título Projecto',
+      newsubproj: 'Título Sub-Projecto',
       longdescr: 'Descripción',
       hoursplanned: 'Horas Estimadas',
       hoursadded: 'Horas Adicional',
@@ -502,8 +508,10 @@ const messages = {
       actualphase: 'Fase Actual',
       hoursweeky_plannedtowork: 'Horarios semanales programados',
       endwork_estimate: 'Fecha estimada de finalización',
+      privacyread: 'Quien puede verlo:',
+      privacywrite: 'Quien puede modificarlo:',
       totalphases: 'Fases totales'
-    }
+    },
   },
   'enUs': {
     dialog: {
@@ -634,7 +642,8 @@ const messages = {
       Admin: 'Admin',
       Test1: 'Test1',
       Test2: 'Test2',
-      Projects: 'Projects',
+      Projects: 'Shared Projects',
+      MyProjects: 'Personal Projects',
     },
     components: {
       authentication: {
@@ -742,6 +751,7 @@ const messages = {
     connection: 'Conexión',
     proj: {
       newproj: 'Project Title',
+      newsubproj: 'SubProject Title',
       longdescr: 'Description',
       hoursplanned: 'Estimated Hours',
       hoursadded: 'Additional Hours',
@@ -752,8 +762,10 @@ const messages = {
       actualphase: 'Actual Phase',
       hoursweeky_plannedtowork: 'Scheduled weekly hours',
       endwork_estimate: 'Estimated completion date',
+      privacyread: 'Who can see it:',
+      privacywrite: 'Who can modify if:',
       totalphases: 'Total Phase'
-    }
+    },
   },
 };
 

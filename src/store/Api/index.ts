@@ -156,11 +156,18 @@ export namespace ApiTool {
           // console.log('A1) INIZIO.............................................................')
           return globalroutines(null, 'readall', tablesync, null)
             .then((alldata) => {
-              const myrecs = [...alldata]
+
+              let myrecs
+
+              if (alldata === undefined) {
+                console.log('alldata NON DEFINITA')
+                return true
+              } else {
+                myrecs = [...alldata]
+              }
 
               const promises = myrecs.map((rec) => {
                 let link = '/' + ApiTables.getLinkByTableName(nametab)
-
 
                 if (method !== 'POST') {
                   link += '/' + rec._id
@@ -185,6 +192,9 @@ export namespace ApiTool {
                       }
                     }
                     console.log(' [Alternative] !!!!!!!!!!!!!!!   Error while sending data', err, errorfromserver, 'lettoqualcosa', lettoqualcosa)
+                    if (!errorfromserver) {
+                      return globalroutines(null, 'delete', 'swmsg', null, mystrparam)
+                    }
                   })
               })
 
@@ -195,11 +205,11 @@ export namespace ApiTool {
                 return (errorfromserver && !lettoqualcosa)
               })
 
-            }).catch((e) => {
+            }).catch((error) => {
+              console.log('¨¨¨¨¨¨¨¨¨¨¨¨¨¨  errorfromserver:', errorfromserver, error)
               return (errorfromserver && !lettoqualcosa)
             })
             .then((error) => {
-              console.log('¨¨¨¨¨¨¨¨¨¨¨¨¨¨  errorfromserver:', errorfromserver, error)
               const mystate = (error || errorfromserver) ? 'offline' : 'online'
               GlobalStore.mutations.setStateConnection(mystate)
               GlobalStore.mutations.saveConfig( { _id: costanti.CONFIG_ID_STATE_CONN, value: mystate })
