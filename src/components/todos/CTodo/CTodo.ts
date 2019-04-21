@@ -82,6 +82,7 @@ export default class CTodo extends Vue {
   }
 
   public async onEndtodo(itemdragend) {
+    console.log('onEndtodo...')
     await Todos.actions.swapElems(itemdragend)
   }
 
@@ -90,14 +91,15 @@ export default class CTodo extends Vue {
     tools.dragula_option($service, this.dragname)
 
     $service.eventBus.$on('dragend', (args) => {
-
-      const itemdragend: IDrag = {
-        category: this.categoryAtt,
-        newIndex: this.getElementIndex(args.el),
-        oldIndex: this.getElementOldIndex(args.el)
+      // console.log('args', args)
+      if (args.name === this.dragname) {
+        const itemdragend: IDrag = {
+          category: this.categoryAtt,
+          newIndex: this.getElementIndex(args.el),
+          oldIndex: this.getElementOldIndex(args.el)
+        }
+        this.onEndtodo(itemdragend)
       }
-
-      this.onEndtodo(itemdragend)
     })
 
     $service.eventBus.$on('drag', (el, source) => {

@@ -61,6 +61,8 @@
                 </template>
             </q-input>
 
+            <!--categoryAtt: {{categoryAtt}}<br>-->
+
             <div style="display: none">{{ prior = 0, priorcomplet = false }}</div>
             <div>
                 <!--<q-infinite-scroll :handler="loadMoreTodo" :offset="7">-->
@@ -75,7 +77,9 @@
                         </div>
                         <SingleTodo ref="single" @deleteItemtodo="mydeleteitemtodo(mytodo._id)" @eventupdate="updateitemtodo"
                                     @setitemsel="setitemsel" @deselectAllRowstodo="deselectAllRowstodo" @deselectAllRowsproj="deselectAllRowsproj" @onEnd="onEndtodo"
-                                    :itemtodo='mytodo'/>
+                                    :itemtodo='mytodo' :CanIModifyTodo="CanIModifyTodo">
+
+                        </SingleTodo>
 
                         <!--<div :nametranslate="`REF${index}`" class="divdrag non-draggato"></div>-->
 
@@ -107,7 +111,7 @@
                 </div>
                 <!--</q-infinite-scroll>-->
             </div>
-            CanIModifyTodo : {{CanIModifyTodo}}
+            <!--CanIModifyTodo : {{CanIModifyTodo}}-->
 
             <q-input v-if="(TodosCount > 0 || !viewtaskTop) && CanIModifyTodo" ref="insertTaskBottom" v-model="todobottom"
                      style="margin-left: 6px;"

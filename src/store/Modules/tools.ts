@@ -963,29 +963,28 @@ export const tools = {
   ,
 
   getIndexById(myarr, id) {
+    if (myarr === undefined)
+      return -1
     return myarr.indexOf(tools.getElemById(myarr, id))
   }
   ,
 
   getElemById(myarr, id) {
+    if (myarr === undefined)
+      return null
     // console.log('getElemById', myarr, id)
     return myarr.find((elem) => elem._id === id)
   }
   ,
 
   getElemPrevById(myarr, id) {
+    if (myarr === undefined)
+      return null
     return myarr.find((elem) => elem.id_prev === id)
   }
   ,
 
-  getLastFirstElemPriority(myarr, priority
-    :
-    number, atfirst
-                             :
-                             boolean, escludiId
-                             :
-                             string
-  ) {
+  getLastFirstElemPriority(myarr, priority: number, atfirst: boolean, escludiId: string) {
     if (myarr === null) {
       return -1
     }
@@ -1052,9 +1051,13 @@ export const tools = {
   }
   ,
 
-  getLastListNotCompleted(nametable, cat) {
-    const module = tools.getModulesByTable(nametable)
-    const arr = module.getters.items_dacompletare(cat)
+  getLastListNotCompleted(nametable, cat, isproj = false, miei = false) {
+    // const module = tools.getModulesByTable(nametable)
+    let arr = []
+    if (nametable === 'projects')
+      arr = Projects.getters.projs_dacompletare(cat, miei)
+    else if (nametable === 'todos')
+      arr = Todos.getters.items_dacompletare(cat)
 
     return (arr.length > 0) ? arr[arr.length - 1] : null
   }
@@ -1272,9 +1275,10 @@ export const tools = {
     if (sortedList.length < linkedList.length) {
       console.log('!!!!! NON CI SONO TUTTI !!!!!', sortedList.length, linkedList.length)
       // Forget something not in a List !
-      for (const itemsorted of sortedList) {
-        if (linkedList.filter((item) => item._id === itemsorted._id)) {
-
+      for (const itemlinked of linkedList) {
+        const elemtrov = sortedList.find((item) => item._id === itemlinked._id)
+        if (elemtrov === undefined) {
+          sortedList.push(itemlinked)
         }
       }
     }
@@ -1308,7 +1312,7 @@ export const tools = {
   ,
 
   getstrDate(mytimestamp) {
-    console.log('getstrDate', mytimestamp)
+    // console.log('getstrDate', mytimestamp)
     if (!!mytimestamp)
       return date.formatDate(mytimestamp, 'DD/MM/YYYY')
     else
@@ -1369,6 +1373,13 @@ export const tools = {
 
   isMainProject(idproj) {
     return idproj === process.env.PROJECT_ID_MAIN
+  },
+
+  getUrlByTipoProj(miei) {
+    if (miei)
+      return '/myprojects/'
+    else
+      return '/projects/'
   }
 
 }

@@ -98,7 +98,19 @@ export const routesList: IMyRouteConfig[] = [
   // },
   {
     path: '/projects/:idProj',
-    name: 'progetti',
+    name: RouteNames.projects,
+    component: () => import('@/views/projects/proj-list/proj-list.vue'),
+    meta: {
+      requiresAuth: true,
+      async asyncData() {
+        await Projects.actions.dbLoad({ checkPending: false, onlyiffirsttime: true })
+      }
+      // middleware: [auth]
+    }
+  },
+  {
+    path: '/myprojects/:idProj',
+    name: RouteNames.myprojects,
     component: () => import('@/views/projects/proj-list/proj-list.vue'),
     meta: {
       requiresAuth: true,
@@ -108,6 +120,7 @@ export const routesList: IMyRouteConfig[] = [
       // middleware: [auth]
     }
   }
+
 
   /*
 

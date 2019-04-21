@@ -45,6 +45,8 @@
         <div v-if="isProject()" class="flex-item pos-item " @mousedown="clickRiga">
             <q-btn flat
                    :class="clButtPopover"
+                   :readonly="!CanIModifyProject"
+                   :disable="!CanIModifyProject"
                    icon="menu">
                 <q-menu ref="popmenu" self="top right">
                     <SubMenusProj :menuPopupProj="menuPopupProj" :itemproject="itemproject" @clickMenu="clickMenu"

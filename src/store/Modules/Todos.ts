@@ -88,6 +88,7 @@ namespace Getters {
   }, 'getRecordEmpty')
   const items_dacompletare = b.read((state: ITodosState) => (cat: string): ITodo[] => {
     const indcat = getindexbycategory(cat)
+    // console.log('items_dacompletare', 'indcat', indcat, state.todos[indcat])
     if (state.todos[indcat]) {
       return state.todos[indcat].filter((todo) => todo.statustodo !== tools.Status.COMPLETED)
     } else {

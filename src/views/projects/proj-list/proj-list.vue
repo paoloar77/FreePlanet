@@ -1,7 +1,6 @@
-<template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
+<template>
     <q-page>
         <div class="panel">
-
             <q-splitter
                     v-model="splitterModel"
                     :limits="[50, 100]"
@@ -9,6 +8,7 @@
 
                 <template v-slot:before class="clMain">
                     <div>
+                        <!--{{idProjAtt}}-->
                         <div class="divtitlecat clMain">
                             <div class="flex-container clMain">
                                 <q-btn v-if="!!getIdParent && CanISeeProjectParent" size="sm" push color="secondary" round
@@ -16,6 +16,7 @@
                                        :to="getrouteup">
 
                                 </q-btn>
+
                                 <div class="flex-item categorytitle shadow-4">{{descrProject | capitalize}}</div>
                                 <div class="flex-item">
                                     <q-btn push
@@ -78,9 +79,9 @@
                         <div style="display: none">{{ prior = 0, priorcomplet = false }}</div>
                         <div>
                             <!--<q-infinite-scroll :handler="loadMoreTodo" :offset="7">-->
-                            <div class="container" v-dragula="items_dacompletare(idProjAtt)" drake="second">
+                            <div class="container" v-dragula="projs_dacompletare(idProjAtt, areMyProjects)" drake="second">
                                 <div :id="tools.getmyid(myproj._id)" :index="index"
-                                     v-for="(myproj, index) in items_dacompletare(idProjAtt)"
+                                     v-for="(myproj, index) in projs_dacompletare(idProjAtt, areMyProjects)"
                                      :key="myproj._id" class="myitemdrag">
 
                                     <SingleProject ref="singleproject" @deleteItemproj="mydeleteitemproj(myproj._id)"
@@ -97,10 +98,10 @@
                         </div>
                         <q-separator></q-separator>
 
-                        CanIModifyPanelPrivacy = {{CanIModifyPanelPrivacy}}<br>
-                        CanIModifyPanelPrivacySel = {{CanIModifyPanelPrivacySel}}<br>
-                        CanISeeProject = {{CanISeeProject}}<br>
-                        CanISeeProjectSel = {{CanISeeProjectSel}}
+                        <!--CanIModifyPanelPrivacy = {{CanIModifyPanelPrivacy}}<br>-->
+                        <!--CanIModifyPanelPrivacySel = {{CanIModifyPanelPrivacySel}}<br>-->
+                        <!--CanISeeProject = {{CanISeeProject}}<br>-->
+                        <!--CanISeeProjectSel = {{CanISeeProjectSel}}-->
 
                         <CTodo ref="ctodo" @setitemsel="setitemsel" :categoryAtt="idProjAtt" title="" backcolor="white"
                                forecolor="black" :viewtaskTop="false" @deselectAllRowsproj="deselectAllRowsproj"
@@ -112,7 +113,7 @@
                     </div>
                 </template>
                 <template v-if="(whatisSel === tools.WHAT_PROJECT) && (!!itemselproj.descr)" v-slot:after>
-                    ID = {{itemselproj._id}}
+                    <!--ID = {{itemselproj._id}}-->
                     <div class="q-pa-xs clMain">
                         <div class="flex-container clMain">
                             <q-icon class="flex-item flex-icon" name="format_align_center"/>
@@ -134,7 +135,7 @@
 
                             </div>
                         </div>
-                        <div v-if="isMainProject || true" class="flex-container clMain">
+                        <div v-if="CanISeeProjectSel" class="flex-container clMain">
                             <q-icon class="flex-item flex-icon" name="lock"/>
                             <div class="flex-item itemstatus">
                                 <q-select :readonly="readonly_PanelPrivacySel"

@@ -51,6 +51,14 @@ function updateDataCalculated(projout, projin) {
   })
 }
 
+function getproj(projects, idproj, miei: boolean) {
+  if (miei) {
+    return tools.mapSort(projects.filter((proj) => (proj.id_parent === idproj) && proj.userId === UserStore.state.userId))
+  } else {
+    return tools.mapSort(projects.filter((proj) => (proj.id_parent === idproj) && proj.userId !== UserStore.state.userId ))
+  }
+}
+
 namespace Getters {
   const getRecordEmpty = b.read((state: IProjectsState) => (): IProject => {
     // const tomorrow = tools.getDateNow()
@@ -92,19 +100,20 @@ namespace Getters {
     return obj
   }, 'getRecordEmpty')
 
-  const items_dacompletare = b.read((state: IProjectsState) => (id_parent: string): IProject[] => {
+  const projs_dacompletare = b.read((state: IProjectsState) => (id_parent: string, miei: boolean): IProject[] => {
+    // console.log('projs_dacompletare', miei)
     if (state.projects) {
       // console.log('state.projects', state.projects)
-      return tools.mapSort(state.projects.filter((proj) => proj.id_parent === id_parent))
+      return getproj(state.projects, id_parent, miei)
     } else {
       return []
     }
-  }, 'items_dacompletare')
+  }, 'projs_dacompletare')
 
-  const listaprojects = b.read((state: IProjectsState) => (): IMenuList[] => {
+  const listaprojects = b.read((state: IProjectsState) => (miei: boolean): IMenuList[] => {
     if (state.projects) {
       // console.log('state.projects', state.projects)
-      const listaproj = tools.mapSort(state.projects.filter((proj) => proj.id_parent === process.env.PROJECT_ID_MAIN))
+      const listaproj = getproj(state.projects, process.env.PROJECT_ID_MAIN, miei)
       const myarr: IMenuList[] = []
       for (const proj of listaproj) {
         myarr.push({ nametranslate: '', description: proj.descr, idelem: proj._id })
@@ -137,20 +146,34 @@ namespace Getters {
   }, 'getRecordById')
 
   const getifCanISeeProj = b.read((state: IProjectsState) => (proj: IProject): boolean => {
-    if (proj === null)
+    if (proj === undefined)
       return false
 
-    if (UserStore.state.userId === proj.userId)  // If it's the owner
-      return true
+    if (!!UserStore.state) {
 
-    return (proj.privacyread === Privacy.all) ||
-      (proj.privacyread === Privacy.friends) && (UserStore.getters.IsMyFriend(proj.userId))
-      || ((proj.privacyread === Privacy.mygroup) && (UserStore.getters.IsMyGroup(proj.userId)))
+      if (UserStore.state.userId === proj.userId)  // If it's the owner
+        return true
+
+      return (proj.privacyread === Privacy.all) ||
+        (proj.privacyread === Privacy.friends) && (UserStore.getters.IsMyFriend(proj.userId))
+        || ((proj.privacyread === Privacy.mygroup) && (UserStore.getters.IsMyGroup(proj.userId)))
+    } else {
+      return false
+    }
 
   }, 'getifCanISeeProj')
 
   const CanIModifyPanelPrivacy = b.read((state: IProjectsState) => (proj: IProject): boolean => {
-    return ((UserStore.state.userId === proj.userId) || (proj.privacywrite === Privacy.all))  // If it's the owner
+    if (proj === undefined)
+      return false
+
+    if (!!UserStore) {
+      if (!!UserStore.state)
+        return ((UserStore.state.userId === proj.userId) || (proj.privacywrite === Privacy.all))  // If it's the owner
+      else
+        return false
+    }
+    return false
   }, 'CanIModifyPanelPrivacy')
 
   export const getters = {
@@ -163,8 +186,8 @@ namespace Getters {
     get getRecordEmpty() {
       return getRecordEmpty()
     },
-    get items_dacompletare() {
-      return items_dacompletare()
+    get projs_dacompletare() {
+      return projs_dacompletare()
     },
     get listaprojects() {
       return listaprojects()
@@ -348,7 +371,7 @@ namespace Actions {
   async function swapElems(context, itemdragend: IDrag) {
     console.log('PROJECT swapElems', itemdragend, stateglob.projects)
 
-    const myarr = Getters.getters.items_dacompletare(itemdragend.id_proj)
+    const myarr = Getters.getters.projs_dacompletare(itemdragend.id_proj, itemdragend.mieiproj)
 
     tools.swapGeneralElem(nametable, myarr, itemdragend, listFieldsToChange)
 

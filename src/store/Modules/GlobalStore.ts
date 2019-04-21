@@ -127,17 +127,29 @@ namespace Getters {
 
     })
 
-    const arrlistaproj = Projects.getters.listaprojects()
-    const listaprojects = []
+    const arrlistaprojtutti = Projects.getters.listaprojects(false)
+    const arrlistaprojmiei = Projects.getters.listaprojects(true)
+    const listaprojectstutti = []
+    const listaprojectsmiei = []
 
-    for (const elem of arrlistaproj) {
+    for (const elem of arrlistaprojtutti) {
       const item = {
         materialIcon: 'next_week',
         name: elem.nametranslate,
         text: elem.description,
-        route: '/projects/' + elem.idelem
+        route: tools.getUrlByTipoProj(false) + elem.idelem
       }
-      listaprojects.push(item)
+      listaprojectstutti.push(item)
+    }
+
+    for (const elem of arrlistaprojmiei) {
+      const item = {
+        materialIcon: 'next_week',
+        name: elem.nametranslate,
+        text: elem.description,
+        route: tools.getUrlByTipoProj(true) + elem.idelem
+      }
+      listaprojectsmiei.push(item)
     }
 
     const arrroutes: IListRoutes[] = []
@@ -151,8 +163,14 @@ namespace Getters {
         level_child: 0.5
       })
 
-      addRoute(arrroutes,{ route: '/projects/' + process.env.PROJECT_ID_MAIN, faIcon: 'fa fa-list-alt', materialIcon: 'next_week', name: 'pages.Projects',
-        routes2: listaprojects,
+      addRoute(arrroutes,{ route: tools.getUrlByTipoProj(false) + process.env.PROJECT_ID_MAIN, faIcon: 'fa fa-list-alt', materialIcon: 'next_week', name: 'pages.Projects',
+        routes2: listaprojectstutti,
+        level_parent: 0,
+        level_child: 0.5
+      })
+
+      addRoute(arrroutes,{ route: tools.getUrlByTipoProj(true) + process.env.PROJECT_ID_MAIN, faIcon: 'fa fa-list-alt', materialIcon: 'next_week', name: 'pages.MyProjects',
+        routes2: listaprojectsmiei,
         level_parent: 0,
         level_child: 0.5
       })

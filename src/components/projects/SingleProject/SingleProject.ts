@@ -44,6 +44,10 @@ export default class SingleProject extends Vue {
     return !Projects.getters.getifCanISeeProj(this.itemproject)
   }
 
+  get CanIModifyProject() {
+    return Projects.getters.CanIModifyPanelPrivacy(this.itemproject)
+  }
+
   @Prop({ required: true }) public itemproject: IProject
 
   @Watch('itemproject.enableExpiring') public valueChanged4() {
@@ -248,12 +252,16 @@ export default class SingleProject extends Vue {
     this.editProject()
   }
 
+  get isMyProject() {
+    return this.itemproject.userId === UserStore.state.userId
+  }
+
   get getrouteto() {
-    return '/projects/' + this.itemproject._id
+    return tools.getUrlByTipoProj(this.isMyProject) + this.itemproject._id
   }
 
   public goIntoTheProject() {
-    this.$router.replace('/projects/' + this.itemproject._id)
+    this.$router.replace(tools.getUrlByTipoProj(this.isMyProject) + this.itemproject._id)
   }
 
   public editProject() {
@@ -290,7 +298,7 @@ export default class SingleProject extends Vue {
       }
 
       // console.log('focus()')
-    }, 300)
+    }, 500)
   }
 
   public getFocus(e) {

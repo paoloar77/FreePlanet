@@ -16,6 +16,7 @@ import { Getter } from 'vuex-class'
 import { date, Screen } from 'quasar'
 import { CProgress } from '../../../components/CProgress'
 import { CDate } from '../../../components/CDate'
+import { RouteNames } from '@src/router/route-names'
 
 const namespace: string = 'Projects'
 
@@ -60,12 +61,17 @@ export default class ProjList extends Vue {
     ctodo: CTodo
   }
 
-  @Getter('items_dacompletare', { namespace })
-  public items_dacompletare: (state: IProjectsState, id_parent: string) => IProject[]
+  @Getter('projs_dacompletare', { namespace })
+  public projs_dacompletare: (state: IProjectsState, id_parent: string, miei: boolean) => IProject[]
 
-  @Watch('items_dacompletare')
+  @Watch('projs_dacompletare')
   public changeitems() {
     this.updateindexProj()
+  }
+
+  @Watch('$route.name')
+  public changename() {
+    console.log('tools.getUrlByTipoProj(this.areMyProjects)', tools.getUrlByTipoProj(this.areMyProjects))
   }
 
   @Watch('$route.params.idProj')
@@ -81,11 +87,18 @@ export default class ProjList extends Vue {
   }
 
   private updateindexProj() {
-    console.log('idProjAtt', this.idProjAtt)
+    // console.log('idProjAtt', this.idProjAtt)
     this.itemproj = Projects.getters.getRecordById(this.idProjAtt)
-    this.itemprojparent = Projects.getters.getRecordById(this.itemproj.id_parent)
-    console.log('this.itemproj', this.itemproj)
+    if (!!this.itemproj) {
+      this.itemprojparent = Projects.getters.getRecordById(this.itemproj.id_parent)
+      console.log('this.itemproj.descr', this.itemproj.descr)
+    }
     // console.log('idproj', this.idProjAtt, 'params' , this.$route.params)
+  }
+
+  get areMyProjects() {
+    console.log('this.$route.name', this.$route.name)
+    return this.$route.name === RouteNames.myprojects
   }
 
   get readonly_PanelPrivacy() {
@@ -117,7 +130,7 @@ export default class ProjList extends Vue {
   }
 
   get getrouteup() {
-    return '/projects/' + this.itemproj.id_parent
+    return tools.getUrlByTipoProj(this.areMyProjects) + this.itemproj.id_parent
   }
 
   get tools() {
@@ -245,6 +258,7 @@ export default class ProjList extends Vue {
   }
 
   public async onEndproj(itemdragend) {
+    console.log('onEndproj...')
     await Projects.actions.swapElems(itemdragend)
   }
 
@@ -256,15 +270,19 @@ export default class ProjList extends Vue {
 
     $service.eventBus.$on('dragend', (args) => {
 
-      const itemdragend: IDrag = {
-        field: '',
-        id_proj: this.idProjAtt,
-        newIndex: this.getElementIndex(args.el),
-        oldIndex: this.getElementOldIndex(args.el)
-      }
+      // console.log('args proj-list', args)
+      if (args.name === this.dragname) {
+        const itemdragend: IDrag = {
+          field: '',
+          id_proj: this.idProjAtt,
+          newIndex: this.getElementIndex(args.el),
+          oldIndex: this.getElementOldIndex(args.el),
+          mieiproj: this.areMyProjects
+        }
 
-      // console.log('args', args, itemdragend)
-      this.onEndproj(itemdragend)
+        // console.log('args', args, itemdragend)
+        this.onEndproj(itemdragend)
+      }
     })
 
     $service.eventBus.$on('drag', (el, source) => {
@@ -279,7 +297,8 @@ export default class ProjList extends Vue {
 
   public mounted() {
 
-    console.log('Screen.width', Screen.width)
+    // console.log('Screen.width', Screen.width)
+    // console.log('this.$route', this.$route)
 
     if (Screen.width < 400) {
       this.splitterModel = 100
@@ -403,7 +422,7 @@ export default class ProjList extends Vue {
   }
 
   public deselectAllRowstodo(item: ITodo, check, onlythis: boolean = false) {
-    console.log('PROJ-LIST deselectAllRowstodo : ', item)
+    // console.log('PROJ-LIST deselectAllRowstodo : ', item)
 
     return false
 
@@ -433,7 +452,7 @@ export default class ProjList extends Vue {
   }
 
   public deselectAllRowsproj(item: IProject, check, onlythis: boolean = false) {
-    console.log('deselectAllRowsproj: ', item)
+    // console.log('deselectAllRowsproj: ', item)
 
     for (const i in this.$refs.singleproject) {
 

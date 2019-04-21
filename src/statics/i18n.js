@@ -127,7 +127,8 @@ const messages = {
       Admin: 'Admin',
       Test1: 'Test1',
       Test2: 'Test2',
-      Projects: 'Progetti'
+      Projects: 'Progetti Condivisi',
+      MyProjects: 'Progetti Personali'
     },
     components: {
       authentication: {
@@ -387,7 +388,8 @@ const messages = {
       Admin: 'Administración',
       Test1: 'Test1',
       Test2: 'Test2',
-      Projects: 'Projectos',
+      Projects: 'Proyectos Compartidos',
+      MyProjects: 'Proyectos Personales',
     },
     components: {
       authentication: {
@@ -640,7 +642,8 @@ const messages = {
       Admin: 'Admin',
       Test1: 'Test1',
       Test2: 'Test2',
-      Projects: 'Projects',
+      Projects: 'Shared Projects',
+      MyProjects: 'Personal Projects',
     },
     components: {
       authentication: {

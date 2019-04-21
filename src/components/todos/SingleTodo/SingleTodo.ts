@@ -25,6 +25,7 @@ export default class SingleTodo extends Vue {
   public classDescrEdit: string = ''
   public classExpiring: string = 'flex-item data-item shadow-1 hide-if-small'
   public classExpiringEx: string = ''
+  public classMenuBtn: string = 'flex-item pos-item'
   public iconPriority: string = ''
   public popover: boolean = false
   public popover_menu: boolean = false  // Serve
@@ -48,6 +49,7 @@ export default class SingleTodo extends Vue {
   }
 
   @Prop({ required: true }) public itemtodo: ITodo
+  @Prop({ required: false, default: true }) public CanIModifyTodo: boolean
 
   @Watch('itemtodo.enableExpiring') public valueChanged4() {
     this.watchupdate('enableExpiring')
@@ -140,6 +142,10 @@ export default class SingleTodo extends Vue {
       this.itemtodo.progress = 100
 
     this.classExpiring = 'flex-item data-item shadow-1 hide-if-small'
+    this.classMenuBtn = 'flex-item pos-item'
+    if (!this.CanIModifyTodo)
+      this.classMenuBtn += ' donotdrag'
+
     this.classExpiringEx = ''
     if (this.itemtodo.statustodo === tools.Status.COMPLETED) {
       this.percentageProgress = 100
@@ -171,7 +177,9 @@ export default class SingleTodo extends Vue {
     this.clButtPopover = this.sel ? 'pos-item-popover comp_selected' : 'pos-item-popover'
 
     if (this.itemtodo.statustodo !== tools.Status.COMPLETED) {
-      this.clButtPopover += ' pos-item-popover_cursor'
+      if (this.CanIModifyTodo) {
+        this.clButtPopover += ' pos-item-popover_cursor'
+      }
     }
 
     if (this.isTodo()) {
@@ -389,6 +397,9 @@ export default class SingleTodo extends Vue {
   }
 
   public setCompleted() {
+    if (!this.CanIModifyTodo)
+      return false
+
     // console.log('setCompleted')
     if (this.itemtodo.statustodo === tools.Status.COMPLETED) {
       this.itemtodo.statustodo = tools.Status.OPENED
