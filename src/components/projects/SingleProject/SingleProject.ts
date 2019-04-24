@@ -50,50 +50,73 @@ export default class SingleProject extends Vue {
 
   @Prop({ required: true }) public itemproject: IProject
 
-  @Watch('itemproject.enableExpiring') public valueChanged4() {
+  @Watch('itemproject.enableExpiring')
+  public valueChanged4() {
     this.watchupdate('enableExpiring')
   }
 
-  @Watch('itemproject.expiring_at') public valueChanged2() {
+  @Watch('itemproject.expiring_at')
+  public valueChanged2() {
     this.watchupdate('expiring_at')
   }
 
-  @Watch('itemproject.descr') public valueChanged5() {
+  @Watch('itemproject.descr')
+  public valueChanged5() {
     this.precDescr = this.itemproject.descr
   }
 
-  @Watch('itemproject.longdescr') public valueChangedlongdescr() {
+  @Watch('itemproject.longdescr')
+  public valueChangedlongdescr() {
     this.watchupdate('longdescr')
   }
 
-  @Watch('itemproject.hoursplanned') public valueChangedhoursplanned() {
+  @Watch('itemproject.hoursplanned')
+  public valueChangedhoursplanned() {
     this.watchupdate('hoursplanned')
   }
-  @Watch('itemproject.hoursworked') public valueChangedhoursworked() {
+
+  @Watch('itemproject.hoursworked')
+  public valueChangedhoursworked() {
     this.watchupdate('hoursworked')
   }
-  @Watch('itemproject.begin_development') public valueChangedbegin_development() {
+
+  @Watch('itemproject.begin_development')
+  public valueChangedbegin_development() {
     this.watchupdate('begin_development')
   }
-  @Watch('itemproject.hoursweeky_plannedtowork') public valueChangedhoursweeky_plannedtowork() {
+
+  @Watch('itemproject.hoursweeky_plannedtowork')
+  public valueChangedhoursweeky_plannedtowork() {
     this.watchupdate('hoursweeky_plannedtowork')
   }
-  @Watch('itemproject.begin_test') public valueChangedbegin_test() {
+
+  @Watch('itemproject.begin_test')
+  public valueChangedbegin_test() {
     this.watchupdate('begin_test')
   }
-  @Watch('itemproject.actualphase') public valueChangedactualphase() {
+
+  @Watch('itemproject.actualphase')
+  public valueChangedactualphase() {
     this.watchupdate('actualphase')
   }
-  @Watch('itemproject.privacyread') public valueChanged_privacyread() {
+
+  @Watch('itemproject.privacyread')
+  public valueChanged_privacyread() {
     this.watchupdate('privacyread')
   }
-  @Watch('itemproject.privacywrite') public valueChanged_privacywrite() {
+
+  @Watch('itemproject.privacywrite')
+  public valueChanged_privacywrite() {
     this.watchupdate('privacywrite')
   }
-  @Watch('itemproject.totalphases') public valueChangedtotalphases() {
+
+  @Watch('itemproject.totalphases')
+  public valueChangedtotalphases() {
     this.watchupdate('totalphases')
   }
-  @Watch('itemproject.progressCalc') public valueChanged6() {
+
+  @Watch('itemproject.progressCalc')
+  public valueChanged6() {
     console.log('itemproject.progressCalc')
     this.updateClasses()
 
@@ -112,12 +135,12 @@ export default class SingleProject extends Vue {
       return this.$t('proj.newsubproj')
   }
 
-/*
-  public dateToYYYYMMDD(date) {
-    // may have timezone caveats https://stackoverflow.com/a/29774197/1850609
-    return date && date.toISOString().split('T')[0]
-  }
-*/
+  /*
+    public dateToYYYYMMDD(date) {
+      // may have timezone caveats https://stackoverflow.com/a/29774197/1850609
+      return date && date.toISOString().split('T')[0]
+    }
+  */
 
   // Computed:
   get isSel() {
@@ -134,7 +157,7 @@ export default class SingleProject extends Vue {
 
   public watchupdate(field = '') {
     console.log('watchupdate PROJ', field)
-    this.$emit('eventupdateproj', {myitem: this.itemproject, field } )
+    this.$emit('eventupdateproj', { myitem: this.itemproject, field })
     this.updateicon()
   }
 
@@ -147,24 +170,26 @@ export default class SingleProject extends Vue {
       this.classDescrEdit += ' titleLista-item'
     }
 
-    if (this.itemproject.progressCalc > 100)
-      this.itemproject.progressCalc = 100
+    this.percProgress = 'percProgress'
 
     this.classExpiring = 'flex-item data-item shadow-1 hide-if-small'
     this.classExpiringEx = ''
 
-    this.percentageProgress = this.itemproject.progressCalc
-
-    this.percProgress = 'percProgress'
-
-    this.colProgress = tools.getProgressColor(this.itemproject.progressCalc)
-
-    this.percProgress += ' ' + tools.getProgressClassColor(this.itemproject.progressCalc)
-
     this.clButtPopover = this.sel ? 'pos-item-popover comp_selected' : 'pos-item-popover'
 
-    if (this.itemproject.statusproj !== tools.Status.COMPLETED) {
-      this.clButtPopover += ' pos-item-popover_cursor'
+    if (!!this.itemproject) {
+      if (this.itemproject.statusproj !== tools.Status.COMPLETED) {
+        this.clButtPopover += ' pos-item-popover_cursor'
+      }
+
+      if (this.itemproject.progressCalc > 100)
+        this.itemproject.progressCalc = 100
+
+      this.percentageProgress = this.itemproject.progressCalc
+
+      this.colProgress = tools.getProgressColor(this.itemproject.progressCalc)
+      this.percProgress += ' ' + tools.getProgressClassColor(this.itemproject.progressCalc)
+
     }
 
     if (this.isProject()) {
@@ -192,19 +217,20 @@ export default class SingleProject extends Vue {
   }
 
   public clickRiga(clickmenu: boolean = false) {
-    console.log('CLICK RIGA PROJ************')
+    console.log('CLICK RIGA PROJ ************')
 
-    if (!this.sel) {
-      if (!this.inEdit) {
-        // this.attivaEdit = true
-        this.$emit('deselectAllRowstodo', null, false)
-        this.$emit('deselectAllRowsproj', this.itemproject, true)
+    // if (!this.sel) {
 
-        if (!this.sel) {
-          this.selectRiga()
-        } else {
-          this.deselectRiga()
-        }
+    if (!this.inEdit) {
+      console.log('entrato...')
+      // this.attivaEdit = true
+      this.$emit('deselectAllRowstodo', null, false)
+      this.$emit('deselectAllRowsproj', this.itemproject, true)
+
+      if (!this.sel) {
+        this.selectRiga()
+      } else {
+        this.deselectRiga()
       }
     }
   }
@@ -246,7 +272,7 @@ export default class SingleProject extends Vue {
     this.clickRiga()
   }
 
-  public activeEdit(){
+  public activeEdit() {
     console.log('Attiva Edit')
     this.attivaEdit = true
     this.editProject()
@@ -277,7 +303,7 @@ export default class SingleProject extends Vue {
         this.updateClasses()
       }
 
-     this.faiFocus('inputprojdescr', false, true)
+      this.faiFocus('inputprojdescr', false, true)
     }
     // console.log('FINE - editProject')
   }
@@ -336,19 +362,19 @@ export default class SingleProject extends Vue {
 
   public keyDownArea(e) {
     console.log('keyDownArea')
-/*
-    if ((e.key === 'ArrowUp') && !e.shiftKey) {
-      e.key = 'Tab'
-      e.shiftKey = true
-    }
+    /*
+        if ((e.key === 'ArrowUp') && !e.shiftKey) {
+          e.key = 'Tab'
+          e.shiftKey = true
+        }
 
-    if ((e.key === 'ArrowDown') && !e.shiftKey) {
-      let nextInput = inputs.get(inputs.index(this) + 1)
-      if (nextInput) {
-        nextInput.focus()
-      }
-    }
-*/
+        if ((e.key === 'ArrowDown') && !e.shiftKey) {
+          let nextInput = inputs.get(inputs.index(this) + 1)
+          if (nextInput) {
+            nextInput.focus()
+          }
+        }
+    */
     // Delete Key or Backspage
     if (((e.keyCode === 46)) && (this.precDescr === '') && !e.shiftKey) {
       e.preventDefault()
@@ -399,7 +425,7 @@ export default class SingleProject extends Vue {
     this.updateClasses()
   }
 
-  public aggiornaProgress(value, initialval){
+  public aggiornaProgress(value, initialval) {
     if (value !== initialval) {
       this.itemproject.progressCalc = value
       this.updatedata('progressCalc')
@@ -424,7 +450,7 @@ export default class SingleProject extends Vue {
   public updatedata(field: string) {
     // const myitem = tools.jsonCopy(this.itemproject)
     console.log('calling this.$emit(eventupdateproj)', this.itemproject)
-    this.$emit('eventupdateproj', { myitem: this.itemproject, field } )
+    this.$emit('eventupdateproj', { myitem: this.itemproject, field })
   }
 
   public updateicon() {
@@ -435,10 +461,10 @@ export default class SingleProject extends Vue {
     }  // expand_less
     else if (this.itemproject.priority === tools.Priority.PRIORITY_NORMAL) {
       this.iconPriority = 'remove'
- }
+    }
     else if (this.itemproject.priority === tools.Priority.PRIORITY_LOW) {
       this.iconPriority = 'expand_more'
- }  // expand_more
+    }  // expand_more
 
     this.updateClasses()
   }
@@ -482,7 +508,7 @@ export default class SingleProject extends Vue {
     const deletestr = this.$t('dialog.delete')
     const cancelstr = this.$t('dialog.cancel')
 
-    const msg = this.$t('dialog.msg.deleteTask', {mytodo : this.itemproject.descr })
+    const msg = this.$t('dialog.msg.deleteTask', { mytodo: this.itemproject.descr })
 
     this.$q.dialog({
       cancel: {

@@ -3,7 +3,7 @@ import globalroutines from './../../globalroutines/index'
 import { costanti } from './costanti'
 import { translation } from './translation'
 import Quasar, { date } from 'quasar'
-import { IProject, ITodo, Privacy } from '@src/model'
+import { IListRoutes, IMenuList, IProject, ITodo, Privacy } from '@src/model'
 import * as ApiTables from '@src/store/Modules/ApiTables'
 import translate from '@src/globalroutines/util'
 
@@ -27,6 +27,7 @@ export const tools = {
 
   FIRST_PROJ: '5ca8f17fcd40dc5012f53346',
 
+  WHAT_NOTHING: 0,
   WHAT_TODO: 1,
   WHAT_PROJECT: 2,
 
@@ -1375,11 +1376,35 @@ export const tools = {
     return idproj === process.env.PROJECT_ID_MAIN
   },
 
-  getUrlByTipoProj(miei) {
+  getUrlByTipoProj(miei, name?: string) {
+    if (!!name)
+      return '/' + name + '/'
+
     if (miei)
       return '/myprojects/'
     else
       return '/projects/'
+  },
+
+  convertMenuListInListRoutes(arrlista: IMenuList[]) {
+    const lista = []
+    if (arrlista === undefined)
+      return lista
+    for (const elem of arrlista) {
+      const item: IListRoutes = {
+        faIcon: 'fa fa-list-alt',
+        materialIcon: elem.icon,
+        name: elem.nametranslate,
+        text: elem.description,
+        route: tools.getUrlByTipoProj(false, elem.urlroute) + elem.idelem,
+        routes2: tools.convertMenuListInListRoutes(elem.routes2),
+        level_parent: elem.level_parent,
+        level_child: elem.level_child
+
+      }
+      lista.push(item)
+    }
+    return lista
   }
 
 }

@@ -97,7 +97,7 @@ export const routesList: IMyRouteConfig[] = [
   //   component: () => import('@/root/malaga/malaga.vue')
   // },
   {
-    path: '/projects/:idProj',
+    path: '/' + RouteNames.projects + '/:idProj',
     name: RouteNames.projects,
     component: () => import('@/views/projects/proj-list/proj-list.vue'),
     meta: {
@@ -109,7 +109,7 @@ export const routesList: IMyRouteConfig[] = [
     }
   },
   {
-    path: '/myprojects/:idProj',
+    path: '/' + RouteNames.myprojects + '/:idProj',
     name: RouteNames.myprojects,
     component: () => import('@/views/projects/proj-list/proj-list.vue'),
     meta: {
@@ -119,7 +119,32 @@ export const routesList: IMyRouteConfig[] = [
       }
       // middleware: [auth]
     }
+  },
+  {
+    path: '/' + RouteNames.listprojects,
+    name: RouteNames.listprojects,
+    component: () => import('@/views/projects/proj-list/proj-list.vue'),
+    meta: {
+      requiresAuth: true,
+      async asyncData() {
+        await Projects.actions.dbLoad({ checkPending: false, onlyiffirsttime: true })
+      }
+      // middleware: [auth]
+    }
+  },
+  {
+    path: '/' + RouteNames.favouriteprojects,
+    name: RouteNames.favouriteprojects,
+    component: () => import('@/views/projects/proj-list/proj-list.vue'),
+    meta: {
+      requiresAuth: true,
+      async asyncData() {
+        await Projects.actions.dbLoad({ checkPending: false, onlyiffirsttime: true })
+      }
+      // middleware: [auth]
+    }
   }
+
 
 
   /*

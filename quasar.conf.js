@@ -172,6 +172,7 @@ module.exports = function (ctx) {
         'QAvatar',
         'QImg',
         'QSplitter',
+        'QRating',
         'QSeparator'
       ],
       directives: [

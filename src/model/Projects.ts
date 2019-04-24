@@ -20,6 +20,7 @@ export interface IProject {
   enableExpiring?: boolean
   id_prev?: string
   modified?: boolean
+  favourite?: number
   pos?: number
   order?: number
   live_url?: string

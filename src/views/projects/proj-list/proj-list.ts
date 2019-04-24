@@ -72,6 +72,7 @@ export default class ProjList extends Vue {
   @Watch('$route.name')
   public changename() {
     console.log('tools.getUrlByTipoProj(this.areMyProjects)', tools.getUrlByTipoProj(this.areMyProjects))
+    this.changeparent()
   }
 
   @Watch('$route.params.idProj')
@@ -403,6 +404,8 @@ export default class ProjList extends Vue {
     this.idsel = id
     this.whatisSel = tools.WHAT_PROJECT
     this.itemselproj = Projects.getters.getRecordById(this.idsel)
+    if ((this.itemselproj === undefined || this.itemselproj === null))
+      this.whatisSel = tools.WHAT_NOTHING
   }
   public setitemsel(item: ITodo) {
     this.whatisSel = tools.WHAT_TODO
@@ -422,7 +425,7 @@ export default class ProjList extends Vue {
   }
 
   public deselectAllRowstodo(item: ITodo, check, onlythis: boolean = false) {
-    // console.log('PROJ-LIST deselectAllRowstodo : ', item)
+    console.log('PROJ-LIST deselectAllRowstodo : ', item)
 
     return false
 
@@ -452,7 +455,7 @@ export default class ProjList extends Vue {
   }
 
   public deselectAllRowsproj(item: IProject, check, onlythis: boolean = false) {
-    // console.log('deselectAllRowsproj: ', item)
+    console.log('deselectAllRowsproj: ', item)
 
     for (const i in this.$refs.singleproject) {
 
@@ -478,7 +481,11 @@ export default class ProjList extends Vue {
   }
 
   public updateclasses() {
-    this.colProgress = tools.getProgressColor(this.itemselproj.progressCalc)
+    if (!!!this.itemselproj) {
+      this.colProgress = tools.getProgressColor(this.itemselproj.progressCalc)
+    } else {
+      this.whatisSel = tools.WHAT_NOTHING
+    }
   }
 
   public checkUpdate() {

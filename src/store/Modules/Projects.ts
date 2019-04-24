@@ -24,7 +24,7 @@ const stateglob: IProjectsState = {
 const listFieldsToChange: string [] = ['descr', 'longdescr', 'hoursplanned', 'hoursworked', 'id_parent', 'statusproj',
   'category', 'expiring_at', 'priority', 'id_prev', 'pos', 'enableExpiring', 'progressCalc', 'live_url', 'test_url',
   'begin_development', 'begin_test', 'actualphase', 'totalphases', 'hoursweeky_plannedtowork', 'endwork_estimate',
-  'privacyread', 'privacywrite', 'id_main_project', 'typeproj']
+  'privacyread', 'privacywrite', 'id_main_project', 'typeproj', 'favourite']
 
 const listFieldsUpdateCalculation: string [] = ['hoursplanned', 'hoursworked', 'progressCalc', 'endwork_estimate']
 
@@ -51,11 +51,11 @@ function updateDataCalculated(projout, projin) {
   })
 }
 
-function getproj(projects, idproj, miei: boolean) {
-  if (miei) {
-    return tools.mapSort(projects.filter((proj) => (proj.id_parent === idproj) && proj.userId === UserStore.state.userId))
+function getproj(projects, idproj, miei: boolean, favourite: boolean) {
+  if (miei && !favourite) {
+    return tools.mapSort(projects.filter((proj) => (proj.id_parent === idproj) && (proj.userId === UserStore.state.userId)))
   } else {
-    return tools.mapSort(projects.filter((proj) => (proj.id_parent === idproj) && proj.userId !== UserStore.state.userId ))
+    return tools.mapSort(projects.filter((proj) => (proj.id_parent === idproj) && (proj.userId !== UserStore.state.userId)))
   }
 }
 
@@ -104,21 +104,21 @@ namespace Getters {
     // console.log('projs_dacompletare', miei)
     if (state.projects) {
       // console.log('state.projects', state.projects)
-      return getproj(state.projects, id_parent, miei)
+      return getproj(state.projects, id_parent, miei, false)
     } else {
       return []
     }
   }, 'projs_dacompletare')
 
-  const listaprojects = b.read((state: IProjectsState) => (miei: boolean): IMenuList[] => {
+  const listaprojects = b.read((state: IProjectsState) => (miei: boolean, favourite: boolean): IMenuList[] => {
     if (state.projects) {
       // console.log('state.projects', state.projects)
-      const listaproj = getproj(state.projects, process.env.PROJECT_ID_MAIN, miei)
+      const listaproj = getproj(state.projects, process.env.PROJECT_ID_MAIN, miei, favourite)
       const myarr: IMenuList[] = []
       for (const proj of listaproj) {
         myarr.push({ nametranslate: '', description: proj.descr, idelem: proj._id })
       }
-      console.log('   myarr', myarr, listaproj)
+      // console.log('   myarr', myarr, listaproj)
       return myarr
 
     } else {
@@ -146,7 +146,7 @@ namespace Getters {
   }, 'getRecordById')
 
   const getifCanISeeProj = b.read((state: IProjectsState) => (proj: IProject): boolean => {
-    if (proj === undefined)
+    if ((proj === undefined) || (proj === null))
       return false
 
     if (!!UserStore.state) {
@@ -164,7 +164,7 @@ namespace Getters {
   }, 'getifCanISeeProj')
 
   const CanIModifyPanelPrivacy = b.read((state: IProjectsState) => (proj: IProject): boolean => {
-    if (proj === undefined)
+    if ((proj === undefined) || (proj === null))
       return false
 
     if (!!UserStore) {

@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import { Watch } from 'vue-property-decorator'
 import { GlobalStore } from '../../store/Modules'
+import Component from 'vue-class-component'
 
 export default class MenuOne extends Vue {
 

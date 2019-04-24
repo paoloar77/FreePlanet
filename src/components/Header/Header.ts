@@ -12,6 +12,7 @@ import { tools } from '../../store/Modules/tools'
 import Quasar from 'quasar'
 
 @Component({
+  name: 'Header',
   components: {
     drawer,
     messagePopover

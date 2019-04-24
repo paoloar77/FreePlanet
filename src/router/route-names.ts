@@ -2,5 +2,8 @@ export const RouteNames = {
   home: 'home',
   login: 'login',
   projects: 'projects',
-  myprojects: 'myprojects'
+  projectsshared: 'projectsShared',
+  myprojects: 'myprojects',
+  favouriteprojects: 'favproj',
+  listprojects: 'listproj'
 }

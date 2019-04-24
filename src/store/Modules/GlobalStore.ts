@@ -15,6 +15,7 @@ import * as ApiTables from '@src/store/Modules/ApiTables'
 import { GlobalStore, Projects, Todos, UserStore } from '@store'
 import messages from '../../statics/i18n'
 import globalroutines from './../../globalroutines/index'
+import { RouteNames } from '@src/router/route-names'
 
 let stateConnDefault = 'online'
 
@@ -72,7 +73,7 @@ async function getstateConnSaved() {
   }
 }
 
-function addRoute(myarr, values) {
+function addRoute(myarr, values: IListRoutes) {
   myarr.push(values)
 }
 
@@ -114,73 +115,131 @@ namespace Getters {
     console.log('getmenu')
 
     const arrlista = GlobalStore.state.listatodo
-    const lista = []
+    const lista: IListRoutes[] = []
 
     arrlista.forEach((elem: IMenuList) => {
-      const item = {
+      const item: IListRoutes = {
         faIcon: 'fa fa-list-alt',
         materialIcon: 'todo',
         name: 'pages.' + elem.description,
         route: '/todo/' + elem.nametranslate
       }
       lista.push(item)
-
     })
 
-    const arrlistaprojtutti = Projects.getters.listaprojects(false)
-    const arrlistaprojmiei = Projects.getters.listaprojects(true)
-    const listaprojectstutti = []
-    const listaprojectsmiei = []
+    const SHOW_PROJINTHEMENU = false
 
-    for (const elem of arrlistaprojtutti) {
-      const item = {
-        materialIcon: 'next_week',
-        name: elem.nametranslate,
-        text: elem.description,
-        route: tools.getUrlByTipoProj(false) + elem.idelem
-      }
-      listaprojectstutti.push(item)
+    let arrlistafavourite = []
+    let arrlistaprojtutti = []
+    let arrlistaprojmiei = []
+    if (SHOW_PROJINTHEMENU) {
+      arrlistaprojtutti = Projects.getters.listaprojects(false, false)
+      arrlistaprojmiei = Projects.getters.listaprojects(true, false)
+      arrlistafavourite = Projects.getters.listaprojects(false, true)
     }
 
-    for (const elem of arrlistaprojmiei) {
-      const item = {
-        materialIcon: 'next_week',
-        name: elem.nametranslate,
-        text: elem.description,
-        route: tools.getUrlByTipoProj(true) + elem.idelem
-      }
-      listaprojectsmiei.push(item)
+    const arrMenu: IMenuList[] = []
+
+    // PROGETTI -> FAVORITI :
+    if (arrlistafavourite.length > 0) {
+      arrMenu.push({
+        icon: '',
+        nametranslate: 'pages.' + RouteNames.favouriteprojects,
+        urlroute: RouteNames.favouriteprojects,
+        level_parent: 0.0,
+        level_child: 0.5,
+        routes2: arrlistafavourite,
+        idelem: ''
+      })
     }
+
+    // PROGETTI -> CONDIVISI :
+    arrMenu.push({
+      icon: '',
+      nametranslate: 'pages.' + RouteNames.projectsshared,
+      urlroute: 'projects',
+      level_parent: 0.0,
+      level_child: 0.5,
+      routes2: arrlistaprojtutti,
+      idelem: process.env.PROJECT_ID_MAIN
+    })
+
+    // PROGETTI -> PERSONALI :
+    arrMenu.push({
+      icon: '',
+      nametranslate: 'pages.' + RouteNames.myprojects,
+      urlroute: 'myprojects',
+      level_parent: 0.0,
+      level_child: 0.5,
+      routes2: arrlistaprojmiei,
+      idelem: process.env.PROJECT_ID_MAIN
+    })
+
+    const listaprojectMenu: IListRoutes[] = tools.convertMenuListInListRoutes(arrMenu)
 
     const arrroutes: IListRoutes[] = []
 
     addRoute(arrroutes, { route: '/', faIcon: 'fa fa-home', materialIcon: 'home', name: 'pages.home' })   // HOME
 
     if (!process.env.PROD) {
-      addRoute(arrroutes, { route: '/todo', faIcon: 'fa fa-list-alt', materialIcon: 'format_list_numbered', name: 'pages.Todo',
+      addRoute(arrroutes, {
+        route: '/todo', faIcon: 'fa fa-list-alt', materialIcon: 'format_list_numbered', name: 'pages.Todo',
         routes2: lista,
         level_parent: 0.5,
         level_child: 0.5
       })
 
-      addRoute(arrroutes,{ route: tools.getUrlByTipoProj(false) + process.env.PROJECT_ID_MAIN, faIcon: 'fa fa-list-alt', materialIcon: 'next_week', name: 'pages.Projects',
-        routes2: listaprojectstutti,
-        level_parent: 0,
-        level_child: 0.5
-      })
-
-      addRoute(arrroutes,{ route: tools.getUrlByTipoProj(true) + process.env.PROJECT_ID_MAIN, faIcon: 'fa fa-list-alt', materialIcon: 'next_week', name: 'pages.MyProjects',
-        routes2: listaprojectsmiei,
-        level_parent: 0,
-        level_child: 0.5
-      })
     }
 
+    const myarrproj = []
+    for (const myitem of listaprojectMenu) {
+      addRoute(myarrproj, myitem)
+    }
+
+    addRoute(arrroutes, {
+      route: '', faIcon: 'fa fa-list-alt', materialIcon: 'next_week', name: 'pages.projects',
+      routes2: myarrproj,
+      level_parent: 0.0,
+      level_child: 0.5
+    })
+
+    console.log('arrroutes', arrroutes)
+    console.log('listaprojectMenu', listaprojectMenu)
+    // console.log('arrlistaprojmiei', arrlistaprojmiei)
+
     if (UserStore.state.isAdmin) {
-      addRoute(arrroutes, { route: '/category', faIcon: 'fa fa-list-alt', materialIcon: 'category', name: 'pages.Category' })
-      addRoute(arrroutes, { route: '/admin/cfgserv', faIcon: 'fa fa-database', materialIcon: 'event_seat', name: 'pages.Admin' })
-      addRoute(arrroutes, { route: '/admin/testp1/par1', faIcon: 'fa fa-database', materialIcon: 'restore', name: 'pages.Test1' })
-      addRoute(arrroutes, { route: '/admin/testp1/par2', faIcon: 'fa fa-database', materialIcon: 'restore', name: 'pages.Test2' })
+      addRoute(arrroutes, {
+        route: '/category',
+        faIcon: 'fa fa-list-alt',
+        materialIcon: 'category',
+        name: 'pages.Category',
+        level_parent: 0.0,
+        level_child: 0.0
+      })
+      addRoute(arrroutes, {
+        route: '/admin/cfgserv',
+        faIcon: 'fa fa-database',
+        materialIcon: 'event_seat',
+        name: 'pages.Admin',
+        level_parent: 0.0,
+        level_child: 0.0
+      })
+      addRoute(arrroutes, {
+        route: '/admin/testp1/par1',
+        faIcon: 'fa fa-database',
+        materialIcon: 'restore',
+        name: 'pages.Test1',
+        level_parent: 0.0,
+        level_child: 0.0
+      })
+      addRoute(arrroutes, {
+        route: '/admin/testp1/par2',
+        faIcon: 'fa fa-database',
+        materialIcon: 'restore',
+        name: 'pages.Test2',
+        level_parent: 0.0,
+        level_child: 0.0
+      })
     }
 
     state.menulinks = {
@@ -192,7 +251,7 @@ namespace Getters {
 
     return state.menulinks
 
-    console.log('state.menulinks', state.menulinks)
+    // console.log('state.menulinks', state.menulinks)
 
   }, 'getmenu')
 
@@ -480,7 +539,7 @@ namespace Actions {
             subscription.unsubscribe().then((successful) => {
               // You've successfully unsubscribed
               console.log('You\'ve successfully unsubscribed')
-            }).catch( (e) => {
+            }).catch((e) => {
               // Unsubscription failed
             })
           }

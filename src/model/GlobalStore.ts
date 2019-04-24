@@ -62,18 +62,23 @@ export interface IGlobalState {
 
 export interface IMenuList {
   nametranslate: string
-  description: string
+  description?: string
   idelem?: string
   icon?: string
+  name?: string
+  level_parent?: number
+  level_child?: number
+  urlroute?: string
+  routes2?: IMenuList[]
 }
 
 export interface IListRoutes {
   route: string
-  faIcon: string
-  materialIcon: string
+  faIcon?: string
+  materialIcon?: string
   name: string
   text?: string
-  routes2: []
-  level_parent: number
-  level_child: number
+  routes2?: IListRoutes[]
+  level_parent?: number
+  level_child?: number
 }

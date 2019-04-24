@@ -116,6 +116,14 @@
                     <!--ID = {{itemselproj._id}}-->
                     <div class="q-pa-xs clMain">
                         <div class="flex-container clMain">
+                            <!--<q-rating-->
+                                    <!--v-model="itemselproj.favourite"-->
+                                    <!--class="flex-item flex-icon"-->
+                                    <!--size="2em"-->
+                                    <!--:max="1"-->
+                                    <!--color="primary">-->
+
+                            <!--</q-rating>-->
                             <q-icon class="flex-item flex-icon" name="format_align_center"/>
                             <div class="flex-item projecttitle shadow-4">
                                 {{itemselproj.descr}}

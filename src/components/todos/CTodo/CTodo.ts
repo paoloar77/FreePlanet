@@ -15,6 +15,7 @@ import { SingleTodo } from '../SingleTodo'
 const namespace: string = 'Todos'
 
 @Component({
+  name: 'CTodo',
   components: { SingleTodo },
   filters: {
     capitalize(value) {
@@ -22,6 +23,7 @@ const namespace: string = 'Todos'
     }
   }
 })
+
 export default class CTodo extends Vue {
   public $q: any
   public todotop: string = ''
