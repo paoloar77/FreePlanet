@@ -218,6 +218,7 @@ export default class CTodo extends Vue {
         }
       }
       if (des) {
+        console.log('contr', contr)
         // @ts-ignore
         contr.deselectAndExitEdit()
       }

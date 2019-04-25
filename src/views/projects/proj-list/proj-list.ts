@@ -51,6 +51,7 @@ export default class ProjList extends Vue {
   public whatisSel: number = 0
   public colProgress: string = 'blue'
   public percProgress: string = 'percProgress'
+  public readonly: boolean = false
 
   public selectStatus: [] = tools.selectStatus[UserStore.state.lang]
   public selectPhase: [] = tools.selectPhase[UserStore.state.lang]
@@ -98,7 +99,7 @@ export default class ProjList extends Vue {
   }
 
   get areMyProjects() {
-    console.log('this.$route.name', this.$route.name)
+    // console.log('this.$route.name', this.$route.name)
     return this.$route.name === RouteNames.myprojects
   }
 
@@ -107,7 +108,7 @@ export default class ProjList extends Vue {
   }
 
   get readonly_PanelPrivacySel() {
-    return !this.CanIModifyPanelPrivacySel
+    return !this.CanIModifyPanelPrivacySel || this.readonly
   }
 
   get CanISeeProject() {
@@ -296,16 +297,27 @@ export default class ProjList extends Vue {
     this.load()
   }
 
+  get isHorizontal() {
+    return (Screen.width < 600)
+  }
+
+  get myStyle(){
+    if (this.isHorizontal)
+      return 'height: 600px'
+    else
+      return ''
+  }
+
   public mounted() {
 
     // console.log('Screen.width', Screen.width)
     // console.log('this.$route', this.$route)
 
-    if (Screen.width < 400) {
-      this.splitterModel = 100
-    } else {
-      this.splitterModel = 50
-    }
+    // if (Screen.width < 400) {
+    //   this.splitterModel = 100
+    // } else {
+    //   this.splitterModel = 50
+    // }
     this.idProjAtt = this.$route.params.idProj
     this.updateindexProj()
 
@@ -406,6 +418,8 @@ export default class ProjList extends Vue {
     this.itemselproj = Projects.getters.getRecordById(this.idsel)
     if ((this.itemselproj === undefined || this.itemselproj === null))
       this.whatisSel = tools.WHAT_NOTHING
+    console.log('readonly = true')
+    this.readonly = true
   }
   public setitemsel(item: ITodo) {
     this.whatisSel = tools.WHAT_TODO
@@ -427,7 +441,7 @@ export default class ProjList extends Vue {
   public deselectAllRowstodo(item: ITodo, check, onlythis: boolean = false) {
     console.log('PROJ-LIST deselectAllRowstodo : ', item)
 
-    return false
+    // return false
 
     // @ts-ignore
     for (const i in this.$refs.ctodo.$refs.single) {
@@ -457,6 +471,13 @@ export default class ProjList extends Vue {
   public deselectAllRowsproj(item: IProject, check, onlythis: boolean = false) {
     console.log('deselectAllRowsproj: ', item)
 
+    if (!!item && check) {
+      // This is the new selected
+      console.log('readonly = false')
+      this.setidsel(item._id)
+      this.readonly = false
+    }
+
     for (const i in this.$refs.singleproject) {
 
       const contr = this.$refs.singleproject[i] as SingleProject
@@ -481,7 +502,7 @@ export default class ProjList extends Vue {
   }
 
   public updateclasses() {
-    if (!!!this.itemselproj) {
+    if (!!this.itemselproj) {
       this.colProgress = tools.getProgressColor(this.itemselproj.progressCalc)
     } else {
       this.whatisSel = tools.WHAT_NOTHING

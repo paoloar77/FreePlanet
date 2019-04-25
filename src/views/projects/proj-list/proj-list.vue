@@ -3,10 +3,13 @@
         <div class="panel">
             <q-splitter
                     v-model="splitterModel"
+                    :horizontal="isHorizontal"
+                    separator-class="bg-deep-orange"
+                    :style="myStyle"
                     :limits="[50, 100]"
             >
 
-                <template v-slot:before class="clMain">
+                <template v-slot:before>
                     <div>
                         <!--{{idProjAtt}}-->
                         <div class="divtitlecat clMain">
