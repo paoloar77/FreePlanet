@@ -173,7 +173,7 @@ export namespace ApiTool {
                   link += '/' + rec._id
                 }
 
-                // console.log('----------------------- LEGGO QUALCOSA ', link)
+                console.log('----------------------- LEGGO QUALCOSA ', link)
 
                 // Insert/Delete/Update table to the server
                 return SendReq(link, method, rec)

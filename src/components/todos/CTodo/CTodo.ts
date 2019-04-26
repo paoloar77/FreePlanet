@@ -199,7 +199,7 @@ export default class CTodo extends Vue {
   }
 
   public deselectAllRowstodo(item: ITodo, check, onlythis: boolean = false) {
-    console.log('CTODO deselectAllRowstodo : ', item)
+    // console.log('CTODO deselectAllRowstodo : ', item)
 
     for (let i = 0; i < this.$refs.single.length; i++) {
 

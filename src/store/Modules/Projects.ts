@@ -324,6 +324,9 @@ namespace Actions {
     objproj.id_parent = myobj.id_parent
     objproj.id_main_project = myobj.id_main_project
     objproj.typeproj = myobj.typeproj
+    objproj.privacyread = myobj.privacyread
+    objproj.privacywrite = myobj.privacywrite
+    objproj.actualphase = myobj.actualphase
 
     let elemtochange: IProject = null
 

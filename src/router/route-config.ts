@@ -101,7 +101,7 @@ export const routesList: IMyRouteConfig[] = [
     name: RouteNames.projects,
     component: () => import('@/views/projects/proj-list/proj-list.vue'),
     meta: {
-      requiresAuth: true,
+      requiresAuth: false,
       async asyncData() {
         await Projects.actions.dbLoad({ checkPending: false, onlyiffirsttime: true })
       }

@@ -4,7 +4,6 @@
             <q-splitter
                     v-model="splitterModel"
                     :horizontal="isHorizontal"
-                    separator-class="bg-deep-orange"
                     :style="myStyle"
                     :limits="[50, 100]"
             >

@@ -386,13 +386,17 @@ export default class ProjList extends Vue {
   // const descr = this.$t('project.newproj').toString()
 
   public async addProject(descr) {
+    const projatt = Projects.getters.getRecordById(this.idProjAtt)
     const myobj: IProject = {
       descr,
-      id_parent: this.idProjAtt
+      id_parent: this.idProjAtt,
+      privacyread: projatt.privacyread,
+      privacywrite: projatt.privacywrite,
+      actualphase: projatt.actualphase
     }
 
     if (this.itemproj === undefined)
-      this.itemproj = Projects.getters.getRecordById(this.idProjAtt)
+      this.itemproj = projatt
 
     if (this.isRootProject) {
       myobj.typeproj = TypeProj.TYPE_PROJECT
@@ -409,6 +413,7 @@ export default class ProjList extends Vue {
       return
     }
 
+    console.log('Nuovo PROJ', myobj)
     return await Projects.actions.dbInsert({ myobj, atfirst: false })
   }
 
@@ -418,7 +423,7 @@ export default class ProjList extends Vue {
     this.itemselproj = Projects.getters.getRecordById(this.idsel)
     if ((this.itemselproj === undefined || this.itemselproj === null))
       this.whatisSel = tools.WHAT_NOTHING
-    console.log('readonly = true')
+    // console.log('readonly = true')
     this.readonly = true
   }
   public setitemsel(item: ITodo) {
@@ -439,7 +444,7 @@ export default class ProjList extends Vue {
   }
 
   public deselectAllRowstodo(item: ITodo, check, onlythis: boolean = false) {
-    console.log('PROJ-LIST deselectAllRowstodo : ', item)
+    // console.log('PROJ-LIST deselectAllRowstodo : ', item)
 
     // return false
 
@@ -469,11 +474,11 @@ export default class ProjList extends Vue {
   }
 
   public deselectAllRowsproj(item: IProject, check, onlythis: boolean = false) {
-    console.log('deselectAllRowsproj: ', item)
+    // console.log('deselectAllRowsproj: ', item)
 
     if (!!item && check) {
       // This is the new selected
-      console.log('readonly = false')
+      // console.log('readonly = false')
       this.setidsel(item._id)
       this.readonly = false
     }
