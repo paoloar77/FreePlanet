@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import { Component, Watch } from 'vue-property-decorator'
 
-import { IDrag, IProject, IProjectsState, ITodo, Privacy, TypeProj } from '../../../model/index'
+import { IAction, IDrag, IProject, IProjectsState, ITodo, Privacy, TypeProj } from '../../../model/index'
 import { SingleProject } from '../../../components/projects/SingleProject/index'
 import { CTodo } from '../../../components/todos/CTodo'
 
@@ -164,10 +164,16 @@ export default class ProjList extends Vue {
   }
 
   get menuPopupConfigProject() {
+    let mymenu = null
     if (this.isMainProject)
-      return tools.menuPopupConfigMAINProject[UserStore.state.lang]
+      mymenu = tools.menuPopupConfigMAINProject[UserStore.state.lang]
     else
-      return tools.menuPopupConfigProject[UserStore.state.lang]
+      mymenu = tools.menuPopupConfigProject[UserStore.state.lang]
+
+    if (mymenu.length > 0)
+      mymenu[0].disable = !(Projects.state.action.type === tools.MenuAction.CUT)
+
+    return mymenu
   }
 
   get listOptionShowTask() {
@@ -370,6 +376,14 @@ export default class ProjList extends Vue {
       // @ts-ignore
       elem.activeEdit()
       // console.log('idnewelem', idnewelem, 'Elem Trovato', elem)
+    } else if (action === tools.MenuAction.PASTE) {
+
+      const myaction: IAction = {
+        type: tools.MenuAction.PASTE,
+        _id: this.itemselproj._id
+      }
+
+      return await Projects.actions.ActionCutPaste(myaction)
     }
   }
 

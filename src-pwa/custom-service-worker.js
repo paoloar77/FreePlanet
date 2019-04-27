@@ -6,11 +6,13 @@
 
 // Questo è il swSrc
 
-console.log('   [  VER-0.0.27 ] _---------________------  PAO: this is my custom service worker');
+console.log('   [  VER-0.0.61 ] _---------________------  PAO: this is my custom service worker');
 
 importScripts('../statics/js/idb.js');
 importScripts('../statics/js/storage.js');
-importScripts('https://storage.googleapis.com/workbox-cdn/releases/3.0.0/workbox-sw.js'); //++Todo: Replace with local workbox.js
+importScripts('../statics/js/workbox-sw.js');
+
+// importScripts('https://storage.googleapis.com/workbox-cdn/releases/3.0.0/workbox-sw.js');
 
 
 let port = 3000;

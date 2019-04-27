@@ -2,6 +2,11 @@ import objectId from '@src/js/objectId'
 import { UserStore } from '@store'
 import { tools } from '@src/store/Modules/tools'
 
+export interface IAction {
+  type: number
+  _id: any
+}
+
 export interface IProject {
   _id?: any,
   userId?: string
@@ -43,6 +48,7 @@ export interface IProjectsState {
   projects: IProject[]
   insidePending: boolean
   visuLastCompleted: number
+  action: IAction
 }
 
 export const Privacy = {

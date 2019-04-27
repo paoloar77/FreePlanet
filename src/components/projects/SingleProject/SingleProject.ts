@@ -324,7 +324,7 @@ export default class SingleProject extends Vue {
       }
 
       // console.log('focus()')
-    }, 500)
+    }, 400)
   }
 
   public getFocus(e) {
@@ -486,6 +486,12 @@ export default class SingleProject extends Vue {
       return await this.enableExpiring()
     } else if (action === tools.MenuAction.EDIT) {
       this.activeEdit()
+    } else if (action === tools.MenuAction.CUT) {
+      const myaction = {
+        type: tools.MenuAction.CUT,
+        _id: this.itemproject._id
+      }
+      return await Projects.actions.ActionCutPaste(myaction)
     } else if (action === 0) {
       this.deselectAndExitEdit()
     }

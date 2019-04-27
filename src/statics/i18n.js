@@ -246,6 +246,7 @@ const messages = {
     proj: {
       newproj: 'Titolo Progetto',
       newsubproj: 'Titolo Sotto-Progetto',
+      insertbottom: 'Inserisci Nuovo Project',
       longdescr: 'Descrizione',
       hoursplanned: 'Ore Preventivate',
       hoursadded: 'Ore Aggiuntive',
@@ -502,6 +503,7 @@ const messages = {
     proj: {
       newproj: 'Título Projecto',
       newsubproj: 'Título Sub-Projecto',
+      insertbottom: 'Añadir nuevo Proyecto',
       longdescr: 'Descripción',
       hoursplanned: 'Horas Estimadas',
       hoursadded: 'Horas Adicional',
@@ -758,6 +760,7 @@ const messages = {
     proj: {
       newproj: 'Project Title',
       newsubproj: 'SubProject Title',
+      insertbottom: 'Insert New Project',
       longdescr: 'Description',
       hoursplanned: 'Estimated Hours',
       hoursadded: 'Additional Hours',

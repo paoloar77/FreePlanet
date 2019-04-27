@@ -181,15 +181,12 @@ namespace Getters {
 
     addRoute(arrroutes, { route: '/', faIcon: 'fa fa-home', materialIcon: 'home', name: 'pages.home' })   // HOME
 
-    if (!process.env.PROD) {
-      addRoute(arrroutes, {
-        route: '/todo', faIcon: 'fa fa-list-alt', materialIcon: 'format_list_numbered', name: 'pages.Todo',
-        routes2: lista,
-        level_parent: 0.5,
-        level_child: 0.5
-      })
-
-    }
+    addRoute(arrroutes, {
+      route: '/todo', faIcon: 'fa fa-list-alt', materialIcon: 'format_list_numbered', name: 'pages.Todo',
+      routes2: lista,
+      level_parent: 0.5,
+      level_child: 0.5
+    })
 
     const myarrproj = []
     for (const myitem of listaprojectMenu) {

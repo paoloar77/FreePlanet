@@ -1,4 +1,4 @@
-import { IProject, IProjectsState, IDrag, IMenuList } from 'model'
+import { IProject, IProjectsState, IDrag, IMenuList, IAction } from 'model'
 import { Privacy } from '@src/model'
 import { storeBuilder } from './Store/Store'
 
@@ -18,7 +18,11 @@ const stateglob: IProjectsState = {
   showtype: costanti.ShowTypeTask.SHOW_LAST_N_COMPLETED,
   projects: [],
   insidePending: false,
-  visuLastCompleted: 10
+  visuLastCompleted: 10,
+  action: {
+    type: 0,
+    _id: ''
+  }
 }
 
 const listFieldsToChange: string [] = ['descr', 'longdescr', 'hoursplanned', 'hoursworked', 'id_parent', 'statusproj',
@@ -94,7 +98,7 @@ namespace Getters {
       begin_development: tools.getDateNull(),
       begin_test: tools.getDateNull(),
       hoursweeky_plannedtowork: 0,
-      endwork_estimate: tools.getDateNull()
+      endwork_estimate: tools.getDateNull(),
     }
 
     return obj
@@ -240,10 +244,23 @@ namespace Mutations {
     ApiTables.removeitemfromarray(state.projects, ind)
   }
 
+  async function movemyitem(state: IProjectsState, { myitemorig, myitemdest } ) {
+    const indorig = tools.getIndexById(state.projects, myitemorig._id)
+
+    // console.log('myitemorig', myitemorig, 'indorig', indorig)
+    // console.log('myitemdest', myitemdest)
+
+    state.projects.splice(indorig, 1)
+    state.projects.push(myitemdest)
+
+    await Actions.actions.modify({ myitem: myitemdest, field: 'id_parent' })
+  }
+
   export const mutations = {
     deletemyitem: b.commit(deletemyitem),
     createNewItem: b.commit(createNewItem),
-    updateProject: b.commit(updateProject)
+    updateProject: b.commit(updateProject),
+    movemyitem: b.commit(movemyitem)
   }
 
 }
@@ -380,12 +397,43 @@ namespace Actions {
 
   }
 
+  async function ActionCutPaste(context, action: IAction) {
+
+    if (action.type === tools.MenuAction.CUT)
+      stateglob.action = action
+    else if (action.type === tools.MenuAction.PASTE) {
+      if (stateglob.action.type === tools.MenuAction.CUT) {
+
+        // Change id_parent
+        const orig_obj = Getters.getters.getRecordById(stateglob.action._id)
+        const dest = Getters.getters.getRecordById(action._id)
+
+        // console.log('dest', dest)
+
+        const dest_obj = tools.jsonCopy(orig_obj)
+
+        if (!!dest_obj) {
+          dest_obj.id_parent = dest._id
+          dest_obj.id_main_project = dest.id_main_project
+          dest_obj.modified = true
+          dest_obj.id_prev = null
+
+          await Mutations.mutations.movemyitem({ myitemorig: orig_obj, myitemdest: dest_obj })
+        }
+
+        stateglob.action.type = 0
+      }
+    }
+    return true
+  }
+
   export const actions = {
     dbLoad: b.dispatch(dbLoad),
     swapElems: b.dispatch(swapElems),
     deleteItem: b.dispatch(deleteItem),
     dbInsert: b.dispatch(dbInsert),
-    modify: b.dispatch(modify)
+    modify: b.dispatch(modify),
+    ActionCutPaste: b.dispatch(ActionCutPaste)
   }
 
 }

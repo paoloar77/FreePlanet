@@ -61,6 +61,8 @@ export const tools = {
   },
 
   MenuAction: {
+    CUT: 71,
+    PASTE: 72,
     DELETE: 100,
     TOGGLE_EXPIRING: 101,
     COMPLETED: 110,
@@ -481,6 +483,12 @@ export const tools = {
   menuPopupProj: {
     it: [
       {
+        id: 5,
+        label: 'Taglia',
+        value: 71, // CUT
+        icon: 'undo'
+      },
+      {
         id: 10,
         label: 'Modifica',
         value: 160, // EDIT
@@ -504,6 +512,12 @@ export const tools = {
     es:
       [
         {
+          id: 5,
+          label: 'Cortar',
+          value: 71, // CUT
+          icon: 'undo'
+        },
+        {
           id: 10,
           label: 'Editar',
           value: 160, // EDIT
@@ -526,6 +540,12 @@ export const tools = {
       ],
     enUs:
       [
+        {
+          id: 5,
+          label: 'Cut',
+          value: 71, // CUT
+          icon: 'undo'
+        },
         {
           id: 10,
           label: 'Edit',
@@ -583,13 +603,22 @@ export const tools = {
   menuPopupConfigProject: {
     it: [
       {
+        id: 3,
+        disable: false,
+        label: translation.it.action.paste,
+        value: 72,  // Action.PASTE
+        icon: 'file_copy'
+      },
+      {
         id: 5,
+        disable: false,
         label: translation.it.proj.newsubproj,
         value: 200,  // ADD_PROJECT
         icon: 'next_week'
       },
       {
         id: 10,
+        disable: false,
         label: translation.it.task.showtask,
         value: 150,  // SHOW_TASK
         icon: 'rowing'
@@ -598,13 +627,22 @@ export const tools = {
     es:
       [
         {
+          id: 3,
+          disable: false,
+          label: translation.es.action.paste,
+          value: 72,  // Action.PASTE
+          icon: 'file_copy'
+        },
+        {
           id: 5,
+          disable: false,
           label: translation.es.proj.newsubproj,
           value: 200,  // ADD_PROJECT
           icon: 'next_week'
         },
         {
           id: 10,
+          disable: false,
           label: translation.es.task.showtask,
           value: 150,
           icon: 'rowing'
@@ -613,13 +651,22 @@ export const tools = {
     enUs:
       [
         {
+          id: 3,
+          disable: false,
+          label: translation.enUs.action.paste,
+          value: 72,  // Action.PASTE
+          icon: 'file_copy'
+        },
+        {
           id: 5,
-          label: translation.it.proj.newsubproj,
+          disable: false,
+          label: translation.enUs.proj.newsubproj,
           value: 200,  // ADD_PROJECT
           icon: 'next_week'
         },
         {
           id: 10,
+          disable: false,
           label: translation.enUs.task.showtask,
           value: 150,
           icon: 'rowing'
@@ -630,7 +677,15 @@ export const tools = {
   menuPopupConfigMAINProject: {
     it: [
       {
+        id: 3,
+        disable: false,
+        label: translation.it.action.paste,
+        value: 72,  // Action.PASTE
+        icon: 'file_copy'
+      },
+      {
         id: 5,
+        disable: false,
         label: translation.it.proj.newproj,
         value: 200,  // ADD_PROJECT
         icon: 'next_week'
@@ -639,7 +694,15 @@ export const tools = {
     es:
       [
         {
+          id: 3,
+          disable: false,
+          label: translation.es.action.paste,
+          value: 72,  // Action.PASTE
+          icon: 'file_copy'
+        },
+        {
           id: 5,
+          disable: false,
           label: translation.es.proj.newproj,
           value: 200,  // ADD_PROJECT
           icon: 'next_week'
@@ -648,8 +711,16 @@ export const tools = {
     enUs:
       [
         {
+          id: 3,
+          disable: false,
+          label: translation.enUs.action.paste,
+          value: 72,  // Action.PASTE
+          icon: 'file_copy'
+        },
+        {
           id: 5,
-          label: translation.it.proj.newproj,
+          disable: false,
+          label: translation.enUs.proj.newproj,
           value: 200,  // ADD_PROJECT
           icon: 'next_week'
         }
@@ -660,6 +731,7 @@ export const tools = {
     it: [
       {
         id: 10,
+        disable: false,
         label: 'Mostra gli ultimi N completati',
         value: costanti.ShowTypeTask.SHOW_LAST_N_COMPLETED,
         icon: 'rowing',
@@ -667,6 +739,7 @@ export const tools = {
       },
       {
         id: 20,
+        disable: false,
         label: 'Compiti da Completare',
         value: costanti.ShowTypeTask.SHOW_ONLY_TOCOMPLETE,
         icon: 'rowing',
@@ -674,6 +747,7 @@ export const tools = {
       },
       {
         id: 30,
+        disable: false,
         label: 'Tutti i compiti',
         value: costanti.ShowTypeTask.SHOW_ALL,
         icon: 'check_circle',
@@ -684,6 +758,7 @@ export const tools = {
       [
         {
           id: 10,
+          disable: false,
           label: 'Mostrar los ultimos N completados',
           value: costanti.ShowTypeTask.SHOW_LAST_N_COMPLETED,
           icon: 'rowing',
@@ -691,6 +766,7 @@ export const tools = {
         },
         {
           id: 20,
+          disable: false,
           label: 'Tareas para completar',
           value: costanti.ShowTypeTask.SHOW_ONLY_TOCOMPLETE,
           icon: 'rowing',
@@ -698,6 +774,7 @@ export const tools = {
         },
         {
           id: 30,
+          disable: false,
           label: 'Todos las Tareas',
           value: costanti.ShowTypeTask.SHOW_ALL,
           icon: 'check_circle',
@@ -708,6 +785,7 @@ export const tools = {
       [
         {
           id: 10,
+          disable: false,
           label: 'Show last N Completed',
           value: costanti.ShowTypeTask.SHOW_LAST_N_COMPLETED,
           icon: 'rowing',
@@ -715,6 +793,7 @@ export const tools = {
         },
         {
           id: 20,
+          disable: false,
           label: 'Task to complete',
           value: costanti.ShowTypeTask.SHOW_ONLY_TOCOMPLETE,
           icon: 'rowing',
@@ -722,6 +801,7 @@ export const tools = {
         },
         {
           id: 30,
+          disable: false,
           label: 'All Tasks',
           value: costanti.ShowTypeTask.SHOW_ALL,
           icon: 'check_circle',
@@ -1405,6 +1485,6 @@ export const tools = {
       lista.push(item)
     }
     return lista
-  }
+  },
 
 }

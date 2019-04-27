@@ -14,6 +14,9 @@ export const translation = {
     task: {
       showtask: 'Mostra Task',
     },
+    action: {
+      paste: 'Incolla'
+    },
     end: ''
   },
   es: {
@@ -31,6 +34,9 @@ export const translation = {
     task: {
       showtask: 'Mostrar Tarea',
     },
+    action: {
+      paste: 'Pegar'
+    },
     end: ''
   },
   enUs: {
@@ -47,6 +53,9 @@ export const translation = {
     },
     task: {
       showtask: 'Show Task',
+    },
+    action: {
+      paste: 'Paste'
     },
     end: ''
   }

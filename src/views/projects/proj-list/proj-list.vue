@@ -61,7 +61,7 @@
                                                             </q-list>
                                                         </q-menu>
                                                     </q-item>
-                                                    <q-item v-else v-close-popup clickable :icon="field.icon"
+                                                    <q-item v-else v-close-popup clickable :icon="field.icon" :disable="field.disable"
                                                             @click="clickMenuProjList(field.value)">
 
                                                         <q-item-section avatar>
@@ -99,6 +99,20 @@
                             </div>
                         </div>
                         <q-separator></q-separator>
+
+                        <q-input v-if="CanIModifyPanelPrivacy" ref="insertProjBottom" v-model="projbottom"
+                                 style="margin-left: 6px;"
+                                 color="blue-12"
+                                 :label="$t('proj.insertbottom')"
+                                 :after="[{icon: 'arrow_forward', content: true, handler () {}}]"
+                                 v-on:keyup.enter="dbInsert(false)">
+
+                        </q-input>
+
+                        <br>
+                        <q-separator></q-separator>
+
+
 
                         <!--CanIModifyPanelPrivacy = {{CanIModifyPanelPrivacy}}<br>-->
                         <!--CanIModifyPanelPrivacySel = {{CanIModifyPanelPrivacySel}}<br>-->
