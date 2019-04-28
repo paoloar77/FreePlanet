@@ -20,6 +20,7 @@ export default class CProgress extends Vue {
   @Prop({ required: true }) public progressval: number
   @Prop() public descr: string
   @Prop({ default: false }) public slider: boolean
+  @Prop({ default: false }) public readonly: boolean
 
   @Watch('progressval')
   public valchanged(value) {

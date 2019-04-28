@@ -10,6 +10,7 @@ import { SubMenusProj } from '../SubMenusProj'
 import { CDate } from '../../CDate'
 
 import { date } from 'quasar'
+import { GlobalStore } from '@store'
 
 @Component({
   components: { SubMenusProj, CDate },
@@ -488,6 +489,7 @@ export default class SingleProject extends Vue {
       this.activeEdit()
     } else if (action === tools.MenuAction.CUT) {
       const myaction = {
+        table: tools.projects,
         type: tools.MenuAction.CUT,
         _id: this.itemproject._id
       }

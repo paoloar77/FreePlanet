@@ -51,7 +51,12 @@ const state: IGlobalState = {
     downloading_server: 0,
     downloading_indexeddb: 0
   },
-  arrConfig: []
+  arrConfig: [],
+  lastaction: {
+    table: '',
+    type: 0,
+    _id: 0
+  }
 }
 
 async function getConfig(id) {

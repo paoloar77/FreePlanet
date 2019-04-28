@@ -11,6 +11,7 @@ import { serv_constants } from '@src/store/Modules/serv_constants'
 import { GetterTree } from 'vuex'
 import objectId from '@src/js/objectId'
 import { costanti } from '@src/store/Modules/costanti'
+import { IAction } from '@src/model'
 
 const nametable = 'todos'
 
@@ -46,7 +47,7 @@ function gettodosByCategory(category: string): [] {
 
 function initcat() {
 
-  let rec = Getters.getters.getRecordEmpty()
+  const rec = Getters.getters.getRecordEmpty()
   rec.userId = UserStore.state.userId
 
   return rec
@@ -54,7 +55,7 @@ function initcat() {
 }
 
 namespace Getters {
-  const getRecordEmpty = b.read((state: ITodosState) => (): ITodo => {
+  const getRecordEmpty = b.read((stateparamf: ITodosState) => (): ITodo => {
 
     const tomorrow = tools.getDateNow()
     tomorrow.setDate(tomorrow.getDate() + 1)
@@ -81,32 +82,32 @@ namespace Getters {
       assigned_to_userId: '',
       hoursplanned: 0,
       hoursworked: 0,
-      start_date: tools.getDateNull(),
+      start_date: tools.getDateNull()
     }
     // return this.copy(objtodo)
     return objtodo
   }, 'getRecordEmpty')
-  const items_dacompletare = b.read((state: ITodosState) => (cat: string): ITodo[] => {
+  const items_dacompletare = b.read((stateparam: ITodosState) => (cat: string): ITodo[] => {
     const indcat = getindexbycategory(cat)
-    // console.log('items_dacompletare', 'indcat', indcat, state.todos[indcat])
-    if (state.todos[indcat]) {
-      return state.todos[indcat].filter((todo) => todo.statustodo !== tools.Status.COMPLETED)
+    // console.log('items_dacompletare', 'indcat', indcat, stateparam.todos[indcat])
+    if (stateparam.todos[indcat]) {
+      return stateparam.todos[indcat].filter((todo) => todo.statustodo !== tools.Status.COMPLETED)
     } else {
       return []
     }
   }, 'items_dacompletare')
 
-  const todos_completati = b.read((state: ITodosState) => (cat: string): ITodo[] => {
+  const todos_completati = b.read((stateparam: ITodosState) => (cat: string): ITodo[] => {
     const indcat = getindexbycategory(cat)
-    if (state.todos[indcat]) {
-      if (state.showtype === costanti.ShowTypeTask.SHOW_LAST_N_COMPLETED) {   // Show only the first N completed
-        return state.todos[indcat].filter((todo) => todo.statustodo === tools.Status.COMPLETED).slice(0, state.visuLastCompleted)
+    if (stateparam.todos[indcat]) {
+      if (stateparam.showtype === costanti.ShowTypeTask.SHOW_LAST_N_COMPLETED) {   // Show only the first N completed
+        return stateparam.todos[indcat].filter((todo) => todo.statustodo === tools.Status.COMPLETED).slice(0, stateparam.visuLastCompleted)
       }
-      else if (state.showtype === costanti.ShowTypeTask.SHOW_ONLY_TOCOMPLETE) {
+      else if (stateparam.showtype === costanti.ShowTypeTask.SHOW_ONLY_TOCOMPLETE) {
         return []
       }
-      else if (state.showtype === costanti.ShowTypeTask.SHOW_ALL) {
-        return state.todos[indcat].filter((todo) => todo.statustodo === tools.Status.COMPLETED)
+      else if (stateparam.showtype === costanti.ShowTypeTask.SHOW_ALL) {
+        return stateparam.todos[indcat].filter((todo) => todo.statustodo === tools.Status.COMPLETED)
       }
       else {
         return []
@@ -116,22 +117,22 @@ namespace Getters {
     }
   }, 'todos_completati')
 
-  const doneTodosCount = b.read((state: ITodosState) => (cat: string): number => {
+  const doneTodosCount = b.read((stateparam: ITodosState) => (cat: string): number => {
     return getters.todos_completati(cat).length
   }, 'doneTodosCount')
-  const TodosCount = b.read((state: ITodosState) => (cat: string): number => {
+  const TodosCount = b.read((stateparam: ITodosState) => (cat: string): number => {
     const indcat = getindexbycategory(cat)
-    if (state.todos[indcat]) {
-      return state.todos[indcat].length
+    if (stateparam.todos[indcat]) {
+      return stateparam.todos[indcat].length
     } else {
       return 0
     }
   }, 'TodosCount')
 
-  const getRecordById = b.read((state: ITodosState) => (id: string, cat: string): ITodo => {
+  const getRecordById = b.read((stateparam: ITodosState) => (id: string, cat: string): ITodo => {
     const indcat = getindexbycategory(cat)
-    if (state.todos) {
-      return state.todos[indcat].find((item) => item._id === id)
+    if (stateparam.todos) {
+      return stateparam.todos[indcat].find((item) => item._id === id)
     }
     return null
   }, 'getRecordById')
@@ -160,49 +161,73 @@ namespace Getters {
 
 namespace Mutations {
 
-  function findIndTodoById(state: ITodosState, data: IParamTodo) {
-    const indcat = state.categories.indexOf(data.categorySel)
+  function findIndTodoById(stateparam: ITodosState, data: IParamTodo) {
+    const indcat = stateparam.categories.indexOf(data.categorySel)
     if (indcat >= 0) {
-      return tools.getIndexById(state.todos[indcat], data.id)
+      return tools.getIndexById(stateparam.todos[indcat], data.id)
     }
     return -1
   }
 
-  function createNewItem(state: ITodosState, { objtodo, atfirst, categorySel }) {
-    let indcat = state.categories.indexOf(categorySel)
-    if (indcat == -1) {
-      state.categories.push(categorySel)
-      indcat = state.categories.indexOf(categorySel)
+  function createNewItem(stateparam: ITodosState, { objtodo, atfirst, categorySel }) {
+    let indcat = stateparam.categories.indexOf(categorySel)
+    if (indcat === -1) {
+      stateparam.categories.push(categorySel)
+      indcat = stateparam.categories.indexOf(categorySel)
     }
-    console.log('createNewItem', objtodo, 'cat=', categorySel, 'state.todos[indcat]', state.todos[indcat])
-    if (state.todos[indcat] === undefined) {
-      state.todos[indcat] = []
-      state.todos[indcat].push(objtodo)
-      console.log('push state.todos[indcat]', state.todos)
+    console.log('createNewItem', objtodo, 'cat=', categorySel, 'stateparam.todos[indcat]', stateparam.todos[indcat])
+    if (stateparam.todos[indcat] === undefined) {
+      stateparam.todos[indcat] = []
+      stateparam.todos[indcat].push(objtodo)
+      console.log('push stateparam.todos[indcat]', stateparam.todos)
       return
     }
     if (atfirst) {
-      state.todos[indcat].unshift(objtodo)
+      stateparam.todos[indcat].unshift(objtodo)
     }
     else {
-      state.todos[indcat].push(objtodo)
+      stateparam.todos[indcat].push(objtodo)
     }
 
-    console.log('state.todos[indcat]', state.todos[indcat])
+    console.log('stateparam.todos[indcat]', stateparam.todos[indcat])
 
   }
 
-  function deletemyitem(state: ITodosState, myitem: ITodo) {
+  function deletemyitem(stateparam: ITodosState, myitem: ITodo) {
     // Find record
-    const indcat = state.categories.indexOf(myitem.category)
-    const ind = findIndTodoById(state, { id: myitem._id, categorySel: myitem.category })
+    const indcat = stateparam.categories.indexOf(myitem.category)
+    const ind = findIndTodoById(stateparam, { id: myitem._id, categorySel: myitem.category })
 
-    ApiTables.removeitemfromarray(state.todos[indcat], ind)
+    ApiTables.removeitemfromarray(stateparam.todos[indcat], ind)
+  }
+
+  async function movemyitem(stateparam: ITodosState, { myitemorig, myitemdest } ) {
+
+    const indcat = stateparam.categories.indexOf(myitemorig.category)
+    const indorig = tools.getIndexById(stateparam.todos[indcat], myitemorig._id)
+    let indcatdest = stateparam.categories.indexOf(myitemdest.category)
+
+    console.log('stateparam.categories', stateparam.categories)
+    console.log('myitemdest', myitemdest)
+    console.log('indcat', indcat, 'indcatdest', indcatdest, 'indorig', indorig)
+
+    if (indcatdest === -1) {
+      stateparam.categories.push(myitemdest.category)
+      const newindcat = stateparam.categories.indexOf(myitemdest.category)
+      stateparam.todos[newindcat] = []
+      indcatdest = newindcat
+    }
+
+    stateparam.todos[indcat].splice(indorig, 1)
+    stateparam.todos[indcatdest].push(myitemdest)
+
+    await Actions.actions.modify({ myitem: myitemdest, field: 'category' })
   }
 
   export const mutations = {
     deletemyitem: b.commit(deletemyitem),
-    createNewItem: b.commit(createNewItem)
+    createNewItem: b.commit(createNewItem),
+    movemyitem: b.commit(movemyitem)
   }
 
 }
@@ -373,12 +398,42 @@ namespace Actions {
 
   }
 
+  async function ActionCutPaste(context, action: IAction) {
+    console.log('ActionCutPaste', action)
+
+    if (action.type === tools.MenuAction.CUT) {
+      GlobalStore.state.lastaction = action
+    } else if (action.type === tools.MenuAction.PASTE) {
+      if (GlobalStore.state.lastaction.type === tools.MenuAction.CUT) {
+
+        // Change id_parent
+        const orig_obj = Getters.getters.getRecordById(GlobalStore.state.lastaction._id, GlobalStore.state.lastaction.cat)
+        // const dest = Getters.getters.getRecordById(action._id, action.cat)
+
+        console.log('action', action, 'orig_obj', orig_obj)
+
+        const dest_obj = tools.jsonCopy(orig_obj)
+
+        if (!!dest_obj) {
+          dest_obj.category = action._id
+          dest_obj.modified = true
+          dest_obj.id_prev = null
+
+          GlobalStore.state.lastaction.type = 0
+
+          return await Mutations.mutations.movemyitem({ myitemorig: orig_obj, myitemdest: dest_obj })
+        }
+      }
+    }
+  }
+
   export const actions = {
     dbLoad: b.dispatch(dbLoad),
     swapElems: b.dispatch(swapElems),
     deleteItemtodo: b.dispatch(deleteItemtodo),
     dbInsert: b.dispatch(dbInsert),
-    modify: b.dispatch(modify)
+    modify: b.dispatch(modify),
+    ActionCutPaste: b.dispatch(ActionCutPaste)
   }
 
 }

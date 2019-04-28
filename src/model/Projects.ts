@@ -3,8 +3,10 @@ import { UserStore } from '@store'
 import { tools } from '@src/store/Modules/tools'
 
 export interface IAction {
+  table: string
   type: number
   _id: any
+  cat?: string
 }
 
 export interface IProject {
@@ -31,6 +33,7 @@ export interface IProject {
   live_url?: string
   test_url?: string
   hoursplanned?: number
+  hoursleft?: number
   hoursworked?: number
   progressCalc?: number
   begin_development?: Date
@@ -48,7 +51,6 @@ export interface IProjectsState {
   projects: IProject[]
   insidePending: boolean
   visuLastCompleted: number
-  action: IAction
 }
 
 export const Privacy = {

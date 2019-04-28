@@ -1,3 +1,5 @@
+import { IAction } from '@src/model/Projects'
+
 export interface ITodo {
   _id?: any,
   userId?: string

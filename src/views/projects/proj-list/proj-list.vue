@@ -272,6 +272,7 @@
                                         v-model="itemtodosel.descr"
                                         :label="$t('proj.longdescr')"
                                         outlined
+                                        :readonly="readonly_PanelPrivacy"
                                         debounce="1000"
                                         autogrow>
 
@@ -283,6 +284,7 @@
                         <q-icon class="flex-item flex-icon" name="done_outline"/>
                         <div class="flex-item itemstatus">
                             <q-select rounded outlined v-model="itemtodosel.statustodo" :options="selectStatus"
+                                      :readonly="readonly_PanelPrivacy"
                                       :label="$t('todo.status')" emit-value map-options
                                       @input="modifyfieldtodo('statustodo')">
                             </q-select>
@@ -290,6 +292,7 @@
                         <q-icon class="flex-item flex-icon" name="outlined_flag"/>
                         <div class="flex-item itemstatus">
                             <q-select rounded outlined v-model="itemtodosel.phase" :options="selectPhase"
+                                      :readonly="readonly_PanelPrivacy"
                                       :label="$t('todo.phase')" emit-value map-options>
                             </q-select>
                         </div>
@@ -299,6 +302,7 @@
                         <div class="flex-item itemdescr">
                             <q-input
                                     ref="input5"
+                                    :readonly="readonly_PanelPrivacy"
                                     v-model="itemtodosel.hoursworked"
                                     type="number"
                                     rounded outlined
@@ -312,6 +316,7 @@
                         <div class="flex-item itemdata content-center">
                             <q-input
                                     ref="input6"
+                                    :readonly="readonly_PanelPrivacy"
                                     type="number"
                                     v-model="itemtodosel.hoursplanned"
                                     rounded outlined
@@ -321,6 +326,7 @@
                             </q-input>
 
                             <CProgress :descr="$t('proj.progresstask')"
+                                       :readonly="readonly_PanelPrivacy"
                                        :progressval="itemtodosel.progress"
                                        :slider="true" @input="itemtodosel.progress = arguments[0]"></CProgress>
                         </div>
@@ -329,6 +335,7 @@
                         <q-icon class="flex-item flex-icon" name="developer_mode"/>
                         <div class="flex-item itemdata">
                             <CDate :mydate="itemtodosel.start_date"
+                                   :readonly="readonly_PanelPrivacy"
                                    @input="itemtodosel.start_date = new Date(arguments[0])"
                                    :label="$t('todo.start_date')">
 
@@ -337,7 +344,7 @@
                         <div style="margin: 10px;"></div>
                         <q-icon class="flex-item flex-icon" name="event"/>
                         <div class="flex-item itemdata">
-                            <CDate :readonly="itemtodosel.statustodo !== tools.Status.COMPLETED"
+                            <CDate :readonly="((itemtodosel.statustodo !== tools.Status.COMPLETED) || readonly_PanelPrivacy)"
                                    :mydate="itemtodosel.completed_at"
                                    @input="itemtodosel.completed_at = new Date(arguments[0])"
                                    :label="$t('todo.completed_at')">

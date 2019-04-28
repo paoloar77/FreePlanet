@@ -14,6 +14,8 @@ export interface INotify {
 }
 
 export const tools = {
+  projects: 'projects',
+  todos: 'todos',
   EMPTY: 0,
   CALLING: 10,
   OK: 20,
@@ -366,7 +368,15 @@ export const tools = {
     {
       it: [
         {
+          id: 5,
+          disable: false,
+          label: 'Taglia',
+          value: 71, // CUT
+          icon: 'undo'
+        },
+        {
           id: 10,
+          disable: false,
           label: '',
           value: 120, // PROGRESS_BAR
           icon: 'rowing',
@@ -374,6 +384,7 @@ export const tools = {
         },
         {
           id: 20,
+          disable: false,
           label: 'Imposta Priorità',
           value: 130, // PRIORITY
           icon: 'rowing',
@@ -381,6 +392,7 @@ export const tools = {
         },
         {
           id: 30,
+          disable: false,
           label: 'Completato',
           value: 110, // COMPLETED
           icon: 'check_circle',
@@ -388,6 +400,7 @@ export const tools = {
         },
         {
           id: 40,
+          disable: false,
           label: 'Imposta Scadenza',
           value: 101, // TOGGLE_EXPIRING
           icon: 'date_range',
@@ -395,6 +408,7 @@ export const tools = {
         },
         {
           id: 50,
+          disable: false,
           label: 'Elimina',
           value: 100, // DELETE
           icon: 'delete',
@@ -404,7 +418,15 @@ export const tools = {
       es:
         [
           {
+            id: 5,
+            disable: false,
+            label: 'Cortar',
+            value: 71, // CUT
+            icon: 'undo'
+          },
+          {
             id: 10,
+            disable: false,
             label: '',
             value: 120, // PROGRESS_BAR
             icon: 'rowing',
@@ -412,6 +434,7 @@ export const tools = {
           },
           {
             id: 20,
+            disable: false,
             label: 'Establecer Prioridad',
             value: 130, // PRIORITY
             icon: 'rowing',
@@ -419,6 +442,7 @@ export const tools = {
           },
           {
             id: 30,
+            disable: false,
             label: 'Completado',
             value: 110, // COMPLETED
             icon: 'check_circle',
@@ -426,6 +450,7 @@ export const tools = {
           },
           {
             id: 40,
+            disable: false,
             label: 'Establecer expiración',
             value: 101, // TOGGLE_EXPIRING
             icon: 'date_range',
@@ -433,6 +458,7 @@ export const tools = {
           },
           {
             id: 50,
+            disable: false,
             label: 'Borrar',
             value: 100, // DELETE
             icon: 'delete',
@@ -442,7 +468,15 @@ export const tools = {
       enUs:
         [
           {
+            id: 5,
+            disable: false,
+            label: 'Cut',
+            value: 71, // CUT
+            icon: 'undo'
+          },
+          {
             id: 10,
+            disable: false,
             label: '',
             value: 120, // PROGRESS_BAR
             icon: 'check_circle',
@@ -450,6 +484,7 @@ export const tools = {
           },
           {
             id: 20,
+            disable: false,
             label: 'Set Priority',
             value: 130, // PRIORITY
             icon: 'high_priority',
@@ -457,6 +492,7 @@ export const tools = {
           },
           {
             id: 30,
+            disable: false,
             label: 'Completed',
             value: 110, // COMPLETED
             icon: 'check_circle',
@@ -464,6 +500,7 @@ export const tools = {
           },
           {
             id: 40,
+            disable: false,
             label: 'Set Expiring',
             value: 101, // TOGGLE_EXPIRING
             icon: 'date_range',
@@ -471,6 +508,7 @@ export const tools = {
           },
           {
             id: 50,
+            disable: false,
             label: 'Delete',
             value: 100, // DELETE
             icon: 'trash',
@@ -484,18 +522,21 @@ export const tools = {
     it: [
       {
         id: 5,
+        disable: false,
         label: 'Taglia',
         value: 71, // CUT
         icon: 'undo'
       },
       {
         id: 10,
+        disable: false,
         label: 'Modifica',
         value: 160, // EDIT
         icon: 'create'
       },
       {
         id: 40,
+        disable: false,
         label: 'Imposta Scadenza',
         value: 101, // TOGGLE_EXPIRING
         icon: 'date_range',
@@ -503,6 +544,7 @@ export const tools = {
       },
       {
         id: 50,
+        disable: false,
         label: 'Elimina',
         value: 100, // DELETE
         icon: 'delete',
@@ -513,18 +555,21 @@ export const tools = {
       [
         {
           id: 5,
+          disable: false,
           label: 'Cortar',
           value: 71, // CUT
           icon: 'undo'
         },
         {
           id: 10,
+          disable: false,
           label: 'Editar',
           value: 160, // EDIT
           icon: 'create'
         },
         {
           id: 40,
+          disable: false,
           label: 'Establecer expiración',
           value: 101, // TOGGLE_EXPIRING
           icon: 'date_range',
@@ -532,6 +577,7 @@ export const tools = {
         },
         {
           id: 50,
+          disable: false,
           label: 'Borrar',
           value: 100, // DELETE
           icon: 'delete',
@@ -542,18 +588,21 @@ export const tools = {
       [
         {
           id: 5,
+          disable: false,
           label: 'Cut',
           value: 71, // CUT
           icon: 'undo'
         },
         {
           id: 10,
+          disable: false,
           label: 'Edit',
           value: 160, // EDIT
           icon: 'create'
         },
         {
           id: 40,
+          disable: false,
           label: 'Set Expiring',
           value: 101, // TOGGLE_EXPIRING
           icon: 'date_range',
@@ -561,6 +610,7 @@ export const tools = {
         },
         {
           id: 50,
+          disable: false,
           label: 'Delete',
           value: 100, // DELETE
           icon: 'trash',
@@ -574,6 +624,7 @@ export const tools = {
     it: [
       {
         id: 10,
+        disable: false,
         label: 'Mostra Task',
         value: 150,  // SHOW_TASK
         icon: 'rowing'
@@ -583,6 +634,7 @@ export const tools = {
       [
         {
           id: 10,
+          disable: false,
           label: 'Mostrar Tareas',
           value: 150,
           icon: 'rowing'
@@ -592,6 +644,7 @@ export const tools = {
       [
         {
           id: 10,
+          disable: false,
           label: 'Show Task',
           value: 150,
           icon: 'rowing'

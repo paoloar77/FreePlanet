@@ -1,6 +1,7 @@
 import { costanti } from "@src/store/Modules/costanti"
 import { UserStore } from "@store"
 import { tools } from '@src/store/Modules/tools'
+import { IAction } from '@src/model/Projects'
 
 export interface IPost {
   title: string
@@ -58,6 +59,7 @@ export interface IGlobalState {
   menulinks: {}
   listatodo: IMenuList[]
   arrConfig: IConfig[]
+  lastaction: IAction
 }
 
 export interface IMenuList {

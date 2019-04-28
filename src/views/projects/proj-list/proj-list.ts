@@ -171,7 +171,7 @@ export default class ProjList extends Vue {
       mymenu = tools.menuPopupConfigProject[UserStore.state.lang]
 
     if (mymenu.length > 0)
-      mymenu[0].disable = !(Projects.state.action.type === tools.MenuAction.CUT)
+      mymenu[0].disable = !(GlobalStore.state.lastaction.type === tools.MenuAction.CUT)
 
     return mymenu
   }
@@ -192,6 +192,14 @@ export default class ProjList extends Vue {
     return Math.round(this.itemselproj.hoursworked / this.itemselproj.hoursplanned * 100)
 
   }
+  get getCalcHoursLeft() {
+
+    if (this.itemselproj.hoursleft <= 0) {
+      return 0
+    }
+    return Math.round(this.itemselproj.hoursworked / this.itemselproj.hoursleft * 100)
+
+  }
 
   get calcprogressWeekly() {
 
@@ -207,7 +215,8 @@ export default class ProjList extends Vue {
 
       try {
 
-        let orerimaste = this.itemselproj.hoursplanned - this.itemselproj.hoursworked
+        // let orerimaste = this.itemselproj.hoursplanned - this.itemselproj.hoursworked
+        let orerimaste = this.itemselproj.hoursleft
         if (orerimaste < 0) {
           orerimaste = 0
         }
@@ -227,7 +236,7 @@ export default class ProjList extends Vue {
         console.log('   days', days, 'weeks', weeks, 'orerimaste', orerimaste, 'dateestimated', this.itemselproj.endwork_estimate)
 
         return this.itemselproj.endwork_estimate
-      }catch (e) {
+      } catch (e) {
         this.itemselproj.endwork_estimate = tools.getDateNull()
       }
 
@@ -379,11 +388,15 @@ export default class ProjList extends Vue {
     } else if (action === tools.MenuAction.PASTE) {
 
       const myaction: IAction = {
+        table: GlobalStore.state.lastaction.table,
         type: tools.MenuAction.PASTE,
         _id: this.itemselproj._id
       }
 
-      return await Projects.actions.ActionCutPaste(myaction)
+      if (myaction.table === tools.projects)
+        return await Projects.actions.ActionCutPaste(myaction)
+      else if (myaction.table === tools.todos)
+        return await Todos.actions.ActionCutPaste(myaction)
     }
   }
 

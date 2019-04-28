@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import { Component, Prop, Watch } from 'vue-property-decorator'
 
-import { UserStore } from '@modules'
+import { Projects, UserStore } from '@modules'
 import { tools } from '../../../store/Modules/tools'
 
 import { ITodo } from '../../../model/index'
@@ -460,6 +460,14 @@ export default class SingleTodo extends Vue {
       return await this.setCompleted()
     } else if (action === tools.MenuAction.PROGRESS_BAR) {
       return await this.updatedata('progress')
+    } else if (action === tools.MenuAction.CUT) {
+      const myaction = {
+        table: tools.todos,
+        type: tools.MenuAction.CUT,
+        _id: this.itemtodo._id,
+        cat: this.itemtodo.category
+      }
+      return await Projects.actions.ActionCutPaste(myaction)
     } else if (action === 0) {
       this.deselectAndExitEdit()
     }

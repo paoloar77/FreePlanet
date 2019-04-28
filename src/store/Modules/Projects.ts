@@ -18,19 +18,15 @@ const stateglob: IProjectsState = {
   showtype: costanti.ShowTypeTask.SHOW_LAST_N_COMPLETED,
   projects: [],
   insidePending: false,
-  visuLastCompleted: 10,
-  action: {
-    type: 0,
-    _id: ''
-  }
+  visuLastCompleted: 10
 }
 
-const listFieldsToChange: string [] = ['descr', 'longdescr', 'hoursplanned', 'hoursworked', 'id_parent', 'statusproj',
+const listFieldsToChange: string [] = ['descr', 'longdescr', 'hoursplanned', 'hoursleft', 'hoursworked', 'id_parent', 'statusproj',
   'category', 'expiring_at', 'priority', 'id_prev', 'pos', 'enableExpiring', 'progressCalc', 'live_url', 'test_url',
   'begin_development', 'begin_test', 'actualphase', 'totalphases', 'hoursweeky_plannedtowork', 'endwork_estimate',
   'privacyread', 'privacywrite', 'id_main_project', 'typeproj', 'favourite']
 
-const listFieldsUpdateCalculation: string [] = ['hoursplanned', 'hoursworked', 'progressCalc', 'endwork_estimate']
+const listFieldsUpdateCalculation: string [] = ['hoursplanned', 'hoursleft', 'hoursworked', 'progressCalc', 'endwork_estimate']
 
 const b = storeBuilder.module<IProjectsState>('Projects', stateglob)
 const stateGetter = b.state()
@@ -92,13 +88,14 @@ namespace Getters {
       actualphase: 1,
       hoursworked: 0,
       hoursplanned: 0,
+      hoursleft: 0,
       progressCalc: 0,
       privacyread: 'onlyme',
       privacywrite: 'onlyme',
       begin_development: tools.getDateNull(),
       begin_test: tools.getDateNull(),
       hoursweeky_plannedtowork: 0,
-      endwork_estimate: tools.getDateNull(),
+      endwork_estimate: tools.getDateNull()
     }
 
     return obj
@@ -246,9 +243,6 @@ namespace Mutations {
 
   async function movemyitem(state: IProjectsState, { myitemorig, myitemdest } ) {
     const indorig = tools.getIndexById(state.projects, myitemorig._id)
-
-    // console.log('myitemorig', myitemorig, 'indorig', indorig)
-    // console.log('myitemdest', myitemdest)
 
     state.projects.splice(indorig, 1)
     state.projects.push(myitemdest)
@@ -399,13 +393,13 @@ namespace Actions {
 
   async function ActionCutPaste(context, action: IAction) {
 
-    if (action.type === tools.MenuAction.CUT)
-      stateglob.action = action
-    else if (action.type === tools.MenuAction.PASTE) {
-      if (stateglob.action.type === tools.MenuAction.CUT) {
+    if (action.type === tools.MenuAction.CUT) {
+      GlobalStore.state.lastaction = action
+    } else if (action.type === tools.MenuAction.PASTE) {
+      if (GlobalStore.state.lastaction.type === tools.MenuAction.CUT) {
 
         // Change id_parent
-        const orig_obj = Getters.getters.getRecordById(stateglob.action._id)
+        const orig_obj = Getters.getters.getRecordById(GlobalStore.state.lastaction._id)
         const dest = Getters.getters.getRecordById(action._id)
 
         // console.log('dest', dest)
@@ -418,13 +412,12 @@ namespace Actions {
           dest_obj.modified = true
           dest_obj.id_prev = null
 
-          await Mutations.mutations.movemyitem({ myitemorig: orig_obj, myitemdest: dest_obj })
-        }
+          GlobalStore.state.lastaction.type = 0
 
-        stateglob.action.type = 0
+          return await Mutations.mutations.movemyitem({ myitemorig: orig_obj, myitemdest: dest_obj })
+        }
       }
     }
-    return true
   }
 
   export const actions = {
