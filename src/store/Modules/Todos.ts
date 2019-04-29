@@ -3,6 +3,7 @@ import { storeBuilder } from './Store/Store'
 
 import Api from '@api'
 import { tools } from './tools'
+import { lists } from './lists'
 import * as ApiTables from './ApiTables'
 import { GlobalStore, Todos, UserStore } from '@store'
 import globalroutines from './../../globalroutines/index'
@@ -28,7 +29,7 @@ const state: ITodosState = {
   visuLastCompleted: 10
 }
 
-const listFieldsToChange: string [] = ['descr', 'statustodo', 'category', 'expiring_at', 'priority', 'id_prev', 'pos', 'enableExpiring', 'progress', 'phase', 'assigned_to_userId', 'hoursplanned', 'hoursworked', 'start_date', 'completed_at']
+const listFieldsToChange: string [] = ['descr', 'statustodo', 'category', 'expiring_at', 'priority', 'id_prev', 'pos', 'enableExpiring', 'progress', 'phase', 'assigned_to_userId', 'hoursplanned', 'hoursworked', 'start_date', 'completed_at', 'themecolor', 'themebgcolor']
 
 const b = storeBuilder.module<ITodosState>('Todos', state)
 const stateGetter = b.state()
@@ -82,7 +83,9 @@ namespace Getters {
       assigned_to_userId: '',
       hoursplanned: 0,
       hoursworked: 0,
-      start_date: tools.getDateNull()
+      start_date: tools.getDateNull(),
+      themecolor: 'blue',
+      themebgcolor: 'white'
     }
     // return this.copy(objtodo)
     return objtodo
@@ -388,7 +391,7 @@ namespace Actions {
   }
 
   async function swapElems(context, itemdragend: IDrag) {
-    console.log('TODOS swapElems', itemdragend, state.todos, state.categories)
+    // console.log('TODOS swapElems', itemdragend, state.todos, state.categories)
 
     const cat = itemdragend.category
     const indcat = state.categories.indexOf(cat)
@@ -401,10 +404,10 @@ namespace Actions {
   async function ActionCutPaste(context, action: IAction) {
     console.log('ActionCutPaste', action)
 
-    if (action.type === tools.MenuAction.CUT) {
+    if (action.type === lists.MenuAction.CUT) {
       GlobalStore.state.lastaction = action
-    } else if (action.type === tools.MenuAction.PASTE) {
-      if (GlobalStore.state.lastaction.type === tools.MenuAction.CUT) {
+    } else if (action.type === lists.MenuAction.PASTE) {
+      if (GlobalStore.state.lastaction.type === lists.MenuAction.CUT) {
 
         // Change id_parent
         const orig_obj = Getters.getters.getRecordById(GlobalStore.state.lastaction._id, GlobalStore.state.lastaction.cat)

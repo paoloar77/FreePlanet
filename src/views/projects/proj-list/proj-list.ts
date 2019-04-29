@@ -6,6 +6,7 @@ import { SingleProject } from '../../../components/projects/SingleProject/index'
 import { CTodo } from '../../../components/todos/CTodo'
 
 import { tools } from '../../../store/Modules/tools'
+import { lists } from '../../../store/Modules/lists'
 import * as ApiTables from '../../../store/Modules/ApiTables'
 
 import { GlobalStore, Projects, Todos } from '@store'
@@ -98,6 +99,36 @@ export default class ProjList extends Vue {
     // console.log('idproj', this.idProjAtt, 'params' , this.$route.params)
   }
 
+  get classTitle() {
+    let cl = 'flex-item categorytitle shadow-4'
+    if (!!this.itemprojparent) {
+      cl += ' text-' + this.itemprojparent.themecolor + ' bg-' + this.itemprojparent.themebgcolor
+    } else {
+      cl += ' text-black' + ' bg-light-blue'
+    }
+    return cl
+  }
+
+  get classTitleTodoSel() {
+    let cl = 'flex-item shadow-4'
+    if (!!this.itemtodosel) {
+      cl += ' text-' + this.itemtodosel.themecolor + ' bg-' + this.itemtodosel.themebgcolor
+    } else {
+      cl += ' text-black' + ' bg-light-blue'
+    }
+    return cl
+  }
+
+  get classTitleProjSel() {
+    let cl = 'flex-item categorytitle shadow-4'
+    if (!!this.itemselproj) {
+      cl += ' text-' + this.itemselproj.themecolor + ' bg-' + this.itemselproj.themebgcolor
+    } else {
+      cl += ' text-black' + ' bg-light-blue'
+    }
+    return cl
+  }
+
   get tipoProj() {
     // console.log('this.$route.name', this.$route.name)
     return this.$route.name
@@ -171,7 +202,7 @@ export default class ProjList extends Vue {
       mymenu = tools.menuPopupConfigProject[UserStore.state.lang]
 
     if (mymenu.length > 0)
-      mymenu[0].disable = !(GlobalStore.state.lastaction.type === tools.MenuAction.CUT)
+      mymenu[0].disable = !(GlobalStore.state.lastaction.type === lists.MenuAction.CUT)
 
     return mymenu
   }
@@ -271,7 +302,7 @@ export default class ProjList extends Vue {
   }
 
   public showTask(field_value) {
-    return field_value === tools.MenuAction.SHOW_TASK
+    return field_value === lists.MenuAction.SHOW_TASK
   }
 
   public async onEndproj(itemdragend) {
@@ -378,18 +409,18 @@ export default class ProjList extends Vue {
 
   public async clickMenuProjList(action) {
     console.log('clickMenuProjList: ', action)
-    if (action === tools.MenuAction.ADD_PROJECT) {
+    if (action === lists.MenuAction.ADD_PROJECT) {
       const idnewelem = await this.addProject('', this.tipoProj)
       // get element by id
       const elem = this.getCompProjectById(idnewelem)
       // @ts-ignore
       elem.activeEdit()
       // console.log('idnewelem', idnewelem, 'Elem Trovato', elem)
-    } else if (action === tools.MenuAction.PASTE) {
+    } else if (action === lists.MenuAction.PASTE) {
 
       const myaction: IAction = {
         table: GlobalStore.state.lastaction.table,
-        type: tools.MenuAction.PASTE,
+        type: lists.MenuAction.PASTE,
         _id: this.itemselproj._id
       }
 

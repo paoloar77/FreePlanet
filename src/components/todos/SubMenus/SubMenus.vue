@@ -1,7 +1,9 @@
 <template>
     <q-list separator no-border class="todo-menu">
         <div v-for="field in menuPopupTodo" :key="field.value">
-            <q-item v-close-popup clickable v-if="(field.value !== 130) && (field.value !== 120)" :icon="field.icon"
+            <q-item v-close-popup clickable
+                    v-if="(field.arrlista === undefined) && (field.value !== 120)"
+                    :icon="field.icon"
                     @click="clickMenu(field.value)">
                 <q-item-section avatar>
                     <q-icon :name="field.icon"/>
@@ -11,14 +13,14 @@
                     <q-item-label>{{field.label}}</q-item-label>
                 </q-item-section>
 
-                <q-item-section side top v-if="field.value === 101">
+                <q-item-section side top v-if="field.value === lists.MenuAction.TOGGLE_EXPIRING">
                     <q-checkbox v-model="itemtodo.enableExpiring"/>
                 </q-item-section>
-                <q-item-section side v-if="field.value === 110">
+                <q-item-section side v-if="field.value === lists.MenuAction.COMPLETED">
                     <q-checkbox v-model="itemtodo.statustodo"/>
                 </q-item-section>
             </q-item>
-            <q-item clickable v-if="(field.value === 120)" :icon="field.icon"
+            <q-item clickable v-if="(field.value === lists.MenuAction.PROGRESS_BAR)" :icon="field.icon"
                     @click="clickMenu(field.value)">
                 <q-item-section avatar>
                     <q-icon :name="field.icon"/>
@@ -40,9 +42,10 @@
                     </div>
                 </q-item-section>
             </q-item>
-            <q-item clickable v-if="(field.value === 130)">
+            <q-item clickable
+                    v-if="(field.arrlista !== undefined)">
                 <q-item-section avatar>
-                    <q-icon name="priority_high" inverted color="primary"/>
+                    <q-icon :name="field.icon" inverted color="primary"/>
                 </q-item-section>
 
                 <q-item-section>{{field.label}}</q-item-section>
@@ -57,14 +60,16 @@
 
                             <q-item-section>
                                 <q-list dense>
-                                    <q-item clickable v-ripple v-for="fieldprior in selectPriority"
+                                    <q-item clickable v-ripple v-for="fieldprior in field.arrlista"
                                             :key="fieldprior.value"
-                                            @click="setPriority(fieldprior.value)">
-                                        <q-item-section avatar>
+                                            @click="selectSubMenu(field.value, fieldprior.value)">
+                                        <q-item-section avatar v-if="!!fieldprior.icon">
                                             <q-icon :name="fieldprior.icon" inverted color="primary"/>
                                         </q-item-section>
                                         <q-item-section>
+                                            <span :class="`text-`+fieldprior.value">
                                             {{fieldprior.label}}
+                                            </span>
                                         </q-item-section>
                                     </q-item>
                                 </q-list>

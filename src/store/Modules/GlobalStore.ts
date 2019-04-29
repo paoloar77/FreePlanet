@@ -148,7 +148,7 @@ namespace Getters {
     // PROGETTI -> FAVORITI :
     if (arrlistafavourite.length > 0) {
       arrMenu.push({
-        icon: '',
+        icon: 'favorite_border',
         nametranslate: 'pages.' + RouteNames.favouriteprojects,
         urlroute: RouteNames.favouriteprojects,
         level_parent: 0.0,
@@ -160,7 +160,7 @@ namespace Getters {
 
     // PROGETTI -> TUTTI :
     arrMenu.push({
-      icon: '',
+      icon: 'accessibility_new',
       nametranslate: 'pages.' + RouteNames.projectsall,
       urlroute: RouteNames.projectsall,
       level_parent: 0.0,
@@ -171,7 +171,7 @@ namespace Getters {
 
     // PROGETTI -> CONDIVISI :
     arrMenu.push({
-      icon: '',
+      icon: 'people_outline',
       nametranslate: 'pages.' + RouteNames.projectsshared,
       urlroute: RouteNames.projectsshared,
       level_parent: 0.0,
@@ -182,7 +182,7 @@ namespace Getters {
 
     // PROGETTI -> PERSONALI :
     arrMenu.push({
-      icon: '',
+      icon: 'person',
       nametranslate: 'pages.' + RouteNames.myprojects,
       urlroute: RouteNames.myprojects,
       level_parent: 0.0,

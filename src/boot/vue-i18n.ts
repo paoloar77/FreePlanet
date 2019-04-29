@@ -3,6 +3,7 @@ import VueI18n from 'vue-i18n'
 import messages from '../statics/i18n'
 import { tools } from '../store/Modules/tools'
 
+
 export default ({ app, store, Vue }) => {
   Vue.use(VueI18n)
   // Vue.config.lang = process.env.LANG_DEFAULT;

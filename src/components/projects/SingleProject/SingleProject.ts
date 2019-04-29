@@ -3,6 +3,7 @@ import { Component, Prop, Watch } from 'vue-property-decorator'
 
 import { Projects, UserStore } from '@modules'
 import { tools } from '../../../store/Modules/tools'
+import { lists } from '../../../store/Modules/lists'
 
 import { IProject } from '../../../model/index'
 
@@ -18,7 +19,6 @@ import { RouteNames } from '@src/router/route-names'
   name: 'SingleProject'
 })
 export default class SingleProject extends Vue {
-  public selectPriority: [] = []
   public menuPopupProj: any[] = []
   public classDescr: string = ''
   public classDescrEdit: string = ''
@@ -75,6 +75,16 @@ export default class SingleProject extends Vue {
   @Watch('itemproject.hoursplanned')
   public valueChangedhoursplanned() {
     this.watchupdate('hoursplanned')
+  }
+
+  @Watch('itemproject.themecolor')
+  public valueChangedthemecolor() {
+    this.watchupdate('themecolor')
+  }
+
+  @Watch('itemproject.themebgcolor')
+  public valueChangedthemebgcolor() {
+    this.watchupdate('themebgcolor')
   }
 
   @Watch('itemproject.hoursworked')
@@ -172,6 +182,9 @@ export default class SingleProject extends Vue {
       this.classDescrEdit += ' titleLista-item'
     }
 
+    this.classDescr += ' text-' + this.itemproject.themecolor + ' bg-' + this.itemproject.themebgcolor
+    this.classDescrEdit += ' text-' + this.itemproject.themecolor + ' bg-' + this.itemproject.themebgcolor
+
     this.percProgress = 'percProgress'
 
     this.classExpiring = 'flex-item data-item shadow-1 hide-if-small'
@@ -209,8 +222,6 @@ export default class SingleProject extends Vue {
     this.updateicon()
 
     this.updateClasses()
-
-    this.selectPriority = tools.selectPriority[UserStore.state.lang]
 
   }
 
@@ -357,7 +368,7 @@ export default class SingleProject extends Vue {
     if (((e.keyCode === 46)) && (this.precDescr === '') && !e.shiftKey) {
       e.preventDefault()
       this.deselectRiga()
-      this.clickMenu(tools.MenuAction.DELETE)
+      this.clickMenu(lists.MenuAction.DELETE)
         .then(() => {
           this.faiFocus('insertProjectBottom', true)
           return
@@ -385,7 +396,7 @@ export default class SingleProject extends Vue {
     if (((e.keyCode === 46)) && (this.precDescr === '') && !e.shiftKey) {
       e.preventDefault()
       this.deselectRiga()
-      this.clickMenu(tools.MenuAction.DELETE)
+      this.clickMenu(lists.MenuAction.DELETE)
         .then(() => {
           this.faiFocus('insertProjectBottom', true)
           return
@@ -486,21 +497,54 @@ export default class SingleProject extends Vue {
 
   public async clickMenu(action) {
     console.log('click menu: ', action)
-    if (action === tools.MenuAction.DELETE) {
+    if (action === lists.MenuAction.DELETE) {
       return await this.askConfirmDelete()
-    } else if (action === tools.MenuAction.TOGGLE_EXPIRING) {
+    } else if (action === lists.MenuAction.TOGGLE_EXPIRING) {
       return await this.enableExpiring()
-    } else if (action === tools.MenuAction.EDIT) {
+    } else if (action === lists.MenuAction.EDIT) {
       this.activeEdit()
-    } else if (action === tools.MenuAction.CUT) {
+    } else if (action === lists.MenuAction.CUT) {
       const myaction = {
         table: tools.projects,
-        type: tools.MenuAction.CUT,
+        type: lists.MenuAction.CUT,
         _id: this.itemproject._id
       }
       return await Projects.actions.ActionCutPaste(myaction)
     } else if (action === 0) {
       this.deselectAndExitEdit()
+    }
+
+  }
+
+  public selectSubMenu(action, elem) {
+    if (action === lists.MenuAction.PRIORITY) {
+      this.setPriority(elem)
+    } else if (action === lists.MenuAction.THEME) {
+      this.setThemeColor(elem, false)
+    } else if (action === lists.MenuAction.THEMEBG) {
+      this.setThemeColor(elem, true)
+    }
+  }
+
+  public setThemeColor(newtheme, bg: boolean) {
+    let changedfield = ''
+
+    if (bg) {
+      if (this.itemproject.themebgcolor !== newtheme) {
+        this.itemproject.themebgcolor = newtheme
+        changedfield = 'themebgcolor'
+      }
+    } else {
+      if (this.itemproject.themecolor !== newtheme) {
+        this.itemproject.themecolor = newtheme
+        changedfield = 'themecolor'
+      }
+    }
+
+    if (changedfield !== '') {
+      this.updatedata(changedfield)
+
+      this.updateicon()
     }
 
   }

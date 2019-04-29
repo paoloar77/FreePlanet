@@ -2,6 +2,7 @@ import Vue from 'vue'
 import { Component, Prop, Watch } from 'vue-property-decorator'
 
 import { tools } from '@src/store/Modules/tools'
+import { lists } from '@src/store/Modules/lists'
 import { UserStore } from '@store'
 import { IProject } from '../../../model/index'
 
@@ -16,18 +17,21 @@ import { IProject } from '../../../model/index'
 })
 
 export default class SubMenusProj extends Vue {
-  public selectPriority: [] = tools.selectPriority[UserStore.state.lang]
 
   @Prop({ required: false }) public menuPopupProj: any[]
   @Prop({ required: false }) public itemproject: IProject
   public $q: any
 
+  get lists() {
+    return lists
+  }
+
   public clickMenu(field) {
     this.$emit('clickMenu', field)
   }
 
-  public setPriority(field) {
-    this.$emit('setPriority', field)
+  public selectSubMenu(action, field) {
+    this.$emit('selectSubMenu', action, field)
   }
 
   public KeychangeProgress(e) {
@@ -46,9 +50,4 @@ export default class SubMenusProj extends Vue {
     }
   }
 
-  public create() {
-    this.selectPriority = tools.selectPriority[UserStore.state.lang]
-
-    console.log('CREAZIONE')
-  }
 }

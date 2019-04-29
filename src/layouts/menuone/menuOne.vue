@@ -19,8 +19,9 @@
                                               :to="child2.route"
                                               :header-inset-level="myitemmenu.level_child"
                                               :duration="300"
-                                              expand-icon="map"
+                                              :icon="child2.materialIcon"
                                               active-class="my-menu-active"
+                                              expand-icon-class="my-menu-icon-none"
                                               class="item item-link drawer-closer cursor-pointer my-menu"
                                               :label="getLabelByItem(child2)">
                                 <q-expansion-item v-if="!!child2.routes2" v-for="(child3, index) in child2.routes2"
@@ -28,7 +29,9 @@
                                                   :to="child3.route"
                                                   :header-inset-level="myitemmenu.level_child"
                                                   :duration="300"
-                                                  expand-icon="map"
+                                                  :icon="child3.materialIcon"
+                                                  :expand-icon="child3.icon"
+                                                  expand-icon-class="my-menu-separat"
                                                   active-class="my-menu-active"
                                                   class="item item-link drawer-closer cursor-pointer my-menu"
                                                   :label="getLabelByItem(child3)">

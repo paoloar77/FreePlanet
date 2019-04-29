@@ -4,6 +4,7 @@ import { storeBuilder } from './Store/Store'
 
 import Api from '@api'
 import { tools } from './tools'
+import { lists } from './lists'
 import * as ApiTables from './ApiTables'
 import { GlobalStore, UserStore } from '@store'
 import globalroutines from './../../globalroutines/index'
@@ -25,7 +26,7 @@ const stateglob: IProjectsState = {
 const listFieldsToChange: string [] = ['descr', 'longdescr', 'hoursplanned', 'hoursleft', 'hoursworked', 'id_parent', 'statusproj',
   'category', 'expiring_at', 'priority', 'id_prev', 'pos', 'enableExpiring', 'progressCalc', 'live_url', 'test_url',
   'begin_development', 'begin_test', 'actualphase', 'totalphases', 'hoursweeky_plannedtowork', 'endwork_estimate',
-  'privacyread', 'privacywrite', 'id_main_project', 'typeproj', 'favourite']
+  'privacyread', 'privacywrite', 'id_main_project', 'typeproj', 'favourite', 'themecolor', 'themebgcolor']
 
 const listFieldsUpdateCalculation: string [] = ['hoursplanned', 'hoursleft', 'hoursworked', 'progressCalc', 'endwork_estimate']
 
@@ -98,7 +99,9 @@ namespace Getters {
       begin_development: tools.getDateNull(),
       begin_test: tools.getDateNull(),
       hoursweeky_plannedtowork: 0,
-      endwork_estimate: tools.getDateNull()
+      endwork_estimate: tools.getDateNull(),
+      themecolor: '',
+      themebgcolor: ''
     }
 
     return obj
@@ -396,10 +399,10 @@ namespace Actions {
 
   async function ActionCutPaste(context, action: IAction) {
 
-    if (action.type === tools.MenuAction.CUT) {
+    if (action.type === lists.MenuAction.CUT) {
       GlobalStore.state.lastaction = action
-    } else if (action.type === tools.MenuAction.PASTE) {
-      if (GlobalStore.state.lastaction.type === tools.MenuAction.CUT) {
+    } else if (action.type === lists.MenuAction.PASTE) {
+      if (GlobalStore.state.lastaction.type === lists.MenuAction.CUT) {
 
         // Change id_parent
         const orig_obj = Getters.getters.getRecordById(GlobalStore.state.lastaction._id)

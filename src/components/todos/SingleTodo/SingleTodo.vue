@@ -72,7 +72,7 @@
                    icon="menu">
                 <q-menu v-if="CanIModifyTodo" ref="popmenu" self="top right">
                     <SubMenus :menuPopupTodo="menuPopupTodo" :itemtodo="itemtodo" @clickMenu="clickMenu"
-                              @setPriority="setPriority"></SubMenus>
+                              @selectSubMenu="selectSubMenu"></SubMenus>
                 </q-menu>
 
             </q-btn>

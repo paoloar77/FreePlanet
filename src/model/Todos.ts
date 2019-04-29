@@ -23,6 +23,8 @@ export interface ITodo {
   hoursplanned?: number
   hoursworked?: number
   start_date?: Date
+  themecolor?: string
+  themebgcolor?: string
 }
 
 export interface IParamTodo {

@@ -50,7 +50,7 @@
                    icon="menu">
                 <q-menu ref="popmenu" self="top right">
                     <SubMenusProj :menuPopupProj="menuPopupProj" :itemproject="itemproject" @clickMenu="clickMenu"
-                              @setPriority="setPriority"></SubMenusProj>
+                              @selectSubMenu="selectSubMenu"></SubMenusProj>
                 </q-menu>
             </q-btn>
         </div>

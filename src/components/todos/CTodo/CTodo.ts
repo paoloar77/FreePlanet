@@ -4,6 +4,7 @@ import { Component, Prop, Watch } from 'vue-property-decorator'
 import { IDrag, IProject, ITodo, ITodosState } from '../../../model/index'
 
 import { tools } from '../../../store/Modules/tools'
+import { lists } from '../../../store/Modules/lists'
 import * as ApiTables from '../../../store/Modules/ApiTables'
 
 import { GlobalStore, Todos } from '@store'
@@ -80,7 +81,7 @@ export default class CTodo extends Vue {
   public todos_completati: (state: ITodosState, category: string) => ITodo[]
 
   public showTask(field_value) {
-    return field_value === tools.MenuAction.SHOW_TASK
+    return field_value === lists.MenuAction.SHOW_TASK
   }
 
   public async onEndtodo(itemdragend) {
@@ -176,15 +177,15 @@ export default class CTodo extends Vue {
   public async updateitemtodo({ myitem, field }) {
     console.log('calling MODIFY updateitemtodo', myitem, field)
 
-    const itemdragend: IDrag = {
-      category: this.categoryAtt,
-      field,
-      idelemtochange: myitem._id,
-      prioritychosen: myitem.priority,
-      atfirst: false
-    }
-
-    await Todos.actions.swapElems(itemdragend)
+    // const itemdragend: IDrag = {
+    //   category: this.categoryAtt,
+    //   field,
+    //   idelemtochange: myitem._id,
+    //   prioritychosen: myitem.priority,
+    //   atfirst: false
+    // }
+    //
+    // await Todos.actions.swapElems(itemdragend)
 
     await Todos.actions.modify({ myitem, field })
 
@@ -218,7 +219,7 @@ export default class CTodo extends Vue {
         }
       }
       if (des) {
-        console.log('contr', contr)
+        // console.log('contr', contr)
         // @ts-ignore
         contr.deselectAndExitEdit()
       }

@@ -8,6 +8,8 @@ import * as ApiTables from '@src/store/Modules/ApiTables'
 import translate from '@src/globalroutines/util'
 import { RouteNames } from '@src/router/route-names'
 
+import { lists } from './lists'
+
 export interface INotify {
   color?: string | 'primary'
   textColor?: string
@@ -63,18 +65,6 @@ export const tools = {
     COMPLETED: 10
   },
 
-  MenuAction: {
-    CUT: 71,
-    PASTE: 72,
-    DELETE: 100,
-    TOGGLE_EXPIRING: 101,
-    COMPLETED: 110,
-    PROGRESS_BAR: 120,
-    PRIORITY: 130,
-    SHOW_TASK: 150,
-    EDIT: 160,
-    ADD_PROJECT: 200
-  },
   selectPhase: {
     it: [
       {
@@ -279,89 +269,6 @@ export const tools = {
 
   }
   ,
-  selectPriority: {
-    it: [
-      {
-        id: 1,
-        label: 'Alta',
-        value: 2,
-        icon: 'expand_less'
-      },
-      {
-        id: 2,
-        label: 'Normale',
-        value: 1,
-        icon: 'remove'
-      },
-      {
-        id: 3,
-        label: 'Bassa',
-        value: 0,
-        icon: 'expand_more'
-      }],
-    es:
-      [
-        {
-          id: 1,
-          label: 'Alta',
-          value: 2,
-          icon: 'expand_less'
-        },
-        {
-          id: 2,
-          label: 'Normal',
-          value: 1,
-          icon: 'remove'
-        },
-        {
-          id: 3,
-          label: 'Baja',
-          value: 0,
-          icon: 'expand_more'
-        }],
-    enUs:
-      [
-        {
-          id: 1,
-          label: 'High',
-          value: 2,
-          icon: 'expand_less'
-        },
-        {
-          id: 2,
-          label: 'Normal',
-          value: 1,
-          icon: 'remove'
-        },
-        {
-          id: 3,
-          label: 'Low',
-          value: 0,
-          icon: 'expand_more'
-        }],
-    de:
-      [
-        {
-          id: 1,
-          label: 'High',
-          value: 2,
-          icon: 'expand_less'
-        },
-        {
-          id: 2,
-          label: 'Normal',
-          value: 1,
-          icon: 'remove'
-        },
-        {
-          id: 3,
-          label: 'Low',
-          value: 0,
-          icon: 'expand_more'
-        }]
-
-  }
-  ,
 
   INDEX_MENU_DELETE: 4,
 
@@ -372,14 +279,14 @@ export const tools = {
           id: 5,
           disable: false,
           label: 'Taglia',
-          value: 71, // CUT
+          value: lists.MenuAction.CUT,
           icon: 'undo'
         },
         {
           id: 10,
           disable: false,
           label: '',
-          value: 120, // PROGRESS_BAR
+          value: lists.MenuAction.PROGRESS_BAR,
           icon: 'rowing',
           checked: true
         },
@@ -387,15 +294,34 @@ export const tools = {
           id: 20,
           disable: false,
           label: 'Imposta Priorità',
-          value: 130, // PRIORITY
+          value: lists.MenuAction.PRIORITY,
           icon: 'rowing',
-          checked: false
+          checked: false,
+          arrlista: lists.selectPriority.it
+        },
+        {
+          id: 21,
+          disable: false,
+          label: translation.it.proj.themecolor,
+          value: lists.MenuAction.THEME,
+          icon: 'format_color_text',
+          checked: false,
+          arrlista: lists.selectTheme
+        },
+        {
+          id: 22,
+          disable: false,
+          label: translation.it.proj.themebgcolor,
+          value: lists.MenuAction.THEMEBG,
+          icon: 'format_color_fill',
+          checked: false,
+          arrlista: lists.selectTheme
         },
         {
           id: 30,
           disable: false,
           label: 'Completato',
-          value: 110, // COMPLETED
+          value: lists.MenuAction.COMPLETED,
           icon: 'check_circle',
           checked: true
         },
@@ -403,7 +329,7 @@ export const tools = {
           id: 40,
           disable: false,
           label: 'Imposta Scadenza',
-          value: 101, // TOGGLE_EXPIRING
+          value: lists.MenuAction.TOGGLE_EXPIRING,
           icon: 'date_range',
           checked: true
         },
@@ -411,7 +337,7 @@ export const tools = {
           id: 50,
           disable: false,
           label: 'Elimina',
-          value: 100, // DELETE
+          value: lists.MenuAction.DELETE,
           icon: 'delete',
           checked: false
         }
@@ -422,14 +348,14 @@ export const tools = {
             id: 5,
             disable: false,
             label: 'Cortar',
-            value: 71, // CUT
+            value: lists.MenuAction.CUT,
             icon: 'undo'
           },
           {
             id: 10,
             disable: false,
             label: '',
-            value: 120, // PROGRESS_BAR
+            value: lists.MenuAction.PROGRESS_BAR,
             icon: 'rowing',
             checked: true
           },
@@ -437,15 +363,34 @@ export const tools = {
             id: 20,
             disable: false,
             label: 'Establecer Prioridad',
-            value: 130, // PRIORITY
+            value: lists.MenuAction.PRIORITY,
             icon: 'rowing',
-            checked: false
+            checked: false,
+            arrlista: lists.selectPriority.es
+          },
+          {
+            id: 21,
+            disable: false,
+            label: translation.es.proj.themecolor,
+            value: lists.MenuAction.THEME,
+            icon: 'format_color_text',
+            checked: false,
+            arrlista: lists.selectTheme
+          },
+          {
+            id: 22,
+            disable: false,
+            label: translation.es.proj.themebgcolor,
+            value: lists.MenuAction.THEMEBG,
+            icon: 'format_color_fill',
+            checked: false,
+            arrlista: lists.selectTheme
           },
           {
             id: 30,
             disable: false,
             label: 'Completado',
-            value: 110, // COMPLETED
+            value: lists.MenuAction.COMPLETED,
             icon: 'check_circle',
             checked: true
           },
@@ -453,7 +398,7 @@ export const tools = {
             id: 40,
             disable: false,
             label: 'Establecer expiración',
-            value: 101, // TOGGLE_EXPIRING
+            value: lists.MenuAction.TOGGLE_EXPIRING,
             icon: 'date_range',
             checked: true
           },
@@ -461,7 +406,7 @@ export const tools = {
             id: 50,
             disable: false,
             label: 'Borrar',
-            value: 100, // DELETE
+            value: lists.MenuAction.DELETE,
             icon: 'delete',
             checked: false
           }
@@ -472,14 +417,14 @@ export const tools = {
             id: 5,
             disable: false,
             label: 'Cut',
-            value: 71, // CUT
+            value: lists.MenuAction.CUT,
             icon: 'undo'
           },
           {
             id: 10,
             disable: false,
             label: '',
-            value: 120, // PROGRESS_BAR
+            value: lists.MenuAction.PROGRESS_BAR,
             icon: 'check_circle',
             checked: true
           },
@@ -487,15 +432,34 @@ export const tools = {
             id: 20,
             disable: false,
             label: 'Set Priority',
-            value: 130, // PRIORITY
+            value: lists.MenuAction.PRIORITY,
             icon: 'high_priority',
-            checked: false
+            checked: false,
+            arrlista: lists.selectPriority.enUs
+          },
+          {
+            id: 21,
+            disable: false,
+            label: translation.enUs.proj.themecolor,
+            value: lists.MenuAction.THEME,
+            icon: 'format_color_text',
+            checked: false,
+            arrlista: lists.selectTheme
+          },
+          {
+            id: 22,
+            disable: false,
+            label: translation.enUs.proj.themebgcolor,
+            value: lists.MenuAction.THEMEBG,
+            icon: 'format_color_fill',
+            checked: false,
+            arrlista: lists.selectTheme
           },
           {
             id: 30,
             disable: false,
             label: 'Completed',
-            value: 110, // COMPLETED
+            value: lists.MenuAction.COMPLETED,
             icon: 'check_circle',
             checked: true
           },
@@ -503,7 +467,7 @@ export const tools = {
             id: 40,
             disable: false,
             label: 'Set Expiring',
-            value: 101, // TOGGLE_EXPIRING
+            value: lists.MenuAction.TOGGLE_EXPIRING,
             icon: 'date_range',
             checked: true
           },
@@ -511,7 +475,7 @@ export const tools = {
             id: 50,
             disable: false,
             label: 'Delete',
-            value: 100, // DELETE
+            value: lists.MenuAction.DELETE,
             icon: 'trash',
             checked: false
           }
@@ -542,6 +506,24 @@ export const tools = {
         value: 101, // TOGGLE_EXPIRING
         icon: 'date_range',
         checked: true
+      },
+      {
+        id: 45,
+        disable: false,
+        label: translation.it.proj.themecolor,
+        value: lists.MenuAction.THEME,
+        icon: 'format_color_text',
+        checked: false,
+        arrlista: lists.selectTheme
+      },
+      {
+        id: 46,
+        disable: false,
+        label: translation.it.proj.themebgcolor,
+        value: lists.MenuAction.THEMEBG,
+        icon: 'format_color_fill',
+        checked: false,
+        arrlista: lists.selectTheme
       },
       {
         id: 50,
@@ -577,6 +559,24 @@ export const tools = {
           checked: true
         },
         {
+          id: 45,
+          disable: false,
+          label: translation.es.proj.themecolor,
+          value: lists.MenuAction.THEME,
+          icon: 'format_color_text',
+          checked: false,
+          arrlista: lists.selectTheme
+        },
+        {
+          id: 46,
+          disable: false,
+          label: translation.es.proj.themebgcolor,
+          value: lists.MenuAction.THEMEBG,
+          icon: 'format_color_fill',
+          checked: false,
+          arrlista: lists.selectTheme
+        },
+        {
           id: 50,
           disable: false,
           label: 'Borrar',
@@ -608,6 +608,24 @@ export const tools = {
           value: 101, // TOGGLE_EXPIRING
           icon: 'date_range',
           checked: true
+        },
+        {
+          id: 45,
+          disable: false,
+          label: translation.enUs.proj.themecolor,
+          value: lists.MenuAction.THEME,
+          icon: 'format_color_text',
+          checked: false,
+          arrlista: lists.selectTheme
+        },
+        {
+          id: 46,
+          disable: false,
+          label: translation.enUs.proj.themebgcolor,
+          value: lists.MenuAction.THEMEBG,
+          icon: 'format_color_fill',
+          checked: false,
+          arrlista: lists.selectTheme
         },
         {
           id: 50,
@@ -900,7 +918,7 @@ export const tools = {
   getPriorityByInd(index) {
     // console.log('LANG in PRIOR', UserStore.state.lang)
     try {
-      const arr = tools.selectPriority[UserStore.state.lang]
+      const arr = lists.selectPriority[UserStore.state.lang]
       for (const rec of arr) {
         if (rec.value === index) {
           return rec.label
@@ -1032,7 +1050,7 @@ export const tools = {
 
     if (tools.isOkIndex(myarr, itemdragend.newIndex) && tools.isOkIndex(myarr, itemdragend.oldIndex)) {
 
-      console.log('SPLICE!')
+      console.log('***  SPLICE!')
       // console.log('   PRIMA!', tools.logga_arrproj(myarr))
       myarr.splice(itemdragend.newIndex, 0, myarr.splice(itemdragend.oldIndex, 1)[0])
       // console.log('   DOPO!', tools.logga_arrproj(myarr))

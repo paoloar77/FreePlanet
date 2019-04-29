@@ -19,7 +19,7 @@
 
                                 </q-btn>
 
-                                <div class="flex-item categorytitle shadow-4">{{descrProject | capitalize}}</div>
+                                <div :class="classTitle">{{descrProject | capitalize}}</div>
                                 <div class="flex-item">
                                     <q-btn push
                                            size="sm"
@@ -141,7 +141,7 @@
 
                             <!--</q-rating>-->
                             <q-icon class="flex-item flex-icon" name="format_align_center"/>
-                            <div class="flex-item projecttitle shadow-4">
+                            <div :class="classTitleProjSel">
                                 {{itemselproj.descr}}
                             </div>
                         </div>
@@ -270,6 +270,7 @@
                                 <q-input
                                         ref="input4"
                                         v-model="itemtodosel.descr"
+                                        :class="classTitleTodoSel"
                                         :label="$t('proj.longdescr')"
                                         outlined
                                         :readonly="readonly_PanelPrivacy"

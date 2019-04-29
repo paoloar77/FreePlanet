@@ -260,7 +260,9 @@ const messages = {
       endwork_estimate: 'Data fine lavori stimata',
       privacyread: 'Chi lo puo vedere:',
       privacywrite: 'Chi lo puo modificare:',
-      totalphases: 'Totale Fasi'
+      totalphases: 'Totale Fasi',
+      themecolor: 'Tema Colore',
+      themebgcolor: 'Tema Colore Sfondo'
     },
   },
   'es': {
@@ -519,7 +521,9 @@ const messages = {
       endwork_estimate: 'Fecha estimada de finalización',
       privacyread: 'Quien puede verlo:',
       privacywrite: 'Quien puede modificarlo:',
-      totalphases: 'Fases totales'
+      totalphases: 'Fases totales',
+      themecolor: 'Tema Colores',
+      themebgcolor: 'Tema Colores Fondo'
     },
   },
   'enUs': {
@@ -778,7 +782,9 @@ const messages = {
       endwork_estimate: 'Estimated completion date',
       privacyread: 'Who can see it:',
       privacywrite: 'Who can modify if:',
-      totalphases: 'Total Phase'
+      totalphases: 'Total Phase',
+      themecolor: 'Theme Color',
+      themebgcolor: 'Theme Color Background'
     },
   },
 };

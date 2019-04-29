@@ -44,6 +44,8 @@ export interface IProject {
   actualphase?: number
   privacyread?: string
   privacywrite?: string
+  themecolor?: string
+  themebgcolor?: string
 }
 
 export interface IProjectsState {
