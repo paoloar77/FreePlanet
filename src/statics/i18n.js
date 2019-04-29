@@ -129,8 +129,9 @@ const messages = {
       Test2: 'Test2',
       projects: 'Progetti',
       favproj: 'Favoriti',
-      projectsShared: 'Condivisi',
-      myprojects: 'Personali'
+      projall: 'Tutti',
+      projectsShared: 'Miei Condivisi',
+      myprojects: 'Miei Personali'
     },
     components: {
       authentication: {
@@ -393,8 +394,9 @@ const messages = {
       Test2: 'Test2',
       projects: 'Proyectos',
       favproj: 'Favoritos',
-      projectsShared: 'Compartidos',
-      myprojects: 'Personales',
+      projall: 'Todos',
+      projectsShared: 'Mis Compartidos',
+      myprojects: 'Mis Personales',
     },
     components: {
       authentication: {
@@ -651,8 +653,9 @@ const messages = {
       Test2: 'Test2',
       projects: 'Projects',
       favproj: 'Favorite',
-      projectsShared: 'Shared',
-      myprojects: 'Personals',
+      projall: 'All',
+      projectsShared: 'My Shared',
+      myprojects: 'My Personals',
     },
     components: {
       authentication: {

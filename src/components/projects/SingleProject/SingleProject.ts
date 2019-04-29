@@ -11,6 +11,7 @@ import { CDate } from '../../CDate'
 
 import { date } from 'quasar'
 import { GlobalStore } from '@store'
+import { RouteNames } from '@src/router/route-names'
 
 @Component({
   components: { SubMenusProj, CDate },
@@ -283,12 +284,16 @@ export default class SingleProject extends Vue {
     return this.itemproject.userId === UserStore.state.userId
   }
 
+  get tipoProj() {
+    return this.$route.name
+  }
+
   get getrouteto() {
-    return tools.getUrlByTipoProj(this.isMyProject) + this.itemproject._id
+    return tools.getUrlByTipoProj(this.tipoProj) + this.itemproject._id
   }
 
   public goIntoTheProject() {
-    this.$router.replace(tools.getUrlByTipoProj(this.isMyProject) + this.itemproject._id)
+    this.$router.replace(tools.getUrlByTipoProj(this.tipoProj) + this.itemproject._id)
   }
 
   public editProject() {

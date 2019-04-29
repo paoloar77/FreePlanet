@@ -42,7 +42,7 @@ export interface IDrag {
   category?: string
   id_proj?: string
   atfirst?: boolean
-  mieiproj?: boolean
+  tipoproj?: string
 }
 
 export interface ITodosState {

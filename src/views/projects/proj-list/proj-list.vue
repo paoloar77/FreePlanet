@@ -81,9 +81,9 @@
                         <div style="display: none">{{ prior = 0, priorcomplet = false }}</div>
                         <div>
                             <!--<q-infinite-scroll :handler="loadMoreTodo" :offset="7">-->
-                            <div class="container" v-dragula="projs_dacompletare(idProjAtt, areMyProjects)" drake="second">
+                            <div class="container" v-dragula="projs_dacompletare(idProjAtt, tipoProj)" drake="second">
                                 <div :id="tools.getmyid(myproj._id)" :index="index"
-                                     v-for="(myproj, index) in projs_dacompletare(idProjAtt, areMyProjects)"
+                                     v-for="(myproj, index) in projs_dacompletare(idProjAtt, tipoProj)"
                                      :key="myproj._id" class="myitemdrag">
 
                                     <SingleProject ref="singleproject" @deleteItemproj="mydeleteitemproj(myproj._id)"
@@ -105,7 +105,7 @@
                                  color="blue-12"
                                  :label="$t('proj.insertbottom')"
                                  :after="[{icon: 'arrow_forward', content: true, handler () {}}]"
-                                 v-on:keyup.enter="dbInsert(false)">
+                                 v-on:keyup.enter="dbInsert()">
 
                         </q-input>
 

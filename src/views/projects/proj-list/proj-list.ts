@@ -63,7 +63,7 @@ export default class ProjList extends Vue {
   }
 
   @Getter('projs_dacompletare', { namespace })
-  public projs_dacompletare: (state: IProjectsState, id_parent: string, miei: boolean) => IProject[]
+  public projs_dacompletare: (state: IProjectsState, id_parent: string, tipoproj: string) => IProject[]
 
   @Watch('projs_dacompletare')
   public changeitems() {
@@ -72,7 +72,7 @@ export default class ProjList extends Vue {
 
   @Watch('$route.name')
   public changename() {
-    console.log('tools.getUrlByTipoProj(this.areMyProjects)', tools.getUrlByTipoProj(this.areMyProjects))
+    console.log('tools.getUrlByTipoProj(this.tipoProj)', tools.getUrlByTipoProj(this.tipoProj))
     this.changeparent()
   }
 
@@ -98,9 +98,9 @@ export default class ProjList extends Vue {
     // console.log('idproj', this.idProjAtt, 'params' , this.$route.params)
   }
 
-  get areMyProjects() {
+  get tipoProj() {
     // console.log('this.$route.name', this.$route.name)
-    return this.$route.name === RouteNames.myprojects
+    return this.$route.name
   }
 
   get readonly_PanelPrivacy() {
@@ -132,7 +132,7 @@ export default class ProjList extends Vue {
   }
 
   get getrouteup() {
-    return tools.getUrlByTipoProj(this.areMyProjects) + this.itemproj.id_parent
+    return tools.getUrlByTipoProj(this.tipoProj) + this.itemproj.id_parent
   }
 
   get tools() {
@@ -294,7 +294,7 @@ export default class ProjList extends Vue {
           id_proj: this.idProjAtt,
           newIndex: this.getElementIndex(args.el),
           oldIndex: this.getElementOldIndex(args.el),
-          mieiproj: this.areMyProjects
+          tipoproj: this.tipoProj
         }
 
         // console.log('args', args, itemdragend)
@@ -373,13 +373,13 @@ export default class ProjList extends Vue {
 
     this.projbottom = ''
 
-    return this.addProject(descr)
+    return this.addProject(descr, this.tipoProj)
   }
 
   public async clickMenuProjList(action) {
     console.log('clickMenuProjList: ', action)
     if (action === tools.MenuAction.ADD_PROJECT) {
-      const idnewelem = await this.addProject('')
+      const idnewelem = await this.addProject('', this.tipoProj)
       // get element by id
       const elem = this.getCompProjectById(idnewelem)
       // @ts-ignore
@@ -412,14 +412,25 @@ export default class ProjList extends Vue {
 
   // const descr = this.$t('project.newproj').toString()
 
-  public async addProject(descr) {
+  public async addProject(descr, tipoproj: string) {
     const projatt = Projects.getters.getRecordById(this.idProjAtt)
-    const myobj: IProject = {
-      descr,
-      id_parent: this.idProjAtt,
-      privacyread: projatt.privacyread,
-      privacywrite: projatt.privacywrite,
-      actualphase: projatt.actualphase
+    let myobj: IProject = null
+    if (this.idProjAtt === process.env.PROJECT_ID_MAIN) {
+      myobj = {
+        descr,
+        id_parent: this.idProjAtt,
+        privacyread: tools.getprivacyreadbytipoproj(tipoproj),
+        privacywrite: tools.getprivacywritebytipoproj(tipoproj),
+        actualphase: projatt.actualphase
+      }
+    } else {
+      myobj = {
+        descr,
+        id_parent: this.idProjAtt,
+        privacyread: projatt.privacyread,
+        privacywrite: projatt.privacywrite,
+        actualphase: projatt.actualphase
+      }
     }
 
     if (this.itemproj === undefined)

@@ -313,7 +313,7 @@ namespace Actions {
     } else {
       console.log('INSERT AT THE BOTTOM')
       // INSERT AT THE BOTTOM , so GET LAST ITEM
-      const lastelem = tools.getLastListNotCompleted(nametable, objtodo.category)
+      const lastelem = tools.getLastListNotCompleted(nametable, objtodo.category, this.tipoProj)
 
       objtodo.id_prev = (!!lastelem) ? lastelem._id : ApiTables.LIST_START
     }

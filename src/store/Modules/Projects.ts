@@ -9,6 +9,7 @@ import { GlobalStore, UserStore } from '@store'
 import globalroutines from './../../globalroutines/index'
 import objectId from '@src/js/objectId'
 import { costanti } from '@src/store/Modules/costanti'
+import { RouteNames } from '@src/router/route-names'
 
 const nametable = 'projects'
 
@@ -51,12 +52,14 @@ function updateDataCalculated(projout, projin) {
   })
 }
 
-function getproj(projects, idproj, miei: boolean, favourite: boolean) {
-  if (miei && !favourite) {
-    return tools.mapSort(projects.filter((proj) => (proj.id_parent === idproj) && (proj.userId === UserStore.state.userId)))
-  } else {
-    return tools.mapSort(projects.filter((proj) => (proj.id_parent === idproj) && (proj.userId !== UserStore.state.userId)))
-  }
+function getproj(projects, idproj, tipoproj: string) {
+
+  if (tipoproj === RouteNames.myprojects)
+    return tools.mapSort(projects.filter((proj) => (proj.id_parent === idproj) && (proj.userId === UserStore.state.userId) && (proj.privacyread === Privacy.onlyme)))
+  else if (tipoproj === RouteNames.projectsshared)
+    return tools.mapSort(projects.filter((proj) => (proj.id_parent === idproj) && (proj.userId === UserStore.state.userId) && (proj.privacyread !== Privacy.onlyme)))
+  else if (tipoproj === RouteNames.projectsall)
+    return tools.mapSort(projects.filter((proj) => (proj.id_parent === idproj) && (proj.userId !== UserStore.state.userId) ))
 }
 
 namespace Getters {
@@ -101,20 +104,20 @@ namespace Getters {
     return obj
   }, 'getRecordEmpty')
 
-  const projs_dacompletare = b.read((state: IProjectsState) => (id_parent: string, miei: boolean): IProject[] => {
+  const projs_dacompletare = b.read((state: IProjectsState) => (id_parent: string, tipoproj: string): IProject[] => {
     // console.log('projs_dacompletare', miei)
     if (state.projects) {
       // console.log('state.projects', state.projects)
-      return getproj(state.projects, id_parent, miei, false)
+      return getproj(state.projects, id_parent, tipoproj)
     } else {
       return []
     }
   }, 'projs_dacompletare')
 
-  const listaprojects = b.read((state: IProjectsState) => (miei: boolean, favourite: boolean): IMenuList[] => {
+  const listaprojects = b.read((state: IProjectsState) => (tipoproj: string): IMenuList[] => {
     if (state.projects) {
       // console.log('state.projects', state.projects)
-      const listaproj = getproj(state.projects, process.env.PROJECT_ID_MAIN, miei, favourite)
+      const listaproj = getproj(state.projects, process.env.PROJECT_ID_MAIN, tipoproj)
       const myarr: IMenuList[] = []
       for (const proj of listaproj) {
         myarr.push({ nametranslate: '', description: proj.descr, idelem: proj._id })
@@ -350,7 +353,7 @@ namespace Actions {
     } else {
       console.log('INSERT AT THE BOTTOM')
       // INSERT AT THE BOTTOM , so GET LAST ITEM
-      const lastelem = tools.getLastListNotCompleted(nametable, objproj.id_parent)
+      const lastelem = tools.getLastListNotCompleted(nametable, objproj.id_parent, this.tipoProj)
 
       objproj.id_prev = (!!lastelem) ? lastelem._id : ApiTables.LIST_START
     }
@@ -385,7 +388,7 @@ namespace Actions {
   async function swapElems(context, itemdragend: IDrag) {
     console.log('PROJECT swapElems', itemdragend, stateglob.projects)
 
-    const myarr = Getters.getters.projs_dacompletare(itemdragend.id_proj, itemdragend.mieiproj)
+    const myarr = Getters.getters.projs_dacompletare(itemdragend.id_proj, itemdragend.tipoproj)
 
     tools.swapGeneralElem(nametable, myarr, itemdragend, listFieldsToChange)
 

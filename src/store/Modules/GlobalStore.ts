@@ -138,9 +138,9 @@ namespace Getters {
     let arrlistaprojtutti = []
     let arrlistaprojmiei = []
     if (SHOW_PROJINTHEMENU) {
-      arrlistaprojtutti = Projects.getters.listaprojects(false, false)
-      arrlistaprojmiei = Projects.getters.listaprojects(true, false)
-      arrlistafavourite = Projects.getters.listaprojects(false, true)
+      arrlistaprojtutti = Projects.getters.listaprojects(RouteNames.projectsall)
+      arrlistaprojmiei = Projects.getters.listaprojects(RouteNames.myprojects)
+      arrlistafavourite = Projects.getters.listaprojects(RouteNames.favouriteprojects)
     }
 
     const arrMenu: IMenuList[] = []
@@ -158,11 +158,22 @@ namespace Getters {
       })
     }
 
+    // PROGETTI -> TUTTI :
+    arrMenu.push({
+      icon: '',
+      nametranslate: 'pages.' + RouteNames.projectsall,
+      urlroute: RouteNames.projectsall,
+      level_parent: 0.0,
+      level_child: 0.5,
+      routes2: [],
+      idelem: process.env.PROJECT_ID_MAIN
+    })
+
     // PROGETTI -> CONDIVISI :
     arrMenu.push({
       icon: '',
       nametranslate: 'pages.' + RouteNames.projectsshared,
-      urlroute: 'projects',
+      urlroute: RouteNames.projectsshared,
       level_parent: 0.0,
       level_child: 0.5,
       routes2: arrlistaprojtutti,
@@ -173,7 +184,7 @@ namespace Getters {
     arrMenu.push({
       icon: '',
       nametranslate: 'pages.' + RouteNames.myprojects,
-      urlroute: 'myprojects',
+      urlroute: RouteNames.myprojects,
       level_parent: 0.0,
       level_child: 0.5,
       routes2: arrlistaprojmiei,
@@ -431,11 +442,11 @@ namespace Actions {
     const mykey = process.env.PUBLICKEY_PUSH
     const mystate = state
     return navigator.serviceWorker.ready
-      .then(function (swreg) {
+      .then((swreg) => {
         reg = swreg
         return swreg.pushManager.getSubscription()
       })
-      .then(function (subscription) {
+      .then((subscription) => {
         mystate.wasAlreadySubscribed = !(subscription === null)
 
         if (mystate.wasAlreadySubscribed) {
@@ -452,10 +463,10 @@ namespace Actions {
           })
         }
       })
-      .then(function (newSub) {
+      .then((newSub) => {
         saveNewSubscriptionToServer(context, newSub)
       })
-      .catch(function (err) {
+      .catch((err) => {
         console.log('ERR createPushSubscription:', err)
       })
   }

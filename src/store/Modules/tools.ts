@@ -6,6 +6,7 @@ import Quasar, { date } from 'quasar'
 import { IListRoutes, IMenuList, IProject, ITodo, Privacy } from '@src/model'
 import * as ApiTables from '@src/store/Modules/ApiTables'
 import translate from '@src/globalroutines/util'
+import { RouteNames } from '@src/router/route-names'
 
 export interface INotify {
   color?: string | 'primary'
@@ -1185,17 +1186,19 @@ export const tools = {
   }
   ,
 
-  getLastListNotCompleted(nametable, cat, isproj = false, miei = false) {
+  getLastListNotCompleted(nametable, cat, tipoproj: string) {
     // const module = tools.getModulesByTable(nametable)
     let arr = []
     if (nametable === 'projects')
-      arr = Projects.getters.projs_dacompletare(cat, miei)
+      arr = Projects.getters.projs_dacompletare(cat, tipoproj)
     else if (nametable === 'todos')
       arr = Todos.getters.items_dacompletare(cat)
 
-    return (arr.length > 0) ? arr[arr.length - 1] : null
-  }
-  ,
+    if (!!arr)
+      return (arr.length > 0) ? arr[arr.length - 1] : null
+    else
+      return null
+  },
 
   getElemByIndex(myarr, index) {
     if (index >= 0 && index < myarr.length) {
@@ -1509,14 +1512,11 @@ export const tools = {
     return idproj === process.env.PROJECT_ID_MAIN
   },
 
-  getUrlByTipoProj(miei, name?: string) {
+  getUrlByTipoProj(tipoproj, name?: string) {
     if (!!name)
       return '/' + name + '/'
-
-    if (miei)
-      return '/myprojects/'
     else
-      return '/projects/'
+      return '/' + tipoproj + '/'
   },
 
   convertMenuListInListRoutes(arrlista: IMenuList[]) {
@@ -1539,5 +1539,16 @@ export const tools = {
     }
     return lista
   },
+
+  getprivacyreadbytipoproj(tipoproj) {
+    if (tipoproj === RouteNames.myprojects)
+      return Privacy.onlyme
+    else
+      return Privacy.all
+  },
+
+  getprivacywritebytipoproj(tipoproj) {
+    return Privacy.onlyme
+  }
 
 }
