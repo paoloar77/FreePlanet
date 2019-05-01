@@ -9,4 +9,8 @@ export default class Logo extends Vue {
   get logoimg() {
     return '../../' + tools.getimglogo()
   }
+
+  get logoalt() {
+    return process.env.APP_NAME
+  }
 }
