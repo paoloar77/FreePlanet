@@ -15,7 +15,8 @@ import * as ApiTables from '@src/store/Modules/ApiTables'
 import { GlobalStore, Projects, Todos, UserStore } from '@store'
 import messages from '../../statics/i18n'
 import globalroutines from './../../globalroutines/index'
-import { RouteNames } from '@src/router/route-names'
+
+import { cfgrouter } from '../../../cfg_locale/index'
 
 let stateConnDefault = 'online'
 
@@ -78,10 +79,6 @@ async function getstateConnSaved() {
   }
 }
 
-function addRoute(myarr, values: IListRoutes) {
-  myarr.push(values)
-}
-
 const b = storeBuilder.module<IGlobalState>('GlobalModule', state)
 
 // Getters
@@ -117,147 +114,11 @@ namespace Getters {
   }, 'showtype')
 
   const getmenu = b.read((state) => {
-    console.log('getmenu')
-
-    const arrlista = GlobalStore.state.listatodo
-    const lista: IListRoutes[] = []
-
-    arrlista.forEach((elem: IMenuList) => {
-      const item: IListRoutes = {
-        faIcon: 'fa fa-list-alt',
-        materialIcon: 'todo',
-        name: 'pages.' + elem.description,
-        route: '/todo/' + elem.nametranslate
-      }
-      lista.push(item)
-    })
-
-    const SHOW_PROJINTHEMENU = false
-
-    let arrlistafavourite = []
-    let arrlistaprojtutti = []
-    let arrlistaprojmiei = []
-    if (SHOW_PROJINTHEMENU) {
-      arrlistaprojtutti = Projects.getters.listaprojects(RouteNames.projectsall)
-      arrlistaprojmiei = Projects.getters.listaprojects(RouteNames.myprojects)
-      arrlistafavourite = Projects.getters.listaprojects(RouteNames.favouriteprojects)
-    }
-
-    const arrMenu: IMenuList[] = []
-
-    // PROGETTI -> FAVORITI :
-    if (arrlistafavourite.length > 0) {
-      arrMenu.push({
-        icon: 'favorite_border',
-        nametranslate: 'pages.' + RouteNames.favouriteprojects,
-        urlroute: RouteNames.favouriteprojects,
-        level_parent: 0.0,
-        level_child: 0.5,
-        routes2: arrlistafavourite,
-        idelem: ''
-      })
-    }
-
-    // PROGETTI -> TUTTI :
-    arrMenu.push({
-      icon: 'accessibility_new',
-      nametranslate: 'pages.' + RouteNames.projectsall,
-      urlroute: RouteNames.projectsall,
-      level_parent: 0.0,
-      level_child: 0.5,
-      routes2: [],
-      idelem: process.env.PROJECT_ID_MAIN
-    })
-
-    // PROGETTI -> CONDIVISI :
-    arrMenu.push({
-      icon: 'people_outline',
-      nametranslate: 'pages.' + RouteNames.projectsshared,
-      urlroute: RouteNames.projectsshared,
-      level_parent: 0.0,
-      level_child: 0.5,
-      routes2: arrlistaprojtutti,
-      idelem: process.env.PROJECT_ID_MAIN
-    })
-
-    // PROGETTI -> PERSONALI :
-    arrMenu.push({
-      icon: 'person',
-      nametranslate: 'pages.' + RouteNames.myprojects,
-      urlroute: RouteNames.myprojects,
-      level_parent: 0.0,
-      level_child: 0.5,
-      routes2: arrlistaprojmiei,
-      idelem: process.env.PROJECT_ID_MAIN
-    })
-
-    const listaprojectMenu: IListRoutes[] = tools.convertMenuListInListRoutes(arrMenu)
-
-    const arrroutes: IListRoutes[] = []
-
-    addRoute(arrroutes, { route: '/', faIcon: 'fa fa-home', materialIcon: 'home', name: 'pages.home' })   // HOME
-
-    addRoute(arrroutes, {
-      route: '/todo', faIcon: 'fa fa-list-alt', materialIcon: 'format_list_numbered', name: 'pages.Todo',
-      routes2: lista,
-      level_parent: 0.5,
-      level_child: 0.5
-    })
-
-    const myarrproj = []
-    for (const myitem of listaprojectMenu) {
-      addRoute(myarrproj, myitem)
-    }
-
-    addRoute(arrroutes, {
-      route: '', faIcon: 'fa fa-list-alt', materialIcon: 'next_week', name: 'pages.projects',
-      routes2: myarrproj,
-      level_parent: 0.0,
-      level_child: 0.5
-    })
-
-    console.log('arrroutes', arrroutes)
-    console.log('listaprojectMenu', listaprojectMenu)
-    // console.log('arrlistaprojmiei', arrlistaprojmiei)
-
-    if (UserStore.state.isAdmin) {
-      addRoute(arrroutes, {
-        route: '/category',
-        faIcon: 'fa fa-list-alt',
-        materialIcon: 'category',
-        name: 'pages.Category',
-        level_parent: 0.0,
-        level_child: 0.0
-      })
-      addRoute(arrroutes, {
-        route: '/admin/cfgserv',
-        faIcon: 'fa fa-database',
-        materialIcon: 'event_seat',
-        name: 'pages.Admin',
-        level_parent: 0.0,
-        level_child: 0.0
-      })
-      addRoute(arrroutes, {
-        route: '/admin/testp1/par1',
-        faIcon: 'fa fa-database',
-        materialIcon: 'restore',
-        name: 'pages.Test1',
-        level_parent: 0.0,
-        level_child: 0.0
-      })
-      addRoute(arrroutes, {
-        route: '/admin/testp1/par2',
-        faIcon: 'fa fa-database',
-        materialIcon: 'restore',
-        name: 'pages.Test2',
-        level_parent: 0.0,
-        level_child: 0.0
-      })
-    }
+    console.log('getmenu', cfgrouter.getmenu())
 
     state.menulinks = {
       Dashboard: {
-        routes: arrroutes,
+        routes: cfgrouter.getmenu(),
         show: true
       }
     }

@@ -1567,6 +1567,10 @@ export const tools = {
 
   getprivacywritebytipoproj(tipoproj) {
     return Privacy.onlyme
-  }
+  },
+
+  addRoute(myarr, values) {
+    myarr.push(values)
+  },
 
 }

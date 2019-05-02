@@ -300,6 +300,7 @@
                     </div>
                 </div>
             </section>
+
             <section class="padding bg-primary landing__swirl-bg" v-scroll-reveal.reset>
                 <div class="landing__features row justify-between items-start q-col-gutter-sm">
                     <div class="col-12 col-sm-5">

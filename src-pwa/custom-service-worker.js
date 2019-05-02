@@ -281,7 +281,7 @@ if (workbox) {
 
 // Storage
   workbox.routing.registerRoute(
-    new RegExp(/.*(?:storage.*$/),
+    new RegExp(/.*(?:storage)/),
     workbox.strategies.staleWhileRevalidate({
       cacheName: 'storage',
       plugins: [
