@@ -5,7 +5,7 @@ import { GlobalStore } from '@modules'
 import Vue from 'vue'
 import { Component, Prop } from 'vue-property-decorator'
 
-const namespace: string = 'GlobalModule'
+const namespace: string = 'Drawer'
 
 @Component({
   components: {

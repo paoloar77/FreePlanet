@@ -520,10 +520,11 @@ namespace Actions {
       GlobalStore.actions.checkUpdates()
     }
 
-    await GlobalStore.actions.loadAfterLogin()
+    return await GlobalStore.actions.loadAfterLogin()
       .then(() => {
-        Todos.actions.dbLoad({ checkPending: true })
-        Projects.actions.dbLoad({ checkPending: true, onlyiffirsttime: true })
+        return Todos.actions.dbLoad({ checkPending: true })
+      }).then(() => {
+        return Projects.actions.dbLoad({ checkPending: true, onlyiffirsttime: true })
       })
   }
 

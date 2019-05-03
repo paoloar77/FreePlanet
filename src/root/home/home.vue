@@ -83,7 +83,7 @@
                                                        class="enable-notifications shadow"
                                                        color="primary" rounded
                                                        size="md"
-                                                       icon="notifications" @click="askfornotification"
+                                                       icon="notifications" @click="tools.askfornotification"
                                                        :label="$t('notification.ask')"/>
                                                 <!--<q-btn v-if="getPermission() === 'granted'" class="enable-notifications" color="primary" rounded size="lg" icon="notifications" @click="showNotificationExample" label="Send Notification"/>-->
                                                 <!--<q-btn v-if="getPermission() === 'granted'" class="enable-notifications" color="secondary" rounded size="lg" icon="notifications" @click="createPushSubscription" label="Create Push Subscription !"/>-->
@@ -170,7 +170,7 @@
                                                        class="enable-notifications shadow"
                                                        color="primary" rounded
                                                        size="md"
-                                                       icon="notifications" @click="askfornotification"
+                                                       icon="notifications" @click="tools.askfornotification"
                                                        :label="$t('notification.ask')"/>
                                                 <!--<q-btn v-if="getPermission() === 'granted'" class="enable-notifications" color="primary" rounded size="lg" icon="notifications" @click="showNotificationExample" label="Send Notification"/>-->
                                                 <!--<q-btn v-if="getPermission() === 'granted'" class="enable-notifications" color="secondary" rounded size="lg" icon="notifications" @click="createPushSubscription" label="Create Push Subscription !"/>-->
@@ -261,7 +261,7 @@
                                                        class="enable-notifications shadow"
                                                        color="primary" rounded
                                                        size="md"
-                                                       icon="notifications" @click="askfornotification"
+                                                       icon="notifications" @click="tools.askfornotification"
                                                        :label="$t('notification.ask')"/>
                                                 <!--<q-btn v-if="getPermission() === 'granted'" class="enable-notifications" color="primary" rounded size="lg" icon="notifications" @click="showNotificationExample" label="Send Notification"/>-->
                                                 <!--<q-btn v-if="getPermission() === 'granted'" class="enable-notifications" color="secondary" rounded size="lg" icon="notifications" @click="createPushSubscription" label="Create Push Subscription !"/>-->

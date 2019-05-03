@@ -1572,5 +1572,86 @@ export const tools = {
   addRoute(myarr, values) {
     myarr.push(values)
   },
+  displayConfirmNotification() {
+    let options = null
+    if ('serviceWorker' in navigator) {
+      options = {
+        body: 'You successfully subscribed to our Notification service!',
+        icon: '/statics/icons/app-icon-96x96.png',
+        image: '/statics/images/sf-boat.jpg',
+        dir: 'ltr',
+        lang: 'enUs', // BCP 47,
+        vibrate: [100, 50, 200],
+        badge: '/statics/icons/app-icon-96x96.png',
+        tag: 'confirm-notification',
+        renotify: true,  // if it's already sent, will Vibrate anyway
+        actions: [
+          { action: 'confirm', title: 'Okay', icon: '/statics/icons/app-icon-96x96.png' },
+          { action: 'cancel', title: 'Cancel', icon: '/statics/icons/app-icon-96x96.png' }
+        ]
+      }
 
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.ready
+          .then(function (swreg) {
+            swreg.showNotification('Successfully subscribed!', options)
+          })
+      }
+    }
+  },
+
+  dataURItoBlob(dataURI) {
+    const byteString = atob(dataURI.split(',')[1])
+    const mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0]
+    const ab = new ArrayBuffer(byteString.length)
+    const ia = new Uint8Array(ab)
+    for (let i = 0; i < byteString.length; i++) {
+      ia[i] = byteString.charCodeAt(i)
+    }
+    const blob = new Blob([ab], { type: mimeString })
+    return blob
+  },
+
+  showNotificationExample() {
+    let options = null
+    const mythis = this
+    if ('serviceWorker' in navigator) {
+      options = {
+        body: mythis.$t('notification.subscribed'),
+        icon: '/statics/icons/android-chrome-192x192.png',
+        image: '/statics/images/imglogonotif.png',
+        dir: 'ltr',
+        lang: 'enUs', // BCP 47,
+        vibrate: [100, 50, 200],
+        badge: '/statics/icons/android-chrome-192x192.png',
+        tag: 'confirm-notification',
+        renotify: true,  // if it's already sent, will Vibrate anyway
+        actions: [
+          { action: 'confirm', title: mythis.$t('dialog.ok'), icon: '/statics/icons/android-chrome-192x192.png' }
+          // { action: 'cancel', title: 'Cancel', icon: '/statics/icons/android-chrome-192x192.png', }
+        ]
+      }
+
+      navigator.serviceWorker.ready
+        .then(function (swreg) {
+          swreg.showNotification('aaa', options)
+        })
+    }
+  },
+
+  askfornotification() {
+    tools.showNotif(this.$q, this.$t('notification.waitingconfirm'), { color: 'positive', icon: 'notifications' })
+
+    Notification.requestPermission((result) => {
+      console.log('User Choice', result)
+      if (result === 'granted') {
+        tools.showNotif(this.$q, this.$t('notification.confirmed'), { color: 'positive', icon: 'notifications' })
+      } else {
+        tools.showNotif(this.$q, this.$t('notification.denied'), { color: 'negative', icon: 'notifications' })
+
+        // displayConfirmNotification();
+      }
+    })
+
+  }
 }

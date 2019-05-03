@@ -16,7 +16,7 @@ import { GlobalStore, Projects, Todos, UserStore } from '@store'
 import messages from '../../statics/i18n'
 import globalroutines from './../../globalroutines/index'
 
-import { cfgrouter } from '../../../cfg_locale/index'
+import { cfgrouter } from '../../router/route-config'
 
 let stateConnDefault = 'online'
 
@@ -114,7 +114,7 @@ namespace Getters {
   }, 'showtype')
 
   const getmenu = b.read((state) => {
-    console.log('getmenu', cfgrouter.getmenu())
+    // console.log('getmenu', cfgrouter.getmenu())
 
     state.menulinks = {
       Dashboard: {

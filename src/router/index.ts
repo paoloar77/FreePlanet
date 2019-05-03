@@ -2,13 +2,11 @@ import Vue from 'vue'
 import VueRouter, { RouterMode } from 'vue-router'
 import { PositionResult } from 'vue-router/types/router'
 
-import { IMyRoute, IMyRouteRecord } from './route-config'
+import { IMyRoute, IMyRouteRecord, cfgrouter } from './route-config'
 import { ProgressBar } from '@src/store/Modules/Interface'
 import { isEqual } from 'lodash'
 import { UserStore } from '@store'
 import { tools } from '@src/store/Modules/tools'
-
-import { cfgrouter } from '../../cfg_locale'
 
 Vue.use(VueRouter)
 /*

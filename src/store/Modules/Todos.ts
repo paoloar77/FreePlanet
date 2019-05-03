@@ -13,6 +13,7 @@ import { GetterTree } from 'vuex'
 import objectId from '@src/js/objectId'
 import { costanti } from '@src/store/Modules/costanti'
 import { IAction } from '@src/model'
+import * as Types from '@src/store/Api/ApiTypes'
 
 const nametable = 'todos'
 
@@ -240,9 +241,9 @@ namespace Actions {
   async function dbLoad(context, { checkPending }) {
     console.log('dbLoad', nametable, checkPending, 'userid=', UserStore.state.userId)
 
-    if (UserStore.state.userId === '') {
-      return false  // Login not made
-    }
+    // if (UserStore.state.userId === '') {
+    //   return new Types.AxiosError(0, null, 0, '')
+    // }
 
     const ris = await Api.SendReq('/todos/' + UserStore.state.userId, 'GET', null)
       .then((res) => {
@@ -268,10 +269,12 @@ namespace Actions {
       .catch((error) => {
         console.log('error dbLoad', error)
         UserStore.mutations.setErrorCatch(error)
-        return error
+        return new Types.AxiosError(serv_constants.RIS_CODE_ERR, null, tools.ERR_GENERICO, error)
       })
 
     ApiTables.aftercalling(ris, checkPending, 'categories')
+
+    return ris
   }
 
   async function deleteItemtodo(context, { cat, idobj }) {

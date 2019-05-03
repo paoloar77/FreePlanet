@@ -11,6 +11,8 @@ import globalroutines from './../../globalroutines/index'
 import objectId from '@src/js/objectId'
 import { costanti } from '@src/store/Modules/costanti'
 import { RouteNames } from '@src/router/route-names'
+import * as Types from '@src/store/Api/ApiTypes'
+import { serv_constants } from '@src/store/Modules/serv_constants'
 
 const nametable = 'projects'
 
@@ -272,7 +274,7 @@ namespace Actions {
     if (onlyiffirsttime) {
       if (stateglob.projects.length > 0) {
         // if already set, then exit.
-        return false
+        return new Types.AxiosError(0, null, 0, '')
       }
     }
 
@@ -304,7 +306,7 @@ namespace Actions {
       .catch((error) => {
         console.log('error dbLoad', error)
         UserStore.mutations.setErrorCatch(error)
-        return error
+        return new Types.AxiosError(serv_constants.RIS_CODE_ERR, null, tools.ERR_GENERICO, error)
       })
 
     ApiTables.aftercalling(ris, checkPending, nametable)
