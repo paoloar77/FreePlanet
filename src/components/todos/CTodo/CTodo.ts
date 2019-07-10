@@ -191,8 +191,8 @@ export default class CTodo extends Vue {
 
   }
 
-  public deselectAllRowsproj(item: IProject, check, onlythis: boolean = false) {
-    this.$emit('deselectAllRowsproj', item, check, onlythis)
+  public deselectAllRowsproj(item: IProject, check, onlythis: boolean = false, deselectRiga: boolean = false) {
+    this.$emit('deselectAllRowsproj', item, check, onlythis, deselectRiga)
   }
 
   public setitemsel(item: ITodo) {

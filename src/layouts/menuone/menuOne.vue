@@ -17,7 +17,7 @@
                             <q-expansion-item v-for="(child2, index) in myitemmenu.routes2"
                                               :key="index"
                                               :to="child2.route"
-                                              :header-inset-level="myitemmenu.level_child"
+                                              :header-inset-level="child2.level_child"
                                               :duration="300"
                                               :icon="child2.materialIcon"
                                               active-class="my-menu-active"
@@ -27,7 +27,7 @@
                                 <q-expansion-item v-if="!!child2.routes2" v-for="(child3, index) in child2.routes2"
                                                   :key="index"
                                                   :to="child3.route"
-                                                  :header-inset-level="myitemmenu.level_child"
+                                                  :header-inset-level="child3.level_child"
                                                   :duration="300"
                                                   :icon="child3.materialIcon"
                                                   :expand-icon="child3.icon"
@@ -44,6 +44,19 @@
                     <div v-else>
                         <q-slide-transition :duration=200>
                             <div v-show="true">
+                                <q-expansion-item
+                                        :to="myitemmenu.route"
+                                        :header-inset-level="myitemmenu.level_parent"
+                                        :content-inset-level="myitemmenu.level_parent"
+                                        :label="getLabelByItem(myitemmenu)"
+                                        :icon="myitemmenu.materialIcon"
+                                        expand-icon="none"
+                                        header-class="my-menu"
+                                        active-class="my-menu-active">
+                                </q-expansion-item>
+
+
+                                    <!--
                                 <q-item
                                         clickable
                                         v-ripple
@@ -58,7 +71,7 @@
                                         {{$t(myitemmenu.name)}}
                                     </q-item-section>
                                 </q-item>
-
+-->
                             </div>
                         </q-slide-transition>
                     </div>

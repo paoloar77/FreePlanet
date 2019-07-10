@@ -8,6 +8,7 @@ const msgglobal = {
       no: 'No',
       delete: 'Elimina',
       cancel: 'Annulla',
+      today: 'Oggi',
       msg: {
         titledeleteTask: 'Elimina Task',
         deleteTask: "Vuoi Eliminare {mytodo}?"
@@ -147,6 +148,20 @@ const msgglobal = {
       themecolor: 'Tema Colore',
       themebgcolor: 'Tema Colore Sfondo'
     },
+    cal: {
+      starttime: 'Dalle',
+      endtime: 'alle',
+      duration: 'Durata',
+      hours: 'Orario',
+      where: 'Dove',
+      teacher: 'Insegnante',
+      enterdate: 'Inserisci data',
+      details: 'Dettagli',
+      infoextra: 'Date e Ora Extra:',
+      alldayevent: 'Tutto il giorno',
+      eventstartdatetime: 'Data e Ora Inizio Evento',
+      enterEndDateTime: 'Data e Ora Fine Evento'
+    }
   },
   'es': {
     dialog: {
@@ -155,6 +170,7 @@ const msgglobal = {
       no: 'No',
       delete: 'Borrar',
       cancel: 'Cancelar',
+      today: 'Hoy',
       msg: {
         titledeleteTask: 'Borrar Tarea',
         deleteTask: 'Quieres borrar {mytodo}?'
@@ -288,6 +304,20 @@ const msgglobal = {
       themecolor: 'Tema Colores',
       themebgcolor: 'Tema Colores Fondo'
     },
+    cal: {
+      starttime: 'Inicio',
+      endtime: 'fin',
+      duration: 'Duración',
+      hours: 'Tiempo',
+      where: 'Donde',
+      teacher: 'Maestro',
+      enterdate: 'Ingresar la fecha',
+      details: 'Detalles',
+      infoextra: 'Fecha y Hora Extras:',
+      alldayevent: 'Todo el dia',
+      eventstartdatetime: 'Evento de inicio de fecha y hora',
+      enterEndDateTime: 'Fecha y hora del evento final'
+    }
   },
   'enUs': {
     dialog: {
@@ -296,6 +326,7 @@ const msgglobal = {
       no: 'No',
       delete: 'Delete',
       cancel: 'Cancel',
+      today: 'Today',
       msg: {
         titledeleteTask: 'Delete Task',
         deleteTask: 'Delete Task {mytodo}?'
@@ -429,6 +460,20 @@ const msgglobal = {
       themecolor: 'Theme Color',
       themebgcolor: 'Theme Color Background'
     },
+    cal: {
+      starttime: 'From',
+      endtime: 'to',
+      duration: 'Duration',
+      hours: 'Hours',
+      where: 'Where',
+      teacher: 'Teacher',
+      enterdate: 'Enter date',
+      details: 'Details',
+      infoextra: 'Extra Info DateTime',
+      alldayevent: 'All-Day event',
+      eventstartdatetime: 'Event start date and time',
+      enterEndDateTime: 'Event end date and time'
+    }
   },
 };
 

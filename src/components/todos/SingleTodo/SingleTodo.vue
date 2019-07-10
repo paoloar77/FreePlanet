@@ -11,7 +11,7 @@
         </div>
 
         <div class="flex-item donotdrag divdescrTot">
-            <q-input v-if="sel && itemtodo.statustodo !== tools.Status.COMPLETED" hide-underline type="textarea" ref="inputdescr"
+            <q-input v-if="sel && inEdit && itemtodo.statustodo !== tools.Status.COMPLETED" hide-underline type="textarea" ref="inputdescr"
                      v-model.trim="precDescr"
                      autogrow
                      borderless
@@ -65,7 +65,7 @@
                    data_class="data_string" :readonly="!CanIModifyTodo">
             </CDate>
         </div>
-        <div v-if="isTodo()" :class="classMenuBtn" @mousedown="clickRiga">
+        <div :class="classMenuBtn" @mousedown="clickRiga">
             <q-btn flat
                    :class="clButtPopover"
                    :readonly="!CanIModifyTodo"

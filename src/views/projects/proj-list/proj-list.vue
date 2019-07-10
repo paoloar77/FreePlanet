@@ -100,12 +100,12 @@
                         </div>
                         <q-separator></q-separator>
 
-                        <q-input v-if="CanIModifyPanelPrivacy" ref="insertProjBottom" v-model="projbottom"
+                        <q-input v-model="projbottom"
                                  style="margin-left: 6px;"
                                  color="blue-12"
                                  :label="$t('proj.insertbottom')"
                                  :after="[{icon: 'arrow_forward', content: true, handler () {}}]"
-                                 v-on:keyup.enter="dbInsert()">
+                                 >
 
                         </q-input>
 
@@ -129,6 +129,7 @@
                     </div>
                 </template>
                 <template v-if="(whatisSel === tools.WHAT_PROJECT) && (!!itemselproj.descr)" v-slot:after>
+
                     <!--ID = {{itemselproj._id}}-->
                     <div class="q-pa-xs clMain">
                         <div class="flex-container clMain">

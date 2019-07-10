@@ -235,14 +235,14 @@ export default class SingleProject extends Vue {
     // if (!this.sel) {
 
     if (!this.inEdit) {
-      console.log('entrato...')
-      // this.attivaEdit = true
+      // console.log('entrato...')
       this.$emit('deselectAllRowstodo', null, false)
       this.$emit('deselectAllRowsproj', this.itemproject, true)
 
       if (!this.sel) {
         this.selectRiga()
       } else {
+        this.$emit('deselectAllRowsproj', null, false, false, true)
         this.deselectRiga()
       }
     }

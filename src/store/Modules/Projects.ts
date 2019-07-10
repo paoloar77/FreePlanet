@@ -56,13 +56,14 @@ function updateDataCalculated(projout, projin) {
 }
 
 function getproj(projects, idproj, tipoproj: string) {
+  console.log('getproj', tipoproj)
 
   if (tipoproj === RouteNames.myprojects)
-    return tools.mapSort(projects.filter((proj) => (proj.id_parent === idproj) && (proj.userId === UserStore.state.userId) && (proj.privacyread === Privacy.onlyme)))
+    return projects.filter((proj) => (proj.id_parent === idproj) && (proj.userId === UserStore.state.userId) && (proj.privacyread === Privacy.onlyme))
   else if (tipoproj === RouteNames.projectsshared)
-    return tools.mapSort(projects.filter((proj) => (proj.id_parent === idproj) && (proj.userId === UserStore.state.userId) && (proj.privacyread !== Privacy.onlyme)))
+    return projects.filter((proj) => (proj.id_parent === idproj) && (proj.userId === UserStore.state.userId) && (proj.privacyread !== Privacy.onlyme))
   else if (tipoproj === RouteNames.projectsall)
-    return tools.mapSort(projects.filter((proj) => (proj.id_parent === idproj) && (proj.userId !== UserStore.state.userId) ))
+    return projects.filter((proj) => (proj.id_parent === idproj) && (proj.userId !== UserStore.state.userId) )
 }
 
 namespace Getters {
@@ -110,7 +111,7 @@ namespace Getters {
   }, 'getRecordEmpty')
 
   const projs_dacompletare = b.read((state: IProjectsState) => (id_parent: string, tipoproj: string): IProject[] => {
-    // console.log('projs_dacompletare', miei)
+    // console.log('projs_dacompletare')
     if (state.projects) {
       // console.log('state.projects', state.projects)
       return getproj(state.projects, id_parent, tipoproj)
@@ -121,7 +122,7 @@ namespace Getters {
 
   const listaprojects = b.read((state: IProjectsState) => (tipoproj: string): IMenuList[] => {
     if (state.projects) {
-      // console.log('state.projects', state.projects)
+      console.log('listaprojects')
       const listaproj = getproj(state.projects, process.env.PROJECT_ID_MAIN, tipoproj)
       const myarr: IMenuList[] = []
       for (const proj of listaproj) {

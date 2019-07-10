@@ -92,30 +92,41 @@ namespace Getters {
     return objtodo
   }, 'getRecordEmpty')
   const items_dacompletare = b.read((stateparam: ITodosState) => (cat: string): ITodo[] => {
+    // console.log('items_dacompletare')
     const indcat = getindexbycategory(cat)
+    let arrout = []
     // console.log('items_dacompletare', 'indcat', indcat, stateparam.todos[indcat])
     if (stateparam.todos[indcat]) {
-      return stateparam.todos[indcat].filter((todo) => todo.statustodo !== tools.Status.COMPLETED)
+      arrout = stateparam.todos[indcat].filter((todo) => todo.statustodo !== tools.Status.COMPLETED)
     } else {
-      return []
+      arrout = []
     }
+
+    // return tools.mapSort(arrout)
+    return arrout
   }, 'items_dacompletare')
 
   const todos_completati = b.read((stateparam: ITodosState) => (cat: string): ITodo[] => {
+    console.log('todos_completati')
     const indcat = getindexbycategory(cat)
     if (stateparam.todos[indcat]) {
+      let arrout = []
       if (stateparam.showtype === costanti.ShowTypeTask.SHOW_LAST_N_COMPLETED) {   // Show only the first N completed
-        return stateparam.todos[indcat].filter((todo) => todo.statustodo === tools.Status.COMPLETED).slice(0, stateparam.visuLastCompleted)
+        arrout = stateparam.todos[indcat].filter((todo) => todo.statustodo === tools.Status.COMPLETED).slice(0, stateparam.visuLastCompleted)
       }
       else if (stateparam.showtype === costanti.ShowTypeTask.SHOW_ONLY_TOCOMPLETE) {
-        return []
+        arrout = []
       }
       else if (stateparam.showtype === costanti.ShowTypeTask.SHOW_ALL) {
-        return stateparam.todos[indcat].filter((todo) => todo.statustodo === tools.Status.COMPLETED)
+        arrout = stateparam.todos[indcat].filter((todo) => todo.statustodo === tools.Status.COMPLETED)
       }
       else {
-        return []
+        arrout = []
       }
+
+      return arrout
+      // return tools.mapSort(arrout)
+
     } else {
       return []
     }

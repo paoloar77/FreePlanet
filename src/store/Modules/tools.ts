@@ -2,7 +2,7 @@ import { Todos, Projects, UserStore } from '@store'
 import globalroutines from './../../globalroutines/index'
 import { costanti } from './costanti'
 import { translation } from './translation'
-import Quasar, { date } from 'quasar'
+import Quasar, { date, Screen } from 'quasar'
 import { IListRoutes, IMenuList, IProject, ITodo, Privacy } from '@src/model'
 import * as ApiTables from '@src/store/Modules/ApiTables'
 import translate from '@src/globalroutines/util'
@@ -64,6 +64,14 @@ export const tools = {
     OPENED: 1,
     COMPLETED: 10
   },
+
+  DateFormatter: new Intl.DateTimeFormat(this.getLocale() || void 0, {
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric'
+    // timeZone: 'UTC'
+  }),
 
   selectPhase: {
     it: [
@@ -285,6 +293,21 @@ export const tools = {
         {
           id: 10,
           disable: false,
+          label: 'Modifica',
+          value: lists.MenuAction.EDIT,
+          icon: 'create'
+        },
+        {
+          id: 11,
+          disable: false,
+          label: 'Elimina',
+          value: lists.MenuAction.DELETE,
+          icon: 'delete',
+          checked: false
+        },
+        {
+          id: 12,
+          disable: false,
           label: '',
           value: lists.MenuAction.PROGRESS_BAR,
           icon: 'rowing',
@@ -332,14 +355,6 @@ export const tools = {
           value: lists.MenuAction.TOGGLE_EXPIRING,
           icon: 'date_range',
           checked: true
-        },
-        {
-          id: 50,
-          disable: false,
-          label: 'Elimina',
-          value: lists.MenuAction.DELETE,
-          icon: 'delete',
-          checked: false
         }
       ],
       es:
@@ -350,6 +365,21 @@ export const tools = {
             label: 'Cortar',
             value: lists.MenuAction.CUT,
             icon: 'undo'
+          },
+          {
+            id: 7,
+            disable: false,
+            label: 'Editar',
+            value: lists.MenuAction.EDIT,
+            icon: 'create'
+          },
+          {
+            id: 8,
+            disable: false,
+            label: 'Borrar',
+            value: lists.MenuAction.DELETE,
+            icon: 'delete',
+            checked: false
           },
           {
             id: 10,
@@ -401,14 +431,6 @@ export const tools = {
             value: lists.MenuAction.TOGGLE_EXPIRING,
             icon: 'date_range',
             checked: true
-          },
-          {
-            id: 50,
-            disable: false,
-            label: 'Borrar',
-            value: lists.MenuAction.DELETE,
-            icon: 'delete',
-            checked: false
           }
         ],
       enUs:
@@ -419,6 +441,21 @@ export const tools = {
             label: 'Cut',
             value: lists.MenuAction.CUT,
             icon: 'undo'
+          },
+          {
+            id: 7,
+            disable: false,
+            label: 'Edit',
+            value: lists.MenuAction.EDIT,
+            icon: 'create'
+          },
+          {
+            id: 8,
+            disable: false,
+            label: 'Delete',
+            value: lists.MenuAction.DELETE,
+            icon: 'trash',
+            checked: false
           },
           {
             id: 10,
@@ -470,14 +507,6 @@ export const tools = {
             value: lists.MenuAction.TOGGLE_EXPIRING,
             icon: 'date_range',
             checked: true
-          },
-          {
-            id: 50,
-            disable: false,
-            label: 'Delete',
-            value: lists.MenuAction.DELETE,
-            icon: 'trash',
-            checked: false
           }
         ]
     }
@@ -489,21 +518,29 @@ export const tools = {
         id: 5,
         disable: false,
         label: 'Taglia',
-        value: 71, // CUT
+        value: lists.MenuAction.CUT,
         icon: 'undo'
       },
       {
         id: 10,
         disable: false,
         label: 'Modifica',
-        value: 160, // EDIT
+        value: lists.MenuAction.EDIT,
         icon: 'create'
+      },
+      {
+        id: 11,
+        disable: false,
+        label: 'Elimina',
+        value: lists.MenuAction.DELETE,
+        icon: 'delete',
+        checked: false
       },
       {
         id: 40,
         disable: false,
         label: 'Imposta Scadenza',
-        value: 101, // TOGGLE_EXPIRING
+        value: lists.MenuAction.TOGGLE_EXPIRING,
         icon: 'date_range',
         checked: true
       },
@@ -524,14 +561,6 @@ export const tools = {
         icon: 'format_color_fill',
         checked: false,
         arrlista: lists.selectTheme
-      },
-      {
-        id: 50,
-        disable: false,
-        label: 'Elimina',
-        value: 100, // DELETE
-        icon: 'delete',
-        checked: false
       }
     ],
     es:
@@ -540,21 +569,29 @@ export const tools = {
           id: 5,
           disable: false,
           label: 'Cortar',
-          value: 71, // CUT
+          value: lists.MenuAction.CUT,
           icon: 'undo'
         },
         {
           id: 10,
           disable: false,
           label: 'Editar',
-          value: 160, // EDIT
+          value: lists.MenuAction.EDIT,
           icon: 'create'
+        },
+        {
+          id: 11,
+          disable: false,
+          label: 'Borrar',
+          value: 100, // DELETE
+          icon: 'delete',
+          checked: false
         },
         {
           id: 40,
           disable: false,
           label: 'Establecer expiración',
-          value: 101, // TOGGLE_EXPIRING
+          value: lists.MenuAction.TOGGLE_EXPIRING,
           icon: 'date_range',
           checked: true
         },
@@ -575,14 +612,6 @@ export const tools = {
           icon: 'format_color_fill',
           checked: false,
           arrlista: lists.selectTheme
-        },
-        {
-          id: 50,
-          disable: false,
-          label: 'Borrar',
-          value: 100, // DELETE
-          icon: 'delete',
-          checked: false
         }
       ],
     enUs:
@@ -598,7 +627,7 @@ export const tools = {
           id: 10,
           disable: false,
           label: 'Edit',
-          value: 160, // EDIT
+          value: lists.MenuAction.EDIT,
           icon: 'create'
         },
         {
@@ -1205,6 +1234,7 @@ export const tools = {
   ,
 
   getLastListNotCompleted(nametable, cat, tipoproj: string) {
+    // console.log('getLastListNotCompleted')
     // const module = tools.getModulesByTable(nametable)
     let arr = []
     if (nametable === 'projects')
@@ -1243,9 +1273,7 @@ export const tools = {
   }
   ,
 
-  showNotif(q
-              :
-              any, msg, data ?: INotify | null
+  showNotif(q: any, msg, data ?: INotify | null
   ) {
     let myicon = data ? data.icon : 'ion-add'
     if (!myicon) {
@@ -1394,7 +1422,8 @@ export const tools = {
   ,
 
   mapSort(linkedList) {
-    const sortedList = []
+    console.log('mapSort')
+    let sortedList = []
     const map = new Map()
     let currentId = null
 
@@ -1438,11 +1467,28 @@ export const tools = {
       }
     }
 
-    // console.log('DOPO sortedList', sortedList);
+    // Now Order by Priority
+    if (!!sortedList) {
+      if (sortedList.length > 0) {
+        if (sortedList[0].priority !== undefined) {
+          const sortednew = []
+          let myarr = []
+          for (const priorelem of lists.selectPriority.it) {
+            const myprior = priorelem.value
+            myarr = sortedList.filter((item) => item.priority === myprior)
+            if (myarr !== undefined)
+              sortednew.push(...myarr)
+          }
+
+          sortedList = sortednew
+        }
+      }
+    }
+
+    // console.log('DOPO sortedList', sortedList)
 
     return sortedList
-  }
-  ,
+  },
 
   getProgressClassColor(progress) {
     if (progress > 66) {
@@ -1507,6 +1553,13 @@ export const tools = {
     }
     value = value.toString()
     return value.charAt(0).toUpperCase() + value.slice(1)
+  },
+
+  firstchars(value, numchars = 200) {
+    if (!value) {
+      return ''
+    }
+    return value.substring(0, numchars) + '...'
   },
 
   getDateNow() {
@@ -1593,7 +1646,7 @@ export const tools = {
 
       if ('serviceWorker' in navigator) {
         navigator.serviceWorker.ready
-          .then(function (swreg) {
+          .then((swreg) => {
             swreg.showNotification('Successfully subscribed!', options)
           })
       }
@@ -1633,10 +1686,14 @@ export const tools = {
       }
 
       navigator.serviceWorker.ready
-        .then(function (swreg) {
+        .then((swreg) => {
           swreg.showNotification('aaa', options)
         })
     }
+  },
+
+  getemailto(text) {
+    return 'mailto:' + text
   },
 
   askfornotification() {
@@ -1653,5 +1710,129 @@ export const tools = {
       }
     })
 
+  },
+
+  heightgallery() {
+    if (Screen.width < 400) {
+      return '200px'
+    } else if (Screen.width < 600) {
+      return '300px'
+    } else {
+      return '500px'
+    }
+  },
+
+  myheight_imgtitle() {
+    if (Screen.width < 400) {
+      return '250'
+    } else if (Screen.width < 600) {
+      return '350'
+    } else {
+      return '350'
+    }
+  },
+
+  myheight_dialog() {
+    if (Screen.width < 400) {
+      return '350'
+    } else if (Screen.width < 600) {
+      return '400'
+    } else {
+      return '500'
+    }
+  },
+
+  styles_imgtitle() {
+    if (Screen.width < 400) {
+      return 'max-height: 250px'
+    } else {
+      return 'max-height: 350px'
+    }
+  },
+
+  /*
+      <q-img
+        src="https://cdn.quasar.dev/img/image-src.png"
+        srcset="https://cdn.quasar.dev/img/image-1x.png 400w,
+                https://cdn.quasar.dev/img/image-2x.png 800w,
+                https://cdn.quasar.dev/img/image-3x.png 1200w,
+                https://cdn.quasar.dev/img/image-4x.png 1600w"
+        sizes="(max-width: 400px) 400w,
+              (min-width: 400px) and (max-width: 800px) 800w,
+              (min-width: 800px) and (max-width: 1200px) 1200w,
+              (min-width: 1200px) 1600w"
+        style="height: 280px; max-width: 300px"
+      >
+        <div class="absolute-bottom text-body1 text-center">
+          With srcset & sizes
+        </div>
+      </q-img>
+  */
+
+  getsizes() {
+    return '(max-width: 400px) 400w, ' +
+      '(min-width: 400px) and (max-width: 800px) 800w, ' +
+      '(min-width: 800px) and (max-width: 1200px) 1200w, ' +
+      '(min-width: 1200px) 1600w'
+  },
+
+  maxwidth_imgtitle() {
+    if (Screen.width < 400) {
+      return 'max-width: 250px'
+    } else {
+      return 'max-width: 350px'
+    }
+  },
+
+  mywidth_imgtitle() {
+    if (Screen.width < 400) {
+      return '250'
+    } else if (Screen.width < 600) {
+      return '350'
+    } else {
+      return '350'
+    }
+  },
+
+  mymargin_imgtitle() {
+    return 'auto'
+  },
+
+  showthumbnails() {
+    if (Screen.width < 400) {
+      return false
+    } else if (Screen.width < 600) {
+      return true
+    } else {
+      return true
+    }
+  },
+
+  padTime(val) {
+    val = Math.floor(val)
+    if (val < 10) {
+      return '0' + val
+    }
+    return val + ''
+  },
+
+  getLocale() {
+    return UserStore.state.lang
+  },
+
+  getDateStr(mydate) {
+    if (this.DateFormatter && this.getLocale()) {
+      const date = new Date(mydate)
+      return this.titleFormatter.format(date)
+    }
+    return ''
   }
+
+// getLocale() {
+  //   if (navigator.languages && navigator.languages.length > 0) {
+  //     return navigator.languages[0]
+  //   } else {
+  //     return navigator.userLanguages || navigator.language || navigator.browserLanguages || 'it-IT'
+  //   }
+  // }
 }

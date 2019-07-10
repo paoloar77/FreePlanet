@@ -41,6 +41,7 @@ export default class SingleTodo extends Vue {
   public itemtodoPrec: ITodo
   public clButtPopover: string = 'pos-item-popover'
   public numpos: number = 0
+  public attivaEdit: boolean = false
 
   public $q: any
 
@@ -215,16 +216,15 @@ export default class SingleTodo extends Vue {
   public clickRiga(clickmenu: boolean = false) {
     // console.log('CLICK RIGA ************')
 
-    if (!this.sel) {
-      if (!this.inEdit) {
-        this.$emit('deselectAllRowsproj', null, false, false)
-        this.$emit('deselectAllRowstodo', this.itemtodo, true)
+    if (!this.inEdit) {
+      this.$emit('deselectAllRowsproj', null, false, false)
+      this.$emit('deselectAllRowstodo', this.itemtodo, true)
 
-        if (!this.sel) {
-          this.selectRiga()
-        } else {
-          this.deselectRiga()
-        }
+      if (!this.sel) {
+        this.selectRiga()
+      } else {
+        this.$emit('deselectAllRowsproj', null, false, false, true)
+        this.deselectRiga()
       }
     }
   }
@@ -238,10 +238,11 @@ export default class SingleTodo extends Vue {
   }
 
   public deselectRiga() {
-    // console.log('DeselectRiga', this.itemtodo.descr)
+    console.log('DeselectRiga', this.itemtodo.descr)
     this.sel = false
     this.classRow = ''
     this.inEdit = false
+    this.attivaEdit = false
     this.updateClasses()
   }
 
@@ -267,7 +268,8 @@ export default class SingleTodo extends Vue {
   }
 
   public editTodo() {
-    if (this.itemtodo.statustodo !== tools.Status.COMPLETED) {
+
+    if (this.attivaEdit) {
       // console.log('INIZIO - editTodo')
       this.$emit('click')
       this.precDescr = this.itemtodo.descr
@@ -299,7 +301,7 @@ export default class SingleTodo extends Vue {
         theField.focus()
       }
       // console.log('focus()')
-    }, 300)
+    }, 400)
   }
 
   public exitEdit(singola: boolean = false) {
@@ -309,6 +311,7 @@ export default class SingleTodo extends Vue {
       }
       // console.log('exitEdit')
       this.inEdit = false
+      this.attivaEdit = false
       this.updateClasses()
       this.$emit('deselectAllRowsproj', null, false, false)
       this.$emit('deselectAllRowstodo', this.itemtodo, false, singola)
@@ -390,6 +393,7 @@ export default class SingleTodo extends Vue {
 
     this.watchupdate('descr')
     this.inEdit = false
+    this.attivaEdit = false
     // this.precDescr = this.itemtodo.descr
     this.updateClasses()
   }
@@ -456,6 +460,12 @@ export default class SingleTodo extends Vue {
 
   }
 
+  public activeEdit() {
+    console.log('Attiva Edit')
+    this.attivaEdit = true
+    this.editTodo()
+  }
+
   public async clickMenu(action) {
     console.log('click menu: ', action)
     if (action === lists.MenuAction.DELETE) {
@@ -464,6 +474,8 @@ export default class SingleTodo extends Vue {
       return await this.enableExpiring()
     } else if (action === lists.MenuAction.COMPLETED) {
       return await this.setCompleted()
+    } else if (action === lists.MenuAction.EDIT) {
+      this.activeEdit()
     } else if (action === lists.MenuAction.PROGRESS_BAR) {
       return await this.updatedata('progress')
     } else if (action === lists.MenuAction.CUT) {

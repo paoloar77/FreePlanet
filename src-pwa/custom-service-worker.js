@@ -6,7 +6,7 @@
 
 // Questo è il swSrc
 
-console.log('   [  VER-0.0.61 ] _---------________------  PAO: this is my custom service worker');
+console.log('   [  VER-0.0.63 ] _---------________------  PAO: this is my custom service worker');
 
 importScripts('../statics/js/idb.js');
 importScripts('../statics/js/storage.js');

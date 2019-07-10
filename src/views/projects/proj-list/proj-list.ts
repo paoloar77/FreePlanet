@@ -38,6 +38,8 @@ const namespace: string = 'Projects'
 export default class ProjList extends Vue {
   public $q: any
   public projbottom: string = ''
+  public prova: string = ''
+  public provatr: string = ''
   public polling = null
   public service: any
   public scrollable = true
@@ -66,10 +68,10 @@ export default class ProjList extends Vue {
   @Getter('projs_dacompletare', { namespace })
   public projs_dacompletare: (state: IProjectsState, id_parent: string, tipoproj: string) => IProject[]
 
-  @Watch('projs_dacompletare')
-  public changeitems() {
-    this.updateindexProj()
-  }
+  // @Watch('projs_dacompletare')
+  // public changeitems() {
+  //   this.updateindexProj()
+  // }
 
   @Watch('$route.name')
   public changename() {
@@ -97,6 +99,10 @@ export default class ProjList extends Vue {
       console.log('this.itemproj.descr', this.itemproj.descr)
     }
     // console.log('idproj', this.idProjAtt, 'params' , this.$route.params)
+  }
+
+  public keyDownArea(e) {
+    console.log('keyDownArea')
   }
 
   get classTitle() {
@@ -400,6 +406,7 @@ export default class ProjList extends Vue {
   }
 
   public dbInsert() {
+    console.log('dbInsert')
     const descr = this.projbottom.trim()
 
     this.projbottom = ''
@@ -432,11 +439,13 @@ export default class ProjList extends Vue {
   }
 
   public getCompProjectById(id): SingleProject {
-    console.log('this.$refs.singleproject', this.$refs.singleproject)
-    for (const elem of this.$refs.singleproject) {
-      // @ts-ignore
-      if (elem.itemproject._id === id) {
-        return elem
+    if (!!this.$refs.singleproject) {
+      console.log('this.$refs.singleproject', this.$refs.singleproject)
+      for (const elem of this.$refs.singleproject) {
+        // @ts-ignore
+        if (elem.itemproject._id === id) {
+          return elem
+        }
       }
     }
   }
@@ -494,10 +503,32 @@ export default class ProjList extends Vue {
       this.whatisSel = tools.WHAT_NOTHING
     // console.log('readonly = true')
     this.readonly = true
+
+    this.checkiftoenable()
   }
   public setitemsel(item: ITodo) {
-    this.whatisSel = tools.WHAT_TODO
     this.itemtodosel = item
+    if (item !== null)
+      this.whatisSel = tools.WHAT_TODO
+    else
+      this.whatisSel = tools.WHAT_NOTHING
+
+    this.checkiftoenable()
+  }
+
+  public checkiftoenable() {
+    if (this.whatisSel === tools.WHAT_NOTHING)
+      this.splitterModel = 100
+    else
+      this.splitterModel = 0
+  }
+
+  public setdeselectrow() {
+    console.log('setdeselectrow')
+    this.itemtodosel = null
+    this.itemselproj = null
+    this.whatisSel = tools.WHAT_NOTHING
+    this.checkiftoenable()
   }
 
   public cambiadata(value) {
@@ -542,8 +573,13 @@ export default class ProjList extends Vue {
     }
   }
 
-  public deselectAllRowsproj(item: IProject, check, onlythis: boolean = false) {
+  public deselectAllRowsproj(item: IProject, check, onlythis: boolean = false, deselectRiga: boolean = false) {
     // console.log('deselectAllRowsproj: ', item)
+
+    if (deselectRiga) {
+      this.setdeselectrow()
+      return
+    }
 
     if (!!item && check) {
       // This is the new selected
@@ -551,6 +587,9 @@ export default class ProjList extends Vue {
       this.setidsel(item._id)
       this.readonly = false
     }
+
+    if (this.$refs.singleproject === undefined)
+      return
 
     for (const i in this.$refs.singleproject) {
 
