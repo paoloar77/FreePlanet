@@ -10,7 +10,6 @@ import translate from '@src/globalroutines/util'
 import { RouteNames } from '@src/router/route-names'
 
 import { lists } from './lists'
-import { shen } from '@src/database/shen'
 
 export interface INotify {
   color?: string | 'primary'
@@ -37,6 +36,8 @@ export const tools = {
   WHAT_NOTHING: 0,
   WHAT_TODO: 1,
   WHAT_PROJECT: 2,
+
+  languageid: 5,
 
   arrLangUsed: ['enUs', 'it', 'es'],
 

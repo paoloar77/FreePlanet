@@ -1,0 +1,26 @@
+.est{
+  margin: 5px;
+  padding: 5px;
+
+  &__price {
+    color: blue;
+  }
+
+  &__totale_text {
+    padding: 2px;
+    font-size: 1.15rem;
+    color: blue;
+  }
+
+  &__totale_numpag {
+    padding: 2px;
+    font-size: 1.15rem;
+    color: red;
+  }
+
+  &__totale_price {
+    padding: 2px;
+    font-size: 1.15rem;
+    color: green;
+  }
+}

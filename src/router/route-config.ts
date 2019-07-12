@@ -89,6 +89,11 @@ export const cfgrouter = {
       component: () => import('@/views/admin/testp1/testp1.vue')
     },
     {
+      path: '/estimate',
+      name: 'Estimate',
+      component: () => import('@/views/pages/estimate/estimate.vue')
+    },
+    {
       path: '/offline',
       name: 'Offline',
       component: () => import('@/views/offline/offline.vue')

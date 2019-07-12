@@ -40,8 +40,7 @@
   }
 }
 
-
-.my-notif-class{
+.my-notif-class {
   font-weight: bold;
 }
 
@@ -54,13 +53,14 @@
 .lowperc {
   color: red;
 }
+
 .medperc {
   color: blue;
 }
+
 .highperc {
   color: green;
 }
-
 
 .hide-if-small {
   @media (max-width: 600px) {
@@ -72,4 +72,26 @@
   @media (max-width: 600px) {
     max-width: 22px;
   }
+}
+
+.tothebottomfixed {
+  left: 0;
+  right: 0;
+  position: fixed;
+  z-index: 9999;
+  box-sizing: border-box;
+  overflow: hidden;
+  margin: 0 auto;
+  bottom: 10px;
+}
+
+.tothetop {
+  left: 0;
+  right: 0;
+  position: fixed;
+  z-index: 9999;
+  box-sizing: border-box;
+  overflow: hidden;
+  margin: 0 auto;
+  top: 20px;
 }
