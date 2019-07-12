@@ -6,6 +6,7 @@ import { IPost } from '../../../model/index'
 
 import './messagePopover.scss'
 import { tools } from '@src/store/Modules/tools'
+import { toolsext } from '@src/store/Modules/toolsext'
 
 @Component({
 })

@@ -4,6 +4,8 @@ import { Component, Prop, Watch } from 'vue-property-decorator'
 import { IDrag, IProject, ITodo, ITodosState } from '../../../model/index'
 
 import { tools } from '../../../store/Modules/tools'
+import { toolsext } from '@src/store/Modules/toolsext'
+import { lists } from '../../../store/Modules/lists'
 import * as ApiTables from '../../../store/Modules/ApiTables'
 
 import { GlobalStore, Todos } from '@store'
@@ -15,6 +17,7 @@ import { SingleTodo } from '../SingleTodo'
 const namespace: string = 'Todos'
 
 @Component({
+  name: 'CTodo',
   components: { SingleTodo },
   filters: {
     capitalize(value) {
@@ -22,6 +25,7 @@ const namespace: string = 'Todos'
     }
   }
 })
+
 export default class CTodo extends Vue {
   public $q: any
   public todotop: string = ''
@@ -60,11 +64,11 @@ export default class CTodo extends Vue {
   }
 
   get menuPopupConfigTodo() {
-    return tools.menuPopupConfigTodo[UserStore.state.lang]
+    return tools.menuPopupConfigTodo[toolsext.getLocale()]
   }
 
   get listOptionShowTask() {
-    return tools.listOptionShowTask[UserStore.state.lang]
+    return tools.listOptionShowTask[toolsext.getLocale()]
   }
 
   get TodosCount() {
@@ -78,7 +82,7 @@ export default class CTodo extends Vue {
   public todos_completati: (state: ITodosState, category: string) => ITodo[]
 
   public showTask(field_value) {
-    return field_value === tools.MenuAction.SHOW_TASK
+    return field_value === lists.MenuAction.SHOW_TASK
   }
 
   public async onEndtodo(itemdragend) {
@@ -174,22 +178,22 @@ export default class CTodo extends Vue {
   public async updateitemtodo({ myitem, field }) {
     console.log('calling MODIFY updateitemtodo', myitem, field)
 
-    const itemdragend: IDrag = {
-      category: this.categoryAtt,
-      field,
-      idelemtochange: myitem._id,
-      prioritychosen: myitem.priority,
-      atfirst: false
-    }
-
-    await Todos.actions.swapElems(itemdragend)
+    // const itemdragend: IDrag = {
+    //   category: this.categoryAtt,
+    //   field,
+    //   idelemtochange: myitem._id,
+    //   prioritychosen: myitem.priority,
+    //   atfirst: false
+    // }
+    //
+    // await Todos.actions.swapElems(itemdragend)
 
     await Todos.actions.modify({ myitem, field })
 
   }
 
-  public deselectAllRowsproj(item: IProject, check, onlythis: boolean = false) {
-    this.$emit('deselectAllRowsproj', item, check, onlythis)
+  public deselectAllRowsproj(item: IProject, check, onlythis: boolean = false, deselectRiga: boolean = false) {
+    this.$emit('deselectAllRowsproj', item, check, onlythis, deselectRiga)
   }
 
   public setitemsel(item: ITodo) {
@@ -197,7 +201,7 @@ export default class CTodo extends Vue {
   }
 
   public deselectAllRowstodo(item: ITodo, check, onlythis: boolean = false) {
-    console.log('CTODO deselectAllRowstodo : ', item)
+    // console.log('CTODO deselectAllRowstodo : ', item)
 
     for (let i = 0; i < this.$refs.single.length; i++) {
 
@@ -216,6 +220,7 @@ export default class CTodo extends Vue {
         }
       }
       if (des) {
+        // console.log('contr', contr)
         // @ts-ignore
         contr.deselectAndExitEdit()
       }

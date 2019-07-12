@@ -11,10 +11,14 @@ import Api from '@api'
 import * as Types from '@src/store/Api/ApiTypes'
 import { costanti } from '@src/store/Modules/costanti'
 import { tools } from '@src/store/Modules/tools'
+import { toolsext } from '@src/store/Modules/toolsext'
 import * as ApiTables from '@src/store/Modules/ApiTables'
 import { GlobalStore, Projects, Todos, UserStore } from '@store'
 import messages from '../../statics/i18n'
 import globalroutines from './../../globalroutines/index'
+
+
+import { cfgrouter } from '../../router/route-config'
 
 let stateConnDefault = 'online'
 
@@ -50,7 +54,12 @@ const state: IGlobalState = {
     downloading_server: 0,
     downloading_indexeddb: 0
   },
-  arrConfig: []
+  arrConfig: [],
+  lastaction: {
+    table: '',
+    type: 0,
+    _id: 0
+  }
 }
 
 async function getConfig(id) {
@@ -70,10 +79,6 @@ async function getstateConnSaved() {
   } else {
     return 'offline'
   }
-}
-
-function addRoute(myarr, values) {
-  myarr.push(values)
 }
 
 const b = storeBuilder.module<IGlobalState>('GlobalModule', state)
@@ -111,94 +116,24 @@ namespace Getters {
   }, 'showtype')
 
   const getmenu = b.read((state) => {
-    console.log('getmenu')
-
-    const arrlista = GlobalStore.state.listatodo
-    const lista = []
-
-    arrlista.forEach((elem: IMenuList) => {
-      const item = {
-        faIcon: 'fa fa-list-alt',
-        materialIcon: 'todo',
-        name: 'pages.' + elem.description,
-        route: '/todo/' + elem.nametranslate
-      }
-      lista.push(item)
-
-    })
-
-    const arrlistaprojtutti = Projects.getters.listaprojects(false)
-    const arrlistaprojmiei = Projects.getters.listaprojects(true)
-    const listaprojectstutti = []
-    const listaprojectsmiei = []
-
-    for (const elem of arrlistaprojtutti) {
-      const item = {
-        materialIcon: 'next_week',
-        name: elem.nametranslate,
-        text: elem.description,
-        route: tools.getUrlByTipoProj(false) + elem.idelem
-      }
-      listaprojectstutti.push(item)
-    }
-
-    for (const elem of arrlistaprojmiei) {
-      const item = {
-        materialIcon: 'next_week',
-        name: elem.nametranslate,
-        text: elem.description,
-        route: tools.getUrlByTipoProj(true) + elem.idelem
-      }
-      listaprojectsmiei.push(item)
-    }
-
-    const arrroutes: IListRoutes[] = []
-
-    addRoute(arrroutes, { route: '/', faIcon: 'fa fa-home', materialIcon: 'home', name: 'pages.home' })   // HOME
-
-    if (!process.env.PROD) {
-      addRoute(arrroutes, { route: '/todo', faIcon: 'fa fa-list-alt', materialIcon: 'format_list_numbered', name: 'pages.Todo',
-        routes2: lista,
-        level_parent: 0.5,
-        level_child: 0.5
-      })
-
-      addRoute(arrroutes,{ route: tools.getUrlByTipoProj(false) + process.env.PROJECT_ID_MAIN, faIcon: 'fa fa-list-alt', materialIcon: 'next_week', name: 'pages.Projects',
-        routes2: listaprojectstutti,
-        level_parent: 0,
-        level_child: 0.5
-      })
-
-      addRoute(arrroutes,{ route: tools.getUrlByTipoProj(true) + process.env.PROJECT_ID_MAIN, faIcon: 'fa fa-list-alt', materialIcon: 'next_week', name: 'pages.MyProjects',
-        routes2: listaprojectsmiei,
-        level_parent: 0,
-        level_child: 0.5
-      })
-    }
-
-    if (UserStore.state.isAdmin) {
-      addRoute(arrroutes, { route: '/category', faIcon: 'fa fa-list-alt', materialIcon: 'category', name: 'pages.Category' })
-      addRoute(arrroutes, { route: '/admin/cfgserv', faIcon: 'fa fa-database', materialIcon: 'event_seat', name: 'pages.Admin' })
-      addRoute(arrroutes, { route: '/admin/testp1/par1', faIcon: 'fa fa-database', materialIcon: 'restore', name: 'pages.Test1' })
-      addRoute(arrroutes, { route: '/admin/testp1/par2', faIcon: 'fa fa-database', materialIcon: 'restore', name: 'pages.Test2' })
-    }
+    // console.log('getmenu', cfgrouter.getmenu())
 
     state.menulinks = {
       Dashboard: {
-        routes: arrroutes,
+        routes: cfgrouter.getmenu(),
         show: true
       }
     }
 
     return state.menulinks
 
-    console.log('state.menulinks', state.menulinks)
+    // console.log('state.menulinks', state.menulinks)
 
   }, 'getmenu')
 
   const t = b.read((state) => (params) => {
     const msg = params.split('.')
-    const lang = UserStore.state.lang
+    const lang = toolsext.getLocale()
 
     const stringa = messages[lang]
 
@@ -370,11 +305,11 @@ namespace Actions {
     const mykey = process.env.PUBLICKEY_PUSH
     const mystate = state
     return navigator.serviceWorker.ready
-      .then(function (swreg) {
+      .then((swreg) => {
         reg = swreg
         return swreg.pushManager.getSubscription()
       })
-      .then(function (subscription) {
+      .then((subscription) => {
         mystate.wasAlreadySubscribed = !(subscription === null)
 
         if (mystate.wasAlreadySubscribed) {
@@ -391,10 +326,10 @@ namespace Actions {
           })
         }
       })
-      .then(function (newSub) {
+      .then((newSub) => {
         saveNewSubscriptionToServer(context, newSub)
       })
-      .catch(function (err) {
+      .catch((err) => {
         console.log('ERR createPushSubscription:', err)
       })
   }
@@ -480,7 +415,7 @@ namespace Actions {
             subscription.unsubscribe().then((successful) => {
               // You've successfully unsubscribed
               console.log('You\'ve successfully unsubscribed')
-            }).catch( (e) => {
+            }).catch((e) => {
               // Unsubscription failed
             })
           }

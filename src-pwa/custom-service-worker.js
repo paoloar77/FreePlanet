@@ -6,15 +6,17 @@
 
 // Questo è il swSrc
 
-console.log('   [  VER-0.0.27 ] _---------________------  PAO: this is my custom service worker');
+console.log('   [  VER-0.0.63 ] _---------________------  PAO: this is my custom service worker');
 
 importScripts('../statics/js/idb.js');
 importScripts('../statics/js/storage.js');
-importScripts('https://storage.googleapis.com/workbox-cdn/releases/3.0.0/workbox-sw.js'); //++Todo: Replace with local workbox.js
+importScripts('../statics/js/workbox-sw.js');
+
+// importScripts('https://storage.googleapis.com/workbox-cdn/releases/3.0.0/workbox-sw.js');
 
 
 let port = 3000;
-if (self.location.hostname === 'test.freeplanet.app') {
+if (self.location.hostname.startsWith('test')) {
   port = 3001;
 }
 // console.log('SW-06 1');
@@ -66,7 +68,7 @@ if (workbox) {
   const debug = false;
   workbox.setConfig({ debug: debug });
 
-  workbox.core.setCacheNameDetails({ prefix: "freeplanet" });
+  workbox.core.setCacheNameDetails({ prefix: self.location.hostname });
 
   /**
    * The workboxSW.precacheAndRoute() method efficiently caches and responds to
@@ -279,7 +281,7 @@ if (workbox) {
 
 // Storage
   workbox.routing.registerRoute(
-    new RegExp(/.*(?:storage\.freeplanet)\.app.*$/),
+    new RegExp(/.*(?:storage)/),
     workbox.strategies.staleWhileRevalidate({
       cacheName: 'storage',
       plugins: [

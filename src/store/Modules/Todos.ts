@@ -3,6 +3,8 @@ import { storeBuilder } from './Store/Store'
 
 import Api from '@api'
 import { tools } from './tools'
+import { toolsext } from '@src/store/Modules/toolsext'
+import { lists } from './lists'
 import * as ApiTables from './ApiTables'
 import { GlobalStore, Todos, UserStore } from '@store'
 import globalroutines from './../../globalroutines/index'
@@ -11,6 +13,8 @@ import { serv_constants } from '@src/store/Modules/serv_constants'
 import { GetterTree } from 'vuex'
 import objectId from '@src/js/objectId'
 import { costanti } from '@src/store/Modules/costanti'
+import { IAction } from '@src/model'
+import * as Types from '@src/store/Api/ApiTypes'
 
 const nametable = 'todos'
 
@@ -27,7 +31,7 @@ const state: ITodosState = {
   visuLastCompleted: 10
 }
 
-const listFieldsToChange: string [] = ['descr', 'statustodo', 'category', 'expiring_at', 'priority', 'id_prev', 'pos', 'enableExpiring', 'progress', 'phase', 'assigned_to_userId', 'hoursplanned', 'hoursworked', 'start_date', 'completed_at']
+const listFieldsToChange: string [] = ['descr', 'statustodo', 'category', 'expiring_at', 'priority', 'id_prev', 'pos', 'enableExpiring', 'progress', 'phase', 'assigned_to_userId', 'hoursplanned', 'hoursworked', 'start_date', 'completed_at', 'themecolor', 'themebgcolor']
 
 const b = storeBuilder.module<ITodosState>('Todos', state)
 const stateGetter = b.state()
@@ -46,7 +50,7 @@ function gettodosByCategory(category: string): [] {
 
 function initcat() {
 
-  let rec = Getters.getters.getRecordEmpty()
+  const rec = Getters.getters.getRecordEmpty()
   rec.userId = UserStore.state.userId
 
   return rec
@@ -54,7 +58,7 @@ function initcat() {
 }
 
 namespace Getters {
-  const getRecordEmpty = b.read((state: ITodosState) => (): ITodo => {
+  const getRecordEmpty = b.read((stateparamf: ITodosState) => (): ITodo => {
 
     const tomorrow = tools.getDateNow()
     tomorrow.setDate(tomorrow.getDate() + 1)
@@ -82,56 +86,69 @@ namespace Getters {
       hoursplanned: 0,
       hoursworked: 0,
       start_date: tools.getDateNull(),
+      themecolor: 'blue',
+      themebgcolor: 'white'
     }
     // return this.copy(objtodo)
     return objtodo
   }, 'getRecordEmpty')
-  const items_dacompletare = b.read((state: ITodosState) => (cat: string): ITodo[] => {
+  const items_dacompletare = b.read((stateparam: ITodosState) => (cat: string): ITodo[] => {
+    // console.log('items_dacompletare')
     const indcat = getindexbycategory(cat)
-    // console.log('items_dacompletare', 'indcat', indcat, state.todos[indcat])
-    if (state.todos[indcat]) {
-      return state.todos[indcat].filter((todo) => todo.statustodo !== tools.Status.COMPLETED)
+    let arrout = []
+    // console.log('items_dacompletare', 'indcat', indcat, stateparam.todos[indcat])
+    if (stateparam.todos[indcat]) {
+      arrout = stateparam.todos[indcat].filter((todo) => todo.statustodo !== tools.Status.COMPLETED)
     } else {
-      return []
+      arrout = []
     }
+
+    // return tools.mapSort(arrout)
+    return arrout
   }, 'items_dacompletare')
 
-  const todos_completati = b.read((state: ITodosState) => (cat: string): ITodo[] => {
+  const todos_completati = b.read((stateparam: ITodosState) => (cat: string): ITodo[] => {
+    console.log('todos_completati')
     const indcat = getindexbycategory(cat)
-    if (state.todos[indcat]) {
-      if (state.showtype === costanti.ShowTypeTask.SHOW_LAST_N_COMPLETED) {   // Show only the first N completed
-        return state.todos[indcat].filter((todo) => todo.statustodo === tools.Status.COMPLETED).slice(0, state.visuLastCompleted)
+    if (stateparam.todos[indcat]) {
+      let arrout = []
+      if (stateparam.showtype === costanti.ShowTypeTask.SHOW_LAST_N_COMPLETED) {   // Show only the first N completed
+        arrout = stateparam.todos[indcat].filter((todo) => todo.statustodo === tools.Status.COMPLETED).slice(0, stateparam.visuLastCompleted)
       }
-      else if (state.showtype === costanti.ShowTypeTask.SHOW_ONLY_TOCOMPLETE) {
-        return []
+      else if (stateparam.showtype === costanti.ShowTypeTask.SHOW_ONLY_TOCOMPLETE) {
+        arrout = []
       }
-      else if (state.showtype === costanti.ShowTypeTask.SHOW_ALL) {
-        return state.todos[indcat].filter((todo) => todo.statustodo === tools.Status.COMPLETED)
+      else if (stateparam.showtype === costanti.ShowTypeTask.SHOW_ALL) {
+        arrout = stateparam.todos[indcat].filter((todo) => todo.statustodo === tools.Status.COMPLETED)
       }
       else {
-        return []
+        arrout = []
       }
+
+      return arrout
+      // return tools.mapSort(arrout)
+
     } else {
       return []
     }
   }, 'todos_completati')
 
-  const doneTodosCount = b.read((state: ITodosState) => (cat: string): number => {
+  const doneTodosCount = b.read((stateparam: ITodosState) => (cat: string): number => {
     return getters.todos_completati(cat).length
   }, 'doneTodosCount')
-  const TodosCount = b.read((state: ITodosState) => (cat: string): number => {
+  const TodosCount = b.read((stateparam: ITodosState) => (cat: string): number => {
     const indcat = getindexbycategory(cat)
-    if (state.todos[indcat]) {
-      return state.todos[indcat].length
+    if (stateparam.todos[indcat]) {
+      return stateparam.todos[indcat].length
     } else {
       return 0
     }
   }, 'TodosCount')
 
-  const getRecordById = b.read((state: ITodosState) => (id: string, cat: string): ITodo => {
+  const getRecordById = b.read((stateparam: ITodosState) => (id: string, cat: string): ITodo => {
     const indcat = getindexbycategory(cat)
-    if (state.todos) {
-      return state.todos[indcat].find((item) => item._id === id)
+    if (stateparam.todos) {
+      return stateparam.todos[indcat].find((item) => item._id === id)
     }
     return null
   }, 'getRecordById')
@@ -160,49 +177,73 @@ namespace Getters {
 
 namespace Mutations {
 
-  function findIndTodoById(state: ITodosState, data: IParamTodo) {
-    const indcat = state.categories.indexOf(data.categorySel)
+  function findIndTodoById(stateparam: ITodosState, data: IParamTodo) {
+    const indcat = stateparam.categories.indexOf(data.categorySel)
     if (indcat >= 0) {
-      return tools.getIndexById(state.todos[indcat], data.id)
+      return tools.getIndexById(stateparam.todos[indcat], data.id)
     }
     return -1
   }
 
-  function createNewItem(state: ITodosState, { objtodo, atfirst, categorySel }) {
-    let indcat = state.categories.indexOf(categorySel)
-    if (indcat == -1) {
-      state.categories.push(categorySel)
-      indcat = state.categories.indexOf(categorySel)
+  function createNewItem(stateparam: ITodosState, { objtodo, atfirst, categorySel }) {
+    let indcat = stateparam.categories.indexOf(categorySel)
+    if (indcat === -1) {
+      stateparam.categories.push(categorySel)
+      indcat = stateparam.categories.indexOf(categorySel)
     }
-    console.log('createNewItem', objtodo, 'cat=', categorySel, 'state.todos[indcat]', state.todos[indcat])
-    if (state.todos[indcat] === undefined) {
-      state.todos[indcat] = []
-      state.todos[indcat].push(objtodo)
-      console.log('push state.todos[indcat]', state.todos)
+    console.log('createNewItem', objtodo, 'cat=', categorySel, 'stateparam.todos[indcat]', stateparam.todos[indcat])
+    if (stateparam.todos[indcat] === undefined) {
+      stateparam.todos[indcat] = []
+      stateparam.todos[indcat].push(objtodo)
+      console.log('push stateparam.todos[indcat]', stateparam.todos)
       return
     }
     if (atfirst) {
-      state.todos[indcat].unshift(objtodo)
+      stateparam.todos[indcat].unshift(objtodo)
     }
     else {
-      state.todos[indcat].push(objtodo)
+      stateparam.todos[indcat].push(objtodo)
     }
 
-    console.log('state.todos[indcat]', state.todos[indcat])
+    console.log('stateparam.todos[indcat]', stateparam.todos[indcat])
 
   }
 
-  function deletemyitem(state: ITodosState, myitem: ITodo) {
+  function deletemyitem(stateparam: ITodosState, myitem: ITodo) {
     // Find record
-    const indcat = state.categories.indexOf(myitem.category)
-    const ind = findIndTodoById(state, { id: myitem._id, categorySel: myitem.category })
+    const indcat = stateparam.categories.indexOf(myitem.category)
+    const ind = findIndTodoById(stateparam, { id: myitem._id, categorySel: myitem.category })
 
-    ApiTables.removeitemfromarray(state.todos[indcat], ind)
+    ApiTables.removeitemfromarray(stateparam.todos[indcat], ind)
+  }
+
+  async function movemyitem(stateparam: ITodosState, { myitemorig, myitemdest } ) {
+
+    const indcat = stateparam.categories.indexOf(myitemorig.category)
+    const indorig = tools.getIndexById(stateparam.todos[indcat], myitemorig._id)
+    let indcatdest = stateparam.categories.indexOf(myitemdest.category)
+
+    console.log('stateparam.categories', stateparam.categories)
+    console.log('myitemdest', myitemdest)
+    console.log('indcat', indcat, 'indcatdest', indcatdest, 'indorig', indorig)
+
+    if (indcatdest === -1) {
+      stateparam.categories.push(myitemdest.category)
+      const newindcat = stateparam.categories.indexOf(myitemdest.category)
+      stateparam.todos[newindcat] = []
+      indcatdest = newindcat
+    }
+
+    stateparam.todos[indcat].splice(indorig, 1)
+    stateparam.todos[indcatdest].push(myitemdest)
+
+    await Actions.actions.modify({ myitem: myitemdest, field: 'category' })
   }
 
   export const mutations = {
     deletemyitem: b.commit(deletemyitem),
-    createNewItem: b.commit(createNewItem)
+    createNewItem: b.commit(createNewItem),
+    movemyitem: b.commit(movemyitem)
   }
 
 }
@@ -212,9 +253,9 @@ namespace Actions {
   async function dbLoad(context, { checkPending }) {
     console.log('dbLoad', nametable, checkPending, 'userid=', UserStore.state.userId)
 
-    if (UserStore.state.userId === '') {
-      return false  // Login not made
-    }
+    // if (UserStore.state.userId === '') {
+    //   return new Types.AxiosError(0, null, 0, '')
+    // }
 
     const ris = await Api.SendReq('/todos/' + UserStore.state.userId, 'GET', null)
       .then((res) => {
@@ -240,10 +281,12 @@ namespace Actions {
       .catch((error) => {
         console.log('error dbLoad', error)
         UserStore.mutations.setErrorCatch(error)
-        return error
+        return new Types.AxiosError(serv_constants.RIS_CODE_ERR, null, tools.ERR_GENERICO, error)
       })
 
     ApiTables.aftercalling(ris, checkPending, 'categories')
+
+    return ris
   }
 
   async function deleteItemtodo(context, { cat, idobj }) {
@@ -288,7 +331,7 @@ namespace Actions {
     } else {
       console.log('INSERT AT THE BOTTOM')
       // INSERT AT THE BOTTOM , so GET LAST ITEM
-      const lastelem = tools.getLastListNotCompleted(nametable, objtodo.category)
+      const lastelem = tools.getLastListNotCompleted(nametable, objtodo.category, this.tipoProj)
 
       objtodo.id_prev = (!!lastelem) ? lastelem._id : ApiTables.LIST_START
     }
@@ -363,7 +406,7 @@ namespace Actions {
   }
 
   async function swapElems(context, itemdragend: IDrag) {
-    console.log('TODOS swapElems', itemdragend, state.todos, state.categories)
+    // console.log('TODOS swapElems', itemdragend, state.todos, state.categories)
 
     const cat = itemdragend.category
     const indcat = state.categories.indexOf(cat)
@@ -373,12 +416,42 @@ namespace Actions {
 
   }
 
+  async function ActionCutPaste(context, action: IAction) {
+    console.log('ActionCutPaste', action)
+
+    if (action.type === lists.MenuAction.CUT) {
+      GlobalStore.state.lastaction = action
+    } else if (action.type === lists.MenuAction.PASTE) {
+      if (GlobalStore.state.lastaction.type === lists.MenuAction.CUT) {
+
+        // Change id_parent
+        const orig_obj = Getters.getters.getRecordById(GlobalStore.state.lastaction._id, GlobalStore.state.lastaction.cat)
+        // const dest = Getters.getters.getRecordById(action._id, action.cat)
+
+        console.log('action', action, 'orig_obj', orig_obj)
+
+        const dest_obj = tools.jsonCopy(orig_obj)
+
+        if (!!dest_obj) {
+          dest_obj.category = action._id
+          dest_obj.modified = true
+          dest_obj.id_prev = null
+
+          GlobalStore.state.lastaction.type = 0
+
+          return await Mutations.mutations.movemyitem({ myitemorig: orig_obj, myitemdest: dest_obj })
+        }
+      }
+    }
+  }
+
   export const actions = {
     dbLoad: b.dispatch(dbLoad),
     swapElems: b.dispatch(swapElems),
     deleteItemtodo: b.dispatch(deleteItemtodo),
     dbInsert: b.dispatch(dbInsert),
-    modify: b.dispatch(modify)
+    modify: b.dispatch(modify),
+    ActionCutPaste: b.dispatch(ActionCutPaste)
   }
 
 }

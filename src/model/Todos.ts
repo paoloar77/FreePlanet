@@ -1,3 +1,5 @@
+import { IAction } from '@src/model/Projects'
+
 export interface ITodo {
   _id?: any,
   userId?: string
@@ -21,6 +23,8 @@ export interface ITodo {
   hoursplanned?: number
   hoursworked?: number
   start_date?: Date
+  themecolor?: string
+  themebgcolor?: string
 }
 
 export interface IParamTodo {
@@ -40,7 +44,7 @@ export interface IDrag {
   category?: string
   id_proj?: string
   atfirst?: boolean
-  mieiproj?: boolean
+  tipoproj?: string
 }
 
 export interface ITodosState {

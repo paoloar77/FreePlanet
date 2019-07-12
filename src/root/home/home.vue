@@ -23,7 +23,7 @@
                                 </div>
                                 <div class="flex justify-end">
                                     <div class="q-gutter-xs testo-banda clgutter">
-                                        <div class="text-h1 shadow-max">{{appname}}</div>
+                                        <div class="text-h1 shadow-max">{{$t('msg.myAppName')}}</div>
                                         <div class="text-subtitle1 shadow text-italic q-pl-sm">
                                             {{$t('msg.sottoTitoloApp')}}
                                         </div>
@@ -83,7 +83,7 @@
                                                        class="enable-notifications shadow"
                                                        color="primary" rounded
                                                        size="md"
-                                                       icon="notifications" @click="askfornotification"
+                                                       icon="notifications" @click="tools.askfornotification"
                                                        :label="$t('notification.ask')"/>
                                                 <!--<q-btn v-if="getPermission() === 'granted'" class="enable-notifications" color="primary" rounded size="lg" icon="notifications" @click="showNotificationExample" label="Send Notification"/>-->
                                                 <!--<q-btn v-if="getPermission() === 'granted'" class="enable-notifications" color="secondary" rounded size="lg" icon="notifications" @click="createPushSubscription" label="Create Push Subscription !"/>-->
@@ -110,7 +110,7 @@
                                 </div>
                                 <div class="flex justify-end">
                                     <div class="q-gutter-xs testo-banda clgutter">
-                                        <div class="text-h1 shadow-max">FreePlanet</div>
+                                        <div class="text-h1 shadow-max">{{$t('msg.myAppName')}}</div>
                                         <div class="text-subtitle1 shadow text-italic q-pl-sm">
                                             {{$t('msg.sottoTitoloApp')}}
                                         </div>
@@ -170,7 +170,7 @@
                                                        class="enable-notifications shadow"
                                                        color="primary" rounded
                                                        size="md"
-                                                       icon="notifications" @click="askfornotification"
+                                                       icon="notifications" @click="tools.askfornotification"
                                                        :label="$t('notification.ask')"/>
                                                 <!--<q-btn v-if="getPermission() === 'granted'" class="enable-notifications" color="primary" rounded size="lg" icon="notifications" @click="showNotificationExample" label="Send Notification"/>-->
                                                 <!--<q-btn v-if="getPermission() === 'granted'" class="enable-notifications" color="secondary" rounded size="lg" icon="notifications" @click="createPushSubscription" label="Create Push Subscription !"/>-->
@@ -201,7 +201,7 @@
                                 </div>
                                 <div class="flex justify-end">
                                     <div class="q-gutter-xs testo-banda clgutter">
-                                        <div class="text-h1 shadow-max">FreePlanet</div>
+                                        <div class="text-h1 shadow-max">{{getenv('APP_NAME')}}</div>
                                         <div class="text-subtitle1 shadow text-italic q-pl-sm">
                                             {{$t('msg.sottoTitoloApp')}}
                                         </div>
@@ -261,7 +261,7 @@
                                                        class="enable-notifications shadow"
                                                        color="primary" rounded
                                                        size="md"
-                                                       icon="notifications" @click="askfornotification"
+                                                       icon="notifications" @click="tools.askfornotification"
                                                        :label="$t('notification.ask')"/>
                                                 <!--<q-btn v-if="getPermission() === 'granted'" class="enable-notifications" color="primary" rounded size="lg" icon="notifications" @click="showNotificationExample" label="Send Notification"/>-->
                                                 <!--<q-btn v-if="getPermission() === 'granted'" class="enable-notifications" color="secondary" rounded size="lg" icon="notifications" @click="createPushSubscription" label="Create Push Subscription !"/>-->
@@ -300,6 +300,7 @@
                     </div>
                 </div>
             </section>
+
             <section class="padding bg-primary landing__swirl-bg" v-scroll-reveal.reset>
                 <div class="landing__features row justify-between items-start q-col-gutter-sm">
                     <div class="col-12 col-sm-5">

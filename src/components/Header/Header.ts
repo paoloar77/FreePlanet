@@ -8,10 +8,12 @@ import { GlobalStore, UserStore } from '@modules'
 // import { StateConnection } from '../../model'
 import { Watch } from 'vue-property-decorator'
 import { tools } from '../../store/Modules/tools'
+import { toolsext } from '@src/store/Modules/toolsext'
 
-import Quasar from 'quasar'
+import Quasar, { Screen } from 'quasar'
 
 @Component({
+  name: 'Header',
   components: {
     drawer,
     messagePopover
@@ -41,6 +43,14 @@ export default class Header extends Vue {
     { label: 'Italiano', icon: 'fa-facebook', value: 'it', image: '../statics/images/it.png', short: 'IT' }
     // { label: 'German', icon: 'fa-flag-de', value: 'de', image: '../statics/images/de.png', short: 'DE' },
   ]
+
+  get getappname(){
+    if (Screen.width < 400) {
+      return this.$t('msg.myAppNameShort')
+    } else {
+      return this.$t('msg.myAppName')
+    }
+  }
 
   get conn_changed() {
     return GlobalStore.state.stateConnection

@@ -1,3 +1,5 @@
+import { UserStore } from '@store'
+
 export const costanti = {
   ShowTypeTask: {
     SHOW_LAST_N_COMPLETED: 200,
@@ -8,5 +10,5 @@ export const costanti = {
   CONFIG_ID_STATE_CONN: '2',
   CONFIG_ID_SHOW_TYPE_TODOS: '3',
 
-  MAX_PHASES: 5
+  MAX_PHASES: 5,
 }

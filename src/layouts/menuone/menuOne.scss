@@ -66,6 +66,10 @@
   font-size: 1.5rem;
 }
 
+.clexpansion{
+  min-width: 0px !important;
+}
+
 .my-menu-active {
   background-color: rgba(174, 189, 241, 0.71);
 }
@@ -73,4 +77,8 @@
 .my-menu-separat > i{
   min-width: 26px;
   font-size: 1rem;
+}
+
+.my-menu-icon-none > i{
+  display: none;
 }

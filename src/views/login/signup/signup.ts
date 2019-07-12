@@ -2,6 +2,7 @@ import Vue from 'vue'
 import { Component, Prop, Watch } from 'vue-property-decorator'
 import { UserStore } from '@store'
 import { tools } from '../../../store/Modules/tools'
+import { toolsext } from '@src/store/Modules/toolsext'
 
 import { ISignupOptions, IUserState } from 'model'
 import { validations, TSignup } from './signup-validate'

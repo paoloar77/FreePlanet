@@ -1,8 +1,10 @@
 import Vue from 'vue'
 import { Component, Prop, Watch } from 'vue-property-decorator'
 
-import { UserStore } from '@modules'
+import { Projects, UserStore } from '@modules'
 import { tools } from '../../../store/Modules/tools'
+import { toolsext } from '@src/store/Modules/toolsext'
+import { lists } from '../../../store/Modules/lists'
 
 import { ITodo } from '../../../model/index'
 
@@ -17,7 +19,6 @@ import { CDate } from '../../CDate'
   name: 'SingleTodo'
 })
 export default class SingleTodo extends Vue {
-  public selectPriority: [] = []
   public menuPopupTodo: any[] = []
   public iconCompleted: string = ''
   public classCompleted: string = ''
@@ -41,6 +42,7 @@ export default class SingleTodo extends Vue {
   public itemtodoPrec: ITodo
   public clButtPopover: string = 'pos-item-popover'
   public numpos: number = 0
+  public attivaEdit: boolean = false
 
   public $q: any
 
@@ -90,6 +92,12 @@ export default class SingleTodo extends Vue {
   @Watch('itemtodo.assigned_to_userId') public valueChangedend_assigned_to_userId() {
     this.watchupdate('assigned_to_userId')
   }
+  @Watch('itemtodo.themecolor') public valueChangedend_themecolor() {
+    this.watchupdate('themecolor')
+  }
+  @Watch('itemtodo.themebgcolor') public valueChangedend_themebgcolor() {
+    this.watchupdate('themebgcolor')
+  }
   @Watch('itemtodo.phase') public valueChangedend_phase() {
     this.watchupdate('phase')
   }
@@ -138,6 +146,9 @@ export default class SingleTodo extends Vue {
       this.classDescrEdit += ' titleLista-item'
     }
 
+    this.classDescr += ' text-' + this.itemtodo.themecolor + ' bg-' + this.itemtodo.themebgcolor
+    this.classDescrEdit += ' text-' + this.itemtodo.themecolor + ' bg-' + this.itemtodo.themebgcolor
+
     if (this.itemtodo.progress > 100)
       this.itemtodo.progress = 100
 
@@ -183,11 +194,11 @@ export default class SingleTodo extends Vue {
     }
 
     if (this.isTodo()) {
-      this.menuPopupTodo = tools.menuPopupTodo[UserStore.state.lang]
+      this.menuPopupTodo = tools.menuPopupTodo[toolsext.getLocale()]
     }
     else {
       this.menuPopupTodo = []
-      this.menuPopupTodo.push(tools.menuPopupTodo[UserStore.state.lang][tools.INDEX_MENU_DELETE])
+      this.menuPopupTodo.push(tools.menuPopupTodo[toolsext.getLocale()][tools.INDEX_MENU_DELETE])
     }
 
   }
@@ -197,9 +208,6 @@ export default class SingleTodo extends Vue {
     this.updateicon()
 
     this.updateClasses()
-
-    this.selectPriority = tools.selectPriority[UserStore.state.lang]
-
   }
 
   public getClassRow() {
@@ -209,16 +217,15 @@ export default class SingleTodo extends Vue {
   public clickRiga(clickmenu: boolean = false) {
     // console.log('CLICK RIGA ************')
 
-    if (!this.sel) {
-      if (!this.inEdit) {
-        this.$emit('deselectAllRowsproj', null, false, false)
-        this.$emit('deselectAllRowstodo', this.itemtodo, true)
+    if (!this.inEdit) {
+      this.$emit('deselectAllRowsproj', null, false, false)
+      this.$emit('deselectAllRowstodo', this.itemtodo, true)
 
-        if (!this.sel) {
-          this.selectRiga()
-        } else {
-          this.deselectRiga()
-        }
+      if (!this.sel) {
+        this.selectRiga()
+      } else {
+        this.$emit('deselectAllRowsproj', null, false, false, true)
+        this.deselectRiga()
       }
     }
   }
@@ -232,10 +239,11 @@ export default class SingleTodo extends Vue {
   }
 
   public deselectRiga() {
-    // console.log('DeselectRiga', this.itemtodo.descr)
+    console.log('DeselectRiga', this.itemtodo.descr)
     this.sel = false
     this.classRow = ''
     this.inEdit = false
+    this.attivaEdit = false
     this.updateClasses()
   }
 
@@ -261,7 +269,8 @@ export default class SingleTodo extends Vue {
   }
 
   public editTodo() {
-    if (this.itemtodo.statustodo !== tools.Status.COMPLETED) {
+
+    if (this.attivaEdit) {
       // console.log('INIZIO - editTodo')
       this.$emit('click')
       this.precDescr = this.itemtodo.descr
@@ -293,7 +302,7 @@ export default class SingleTodo extends Vue {
         theField.focus()
       }
       // console.log('focus()')
-    }, 300)
+    }, 400)
   }
 
   public exitEdit(singola: boolean = false) {
@@ -303,6 +312,7 @@ export default class SingleTodo extends Vue {
       }
       // console.log('exitEdit')
       this.inEdit = false
+      this.attivaEdit = false
       this.updateClasses()
       this.$emit('deselectAllRowsproj', null, false, false)
       this.$emit('deselectAllRowstodo', this.itemtodo, false, singola)
@@ -315,7 +325,7 @@ export default class SingleTodo extends Vue {
     if (((e.keyCode === 8) || (e.keyCode === 46)) && (this.precDescr === '') && !e.shiftKey) {
       e.preventDefault()
       this.deselectRiga()
-      this.clickMenu(tools.MenuAction.DELETE)
+      this.clickMenu(lists.MenuAction.DELETE)
         .then(() => {
           this.faiFocus('insertTask', true)
           return
@@ -343,7 +353,7 @@ export default class SingleTodo extends Vue {
     if (((e.keyCode === 8) || (e.keyCode === 46)) && (this.precDescr === '') && !e.shiftKey) {
       e.preventDefault()
       this.deselectRiga()
-      this.clickMenu(tools.MenuAction.DELETE)
+      this.clickMenu(lists.MenuAction.DELETE)
         .then(() => {
           this.faiFocus('insertTask', true)
           return
@@ -384,6 +394,7 @@ export default class SingleTodo extends Vue {
 
     this.watchupdate('descr')
     this.inEdit = false
+    this.attivaEdit = false
     // this.precDescr = this.itemtodo.descr
     this.updateClasses()
   }
@@ -450,20 +461,68 @@ export default class SingleTodo extends Vue {
 
   }
 
+  public activeEdit() {
+    console.log('Attiva Edit')
+    this.attivaEdit = true
+    this.editTodo()
+  }
+
   public async clickMenu(action) {
     console.log('click menu: ', action)
-    if (action === tools.MenuAction.DELETE) {
+    if (action === lists.MenuAction.DELETE) {
       return await this.askConfirmDelete()
-    } else if (action === tools.MenuAction.TOGGLE_EXPIRING) {
+    } else if (action === lists.MenuAction.TOGGLE_EXPIRING) {
       return await this.enableExpiring()
-    } else if (action === tools.MenuAction.COMPLETED) {
+    } else if (action === lists.MenuAction.COMPLETED) {
       return await this.setCompleted()
-    } else if (action === tools.MenuAction.PROGRESS_BAR) {
+    } else if (action === lists.MenuAction.EDIT) {
+      this.activeEdit()
+    } else if (action === lists.MenuAction.PROGRESS_BAR) {
       return await this.updatedata('progress')
+    } else if (action === lists.MenuAction.CUT) {
+      const myaction = {
+        table: tools.todos,
+        type: lists.MenuAction.CUT,
+        _id: this.itemtodo._id,
+        cat: this.itemtodo.category
+      }
+      return await Projects.actions.ActionCutPaste(myaction)
     } else if (action === 0) {
       this.deselectAndExitEdit()
     }
 
+  }
+
+  public selectSubMenu(action, elem) {
+    if (action === lists.MenuAction.PRIORITY) {
+      this.setPriority(elem)
+    } else if (action === lists.MenuAction.THEME) {
+      this.setThemeColor(elem, false)
+    } else if (action === lists.MenuAction.THEMEBG) {
+      this.setThemeColor(elem, true)
+    }
+  }
+
+  public setThemeColor(newtheme, bg: boolean) {
+    let changedfield = ''
+
+    if (bg){
+      if (this.itemtodo.themebgcolor !== newtheme) {
+        this.itemtodo.themebgcolor = newtheme
+        changedfield = 'themebgcolor'
+      }
+    }else {
+        if (this.itemtodo.themecolor !== newtheme) {
+          this.itemtodo.themecolor = newtheme
+          changedfield = 'themecolor'
+        }
+    }
+
+    if (changedfield !== '') {
+      this.updatedata(changedfield)
+
+      this.updateicon()
+    }
   }
 
   public setPriority(newpriority) {

@@ -1,6 +1,14 @@
 import objectId from '@src/js/objectId'
 import { UserStore } from '@store'
 import { tools } from '@src/store/Modules/tools'
+import { toolsext } from '@src/store/Modules/toolsext'
+
+export interface IAction {
+  table: string
+  type: number
+  _id: any
+  cat?: string
+}
 
 export interface IProject {
   _id?: any,
@@ -20,11 +28,13 @@ export interface IProject {
   enableExpiring?: boolean
   id_prev?: string
   modified?: boolean
+  favourite?: number
   pos?: number
   order?: number
   live_url?: string
   test_url?: string
   hoursplanned?: number
+  hoursleft?: number
   hoursworked?: number
   progressCalc?: number
   begin_development?: Date
@@ -35,6 +45,8 @@ export interface IProject {
   actualphase?: number
   privacyread?: string
   privacywrite?: string
+  themecolor?: string
+  themebgcolor?: string
 }
 
 export interface IProjectsState {

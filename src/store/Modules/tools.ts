@@ -1,11 +1,16 @@
 import { Todos, Projects, UserStore } from '@store'
 import globalroutines from './../../globalroutines/index'
 import { costanti } from './costanti'
+import { toolsext } from './toolsext'
 import { translation } from './translation'
-import Quasar, { date } from 'quasar'
-import { IProject, ITodo, Privacy } from '@src/model'
+import Quasar, { date, Screen } from 'quasar'
+import { IListRoutes, IMenuList, IProject, ITodo, Privacy } from '@src/model'
 import * as ApiTables from '@src/store/Modules/ApiTables'
 import translate from '@src/globalroutines/util'
+import { RouteNames } from '@src/router/route-names'
+
+import { lists } from './lists'
+import { shen } from '@src/database/shen'
 
 export interface INotify {
   color?: string | 'primary'
@@ -14,6 +19,8 @@ export interface INotify {
 }
 
 export const tools = {
+  projects: 'projects',
+  todos: 'todos',
   EMPTY: 0,
   CALLING: 10,
   OK: 20,
@@ -27,6 +34,7 @@ export const tools = {
 
   FIRST_PROJ: '5ca8f17fcd40dc5012f53346',
 
+  WHAT_NOTHING: 0,
   WHAT_TODO: 1,
   WHAT_PROJECT: 2,
 
@@ -59,16 +67,6 @@ export const tools = {
     COMPLETED: 10
   },
 
-  MenuAction: {
-    DELETE: 100,
-    TOGGLE_EXPIRING: 101,
-    COMPLETED: 110,
-    PROGRESS_BAR: 120,
-    PRIORITY: 130,
-    SHOW_TASK: 150,
-    EDIT: 160,
-    ADD_PROJECT: 200
-  },
   selectPhase: {
     it: [
       {
@@ -273,89 +271,6 @@ export const tools = {
 
   }
   ,
-  selectPriority: {
-    it: [
-      {
-        id: 1,
-        label: 'Alta',
-        value: 2,
-        icon: 'expand_less'
-      },
-      {
-        id: 2,
-        label: 'Normale',
-        value: 1,
-        icon: 'remove'
-      },
-      {
-        id: 3,
-        label: 'Bassa',
-        value: 0,
-        icon: 'expand_more'
-      }],
-    es:
-      [
-        {
-          id: 1,
-          label: 'Alta',
-          value: 2,
-          icon: 'expand_less'
-        },
-        {
-          id: 2,
-          label: 'Normal',
-          value: 1,
-          icon: 'remove'
-        },
-        {
-          id: 3,
-          label: 'Baja',
-          value: 0,
-          icon: 'expand_more'
-        }],
-    enUs:
-      [
-        {
-          id: 1,
-          label: 'High',
-          value: 2,
-          icon: 'expand_less'
-        },
-        {
-          id: 2,
-          label: 'Normal',
-          value: 1,
-          icon: 'remove'
-        },
-        {
-          id: 3,
-          label: 'Low',
-          value: 0,
-          icon: 'expand_more'
-        }],
-    de:
-      [
-        {
-          id: 1,
-          label: 'High',
-          value: 2,
-          icon: 'expand_less'
-        },
-        {
-          id: 2,
-          label: 'Normal',
-          value: 1,
-          icon: 'remove'
-        },
-        {
-          id: 3,
-          label: 'Low',
-          value: 0,
-          icon: 'expand_more'
-        }]
-
-  }
-  ,
 
   INDEX_MENU_DELETE: 4,
 
@@ -363,115 +278,229 @@ export const tools = {
     {
       it: [
         {
+          id: 5,
+          disable: false,
+          label: 'Taglia',
+          value: lists.MenuAction.CUT,
+          icon: 'undo'
+        },
+        {
           id: 10,
+          disable: false,
+          label: 'Modifica',
+          value: lists.MenuAction.EDIT,
+          icon: 'create'
+        },
+        {
+          id: 11,
+          disable: false,
+          label: 'Elimina',
+          value: lists.MenuAction.DELETE,
+          icon: 'delete',
+          checked: false
+        },
+        {
+          id: 12,
+          disable: false,
           label: '',
-          value: 120, // PROGRESS_BAR
+          value: lists.MenuAction.PROGRESS_BAR,
           icon: 'rowing',
           checked: true
         },
         {
           id: 20,
+          disable: false,
           label: 'Imposta Priorità',
-          value: 130, // PRIORITY
+          value: lists.MenuAction.PRIORITY,
           icon: 'rowing',
-          checked: false
+          checked: false,
+          arrlista: lists.selectPriority.it
+        },
+        {
+          id: 21,
+          disable: false,
+          label: translation.it.proj.themecolor,
+          value: lists.MenuAction.THEME,
+          icon: 'format_color_text',
+          checked: false,
+          arrlista: lists.selectTheme
+        },
+        {
+          id: 22,
+          disable: false,
+          label: translation.it.proj.themebgcolor,
+          value: lists.MenuAction.THEMEBG,
+          icon: 'format_color_fill',
+          checked: false,
+          arrlista: lists.selectTheme
         },
         {
           id: 30,
+          disable: false,
           label: 'Completato',
-          value: 110, // COMPLETED
+          value: lists.MenuAction.COMPLETED,
           icon: 'check_circle',
           checked: true
         },
         {
           id: 40,
+          disable: false,
           label: 'Imposta Scadenza',
-          value: 101, // TOGGLE_EXPIRING
+          value: lists.MenuAction.TOGGLE_EXPIRING,
           icon: 'date_range',
           checked: true
-        },
-        {
-          id: 50,
-          label: 'Elimina',
-          value: 100, // DELETE
-          icon: 'delete',
-          checked: false
         }
       ],
       es:
         [
           {
+            id: 5,
+            disable: false,
+            label: 'Cortar',
+            value: lists.MenuAction.CUT,
+            icon: 'undo'
+          },
+          {
+            id: 7,
+            disable: false,
+            label: 'Editar',
+            value: lists.MenuAction.EDIT,
+            icon: 'create'
+          },
+          {
+            id: 8,
+            disable: false,
+            label: 'Borrar',
+            value: lists.MenuAction.DELETE,
+            icon: 'delete',
+            checked: false
+          },
+          {
             id: 10,
+            disable: false,
             label: '',
-            value: 120, // PROGRESS_BAR
+            value: lists.MenuAction.PROGRESS_BAR,
             icon: 'rowing',
             checked: true
           },
           {
             id: 20,
+            disable: false,
             label: 'Establecer Prioridad',
-            value: 130, // PRIORITY
+            value: lists.MenuAction.PRIORITY,
             icon: 'rowing',
-            checked: false
+            checked: false,
+            arrlista: lists.selectPriority.es
+          },
+          {
+            id: 21,
+            disable: false,
+            label: translation.es.proj.themecolor,
+            value: lists.MenuAction.THEME,
+            icon: 'format_color_text',
+            checked: false,
+            arrlista: lists.selectTheme
+          },
+          {
+            id: 22,
+            disable: false,
+            label: translation.es.proj.themebgcolor,
+            value: lists.MenuAction.THEMEBG,
+            icon: 'format_color_fill',
+            checked: false,
+            arrlista: lists.selectTheme
           },
           {
             id: 30,
+            disable: false,
             label: 'Completado',
-            value: 110, // COMPLETED
+            value: lists.MenuAction.COMPLETED,
             icon: 'check_circle',
             checked: true
           },
           {
             id: 40,
+            disable: false,
             label: 'Establecer expiración',
-            value: 101, // TOGGLE_EXPIRING
+            value: lists.MenuAction.TOGGLE_EXPIRING,
             icon: 'date_range',
             checked: true
-          },
-          {
-            id: 50,
-            label: 'Borrar',
-            value: 100, // DELETE
-            icon: 'delete',
-            checked: false
           }
         ],
       enUs:
         [
           {
+            id: 5,
+            disable: false,
+            label: 'Cut',
+            value: lists.MenuAction.CUT,
+            icon: 'undo'
+          },
+          {
+            id: 7,
+            disable: false,
+            label: 'Edit',
+            value: lists.MenuAction.EDIT,
+            icon: 'create'
+          },
+          {
+            id: 8,
+            disable: false,
+            label: 'Delete',
+            value: lists.MenuAction.DELETE,
+            icon: 'trash',
+            checked: false
+          },
+          {
             id: 10,
+            disable: false,
             label: '',
-            value: 120, // PROGRESS_BAR
+            value: lists.MenuAction.PROGRESS_BAR,
             icon: 'check_circle',
             checked: true
           },
           {
             id: 20,
+            disable: false,
             label: 'Set Priority',
-            value: 130, // PRIORITY
+            value: lists.MenuAction.PRIORITY,
             icon: 'high_priority',
-            checked: false
+            checked: false,
+            arrlista: lists.selectPriority.enUs
+          },
+          {
+            id: 21,
+            disable: false,
+            label: translation.enUs.proj.themecolor,
+            value: lists.MenuAction.THEME,
+            icon: 'format_color_text',
+            checked: false,
+            arrlista: lists.selectTheme
+          },
+          {
+            id: 22,
+            disable: false,
+            label: translation.enUs.proj.themebgcolor,
+            value: lists.MenuAction.THEMEBG,
+            icon: 'format_color_fill',
+            checked: false,
+            arrlista: lists.selectTheme
           },
           {
             id: 30,
+            disable: false,
             label: 'Completed',
-            value: 110, // COMPLETED
+            value: lists.MenuAction.COMPLETED,
             icon: 'check_circle',
             checked: true
           },
           {
             id: 40,
+            disable: false,
             label: 'Set Expiring',
-            value: 101, // TOGGLE_EXPIRING
+            value: lists.MenuAction.TOGGLE_EXPIRING,
             icon: 'date_range',
             checked: true
-          },
-          {
-            id: 50,
-            label: 'Delete',
-            value: 100, // DELETE
-            icon: 'trash',
-            checked: false
           }
         ]
     }
@@ -480,66 +509,150 @@ export const tools = {
   menuPopupProj: {
     it: [
       {
+        id: 5,
+        disable: false,
+        label: 'Taglia',
+        value: lists.MenuAction.CUT,
+        icon: 'undo'
+      },
+      {
         id: 10,
+        disable: false,
         label: 'Modifica',
-        value: 160, // EDIT
+        value: lists.MenuAction.EDIT,
         icon: 'create'
       },
       {
+        id: 11,
+        disable: false,
+        label: 'Elimina',
+        value: lists.MenuAction.DELETE,
+        icon: 'delete',
+        checked: false
+      },
+      {
         id: 40,
+        disable: false,
         label: 'Imposta Scadenza',
-        value: 101, // TOGGLE_EXPIRING
+        value: lists.MenuAction.TOGGLE_EXPIRING,
         icon: 'date_range',
         checked: true
       },
       {
-        id: 50,
-        label: 'Elimina',
-        value: 100, // DELETE
-        icon: 'delete',
-        checked: false
+        id: 45,
+        disable: false,
+        label: translation.it.proj.themecolor,
+        value: lists.MenuAction.THEME,
+        icon: 'format_color_text',
+        checked: false,
+        arrlista: lists.selectTheme
+      },
+      {
+        id: 46,
+        disable: false,
+        label: translation.it.proj.themebgcolor,
+        value: lists.MenuAction.THEMEBG,
+        icon: 'format_color_fill',
+        checked: false,
+        arrlista: lists.selectTheme
       }
     ],
     es:
       [
         {
+          id: 5,
+          disable: false,
+          label: 'Cortar',
+          value: lists.MenuAction.CUT,
+          icon: 'undo'
+        },
+        {
           id: 10,
+          disable: false,
           label: 'Editar',
-          value: 160, // EDIT
+          value: lists.MenuAction.EDIT,
           icon: 'create'
         },
         {
-          id: 40,
-          label: 'Establecer expiración',
-          value: 101, // TOGGLE_EXPIRING
-          icon: 'date_range',
-          checked: true
-        },
-        {
-          id: 50,
+          id: 11,
+          disable: false,
           label: 'Borrar',
           value: 100, // DELETE
           icon: 'delete',
           checked: false
+        },
+        {
+          id: 40,
+          disable: false,
+          label: 'Establecer expiración',
+          value: lists.MenuAction.TOGGLE_EXPIRING,
+          icon: 'date_range',
+          checked: true
+        },
+        {
+          id: 45,
+          disable: false,
+          label: translation.es.proj.themecolor,
+          value: lists.MenuAction.THEME,
+          icon: 'format_color_text',
+          checked: false,
+          arrlista: lists.selectTheme
+        },
+        {
+          id: 46,
+          disable: false,
+          label: translation.es.proj.themebgcolor,
+          value: lists.MenuAction.THEMEBG,
+          icon: 'format_color_fill',
+          checked: false,
+          arrlista: lists.selectTheme
         }
       ],
     enUs:
       [
         {
+          id: 5,
+          disable: false,
+          label: 'Cut',
+          value: 71, // CUT
+          icon: 'undo'
+        },
+        {
           id: 10,
+          disable: false,
           label: 'Edit',
-          value: 160, // EDIT
+          value: lists.MenuAction.EDIT,
           icon: 'create'
         },
         {
           id: 40,
+          disable: false,
           label: 'Set Expiring',
           value: 101, // TOGGLE_EXPIRING
           icon: 'date_range',
           checked: true
         },
         {
+          id: 45,
+          disable: false,
+          label: translation.enUs.proj.themecolor,
+          value: lists.MenuAction.THEME,
+          icon: 'format_color_text',
+          checked: false,
+          arrlista: lists.selectTheme
+        },
+        {
+          id: 46,
+          disable: false,
+          label: translation.enUs.proj.themebgcolor,
+          value: lists.MenuAction.THEMEBG,
+          icon: 'format_color_fill',
+          checked: false,
+          arrlista: lists.selectTheme
+        },
+        {
           id: 50,
+          disable: false,
           label: 'Delete',
           value: 100, // DELETE
           icon: 'trash',
@@ -553,6 +666,7 @@ export const tools = {
     it: [
       {
         id: 10,
+        disable: false,
         label: 'Mostra Task',
         value: 150,  // SHOW_TASK
         icon: 'rowing'
@@ -562,6 +676,7 @@ export const tools = {
       [
         {
           id: 10,
+          disable: false,
           label: 'Mostrar Tareas',
           value: 150,
           icon: 'rowing'
@@ -571,6 +686,7 @@ export const tools = {
       [
         {
           id: 10,
+          disable: false,
           label: 'Show Task',
           value: 150,
           icon: 'rowing'
@@ -582,13 +698,22 @@ export const tools = {
   menuPopupConfigProject: {
     it: [
       {
+        id: 3,
+        disable: false,
+        label: translation.it.action.paste,
+        value: 72,  // Action.PASTE
+        icon: 'file_copy'
+      },
+      {
         id: 5,
+        disable: false,
         label: translation.it.proj.newsubproj,
         value: 200,  // ADD_PROJECT
         icon: 'next_week'
       },
       {
         id: 10,
+        disable: false,
         label: translation.it.task.showtask,
         value: 150,  // SHOW_TASK
         icon: 'rowing'
@@ -597,13 +722,22 @@ export const tools = {
     es:
       [
         {
+          id: 3,
+          disable: false,
+          label: translation.es.action.paste,
+          value: 72,  // Action.PASTE
+          icon: 'file_copy'
+        },
+        {
           id: 5,
+          disable: false,
           label: translation.es.proj.newsubproj,
           value: 200,  // ADD_PROJECT
           icon: 'next_week'
         },
         {
           id: 10,
+          disable: false,
           label: translation.es.task.showtask,
           value: 150,
           icon: 'rowing'
@@ -612,13 +746,22 @@ export const tools = {
     enUs:
       [
         {
+          id: 3,
+          disable: false,
+          label: translation.enUs.action.paste,
+          value: 72,  // Action.PASTE
+          icon: 'file_copy'
+        },
+        {
           id: 5,
-          label: translation.it.proj.newsubproj,
+          disable: false,
+          label: translation.enUs.proj.newsubproj,
           value: 200,  // ADD_PROJECT
           icon: 'next_week'
         },
         {
           id: 10,
+          disable: false,
           label: translation.enUs.task.showtask,
           value: 150,
           icon: 'rowing'
@@ -629,7 +772,15 @@ export const tools = {
   menuPopupConfigMAINProject: {
     it: [
       {
+        id: 3,
+        disable: false,
+        label: translation.it.action.paste,
+        value: 72,  // Action.PASTE
+        icon: 'file_copy'
+      },
+      {
         id: 5,
+        disable: false,
         label: translation.it.proj.newproj,
         value: 200,  // ADD_PROJECT
         icon: 'next_week'
@@ -638,7 +789,15 @@ export const tools = {
     es:
       [
         {
+          id: 3,
+          disable: false,
+          label: translation.es.action.paste,
+          value: 72,  // Action.PASTE
+          icon: 'file_copy'
+        },
+        {
           id: 5,
+          disable: false,
           label: translation.es.proj.newproj,
           value: 200,  // ADD_PROJECT
           icon: 'next_week'
@@ -647,8 +806,16 @@ export const tools = {
     enUs:
       [
         {
+          id: 3,
+          disable: false,
+          label: translation.enUs.action.paste,
+          value: 72,  // Action.PASTE
+          icon: 'file_copy'
+        },
+        {
           id: 5,
-          label: translation.it.proj.newproj,
+          disable: false,
+          label: translation.enUs.proj.newproj,
           value: 200,  // ADD_PROJECT
           icon: 'next_week'
         }
@@ -659,6 +826,7 @@ export const tools = {
     it: [
       {
         id: 10,
+        disable: false,
         label: 'Mostra gli ultimi N completati',
         value: costanti.ShowTypeTask.SHOW_LAST_N_COMPLETED,
         icon: 'rowing',
@@ -666,6 +834,7 @@ export const tools = {
       },
       {
         id: 20,
+        disable: false,
         label: 'Compiti da Completare',
         value: costanti.ShowTypeTask.SHOW_ONLY_TOCOMPLETE,
         icon: 'rowing',
@@ -673,6 +842,7 @@ export const tools = {
       },
       {
         id: 30,
+        disable: false,
         label: 'Tutti i compiti',
         value: costanti.ShowTypeTask.SHOW_ALL,
         icon: 'check_circle',
@@ -683,6 +853,7 @@ export const tools = {
       [
         {
           id: 10,
+          disable: false,
           label: 'Mostrar los ultimos N completados',
           value: costanti.ShowTypeTask.SHOW_LAST_N_COMPLETED,
           icon: 'rowing',
@@ -690,6 +861,7 @@ export const tools = {
         },
         {
           id: 20,
+          disable: false,
           label: 'Tareas para completar',
           value: costanti.ShowTypeTask.SHOW_ONLY_TOCOMPLETE,
           icon: 'rowing',
@@ -697,6 +869,7 @@ export const tools = {
         },
         {
           id: 30,
+          disable: false,
           label: 'Todos las Tareas',
           value: costanti.ShowTypeTask.SHOW_ALL,
           icon: 'check_circle',
@@ -707,6 +880,7 @@ export const tools = {
       [
         {
           id: 10,
+          disable: false,
           label: 'Show last N Completed',
           value: costanti.ShowTypeTask.SHOW_LAST_N_COMPLETED,
           icon: 'rowing',
@@ -714,6 +888,7 @@ export const tools = {
         },
         {
           id: 20,
+          disable: false,
           label: 'Task to complete',
           value: costanti.ShowTypeTask.SHOW_ONLY_TOCOMPLETE,
           icon: 'rowing',
@@ -721,6 +896,7 @@ export const tools = {
         },
         {
           id: 30,
+          disable: false,
           label: 'All Tasks',
           value: costanti.ShowTypeTask.SHOW_ALL,
           icon: 'check_circle',
@@ -749,7 +925,7 @@ export const tools = {
 
   getStatusListByInd(index) {
     try {
-      const arr = tools.selectStatus[UserStore.state.lang]
+      const arr = tools.selectStatus[toolsext.getLocale()]
       for (const rec of arr) {
         if (rec.value === index) {
           return rec.label
@@ -763,9 +939,9 @@ export const tools = {
   ,
 
   getPriorityByInd(index) {
-    // console.log('LANG in PRIOR', UserStore.state.lang)
+    // console.log('LANG in PRIOR', toolsext.getLocale())
     try {
-      const arr = tools.selectPriority[UserStore.state.lang]
+      const arr = lists.selectPriority[toolsext.getLocale()]
       for (const rec of arr) {
         if (rec.value === index) {
           return rec.label
@@ -897,7 +1073,7 @@ export const tools = {
 
     if (tools.isOkIndex(myarr, itemdragend.newIndex) && tools.isOkIndex(myarr, itemdragend.oldIndex)) {
 
-      console.log('SPLICE!')
+      console.log('***  SPLICE!')
       // console.log('   PRIMA!', tools.logga_arrproj(myarr))
       myarr.splice(itemdragend.newIndex, 0, myarr.splice(itemdragend.oldIndex, 1)[0])
       // console.log('   DOPO!', tools.logga_arrproj(myarr))
@@ -1051,17 +1227,20 @@ export const tools = {
   }
   ,
 
-  getLastListNotCompleted(nametable, cat, isproj = false, miei = false) {
+  getLastListNotCompleted(nametable, cat, tipoproj: string) {
+    // console.log('getLastListNotCompleted')
     // const module = tools.getModulesByTable(nametable)
     let arr = []
     if (nametable === 'projects')
-      arr = Projects.getters.projs_dacompletare(cat, miei)
+      arr = Projects.getters.projs_dacompletare(cat, tipoproj)
     else if (nametable === 'todos')
       arr = Todos.getters.items_dacompletare(cat)
 
-    return (arr.length > 0) ? arr[arr.length - 1] : null
-  }
-  ,
+    if (!!arr)
+      return (arr.length > 0) ? arr[arr.length - 1] : null
+    else
+      return null
+  },
 
   getElemByIndex(myarr, index) {
     if (index >= 0 && index < myarr.length) {
@@ -1088,9 +1267,7 @@ export const tools = {
   }
   ,
 
-  showNotif(q
-              :
-              any, msg, data ?: INotify | null
+  showNotif(q: any, msg, data ?: INotify | null
   ) {
     let myicon = data ? data.icon : 'ion-add'
     if (!myicon) {
@@ -1133,6 +1310,7 @@ export const tools = {
   ,
 
   checkLangPassed(mylang) {
+    console.log('checkLangPassed')
 
     const mybrowserLang = Quasar.lang.isoName
 
@@ -1156,11 +1334,15 @@ export const tools = {
     if (!mylang) {
       mylang = process.env.LANG_DEFAULT
     }
+
+    if (toolsext.getLocale(true) === '') {
+      UserStore.mutations.setlang(mylang)
+    }
+
     console.log('mylang calc : ', mylang)
 
     return mylang
-  }
-  ,
+  },
 
   getimglogo() {
     return 'statics/images/' + process.env.LOGO_REG
@@ -1239,7 +1421,8 @@ export const tools = {
   ,
 
   mapSort(linkedList) {
-    const sortedList = []
+    console.log('mapSort')
+    let sortedList = []
     const map = new Map()
     let currentId = null
 
@@ -1283,11 +1466,28 @@ export const tools = {
       }
     }
 
-    // console.log('DOPO sortedList', sortedList);
+    // Now Order by Priority
+    if (!!sortedList) {
+      if (sortedList.length > 0) {
+        if (sortedList[0].priority !== undefined) {
+          const sortednew = []
+          let myarr = []
+          for (const priorelem of lists.selectPriority.it) {
+            const myprior = priorelem.value
+            myarr = sortedList.filter((item) => item.priority === myprior)
+            if (myarr !== undefined)
+              sortednew.push(...myarr)
+          }
+
+          sortedList = sortednew
+        }
+      }
+    }
+
+    // console.log('DOPO sortedList', sortedList)
 
     return sortedList
-  }
-  ,
+  },
 
   getProgressClassColor(progress) {
     if (progress > 66) {
@@ -1354,6 +1554,13 @@ export const tools = {
     return value.charAt(0).toUpperCase() + value.slice(1)
   },
 
+  firstchars(value, numchars = 200) {
+    if (!value) {
+      return ''
+    }
+    return value.substring(0, numchars) + '...'
+  },
+
   getDateNow() {
     const mydate = new Date()
     return mydate
@@ -1375,11 +1582,260 @@ export const tools = {
     return idproj === process.env.PROJECT_ID_MAIN
   },
 
-  getUrlByTipoProj(miei) {
-    if (miei)
-      return '/myprojects/'
+  getUrlByTipoProj(tipoproj, name?: string) {
+    if (!!name)
+      return '/' + name + '/'
     else
-      return '/projects/'
+      return '/' + tipoproj + '/'
+  },
+
+  convertMenuListInListRoutes(arrlista: IMenuList[]) {
+    const lista = []
+    if (arrlista === undefined)
+      return lista
+    for (const elem of arrlista) {
+      const item: IListRoutes = {
+        faIcon: 'fa fa-list-alt',
+        materialIcon: elem.icon,
+        name: elem.nametranslate,
+        text: elem.description,
+        route: tools.getUrlByTipoProj(false, elem.urlroute) + elem.idelem,
+        routes2: tools.convertMenuListInListRoutes(elem.routes2),
+        level_parent: elem.level_parent,
+        level_child: elem.level_child
+
+      }
+      lista.push(item)
+    }
+    return lista
+  },
+
+  getprivacyreadbytipoproj(tipoproj) {
+    if (tipoproj === RouteNames.myprojects)
+      return Privacy.onlyme
+    else
+      return Privacy.all
+  },
+
+  getprivacywritebytipoproj(tipoproj) {
+    return Privacy.onlyme
+  },
+
+  addRoute(myarr, values) {
+    myarr.push(values)
+  },
+  displayConfirmNotification() {
+    let options = null
+    if ('serviceWorker' in navigator) {
+      options = {
+        body: 'You successfully subscribed to our Notification service!',
+        icon: '/statics/icons/app-icon-96x96.png',
+        image: '/statics/images/sf-boat.jpg',
+        dir: 'ltr',
+        lang: 'enUs', // BCP 47,
+        vibrate: [100, 50, 200],
+        badge: '/statics/icons/app-icon-96x96.png',
+        tag: 'confirm-notification',
+        renotify: true,  // if it's already sent, will Vibrate anyway
+        actions: [
+          { action: 'confirm', title: 'Okay', icon: '/statics/icons/app-icon-96x96.png' },
+          { action: 'cancel', title: 'Cancel', icon: '/statics/icons/app-icon-96x96.png' }
+        ]
+      }
+
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.ready
+          .then((swreg) => {
+            swreg.showNotification('Successfully subscribed!', options)
+          })
+      }
+    }
+  },
+
+  dataURItoBlob(dataURI) {
+    const byteString = atob(dataURI.split(',')[1])
+    const mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0]
+    const ab = new ArrayBuffer(byteString.length)
+    const ia = new Uint8Array(ab)
+    for (let i = 0; i < byteString.length; i++) {
+      ia[i] = byteString.charCodeAt(i)
+    }
+    const blob = new Blob([ab], { type: mimeString })
+    return blob
+  },
+
+  showNotificationExample() {
+    let options = null
+    const mythis = this
+    if ('serviceWorker' in navigator) {
+      options = {
+        body: mythis.$t('notification.subscribed'),
+        icon: '/statics/icons/android-chrome-192x192.png',
+        image: '/statics/images/imglogonotif.png',
+        dir: 'ltr',
+        lang: 'enUs', // BCP 47,
+        vibrate: [100, 50, 200],
+        badge: '/statics/icons/android-chrome-192x192.png',
+        tag: 'confirm-notification',
+        renotify: true,  // if it's already sent, will Vibrate anyway
+        actions: [
+          { action: 'confirm', title: mythis.$t('dialog.ok'), icon: '/statics/icons/android-chrome-192x192.png' }
+          // { action: 'cancel', title: 'Cancel', icon: '/statics/icons/android-chrome-192x192.png', }
+        ]
+      }
+
+      navigator.serviceWorker.ready
+        .then((swreg) => {
+          swreg.showNotification('aaa', options)
+        })
+    }
+  },
+
+  getemailto(text) {
+    return 'mailto:' + text
+  },
+
+  askfornotification() {
+    tools.showNotif(this.$q, this.$t('notification.waitingconfirm'), { color: 'positive', icon: 'notifications' })
+
+    Notification.requestPermission((result) => {
+      console.log('User Choice', result)
+      if (result === 'granted') {
+        tools.showNotif(this.$q, this.$t('notification.confirmed'), { color: 'positive', icon: 'notifications' })
+      } else {
+        tools.showNotif(this.$q, this.$t('notification.denied'), { color: 'negative', icon: 'notifications' })
+
+        // displayConfirmNotification();
+      }
+    })
+
+  },
+
+  heightgallery() {
+    if (Screen.width < 400) {
+      return '200px'
+    } else if (Screen.width < 600) {
+      return '300px'
+    } else {
+      return '500px'
+    }
+  },
+
+  myheight_imgtitle() {
+    if (Screen.width < 400) {
+      return '250'
+    } else if (Screen.width < 600) {
+      return '350'
+    } else {
+      return '350'
+    }
+  },
+
+  myheight_dialog() {
+    if (Screen.width < 400) {
+      return '350'
+    } else if (Screen.width < 600) {
+      return '400'
+    } else {
+      return '500'
+    }
+  },
+
+  styles_imgtitle() {
+    if (Screen.width < 400) {
+      return 'max-height: 250px'
+    } else {
+      return 'max-height: 350px'
+    }
+  },
+
+  /*
+      <q-img
+        src="https://cdn.quasar.dev/img/image-src.png"
+        srcset="https://cdn.quasar.dev/img/image-1x.png 400w,
+                https://cdn.quasar.dev/img/image-2x.png 800w,
+                https://cdn.quasar.dev/img/image-3x.png 1200w,
+                https://cdn.quasar.dev/img/image-4x.png 1600w"
+        sizes="(max-width: 400px) 400w,
+              (min-width: 400px) and (max-width: 800px) 800w,
+              (min-width: 800px) and (max-width: 1200px) 1200w,
+              (min-width: 1200px) 1600w"
+        style="height: 280px; max-width: 300px"
+      >
+        <div class="absolute-bottom text-body1 text-center">
+          With srcset & sizes
+        </div>
+      </q-img>
+  */
+
+  getsizes() {
+    return '(max-width: 400px) 400w, ' +
+      '(min-width: 400px) and (max-width: 800px) 800w, ' +
+      '(min-width: 800px) and (max-width: 1200px) 1200w, ' +
+      '(min-width: 1200px) 1600w'
+  },
+
+  maxwidth_imgtitle() {
+    if (Screen.width < 400) {
+      return 'max-width: 250px'
+    } else {
+      return 'max-width: 350px'
+    }
+  },
+
+  mywidth_imgtitle() {
+    if (Screen.width < 400) {
+      return '250'
+    } else if (Screen.width < 600) {
+      return '350'
+    } else {
+      return '350'
+    }
+  },
+
+  mymargin_imgtitle() {
+    return 'auto'
+  },
+
+  showthumbnails() {
+    if (Screen.width < 400) {
+      return false
+    } else if (Screen.width < 600) {
+      return true
+    } else {
+      return true
+    }
+  },
+
+  padTime(val) {
+    val = Math.floor(val)
+    if (val < 10) {
+      return '0' + val
+    }
+    return val + ''
+  },
+
+  getLocale(vero?: boolean) {
+    if (UserStore) {
+      if (UserStore.state) {
+        return UserStore.state.lang
+      }
+    }
+    if (!vero)
+      return process.env.LANG_DEFAULT
+    else
+      return ''
+  },
+
+  addDays(mydate, days) {
+    return date.addToDate(mydate, { days })
   }
 
+// getLocale() {
+  //   if (navigator.languages && navigator.languages.length > 0) {
+  //     return navigator.languages[0]
+  //   } else {
+  //     return navigator.userLanguages || navigator.language || navigator.browserLanguages || 'it-IT'
+  //   }
+  // }
 }

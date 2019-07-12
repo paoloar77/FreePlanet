@@ -2,6 +2,7 @@ import Vue from 'vue'
 import { Component, Watch } from 'vue-property-decorator'
 import { CTodo } from '@src/components/todos/CTodo'
 import { tools } from '@src/store/Modules/tools'
+import { toolsext } from '@src/store/Modules/toolsext'
 
 @Component({
   components: { CTodo },

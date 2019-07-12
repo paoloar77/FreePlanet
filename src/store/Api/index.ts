@@ -8,6 +8,7 @@ export { addAuthHeaders, removeAuthHeaders, API_URL } from './Instance'
 // import {AlgoliaSearch} from './AlgoliaController'
 import Paths from '@paths'
 import { tools } from '@src/store/Modules/tools'
+import { toolsext } from '@src/store/Modules/toolsext'
 
 import { GlobalStore, Projects, UserStore } from '@modules'
 import globalroutines from './../../globalroutines/index'
@@ -173,7 +174,7 @@ export namespace ApiTool {
                   link += '/' + rec._id
                 }
 
-                // console.log('----------------------- LEGGO QUALCOSA ', link)
+                console.log('----------------------- LEGGO QUALCOSA ', link)
 
                 // Insert/Delete/Update table to the server
                 return SendReq(link, method, rec)

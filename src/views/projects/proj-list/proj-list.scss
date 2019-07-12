@@ -4,6 +4,11 @@ $heightBtn: 100%;
   min-width: 350px;
 }
 
+.clVista {
+  max-height: 400px !important;
+}
+
+
 .flex-container, .flex-container_col{
   background-color: rgb(250, 250, 250);
   padding: 2px 4px 2px 4px;
@@ -88,20 +93,6 @@ $heightBtn: 100%;
   font-weight: bold;
   text-align: center;
   flex: 1;
-}
-
-.flex-item{
-  // background-color: #d5e2eb;
-  padding: 0px;
-  margin: 1px;
-  margin-left: 3px;
-  margin-right: 3px;
-  color: #000;
-  font-size: 0.85rem;
-  height: $heightBtn;
-  line-height: $heightBtn;
-  vertical-align: middle;
-  //flex: 0 0 100%;
 }
 
 .itemdescr{

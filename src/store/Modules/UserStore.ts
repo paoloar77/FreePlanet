@@ -6,6 +6,7 @@ import router from '@router'
 
 import { serv_constants } from '../Modules/serv_constants'
 import { tools } from '../Modules/tools'
+import { toolsext } from '@src/store/Modules/toolsext'
 import { GlobalStore, UserStore, Todos, Projects } from '@store'
 import globalroutines from './../../globalroutines/index'
 
@@ -20,7 +21,7 @@ const state: IUserState = {
   email: '',
   username: '',
   password: '',
-  lang: '',
+  lang: process.env.LANG_DEFAULT,
   repeatPassword: '',
   tokens: [],
   verified_email: false,
@@ -520,10 +521,11 @@ namespace Actions {
       GlobalStore.actions.checkUpdates()
     }
 
-    await GlobalStore.actions.loadAfterLogin()
+    return await GlobalStore.actions.loadAfterLogin()
       .then(() => {
-        Todos.actions.dbLoad({ checkPending: true })
-        Projects.actions.dbLoad({ checkPending: true, onlyiffirsttime: true })
+        return Todos.actions.dbLoad({ checkPending: true })
+      }).then(() => {
+        return Projects.actions.dbLoad({ checkPending: true, onlyiffirsttime: true })
       })
   }
 

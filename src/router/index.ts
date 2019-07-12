@@ -2,11 +2,10 @@ import Vue from 'vue'
 import VueRouter, { RouterMode } from 'vue-router'
 import { PositionResult } from 'vue-router/types/router'
 
-import { IMyRoute, IMyRouteRecord, routesList } from './route-config'
+import { IMyRoute, IMyRouteRecord, cfgrouter } from './route-config'
 import { ProgressBar } from '@src/store/Modules/Interface'
 import { isEqual } from 'lodash'
 import { UserStore } from '@store'
-import { RouteNames } from '@src/router/route-names'
 import { tools } from '@src/store/Modules/tools'
 
 Vue.use(VueRouter)
@@ -17,7 +16,7 @@ Vue.use(VueRouter)
 
 const Router = new VueRouter({
   scrollBehavior: () => ({ x: 0, y: 0 } as PositionResult),
-  routes: routesList,
+  routes: cfgrouter.routes,
 
   // Leave these as is and change from quasar.conf.js instead!
   // quasar.conf.js -> build -> vueRouterMode
@@ -124,7 +123,7 @@ Router.beforeEach(async (to: IMyRoute, from: IMyRoute, next) => {
               // next('/')
             }
 
-            return Router.push({ name: RouteNames.login })
+            return Router.push({ name: 'login' })
           }
         } else if (to.matched.some((m) => m.meta.noAuth) && UserStore.state.isLogged) {
           next('/')

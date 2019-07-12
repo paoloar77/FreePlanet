@@ -7,25 +7,11 @@ $heightBtn: 100%;
 $heightcounter: 26px;
 $heightdescr: 20px;
 
-.flex-item{
-   // background-color: #d5e2eb;
-  padding: 2px;
-  margin: 2px;
-  margin-left: 3px;
-  margin-right: 3px;
-  color: #000;
-  font-size: 1rem;
-  height: $heightBtn;
-  line-height: $heightBtn;
-  vertical-align: middle;
-  //flex: 0 0 100%;
-}
-
 
 .flex-container2 {
   flex-flow: row wrap;
   justify-content: space-between;
-  margin: 0px 1px 0px 1px;  // top right bottom left
+  margin: 0px 10px 0px 10px;  // top right bottom left
 }
 
 // Set visibility: visible to the icon menu of pos-item-popover
@@ -270,7 +256,7 @@ $heightdescr: 20px;
   //padding: 2px;
   min-width: 100px;
   text-align: left;
-  color: blue !important;
+  color: blue;
   overflow: hidden;
 
   align-items: center;

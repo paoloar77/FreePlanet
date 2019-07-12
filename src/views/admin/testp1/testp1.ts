@@ -5,7 +5,7 @@ import { GlobalStore, UserStore } from '@store'
 import { Getter } from 'vuex-class'
 import { ICfgServer, IGlobalState, ITodo, ITodosState } from '../../../model/index'
 
-const namespace: string = 'GlobalModule'
+const namespace: string = 'Testp1'
 
 @Component({})
 export default class Testp1 extends Vue {

@@ -76,6 +76,7 @@
   import { UserStore } from "../../store/Modules";
   import { IUserState } from "../../model";
   import { tools } from "../../store/Modules/tools";
+  import { toolsext } from '@src/store/Modules/toolsext'
 
   export default class UpdatePassword extends Vue {
     emailsent = false

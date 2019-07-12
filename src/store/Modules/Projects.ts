@@ -1,14 +1,19 @@
-import { IProject, IProjectsState, IDrag, IMenuList } from 'model'
+import { IProject, IProjectsState, IDrag, IMenuList, IAction } from 'model'
 import { Privacy } from '@src/model'
 import { storeBuilder } from './Store/Store'
 
 import Api from '@api'
 import { tools } from './tools'
+import { toolsext } from '@src/store/Modules/toolsext'
+import { lists } from './lists'
 import * as ApiTables from './ApiTables'
 import { GlobalStore, UserStore } from '@store'
 import globalroutines from './../../globalroutines/index'
 import objectId from '@src/js/objectId'
 import { costanti } from '@src/store/Modules/costanti'
+import { RouteNames } from '@src/router/route-names'
+import * as Types from '@src/store/Api/ApiTypes'
+import { serv_constants } from '@src/store/Modules/serv_constants'
 
 const nametable = 'projects'
 
@@ -21,12 +26,12 @@ const stateglob: IProjectsState = {
   visuLastCompleted: 10
 }
 
-const listFieldsToChange: string [] = ['descr', 'longdescr', 'hoursplanned', 'hoursworked', 'id_parent', 'statusproj',
+const listFieldsToChange: string [] = ['descr', 'longdescr', 'hoursplanned', 'hoursleft', 'hoursworked', 'id_parent', 'statusproj',
   'category', 'expiring_at', 'priority', 'id_prev', 'pos', 'enableExpiring', 'progressCalc', 'live_url', 'test_url',
   'begin_development', 'begin_test', 'actualphase', 'totalphases', 'hoursweeky_plannedtowork', 'endwork_estimate',
-  'privacyread', 'privacywrite', 'id_main_project', 'typeproj']
+  'privacyread', 'privacywrite', 'id_main_project', 'typeproj', 'favourite', 'themecolor', 'themebgcolor']
 
-const listFieldsUpdateCalculation: string [] = ['hoursplanned', 'hoursworked', 'progressCalc', 'endwork_estimate']
+const listFieldsUpdateCalculation: string [] = ['hoursplanned', 'hoursleft', 'hoursworked', 'progressCalc', 'endwork_estimate']
 
 const b = storeBuilder.module<IProjectsState>('Projects', stateglob)
 const stateGetter = b.state()
@@ -51,12 +56,15 @@ function updateDataCalculated(projout, projin) {
   })
 }
 
-function getproj(projects, idproj, miei: boolean) {
-  if (miei) {
-    return tools.mapSort(projects.filter((proj) => (proj.id_parent === idproj) && proj.userId === UserStore.state.userId))
-  } else {
-    return tools.mapSort(projects.filter((proj) => (proj.id_parent === idproj) && proj.userId !== UserStore.state.userId ))
-  }
+function getproj(projects, idproj, tipoproj: string) {
+  console.log('getproj', tipoproj)
+
+  if (tipoproj === RouteNames.myprojects)
+    return projects.filter((proj) => (proj.id_parent === idproj) && (proj.userId === UserStore.state.userId) && (proj.privacyread === Privacy.onlyme))
+  else if (tipoproj === RouteNames.projectsshared)
+    return projects.filter((proj) => (proj.id_parent === idproj) && (proj.userId === UserStore.state.userId) && (proj.privacyread !== Privacy.onlyme))
+  else if (tipoproj === RouteNames.projectsall)
+    return projects.filter((proj) => (proj.id_parent === idproj) && (proj.userId !== UserStore.state.userId) )
 }
 
 namespace Getters {
@@ -88,37 +96,40 @@ namespace Getters {
       actualphase: 1,
       hoursworked: 0,
       hoursplanned: 0,
+      hoursleft: 0,
       progressCalc: 0,
       privacyread: 'onlyme',
       privacywrite: 'onlyme',
       begin_development: tools.getDateNull(),
       begin_test: tools.getDateNull(),
       hoursweeky_plannedtowork: 0,
-      endwork_estimate: tools.getDateNull()
+      endwork_estimate: tools.getDateNull(),
+      themecolor: '',
+      themebgcolor: ''
     }
 
     return obj
   }, 'getRecordEmpty')
 
-  const projs_dacompletare = b.read((state: IProjectsState) => (id_parent: string, miei: boolean): IProject[] => {
-    // console.log('projs_dacompletare', miei)
+  const projs_dacompletare = b.read((state: IProjectsState) => (id_parent: string, tipoproj: string): IProject[] => {
+    // console.log('projs_dacompletare')
     if (state.projects) {
       // console.log('state.projects', state.projects)
-      return getproj(state.projects, id_parent, miei)
+      return getproj(state.projects, id_parent, tipoproj)
     } else {
       return []
     }
   }, 'projs_dacompletare')
 
-  const listaprojects = b.read((state: IProjectsState) => (miei: boolean): IMenuList[] => {
+  const listaprojects = b.read((state: IProjectsState) => (tipoproj: string): IMenuList[] => {
     if (state.projects) {
-      // console.log('state.projects', state.projects)
-      const listaproj = getproj(state.projects, process.env.PROJECT_ID_MAIN, miei)
+      console.log('listaprojects')
+      const listaproj = getproj(state.projects, process.env.PROJECT_ID_MAIN, tipoproj)
       const myarr: IMenuList[] = []
       for (const proj of listaproj) {
         myarr.push({ nametranslate: '', description: proj.descr, idelem: proj._id })
       }
-      console.log('   myarr', myarr, listaproj)
+      // console.log('   myarr', myarr, listaproj)
       return myarr
 
     } else {
@@ -146,7 +157,7 @@ namespace Getters {
   }, 'getRecordById')
 
   const getifCanISeeProj = b.read((state: IProjectsState) => (proj: IProject): boolean => {
-    if (proj === undefined)
+    if ((proj === undefined) || (proj === null))
       return false
 
     if (!!UserStore.state) {
@@ -164,7 +175,7 @@ namespace Getters {
   }, 'getifCanISeeProj')
 
   const CanIModifyPanelPrivacy = b.read((state: IProjectsState) => (proj: IProject): boolean => {
-    if (proj === undefined)
+    if ((proj === undefined) || (proj === null))
       return false
 
     if (!!UserStore) {
@@ -240,10 +251,20 @@ namespace Mutations {
     ApiTables.removeitemfromarray(state.projects, ind)
   }
 
+  async function movemyitem(state: IProjectsState, { myitemorig, myitemdest } ) {
+    const indorig = tools.getIndexById(state.projects, myitemorig._id)
+
+    state.projects.splice(indorig, 1)
+    state.projects.push(myitemdest)
+
+    await Actions.actions.modify({ myitem: myitemdest, field: 'id_parent' })
+  }
+
   export const mutations = {
     deletemyitem: b.commit(deletemyitem),
     createNewItem: b.commit(createNewItem),
-    updateProject: b.commit(updateProject)
+    updateProject: b.commit(updateProject),
+    movemyitem: b.commit(movemyitem)
   }
 
 }
@@ -255,7 +276,7 @@ namespace Actions {
     if (onlyiffirsttime) {
       if (stateglob.projects.length > 0) {
         // if already set, then exit.
-        return false
+        return new Types.AxiosError(0, null, 0, '')
       }
     }
 
@@ -287,7 +308,7 @@ namespace Actions {
       .catch((error) => {
         console.log('error dbLoad', error)
         UserStore.mutations.setErrorCatch(error)
-        return error
+        return new Types.AxiosError(serv_constants.RIS_CODE_ERR, null, tools.ERR_GENERICO, error)
       })
 
     ApiTables.aftercalling(ris, checkPending, nametable)
@@ -324,6 +345,9 @@ namespace Actions {
     objproj.id_parent = myobj.id_parent
     objproj.id_main_project = myobj.id_main_project
     objproj.typeproj = myobj.typeproj
+    objproj.privacyread = myobj.privacyread
+    objproj.privacywrite = myobj.privacywrite
+    objproj.actualphase = myobj.actualphase
 
     let elemtochange: IProject = null
 
@@ -336,7 +360,7 @@ namespace Actions {
     } else {
       console.log('INSERT AT THE BOTTOM')
       // INSERT AT THE BOTTOM , so GET LAST ITEM
-      const lastelem = tools.getLastListNotCompleted(nametable, objproj.id_parent)
+      const lastelem = tools.getLastListNotCompleted(nametable, objproj.id_parent, this.tipoProj)
 
       objproj.id_prev = (!!lastelem) ? lastelem._id : ApiTables.LIST_START
     }
@@ -371,10 +395,39 @@ namespace Actions {
   async function swapElems(context, itemdragend: IDrag) {
     console.log('PROJECT swapElems', itemdragend, stateglob.projects)
 
-    const myarr = Getters.getters.projs_dacompletare(itemdragend.id_proj, itemdragend.mieiproj)
+    const myarr = Getters.getters.projs_dacompletare(itemdragend.id_proj, itemdragend.tipoproj)
 
     tools.swapGeneralElem(nametable, myarr, itemdragend, listFieldsToChange)
 
+  }
+
+  async function ActionCutPaste(context, action: IAction) {
+
+    if (action.type === lists.MenuAction.CUT) {
+      GlobalStore.state.lastaction = action
+    } else if (action.type === lists.MenuAction.PASTE) {
+      if (GlobalStore.state.lastaction.type === lists.MenuAction.CUT) {
+
+        // Change id_parent
+        const orig_obj = Getters.getters.getRecordById(GlobalStore.state.lastaction._id)
+        const dest = Getters.getters.getRecordById(action._id)
+
+        // console.log('dest', dest)
+
+        const dest_obj = tools.jsonCopy(orig_obj)
+
+        if (!!dest_obj) {
+          dest_obj.id_parent = dest._id
+          dest_obj.id_main_project = dest.id_main_project
+          dest_obj.modified = true
+          dest_obj.id_prev = null
+
+          GlobalStore.state.lastaction.type = 0
+
+          return await Mutations.mutations.movemyitem({ myitemorig: orig_obj, myitemdest: dest_obj })
+        }
+      }
+    }
   }
 
   export const actions = {
@@ -382,7 +435,8 @@ namespace Actions {
     swapElems: b.dispatch(swapElems),
     deleteItem: b.dispatch(deleteItem),
     dbInsert: b.dispatch(dbInsert),
-    modify: b.dispatch(modify)
+    modify: b.dispatch(modify),
+    ActionCutPaste: b.dispatch(ActionCutPaste)
   }
 
 }

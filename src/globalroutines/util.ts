@@ -1,9 +1,9 @@
-import { UserStore } from '@modules'
+import { toolsext } from '@src/store/Modules/toolsext'
 import messages from '../statics/i18n'
 
 function translate(params) {
   const msg = params.split('.')
-  const lang = UserStore.state.lang
+  const lang = toolsext.getLocale()
 
   const stringa = messages[lang]
 

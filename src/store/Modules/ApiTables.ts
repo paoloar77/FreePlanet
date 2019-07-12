@@ -4,6 +4,7 @@ import { GlobalStore, Todos, Projects, UserStore } from '@store'
 import globalroutines from './../../globalroutines/index'
 import { serv_constants } from '@src/store/Modules/serv_constants'
 import { tools } from '@src/store/Modules/tools'
+import { toolsext } from '@src/store/Modules/toolsext'
 
 export const OtherTables = ['categories', 'config', 'swmsg']
 export const MainTables = ['todos', 'projects']
@@ -108,17 +109,25 @@ async function Sync_Execute(cmd, tablesync, nametab, method, item: ITodo, id, ms
     cmdSw = DB.CMD_SYNC
   }
 
+  // console.log('cmdSw', cmdSw)
+
+  // if ('serviceWorker' in navigator) {
+  //   console.log('serviceWorker PRESENTE')
+  // } else {
+  //   console.log('serviceWorker NON PRESENTE !')
+  // }
+
   if ('serviceWorker' in navigator) {
     return await navigator.serviceWorker.ready
       .then((sw) => {
         // console.log('----------------------      navigator.serviceWorker.ready')
 
         return globalroutines(null, 'write', tablesync, item, id)
-          .then((id) => {
-            // console.log('id', id)
+          .then((ris) => {
+            console.log('ris write:', ris)
             const sep = '|'
 
-            const multiparams = cmdSw + sep + tablesync + sep + nametab + sep + method + sep + UserStore.state.x_auth_token + sep + UserStore.state.lang
+            const multiparams = cmdSw + sep + tablesync + sep + nametab + sep + method + sep + UserStore.state.x_auth_token + sep + toolsext.getLocale()
             const mymsgkey = {
               _id: multiparams,
               value: multiparams
@@ -144,6 +153,9 @@ async function Sync_Execute(cmd, tablesync, nametab, method, item: ITodo, id, ms
               .catch((err) => {
                 console.error('Errore in globalroutines', tablesync, nametab, err)
               })
+          })
+          .catch((err) => {
+            console.error('Errore catch in globalroutines write', tablesync, nametab, err)
           })
       })
   }
@@ -408,6 +420,7 @@ export async function table_ModifyRecord(nametable, myitem, listFieldsToChange, 
     tools.notifyarraychanged(miorec)
 
     // 2) Modify on IndexedDb
+    console.log('// 2) Modify on IndexedDb', miorec)
     return globalroutines(null, 'write', nametable, miorec)
       .then((ris) => {
 

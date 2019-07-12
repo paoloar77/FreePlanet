@@ -3,6 +3,7 @@
         <div class="flex-item progress-item shadow-1">
             <q-slider v-if="slider" label
                       class="cpr-slider-item"
+                      :readonly="readonly"
                       :value="progressval"
                       :min="0"
                       :max="100"
@@ -12,6 +13,7 @@
             <q-linear-progress
                     v-else
                     stripe
+                    :readonly="readonly"
                     rounded
                     :value="progressval / 100"
                     class="cpr-progrbar-item"

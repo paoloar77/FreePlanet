@@ -10,9 +10,14 @@ export const translation = {
     proj: {
       newproj: 'Nuovo Progetto',
       newsubproj: 'Nuovo Sotto-Progetto',
+      themecolor: 'Tema Colore',
+      themebgcolor: 'Tema Colore Sfondo'
     },
     task: {
       showtask: 'Mostra Task',
+    },
+    action: {
+      paste: 'Incolla'
     },
     end: ''
   },
@@ -27,9 +32,14 @@ export const translation = {
     proj: {
       newproj: 'Nuevo Projecto',
       newsubproj: 'Nuevo Sub-Projecto',
+      themecolor: 'Tema Colores',
+      themebgcolor: 'Tema Colores Fondo'
     },
     task: {
       showtask: 'Mostrar Tarea',
+    },
+    action: {
+      paste: 'Pegar'
     },
     end: ''
   },
@@ -44,9 +54,14 @@ export const translation = {
     proj: {
       newproj: 'New Project',
       newsubproj: 'New Sub-Project',
+      themecolor: 'Theme Color',
+      themebgcolor: 'Theme Background Color'
     },
     task: {
-      showtask: 'Show Task',
+      showtask: 'Show Task'
+    },
+    action: {
+      paste: 'Paste'
     },
     end: ''
   }

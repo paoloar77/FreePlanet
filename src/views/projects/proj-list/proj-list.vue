@@ -3,10 +3,12 @@
         <div class="panel">
             <q-splitter
                     v-model="splitterModel"
+                    :horizontal="isHorizontal"
+                    :style="myStyle"
                     :limits="[50, 100]"
             >
 
-                <template v-slot:before class="clMain">
+                <template v-slot:before>
                     <div>
                         <!--{{idProjAtt}}-->
                         <div class="divtitlecat clMain">
@@ -17,7 +19,7 @@
 
                                 </q-btn>
 
-                                <div class="flex-item categorytitle shadow-4">{{descrProject | capitalize}}</div>
+                                <div :class="classTitle">{{descrProject | capitalize}}</div>
                                 <div class="flex-item">
                                     <q-btn push
                                            size="sm"
@@ -59,7 +61,7 @@
                                                             </q-list>
                                                         </q-menu>
                                                     </q-item>
-                                                    <q-item v-else v-close-popup clickable :icon="field.icon"
+                                                    <q-item v-else v-close-popup clickable :icon="field.icon" :disable="field.disable"
                                                             @click="clickMenuProjList(field.value)">
 
                                                         <q-item-section avatar>
@@ -79,9 +81,9 @@
                         <div style="display: none">{{ prior = 0, priorcomplet = false }}</div>
                         <div>
                             <!--<q-infinite-scroll :handler="loadMoreTodo" :offset="7">-->
-                            <div class="container" v-dragula="projs_dacompletare(idProjAtt, areMyProjects)" drake="second">
+                            <div class="container" v-dragula="projs_dacompletare(idProjAtt, tipoProj)" drake="second">
                                 <div :id="tools.getmyid(myproj._id)" :index="index"
-                                     v-for="(myproj, index) in projs_dacompletare(idProjAtt, areMyProjects)"
+                                     v-for="(myproj, index) in projs_dacompletare(idProjAtt, tipoProj)"
                                      :key="myproj._id" class="myitemdrag">
 
                                     <SingleProject ref="singleproject" @deleteItemproj="mydeleteitemproj(myproj._id)"
@@ -98,6 +100,20 @@
                         </div>
                         <q-separator></q-separator>
 
+                        <q-input v-model="projbottom"
+                                 style="margin-left: 6px;"
+                                 color="blue-12"
+                                 :label="$t('proj.insertbottom')"
+                                 :after="[{icon: 'arrow_forward', content: true, handler () {}}]"
+                                 >
+
+                        </q-input>
+
+                        <br>
+                        <q-separator></q-separator>
+
+
+
                         <!--CanIModifyPanelPrivacy = {{CanIModifyPanelPrivacy}}<br>-->
                         <!--CanIModifyPanelPrivacySel = {{CanIModifyPanelPrivacySel}}<br>-->
                         <!--CanISeeProject = {{CanISeeProject}}<br>-->
@@ -113,11 +129,20 @@
                     </div>
                 </template>
                 <template v-if="(whatisSel === tools.WHAT_PROJECT) && (!!itemselproj.descr)" v-slot:after>
+
                     <!--ID = {{itemselproj._id}}-->
                     <div class="q-pa-xs clMain">
                         <div class="flex-container clMain">
+                            <!--<q-rating-->
+                                    <!--v-model="itemselproj.favourite"-->
+                                    <!--class="flex-item flex-icon"-->
+                                    <!--size="2em"-->
+                                    <!--:max="1"-->
+                                    <!--color="primary">-->
+
+                            <!--</q-rating>-->
                             <q-icon class="flex-item flex-icon" name="format_align_center"/>
-                            <div class="flex-item projecttitle shadow-4">
+                            <div :class="classTitleProjSel">
                                 {{itemselproj.descr}}
                             </div>
                         </div>
@@ -246,8 +271,10 @@
                                 <q-input
                                         ref="input4"
                                         v-model="itemtodosel.descr"
+                                        :class="classTitleTodoSel"
                                         :label="$t('proj.longdescr')"
                                         outlined
+                                        :readonly="readonly_PanelPrivacy"
                                         debounce="1000"
                                         autogrow>
 
@@ -259,6 +286,7 @@
                         <q-icon class="flex-item flex-icon" name="done_outline"/>
                         <div class="flex-item itemstatus">
                             <q-select rounded outlined v-model="itemtodosel.statustodo" :options="selectStatus"
+                                      :readonly="readonly_PanelPrivacy"
                                       :label="$t('todo.status')" emit-value map-options
                                       @input="modifyfieldtodo('statustodo')">
                             </q-select>
@@ -266,6 +294,7 @@
                         <q-icon class="flex-item flex-icon" name="outlined_flag"/>
                         <div class="flex-item itemstatus">
                             <q-select rounded outlined v-model="itemtodosel.phase" :options="selectPhase"
+                                      :readonly="readonly_PanelPrivacy"
                                       :label="$t('todo.phase')" emit-value map-options>
                             </q-select>
                         </div>
@@ -275,6 +304,7 @@
                         <div class="flex-item itemdescr">
                             <q-input
                                     ref="input5"
+                                    :readonly="readonly_PanelPrivacy"
                                     v-model="itemtodosel.hoursworked"
                                     type="number"
                                     rounded outlined
@@ -288,6 +318,7 @@
                         <div class="flex-item itemdata content-center">
                             <q-input
                                     ref="input6"
+                                    :readonly="readonly_PanelPrivacy"
                                     type="number"
                                     v-model="itemtodosel.hoursplanned"
                                     rounded outlined
@@ -297,6 +328,7 @@
                             </q-input>
 
                             <CProgress :descr="$t('proj.progresstask')"
+                                       :readonly="readonly_PanelPrivacy"
                                        :progressval="itemtodosel.progress"
                                        :slider="true" @input="itemtodosel.progress = arguments[0]"></CProgress>
                         </div>
@@ -305,6 +337,7 @@
                         <q-icon class="flex-item flex-icon" name="developer_mode"/>
                         <div class="flex-item itemdata">
                             <CDate :mydate="itemtodosel.start_date"
+                                   :readonly="readonly_PanelPrivacy"
                                    @input="itemtodosel.start_date = new Date(arguments[0])"
                                    :label="$t('todo.start_date')">
 
@@ -313,7 +346,7 @@
                         <div style="margin: 10px;"></div>
                         <q-icon class="flex-item flex-icon" name="event"/>
                         <div class="flex-item itemdata">
-                            <CDate :readonly="itemtodosel.statustodo !== tools.Status.COMPLETED"
+                            <CDate :readonly="((itemtodosel.statustodo !== tools.Status.COMPLETED) || readonly_PanelPrivacy)"
                                    :mydate="itemtodosel.completed_at"
                                    @input="itemtodosel.completed_at = new Date(arguments[0])"
                                    :label="$t('todo.completed_at')">

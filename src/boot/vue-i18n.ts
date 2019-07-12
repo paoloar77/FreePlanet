@@ -2,6 +2,7 @@
 import VueI18n from 'vue-i18n'
 import messages from '../statics/i18n'
 import { tools } from '../store/Modules/tools'
+import { toolsext } from '@src/store/Modules/toolsext'
 
 export default ({ app, store, Vue }) => {
   Vue.use(VueI18n)

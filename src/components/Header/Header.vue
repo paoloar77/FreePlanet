@@ -39,7 +39,7 @@
                     <q-avatar>
                         <img :src="imglogo" height="27">
                     </q-avatar>
-                    {{$t('msg.myAppName')}}
+                    {{getappname}}
                     <div slot="subtitle">{{$t('msg.myDescriz')}} {{ getAppVersion() }}</div>
                 </q-toolbar-title>
 

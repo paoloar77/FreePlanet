@@ -1,11 +1,13 @@
 import Vue from 'vue'
 import { Component, Watch } from 'vue-property-decorator'
 
-import { IDrag, IProject, IProjectsState, ITodo, Privacy, TypeProj } from '../../../model/index'
+import { IAction, IDrag, IProject, IProjectsState, ITodo, Privacy, TypeProj } from '../../../model/index'
 import { SingleProject } from '../../../components/projects/SingleProject/index'
 import { CTodo } from '../../../components/todos/CTodo'
 
 import { tools } from '../../../store/Modules/tools'
+import { toolsext } from '@src/store/Modules/toolsext'
+import { lists } from '../../../store/Modules/lists'
 import * as ApiTables from '../../../store/Modules/ApiTables'
 
 import { GlobalStore, Projects, Todos } from '@store'
@@ -37,6 +39,8 @@ const namespace: string = 'Projects'
 export default class ProjList extends Vue {
   public $q: any
   public projbottom: string = ''
+  public prova: string = ''
+  public provatr: string = ''
   public polling = null
   public service: any
   public scrollable = true
@@ -51,10 +55,11 @@ export default class ProjList extends Vue {
   public whatisSel: number = 0
   public colProgress: string = 'blue'
   public percProgress: string = 'percProgress'
+  public readonly: boolean = false
 
-  public selectStatus: [] = tools.selectStatus[UserStore.state.lang]
-  public selectPhase: [] = tools.selectPhase[UserStore.state.lang]
-  public selectPrivacy: [] = tools.selectPrivacy[UserStore.state.lang]
+  public selectStatus: [] = tools.selectStatus[toolsext.getLocale()]
+  public selectPhase: [] = tools.selectPhase[toolsext.getLocale()]
+  public selectPrivacy: [] = tools.selectPrivacy[toolsext.getLocale()]
 
   public $refs: {
     singleproject: SingleProject[],
@@ -62,16 +67,17 @@ export default class ProjList extends Vue {
   }
 
   @Getter('projs_dacompletare', { namespace })
-  public projs_dacompletare: (state: IProjectsState, id_parent: string, miei: boolean) => IProject[]
+  public projs_dacompletare: (state: IProjectsState, id_parent: string, tipoproj: string) => IProject[]
 
-  @Watch('projs_dacompletare')
-  public changeitems() {
-    this.updateindexProj()
-  }
+  // @Watch('projs_dacompletare')
+  // public changeitems() {
+  //   this.updateindexProj()
+  // }
 
   @Watch('$route.name')
   public changename() {
-    console.log('tools.getUrlByTipoProj(this.areMyProjects)', tools.getUrlByTipoProj(this.areMyProjects))
+    console.log('tools.getUrlByTipoProj(this.tipoProj)', tools.getUrlByTipoProj(this.tipoProj))
+    this.changeparent()
   }
 
   @Watch('$route.params.idProj')
@@ -96,9 +102,43 @@ export default class ProjList extends Vue {
     // console.log('idproj', this.idProjAtt, 'params' , this.$route.params)
   }
 
-  get areMyProjects() {
-    console.log('this.$route.name', this.$route.name)
-    return this.$route.name === RouteNames.myprojects
+  public keyDownArea(e) {
+    console.log('keyDownArea')
+  }
+
+  get classTitle() {
+    let cl = 'flex-item categorytitle shadow-4'
+    if (!!this.itemprojparent) {
+      cl += ' text-' + this.itemprojparent.themecolor + ' bg-' + this.itemprojparent.themebgcolor
+    } else {
+      cl += ' text-black' + ' bg-light-blue'
+    }
+    return cl
+  }
+
+  get classTitleTodoSel() {
+    let cl = 'flex-item shadow-4'
+    if (!!this.itemtodosel) {
+      cl += ' text-' + this.itemtodosel.themecolor + ' bg-' + this.itemtodosel.themebgcolor
+    } else {
+      cl += ' text-black' + ' bg-light-blue'
+    }
+    return cl
+  }
+
+  get classTitleProjSel() {
+    let cl = 'flex-item categorytitle shadow-4'
+    if (!!this.itemselproj) {
+      cl += ' text-' + this.itemselproj.themecolor + ' bg-' + this.itemselproj.themebgcolor
+    } else {
+      cl += ' text-black' + ' bg-light-blue'
+    }
+    return cl
+  }
+
+  get tipoProj() {
+    // console.log('this.$route.name', this.$route.name)
+    return this.$route.name
   }
 
   get readonly_PanelPrivacy() {
@@ -106,7 +146,7 @@ export default class ProjList extends Vue {
   }
 
   get readonly_PanelPrivacySel() {
-    return !this.CanIModifyPanelPrivacySel
+    return !this.CanIModifyPanelPrivacySel || this.readonly
   }
 
   get CanISeeProject() {
@@ -130,7 +170,7 @@ export default class ProjList extends Vue {
   }
 
   get getrouteup() {
-    return tools.getUrlByTipoProj(this.areMyProjects) + this.itemproj.id_parent
+    return tools.getUrlByTipoProj(this.tipoProj) + this.itemproj.id_parent
   }
 
   get tools() {
@@ -162,14 +202,20 @@ export default class ProjList extends Vue {
   }
 
   get menuPopupConfigProject() {
+    let mymenu = null
     if (this.isMainProject)
-      return tools.menuPopupConfigMAINProject[UserStore.state.lang]
+      mymenu = tools.menuPopupConfigMAINProject[toolsext.getLocale()]
     else
-      return tools.menuPopupConfigProject[UserStore.state.lang]
+      mymenu = tools.menuPopupConfigProject[toolsext.getLocale()]
+
+    if (mymenu.length > 0)
+      mymenu[0].disable = !(GlobalStore.state.lastaction.type === lists.MenuAction.CUT)
+
+    return mymenu
   }
 
   get listOptionShowTask() {
-    return tools.listOptionShowTask[UserStore.state.lang]
+    return tools.listOptionShowTask[toolsext.getLocale()]
   }
 
   get descrProject() {
@@ -182,6 +228,14 @@ export default class ProjList extends Vue {
       return 0
     }
     return Math.round(this.itemselproj.hoursworked / this.itemselproj.hoursplanned * 100)
+
+  }
+  get getCalcHoursLeft() {
+
+    if (this.itemselproj.hoursleft <= 0) {
+      return 0
+    }
+    return Math.round(this.itemselproj.hoursworked / this.itemselproj.hoursleft * 100)
 
   }
 
@@ -199,7 +253,8 @@ export default class ProjList extends Vue {
 
       try {
 
-        let orerimaste = this.itemselproj.hoursplanned - this.itemselproj.hoursworked
+        // let orerimaste = this.itemselproj.hoursplanned - this.itemselproj.hoursworked
+        let orerimaste = this.itemselproj.hoursleft
         if (orerimaste < 0) {
           orerimaste = 0
         }
@@ -219,7 +274,7 @@ export default class ProjList extends Vue {
         console.log('   days', days, 'weeks', weeks, 'orerimaste', orerimaste, 'dateestimated', this.itemselproj.endwork_estimate)
 
         return this.itemselproj.endwork_estimate
-      }catch (e) {
+      } catch (e) {
         this.itemselproj.endwork_estimate = tools.getDateNull()
       }
 
@@ -254,7 +309,7 @@ export default class ProjList extends Vue {
   }
 
   public showTask(field_value) {
-    return field_value === tools.MenuAction.SHOW_TASK
+    return field_value === lists.MenuAction.SHOW_TASK
   }
 
   public async onEndproj(itemdragend) {
@@ -277,7 +332,7 @@ export default class ProjList extends Vue {
           id_proj: this.idProjAtt,
           newIndex: this.getElementIndex(args.el),
           oldIndex: this.getElementOldIndex(args.el),
-          mieiproj: this.areMyProjects
+          tipoproj: this.tipoProj
         }
 
         // console.log('args', args, itemdragend)
@@ -295,16 +350,27 @@ export default class ProjList extends Vue {
     this.load()
   }
 
+  get isHorizontal() {
+    return (Screen.width < 600)
+  }
+
+  get myStyle(){
+    if (this.isHorizontal)
+      return 'height: 600px'
+    else
+      return ''
+  }
+
   public mounted() {
 
     // console.log('Screen.width', Screen.width)
     // console.log('this.$route', this.$route)
 
-    if (Screen.width < 400) {
-      this.splitterModel = 100
-    } else {
-      this.splitterModel = 50
-    }
+    // if (Screen.width < 400) {
+    //   this.splitterModel = 100
+    // } else {
+    //   this.splitterModel = 50
+    // }
     this.idProjAtt = this.$route.params.idProj
     this.updateindexProj()
 
@@ -341,45 +407,75 @@ export default class ProjList extends Vue {
   }
 
   public dbInsert() {
+    console.log('dbInsert')
     const descr = this.projbottom.trim()
 
     this.projbottom = ''
 
-    return this.addProject(descr)
+    return this.addProject(descr, this.tipoProj)
   }
 
   public async clickMenuProjList(action) {
     console.log('clickMenuProjList: ', action)
-    if (action === tools.MenuAction.ADD_PROJECT) {
-      const idnewelem = await this.addProject('')
+    if (action === lists.MenuAction.ADD_PROJECT) {
+      const idnewelem = await this.addProject('', this.tipoProj)
       // get element by id
       const elem = this.getCompProjectById(idnewelem)
       // @ts-ignore
       elem.activeEdit()
       // console.log('idnewelem', idnewelem, 'Elem Trovato', elem)
+    } else if (action === lists.MenuAction.PASTE) {
+
+      const myaction: IAction = {
+        table: GlobalStore.state.lastaction.table,
+        type: lists.MenuAction.PASTE,
+        _id: this.itemselproj._id
+      }
+
+      if (myaction.table === tools.projects)
+        return await Projects.actions.ActionCutPaste(myaction)
+      else if (myaction.table === tools.todos)
+        return await Todos.actions.ActionCutPaste(myaction)
     }
   }
 
   public getCompProjectById(id): SingleProject {
-    console.log('this.$refs.singleproject', this.$refs.singleproject)
-    for (const elem of this.$refs.singleproject) {
-      // @ts-ignore
-      if (elem.itemproject._id === id) {
-        return elem
+    if (!!this.$refs.singleproject) {
+      console.log('this.$refs.singleproject', this.$refs.singleproject)
+      for (const elem of this.$refs.singleproject) {
+        // @ts-ignore
+        if (elem.itemproject._id === id) {
+          return elem
+        }
       }
     }
   }
 
   // const descr = this.$t('project.newproj').toString()
 
-  public async addProject(descr) {
-    const myobj: IProject = {
-      descr,
-      id_parent: this.idProjAtt
+  public async addProject(descr, tipoproj: string) {
+    const projatt = Projects.getters.getRecordById(this.idProjAtt)
+    let myobj: IProject = null
+    if (this.idProjAtt === process.env.PROJECT_ID_MAIN) {
+      myobj = {
+        descr,
+        id_parent: this.idProjAtt,
+        privacyread: tools.getprivacyreadbytipoproj(tipoproj),
+        privacywrite: tools.getprivacywritebytipoproj(tipoproj),
+        actualphase: projatt.actualphase
+      }
+    } else {
+      myobj = {
+        descr,
+        id_parent: this.idProjAtt,
+        privacyread: projatt.privacyread,
+        privacywrite: projatt.privacywrite,
+        actualphase: projatt.actualphase
+      }
     }
 
     if (this.itemproj === undefined)
-      this.itemproj = Projects.getters.getRecordById(this.idProjAtt)
+      this.itemproj = projatt
 
     if (this.isRootProject) {
       myobj.typeproj = TypeProj.TYPE_PROJECT
@@ -396,6 +492,7 @@ export default class ProjList extends Vue {
       return
     }
 
+    console.log('Nuovo PROJ', myobj)
     return await Projects.actions.dbInsert({ myobj, atfirst: false })
   }
 
@@ -403,10 +500,36 @@ export default class ProjList extends Vue {
     this.idsel = id
     this.whatisSel = tools.WHAT_PROJECT
     this.itemselproj = Projects.getters.getRecordById(this.idsel)
+    if ((this.itemselproj === undefined || this.itemselproj === null))
+      this.whatisSel = tools.WHAT_NOTHING
+    // console.log('readonly = true')
+    this.readonly = true
+
+    this.checkiftoenable()
   }
   public setitemsel(item: ITodo) {
-    this.whatisSel = tools.WHAT_TODO
     this.itemtodosel = item
+    if (item !== null)
+      this.whatisSel = tools.WHAT_TODO
+    else
+      this.whatisSel = tools.WHAT_NOTHING
+
+    this.checkiftoenable()
+  }
+
+  public checkiftoenable() {
+    if (this.whatisSel === tools.WHAT_NOTHING)
+      this.splitterModel = 100
+    else
+      this.splitterModel = 0
+  }
+
+  public setdeselectrow() {
+    console.log('setdeselectrow')
+    this.itemtodosel = null
+    this.itemselproj = null
+    this.whatisSel = tools.WHAT_NOTHING
+    this.checkiftoenable()
   }
 
   public cambiadata(value) {
@@ -424,7 +547,7 @@ export default class ProjList extends Vue {
   public deselectAllRowstodo(item: ITodo, check, onlythis: boolean = false) {
     // console.log('PROJ-LIST deselectAllRowstodo : ', item)
 
-    return false
+    // return false
 
     // @ts-ignore
     for (const i in this.$refs.ctodo.$refs.single) {
@@ -451,8 +574,23 @@ export default class ProjList extends Vue {
     }
   }
 
-  public deselectAllRowsproj(item: IProject, check, onlythis: boolean = false) {
+  public deselectAllRowsproj(item: IProject, check, onlythis: boolean = false, deselectRiga: boolean = false) {
     // console.log('deselectAllRowsproj: ', item)
+
+    if (deselectRiga) {
+      this.setdeselectrow()
+      return
+    }
+
+    if (!!item && check) {
+      // This is the new selected
+      // console.log('readonly = false')
+      this.setidsel(item._id)
+      this.readonly = false
+    }
+
+    if (this.$refs.singleproject === undefined)
+      return
 
     for (const i in this.$refs.singleproject) {
 
@@ -478,7 +616,11 @@ export default class ProjList extends Vue {
   }
 
   public updateclasses() {
-    this.colProgress = tools.getProgressColor(this.itemselproj.progressCalc)
+    if (!!this.itemselproj) {
+      this.colProgress = tools.getProgressColor(this.itemselproj.progressCalc)
+    } else {
+      this.whatisSel = tools.WHAT_NOTHING
+    }
   }
 
   public checkUpdate() {
