@@ -3,6 +3,7 @@ import { Component, Prop, Watch } from 'vue-property-decorator'
 
 import { Projects, UserStore } from '@modules'
 import { tools } from '../../../store/Modules/tools'
+import { toolsext } from '@src/store/Modules/toolsext'
 import { lists } from '../../../store/Modules/lists'
 
 import { ITodo } from '../../../model/index'
@@ -193,11 +194,11 @@ export default class SingleTodo extends Vue {
     }
 
     if (this.isTodo()) {
-      this.menuPopupTodo = tools.menuPopupTodo[UserStore.state.lang]
+      this.menuPopupTodo = tools.menuPopupTodo[toolsext.getLocale()]
     }
     else {
       this.menuPopupTodo = []
-      this.menuPopupTodo.push(tools.menuPopupTodo[UserStore.state.lang][tools.INDEX_MENU_DELETE])
+      this.menuPopupTodo.push(tools.menuPopupTodo[toolsext.getLocale()][tools.INDEX_MENU_DELETE])
     }
 
   }

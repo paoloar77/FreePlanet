@@ -3,6 +3,7 @@ import { Component, Watch } from 'vue-property-decorator'
 
 import { ICategory } from '../../../model/index'
 import { tools } from '../../../store/Modules/tools'
+import { toolsext } from '@src/store/Modules/toolsext'
 
 @Component({
 })

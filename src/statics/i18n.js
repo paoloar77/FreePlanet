@@ -153,14 +153,26 @@ const msgglobal = {
       endtime: 'alle',
       duration: 'Durata',
       hours: 'Orario',
+      when: 'Quando',
       where: 'Dove',
-      teacher: 'Insegnante',
+      teacher: 'Con',
       enterdate: 'Inserisci data',
       details: 'Dettagli',
       infoextra: 'Date e Ora Extra:',
       alldayevent: 'Tutto il giorno',
       eventstartdatetime: 'Data e Ora Inizio Evento',
       enterEndDateTime: 'Data e Ora Fine Evento'
+    },
+    newsletter: {
+      name: 'Il tuo Nome',
+      namehint: 'Nome e Cognome',
+      email: 'La tua Email',
+      submit: 'Iscriviti',
+      reset: 'Cancella',
+      typesomething: 'Compilare correttamente il campo',
+      acceptlicense: 'Accetto la licenza e i termini',
+      license: 'Devi prima accettare la licenza e i termini',
+      submitted: 'Iscritto'
     }
   },
   'es': {
@@ -309,14 +321,26 @@ const msgglobal = {
       endtime: 'fin',
       duration: 'Duración',
       hours: 'Tiempo',
+      when: 'Cuando',
       where: 'Donde',
-      teacher: 'Maestro',
+      teacher: 'Con',
       enterdate: 'Ingresar la fecha',
       details: 'Detalles',
       infoextra: 'Fecha y Hora Extras:',
       alldayevent: 'Todo el dia',
       eventstartdatetime: 'Evento de inicio de fecha y hora',
       enterEndDateTime: 'Fecha y hora del evento final'
+    },
+    newsletter: {
+      name: 'Tu Nombre',
+      namehint: 'Nombre y Apellido',
+      email: 'tu correo',
+      submit: 'Subscribete',
+      reset: 'Reiniciar',
+      typesomething: 'Llenar el campo',
+      acceptlicense: 'Acepto la licencia y los términos',
+      license: 'Necesitas aceptar la licencia y los términos primero',
+      submitted: 'Subscrito'
     }
   },
   'enUs': {
@@ -465,14 +489,26 @@ const msgglobal = {
       endtime: 'to',
       duration: 'Duration',
       hours: 'Hours',
+      when: 'When',
       where: 'Where',
-      teacher: 'Teacher',
+      teacher: 'With',
       enterdate: 'Enter date',
       details: 'Details',
       infoextra: 'Extra Info DateTime',
       alldayevent: 'All-Day event',
       eventstartdatetime: 'Event start date and time',
       enterEndDateTime: 'Event end date and time'
+    },
+    newsletter: {
+      name: 'Your name',
+      namehint: 'Name and surname',
+      email: 'Your email',
+      submit: 'Subscribe',
+      reset: 'Reset',
+      typesomething: 'Please type something',
+      acceptlicense: 'I accept the license and terms',
+      license: 'You need to accept the license and terms first',
+      submitted: 'Subscribed'
     }
   },
 };

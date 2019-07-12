@@ -11,6 +11,7 @@ import Api from '@api'
 import * as Types from '@src/store/Api/ApiTypes'
 import { costanti } from '@src/store/Modules/costanti'
 import { tools } from '@src/store/Modules/tools'
+import { toolsext } from '@src/store/Modules/toolsext'
 import * as ApiTables from '@src/store/Modules/ApiTables'
 import { GlobalStore, Projects, Todos, UserStore } from '@store'
 import messages from '../../statics/i18n'
@@ -132,7 +133,7 @@ namespace Getters {
 
   const t = b.read((state) => (params) => {
     const msg = params.split('.')
-    const lang = UserStore.state.lang
+    const lang = toolsext.getLocale()
 
     const stringa = messages[lang]
 

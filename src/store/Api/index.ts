@@ -8,6 +8,7 @@ export { addAuthHeaders, removeAuthHeaders, API_URL } from './Instance'
 // import {AlgoliaSearch} from './AlgoliaController'
 import Paths from '@paths'
 import { tools } from '@src/store/Modules/tools'
+import { toolsext } from '@src/store/Modules/toolsext'
 
 import { GlobalStore, Projects, UserStore } from '@modules'
 import globalroutines from './../../globalroutines/index'

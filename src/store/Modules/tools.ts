@@ -1,6 +1,7 @@
 import { Todos, Projects, UserStore } from '@store'
 import globalroutines from './../../globalroutines/index'
 import { costanti } from './costanti'
+import { toolsext } from './toolsext'
 import { translation } from './translation'
 import Quasar, { date, Screen } from 'quasar'
 import { IListRoutes, IMenuList, IProject, ITodo, Privacy } from '@src/model'
@@ -9,6 +10,7 @@ import translate from '@src/globalroutines/util'
 import { RouteNames } from '@src/router/route-names'
 
 import { lists } from './lists'
+import { shen } from '@src/database/shen'
 
 export interface INotify {
   color?: string | 'primary'
@@ -64,14 +66,6 @@ export const tools = {
     OPENED: 1,
     COMPLETED: 10
   },
-
-  DateFormatter: new Intl.DateTimeFormat(this.getLocale() || void 0, {
-    weekday: 'long',
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric'
-    // timeZone: 'UTC'
-  }),
 
   selectPhase: {
     it: [
@@ -931,7 +925,7 @@ export const tools = {
 
   getStatusListByInd(index) {
     try {
-      const arr = tools.selectStatus[UserStore.state.lang]
+      const arr = tools.selectStatus[toolsext.getLocale()]
       for (const rec of arr) {
         if (rec.value === index) {
           return rec.label
@@ -945,9 +939,9 @@ export const tools = {
   ,
 
   getPriorityByInd(index) {
-    // console.log('LANG in PRIOR', UserStore.state.lang)
+    // console.log('LANG in PRIOR', toolsext.getLocale())
     try {
-      const arr = lists.selectPriority[UserStore.state.lang]
+      const arr = lists.selectPriority[toolsext.getLocale()]
       for (const rec of arr) {
         if (rec.value === index) {
           return rec.label
@@ -1316,6 +1310,7 @@ export const tools = {
   ,
 
   checkLangPassed(mylang) {
+    console.log('checkLangPassed')
 
     const mybrowserLang = Quasar.lang.isoName
 
@@ -1339,11 +1334,15 @@ export const tools = {
     if (!mylang) {
       mylang = process.env.LANG_DEFAULT
     }
+
+    if (toolsext.getLocale(true) === '') {
+      UserStore.mutations.setlang(mylang)
+    }
+
     console.log('mylang calc : ', mylang)
 
     return mylang
-  }
-  ,
+  },
 
   getimglogo() {
     return 'statics/images/' + process.env.LOGO_REG
@@ -1816,16 +1815,20 @@ export const tools = {
     return val + ''
   },
 
-  getLocale() {
-    return UserStore.state.lang
+  getLocale(vero?: boolean) {
+    if (UserStore) {
+      if (UserStore.state) {
+        return UserStore.state.lang
+      }
+    }
+    if (!vero)
+      return process.env.LANG_DEFAULT
+    else
+      return ''
   },
 
-  getDateStr(mydate) {
-    if (this.DateFormatter && this.getLocale()) {
-      const date = new Date(mydate)
-      return this.titleFormatter.format(date)
-    }
-    return ''
+  addDays(mydate, days) {
+    return date.addToDate(mydate, { days })
   }
 
 // getLocale() {

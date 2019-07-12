@@ -4,6 +4,7 @@ import { Component, Prop, Watch } from 'vue-property-decorator'
 import { IDrag, IProject, ITodo, ITodosState } from '../../../model/index'
 
 import { tools } from '../../../store/Modules/tools'
+import { toolsext } from '@src/store/Modules/toolsext'
 import { lists } from '../../../store/Modules/lists'
 import * as ApiTables from '../../../store/Modules/ApiTables'
 
@@ -63,11 +64,11 @@ export default class CTodo extends Vue {
   }
 
   get menuPopupConfigTodo() {
-    return tools.menuPopupConfigTodo[UserStore.state.lang]
+    return tools.menuPopupConfigTodo[toolsext.getLocale()]
   }
 
   get listOptionShowTask() {
-    return tools.listOptionShowTask[UserStore.state.lang]
+    return tools.listOptionShowTask[toolsext.getLocale()]
   }
 
   get TodosCount() {

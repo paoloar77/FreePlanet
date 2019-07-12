@@ -3,6 +3,7 @@ import { Component, Prop, Watch } from 'vue-property-decorator'
 
 import { Projects, UserStore } from '@modules'
 import { tools } from '../../../store/Modules/tools'
+import { toolsext } from '@src/store/Modules/toolsext'
 import { lists } from '../../../store/Modules/lists'
 
 import { IProject } from '../../../model/index'
@@ -208,11 +209,11 @@ export default class SingleProject extends Vue {
     }
 
     if (this.isProject()) {
-      this.menuPopupProj = tools.menuPopupProj[UserStore.state.lang]
+      this.menuPopupProj = tools.menuPopupProj[toolsext.getLocale()]
     }
     else {
       this.menuPopupProj = []
-      this.menuPopupProj.push(tools.menuPopupProj[UserStore.state.lang][tools.INDEX_MENU_DELETE])
+      this.menuPopupProj.push(tools.menuPopupProj[toolsext.getLocale()][tools.INDEX_MENU_DELETE])
     }
 
   }

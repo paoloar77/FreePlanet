@@ -3,6 +3,7 @@ import Vue from 'vue'
 import { Component, Prop, Watch } from 'vue-property-decorator'
 import { serv_constants } from '../../../store/Modules/serv_constants'
 import { tools } from '../../../store/Modules/tools'
+import { toolsext } from '@src/store/Modules/toolsext'
 
 import { ISigninOptions, IUserState } from 'model'
 import { TSignin, validations } from './signin-validate'
@@ -161,14 +162,14 @@ export default class Signin extends Vue {
         }
         return riscode
       }).then((riscode) => {
-        if (UserStore.state.lang !== '') {
-          this.$i18n.locale = UserStore.state.lang
+        if (toolsext.getLocale() !== '') {
+          this.$i18n.locale = toolsext.getLocale()
         }    // Set Lang
         else {
           UserStore.mutations.setlang(this.$i18n.locale)
         }     // Set Lang
 
-        // console.log('LANG ORA=', UserStore.state.lang)
+        // console.log('LANG ORA=', toolsext.getLocale())
 
         globalroutines(this, 'loadapp', '')
         return riscode

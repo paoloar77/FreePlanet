@@ -6,6 +6,7 @@ import { SingleProject } from '../../../components/projects/SingleProject/index'
 import { CTodo } from '../../../components/todos/CTodo'
 
 import { tools } from '../../../store/Modules/tools'
+import { toolsext } from '@src/store/Modules/toolsext'
 import { lists } from '../../../store/Modules/lists'
 import * as ApiTables from '../../../store/Modules/ApiTables'
 
@@ -56,9 +57,9 @@ export default class ProjList extends Vue {
   public percProgress: string = 'percProgress'
   public readonly: boolean = false
 
-  public selectStatus: [] = tools.selectStatus[UserStore.state.lang]
-  public selectPhase: [] = tools.selectPhase[UserStore.state.lang]
-  public selectPrivacy: [] = tools.selectPrivacy[UserStore.state.lang]
+  public selectStatus: [] = tools.selectStatus[toolsext.getLocale()]
+  public selectPhase: [] = tools.selectPhase[toolsext.getLocale()]
+  public selectPrivacy: [] = tools.selectPrivacy[toolsext.getLocale()]
 
   public $refs: {
     singleproject: SingleProject[],
@@ -203,9 +204,9 @@ export default class ProjList extends Vue {
   get menuPopupConfigProject() {
     let mymenu = null
     if (this.isMainProject)
-      mymenu = tools.menuPopupConfigMAINProject[UserStore.state.lang]
+      mymenu = tools.menuPopupConfigMAINProject[toolsext.getLocale()]
     else
-      mymenu = tools.menuPopupConfigProject[UserStore.state.lang]
+      mymenu = tools.menuPopupConfigProject[toolsext.getLocale()]
 
     if (mymenu.length > 0)
       mymenu[0].disable = !(GlobalStore.state.lastaction.type === lists.MenuAction.CUT)
@@ -214,7 +215,7 @@ export default class ProjList extends Vue {
   }
 
   get listOptionShowTask() {
-    return tools.listOptionShowTask[UserStore.state.lang]
+    return tools.listOptionShowTask[toolsext.getLocale()]
   }
 
   get descrProject() {

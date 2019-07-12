@@ -3,6 +3,7 @@ import { storeBuilder } from './Store/Store'
 
 import Api from '@api'
 import { tools } from './tools'
+import { toolsext } from '@src/store/Modules/toolsext'
 import { lists } from './lists'
 import * as ApiTables from './ApiTables'
 import { GlobalStore, Todos, UserStore } from '@store'

@@ -6,12 +6,14 @@ import { idbKeyval as storage } from '../js/storage.js'
 import { costanti } from '../store/Modules/costanti'
 import { ICfgData, IGlobalState } from '@src/model'
 import { tools } from '@src/store/Modules/tools'
+import { toolsext } from '@src/store/Modules/toolsext'
+
 
 function saveConfigIndexDb(context) {
 
   const data: ICfgData = {
     _id: costanti.CONFIG_ID_CFG,
-    lang: UserStore.state.lang,
+    lang: toolsext.getLocale(),
     token: UserStore.state.x_auth_token,
     userId: UserStore.state.userId
   }

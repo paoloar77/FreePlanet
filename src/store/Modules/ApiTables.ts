@@ -4,6 +4,7 @@ import { GlobalStore, Todos, Projects, UserStore } from '@store'
 import globalroutines from './../../globalroutines/index'
 import { serv_constants } from '@src/store/Modules/serv_constants'
 import { tools } from '@src/store/Modules/tools'
+import { toolsext } from '@src/store/Modules/toolsext'
 
 export const OtherTables = ['categories', 'config', 'swmsg']
 export const MainTables = ['todos', 'projects']
@@ -126,7 +127,7 @@ async function Sync_Execute(cmd, tablesync, nametab, method, item: ITodo, id, ms
             console.log('ris write:', ris)
             const sep = '|'
 
-            const multiparams = cmdSw + sep + tablesync + sep + nametab + sep + method + sep + UserStore.state.x_auth_token + sep + UserStore.state.lang
+            const multiparams = cmdSw + sep + tablesync + sep + nametab + sep + method + sep + UserStore.state.x_auth_token + sep + toolsext.getLocale()
             const mymsgkey = {
               _id: multiparams,
               value: multiparams
