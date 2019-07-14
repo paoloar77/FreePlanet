@@ -2,7 +2,7 @@ import { tools } from '@src/store/Modules/tools'
 import { toolsext } from '@src/store/Modules/toolsext'
 
 export interface IEstimate {
-  id: number
+  id?: number
   title: string
   advanced?: boolean
   description?: string
@@ -12,6 +12,7 @@ export interface IEstimate {
   icon?: string
   numpag?: number
   qta?: number
-  price: number
+  price?: number
+  pricebase?: number
   checksel?: boolean
 }

@@ -7,16 +7,46 @@ import { tools } from '@src/store/Modules/tools'
 export default class Estimate extends Vue {
   public arrEstimate: IEstimate[] = []
 
+  public features: IEstimate[] = [
+    {
+      title: '5 pagine principali: 1) Home principale con testo + slideshow di immagini, 2) Chi siamo, 3) Dove Siamo, 4) Contatti, 5) Servizi',
+      icon: 'looks_5'
+    },
+    {
+      title: 'Ottimizzato con tecnologia Responsive, visualizzabile su cellulare',
+      icon: 'devices_other'
+    },
+    {
+      title: 'Possibilità di modificare, in maniera autonoma, i testi delle pagine esistenti (Sito Dinamico)',
+      icon: 'edit'
+    },
+    {
+      title: 'Galleria d\'immagini Slideshow',
+      icon: 'photo_album'
+    },
+    {
+      title: 'Certificato SSL / HTTPS di sicurezza incluso',
+      icon: 'https'
+    },
+    {
+      title: 'GDPR privacy e cookie',
+      icon: 'verified_user'
+    },
+    {
+      title: 'Posizionamento motori di ricerca (Google)',
+      icon: 'search'
+    },
+    {
+      title: 'Statistica Visualizzazioni sito web (Google Analytics)',
+      icon: 'search'
+    }
+
+    ]
+
   public arrEstimateit: IEstimate[] = [
     {
       id: 1,
-      title: 'Pagina Web Base', description: 'Incluso nel prezzo:<br />' +
-      '- 5 pagine principali: Home principale con testo + slideshow di immagini, Chi siamo, Dove Siamo, Contatti<br />' +
-      '- Possibilità di modificare in maniera autonoma i testi delle pagine (Sito Dinamico)<br />' +
-      '- Galleria d\'immagini Slideshow ' +
-      '- Certificato SSL / HTTPS di sicurezza incluso<br />' +
-      '- GDPR privacy e cookie<br />' +
-      '- Posizionamento motori di ricerca<br />',
+      title: 'Pagina Web Base', description: '',
       price: 250,
       advanced: false,
       qta: 1,
@@ -79,6 +109,7 @@ export default class Estimate extends Vue {
       advanced: false,
       icon: 'language',
       price: 10,
+      pricebase: 50,
       qta: 1,
       numpag: 0,
       viewlist: null,
@@ -138,11 +169,14 @@ export default class Estimate extends Vue {
   }
 
   public getPrice(rec: IEstimate) {
+    let myprice = 0
     if (rec.id === tools.languageid) {
-      return rec.price * this.getNumpagTotal()
+      myprice = (rec.price * this.getNumpagTotal()) + rec.pricebase
     } else {
-      return rec.price
+      myprice = rec.price
     }
+
+    return myprice
   }
 
   public getNumpagTotal() {
