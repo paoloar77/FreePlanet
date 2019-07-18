@@ -58,7 +58,7 @@
                 -->
 
                 <q-btn
-                        v-if="!isonline"
+                        v-if="!isonline && static_data.SHOW_IF_IS_SERVER_CONNECTION"
                         flat
                         dense
                         round
@@ -72,6 +72,7 @@
 
                 <q-btn-dropdown
                         stretch
+                        v-if="selectOpLang.length > 1"
                         flat
                         :label="langshort"
                         auto-close

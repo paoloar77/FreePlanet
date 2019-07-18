@@ -1,4 +1,5 @@
 import { IAction } from '@src/model/Projects'
+import { Component } from 'vue-router/types/router'
 
 export interface IPost {
   title: string
@@ -72,12 +73,42 @@ export interface IMenuList {
 }
 
 export interface IListRoutes {
-  route: string
-  faIcon?: string
-  materialIcon?: string
+  path: string
   name: string
+  materialIcon?: string
+  component?: Component
+  reqauth?: boolean
+  inmenu?: boolean
+  submenu?: boolean
+  // ------------------------
+  faIcon?: string
   text?: string
   routes2?: IListRoutes[]
   level_parent?: number
   level_child?: number
+}
+
+export interface IPerson {
+  index?: number
+  tab?: string
+  name: string
+  sub1: string
+  sub2?: string
+  sub3?: string
+  img: string
+  cell?: string
+  email?: string
+  paginaweb?: string
+  paginafb?: string
+  intro?: string
+  info?: string
+  vario?: string
+}
+
+export interface ILang {
+  label: string
+  icon: string
+  value: string
+  image: string
+  short: string
 }

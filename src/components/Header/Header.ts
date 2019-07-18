@@ -11,6 +11,7 @@ import { tools } from '../../store/Modules/tools'
 import { toolsext } from '@src/store/Modules/toolsext'
 
 import Quasar, { Screen } from 'quasar'
+import { static_data } from '../../db/static_data'
 
 @Component({
   name: 'Header',
@@ -37,12 +38,10 @@ export default class Header extends Vue {
   public photo = ''
   public visuimg: boolean = true
 
-  public selectOpLang = [
-    { label: 'English', icon: 'fa-flag-us', value: 'enUs', image: '../statics/images/gb.png', short: 'EN' },
-    { label: 'Español', icon: 'fa-flag-es', value: 'es', image: '../statics/images/es.png', short: 'ES' },
-    { label: 'Italiano', icon: 'fa-facebook', value: 'it', image: '../statics/images/it.png', short: 'IT' }
-    // { label: 'German', icon: 'fa-flag-de', value: 'de', image: '../statics/images/de.png', short: 'DE' },
-  ]
+  public selectOpLang() {
+    return static_data.lang_available
+
+  }
 
   get getappname(){
     if (Screen.width < 400) {
@@ -165,14 +164,17 @@ export default class Header extends Vue {
 
       const color = (value === 'online') ? 'positive' : 'warning'
 
-      if (!!oldValue) {
-        tools.showNotif(this.$q, this.$t('connection') + ` ${value}`, {
-          color,
-          icon: 'wifi'
-        })
-      }
+      if (this.static_data.SHOW_IF_IS_SERVER_CONNECTION) {
 
-      this.changeIconConn()
+        if (!!oldValue) {
+          tools.showNotif(this.$q, this.$t('connection') + ` ${value}`, {
+            color,
+            icon: 'wifi'
+          })
+        }
+
+        this.changeIconConn()
+      }
     }
   }
 
@@ -336,5 +338,9 @@ export default class Header extends Vue {
 
         tools.showNotif(this.$q, this.$t('logout.uscito'), {icon: 'exit_to_app'})
       })
+  }
+
+  get static_data(){
+    return static_data
   }
 }

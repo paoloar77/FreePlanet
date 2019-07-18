@@ -3,8 +3,8 @@
         <q-list class="rounded-borders text-primary">
             <template v-for="(parent, index) in getmenu">
                 <!--<div class="q-list-header">{{replaceUnderlineToSpace(index)}}</div>-->
-                <div v-for="myitemmenu in parent.routes">
-                    <div v-if="!!myitemmenu.routes2">
+                <div v-for="myitemmenu in static_data.routes">
+                    <div v-if="!!myitemmenu.routes2 && myitemmenu.inmenu">
                         <q-expansion-item
                                 :header-inset-level="myitemmenu.level_parent"
                                 :content-inset-level="myitemmenu.level_parent"
@@ -16,7 +16,7 @@
 
                             <q-expansion-item v-for="(child2, index) in myitemmenu.routes2"
                                               :key="index"
-                                              :to="child2.route"
+                                              :to="child2.path"
                                               :header-inset-level="child2.level_child"
                                               :duration="300"
                                               :icon="child2.materialIcon"
@@ -26,7 +26,7 @@
                                               :label="getLabelByItem(child2)">
                                 <q-expansion-item v-if="!!child2.routes2" v-for="(child3, index) in child2.routes2"
                                                   :key="index"
-                                                  :to="child3.route"
+                                                  :to="child3.path"
                                                   :header-inset-level="child3.level_child"
                                                   :duration="300"
                                                   :icon="child3.materialIcon"
@@ -42,18 +42,19 @@
                         </q-expansion-item>
                     </div>
                     <div v-else>
-                        <q-slide-transition :duration=200>
-                            <div v-show="true">
-                                <q-expansion-item
-                                        :to="myitemmenu.route"
-                                        :header-inset-level="myitemmenu.level_parent"
-                                        :content-inset-level="myitemmenu.level_parent"
-                                        :label="getLabelByItem(myitemmenu)"
-                                        :icon="myitemmenu.materialIcon"
-                                        expand-icon="none"
-                                        header-class="my-menu"
-                                        active-class="my-menu-active">
-                                </q-expansion-item>
+                        <div v-if="myitemmenu.inmenu && !myitemmenu.submenu">
+                            <q-slide-transition :duration=200>
+                                <div v-show="true">
+                                    <q-expansion-item
+                                            :to="myitemmenu.path"
+                                            :header-inset-level="myitemmenu.level_parent"
+                                            :content-inset-level="myitemmenu.level_parent"
+                                            :label="getLabelByItem(myitemmenu)"
+                                            :icon="myitemmenu.materialIcon"
+                                            expand-icon="none"
+                                            header-class="my-menu"
+                                            active-class="my-menu-active">
+                                    </q-expansion-item>
 
 
                                     <!--
@@ -72,8 +73,9 @@
                                     </q-item-section>
                                 </q-item>
 -->
-                            </div>
-                        </q-slide-transition>
+                                </div>
+                            </q-slide-transition>
+                        </div>
                     </div>
                 </div>
             </template>

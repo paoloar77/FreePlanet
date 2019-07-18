@@ -10,6 +10,7 @@ import translate from '@src/globalroutines/util'
 import { RouteNames } from '@src/router/route-names'
 
 import { lists } from './lists'
+import { static_data } from '@src/db/static_data'
 
 export interface INotify {
   color?: string | 'primary'
@@ -38,8 +39,6 @@ export const tools = {
   WHAT_PROJECT: 2,
 
   languageid: 5,
-
-  arrLangUsed: ['enUs', 'it', 'es'],
 
   SERVKEY_VERS: 'vers',
 
@@ -1322,10 +1321,16 @@ export const tools = {
       if ((mylang.toLowerCase() === 'es') || (mylang.toLowerCase() === 'es-es') || (mylang.toLowerCase() === 'eses')) {
         mylang = 'es'
       }
+      if ((mylang.toLowerCase() === 'fr') || (mylang.toLowerCase() === 'fr-fr') || (mylang.toLowerCase() === 'frfr')) {
+        mylang = 'fr'
+      }
+      if ((mylang.toLowerCase() === 'it') || (mylang.toLowerCase() === 'it-it') || (mylang.toLowerCase() === 'itit')) {
+        mylang = 'it'
+      }
 
-      if (!(tools.arrLangUsed.includes(mylang))) {
+      if (!(static_data.arrLangUsed.includes(mylang))) {
         console.log('non incluso ', mylang)
-        mylang = tools.arrLangUsed[0]
+        mylang = static_data.arrLangUsed[0]
 
         // Metti Inglese come default
         UserStore.mutations.setlang(mylang)
@@ -1590,26 +1595,26 @@ export const tools = {
       return '/' + tipoproj + '/'
   },
 
-  convertMenuListInListRoutes(arrlista: IMenuList[]) {
-    const lista = []
-    if (arrlista === undefined)
-      return lista
-    for (const elem of arrlista) {
-      const item: IListRoutes = {
-        faIcon: 'fa fa-list-alt',
-        materialIcon: elem.icon,
-        name: elem.nametranslate,
-        text: elem.description,
-        route: tools.getUrlByTipoProj(false, elem.urlroute) + elem.idelem,
-        routes2: tools.convertMenuListInListRoutes(elem.routes2),
-        level_parent: elem.level_parent,
-        level_child: elem.level_child
-
-      }
-      lista.push(item)
-    }
-    return lista
-  },
+  // convertMenuListInListRoutes(arrlista: IMenuList[]) {
+  //   const lista = []
+  //   if (arrlista === undefined)
+  //     return lista
+  //   for (const elem of arrlista) {
+  //     const item: IListRoutes = {
+  //       faIcon: 'fa fa-list-alt',
+  //       materialIcon: elem.icon,
+  //       name: elem.nametranslate,
+  //       text: elem.description,
+  //       path: tools.getUrlByTipoProj(false, elem.urlroute) + elem.idelem,
+  //       routes2: tools.convertMenuListInListRoutes(elem.routes2),
+  //       level_parent: elem.level_parent,
+  //       level_child: elem.level_child
+  //
+  //     }
+  //     lista.push(item)
+  //   }
+  //   return lista
+  // },
 
   getprivacyreadbytipoproj(tipoproj) {
     if (tipoproj === RouteNames.myprojects)

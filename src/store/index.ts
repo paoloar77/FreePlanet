@@ -9,7 +9,7 @@ import { IProgressState } from '@types'
 
 export interface RootState {
   GlobalModule: IGlobalState
-  route: Route
+  path: Route
 }
 
 Vue.use(Vuex)
