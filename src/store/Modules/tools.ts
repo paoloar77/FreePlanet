@@ -1310,7 +1310,7 @@ export const tools = {
   ,
 
   checkLangPassed(mylang) {
-    console.log('checkLangPassed')
+    // console.log('checkLangPassed')
 
     const mybrowserLang = Quasar.lang.isoName
 
@@ -1345,7 +1345,7 @@ export const tools = {
       UserStore.mutations.setlang(mylang)
     }
 
-    console.log('mylang calc : ', mylang)
+    // console.log('mylang calc : ', mylang)
 
     return mylang
   },
@@ -1521,6 +1521,14 @@ export const tools = {
     // console.log('getstrDate', mytimestamp)
     if (!!mytimestamp)
       return date.formatDate(mytimestamp, 'DD/MM/YYYY')
+    else
+      return ''
+  }
+  ,
+  getstrMMMDate(mytimestamp) {
+    // console.log('getstrDate', mytimestamp)
+    if (!!mytimestamp)
+      return date.formatDate(mytimestamp, 'DD MMM YYYY')
     else
       return ''
   }

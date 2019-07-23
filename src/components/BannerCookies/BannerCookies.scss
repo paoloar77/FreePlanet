@@ -1,0 +1,17 @@
+// Animations
+// slideFromBottom
+.slideFromBottom-enter, .slideFromBottom-leave-to {
+  transform: translate(0px, 10em);
+}
+
+.slideFromBottom-enter-to, .slideFromBottom-leave {
+  transform: translate(0px, 0px);
+}
+
+.slideFromBottom-enter-active {
+  transition: transform .2s ease-out;
+}
+
+.slideFromBottom-leave-active {
+  transition: transform .2s ease-in;
+}

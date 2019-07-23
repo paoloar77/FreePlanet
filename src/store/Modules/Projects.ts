@@ -14,6 +14,7 @@ import { costanti } from '@src/store/Modules/costanti'
 import { RouteNames } from '@src/router/route-names'
 import * as Types from '@src/store/Api/ApiTypes'
 import { serv_constants } from '@src/store/Modules/serv_constants'
+import { static_data } from '@src/db/static_data'
 
 const nametable = 'projects'
 
@@ -272,6 +273,9 @@ namespace Mutations {
 namespace Actions {
 
   async function dbLoad(context, { checkPending, onlyiffirsttime }) {
+
+    if (!static_data.ENABLE_PROJECTS_LOADING)
+      return null
 
     if (onlyiffirsttime) {
       if (stateglob.projects.length > 0) {

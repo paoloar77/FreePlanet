@@ -1,0 +1,180 @@
+$grayshadow: #555;
+
+$textcol: blue;
+$textcol_scuro: darkblue;
+
+
+.landing__footer {
+  //background: -webkit-gradient(linear, left top, left bottom, color-stop(65%, rgba(0, 0, 0, .1)), to(#000));
+  background: linear-gradient(180deg, rgba(0, 0, 0, .8) 95%, #FFF);
+  padding-top: 4.5rem !important;
+  padding-bottom: 4.5rem !important;
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
+  color: #9f9f9f;
+}
+
+.icon_contact:hover {
+  color: blue;
+  border-color: white;
+  border-width: .0625rem;
+}
+
+.landing__footer .doc-link {
+  color: $textcol;
+}
+
+.landing__footer .doc-link:hover {
+  opacity: .8
+}
+
+.landing__swirl-bg {
+  background-repeat: no-repeat !important;
+  background-position: top;
+  background-size: contain !important;
+  background-image: url(../../statics/images/landing_first_section.png) !important
+}
+
+
+.landing__footer-icons {
+  font-size: 1.75rem
+}
+
+.landing__footer-icons a {
+  margin: 0 .5rem .5rem;
+  text-decoration: none;
+  outline: 0;
+  color: $textcol;
+  transition: color .28s
+}
+
+.landing__footer-icons a:hover {
+  color: $textcol_scuro;
+}
+
+.doc-img {
+  max-width: 100%;
+}
+
+.mylist {
+  background: #3fdaff;
+  padding-left: 1.25rem;
+}
+
+.clgutter {
+  margin-top: 1.25rem;
+  padding: .62rem;
+}
+
+.carousel_img_3 {
+  //background-image: url(../../statics/images/cibo_sano.jpg);
+  background-size: cover !important;
+  background-position: 50% center !important;
+  background-repeat: no-repeat !important;
+}
+
+
+@media (max-width: 718px) {
+  // PER VERSIONE MOBILE
+
+  .landing__hero {
+    text-align: center
+  }
+  .landing__header {
+    height: 7vh
+  }
+  .clgutter {
+    margin-top: 0;
+    padding: 0;
+  }
+  .landing__hero .text-h1 {
+    font-size: 3rem;
+    line-height: 3.05rem;
+    margin-bottom: 1.5rem
+  }
+
+  .landing > section.padding {
+    padding: 2.5rem 1rem;
+  }
+
+  .landing > section.padding_testo {
+    padding-top: 1.25rem;
+    padding-bottom: 1rem;
+  }
+
+  .landing > section.padding_gallery {
+    padding-top: 3.125rem;
+    padding-bottom: 5.625rem;
+  }
+
+  .landing__features h4, .landing__features h6 {
+    margin: 1.25rem 0
+  }
+
+  h4 {
+    line-height: 1.4;
+    text-shadow: 0.25rem 0.25rem 0.5rem $grayshadow;
+  }
+
+  .landing .feature-item {
+    text-align: center;
+    margin-top: 1.25rem;
+  }
+  .landing__hero-content {
+    padding-bottom: 11.25rem;
+  }
+  .landing__hero-btns {
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center
+  }
+
+  .q-col-gutter-sm {
+    padding: .625rem .315rem;
+  }
+
+  .text-vers{
+    font-size: 0.6rem;
+  }
+
+  .carousel_img_3 {
+    //background-image: url(../../statics/images/cibo_sano.jpg);
+    background-size: 620px 620px !important;
+    background-position: 50% top !important;
+    background-repeat: no-repeat !important;
+  }
+
+}
+
+.custom-caption {
+  text-align: center;
+  padding: .75rem;
+  color: $textcol;
+  background-color: rgba(0, 0, 0, .3);
+}
+
+.mycontacts {
+  color: gray;
+  letter-spacing: 0.078rem;
+}
+
+.mycontacts_title {
+  text-shadow: 0.125rem 0.125rem 0.125rem #555;
+  font-weight: bold;
+  color: #999;
+  letter-spacing: 0.125rem;
+}
+
+.mycontacts_text {
+  color: #999;
+  letter-spacing: normal !important;
+}
+
+.footer_link {
+  font-size: 1rem;
+  color:gray;
+}
+
+.footer_link:hover {
+  color:white;
+}

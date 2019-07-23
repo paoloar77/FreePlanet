@@ -38,10 +38,6 @@ export default class Header extends Vue {
   public photo = ''
   public visuimg: boolean = true
 
-  public selectOpLang() {
-    return static_data.lang_available
-
-  }
 
   get getappname(){
     if (Screen.width < 400) {
@@ -205,10 +201,10 @@ export default class Header extends Vue {
   }
 
   public setshortlang(lang) {
-    for (const indrec in this.selectOpLang) {
-      if (this.selectOpLang[indrec].value === lang) {
-        // console.log('this.selectOpLang[indrec].short', this.selectOpLang[indrec].short, this.selectOpLang[indrec].value)
-        this.langshort = this.selectOpLang[indrec].short
+    for (const indrec in static_data.lang_available) {
+      if (static_data.lang_available[indrec].value === lang) {
+        // console.log('static_data.lang_available[indrec].short', static_data.lang_available[indrec].short, static_data.lang_available[indrec].value)
+        this.langshort = static_data.lang_available[indrec].short
         return
       }
     }
@@ -220,7 +216,7 @@ export default class Header extends Vue {
   }
 
   public setLangAtt(mylang) {
-    console.log('MYLL=', mylang)
+    console.log('LANG =', mylang)
     // console.log('PRIMA this.$q.lang.isoName', this.$q.lang.isoName)
 
     // dynamic import, so loading on demand only

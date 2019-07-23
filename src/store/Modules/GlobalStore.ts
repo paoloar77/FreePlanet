@@ -432,7 +432,7 @@ namespace Actions {
   }
 
   async function loadAfterLogin(context) {
-    console.log('loadAfterLogin')
+    // console.log('loadAfterLogin')
     actions.clearDataAfterLoginOnlyIfActiveConnection()
 
     state.arrConfig = await globalroutines(null, 'readall', 'config', null)

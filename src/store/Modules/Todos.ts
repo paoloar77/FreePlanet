@@ -15,6 +15,7 @@ import objectId from '@src/js/objectId'
 import { costanti } from '@src/store/Modules/costanti'
 import { IAction } from '@src/model'
 import * as Types from '@src/store/Api/ApiTypes'
+import { static_data } from '@src/db/static_data'
 
 const nametable = 'todos'
 
@@ -217,7 +218,7 @@ namespace Mutations {
     ApiTables.removeitemfromarray(stateparam.todos[indcat], ind)
   }
 
-  async function movemyitem(stateparam: ITodosState, { myitemorig, myitemdest } ) {
+  async function movemyitem(stateparam: ITodosState, { myitemorig, myitemdest }) {
 
     const indcat = stateparam.categories.indexOf(myitemorig.category)
     const indorig = tools.getIndexById(stateparam.todos[indcat], myitemorig._id)
@@ -251,13 +252,19 @@ namespace Mutations {
 namespace Actions {
 
   async function dbLoad(context, { checkPending }) {
+
+    if (!static_data.ENABLE_PROJECTS_LOADING)
+      return null
+
     console.log('dbLoad', nametable, checkPending, 'userid=', UserStore.state.userId)
 
     // if (UserStore.state.userId === '') {
     //   return new Types.AxiosError(0, null, 0, '')
     // }
 
-    const ris = await Api.SendReq('/todos/' + UserStore.state.userId, 'GET', null)
+    let ris = null
+
+    ris = await Api.SendReq('/todos/' + UserStore.state.userId, 'GET', null)
       .then((res) => {
         if (res.data.todos) {  // console.log('RISULTANTE CATEGORIES DAL SERVER = ', res.data.categories)
           state.todos = res.data.todos

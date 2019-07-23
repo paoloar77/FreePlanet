@@ -112,3 +112,39 @@ export interface ILang {
   image: string
   short: string
 }
+
+export interface IAllLang {
+  es?: string
+  enUs?: string
+  fr?: string
+  it?: string
+}
+
+export interface ITimeLineEntry {
+  date: string
+  title: string
+  description: IAllLang
+  description2?: IAllLang
+  description3?: IAllLang
+  icon: string
+  image: string
+  image2?: string
+  image3?: string
+  image4?: string
+  side: string
+  link_url?: string
+  link_text?: IAllLang
+}
+
+export interface ITimeLineMain {
+  titlemain: IAllLang
+  body: ITimeLineEntry[]
+}
+
+export interface IGallery {
+  title: string
+  subtitle?: IAllLang
+  img: string
+  width?: number
+  height?: number
+}

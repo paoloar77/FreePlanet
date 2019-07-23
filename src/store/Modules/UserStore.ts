@@ -512,9 +512,10 @@ namespace Actions {
   }
 
   async function setGlobal(isLogged: boolean) {
-    state.isLogged = true
-    console.log('state.isLogged')
+    // state.isLogged = true
+    state.isLogged = isLogged
     if (isLogged) {
+      console.log('state.isLogged')
       GlobalStore.mutations.setleftDrawerOpen(localStorage.getItem(tools.localStorage.leftDrawerOpen) === 'true')
       GlobalStore.mutations.setCategorySel(localStorage.getItem(tools.localStorage.categorySel))
 
@@ -531,7 +532,7 @@ namespace Actions {
 
   async function autologin_FromLocalStorage(context) {
     try {
-      console.log('*** autologin_FromLocalStorage ***')
+      // console.log('*** autologin_FromLocalStorage ***')
       // INIT
 
       let isLogged = false
@@ -566,7 +567,7 @@ namespace Actions {
 
       await setGlobal(isLogged)
 
-      console.log('autologin userId STATE ', state.userId)
+      // console.log('autologin userId STATE ', state.userId)
 
       return true
     } catch (e) {
