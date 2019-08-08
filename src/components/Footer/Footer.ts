@@ -31,6 +31,10 @@ export default class Footer extends Vue {
     return db_data.URL_FACEBOOK
   }
 
+  get InstagramPage() {
+    return db_data.URL_INSTAGRAM
+  }
+
   get static_data(){
     return static_data
   }

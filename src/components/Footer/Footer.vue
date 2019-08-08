@@ -10,10 +10,12 @@
                     <!--</span>-->
 
 
-                    <FormNewsletter v-if="static_data.SHOW_NEWSLETTER"
-
-                    >
+                    <FormNewsletter v-if="static_data.SHOW_NEWSLETTER">
                     </FormNewsletter>
+
+                    <div class="q-mt-xs copyrights">
+                        <p class="mycontacts_text" v-html="$t('homepage.copyrights')"></p>
+                    </div>
 
                 </div>
                 <div class="col-12 col-sm-4">
@@ -28,6 +30,9 @@
                         <div class="landing__footer-icons row flex-center">
                             <a :href="FBPage" target="_blank">
                                 <i aria-hidden="true" class="q-icon fab fa-facebook-f icon_contact links"> </i></a>
+
+                            <a :href="InstagramPage" target="_blank">
+                                <i aria-hidden="true" class="q-icon fab fa-instagram icon_contact links"> </i></a>
 
                             <a :href="TelegramSupport" target="_blank">
                                 <i aria-hidden="true" class="q-icon fab fa-telegram icon_contact links"></i></a>

@@ -133,6 +133,7 @@ export interface ITimeLineEntry {
   image4?: string
   side: string
   link_url?: string
+  link_url_lang?: IAllLang
   link_text?: IAllLang
 }
 
