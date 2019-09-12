@@ -9,10 +9,23 @@
             >
                 <q-input
                         filled
+                        name="firstName"
                         dark standout
                         v-model="name"
                         :label="$t('newsletter.name') + `*`"
                         :hint="$t('newsletter.namehint')"
+                        lazy-rules
+                        :rules="[ val => val && val.length > 0 || $t('newsletter.typesomething')]">
+
+                </q-input>
+
+                <q-input
+                        filled
+                        dark standout
+                        v-model="surname"
+                        name="lastName"
+                        :label="$t('newsletter.surname') + `*`"
+                        :hint="$t('newsletter.surnamehint')"
                         lazy-rules
                         :rules="[ val => val && val.length > 0 || $t('newsletter.typesomething')]">
 

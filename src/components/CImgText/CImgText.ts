@@ -25,6 +25,6 @@ import { Screen } from 'quasar'
 })
 export default class CImgText extends Vue {
   @Prop({ required: false, default: '' }) public src: string
-  @Prop({ required: false, default: '' }) public class1: string
+  @Prop({ required: false, default: 'myclimg' }) public class1: string
   @Prop({ required: false, default: '' }) public style1: string
 }

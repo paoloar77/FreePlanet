@@ -341,6 +341,10 @@ namespace Actions {
       return
     }
 
+    if (UserStore.state.userId === undefined) {
+      return
+    }
+
     // console.log('saveSubscriptionToServer: ', newSub)
     // console.log('context', context)
 

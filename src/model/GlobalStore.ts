@@ -149,3 +149,19 @@ export interface IGallery {
   width?: number
   height?: number
 }
+
+export interface IColl {
+  title: IAllLang
+  date: string
+  subtitle?: IAllLang
+  img: string
+  linkagg?: string
+  linkagg_type?: number
+  width?: number
+  height?: number
+}
+
+export interface ICollaborations {
+  withwhom_title: IAllLang
+  list: IColl[]
+}

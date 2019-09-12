@@ -10,7 +10,7 @@
                     <!--</span>-->
 
 
-                    <FormNewsletter v-if="static_data.SHOW_NEWSLETTER">
+                    <FormNewsletter v-if="static_data.SHOW_NEWSLETTER" :idwebsite="tools.appid()" :locale="tools.getLocale()">
                     </FormNewsletter>
 
                     <div class="q-mt-xs copyrights">

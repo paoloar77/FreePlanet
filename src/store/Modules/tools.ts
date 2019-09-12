@@ -4,13 +4,14 @@ import { costanti } from './costanti'
 import { toolsext } from './toolsext'
 import { translation } from './translation'
 import Quasar, { date, Screen } from 'quasar'
-import { IListRoutes, IMenuList, IProject, ITodo, Privacy } from '@src/model'
+import { ICollaborations, IListRoutes, IMenuList, IProject, ITodo, Privacy } from '@src/model'
 import * as ApiTables from '@src/store/Modules/ApiTables'
 import translate from '@src/globalroutines/util'
 import { RouteNames } from '@src/router/route-names'
 
 import { lists } from './lists'
 import { static_data } from '@src/db/static_data'
+import { IColl, ITimeLineEntry, ITimeLineMain } from '@src/model/GlobalStore'
 
 export interface INotify {
   color?: string | 'primary'
@@ -29,6 +30,8 @@ export const tools = {
   ERR_AUTHENTICATION: -5,
   DUPLICATE_EMAIL_ID: 11000,
   DUPLICATE_USERNAME_ID: 11100,
+
+  TYPE_AUDIO: 1,
 
   NUMSEC_CHECKUPDATE: 20000,
 
@@ -1735,13 +1738,21 @@ export const tools = {
     }
   },
 
-  myheight_imgtitle() {
+  myheight_imgtitle(myheight?) {
+    if (!!myheight) {
+      if (myheight > 0)
+        return myheight
+    }
     if (Screen.width < 400) {
-      return '250'
+      return 350
     } else if (Screen.width < 600) {
-      return '350'
+      return 400
+    } else if (Screen.width < 800) {
+      return 450
+    } else if (Screen.width < 1000) {
+      return 500
     } else {
-      return '350'
+      return 500
     }
   },
 
@@ -1843,7 +1854,76 @@ export const tools = {
 
   addDays(mydate, days) {
     return date.addToDate(mydate, { days })
+  },
+
+  gettitlemain(datamain: ITimeLineMain) {
+    if (datamain.titlemain[toolsext.getLocale()])
+      return datamain.titlemain[toolsext.getLocale()]
+    else {
+      return datamain.titlemain[static_data.arrLangUsed[0]]
+    }
+
+  },
+  getwwithwhocoll(datamain: ICollaborations) {
+    if (datamain.withwhom_title[toolsext.getLocale()])
+      return datamain.withwhom_title[toolsext.getLocale()]
+    else {
+      return datamain.withwhom_title[static_data.arrLangUsed[0]]
+    }
+
+  },
+  gettextcoll(data: IColl) {
+    if (data.subtitle[toolsext.getLocale()])
+      return data.subtitle[toolsext.getLocale()]
+    else {
+      return data.subtitle[static_data.arrLangUsed[0]]
+    }
+  },
+  gettitlecoll(data: IColl) {
+    if (data.title[toolsext.getLocale()])
+      return data.title[toolsext.getLocale()]
+    else {
+      return data.title[static_data.arrLangUsed[0]]
+    }
+  },
+  gettextdescr(data: ITimeLineEntry, numdescr = 'description') {
+    if (!!data[numdescr]) {
+      if (data[numdescr][toolsext.getLocale()])
+        return data[numdescr][toolsext.getLocale()]
+      else {
+        return data[numdescr][static_data.arrLangUsed[0]]
+      }
+    } else {
+      return ''
+    }
+  },
+
+  getlink(data: ITimeLineEntry) {
+    if (data.link_text[toolsext.getLocale()])
+      return data.link_text[toolsext.getLocale()]
+    else {
+      return data.link_text[static_data.arrLangUsed[0]]
+    }
+
+  },
+
+  getlinkurl(data: ITimeLineEntry) {
+    if (data.link_url_lang) {
+      if (data.link_url_lang[toolsext.getLocale()]) {
+        return data.link_url_lang[toolsext.getLocale()]
+      } else {
+        return data.link_url
+      }
+    } else {
+      return data.link_url
+    }
+
+  },
+
+  appid() {
+    return process.env.APP_ID
   }
+
 
 // getLocale() {
   //   if (navigator.languages && navigator.languages.length > 0) {

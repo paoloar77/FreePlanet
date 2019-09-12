@@ -31,6 +31,25 @@
   }
 }
 
+@media (max-width: 1600px) {
+  .myclimg {
+    height: 550px !important;
+  }
+}
+
+@media (max-width: 1000px) {
+  .myclimg {
+    height: 450px !important;
+  }
+}
+
+@media (max-width: 800px) {
+  .myclimg {
+    height: 400px !important;
+  }
+}
+
+
 @media (max-width: 718px) {
   // PER VERSIONE MOBILE
   .landing > section.padding_testo {
