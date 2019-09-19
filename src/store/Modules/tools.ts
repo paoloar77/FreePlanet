@@ -1728,6 +1728,7 @@ export const tools = {
 
   },
 
+
   heightgallery() {
     if (Screen.width < 400) {
       return '200px'
@@ -1738,22 +1739,51 @@ export const tools = {
     }
   },
 
-  myheight_imgtitle(myheight?) {
+  myheight_imgtitle(myheight?, myheightmobile?) {
+    let maxheight = 0
     if (!!myheight) {
-      if (myheight > 0)
-        return myheight
-    }
-    if (Screen.width < 400) {
-      return 350
-    } else if (Screen.width < 600) {
-      return 400
-    } else if (Screen.width < 800) {
-      return 450
-    } else if (Screen.width < 1000) {
-      return 500
+      maxheight = myheight
+      if (myheight > 0) {
+        if (myheight > 1000) {
+          maxheight = 1000
+        } else {
+          maxheight =  parseInt(myheight, 10)
+        }
+      }
     } else {
-      return 500
+      maxheight = 500
     }
+
+    let maxh2 = 0
+    if (Screen.width < 400) {
+      maxh2 = 350
+    } else if (Screen.width < 600) {
+      maxh2 = 400
+    } else if (Screen.width < 800) {
+      maxh2 = 450
+    } else if (Screen.width < 1000) {
+      maxh2 = 500
+    } else {
+      maxh2 = 500
+    }
+
+    console.log('maxh2', maxh2)
+    console.log('maxheight', maxheight)
+
+    let ris = 0
+
+    if (maxh2 < maxheight)
+      ris = maxh2
+    else
+      ris = maxheight
+
+    if (!!myheightmobile) {
+      if (this.isMobile() && maxh2 > myheightmobile)
+        ris = parseInt(myheightmobile, 10)
+    }
+
+    console.log('ris', ris)
+    return ris
   },
 
   myheight_dialog() {
@@ -1766,11 +1796,15 @@ export const tools = {
     }
   },
 
-  styles_imgtitle() {
-    if (Screen.width < 400) {
-      return 'max-height: 250px'
+  styles_imgtitle(sized?: string) {
+    if (!!sized) {
+      return sized
     } else {
-      return 'max-height: 350px'
+      if (Screen.width < 400) {
+        return 'max-height: 250px'
+      } else {
+        return 'max-height: 350px'
+      }
     }
   },
 
@@ -1806,6 +1840,10 @@ export const tools = {
     } else {
       return 'max-width: 350px'
     }
+  },
+
+  isMobile() {
+    return (Screen.width < 400)
   },
 
   mywidth_imgtitle() {
@@ -1922,7 +1960,41 @@ export const tools = {
 
   appid() {
     return process.env.APP_ID
+  },
+
+  getLabelByItem(item, mythis) {
+    if (!!item.name)
+      return mythis.$t(item.name)
+    else
+      return item.text
+
+  },
+
+  getimgbysize(dir: string, file: string) {
+    const myimage = dir + file
+    console.log('includes = ', static_data.preLoadImages.includes(myimage), myimage)
+    let ris = ''
+    if (this.isMobile() && (static_data.preLoadImages.includes(myimage))) {
+      ris = dir + 'mobile/' + file
+    } else {
+      ris = myimage
+    }
+
+    console.log('getimgbysize', ris)
+
+    return ris
+  },
+
+  getimgFullpathbysize(fileimg: string) {
+    const ind = fileimg.lastIndexOf('/')
+    if (ind > 0) {
+      return { path: fileimg.substring(0, ind + 1) , file: fileimg.substring(ind + 1) }
+    } else {
+      return { path: '', file: fileimg }
+    }
+
   }
+
 
 
 // getLocale() {

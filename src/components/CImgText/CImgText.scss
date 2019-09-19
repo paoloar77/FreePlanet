@@ -33,24 +33,28 @@
 
 @media (max-width: 1600px) {
   .myclimg {
-    height: 550px !important;
+    max-height: 550px !important;
   }
 }
 
 @media (max-width: 1000px) {
   .myclimg {
-    height: 450px !important;
+    max-height: 450px !important;
   }
 }
 
 @media (max-width: 800px) {
   .myclimg {
-    height: 400px !important;
+    max-height: 400px !important;
   }
 }
 
 
-@media (max-width: 718px) {
+@media (max-width: 400px) {
+  .myclimg {
+    // height: inherit !important;
+  }
+
   // PER VERSIONE MOBILE
   .landing > section.padding_testo {
     padding-top: 0.5rem;

@@ -3,7 +3,7 @@
         <div class="q-pa-md q-gutter-sm">
             <transition appear name="slide-up" mode="out-in" :duration="2000">
                 <q-banner class="bg-primary text-white" transition-show="jump-down">
-                    Usiamo i Cookie per una migliore prestazione web.
+                    {{$t('cookies')}}
                     <template v-slot:action>
                         <q-btn v-if="disableDecline === false" flat color="white" label="Declina"
                                @click="decline"></q-btn>

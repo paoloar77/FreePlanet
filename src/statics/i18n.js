@@ -151,6 +151,7 @@ const msgglobal = {
       themebgcolor: 'Tema Colore Sfondo'
     },
     cal: {
+      event: 'Evento',
       starttime: 'Dalle',
       endtime: 'alle',
       duration: 'Durata',
@@ -166,6 +167,7 @@ const msgglobal = {
       enterEndDateTime: 'Data e Ora Fine Evento'
     },
     newsletter: {
+      title: 'Desideri ricevere la nostra Newsletter?',
       name: 'Il tuo Nome',
       surname: 'Il tuo Cognome',
       namehint: 'Nome',
@@ -177,9 +179,10 @@ const msgglobal = {
       acceptlicense: 'Accetto la licenza e i termini',
       license: 'Devi prima accettare la licenza e i termini',
       submitted: 'Iscritto'
-    }
+    },
+    cookies: 'Usiamo i Cookie per una migliore prestazione web.'
   },
-  'es': {
+  es: {
     dialog: {
       ok: 'Vale',
       yes: 'Sí',
@@ -323,6 +326,7 @@ const msgglobal = {
       themebgcolor: 'Tema Colores Fondo'
     },
     cal: {
+      event: 'Evento',
       starttime: 'Inicio',
       endtime: 'fin',
       duration: 'Duración',
@@ -338,6 +342,7 @@ const msgglobal = {
       enterEndDateTime: 'Fecha y hora del evento final'
     },
     newsletter: {
+      title: '¿Desea recibir nuestro boletín informativo?',
       name: 'Tu Nombre',
       surname: 'Tu Apellido',
       namehint: 'Nombre',
@@ -349,7 +354,8 @@ const msgglobal = {
       acceptlicense: 'Acepto la licencia y los términos',
       license: 'Necesitas aceptar la licencia y los términos primero',
       submitted: 'Subscrito'
-    }
+    },
+    cookies: 'Utilizamos cookies para un mejor rendimiento web.'
   },
   fr: {
     dialog: {
@@ -494,6 +500,7 @@ const msgglobal = {
       themebgcolor: 'Tema Colores Fondo'
     },
     cal: {
+      event: 'événement',
       starttime: 'Accueil',
       endtime: 'fin',
       duration: 'Durée',
@@ -509,6 +516,7 @@ const msgglobal = {
       enterEndDateTime: 'Date et heure de l\'événement final'
     },
     newsletter: {
+      title: 'Souhaitez-vous recevoir notre newsletter?',
       name: 'Ton nom',
       surname: 'Tu prénom',
       namehint: 'Nom',
@@ -520,9 +528,10 @@ const msgglobal = {
       acceptlicense: 'J\'accepte la licence et les termes',
       license: 'Vous devez d\'abord accepter la licence et les termes',
       submitted: 'Abonné'
-    }
+    },
+    cookies: 'Nous utilisons des cookies pour améliorer les performances Web.'
   },
-  'enUs': {
+  enUs: {
     dialog: {
       ok: 'Ok',
       yes: 'Yes',
@@ -664,6 +673,7 @@ const msgglobal = {
       themebgcolor: 'Theme Color Background'
     },
     cal: {
+      event: 'Event',
       starttime: 'From',
       endtime: 'to',
       duration: 'Duration',
@@ -679,6 +689,7 @@ const msgglobal = {
       enterEndDateTime: 'Event end date and time'
     },
     newsletter: {
+      title: 'Would you like to receive our Newsletter?',
       name: 'Your name',
       surname: 'Your surname',
       namehint: 'Name',
@@ -690,7 +701,8 @@ const msgglobal = {
       acceptlicense: 'I accept the license and terms',
       license: 'You need to accept the license and terms first',
       submitted: 'Subscribed'
-    }
+    },
+    cookies: 'We use cookies for better web performance.'
   },
   de: {
     dialog: {
@@ -836,6 +848,7 @@ const msgglobal = {
       themebgcolor: 'Theme Color Background'
     },
     cal: {
+      event: 'Event',
       starttime: 'From',
       endtime: 'to',
       duration: 'Duration',
@@ -851,6 +864,7 @@ const msgglobal = {
       enterEndDateTime: 'Event end date and time'
     },
     newsletter: {
+      title: 'Would you like to receive our Newsletter?',
       name: 'Your name',
       surname: 'Your surname',
       namehint: 'Name',
@@ -862,7 +876,8 @@ const msgglobal = {
       acceptlicense: 'I accept the license and terms',
       license: 'You need to accept the license and terms first',
       submitted: 'Subscribed'
-    }
+    },
+    cookies: 'Wir verwenden Cookies für eine bessere Webleistung.'
   },
 };
 
@@ -874,7 +889,7 @@ const msgenUs = { ...msg_website.enUs, ...msgglobal.enUs }
 
 const messages = {
   it: {
-    ...msges,
+    ...msgit,
     pages: { ...msg_website.it.pages, ...msgglobal.it.pages },
     msg: { ...msg_website.it.msg, ...msgglobal.it.msg },
     homepage: { ...msg_website.it.homepage, ...msgglobal.it.homepage }

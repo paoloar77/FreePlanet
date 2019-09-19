@@ -62,5 +62,23 @@ export const db_data = {
       infoextra: 'sabato e domenica dalle 10.00 alle 18.00',
       linkpdf: '',
     },
+    {
+      title: 'Presentazione Corsi per Operatori del Massaggio del Benessere',
+      details: 'Vieni alla presentazione dei Corsi!<br>10 settembre a Ravenna, 17 settembre a Lugo',
+      date: '2019-09-10',
+      time: '20:30',
+      duration: 120,
+      side: 'left',
+      bgcolor: 'blue',
+      icon: 'fas fa-praying-hands',
+      img: 'images/scuolaopbenessere/img1.jpg',
+      where: 'Centro Shen',
+      // whereicon: 'shen.png',
+      teacher: 'Operatori',
+      avatar: 'cristina.png',
+      avatar2: 'elisa.png',
+      infoextra: '',
+      linkpdf: '',
+    },
   ]
 }

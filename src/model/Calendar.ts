@@ -2,6 +2,7 @@
 export interface IEvents {
   time?: string
   duration?: number
+  duration2?: number
   title?: string
   details?: string
   date?: string

@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="q-pa-md q-gutter-sm text-white">
-            <p class="news_title">Desideri ricevere la nostra Newsletter?</p>
+            <p class="news_title">{{$t('newsletter.title')}}</p>
             <q-form
                     @submit="onSubmit"
                     @reset="onReset"
@@ -41,7 +41,7 @@
 
                 </q-input>
 
-                <a href="/policy"><span class="news_link">Privacy Policy</span></a>
+                <router-link to="/policy"><span class="news_link">Privacy Policy</span></router-link>
 
                 <q-toggle dark v-model="accept" :label="$t('newsletter.acceptlicense')"/>
 

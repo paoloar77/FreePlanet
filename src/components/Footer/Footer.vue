@@ -10,12 +10,13 @@
                     <!--</span>-->
 
 
-                    <FormNewsletter v-if="static_data.SHOW_NEWSLETTER" :idwebsite="tools.appid()" :locale="tools.getLocale()">
+                    <FormNewsletter v-if="static_data.SHOW_NEWSLETTER" :idwebsite="tools.appid()"
+                                    :locale="tools.getLocale()">
                     </FormNewsletter>
 
-                    <div class="q-mt-xs copyrights">
-                        <p class="mycontacts_text" v-html="$t('homepage.copyrights')"></p>
-                    </div>
+                    <!--<div class="q-mt-xs copyrights">-->
+                    <!--<p class="mycontacts_text" v-html="$t('homepage.copyrights')"></p>-->
+                    <!--</div>-->
 
                 </div>
                 <div class="col-12 col-sm-4">
@@ -28,13 +29,13 @@
                             <p class="mycontacts_text" v-html="$t('homepage.contacts')"></p>
                         </div>
                         <div class="landing__footer-icons row flex-center">
-                            <a :href="FBPage" target="_blank">
+                            <a v-if="!!FBPage" :href="FBPage" target="_blank">
                                 <i aria-hidden="true" class="q-icon fab fa-facebook-f icon_contact links"> </i></a>
 
-                            <a :href="InstagramPage" target="_blank">
+                            <a v-if="!!InstagramPage" :href="InstagramPage" target="_blank">
                                 <i aria-hidden="true" class="q-icon fab fa-instagram icon_contact links"> </i></a>
 
-                            <a :href="TelegramSupport" target="_blank">
+                            <a v-if="!!TelegramSupport" :href="TelegramSupport" target="_blank">
                                 <i aria-hidden="true" class="q-icon fab fa-telegram icon_contact links"></i></a>
 
 
@@ -53,29 +54,22 @@
                 </div>
 
                 <div class="col-12 col-sm-4 q-pa-md" v-for="">
-                    <a href="/"><span class="footer_link">Home</span></a><br />
+                    <div v-for="myitemmenu in static_data.routes">
+                        <div v-if="myitemmenu.infooter">
+
+                            <div v-if="myitemmenu.solotitle">
+                                <span class="footer_link">{{tools.getLabelByItem(myitemmenu, mythis)}}</span><br/>
+                            </div>
+                            <div v-else>
+                                <router-link :to="myitemmenu.path">
+                                    <span class="footer_link"><span v-if="myitemmenu.level_child > 0">&nbsp;&nbsp;&nbsp;</span>
+                                        {{tools.getLabelByItem(myitemmenu, mythis)}}</span><br/>
+                                </router-link>
+                            </div>
+                            <!--<a :href="myitemmenu.path"><span class="footer_link">{{tools.getLabelByItem(myitemmenu, mythis)}}</span></a><br/>-->
+                        </div>
+                    </div>
                 </div>
-
-                <!--
-                <div class="col-12 col-sm-4 q-pa-md">
-                    <a href="/"><span class="footer_link">Home</span></a><br />
-                    <a href="/chisiamo"><span class="footer_link">Chi Siamo</span></a><br />
-                    <a href="/calendarioeventi"><span class="footer_link">Calendario Eventi</span></a><br />
-                    <a href="/reiki/significato"><span class="footer_link">Reiki</span></a><br />
-                    <a href="/reiki/seminari"><span class="footer_link"> - Seminari Reiki</span></a><br />
-                    <a href="/reiki/trattamentiindividuali"><span class="footer_link"> - Trattamenti Individuali</span></a><br />
-                    <a href="/reiki/seratereikigruppo"><span class="footer_link"> - Serate di Gruppo</span></a><br />
-                    <a href="/shiatsu/significato"><span class="footer_link">Shiatsu</span></a><br />
-                    <a href="/shiatsu/trattamentiindividuali"><span class="footer_link"> - Trattamenti Individuali</span></a><br />
-                    <a href="/shiatsu/energyyoga"><span class="footer_link"> - Energy Yoga</span></a><br />
-                    <a href="/fioridibach"><span class="footer_link">Fiori di Bach</span></a><br />
-                    <a href="/scuolaoperatoreolistico"><span class="footer_link">Scuola Operatore Olistico</span></a><br />
-                    <a href="/scuoladinaturopatia"><span class="footer_link">Scuola di Naturopatia</span></a><br />
-
-
-                    <br /><a href="/policy"><span class="footer_link">Privacy Policy</span></a><br />
-                </div>
-                -->
             </div>
         </section>
         <q-page-scroller position="bottom-right" :scroll-offset="850" :offset="[18, 18]" style="opacity: 0.3">

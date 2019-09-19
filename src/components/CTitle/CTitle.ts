@@ -12,6 +12,7 @@ import { Screen } from 'quasar'
 export default class CTitle extends Vue {
   @Prop({ required: false, default: '' }) public imgbackground: string
   @Prop({ required: false, default: '' }) public imghead: string
+  @Prop({ required: false, default: '' }) public sizes: string
   @Prop({ required: true }) public headtitle: string
 
   get tools() {

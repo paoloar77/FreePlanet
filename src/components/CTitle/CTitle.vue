@@ -1,7 +1,7 @@
 <template>
     <div>
         <q-img v-if="imgbackground" :src="imgbackground"
-               :style="tools.styles_imgtitle()">
+               :style="tools.styles_imgtitle(sizes)">
 
             <div class="absolute-bottom text-body1 text-center">
                 <h2 class="titletext">{{headtitle}}</h2>

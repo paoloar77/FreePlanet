@@ -12,7 +12,7 @@ import { Prop } from 'vue-property-decorator'
 })
 
 export default class BannerCookies extends Vue {
-  public $t
+  public $t: any
   @Prop({ required: true }) public urlInfo: string
 
   public elementId = 'id'

@@ -22,20 +22,27 @@ export const func_tools = {
   },
 
   getDateStr(mydate) {
-    if (costanti_tools.DateFormatter) {
+    const DateFormatter = new Intl.DateTimeFormat(func_tools.getLocale() || void 0, {
+      weekday: 'long',
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric'
+      // timeZone: 'UTC'
+    })
+    if (DateFormatter) {
       const date = new Date(mydate)
-      return costanti_tools.DateFormatter.format(date)
+      return DateFormatter.format(date)
     }
     return mydate
   }
 }
 
-export const costanti_tools = {
-  DateFormatter: new Intl.DateTimeFormat(func_tools.getLocale() || void 0, {
-    weekday: 'long',
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric'
-    // timeZone: 'UTC'
-  })
-}
+// export const costanti_tools = {
+//   DateFormatter: new Intl.DateTimeFormat(func_tools.getLocale() || void 0, {
+//     weekday: 'long',
+//     day: 'numeric',
+//     month: 'long',
+//     year: 'numeric'
+//     // timeZone: 'UTC'
+//   })
+// }

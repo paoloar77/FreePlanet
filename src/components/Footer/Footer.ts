@@ -27,6 +27,10 @@ export default class Footer extends Vue {
     return tools
   }
 
+  get mythis() {
+    return this
+  }
+
   get TelegramSupport() {
     return db_data.TELEGRAM_SUPPORT
   }

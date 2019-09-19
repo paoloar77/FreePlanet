@@ -8,7 +8,7 @@
                         <q-expansion-item
                                 :header-inset-level="myitemmenu.level_parent"
                                 :content-inset-level="myitemmenu.level_parent"
-                                :label="getLabelByItem(myitemmenu)"
+                                :label="tools.getLabelByItem(myitemmenu, mythis)"
                                 :icon="myitemmenu.materialIcon"
                                 expand-icon-class="my-menu-separat"
                                 header-class="my-menu"
@@ -23,7 +23,7 @@
                                               active-class="my-menu-active"
                                               expand-icon-class="my-menu-icon-none"
                                               class="item item-link drawer-closer cursor-pointer my-menu"
-                                              :label="getLabelByItem(child2)">
+                                              :label="tools.getLabelByItem(child2, mythis)">
                                 <q-expansion-item v-if="!!child2.routes2" v-for="(child3, index) in child2.routes2"
                                                   :key="index"
                                                   :to="child3.path"
@@ -34,7 +34,7 @@
                                                   expand-icon-class="my-menu-separat"
                                                   active-class="my-menu-active"
                                                   class="item item-link drawer-closer cursor-pointer my-menu"
-                                                  :label="getLabelByItem(child3)">
+                                                  :label="tools.getLabelByItem(child3, mythis)">
                                 </q-expansion-item>
 
                             </q-expansion-item>
@@ -49,7 +49,7 @@
                                             :to="myitemmenu.path"
                                             :header-inset-level="myitemmenu.level_parent"
                                             :content-inset-level="myitemmenu.level_parent"
-                                            :label="getLabelByItem(myitemmenu)"
+                                            :label="tools.getLabelByItem(myitemmenu, mythis)"
                                             :icon="myitemmenu.materialIcon"
                                             expand-icon="none"
                                             header-class="my-menu"

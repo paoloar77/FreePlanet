@@ -3,6 +3,7 @@ import { Watch } from 'vue-property-decorator'
 import { GlobalStore } from '../../store/Modules'
 import Component from 'vue-class-component'
 import { static_data } from '../../db/static_data'
+import { tools } from '../../store/Modules/tools'
 
 export default class MenuOne extends Vue {
 
@@ -17,15 +18,16 @@ export default class MenuOne extends Vue {
   //   return this.$route.path
   // }
 
-  get getmenu() {
-    return GlobalStore.getters.getmenu
+  get tools() {
+    return tools
   }
 
-  public getLabelByItem(item) {
-    if (!!item.name)
-      return this.$t(item.name)
-    else
-      return item.text
+  get mythis() {
+    return this
+  }
+
+  get getmenu() {
+    return GlobalStore.getters.getmenu
   }
 
   public setParentVisibilityBasedOnRoute(parent) {

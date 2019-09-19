@@ -79,6 +79,8 @@ export interface IListRoutes {
   component?: Component
   reqauth?: boolean
   inmenu?: boolean
+  solotitle?: boolean
+  infooter?: boolean
   submenu?: boolean
   // ------------------------
   faIcon?: string
@@ -117,6 +119,7 @@ export interface IAllLang {
   es?: string
   enUs?: string
   fr?: string
+  de?: string
   it?: string
 }
 
