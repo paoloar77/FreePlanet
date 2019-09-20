@@ -8,6 +8,10 @@ export const toolsext = {
       }
     }
     return process.env.LANG_DEFAULT
+  },
+  isLang(whichlang) {
+    const loc = func_tools.getLocale()
+    return (loc === whichlang)
   }
 }
 

@@ -19,5 +19,10 @@ export default class PagePolicy extends Vue {
   @Prop({required: true}) public includeData: string
   @Prop({required: true}) public url: string
   @Prop({required: true}) public lastdataupdate: string
+  @Prop({required: true}) public country: string
+
+  get toolsext() {
+    return toolsext
+  }
 
 }

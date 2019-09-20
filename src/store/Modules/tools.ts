@@ -1972,15 +1972,15 @@ export const tools = {
 
   getimgbysize(dir: string, file: string) {
     const myimage = dir + file
-    console.log('includes = ', static_data.preLoadImages.includes(myimage), myimage)
+    // console.log('includes = ', static_data.preLoadImages.map((a) => a.imgname).includes(myimage), myimage)
     let ris = ''
-    if (this.isMobile() && (static_data.preLoadImages.includes(myimage))) {
+    if (this.isMobile() && (static_data.preLoadImages.map((a) => a.imgname).includes(myimage))) {
       ris = dir + 'mobile/' + file
     } else {
       ris = myimage
     }
 
-    console.log('getimgbysize', ris)
+    // console.log('getimgbysize', ris)
 
     return ris
   },

@@ -180,6 +180,7 @@ const msgglobal = {
       license: 'Devi prima accettare la licenza e i termini',
       submitted: 'Iscritto'
     },
+    privacy_policy:'Privacy Policy',
     cookies: 'Usiamo i Cookie per una migliore prestazione web.'
   },
   es: {
@@ -355,6 +356,7 @@ const msgglobal = {
       license: 'Necesitas aceptar la licencia y los términos primero',
       submitted: 'Subscrito'
     },
+    privacy_policy:'Política de privacidad',
     cookies: 'Utilizamos cookies para un mejor rendimiento web.'
   },
   fr: {
@@ -529,6 +531,7 @@ const msgglobal = {
       license: 'Vous devez d\'abord accepter la licence et les termes',
       submitted: 'Abonné'
     },
+    privacy_policy:'Politique de confidentialité',
     cookies: 'Nous utilisons des cookies pour améliorer les performances Web.'
   },
   enUs: {
@@ -702,6 +705,7 @@ const msgglobal = {
       license: 'You need to accept the license and terms first',
       submitted: 'Subscribed'
     },
+    privacy_policy:'Privacy Policy',
     cookies: 'We use cookies for better web performance.'
   },
   de: {
@@ -877,6 +881,7 @@ const msgglobal = {
       license: 'You need to accept the license and terms first',
       submitted: 'Subscribed'
     },
+    privacy_policy:'Privacy Policy',
     cookies: 'Wir verwenden Cookies für eine bessere Webleistung.'
   },
 };

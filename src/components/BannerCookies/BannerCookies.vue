@@ -1,5 +1,5 @@
 <template>
-    <div v-if="isOpen">
+    <div v-if="isOpen" class="tothebottomfixed" role="dialog">
         <div class="q-pa-md q-gutter-sm">
             <transition appear name="slide-up" mode="out-in" :duration="2000">
                 <q-banner class="bg-primary text-white" transition-show="jump-down">

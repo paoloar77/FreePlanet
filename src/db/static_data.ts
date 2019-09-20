@@ -41,7 +41,13 @@ const lang_available: ILang[] = [
 ]
 
 export const static_data = {
+  SHOW_USER_MENU: true,
   SHOW_IF_IS_SERVER_CONNECTION: false,
+  ENABLE_TODOS_LOADING: true,
+  ENABLE_PROJECTS_LOADING: true,
+  SHOW_NEWSLETTER: false,
+  SHOW_ONLY_POLICY: false,
+
   ds_operatori,
   lang_available,
   arrLangUsed

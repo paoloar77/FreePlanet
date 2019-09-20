@@ -51,6 +51,10 @@
 
                     </div>
 
+                    <p class="text-center">
+                        <router-link v-if="static_data.SHOW_ONLY_POLICY" to="/policy"><span class="footer_link">{{$t('privacy_policy')}}</span></router-link>
+                    </p>
+
                 </div>
 
                 <div class="col-12 col-sm-4 q-pa-md" v-for="">
@@ -62,7 +66,8 @@
                             </div>
                             <div v-else>
                                 <router-link :to="myitemmenu.path">
-                                    <span class="footer_link"><span v-if="myitemmenu.level_child > 0">&nbsp;&nbsp;&nbsp;</span>
+                                    <span class="footer_link"><span
+                                            v-if="myitemmenu.level_child > 0">&nbsp;&nbsp;&nbsp;</span>
                                         {{tools.getLabelByItem(myitemmenu, mythis)}}</span><br/>
                                 </router-link>
                             </div>

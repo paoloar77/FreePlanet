@@ -18,6 +18,9 @@
 
 .tothebottomfixed {
   position: fixed;
-  top: 100px;
-  height: 50px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: -100%;
+  z-index: 1000;
 }

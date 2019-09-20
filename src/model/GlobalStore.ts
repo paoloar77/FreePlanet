@@ -107,6 +107,11 @@ export interface IPerson {
   vario?: string
 }
 
+export interface IPreloadImages {
+  imgname: string
+  mobile: boolean
+}
+
 export interface ILang {
   label: string
   icon: string
@@ -138,6 +143,7 @@ export interface ITimeLineEntry {
   link_url?: string
   link_url_lang?: IAllLang
   link_text?: IAllLang
+  ingallery?: boolean
 }
 
 export interface ITimeLineMain {
@@ -151,6 +157,8 @@ export interface IGallery {
   img: string
   width?: number
   height?: number
+  ingallery?: boolean
+  inexibitions?: boolean
 }
 
 export interface IColl {
