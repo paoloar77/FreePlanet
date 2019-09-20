@@ -1,6 +1,6 @@
 <template>
     <div>
-        <q-img v-if="imgbackground" :src="imgbackground"
+        <q-img v-if="imgbackground" :src="getsrc"
                :style="tools.styles_imgtitle(sizes)">
 
             <div class="absolute-bottom text-body1 text-center">

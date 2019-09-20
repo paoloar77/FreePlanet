@@ -18,4 +18,12 @@ export default class CTitle extends Vue {
   get tools() {
     return tools
   }
+
+  get getsrc() {
+    // return this.src
+    const filefull = tools.getimgFullpathbysize(this.imgbackground)
+
+    return tools.getimgbysize(filefull.path, filefull.file)
+  }
+
 }
