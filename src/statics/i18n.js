@@ -151,6 +151,9 @@ const msgglobal = {
       themebgcolor: 'Tema Colore Sfondo'
     },
     cal: {
+      booked: 'Prenotato',
+      booking: 'Prenota Evento',
+      cancelbooking: 'Cancella Prenotazione',
       event: 'Evento',
       starttime: 'Dalle',
       endtime: 'alle',
@@ -327,6 +330,9 @@ const msgglobal = {
       themebgcolor: 'Tema Colores Fondo'
     },
     cal: {
+      booked: 'Reservado',
+      booking: 'Reserva Evento',
+      cancelbooking: 'Cancelar Reserva',
       event: 'Evento',
       starttime: 'Inicio',
       endtime: 'fin',
@@ -502,6 +508,9 @@ const msgglobal = {
       themebgcolor: 'Tema Colores Fondo'
     },
     cal: {
+      booked: 'Réservé',
+      booking: 'Réserver l\'événement',
+      cancelbooking: 'Annuler la réservation',
       event: 'événement',
       starttime: 'Accueil',
       endtime: 'fin',
@@ -676,6 +685,9 @@ const msgglobal = {
       themebgcolor: 'Theme Color Background'
     },
     cal: {
+      booked: 'Booked',
+      booking: 'Book the Event',
+      cancelbooking: 'Cancel Reservation',
       event: 'Event',
       starttime: 'From',
       endtime: 'to',
@@ -687,7 +699,7 @@ const msgglobal = {
       enterdate: 'Enter date',
       details: 'Details',
       infoextra: 'Extra Info DateTime',
-      alldayevent: 'All-Day event',
+      alldayevent: 'All-Day myevent',
       eventstartdatetime: 'Event start date and time',
       enterEndDateTime: 'Event end date and time'
     },
@@ -852,6 +864,9 @@ const msgglobal = {
       themebgcolor: 'Theme Color Background'
     },
     cal: {
+      booked: 'Booked',
+      booking: 'Book the Event',
+      cancelbooking: 'Cancel Reservation',
       event: 'Event',
       starttime: 'From',
       endtime: 'to',
@@ -863,7 +878,7 @@ const msgglobal = {
       enterdate: 'Enter date',
       details: 'Details',
       infoextra: 'Extra Info DateTime',
-      alldayevent: 'All-Day event',
+      alldayevent: 'All-Day myevent',
       eventstartdatetime: 'Event start date and time',
       enterEndDateTime: 'Event end date and time'
     },

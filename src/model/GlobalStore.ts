@@ -166,6 +166,7 @@ export interface IColl {
   date: string
   subtitle?: IAllLang
   img: string
+  img2?: string
   linkagg?: string
   linkagg_type?: number
   width?: number
@@ -175,4 +176,14 @@ export interface IColl {
 export interface ICollaborations {
   withwhom_title: IAllLang
   list: IColl[]
+}
+
+export interface IFunctionality {
+  SHOW_USER_MENU?: boolean
+  SHOW_IF_IS_SERVER_CONNECTION?: boolean
+  ENABLE_TODOS_LOADING?: boolean
+  ENABLE_PROJECTS_LOADING?: boolean
+  SHOW_NEWSLETTER?: boolean
+  SHOW_ONLY_POLICY?: boolean
+  EVENTS_CAN_BOOKING?: false
 }

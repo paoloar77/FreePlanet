@@ -68,12 +68,12 @@ export default class Header extends Vue {
   }
 
   // -------------------------------------------------------------------------
-  // QUASAR Example using event to open drawer from another component or page
+  // QUASAR Example using myevent to open drawer from another component or page
   // -------------------------------------------------------------------------
   // (1) This code is inside layout file that have a drawer
   //     if this.leftDrawerOpen is true, drawer is displayed
 
-  // (2) Listen for an event in created
+  // (2) Listen for an myevent in created
   /*    created(){
         this.$root.$on("openLeftDrawer", this.openLeftDrawercb);
       },
@@ -85,7 +85,7 @@ export default class Header extends Vue {
       }
     }
 
-    // (4) In another component or page, emit the event!
+    // (4) In another component or page, emit the myevent!
     //     Call the method when clicking button etc.
     methods: {
       openLeftDrawer() {
@@ -160,7 +160,7 @@ export default class Header extends Vue {
 
       const color = (value === 'online') ? 'positive' : 'warning'
 
-      if (this.static_data.SHOW_IF_IS_SERVER_CONNECTION) {
+      if (this.static_data.functionality.SHOW_IF_IS_SERVER_CONNECTION) {
 
         if (!!oldValue) {
           tools.showNotif(this.$q, this.$t('connection') + ` ${value}`, {

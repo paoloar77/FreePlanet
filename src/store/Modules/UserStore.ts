@@ -7,7 +7,7 @@ import router from '@router'
 import { serv_constants } from '../Modules/serv_constants'
 import { tools } from '../Modules/tools'
 import { toolsext } from '@src/store/Modules/toolsext'
-import { GlobalStore, UserStore, Todos, Projects } from '@store'
+import { GlobalStore, UserStore, Todos, Projects, BookingStore, CalendarStore } from '@store'
 import globalroutines from './../../globalroutines/index'
 
 import translate from './../../globalroutines/util'
@@ -221,7 +221,6 @@ namespace Mutations {
     setErrorCatch: b.commit(setErrorCatch),
     getMsgError: b.commit(getMsgError)
   }
-
 }
 
 namespace Actions {
@@ -512,6 +511,7 @@ namespace Actions {
   }
 
   async function setGlobal(isLogged: boolean) {
+    // console.log('setGlobal')
     // state.isLogged = true
     state.isLogged = isLogged
     if (isLogged) {
@@ -521,6 +521,9 @@ namespace Actions {
 
       GlobalStore.actions.checkUpdates()
     }
+
+    const p = await BookingStore.actions.loadAfterLogin()
+    const p2 = await CalendarStore.actions.loadAfterLogin()
 
     return await GlobalStore.actions.loadAfterLogin()
       .then(() => {
