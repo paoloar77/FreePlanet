@@ -7,8 +7,10 @@ import router from '@router'
 import { serv_constants } from '../Modules/serv_constants'
 import { tools } from '../Modules/tools'
 import { toolsext } from '@src/store/Modules/toolsext'
-import { GlobalStore, UserStore, Todos, Projects } from '@store'
+import { GlobalStore, UserStore, Todos, Projects, BookingStore, CalendarStore } from '@store'
 import globalroutines from './../../globalroutines/index'
+
+import { static_data } from '@src/db/static_data'
 
 import translate from './../../globalroutines/util'
 import * as Types from '@src/store/Api/ApiTypes'
@@ -20,6 +22,8 @@ const state: IUserState = {
   userId: '',
   email: '',
   username: '',
+  name: '',
+  surname: '',
   password: '',
   lang: process.env.LANG_DEFAULT,
   repeatPassword: '',
@@ -108,6 +112,8 @@ namespace Mutations {
   function authUser(state: IUserState, data: IUserState) {
     state.userId = data.userId
     state.username = data.username
+    state.name = data.name
+    state.surname = data.surname
     if (data.verified_email) {
       state.verified_email = data.verified_email
     }
@@ -176,6 +182,8 @@ namespace Mutations {
   function clearAuthData(state: IUserState) {
     state.userId = ''
     state.username = ''
+    state.name = ''
+    state.surname = ''
     resetArrToken(state.tokens)
     state.x_auth_token = ''
     state.verified_email = false
@@ -221,7 +229,6 @@ namespace Mutations {
     setErrorCatch: b.commit(setErrorCatch),
     getMsgError: b.commit(getMsgError)
   }
-
 }
 
 namespace Actions {
@@ -318,6 +325,8 @@ namespace Actions {
           email: authData.email,
           password: String(hashedPassword),
           username: authData.username,
+          name: authData.name,
+          surname: authData.surname,
         }
 
         console.log(usertosend)
@@ -336,6 +345,8 @@ namespace Actions {
             if (res.status === 200) {
               const userId = newuser._id
               const username = authData.username
+              const name = authData.name
+              const surname = authData.surname
               if (process.env.DEV) {
                 console.log('USERNAME = ' + username)
                 console.log('IDUSER= ' + userId)
@@ -344,6 +355,8 @@ namespace Actions {
               Mutations.mutations.authUser({
                 userId,
                 username,
+                name,
+                surname,
                 verified_email: false
               })
 
@@ -353,6 +366,8 @@ namespace Actions {
               localStorage.setItem(tools.localStorage.lang, state.lang)
               localStorage.setItem(tools.localStorage.userId, userId)
               localStorage.setItem(tools.localStorage.username, username)
+              localStorage.setItem(tools.localStorage.name, name)
+              localStorage.setItem(tools.localStorage.surname, surname)
               localStorage.setItem(tools.localStorage.token, state.x_auth_token)
               localStorage.setItem(tools.localStorage.expirationDate, expirationDate.toString())
               localStorage.setItem(tools.localStorage.verified_email, String(false))
@@ -438,11 +453,15 @@ namespace Actions {
           if (myuser) {
             const userId = myuser.userId
             const username = authData.username
+            const name = myuser.name
+            const surname = myuser.surname
             const verified_email = myuser.verified_email
 
             Mutations.mutations.authUser({
               userId,
               username,
+              name,
+              surname,
               verified_email
             })
 
@@ -452,6 +471,8 @@ namespace Actions {
             localStorage.setItem(tools.localStorage.lang, state.lang)
             localStorage.setItem(tools.localStorage.userId, userId)
             localStorage.setItem(tools.localStorage.username, username)
+            localStorage.setItem(tools.localStorage.name, name)
+            localStorage.setItem(tools.localStorage.surname, surname)
             localStorage.setItem(tools.localStorage.token, state.x_auth_token)
             localStorage.setItem(tools.localStorage.expirationDate, expirationDate.toString())
             localStorage.setItem(tools.localStorage.isLogged, String(true))
@@ -486,6 +507,8 @@ namespace Actions {
     localStorage.removeItem(tools.localStorage.token)
     localStorage.removeItem(tools.localStorage.userId)
     localStorage.removeItem(tools.localStorage.username)
+    localStorage.removeItem(tools.localStorage.name)
+    localStorage.removeItem(tools.localStorage.surname)
     localStorage.removeItem(tools.localStorage.isLogged)
     // localStorage.removeItem(rescodes.localStorage.leftDrawerOpen)
     localStorage.removeItem(tools.localStorage.verified_email)
@@ -512,26 +535,33 @@ namespace Actions {
   }
 
   async function setGlobal(isLogged: boolean) {
-    state.isLogged = true
-    console.log('state.isLogged')
+    // console.log('setGlobal')
+    // state.isLogged = true
+    state.isLogged = isLogged
     if (isLogged) {
+      console.log('state.isLogged')
       GlobalStore.mutations.setleftDrawerOpen(localStorage.getItem(tools.localStorage.leftDrawerOpen) === 'true')
       GlobalStore.mutations.setCategorySel(localStorage.getItem(tools.localStorage.categorySel))
 
       GlobalStore.actions.checkUpdates()
     }
 
-    return await GlobalStore.actions.loadAfterLogin()
-      .then(() => {
-        return Todos.actions.dbLoad({ checkPending: true })
-      }).then(() => {
-        return Projects.actions.dbLoad({ checkPending: true, onlyiffirsttime: true })
-      })
+    const p = await BookingStore.actions.loadAfterLogin()
+    const p2 = await CalendarStore.actions.loadAfterLogin()
+
+    const p3 = await GlobalStore.actions.loadAfterLogin()
+
+    if (static_data.functionality.ENABLE_TODOS_LOADING)
+      await Todos.actions.dbLoad({ checkPending: true })
+
+    if (static_data.functionality.ENABLE_PROJECTS_LOADING)
+      await Projects.actions.dbLoad({ checkPending: true, onlyiffirsttime: true })
+
   }
 
   async function autologin_FromLocalStorage(context) {
     try {
-      console.log('*** autologin_FromLocalStorage ***')
+      // console.log('*** autologin_FromLocalStorage ***')
       // INIT
 
       let isLogged = false
@@ -546,6 +576,8 @@ namespace Actions {
         if (now < expirationDate) {
           const userId = String(localStorage.getItem(tools.localStorage.userId))
           const username = String(localStorage.getItem(tools.localStorage.username))
+          const name = String(localStorage.getItem(tools.localStorage.name))
+          const surname = String(localStorage.getItem(tools.localStorage.surname))
           const verified_email = localStorage.getItem(tools.localStorage.verified_email) === 'true'
 
           GlobalStore.state.wasAlreadySubOnDb = localStorage.getItem(tools.localStorage.wasAlreadySubOnDb) === 'true'
@@ -557,6 +589,8 @@ namespace Actions {
           Mutations.mutations.authUser({
             userId,
             username,
+            name,
+            surname,
             verified_email
           })
 
@@ -566,7 +600,7 @@ namespace Actions {
 
       await setGlobal(isLogged)
 
-      console.log('autologin userId STATE ', state.userId)
+      // console.log('autologin userId STATE ', state.userId)
 
       return true
     } catch (e) {

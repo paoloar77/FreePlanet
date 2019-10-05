@@ -2,6 +2,8 @@ import Vue from 'vue'
 import { Watch } from 'vue-property-decorator'
 import { GlobalStore } from '../../store/Modules'
 import Component from 'vue-class-component'
+import { static_data } from '../../db/static_data'
+import { tools } from '../../store/Modules/tools'
 
 export default class MenuOne extends Vue {
 
@@ -16,20 +18,21 @@ export default class MenuOne extends Vue {
   //   return this.$route.path
   // }
 
+  get tools() {
+    return tools
+  }
+
+  get mythis() {
+    return this
+  }
+
   get getmenu() {
     return GlobalStore.getters.getmenu
   }
 
-  public getLabelByItem(item) {
-    if (!!item.name)
-      return this.$t(item.name)
-    else
-      return item.text
-  }
-
   public setParentVisibilityBasedOnRoute(parent) {
     parent.routes.forEach((item) => {
-      if (this.$route.path === item.route) {
+      if (this.$route.path === item.path) {
         parent.show = true
         return
       }
@@ -41,6 +44,10 @@ export default class MenuOne extends Vue {
       text = text.replace('_', ' ')
     }
     return text
+  }
+
+  get static_data(){
+    return static_data
   }
 
 }

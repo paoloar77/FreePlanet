@@ -341,6 +341,10 @@ namespace Actions {
       return
     }
 
+    if (UserStore.state.userId === undefined || UserStore.state.tokens[0] === undefined) {
+      return
+    }
+
     // console.log('saveSubscriptionToServer: ', newSub)
     // console.log('context', context)
 
@@ -432,7 +436,7 @@ namespace Actions {
   }
 
   async function loadAfterLogin(context) {
-    console.log('loadAfterLogin')
+    // console.log('loadAfterLogin')
     actions.clearDataAfterLoginOnlyIfActiveConnection()
 
     state.arrConfig = await globalroutines(null, 'readall', 'config', null)

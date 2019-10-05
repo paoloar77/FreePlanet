@@ -11,6 +11,7 @@ import { tools } from '../../store/Modules/tools'
 import { toolsext } from '@src/store/Modules/toolsext'
 
 import Quasar, { Screen } from 'quasar'
+import { static_data } from '../../db/static_data'
 
 @Component({
   name: 'Header',
@@ -37,12 +38,6 @@ export default class Header extends Vue {
   public photo = ''
   public visuimg: boolean = true
 
-  public selectOpLang = [
-    { label: 'English', icon: 'fa-flag-us', value: 'enUs', image: '../statics/images/gb.png', short: 'EN' },
-    { label: 'Español', icon: 'fa-flag-es', value: 'es', image: '../statics/images/es.png', short: 'ES' },
-    { label: 'Italiano', icon: 'fa-facebook', value: 'it', image: '../statics/images/it.png', short: 'IT' }
-    // { label: 'German', icon: 'fa-flag-de', value: 'de', image: '../statics/images/de.png', short: 'DE' },
-  ]
 
   get getappname(){
     if (Screen.width < 400) {
@@ -73,12 +68,12 @@ export default class Header extends Vue {
   }
 
   // -------------------------------------------------------------------------
-  // QUASAR Example using event to open drawer from another component or page
+  // QUASAR Example using myevent to open drawer from another component or page
   // -------------------------------------------------------------------------
   // (1) This code is inside layout file that have a drawer
   //     if this.leftDrawerOpen is true, drawer is displayed
 
-  // (2) Listen for an event in created
+  // (2) Listen for an myevent in created
   /*    created(){
         this.$root.$on("openLeftDrawer", this.openLeftDrawercb);
       },
@@ -90,7 +85,7 @@ export default class Header extends Vue {
       }
     }
 
-    // (4) In another component or page, emit the event!
+    // (4) In another component or page, emit the myevent!
     //     Call the method when clicking button etc.
     methods: {
       openLeftDrawer() {
@@ -165,14 +160,17 @@ export default class Header extends Vue {
 
       const color = (value === 'online') ? 'positive' : 'warning'
 
-      if (!!oldValue) {
-        tools.showNotif(this.$q, this.$t('connection') + ` ${value}`, {
-          color,
-          icon: 'wifi'
-        })
-      }
+      if (this.static_data.functionality.SHOW_IF_IS_SERVER_CONNECTION) {
 
-      this.changeIconConn()
+        if (!!oldValue) {
+          tools.showNotif(this.$q, this.$t('connection') + ` ${value}`, {
+            color,
+            icon: 'wifi'
+          })
+        }
+
+        this.changeIconConn()
+      }
     }
   }
 
@@ -203,10 +201,10 @@ export default class Header extends Vue {
   }
 
   public setshortlang(lang) {
-    for (const indrec in this.selectOpLang) {
-      if (this.selectOpLang[indrec].value === lang) {
-        // console.log('this.selectOpLang[indrec].short', this.selectOpLang[indrec].short, this.selectOpLang[indrec].value)
-        this.langshort = this.selectOpLang[indrec].short
+    for (const indrec in static_data.lang_available) {
+      if (static_data.lang_available[indrec].value === lang) {
+        // console.log('static_data.lang_available[indrec].short', static_data.lang_available[indrec].short, static_data.lang_available[indrec].value)
+        this.langshort = static_data.lang_available[indrec].short
         return
       }
     }
@@ -218,7 +216,7 @@ export default class Header extends Vue {
   }
 
   public setLangAtt(mylang) {
-    console.log('MYLL=', mylang)
+    console.log('LANG =', mylang)
     // console.log('PRIMA this.$q.lang.isoName', this.$q.lang.isoName)
 
     // dynamic import, so loading on demand only
@@ -316,6 +314,12 @@ export default class Header extends Vue {
   get Username() {
     return UserStore.state.username
   }
+  get Name() {
+    return UserStore.state.name
+  }
+  get Surname() {
+    return UserStore.state.surname
+  }
 
   get Verificato() {
     return UserStore.state.verified_email
@@ -336,5 +340,9 @@ export default class Header extends Vue {
 
         tools.showNotif(this.$q, this.$t('logout.uscito'), {icon: 'exit_to_app'})
       })
+  }
+
+  get static_data(){
+    return static_data
   }
 }

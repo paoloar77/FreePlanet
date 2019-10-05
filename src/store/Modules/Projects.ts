@@ -14,6 +14,7 @@ import { costanti } from '@src/store/Modules/costanti'
 import { RouteNames } from '@src/router/route-names'
 import * as Types from '@src/store/Api/ApiTypes'
 import { serv_constants } from '@src/store/Modules/serv_constants'
+import { static_data } from '@src/db/static_data'
 
 const nametable = 'projects'
 
@@ -273,6 +274,9 @@ namespace Actions {
 
   async function dbLoad(context, { checkPending, onlyiffirsttime }) {
 
+    if (!static_data.functionality.ENABLE_PROJECTS_LOADING)
+      return null
+
     if (onlyiffirsttime) {
       if (stateglob.projects.length > 0) {
         // if already set, then exit.
@@ -438,7 +442,6 @@ namespace Actions {
     modify: b.dispatch(modify),
     ActionCutPaste: b.dispatch(ActionCutPaste)
   }
-
 }
 
 // Module

@@ -3,6 +3,8 @@ import { IToken } from 'model/other'
 export const DefaultUser = <IUserState>{
   email: '',
   username: '',
+  name: '',
+  surname: '',
   password: '',
   lang: 'it'
 }
@@ -11,6 +13,8 @@ export interface IUserState {
   userId?: string
   email?: string
   username?: string
+  name?: string
+  surname?: string
   password?: string
   lang?: string
   repeatPassword?: string

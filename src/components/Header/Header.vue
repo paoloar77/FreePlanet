@@ -1,6 +1,6 @@
 <template>
     <div>
-        <q-header reveal elevated class="bg-primary text-white">
+        <q-header reveal elevated class="bg-primary">
             <q-toolbar
                     color="primary"
                     :glossy="$q.theme === 'mat'"
@@ -58,7 +58,7 @@
                 -->
 
                 <q-btn
-                        v-if="!isonline"
+                        v-if="!isonline && static_data.functionality.SHOW_IF_IS_SERVER_CONNECTION"
                         flat
                         dense
                         round
@@ -72,6 +72,7 @@
 
                 <q-btn-dropdown
                         stretch
+                        v-if="static_data.lang_available.length > 1"
                         flat
                         :label="langshort"
                         auto-close
@@ -79,7 +80,7 @@
                     <q-list bordered>
                         <q-item clickable v-ripple
 
-                                v-for="langrec in selectOpLang" :key="langrec.value"
+                                v-for="langrec in static_data.lang_available" :key="langrec.value"
                                 @click="lang = langrec.value">
                             <q-item-section avatar>
                                 <img :src="langrec.image" class="flagimg">
@@ -101,7 +102,8 @@
                     <label>{{ $t('msg.hello') }}</label> <span v-model="prova"></span> !
                 </div>-->
 
-                <q-btn dense flat round icon="menu" @click="right = !right"/>
+                <q-btn v-if="static_data.functionality.SHOW_USER_MENU" dense flat round icon="menu" @click="right = !right">
+                </q-btn>
 
             </q-toolbar>
 
@@ -119,16 +121,16 @@
 
         </q-drawer>
 
-        <q-drawer v-model="right" side="right" overlay bordered>
+        <q-drawer v-if="static_data.functionality.SHOW_USER_MENU" v-model="right" side="right" overlay bordered>
             <div id="profile">
-                <q-img class="absolute-top" src="https://cdn.quasar-framework.org/img/material.png"
+                <q-img class="absolute-top" src="../../statics/images/landing_first_section.png"
                        style="height: 150px">
-                    <div class="absolute-bottom bg-transparent">
+                    <div class="absolute-bottom bg-transparent text-black center_img">
 
-                        <q-avatar class="q-mb-sm">
+                        <q-avatar class="q-mb-sm center_img">
                             <img src="../../statics/images/avatar-1.svg">
                         </q-avatar>
-                        <div v-if="Username" class="text-weight-bold">{{ Username }}</div>
+                        <div v-if="Username" class="text-weight-bold text-user">{{ Username }} - {{ Name }}</div>
                         <div v-else class="text-italic">{{ $t('user.loggati') }}</div>
 
                         <!--<span class="text-white" v-if="Verificato"> {{$t('reg.verificato')}} </span>-->
