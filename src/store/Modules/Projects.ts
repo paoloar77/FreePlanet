@@ -274,7 +274,7 @@ namespace Actions {
 
   async function dbLoad(context, { checkPending, onlyiffirsttime }) {
 
-    if (!static_data.ENABLE_PROJECTS_LOADING)
+    if (!static_data.functionality.ENABLE_PROJECTS_LOADING)
       return null
 
     if (onlyiffirsttime) {
@@ -442,7 +442,6 @@ namespace Actions {
     modify: b.dispatch(modify),
     ActionCutPaste: b.dispatch(ActionCutPaste)
   }
-
 }
 
 // Module

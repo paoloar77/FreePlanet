@@ -139,6 +139,7 @@ export interface ITimeLineEntry {
   image2?: string
   image3?: string
   image4?: string
+  video?: string
   side: string
   link_url?: string
   link_url_lang?: IAllLang
@@ -166,6 +167,7 @@ export interface IColl {
   date: string
   subtitle?: IAllLang
   img: string
+  img2?: string
   linkagg?: string
   linkagg_type?: number
   width?: number
@@ -175,4 +177,20 @@ export interface IColl {
 export interface ICollaborations {
   withwhom_title: IAllLang
   list: IColl[]
+}
+
+export interface IParamDialog {
+  param1?: any
+  param2?: any
+  param3?: any
+}
+
+export interface IFunctionality {
+  SHOW_USER_MENU?: boolean
+  SHOW_IF_IS_SERVER_CONNECTION?: boolean
+  ENABLE_TODOS_LOADING?: boolean
+  ENABLE_PROJECTS_LOADING?: boolean
+  SHOW_NEWSLETTER?: boolean
+  SHOW_ONLY_POLICY?: boolean
+  EVENTS_CAN_BOOKING?: false
 }

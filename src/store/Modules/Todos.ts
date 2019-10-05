@@ -253,7 +253,7 @@ namespace Actions {
 
   async function dbLoad(context, { checkPending }) {
 
-    if (!static_data.ENABLE_PROJECTS_LOADING)
+    if (!static_data.functionality.ENABLE_PROJECTS_LOADING)
       return null
 
     console.log('dbLoad', nametable, checkPending, 'userid=', UserStore.state.userId)

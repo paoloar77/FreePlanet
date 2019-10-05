@@ -58,7 +58,7 @@
                 -->
 
                 <q-btn
-                        v-if="!isonline && static_data.SHOW_IF_IS_SERVER_CONNECTION"
+                        v-if="!isonline && static_data.functionality.SHOW_IF_IS_SERVER_CONNECTION"
                         flat
                         dense
                         round
@@ -102,7 +102,7 @@
                     <label>{{ $t('msg.hello') }}</label> <span v-model="prova"></span> !
                 </div>-->
 
-                <q-btn v-if="static_data.SHOW_USER_MENU" dense flat round icon="menu" @click="right = !right">
+                <q-btn v-if="static_data.functionality.SHOW_USER_MENU" dense flat round icon="menu" @click="right = !right">
                 </q-btn>
 
             </q-toolbar>
@@ -121,16 +121,16 @@
 
         </q-drawer>
 
-        <q-drawer v-if="static_data.SHOW_USER_MENU" v-model="right" side="right" overlay bordered>
+        <q-drawer v-if="static_data.functionality.SHOW_USER_MENU" v-model="right" side="right" overlay bordered>
             <div id="profile">
                 <q-img class="absolute-top" src="../../statics/images/landing_first_section.png"
                        style="height: 150px">
-                    <div class="absolute-bottom bg-transparent text-black">
+                    <div class="absolute-bottom bg-transparent text-black center_img">
 
-                        <q-avatar class="q-mb-sm">
+                        <q-avatar class="q-mb-sm center_img">
                             <img src="../../statics/images/avatar-1.svg">
                         </q-avatar>
-                        <div v-if="Username" class="text-weight-bold">{{ Username }}</div>
+                        <div v-if="Username" class="text-weight-bold text-user">{{ Username }} - {{ Name }}</div>
                         <div v-else class="text-italic">{{ $t('user.loggati') }}</div>
 
                         <!--<span class="text-white" v-if="Verificato"> {{$t('reg.verificato')}} </span>-->

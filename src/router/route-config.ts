@@ -1,11 +1,13 @@
 import { RouteConfig, Route, RouteRecord } from 'vue-router/types'
 
 import { tools } from '@src/store/Modules/tools'
+import { toolsext } from '@src/store/Modules/toolsext'
 
 import auth from '../middleware/auth'
 import { GlobalStore, Projects, Todos, UserStore } from '@store'
 import { RouteNames } from '@src/router/route-names'
 import { IListRoutes, IMenuList } from '@src/model'
+import { static_data } from '@src/db/static_data'
 
 interface IMyMeta {
   title?: string,

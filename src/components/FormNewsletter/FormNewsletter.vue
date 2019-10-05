@@ -41,7 +41,7 @@
 
                 </q-input>
 
-                <router-link to="/policy"><span class="news_link">$t('newsletter.acceptlicense')</span></router-link>
+                <router-link to="/policy"><span class="news_link">{{$t('privacy_policy')}}</span></router-link>
 
                 <q-toggle dark v-model="accept" :label="$t('newsletter.acceptlicense')"/>
 

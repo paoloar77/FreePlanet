@@ -7,10 +7,14 @@ import { Header } from './components/Header'
 
 import globalroutines from './globalroutines/index'
 import { GlobalStore } from './store/Modules'
+import { toolsext } from '@src/store/Modules/toolsext'
+import { BannerCookies, CPreloadImages } from '@components'
+import { static_data } from '@src/db/static_data'
 
 @Component({
   components: {
-    appHeader: Header
+    appHeader: Header,
+    BannerCookies, CPreloadImages
   },
   router
 })
@@ -47,7 +51,7 @@ export default class App extends Vue {
     // console.log('window.location.href', window.location.href)
 
     let chiamaautologin = true
-    this.listaRoutingNoLogin.forEach(mystr => {
+    this.listaRoutingNoLogin.forEach((mystr) => {
       if (window.location.href.includes(mystr)) {
         chiamaautologin = false
       }
@@ -59,9 +63,9 @@ export default class App extends Vue {
         .then((loadstorage) => {
           if (loadstorage) {
 
-            if (UserStore.state.lang !== '') {
+            if (toolsext.getLocale() !== '') {
               // console.log('SETLOCALE :', this.$i18n.locale)
-              this.$i18n.locale = UserStore.state.lang    // Set Lang
+              this.$i18n.locale = toolsext.getLocale()    // Set Lang
             } else {
               UserStore.mutations.setlang(this.$i18n.locale)
             }
@@ -81,5 +85,7 @@ export default class App extends Vue {
 
   }
 
-
+  get static_data() {
+    return static_data
+  }
 }

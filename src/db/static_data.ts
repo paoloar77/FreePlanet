@@ -2,7 +2,7 @@ import { Todos, Projects, UserStore } from '@store'
 import globalroutines from '../globalroutines/index'
 
 import Quasar, { date, Screen } from 'quasar'
-import { IListRoutes, ILang, IMenuList, IProject, ITodo, Privacy, IPerson } from '../model/index'
+import { IListRoutes, ILang, IMenuList, IProject, ITodo, Privacy, IPerson, IFunctionality } from '../model/index'
 import { RouteNames } from '../router/route-names'
 
 const ds_operatori: IPerson[] = [
@@ -40,14 +40,19 @@ const lang_available: ILang[] = [
   // { label: 'German', icon: 'fa-flag-de', value: 'de', image: '../statics/images/de.png', short: 'DE' },
 ]
 
-export const static_data = {
+const functionality: IFunctionality = {
   SHOW_USER_MENU: true,
   SHOW_IF_IS_SERVER_CONNECTION: false,
   ENABLE_TODOS_LOADING: true,
   ENABLE_PROJECTS_LOADING: true,
   SHOW_NEWSLETTER: false,
   SHOW_ONLY_POLICY: false,
+  EVENTS_CAN_BOOKING: false
 
+}
+
+export const static_data = {
+  functionality,
   ds_operatori,
   lang_available,
   arrLangUsed

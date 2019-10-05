@@ -10,7 +10,7 @@
                     <!--</span>-->
 
 
-                    <FormNewsletter v-if="static_data.SHOW_NEWSLETTER" :idwebsite="tools.appid()"
+                    <FormNewsletter v-if="static_data.functionality.SHOW_NEWSLETTER" :idwebsite="tools.appid()"
                                     :locale="tools.getLocale()">
                     </FormNewsletter>
 
@@ -52,7 +52,7 @@
                     </div>
 
                     <p class="text-center">
-                        <router-link v-if="static_data.SHOW_ONLY_POLICY" to="/policy"><span class="footer_link">{{$t('privacy_policy')}}</span></router-link>
+                        <router-link v-if="static_data.functionality.SHOW_ONLY_POLICY" to="/policy"><span class="footer_link">{{$t('privacy_policy')}}</span></router-link>
                     </p>
 
                 </div>

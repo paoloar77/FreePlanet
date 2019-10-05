@@ -1,10 +1,10 @@
-import { Todos, Projects, UserStore } from '@store'
+import { Todos, Projects, UserStore, CalendarStore } from '@store'
 import globalroutines from './../../globalroutines/index'
 import { costanti } from './costanti'
 import { toolsext } from './toolsext'
 import { translation } from './translation'
 import Quasar, { date, Screen } from 'quasar'
-import { ICollaborations, IListRoutes, IMenuList, IProject, ITodo, Privacy } from '@src/model'
+import { ICollaborations, IListRoutes, IMenuList, IParamDialog, IProject, ITodo, Privacy } from '@src/model'
 import * as ApiTables from '@src/store/Modules/ApiTables'
 import translate from '@src/globalroutines/util'
 import { RouteNames } from '@src/router/route-names'
@@ -55,6 +55,8 @@ export const tools = {
     userId: 'uid',
     token: 'tk',
     username: 'uname',
+    name: 'nm',
+    surname: 'sn',
     lang: 'lg'
   },
 
@@ -69,6 +71,35 @@ export const tools = {
     OPENED: 1,
     COMPLETED: 10
   },
+
+  SelectListNumPeople: [
+    {
+      id: 1,
+      label: '1',
+      value: 1
+    },
+    {
+      id: 2,
+      label: '2',
+      value: 2
+    },
+    {
+      id: 3,
+      label: '3',
+      value: 3
+    },
+    {
+      id: 4,
+      label: '4',
+      value: 4
+    },
+    {
+      id: 5,
+      label: '5',
+      value: 5
+    },
+  ]
+  ,
 
   selectPhase: {
     it: [
@@ -1267,8 +1298,48 @@ export const tools = {
       result.push(json[key])
     })
     return result
-  }
-  ,
+  },
+
+  executefunc(myself: any, myfunc: number, par: IParamDialog) {
+    if (myfunc === costanti.FuncDialog.CANCEL_BOOKING) {
+      console.log(' ENTRATO ! CancelBookingEvent ')
+      CalendarStore.actions.CancelBookingEvent(par.param1).then(ris => {
+        if (ris)
+          tools.showPositiveNotif(myself.$q, myself.$t('cal.canceledbooking') + ' "' + par.param1.title + '"')
+        else
+          tools.showNegativeNotif(myself.$q, myself.$t('cal.cancelederrorbooking'))
+      })
+    }
+  },
+
+  async askConfirm($q: any, mytitle, mytext, ok, cancel, myself: any, funcok: number, funccancel: number, par: IParamDialog) {
+    return $q.dialog({
+      message: mytext,
+      ok: {
+        label: ok,
+        push: true
+      },
+      title: mytitle,
+      cancel: true,
+      persistent: false
+    }).onOk(() => {
+      console.log('OK')
+      tools.executefunc(myself, funcok, par)
+      return true
+    }).onCancel(() => {
+      console.log('CANCEL')
+      tools.executefunc(myself, funccancel, par)
+      return false
+    })
+  },
+
+  showPositiveNotif(q: any, msg) {
+    tools.showNotif(q, msg, { color: 'positive', icon: 'notifications' })
+  },
+
+  showNegativeNotif(q: any, msg) {
+    tools.showNotif(q, msg, { color: 'negative', icon: 'notifications' })
+  },
 
   showNotif(q: any, msg, data ?: INotify | null
   ) {
@@ -1728,7 +1799,6 @@ export const tools = {
 
   },
 
-
   heightgallery() {
     if (Screen.width < 400) {
       return '200px'
@@ -1993,9 +2063,18 @@ export const tools = {
       return { path: '', file: fileimg }
     }
 
+  },
+
+  convertHTMLtoText(myhtml) {
+    let msg = myhtml
+    msg = msg.replace('&quot;', '"')
+    msg = msg.replace('&gt;', '>')
+    msg = msg.replace('&lt;', '<')
+    msg = msg.replace('&amp;', '&')
+    msg = msg.replace('<br>', '\n')
+
+    return msg
   }
-
-
 
 // getLocale() {
   //   if (navigator.languages && navigator.languages.length > 0) {
