@@ -4,7 +4,7 @@ import { IMyRoute } from '@src/router/route-config'
 
 // import { isEqual } from 'lodash'
 import { ProgressBar } from '@src/store/Modules/Interface'
-import { UserStore } from "@store"
+import { UserStore } from '@store'
 
 export default ({ app, router, store, Vue }) => {
   // ******************************************

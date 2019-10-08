@@ -30,9 +30,11 @@ export default class Signup extends Vue {
   public signup: ISignupOptions = {
     email: process.env.TEST_EMAIL || '',
     username: process.env.TEST_USERNAME || '',
+    name: process.env.TEST_NAME || '',
+    surname: process.env.TEST_SURNAME || '',
     password: process.env.TEST_PASSWORD || '',
     repeatPassword: process.env.TEST_PASSWORD || '',
-    terms: process.env.PROD ? false : true
+    terms: !process.env.PROD
   }
 
   public created() {
@@ -107,6 +109,9 @@ export default class Signup extends Vue {
       } else if (cosa === 'username') {
         // console.log(item);
         if (!item.isUnique) { return this.$t('reg.err.duplicate_username') }
+      } else if ((cosa === 'name') || (cosa === 'surname')) {
+        // console.log(item);
+
       }
 
       if (!item.complexity) { return this.$t('reg.err.complexity') }

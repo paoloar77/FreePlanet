@@ -408,6 +408,7 @@ export default class SingleProject extends Vue {
       this.updateTodo()
 
       if ((e.key === 'Tab') && !e.shiftKey) {
+        // ...
 
       } else {
         e.preventDefault()

@@ -78,7 +78,7 @@ module.exports = function (ctx) {
     ],
     supportIE: false,
     aliases: {
-      quasar: path.resolve(__dirname, '../node_modules/@quasar/'),
+      quasar: path.resolve(__dirname, '../../node_modules/@quasar/'),
       src: path.resolve(__dirname, '../src'),
       statics: path.resolve(__dirname, '../src/statics'),
       components: path.resolve(__dirname, '../src/components')

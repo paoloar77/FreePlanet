@@ -27,7 +27,7 @@ export const func_tools = {
 
   getDateStr(mydate) {
     const DateFormatter = new Intl.DateTimeFormat(func_tools.getLocale() || void 0, {
-      weekday: 'long',
+      weekday: 'short',
       day: 'numeric',
       month: 'long',
       year: 'numeric'

@@ -58,7 +58,7 @@
                 -->
 
                 <q-btn
-                        v-if="!isonline && static_data.SHOW_IF_IS_SERVER_CONNECTION"
+                        v-if="!isonline && static_data.functionality.SHOW_IF_IS_SERVER_CONNECTION"
                         flat
                         dense
                         round
@@ -102,7 +102,7 @@
                     <label>{{ $t('msg.hello') }}</label> <span v-model="prova"></span> !
                 </div>-->
 
-                <q-btn v-if="static_data.SHOW_USER_MENU" dense flat round icon="menu" @click="right = !right">
+                <q-btn v-if="static_data.functionality.SHOW_USER_MENU" dense flat round icon="menu" @click="right = !right">
                 </q-btn>
 
             </q-toolbar>
@@ -121,7 +121,7 @@
 
         </q-drawer>
 
-        <q-drawer v-if="static_data.SHOW_USER_MENU" v-model="right" side="right" overlay bordered>
+        <q-drawer v-if="static_data.functionality.SHOW_USER_MENU" v-model="right" side="right" overlay bordered>
             <div id="profile">
                 <q-img class="absolute-top" src="../../statics/images/landing_first_section.png"
                        style="height: 150px">
