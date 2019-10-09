@@ -23,8 +23,12 @@ export interface IEvents {
 }
 
 export interface IBookedEvent {
-  id_bookedevent: any
+  id_bookedevent?: any
   numpeople: number
+  infoevent: string
+  msgbooking: string
+  datebooked?: Date
+  booked: boolean
 }
 
 export interface ICalendarState {

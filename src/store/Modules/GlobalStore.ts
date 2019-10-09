@@ -341,7 +341,7 @@ namespace Actions {
       return
     }
 
-    if (UserStore.state.userId === undefined || UserStore.state.tokens[0] === undefined) {
+    if (UserStore.getters.isUserInvalid) {
       return
     }
 

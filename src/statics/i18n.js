@@ -9,6 +9,7 @@ const msgglobal = {
       delete: 'Elimina',
       cancel: 'Annulla',
       today: 'Oggi',
+      book: 'Prenota',
       msg: {
         titledeleteTask: 'Elimina Task',
         deleteTask: "Vuoi Eliminare {mytodo}?"
@@ -49,6 +50,8 @@ const msgglobal = {
       richiesto: 'Campo Richiesto',
       email: 'Email',
       username: 'Nome Utente',
+      name: 'Nome',
+      surname: 'Cognome',
       username_login: 'Nome Utente o email',
       password: 'Password',
       repeatPassword: 'Ripeti password',
@@ -152,8 +155,12 @@ const msgglobal = {
     },
     cal: {
       booked: 'Prenotato',
+      booked_error: 'Prenotazione non avvenuta. Riprovare più tardi',
       booking: 'Prenota Evento',
+      titlebooking: 'Prenotazione',
       cancelbooking: 'Cancella Prenotazione',
+      canceledbooking: 'Prenotazione Cancellata',
+      cancelederrorbooking: 'Cancellazione non effettuata, Riprovare più tardi',
       event: 'Evento',
       starttime: 'Dalle',
       endtime: 'alle',
@@ -167,7 +174,11 @@ const msgglobal = {
       infoextra: 'Date e Ora Extra:',
       alldayevent: 'Tutto il giorno',
       eventstartdatetime: 'Data e Ora Inizio Evento',
-      enterEndDateTime: 'Data e Ora Fine Evento'
+      enterEndDateTime: 'Data e Ora Fine Evento',
+      selnumpeople: 'Partecipanti',
+      msgbooking: 'Messaggio da inviare',
+      bookingtextdefault: 'Mi prenoto all\'evento',
+      bookingtextdefault_of: 'di'
     },
     newsletter: {
       title: 'Desideri ricevere la nostra Newsletter?',
@@ -194,6 +205,7 @@ const msgglobal = {
       delete: 'Borrar',
       cancel: 'Cancelar',
       today: 'Hoy',
+      book: 'Reserva',
       msg: {
         titledeleteTask: 'Borrar Tarea',
         deleteTask: 'Quieres borrar {mytodo}?'
@@ -234,6 +246,8 @@ const msgglobal = {
       richiesto: 'Campo requerido',
       email: 'Email',
       username: 'Nombre usuario',
+      name: 'Nombre',
+      surname: 'Apellido',
       username_login: 'Nombre usuario o email',
       password: 'contraseña',
       repeatPassword: 'Repetir contraseña',
@@ -331,8 +345,12 @@ const msgglobal = {
     },
     cal: {
       booked: 'Reservado',
+      booked_error: 'Reserva fallida. Intenta nuevamente más tarde',
       booking: 'Reserva Evento',
+      titlebooking: 'Reserva',
       cancelbooking: 'Cancelar Reserva',
+      canceledbooking: 'Reserva Cancelada',
+      cancelederrorbooking: 'Cancelación no realizada, intente nuevamente más tarde',
       event: 'Evento',
       starttime: 'Inicio',
       endtime: 'fin',
@@ -346,7 +364,11 @@ const msgglobal = {
       infoextra: 'Fecha y Hora Extras:',
       alldayevent: 'Todo el dia',
       eventstartdatetime: 'Evento de inicio de fecha y hora',
-      enterEndDateTime: 'Fecha y hora del evento final'
+      enterEndDateTime: 'Fecha y hora del evento final',
+      selnumpeople: 'Partecipantes',
+      msgbooking: 'Mensaje para enviar',
+      bookingtextdefault: 'Reservo el evento',
+      bookingtextdefault_of: 'de',
     },
     newsletter: {
       title: '¿Desea recibir nuestro boletín informativo?',
@@ -373,6 +395,7 @@ const msgglobal = {
       delete: 'Supprimer',
       cancel: 'annuler',
       today: 'Aujourd\'hui',
+      book: 'Réserve',
       msg: {
         titledeleteTask: 'Supprimer la tâche',
         deleteTask: 'Voulez-vous supprimer {mytodo}?'
@@ -412,6 +435,8 @@ const msgglobal = {
       richiesto: 'Champ obligatoire',
       email: 'Email',
       username: 'Nom d\'utilisateur',
+      name: 'Nom',
+      surname: 'Prénom',
       username_login: 'Nom d\'utilisateur ou email',
       password: 'mot de passe',
       repeatPassword: 'Répéter le mot de passe',
@@ -509,8 +534,12 @@ const msgglobal = {
     },
     cal: {
       booked: 'Réservé',
+      booked_error: 'La réservation a échoué. Réessayez plus tard',
       booking: 'Réserver l\'événement',
+      titlebooking: 'Réservation',
       cancelbooking: 'Annuler la réservation',
+      canceledbooking: 'Réservation annulée',
+      cancelederrorbooking: 'Annulation non effectuée, réessayez plus tard',
       event: 'événement',
       starttime: 'Accueil',
       endtime: 'fin',
@@ -524,7 +553,11 @@ const msgglobal = {
       infoextra: 'Extras Date et heure:',
       alldayevent: 'Toute la journée',
       eventstartdatetime: 'Date de début et heure de l\'événement',
-      enterEndDateTime: 'Date et heure de l\'événement final'
+      enterEndDateTime: 'Date et heure de l\'événement final',
+      selnumpeople: 'Participants',
+      msgbooking: 'Message à envoyer',
+      bookingtextdefault: 'Je réserve l\'événement',
+      bookingtextdefault_of: 'du',
     },
     newsletter: {
       title: 'Souhaitez-vous recevoir notre newsletter?',
@@ -551,6 +584,7 @@ const msgglobal = {
       delete: 'Delete',
       cancel: 'Cancel',
       today: 'Today',
+      book: 'Book',
       msg: {
         titledeleteTask: 'Delete Task',
         deleteTask: 'Delete Task {mytodo}?'
@@ -591,6 +625,8 @@ const msgglobal = {
       email: 'Email',
       username_login: 'Username or email',
       username: 'Username',
+      name: 'Name',
+      surname: 'Surname',
       password: 'Password',
       repeatPassword: 'Repeat password',
       terms: "I agree with the terms and conditions",
@@ -686,8 +722,12 @@ const msgglobal = {
     },
     cal: {
       booked: 'Booked',
+      booked_error: 'Reservation failed. Try again later',
       booking: 'Book the Event',
+      titlebooking: 'Reservation',
       cancelbooking: 'Cancel Reservation',
+      canceledbooking: 'Booking cancelled',
+      cancelederrorbooking: 'Cancellation unsuccessfully, try again later',
       event: 'Event',
       starttime: 'From',
       endtime: 'to',
@@ -701,7 +741,11 @@ const msgglobal = {
       infoextra: 'Extra Info DateTime',
       alldayevent: 'All-Day myevent',
       eventstartdatetime: 'Event start date and time',
-      enterEndDateTime: 'Event end date and time'
+      enterEndDateTime: 'Event end date and time',
+      selnumpeople: 'Participants',
+      msgbooking: 'Message to send',
+      bookingtextdefault: 'I book the event',
+      bookingtextdefault_of: 'of',
     },
     newsletter: {
       title: 'Would you like to receive our Newsletter?',
@@ -728,6 +772,7 @@ const msgglobal = {
       delete: 'Delete',
       cancel: 'Cancel',
       today: 'Today',
+      book: 'Book',
       msg: {
         titledeleteTask: 'Delete Task',
         deleteTask: 'Delete Task {mytodo}?'
@@ -769,6 +814,8 @@ const msgglobal = {
       email: 'Email',
       username_login: 'Username or email',
       username: 'Username',
+      name: 'Name',
+      surname: 'Surname',
       password: 'Password',
       repeatPassword: 'Repeat password',
       terms: "I agree with the terms and conditions",
@@ -865,8 +912,12 @@ const msgglobal = {
     },
     cal: {
       booked: 'Booked',
+      booked_error: 'Reservation failed. Try again later',
       booking: 'Book the Event',
+      titlebooking: 'Reservation',
       cancelbooking: 'Cancel Reservation',
+      canceledbooking: 'Booking cancelled',
+      cancelederrorbooking: 'Cancellation unsuccessfully, try again later',
       event: 'Event',
       starttime: 'From',
       endtime: 'to',
@@ -880,7 +931,11 @@ const msgglobal = {
       infoextra: 'Extra Info DateTime',
       alldayevent: 'All-Day myevent',
       eventstartdatetime: 'Event start date and time',
-      enterEndDateTime: 'Event end date and time'
+      enterEndDateTime: 'Event end date and time',
+      selnumpeople: 'Participants',
+      msgbooking: 'Message to send',
+      bookingtextdefault: 'I book the event',
+      bookingtextdefault_of: 'of',
     },
     newsletter: {
       title: 'Would you like to receive our Newsletter?',
@@ -912,31 +967,26 @@ const messages = {
     ...msgit,
     pages: { ...msg_website.it.pages, ...msgglobal.it.pages },
     msg: { ...msg_website.it.msg, ...msgglobal.it.msg },
-    homepage: { ...msg_website.it.homepage, ...msgglobal.it.homepage }
   },
   es: {
     ...msges,
     pages: { ...msg_website.es.pages, ...msgglobal.es.pages },
     msg: { ...msg_website.es.msg, ...msgglobal.es.msg },
-    homepage: { ...msg_website.es.homepage, ...msgglobal.es.homepage }
   },
   enUs: {
     ...msgenUs,
     pages: { ...msg_website.enUs.pages, ...msgglobal.enUs.pages },
     msg: { ...msg_website.enUs.msg, ...msgglobal.enUs.msg },
-    homepage: { ...msg_website.enUs.homepage, ...msgglobal.enUs.homepage }
   },
   fr: {
     ...msgfr,
     pages: { ...msg_website.fr.pages, ...msgglobal.fr.pages },
     msg: { ...msg_website.fr.msg, ...msgglobal.fr.msg },
-    homepage: { ...msg_website.fr.homepage, ...msgglobal.fr.homepage },
   },
   de: {
     ...msgde,
     pages: { ...msg_website.de.pages, ...msgglobal.de.pages },
     msg: { ...msg_website.de.msg, ...msgglobal.de.msg },
-    homepage: { ...msg_website.de.homepage, ...msgglobal.de.homepage },
   }
 }
 

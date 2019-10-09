@@ -41,7 +41,7 @@ function getindexbycategory(category: string) {
   return state.categories.indexOf(category)
 }
 
-function gettodosByCategory(category: string): [] {
+function gettodosByCategory(category: string): any[] {
   const indcat = state.categories.indexOf(category)
   if (!state.todos[indcat]) {
     return []
@@ -109,8 +109,8 @@ namespace Getters {
   }, 'items_dacompletare')
 
   const todos_completati = b.read((stateparam: ITodosState) => (cat: string): ITodo[] => {
-    console.log('todos_completati')
     const indcat = getindexbycategory(cat)
+    console.log('todos_completati', cat, 'indcat=', indcat, 'state.categories=', state.categories)
     if (stateparam.todos[indcat]) {
       let arrout = []
       if (stateparam.showtype === costanti.ShowTypeTask.SHOW_LAST_N_COMPLETED) {   // Show only the first N completed
@@ -125,6 +125,8 @@ namespace Getters {
       else {
         arrout = []
       }
+
+      console.log('arrout', arrout)
 
       return arrout
       // return tools.mapSort(arrout)

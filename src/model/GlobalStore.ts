@@ -82,12 +82,17 @@ export interface IListRoutes {
   solotitle?: boolean
   infooter?: boolean
   submenu?: boolean
+  onlyAdmin?: boolean
+  meta?: any
+  idelem?: string
+  urlroute?: string
   // ------------------------
   faIcon?: string
   text?: string
   routes2?: IListRoutes[]
   level_parent?: number
   level_child?: number
+  separator?: boolean
 }
 
 export interface IPerson {
@@ -139,6 +144,7 @@ export interface ITimeLineEntry {
   image2?: string
   image3?: string
   image4?: string
+  video?: string
   side: string
   link_url?: string
   link_url_lang?: IAllLang
@@ -178,6 +184,12 @@ export interface ICollaborations {
   list: IColl[]
 }
 
+export interface IParamDialog {
+  param1?: any
+  param2?: any
+  param3?: any
+}
+
 export interface IFunctionality {
   SHOW_USER_MENU?: boolean
   SHOW_IF_IS_SERVER_CONNECTION?: boolean
@@ -185,5 +197,5 @@ export interface IFunctionality {
   ENABLE_PROJECTS_LOADING?: boolean
   SHOW_NEWSLETTER?: boolean
   SHOW_ONLY_POLICY?: boolean
-  EVENTS_CAN_BOOKING?: false
+  BOOKING_EVENTS?: boolean
 }

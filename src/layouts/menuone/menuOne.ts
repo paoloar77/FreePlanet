@@ -4,6 +4,8 @@ import { GlobalStore } from '../../store/Modules'
 import Component from 'vue-class-component'
 import { static_data } from '../../db/static_data'
 import { tools } from '../../store/Modules/tools'
+import { IListRoutes } from '@src/model'
+import { UserStore } from '@modules'
 
 export default class MenuOne extends Vue {
 
@@ -30,6 +32,10 @@ export default class MenuOne extends Vue {
     return GlobalStore.getters.getmenu
   }
 
+  public visumenu(elem) {  // : IListRoutes
+    return (elem.onlyAdmin && UserStore.state.isAdmin) || (!elem.onlyAdmin)
+  }
+
   public setParentVisibilityBasedOnRoute(parent) {
     parent.routes.forEach((item) => {
       if (this.$route.path === item.path) {
@@ -48,6 +54,15 @@ export default class MenuOne extends Vue {
 
   get static_data(){
     return static_data
+  }
+
+  public getroute(elem) {
+    if (elem.idelem) {
+      return tools.getUrlByTipoProj(elem.urlroute) + elem.idelem
+    } else {
+      return elem.path
+    }
+
   }
 
 }

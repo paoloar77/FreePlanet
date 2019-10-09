@@ -58,14 +58,19 @@ function updateDataCalculated(projout, projin) {
 }
 
 function getproj(projects, idproj, tipoproj: string) {
-  console.log('getproj', tipoproj)
+
+  let ris = null
 
   if (tipoproj === RouteNames.myprojects)
-    return projects.filter((proj) => (proj.id_parent === idproj) && (proj.userId === UserStore.state.userId) && (proj.privacyread === Privacy.onlyme))
+    ris = projects.filter((proj) => (proj.id_parent === idproj) && (proj.userId === UserStore.state.userId) && (proj.privacyread === Privacy.onlyme))
   else if (tipoproj === RouteNames.projectsshared)
-    return projects.filter((proj) => (proj.id_parent === idproj) && (proj.userId === UserStore.state.userId) && (proj.privacyread !== Privacy.onlyme))
+    ris = projects.filter((proj) => (proj.id_parent === idproj) && (proj.userId === UserStore.state.userId) && (proj.privacyread !== Privacy.onlyme))
   else if (tipoproj === RouteNames.projectsall)
-    return projects.filter((proj) => (proj.id_parent === idproj) && (proj.userId !== UserStore.state.userId) )
+    ris = projects.filter((proj) => (proj.id_parent === idproj) && (proj.userId !== UserStore.state.userId) )
+
+  // console.log('idproj', idproj, 'projects', projects, 'getproj', tipoproj, 'ris=', ris)
+
+  return ris
 }
 
 namespace Getters {
@@ -115,7 +120,7 @@ namespace Getters {
   const projs_dacompletare = b.read((state: IProjectsState) => (id_parent: string, tipoproj: string): IProject[] => {
     // console.log('projs_dacompletare')
     if (state.projects) {
-      // console.log('state.projects', state.projects)
+      // console.log('projs_dacompletare', state.projects)
       return getproj(state.projects, id_parent, tipoproj)
     } else {
       return []
@@ -130,7 +135,7 @@ namespace Getters {
       for (const proj of listaproj) {
         myarr.push({ nametranslate: '', description: proj.descr, idelem: proj._id })
       }
-      // console.log('   myarr', myarr, listaproj)
+      console.log('   myarr', myarr, listaproj)
       return myarr
 
     } else {

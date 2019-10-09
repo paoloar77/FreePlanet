@@ -90,7 +90,7 @@
     "@types/dotenv": "^4.0.3",
     "@types/jest": "^23.1.4",
     "@types/js-cookie": "^2.1.0",
-    "@types/node": "^11.9.5",
+    "@types/node": "^12.7.12",
     "@types/nprogress": "^0.0.29",
     "@types/webpack-env": "^1.13.6",
     "@vue/babel-preset-app": "3.1.1",

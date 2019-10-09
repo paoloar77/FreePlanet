@@ -314,6 +314,12 @@ export default class Header extends Vue {
   get Username() {
     return UserStore.state.username
   }
+  get myName() {
+    return UserStore.state.name
+  }
+  get mySurname() {
+    return UserStore.state.surname
+  }
 
   get Verificato() {
     return UserStore.state.verified_email
@@ -338,5 +344,9 @@ export default class Header extends Vue {
 
   get static_data(){
     return static_data
+  }
+
+  get isLogged() {
+    return UserStore.state.isLogged
   }
 }

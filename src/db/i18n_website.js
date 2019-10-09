@@ -16,10 +16,10 @@ const msg_website = {
       Test2: 'Test2',
       projects: 'Progetti',
       favproj: 'Favoriti',
-      projall: 'Tutti',
-      projectsShared: 'Miei Condivisi',
-      myprojects: 'Miei Personali'
     },
+    projall: 'Tutti',
+    projectsShared: 'Miei Condivisi',
+    myprojects: 'Miei Personali',
     msg: {
       hello: 'Buongiorno',
       myAppName: 'FreePlanet',
@@ -136,11 +136,11 @@ const msg_website = {
       Test1: 'Test1',
       Test2: 'Test2',
       projects: 'Proyectos',
-      favproj: 'Favoritos',
-      projall: 'Todos',
-      projectsShared: 'Mis Compartidos',
-      myprojects: 'Mis Personales',
     },
+    favproj: 'Favoritos',
+    projall: 'Todos',
+    projectsShared: 'Mis Compartidos',
+    myprojects: 'Mis Personales',
     msg: {
       hello: 'Buenos Días',
       myAppName: 'FreePlanet',
@@ -258,11 +258,11 @@ const msg_website = {
       Test1: 'Test1',
       Test2: 'Test2',
       projects: 'Projects',
-      favproj: 'Favorite',
-      projall: 'All',
-      projectsShared: 'My Shared',
-      myprojects: 'My Personals',
     },
+    favproj: 'Favorite',
+    projall: 'All',
+    projectsShared: 'My Shared',
+    myprojects: 'My Personals',
     msg: {
       hello: 'Hello!',
       myAppName: 'FreePlanet',
@@ -363,6 +363,24 @@ const msg_website = {
       },
       contacts: 'Contacts'
     },
+  },
+  fr: {
+    pages: {
+
+    },
+    msg: {
+
+    },
+
+  },
+  de: {
+    pages: {
+
+    },
+    msg: {
+
+    },
+
   }
 }
 
