@@ -256,6 +256,8 @@ const lang_available: ILang[] = [
   // { label: 'German', icon: 'fa-flag-de', value: 'de', image: '../statics/images/de.png', short: 'DE' },
 ]
 
+const preLoadImages: IPreloadImages[] = []
+
 const functionality: IFunctionality = {
   SHOW_USER_MENU: true,
   SHOW_IF_IS_SERVER_CONNECTION: false,
@@ -263,7 +265,7 @@ const functionality: IFunctionality = {
   ENABLE_PROJECTS_LOADING: true,
   SHOW_NEWSLETTER: false,
   SHOW_ONLY_POLICY: false,
-  EVENTS_CAN_BOOKING: false
+  BOOKING_EVENTS: false
 }
 
 export const static_data = {
