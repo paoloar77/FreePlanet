@@ -102,7 +102,13 @@
                     <label>{{ $t('msg.hello') }}</label> <span v-model="prova"></span> !
                 </div>-->
 
-                <q-btn v-if="static_data.functionality.SHOW_USER_MENU" dense flat round icon="menu" @click="right = !right">
+                <!-- BUTTON USER BAR -->
+
+                <q-btn v-if="static_data.functionality.SHOW_USER_MENU && !isLogged" dense flat round icon="menu"
+                       @click="right = !right">
+                </q-btn>
+                <q-btn v-if="static_data.functionality.SHOW_USER_MENU && isLogged" dense flat round
+                       icon="img:statics/images/avatar-1.svg" @click="right = !right">
                 </q-btn>
 
             </q-toolbar>
@@ -121,7 +127,8 @@
 
         </q-drawer>
 
-        <q-drawer v-if="static_data.functionality.SHOW_USER_MENU" v-model="right" side="right" overlay bordered>
+        <!-- USER BAR -->
+        <q-drawer v-if="static_data.functionality.SHOW_USER_MENU" v-model="right" side="right" elevated>
             <div id="profile">
                 <q-img class="absolute-top" src="../../statics/images/landing_first_section.png"
                        style="height: 150px">
@@ -130,7 +137,9 @@
                         <q-avatar class="q-mb-sm center_img">
                             <img src="../../statics/images/avatar-1.svg">
                         </q-avatar>
-                        <div v-if="Username" class="text-weight-bold text-user">{{ Username }} - {{ Name }}</div>
+                        <q-btn class="absolute-top-right" style="margin-top: 9px; margin-right: 12px; color: white;" dense flat round icon="close" @click="right = !right">
+                        </q-btn>
+                        <div v-if="Username" class="text-weight-bold text-user">{{ Username }} - {{ myName }}</div>
                         <div v-else class="text-italic">{{ $t('user.loggati') }}</div>
 
                         <!--<span class="text-white" v-if="Verificato"> {{$t('reg.verificato')}} </span>-->

@@ -113,6 +113,7 @@ namespace Actions {
       datebooked: bookevent.datebooked,
       userId: UserStore.state.userId,
       booked: bookevent.booked,
+      modified: bookevent.modified,
     }
   }
 
@@ -125,7 +126,15 @@ namespace Actions {
       .then((res) => {
         if (res.status === 200) {
           if (res.data.code === serv_constants.RIS_CODE_OK) {
-            state.bookedevent.push(bookevent)
+            if (bookevent.modified) {
+
+              const foundIndex = state.bookedevent.findIndex((x) => x.id_bookedevent === bookevent.id_bookedevent)
+              if (foundIndex >= 0)
+                state.bookedevent[foundIndex] = bookevent
+
+            } else {
+              state.bookedevent.push(bookevent)
+            }
             return true
           }
         }
