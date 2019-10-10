@@ -320,7 +320,6 @@ export default class Header extends Vue {
   get mySurname() {
     return UserStore.state.surname
   }
-
   get Verificato() {
     return UserStore.state.verified_email
   }

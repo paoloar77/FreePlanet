@@ -5,6 +5,10 @@
                 <app-header></app-header>
                 <q-ajax-bar></q-ajax-bar>
 
+                <CPreloadImages :arrimg="static_data.preLoadImages">
+                </CPreloadImages>
+
+
                 <q-page-container>
                     <transition name="fade" mode="out-in">
                         <router-view/>
@@ -12,6 +16,7 @@
                 </q-page-container>
             </q-layout>
         </div>
+        <BannerCookies urlInfo="/policy"></BannerCookies>
     </div>
 </template>
 <script lang="ts" src="./App.ts">

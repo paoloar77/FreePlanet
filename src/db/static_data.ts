@@ -266,11 +266,9 @@ const functionality: IFunctionality = {
   SHOW_NEWSLETTER: false,
   SHOW_ONLY_POLICY: false,
   BOOKING_EVENTS: false
-
 }
 
 export const static_data = {
-  routes,
   functionality,
   ds_operatori,
   lang_available,
