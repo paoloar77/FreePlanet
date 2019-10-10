@@ -46,7 +46,7 @@ async function dbInsertSave(call, item, method) {
 
     console.log('dbInsertSave', item, method)
 
-    if (UserStore.state.userId === '') {
+    if (UserStore.getters.isUserInvalid) {
       return false
     } // Login not made
 
@@ -76,7 +76,7 @@ async function dbDeleteItem(call, item) {
 
   if (!('serviceWorker' in navigator)) {
     // console.log('dbdeleteItem', item)
-    if (UserStore.state.userId === '') {
+    if (UserStore.getters.isUserInvalid) {
       return false
     } // Login not made
 
@@ -234,6 +234,7 @@ async function checkPendingMsg() {
       }
     }
   } catch (e) {
+    // ...
   }
 
   return new Promise((resolve, reject) => {

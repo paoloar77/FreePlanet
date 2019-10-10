@@ -19,6 +19,7 @@ import globalroutines from './../../globalroutines/index'
 
 
 import { cfgrouter } from '../../router/route-config'
+// import { static_data } from '@src/db/static_data'
 
 let stateConnDefault = 'online'
 
@@ -291,6 +292,10 @@ namespace Actions {
     //   return
     // }
 
+    // if (!static_data.functionality.PWA) {
+    //   return
+    // }
+
     if (!('serviceWorker' in navigator)) {
       return
     }
@@ -337,11 +342,15 @@ namespace Actions {
   // Calling the Server to Save in the MongoDB the Subscriber
   function saveNewSubscriptionToServer(context, newSub) {
     // If already subscribed, exit
+    if (true) {
+      return
+    }
+
     if (!newSub) {
       return
     }
 
-    if (UserStore.state.userId === undefined || UserStore.state.tokens[0] === undefined) {
+    if (UserStore.getters.isUserInvalid) {
       return
     }
 

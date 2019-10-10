@@ -4,7 +4,7 @@
             <template v-for="(parent, index) in getmenu">
                 <!--<div class="q-list-header">{{replaceUnderlineToSpace(index)}}</div>-->
                 <div v-for="myitemmenu in static_data.routes">
-                    <div v-if="!!myitemmenu.routes2 && myitemmenu.inmenu">
+                    <div v-if="!!myitemmenu.routes2 && myitemmenu.inmenu && visumenu(myitemmenu)">
                         <q-expansion-item
                                 :header-inset-level="myitemmenu.level_parent"
                                 :content-inset-level="myitemmenu.level_parent"
@@ -16,7 +16,7 @@
 
                             <q-expansion-item v-for="(child2, index) in myitemmenu.routes2"
                                               :key="index"
-                                              :to="child2.path"
+                                              :to="getroute(child2)"
                                               :header-inset-level="child2.level_child"
                                               :duration="300"
                                               :icon="child2.materialIcon"
@@ -26,7 +26,7 @@
                                               :label="tools.getLabelByItem(child2, mythis)">
                                 <q-expansion-item v-if="!!child2.routes2" v-for="(child3, index) in child2.routes2"
                                                   :key="index"
-                                                  :to="child3.path"
+                                                  :to="getroute(child3)"
                                                   :header-inset-level="child3.level_child"
                                                   :duration="300"
                                                   :icon="child3.materialIcon"
@@ -42,11 +42,11 @@
                         </q-expansion-item>
                     </div>
                     <div v-else>
-                        <div v-if="myitemmenu.inmenu && !myitemmenu.submenu">
+                        <div v-if="myitemmenu.inmenu && !myitemmenu.submenu && visumenu(myitemmenu)">
                             <q-slide-transition :duration=200>
                                 <div v-show="true">
                                     <q-expansion-item
-                                            :to="myitemmenu.path"
+                                            :to="getroute(myitemmenu)"
                                             :header-inset-level="myitemmenu.level_parent"
                                             :content-inset-level="myitemmenu.level_parent"
                                             :label="tools.getLabelByItem(myitemmenu, mythis)"

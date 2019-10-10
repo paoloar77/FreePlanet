@@ -402,6 +402,8 @@
             <q-page-scroller position="bottom-right" :scroll-offset="850" :offset="[18, 18]" style="opacity: 0.3">
                 <q-btn fab icon="keyboard_arrow_up" color="accent" />
             </q-page-scroller>
+
+	    <Footer></Footer>
         </div>
 
     </q-page>

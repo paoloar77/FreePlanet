@@ -1,4 +1,5 @@
-import { GlobalStore, UserStore } from '@store'
+import { GlobalStore } from '@store'
+import { UserStore } from '../../../store/Modules'
 import Vue from 'vue'
 import { Component, Prop, Watch } from 'vue-property-decorator'
 import { serv_constants } from '../../../store/Modules/serv_constants'
@@ -58,12 +59,22 @@ export default class Signin extends Vue {
 
   public errorMsg(cosa: string, item: any) {
     try {
-      if (!item.$error) { return '' }
-      if (item.$params.email && !item.email) { return this.$t('reg.err.email') }
+      if (!item.$error) {
+        return ''
+      }
+      if (item.$params.email && !item.email) {
+        return this.$t('reg.err.email')
+      }
 
-      if (!item.required) { return this.$t('reg.err.required') }
-      if (!item.minLength) { return this.$t('reg.err.atleast') + ` ${item.$params.minLength.min} ` + this.$t('reg.err.char') }
-      if (!item.maxLength) { return this.$t('reg.err.notmore') + ` ${item.$params.maxLength.max} ` + this.$t('reg.err.char') }
+      if (!item.required) {
+        return this.$t('reg.err.required')
+      }
+      if (!item.minLength) {
+        return this.$t('reg.err.atleast') + ` ${item.$params.minLength.min} ` + this.$t('reg.err.char')
+      }
+      if (!item.maxLength) {
+        return this.$t('reg.err.notmore') + ` ${item.$params.maxLength.max} ` + this.$t('reg.err.char')
+      }
       return ''
     } catch (error) {
       // console.log("ERR : " + error);
@@ -74,17 +85,17 @@ export default class Signin extends Vue {
     // console.log('checkErrors: ', riscode)
     try {
       if (riscode === tools.OK) {
-        tools.showNotif(this.$q, this.$t('login.completato'), { color: 'positive', icon: 'check'})
+        tools.showNotif(this.$q, this.$t('login.completato'), { color: 'positive', icon: 'check' })
         this.$router.push('/')
       } else if (riscode === serv_constants.RIS_CODE_LOGIN_ERR) {
 
         // Wait N seconds to avoid calling many times...
-        return new Promise(function(resolve, reject) {
-          setTimeout(function() {
+        return new Promise(function (resolve, reject) {
+          setTimeout(function () {
             resolve('anything')
           }, 3000)
         }).then(() => {
-          setTimeout( () => {
+          setTimeout(() => {
             this.$q.loading.hide()
           }, 200)
           tools.showNotif(this.$q, this.$t('login.errato'))
@@ -103,7 +114,7 @@ export default class Signin extends Vue {
 
       if (riscode !== serv_constants.RIS_CODE_LOGIN_ERR) {
         this.iswaitingforRes = false
-        setTimeout( () => {
+        setTimeout(() => {
           this.$q.loading.hide()
         }, 200)
       }
@@ -135,6 +146,7 @@ export default class Signin extends Vue {
   }
 
   public submit() {
+    console.log('submit LOGIN')
     this.$v.signin.$touch()
 
     if (this.$v.signin.$error) {
@@ -146,7 +158,7 @@ export default class Signin extends Vue {
     if (process.env.DEBUG) {
       msg += ' ' + process.env.MONGODB_HOST
     }
-    this.$q.loading.show({ message: msg})
+    this.$q.loading.show({ message: msg })
     // disable Button Login:
     this.iswaitingforRes = true
 
@@ -158,10 +170,15 @@ export default class Signin extends Vue {
       .then((riscode) => {
         // console.log('signin FINITO CALL: riscode=', riscode)
         if (riscode === tools.OK) {
-          router.push('/signin')
+          // router.push('/signin')
         }
         return riscode
-      }).then((riscode) => {
+      })
+      .then((riscode) => {
+        if (process.env.DEBUG) {
+          console.log('  riscode=', riscode)
+        }
+
         if (toolsext.getLocale() !== '') {
           this.$i18n.locale = toolsext.getLocale()
         }    // Set Lang
@@ -169,7 +186,10 @@ export default class Signin extends Vue {
           UserStore.mutations.setlang(this.$i18n.locale)
         }     // Set Lang
 
-        // console.log('LANG ORA=', toolsext.getLocale())
+
+        if (process.env.DEBUG) {
+          console.log('LANG ORA=', toolsext.getLocale())
+        }
 
         globalroutines(this, 'loadapp', '')
         return riscode

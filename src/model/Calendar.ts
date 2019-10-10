@@ -1,5 +1,6 @@
 
 export interface IEvents {
+  _id?: any
   time?: string
   duration?: number
   duration2?: number
@@ -18,9 +19,23 @@ export interface IEvents {
   avatar2?: string
   infoextra?: string
   linkpdf?: string
+  nobookable?: boolean
+}
+
+export interface IBookedEvent {
+  id_bookedevent?: any
+  numpeople: number
+  infoevent: string
+  msgbooking: string
+  datebooked?: Date
+  booked: boolean
 }
 
 export interface ICalendarState {
+  editable: boolean
+  eventlist: IEvents[]
+  bookedevent: IBookedEvent[]
+  // ---------------
   titlebarHeight: number
   locale: string,
   maxDays: number,
