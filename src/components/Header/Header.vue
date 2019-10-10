@@ -125,12 +125,12 @@
             <div id="profile">
                 <q-img class="absolute-top" src="../../statics/images/landing_first_section.png"
                        style="height: 150px">
-                    <div class="absolute-bottom bg-transparent text-black">
+                    <div class="absolute-bottom bg-transparent text-black center_img">
 
-                        <q-avatar class="q-mb-sm">
+                        <q-avatar class="q-mb-sm center_img">
                             <img src="../../statics/images/avatar-1.svg">
                         </q-avatar>
-                        <div v-if="Username" class="text-weight-bold">{{ Username }}</div>
+                        <div v-if="Username" class="text-weight-bold text-user">{{ Username }} - {{ Name }}</div>
                         <div v-else class="text-italic">{{ $t('user.loggati') }}</div>
 
                         <!--<span class="text-white" v-if="Verificato"> {{$t('reg.verificato')}} </span>-->
