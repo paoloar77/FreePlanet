@@ -42,6 +42,38 @@
             </q-input>
 
             <q-input
+                    v-model="signup.name"
+                    rounded outlined
+                    @blur="$v.signup.name.$touch"
+                    :error="$v.signup.name.$error"
+                    bottom-slots
+                    debounce="1000"
+                    :error-message="errorMsg('name', $v.signup.name)"
+                    :label="$t('reg.name')">
+
+                <template v-slot:prepend>
+                    <q-icon name="person"/>
+                </template>
+
+            </q-input>
+
+            <q-input
+                    v-model="signup.surname"
+                    rounded outlined
+                    @blur="$v.signup.surname.$touch"
+                    :error="$v.signup.surname.$error"
+                    bottom-slots
+                    debounce="1000"
+                    :error-message="errorMsg('surname', $v.signup.surname)"
+                    :label="$t('reg.surname')">
+
+                <template v-slot:prepend>
+                    <q-icon name="person"/>
+                </template>
+
+            </q-input>
+
+            <q-input
                     v-model="signup.password"
                     type="password"
                     rounded outlined

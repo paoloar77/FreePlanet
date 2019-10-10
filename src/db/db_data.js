@@ -3,6 +3,12 @@ import { IEvents } from "../model";
 export const db_data = {
   URL_FACEBOOK: "https://www.facebook.com/associazioneshen",
 
+
+  userdata : {
+    calendar_editable: false,
+
+  },
+
   events: [
     {
       title: 'Scambi Reiki',

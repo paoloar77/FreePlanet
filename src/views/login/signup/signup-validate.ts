@@ -19,6 +19,12 @@ export const validations = {
           registereduser,
           required
         },
+        name: {
+          required
+        },
+        surname: {
+          required
+        },
         email: {
           email,
           registeredemail,

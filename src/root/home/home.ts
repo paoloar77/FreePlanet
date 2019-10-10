@@ -4,8 +4,12 @@ import { GlobalStore, UserStore } from '@store'
 
 import { Logo } from '../../components/logo'
 
+import { Footer } from '../../components/Footer'
+
 import VueScrollReveal from 'vue-scroll-reveal'
 import { tools } from '@src/store/Modules/tools'
+import { toolsext } from '@src/store/Modules/toolsext'
+import { Screen } from 'quasar'
 
 Vue.use(VueScrollReveal, {
   class: 'v-scroll-reveal', // A CSS class applied to elements with the v-scroll-reveal directive; useful for animation overrides.
@@ -21,7 +25,7 @@ Vue.use(VueScrollReveal, {
 })
 
 @Component({
-  components: { Logo }
+  components: { Logo, Footer }
 })
 export default class Home extends Vue {
   public text: string = ''

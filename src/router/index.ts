@@ -7,6 +7,7 @@ import { ProgressBar } from '@src/store/Modules/Interface'
 import { isEqual } from 'lodash'
 import { UserStore } from '@store'
 import { tools } from '@src/store/Modules/tools'
+import { toolsext } from '@src/store/Modules/toolsext'
 
 Vue.use(VueRouter)
 /*
@@ -16,7 +17,7 @@ Vue.use(VueRouter)
 
 const Router = new VueRouter({
   scrollBehavior: () => ({ x: 0, y: 0 } as PositionResult),
-  routes: cfgrouter.routes,
+  routes: cfgrouter.getmenu(),
 
   // Leave these as is and change from quasar.conf.js instead!
   // quasar.conf.js -> build -> vueRouterMode
