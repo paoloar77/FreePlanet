@@ -57,9 +57,9 @@ export default class ProjList extends Vue {
   public percProgress: string = 'percProgress'
   public readonly: boolean = false
 
-  public selectStatus: [] = tools.selectStatus[toolsext.getLocale()]
-  public selectPhase: [] = tools.selectPhase[toolsext.getLocale()]
-  public selectPrivacy: [] = tools.selectPrivacy[toolsext.getLocale()]
+  public selectStatus: any[] = tools.selectStatus[toolsext.getLocale()]
+  public selectPhase: any[] = tools.selectPhase[toolsext.getLocale()]
+  public selectPrivacy: any[] = tools.selectPrivacy[toolsext.getLocale()]
 
   public $refs: {
     singleproject: SingleProject[],

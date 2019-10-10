@@ -82,12 +82,17 @@ export interface IListRoutes {
   solotitle?: boolean
   infooter?: boolean
   submenu?: boolean
+  onlyAdmin?: boolean
+  meta?: any
+  idelem?: string
+  urlroute?: string
   // ------------------------
   faIcon?: string
   text?: string
   routes2?: IListRoutes[]
   level_parent?: number
   level_child?: number
+  separator?: boolean
 }
 
 export interface IPerson {
@@ -186,11 +191,12 @@ export interface IParamDialog {
 }
 
 export interface IFunctionality {
+  PWA?: boolean
   SHOW_USER_MENU?: boolean
   SHOW_IF_IS_SERVER_CONNECTION?: boolean
   ENABLE_TODOS_LOADING?: boolean
   ENABLE_PROJECTS_LOADING?: boolean
   SHOW_NEWSLETTER?: boolean
   SHOW_ONLY_POLICY?: boolean
-  EVENTS_CAN_BOOKING?: false
+  BOOKING_EVENTS?: boolean
 }

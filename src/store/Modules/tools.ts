@@ -12,6 +12,7 @@ import { RouteNames } from '@src/router/route-names'
 import { lists } from './lists'
 import { static_data } from '@src/db/static_data'
 import { IColl, ITimeLineEntry, ITimeLineMain } from '@src/model/GlobalStore'
+import { func_tools } from '@src/store/Modules/toolsext'
 
 export interface INotify {
   color?: string | 'primary'
@@ -97,7 +98,7 @@ export const tools = {
       id: 5,
       label: '5',
       value: 5
-    },
+    }
   ]
   ,
 
@@ -1303,7 +1304,7 @@ export const tools = {
   executefunc(myself: any, myfunc: number, par: IParamDialog) {
     if (myfunc === costanti.FuncDialog.CANCEL_BOOKING) {
       console.log(' ENTRATO ! CancelBookingEvent ')
-      CalendarStore.actions.CancelBookingEvent(par.param1).then(ris => {
+      CalendarStore.actions.CancelBookingEvent(par.param1).then((ris) => {
         if (ris)
           tools.showPositiveNotif(myself.$q, myself.$t('cal.canceledbooking') + ' "' + par.param1.title + '"')
         else
@@ -1368,7 +1369,7 @@ export const tools = {
 
   checkIfUserExist(mythis) {
 
-    if (UserStore.state.userId === undefined) {
+    if (UserStore.getters.isUserInvalid) {
       tools.showNotif(mythis.$q, mythis.$t('todo.usernotdefined'))
       return false
     }
@@ -1384,7 +1385,7 @@ export const tools = {
   ,
 
   checkLangPassed(mylang) {
-    // console.log('checkLangPassed')
+    console.log('checkLangPassed')
 
     const mybrowserLang = Quasar.lang.isoName
 
@@ -1406,7 +1407,7 @@ export const tools = {
         console.log('non incluso ', mylang)
         mylang = static_data.arrLangUsed[0]
 
-        // Metti Inglese come default
+        // Metti come default
         UserStore.mutations.setlang(mylang)
       }
     }
@@ -1817,7 +1818,7 @@ export const tools = {
         if (myheight > 1000) {
           maxheight = 1000
         } else {
-          maxheight =  parseInt(myheight, 10)
+          maxheight = parseInt(myheight, 10)
         }
       }
     } else {
@@ -2058,7 +2059,7 @@ export const tools = {
   getimgFullpathbysize(fileimg: string) {
     const ind = fileimg.lastIndexOf('/')
     if (ind > 0) {
-      return { path: fileimg.substring(0, ind + 1) , file: fileimg.substring(ind + 1) }
+      return { path: fileimg.substring(0, ind + 1), file: fileimg.substring(ind + 1) }
     } else {
       return { path: '', file: fileimg }
     }
@@ -2074,6 +2075,37 @@ export const tools = {
     msg = msg.replace('<br>', '\n')
 
     return msg
+  },
+  gettextevent(myevent) {
+    return '"' + myevent.title + '" (' + this.getDateStr(myevent.date) + ') - ' + myevent.time
+  },
+
+  setLangAtt(mylang) {
+    console.log('setLangAtt =', mylang)
+    // console.log('PRIMA this.$q.lang.isoName', this.$q.lang.isoName)
+
+    // dynamic import, so loading on demand only
+    import(`quasar/lang/${mylang}`).then((lang) => {
+      console.log('   Import dinamically lang =', lang)
+      Quasar.lang.set(lang.default)
+      import(`../../statics/i18n`).then(() => {
+        console.log('   *** MY LANG DOPO=', Quasar.lang.isoName)
+      })
+    })
+
+    // this.$q.lang.set(mylang)
+
+  },
+  getappname(mythis) {
+    if (mythis === undefined)
+      return ''
+    if (mythis.$t === undefined)
+      return ''
+    if (Screen.width < 400) {
+      return mythis.$t('msg.myAppNameShort')
+    } else {
+      return mythis.$t('msg.myAppName')
+    }
   }
 
 // getLocale() {

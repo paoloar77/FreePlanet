@@ -37,12 +37,21 @@ const state: IUserState = {
 }
 
 const b = storeBuilder.module<IUserState>('UserModule', state)
-const stateGetter = b.state()
 
 namespace Getters {
   // const fullName = b.read(function fullName(state): string {
   //   return state.userInfos.firstname?capitalize(state.userInfos.firstname) + " " + capitalize(state.userInfos.lastname):null;
   // })
+
+  const isUserInvalid = b.read((mystate) => {
+    try {
+      const ris = (mystate.userId === undefined) || (mystate.userId.trim() === '') || (mystate.tokens[0] === undefined)
+      // console.log('state.userId', state.userId, 'ris', ris)
+      return ris
+    } catch (e) {
+      return true
+    }
+  }, 'isUserInvalid')
 
   const lang = b.read((state) => {
     if (state.lang !== '') {
@@ -85,6 +94,9 @@ namespace Getters {
   }, 'IsMyGroup')
 
   export const getters = {
+    get isUserInvalid() {
+      return isUserInvalid()
+    },
     get lang() {
       return lang()
     },
@@ -144,6 +156,7 @@ namespace Mutations {
   function setlang(state: IUserState, newstr: string) {
     console.log('SETLANG', newstr)
     state.lang = newstr
+    tools.setLangAtt(newstr)
     localStorage.setItem(tools.localStorage.lang, state.lang)
   }
 
@@ -326,7 +339,7 @@ namespace Actions {
           password: String(hashedPassword),
           username: authData.username,
           name: authData.name,
-          surname: authData.surname,
+          surname: authData.surname
         }
 
         console.log(usertosend)
@@ -395,16 +408,19 @@ namespace Actions {
     let sub = null
 
     try {
-      if ('serviceWorker' in navigator) {
-        sub = await navigator.serviceWorker.ready
-          .then(function (swreg) {
-            console.log('swreg')
-            const sub = swreg.pushManager.getSubscription()
-            return sub
-          })
-          .catch((e) => {
-            sub = null
-          })
+      if (static_data.functionality.PWA) {
+        if ('serviceWorker' in navigator) {
+          sub = await navigator.serviceWorker.ready
+            .then((swreg) => {
+              console.log('swreg')
+              sub = swreg.pushManager.getSubscription()
+              return sub
+            })
+            .catch((e) => {
+              console.log('  ERROR ')
+              sub = null
+            })
+        }
       }
     } catch (e) {
       console.log('Err navigator.serviceWorker.ready ... GetSubscription:', e)
@@ -424,7 +440,6 @@ namespace Actions {
       options
     }
 
-    // console.log('PASSO 4')
     if (process.env.DEBUG === '1') {
       console.log(usertosend)
     }
@@ -433,7 +448,7 @@ namespace Actions {
 
     let myres: any
 
-    console.log('Api.SendReq')
+    // console.log('Api.SendReq')
 
     return Api.SendReq('/users/login', 'POST', usertosend, true)
       .then((res) => {
@@ -535,7 +550,7 @@ namespace Actions {
   }
 
   async function setGlobal(isLogged: boolean) {
-    // console.log('setGlobal')
+    console.log('setGlobal')
     // state.isLogged = true
     state.isLogged = isLogged
     if (isLogged) {
@@ -557,6 +572,7 @@ namespace Actions {
     if (static_data.functionality.ENABLE_PROJECTS_LOADING)
       await Projects.actions.dbLoad({ checkPending: true, onlyiffirsttime: true })
 
+    console.log('setGlobal: END')
   }
 
   async function autologin_FromLocalStorage(context) {
@@ -635,6 +651,8 @@ namespace Actions {
     vreg: b.dispatch(vreg)
   }
 }
+
+const stateGetter = b.state()
 
 // Module
 const UserModule = {

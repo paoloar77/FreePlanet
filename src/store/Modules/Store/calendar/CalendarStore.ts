@@ -70,10 +70,16 @@ namespace Mutations {
 
 namespace Actions {
   async function loadAfterLogin(context) {
+    console.log('CalendarStore: loadAfterLogin')
     // Load local data
     state.editable = db_data.userdata.calendar_editable
     state.eventlist = db_data.events
     // state.bookedevent = db_data.userdata.bookedevent
+
+    if (UserStore.getters.isUserInvalid) {
+      state.bookedevent = []
+      return false
+    }
 
     // Load local data
     console.log('CALENDAR loadAfterLogin', 'userid=', UserStore.state.userId)

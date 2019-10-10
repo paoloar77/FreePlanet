@@ -967,31 +967,26 @@ const messages = {
     ...msgit,
     pages: { ...msg_website.it.pages, ...msgglobal.it.pages },
     msg: { ...msg_website.it.msg, ...msgglobal.it.msg },
-    homepage: { ...msg_website.it.homepage, ...msgglobal.it.homepage }
   },
   es: {
     ...msges,
     pages: { ...msg_website.es.pages, ...msgglobal.es.pages },
     msg: { ...msg_website.es.msg, ...msgglobal.es.msg },
-    homepage: { ...msg_website.es.homepage, ...msgglobal.es.homepage }
   },
   enUs: {
     ...msgenUs,
     pages: { ...msg_website.enUs.pages, ...msgglobal.enUs.pages },
     msg: { ...msg_website.enUs.msg, ...msgglobal.enUs.msg },
-    homepage: { ...msg_website.enUs.homepage, ...msgglobal.enUs.homepage }
   },
   fr: {
     ...msgfr,
     pages: { ...msg_website.fr.pages, ...msgglobal.fr.pages },
     msg: { ...msg_website.fr.msg, ...msgglobal.fr.msg },
-    homepage: { ...msg_website.fr.homepage, ...msgglobal.fr.homepage },
   },
   de: {
     ...msgde,
     pages: { ...msg_website.de.pages, ...msgglobal.de.pages },
     msg: { ...msg_website.de.msg, ...msgglobal.de.msg },
-    homepage: { ...msg_website.de.homepage, ...msgglobal.de.homepage },
   }
 }
 

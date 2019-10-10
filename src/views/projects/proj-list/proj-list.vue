@@ -10,7 +10,7 @@
 
                 <template v-slot:before>
                     <div>
-                        <!--{{idProjAtt}}-->
+                        idProjAtt: {{idProjAtt}}
                         <div class="divtitlecat clMain">
                             <div class="flex-container clMain">
                                 <q-btn v-if="!!getIdParent && CanISeeProjectParent" size="sm" push color="secondary" round
