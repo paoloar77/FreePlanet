@@ -28,7 +28,18 @@ export interface IBookedEvent {
   infoevent: string
   msgbooking: string
   datebooked?: Date
+  modified: boolean
   booked: boolean
+}
+
+export enum EState {
+  None, Creating, Modifying
+}
+
+export interface IBookedEventPage {
+  show: boolean
+  bookedevent: IBookedEvent
+  state: EState
 }
 
 export interface ICalendarState {

@@ -38,7 +38,6 @@ export default class Header extends Vue {
   public photo = ''
   public visuimg: boolean = true
 
-
   get getappname(){
     if (Screen.width < 400) {
       return this.$t('msg.myAppNameShort')

@@ -1305,9 +1305,10 @@ export const tools = {
     if (myfunc === costanti.FuncDialog.CANCEL_BOOKING) {
       console.log(' ENTRATO ! CancelBookingEvent ')
       CalendarStore.actions.CancelBookingEvent(par.param1).then((ris) => {
-        if (ris)
+        if (ris) {
           tools.showPositiveNotif(myself.$q, myself.$t('cal.canceledbooking') + ' "' + par.param1.title + '"')
-        else
+          myself.bookEventpage.show = false
+        } else
           tools.showNegativeNotif(myself.$q, myself.$t('cal.cancelederrorbooking'))
       })
     }
@@ -2077,7 +2078,7 @@ export const tools = {
     return msg
   },
   gettextevent(myevent) {
-    return '"' + myevent.title + '" (' + this.getDateStr(myevent.date) + ') - ' + myevent.time
+    return '"' + myevent.title + '" (' + func_tools.getDateStr(myevent.date) + ') - ' + myevent.time
   },
 
   setLangAtt(mylang) {
