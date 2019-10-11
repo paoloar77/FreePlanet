@@ -198,9 +198,14 @@ namespace Mutations {
     state.name = ''
     state.surname = ''
     resetArrToken(state.tokens)
-    state.x_auth_token = ''
     state.verified_email = false
     state.categorySel = 'personal'
+
+    state.servercode = 0
+    state.resStatus = 0
+    state.isLogged = false
+    state.isAdmin = false
+    state.x_auth_token = ''
   }
 
   function setErrorCatch(state: IUserState, axerr: Types.AxiosError) {
@@ -554,7 +559,7 @@ namespace Actions {
     // state.isLogged = true
     state.isLogged = isLogged
     if (isLogged) {
-      console.log('state.isLogged')
+      console.log('state.isLogged', state.isLogged)
       GlobalStore.mutations.setleftDrawerOpen(localStorage.getItem(tools.localStorage.leftDrawerOpen) === 'true')
       GlobalStore.mutations.setCategorySel(localStorage.getItem(tools.localStorage.categorySel))
 

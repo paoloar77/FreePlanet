@@ -137,10 +137,13 @@
                         <q-avatar class="q-mb-sm center_img">
                             <img src="../../statics/images/avatar-1.svg">
                         </q-avatar>
-                        <q-btn class="absolute-top-right" style="margin-top: 9px; margin-right: 12px; color: white;" dense flat round icon="close" @click="right = !right">
+                        <q-btn class="absolute-top-right" style="margin-top: 9px; margin-right: 12px; color: white;"
+                               dense flat round icon="close" @click="right = !right">
                         </q-btn>
                         <div v-if="Username" class="text-weight-bold text-user">{{ Username }} - {{ myName }}</div>
-                        <div v-else class="text-italic">{{ $t('user.loggati') }}</div>
+                        <div v-else class="text-italic">
+                            {{ $t('user.loggati') }}
+                        </div>
 
                         <!--<span class="text-white" v-if="Verificato"> {{$t('reg.verificato')}} </span>-->
                         <!--<span class="text-white background-red" v-else> {{$t('reg.non_verificato')}} </span>-->
@@ -153,6 +156,18 @@
 
                     </div>
                 </q-img>
+                <div style="margin-top:120px;"></div>
+                <div v-show="!Username">
+                    <div class="q-ma-md" style="">
+                        <CSignIn :mythis="mythis"
+                                 @loginOk="loginOk"
+                                 @loginInCorso="loginInCorso"
+                                 @checkErrors="checkErrors"
+                                 @showNotif="showNotif">
+                        </CSignIn>
+                    </div>
+                </div>
+
 
             </div>
         </q-drawer>

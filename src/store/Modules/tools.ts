@@ -13,6 +13,7 @@ import { lists } from './lists'
 import { static_data } from '@src/db/static_data'
 import { IColl, ITimeLineEntry, ITimeLineMain } from '@src/model/GlobalStore'
 import { func_tools } from '@src/store/Modules/toolsext'
+import { serv_constants } from '@src/store/Modules/serv_constants'
 
 export interface INotify {
   color?: string | 'primary'
@@ -2107,7 +2108,85 @@ export const tools = {
     } else {
       return mythis.$t('msg.myAppName')
     }
+  },
+
+  loginOk(mythis, ispageLogin: boolean) {
+    // console.log('loginOk')
+
+    if (toolsext.getLocale() !== '') {
+      mythis.$i18n.locale = toolsext.getLocale()
+    }    // Set Lang
+    else {
+      UserStore.mutations.setlang(mythis.$i18n.locale)
+    }     // Set Lang
+
+    if (process.env.DEBUG) {
+      console.log('LANG ORA=', toolsext.getLocale())
+    }
+
+    globalroutines(mythis, 'loadapp', '')
+
+    tools.checkErrors(mythis, tools.OK, ispageLogin)
+  },
+
+  loginInCorso(mythis) {
+    // console.log('loginInCorso')
+
+    let msg = mythis.$t('login.incorso')
+    if (process.env.DEBUG) {
+      msg += ' ' + process.env.MONGODB_HOST
+    }
+    mythis.$q.loading.show({ message: msg })
+  },
+
+  checkErrors(mythis, riscode, ispageLogin?: boolean) {
+    // console.log('checkErrors: ', riscode)
+    try {
+      if (riscode === tools.OK) {
+        tools.showNotif(mythis.$q, mythis.$t('login.completato'), { color: 'positive', icon: 'check' })
+        if (ispageLogin) {
+          mythis.$router.push('/')
+        }
+      } else if (riscode === serv_constants.RIS_CODE_LOGIN_ERR) {
+
+        // Wait N seconds to avoid calling many times...
+        return new Promise((resolve, reject) => {
+          setTimeout(() => {
+            resolve('anything')
+          }, 3000)
+        }).then(() => {
+          setTimeout(() => {
+            console.log('HIDE...')
+            mythis.$q.loading.hide()
+          }, 500)
+          tools.showNotif(mythis.$q, mythis.$t('login.errato'), { color: 'negative', icon: 'notifications' })
+          mythis.iswaitingforRes = false
+          if (ispageLogin) {
+            mythis.$router.push('/signin')
+          }
+        })
+
+      } else if (riscode === tools.ERR_SERVERFETCH) {
+        tools.showNotif(mythis.$q, mythis.$t('fetch.errore_server'), { color: 'negative', icon: 'notifications' })
+      } else if (riscode === tools.ERR_GENERICO) {
+        const msg = mythis.$t('fetch.errore_generico') + UserStore.mutations.getMsgError(riscode)
+        tools.showNotif(mythis.$q, msg, { color: 'negative', icon: 'notifications' })
+      } else {
+        tools.showNotif(mythis.$q, 'Errore num ' + riscode, { color: 'negative', icon: 'notifications' })
+      }
+
+      if (riscode !== serv_constants.RIS_CODE_LOGIN_ERR) {
+        mythis.iswaitingforRes = false
+        setTimeout(() => {
+          mythis.$q.loading.hide()
+        }, 200)
+      }
+
+    } finally {
+      // ...
+    }
   }
+
 
 // getLocale() {
   //   if (navigator.languages && navigator.languages.length > 0) {

@@ -3,6 +3,7 @@ import Component from 'vue-class-component'
 
 import drawer from '../../layouts/drawer/drawer.vue'
 import messagePopover from '../../layouts/toolbar/messagePopover/messagePopover.vue'
+import { CSignIn } from '../../components/CSignIn'
 
 import { GlobalStore, UserStore } from '@modules'
 // import { StateConnection } from '../../model'
@@ -12,12 +13,13 @@ import { toolsext } from '@src/store/Modules/toolsext'
 
 import Quasar, { Screen } from 'quasar'
 import { static_data } from '../../db/static_data'
+import globalroutines from '../../globalroutines'
 
 @Component({
   name: 'Header',
   components: {
     drawer,
-    messagePopover
+    messagePopover, CSignIn
   }
 })
 
@@ -330,11 +332,11 @@ export default class Header extends Vue {
   public logoutHandler() {
     UserStore.actions.logout()
       .then(() => {
-        this.$router.replace('/logout')
-
-        setTimeout(() => {
-          this.$router.replace('/')
-        }, 1000)
+        // this.$router.replace('/logout')
+        //
+        // setTimeout(() => {
+        //   this.$router.replace('/')
+        // }, 1000)
 
         tools.showNotif(this.$q, this.$t('logout.uscito'), {icon: 'exit_to_app'})
       })
@@ -346,5 +348,25 @@ export default class Header extends Vue {
 
   get isLogged() {
     return UserStore.state.isLogged
+  }
+
+  public loginOk() {
+    tools.loginOk(this, false)
+  }
+
+  public loginInCorso() {
+    tools.loginInCorso(this)
+  }
+
+  public checkErrors(riscode) {
+    tools.checkErrors(this, riscode)
+  }
+
+  public showNotif(msgcode) {
+    tools.showNotif(this.$q, this.$t(msgcode))
+  }
+
+  public mythis() {
+    return this
   }
 }
