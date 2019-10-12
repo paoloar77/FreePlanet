@@ -31,4 +31,12 @@ export interface IUserState {
   x_auth_token?: string
   isLogged?: boolean
   isAdmin?: boolean
+  usersList?: IUserList[]
+}
+
+export interface IUserList {
+  userId: string
+  username: string
+  name?: string
+  surname?: string
 }

@@ -64,5 +64,4 @@ export default class MenuOne extends Vue {
     }
 
   }
-
 }

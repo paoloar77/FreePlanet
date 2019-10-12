@@ -3,8 +3,18 @@ import globalroutines from './../../globalroutines/index'
 import { costanti } from './costanti'
 import { toolsext } from './toolsext'
 import { translation } from './translation'
-import Quasar, { date, Screen } from 'quasar'
-import { ICollaborations, IListRoutes, IMenuList, IParamDialog, IProject, ITodo, Privacy } from '@src/model'
+import Quasar, { colors, date, Screen } from 'quasar'
+import {
+  IBookedEvent,
+  ICollaborations,
+  IEvents,
+  IListRoutes,
+  IMenuList,
+  IParamDialog,
+  IProject,
+  ITodo,
+  Privacy
+} from '@src/model'
 import * as ApiTables from '@src/store/Modules/ApiTables'
 import translate from '@src/globalroutines/util'
 import { RouteNames } from '@src/router/route-names'
@@ -1302,13 +1312,14 @@ export const tools = {
     return result
   },
 
-  executefunc(myself: any, myfunc: number, par: IParamDialog) {
-    if (myfunc === costanti.FuncDialog.CANCEL_BOOKING) {
-      console.log(' ENTRATO ! CancelBookingEvent ')
-      CalendarStore.actions.CancelBookingEvent(par.param1).then((ris) => {
+  executefunc(myself: any, func: number, par: IParamDialog) {
+    if (func === lists.MenuAction.DELETE) {
+      console.log('param1', par.param1)
+      CalendarStore.actions.CancelBookingEvent({ideventbook: par.param1, notify: par.param2 === true ? '1' : '0'}).then((ris) => {
         if (ris) {
           tools.showPositiveNotif(myself.$q, myself.$t('cal.canceledbooking') + ' "' + par.param1.title + '"')
-          myself.bookEventpage.show = false
+          if (myself.bookEventpage)
+            myself.bookEventpage.show = false
         } else
           tools.showNegativeNotif(myself.$q, myself.$t('cal.cancelederrorbooking'))
       })
@@ -2078,7 +2089,7 @@ export const tools = {
 
     return msg
   },
-  gettextevent(myevent) {
+  gettextevent(myevent: IEvents) {
     return '"' + myevent.title + '" (' + func_tools.getDateStr(myevent.date) + ') - ' + myevent.time
   },
 
@@ -2126,7 +2137,7 @@ export const tools = {
 
     globalroutines(mythis, 'loadapp', '')
 
-    tools.checkErrors(mythis, tools.OK, ispageLogin)
+    tools.SignIncheckErrors(mythis, tools.OK, ispageLogin)
   },
 
   loginInCorso(mythis) {
@@ -2139,8 +2150,8 @@ export const tools = {
     mythis.$q.loading.show({ message: msg })
   },
 
-  checkErrors(mythis, riscode, ispageLogin?: boolean) {
-    // console.log('checkErrors: ', riscode)
+  SignIncheckErrors(mythis, riscode, ispageLogin?: boolean) {
+    // console.log('SignIncheckErrors: ', riscode)
     try {
       if (riscode === tools.OK) {
         tools.showNotif(mythis.$q, mythis.$t('login.completato'), { color: 'positive', icon: 'check' })
@@ -2185,8 +2196,51 @@ export const tools = {
     } finally {
       // ...
     }
-  }
+  },
 
+  SignUpcheckErrors(mythis, riscode: number) {
+    console.log('SignUpcheckErrors', riscode)
+    if (riscode === tools.DUPLICATE_EMAIL_ID) {
+      tools.showNotif(mythis.$q, mythis.$t('reg.err.duplicate_email'))
+    } else if (riscode === tools.DUPLICATE_USERNAME_ID) {
+      tools.showNotif(mythis.$q, mythis.$t('reg.err.duplicate_username'))
+    } else if (riscode === tools.ERR_SERVERFETCH) {
+      tools.showNotif(mythis.$q, mythis.$t('fetch.errore_server'))
+    } else if (riscode === tools.ERR_GENERICO) {
+      const msg = mythis.$t('fetch.errore_generico') + UserStore.mutations.getMsgError(riscode)
+      tools.showNotif(mythis.$q, msg)
+    } else if (riscode === tools.OK) {
+      mythis.$router.push('/signin')
+      tools.showNotif(mythis.$q, mythis.$t('components.authentication.email_verification.link_sent'), {
+        color: 'warning',
+        textColor: 'black'
+      })
+    } else {
+      tools.showNotif(mythis.$q, 'Errore num ' + riscode)
+    }
+
+  },
+  isCssColor(color) {
+    return !!color && !!color.match(/^(#|(rgb|hsl)a?\()/)
+  },
+  displayClasses(eventparam) {
+    return {
+      [`bg-${eventparam.bgcolor}`]: !tools.isCssColor(eventparam.bgcolor),
+      'text-white': !tools.isCssColor(eventparam.bgcolor)
+    }
+  },
+  displayStyles(eventparam) {
+    const s = { color: '' }
+    if (tools.isCssColor(eventparam.bgcolor)) {
+      s['background-color'] = eventparam.bgcolor
+      s.color = colors.luminosity(eventparam.bgcolor) > 0.5 ? 'black' : 'white'
+    }
+    return s
+  },
+  CancelBookingEvent(mythis, eventparam: IEvents, bookeventid: string, notify: boolean) {
+    console.log('CancelBookingEvent ', eventparam)
+    tools.askConfirm(mythis.$q, translate('cal.titlebooking'), translate('cal.cancelbooking') + ' ' + tools.gettextevent(eventparam) + '?', translate('dialog.yes'), translate('dialog.no'), mythis, lists.MenuAction.DELETE, 0, { param1: bookeventid, param2: notify })
+  }
 
 // getLocale() {
   //   if (navigator.languages && navigator.languages.length > 0) {

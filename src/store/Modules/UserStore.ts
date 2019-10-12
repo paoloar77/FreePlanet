@@ -1,5 +1,5 @@
 import Api from '@api'
-import { ISignupOptions, ISigninOptions, IUserState } from 'model'
+import { ISignupOptions, ISigninOptions, IUserState, IUserList } from 'model'
 import { ILinkReg, IResult, IIdToken, IToken } from 'model/other'
 import { storeBuilder } from './Store/Store'
 import router from '@router'
@@ -11,6 +11,7 @@ import { GlobalStore, UserStore, Todos, Projects, BookingStore, CalendarStore } 
 import globalroutines from './../../globalroutines/index'
 
 import { static_data } from '@src/db/static_data'
+import { db_data } from '@src/db/db_data'
 
 import translate from './../../globalroutines/util'
 import * as Types from '@src/store/Api/ApiTypes'
@@ -33,7 +34,8 @@ const state: IUserState = {
   servercode: 0,
   x_auth_token: '',
   isLogged: false,
-  isAdmin: false
+  isAdmin: false,
+  usersList: []
 }
 
 const b = storeBuilder.module<IUserState>('UserModule', state)
@@ -81,6 +83,14 @@ namespace Getters {
     return state.servercode
   }, 'getServerCode')
 
+  const getNameSurnameByUserId = b.read((state: IUserState) => (userId: string) => {
+    const user = UserStore.getters.getUserByUserId(userId)
+    if (user)
+      return user.name + ' ' + user.surname
+    else
+      return '(' + userId + ')'
+  }, 'getNameSurnameByUserId')
+
   const IsMyFriend = b.read((state) => (userIdOwner) => {
     // ++TODO Check if userIdOwner is my friend
     // userIdOwner is my friend ?
@@ -92,6 +102,10 @@ namespace Getters {
     // userIdOwner is on my groups ?
     return true
   }, 'IsMyGroup')
+
+  const getUserByUserId = b.read((mystate: IUserState) => (userId): IUserState => {
+    return mystate.usersList.find((item) => item.userId === userId)
+  }, 'getUserByUserId')
 
   export const getters = {
     get isUserInvalid() {
@@ -114,6 +128,12 @@ namespace Getters {
     },
     get IsMyGroup() {
       return IsMyGroup()
+    },
+    get getNameSurnameByUserId() {
+      return getNameSurnameByUserId()
+    },
+    get getUserByUserId() {
+      return getUserByUserId()
     }
     // get fullName() { return fullName();},
   }
@@ -138,8 +158,10 @@ namespace Mutations {
     state.tokens.push({ access: 'auth', token: state.x_auth_token, data_login: tools.getDateNow() })
 
     // ++Todo: Settings Users Admin
-    if (state.username === 'paoloar77') {
+    if (db_data.adminUsers.includes(state.username)) {
       state.isAdmin = true
+    } else {
+      state.isAdmin = false
     }
 
     // console.log('state.tokens', state.tokens)
@@ -389,7 +411,9 @@ namespace Actions {
               localStorage.setItem(tools.localStorage.token, state.x_auth_token)
               localStorage.setItem(tools.localStorage.expirationDate, expirationDate.toString())
               localStorage.setItem(tools.localStorage.verified_email, String(false))
-              state.isLogged = true
+
+              // Even if you has registered, you have to SignIn first
+              state.isLogged = false
               // dispatch('storeUser', authData);
               // dispatch('setLogoutTimer', myres.data.expiresIn);
 

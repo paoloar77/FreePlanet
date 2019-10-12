@@ -71,7 +71,7 @@ export namespace ApiTool {
       idapp: process.env.APP_ID
     }
 
-    // console.log('mydata', mydata)
+    console.log('mydata', mydata)
 
     UserStore.mutations.setServerCode(tools.EMPTY)
     UserStore.mutations.setResStatus(0)

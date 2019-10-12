@@ -26,7 +26,7 @@ export default class Signin extends Vue {
   }
 
   public checkErrors(riscode) {
-    tools.checkErrors(this, riscode, true)
+    tools.SignIncheckErrors(this, riscode, true)
   }
 
   public showNotif(msgcode) {

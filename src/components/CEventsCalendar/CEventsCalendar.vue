@@ -9,8 +9,8 @@ $t('
             <!-- display an myevent -->
             <q-dialog v-model="displayEvent">
                 <q-card v-if="myevent">
-                    <q-toolbar :class="displayClasses(myevent)"
-                               :style="displayStyles(myevent) + ` min-width: `+ tools.myheight_dialog() + `px;`">
+                    <q-toolbar :class="tools.displayClasses(myevent)"
+                               :style="tools.displayStyles(myevent) + ` min-width: `+ tools.myheight_dialog() + `px;`">
                         <q-toolbar-title>
                             {{ $t('cal.event') }}
                         </q-toolbar-title>
@@ -83,7 +83,7 @@ $t('
                             </div>
                             <p v-if="myevent.linkpdf" style="margin-top: 10px; text-align: center">
                                 <q-btn size="md" type="a" :href="`../../statics/` + myevent.linkpdf"
-                                       target="_blank" rounded color="primary" icon="info" label="Vedi Info">
+                                       target="_blank" rounded color="primary" icon="info" :label="$t('cal.showinfo')">
                                 </q-btn>
                             </p>
                         </div>
@@ -224,7 +224,7 @@ $t('
                 <q-card v-if="bookEventpage.show" :style="`min-width: `+ tools.myheight_dialog() + `px;`">
                     <q-toolbar class="bg-primary text-white">
                         <q-toolbar-title>
-                            Book Event
+                            {{$t('cal.booking')}}
                         </q-toolbar-title>
                         <q-btn flat round color="white" icon="close" v-close-popup></q-btn>
                     </q-toolbar>
@@ -250,32 +250,27 @@ $t('
                                         <span v-if="myevent.time" class="cal__hours">
                                              -
                                             <span class="cal__hours-title">{{$t('cal.hours')}}: </span>
-                                            <span class="cal__hours-content">{{$t('cal.starttime')}} {{ myevent.time }} {{$t('cal.endtime')}}: {{
-                                        getEndTime(myevent) }}</span>
+                                            <span class="cal__hours-content"><span v-if="!tools.isMobile()">{{$t('cal.starttime')}} </span>{{ myevent.time }} <span v-if="!tools.isMobile()">{{$t('cal.endtime')}} </span><span v-else> - </span> {{
+                                                getEndTime(myevent) }}</span>
                                         </span>
                                     </span>
                             </div>
-                            <div class="q-pa-sm">
-                                <q-card
-                                        class="text-white windowcol">
-                                    <!--<q-card-section>-->
-                                    <!--<div class="text-h6"></div>-->
-                                    <!--<div class="text-subtitle2">by John Doe</div>-->
-                                    <!--</q-card-section>-->
-
+                            <div class="q-pa-xs">
+                                <q-card class="text-white windowcol">
                                     <q-card-section>
-                                        <q-input v-model="bookEventForm.msgbooking" :label="$t('cal.msgbooking')"
-                                                 autogrow>
+                                        <q-checkbox :disable="(bookEventpage.bookedevent && bookEventpage.bookedevent.booked) || (bookEventpage.bookedevent === undefined)" style="color: black;" v-model="bookEventForm.booked" :label="$t('cal.bookingtextdefault')" color="green">
+                                        </q-checkbox>
 
-                                        </q-input>
-
-                                        <div class="q-gutter-md centermydiv" style="max-width: 150px; margin-top:10px;">
+                                        <div v-if="bookEventForm.booked" class="q-gutter-md centermydiv" style="max-width: 150px; margin-top:10px;">
                                             <q-select
                                                     rounded outlined v-model="bookEventForm.numpeople"
                                                     :options="tools.SelectListNumPeople"
                                                     :label="$t('cal.selnumpeople')" emit-value map-options>
                                             </q-select>
                                         </div>
+
+                                        <q-input v-model="bookEventForm.msgbooking" :label="$t('cal.msgbooking')+':'" autogrow>
+                                        </q-input>
                                     </q-card-section>
                                 </q-card>
 
@@ -284,16 +279,19 @@ $t('
 
                             <p v-if="myevent.linkpdf" style="margin-top: 10px; text-align: center">
                                 <q-btn size="md" type="a" :href="`../../statics/` + myevent.linkpdf"
-                                       target="_blank" rounded color="primary" icon="info" label="Vedi Info">
+                                       target="_blank" rounded color="primary" icon="info" :label="$t('cal.showinfo')">
                                 </q-btn>
                             </p>
                         </div>
                     </q-card-section>
                     <q-card-actions align="right">
                         <q-btn v-if="bookEventpage.state === EState.Modifying" flat :label="$t('cal.cancelbooking')"
-                               color="negative" @click="CancelBookingEvent(myevent)"></q-btn>
-                        <q-btn flat :label="getTitleBtnBooking()" color="primary" @click="saveBookEvent(myevent)"
+                               color="negative" @click="tools.CancelBookingEvent(mythis, myevent, bookEventForm._id, true)"></q-btn>
+                        <q-btn v-if="checkseinviaMsg" flat :label="$t('dialog.sendmsg')" color="primary" @click="sendMsg(myevent)"></q-btn>
+                        <q-btn v-else flat :label="getTitleBtnBooking" color="primary" @click="saveBookEvent(myevent)"
                                :disable="!(bookEventpage.state === EState.Creating || hasModifiedBooking)"></q-btn>
+
+
                         <q-btn flat :label="$t('dialog.cancel')" color="primary" v-close-popup></q-btn>
                     </q-card-actions>
                 </q-card>
@@ -543,7 +541,7 @@ $t('
                                         <span v-if="event.linkpdf" class="">
                                             <q-btn size="md" type="a" :href="`../../statics/` + event.linkpdf"
                                                    target="_blank" rounded color="primary" icon="info"
-                                                   label="Vedi Info">
+                                                   :label="$t('cal.showinfo')">
 
                                             </q-btn>
                                         </span>

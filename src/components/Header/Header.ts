@@ -350,6 +350,10 @@ export default class Header extends Vue {
     return UserStore.state.isLogged
   }
 
+  get isVerified() {
+    return UserStore.state.verified_email
+  }
+
   public loginOk() {
     tools.loginOk(this, false)
   }
@@ -359,7 +363,7 @@ export default class Header extends Vue {
   }
 
   public checkErrors(riscode) {
-    tools.checkErrors(this, riscode)
+    tools.SignIncheckErrors(this, riscode)
   }
 
   public showNotif(msgcode) {
@@ -368,5 +372,10 @@ export default class Header extends Vue {
 
   public mythis() {
     return this
+  }
+
+  public clickregister() {
+    this.right = false
+    this.$router.replace('/signup')
   }
 }

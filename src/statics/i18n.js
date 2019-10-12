@@ -2,6 +2,15 @@ import msg_website from '../db/i18n_website'
 
 const msgglobal = {
   it: {
+    otherpages: {
+      admin : {
+        menu: 'Amministrazione',
+        eventlist: 'Lista Prenotazioni',
+      },
+    },
+    sendmsg: {
+      write: 'scrive'
+    },
     dialog: {
       ok: 'Ok',
       yes: 'Si',
@@ -11,6 +20,7 @@ const msgglobal = {
       update: 'Aggiorna',
       today: 'Oggi',
       book: 'Prenota',
+      sendmsg: 'Invia Msg',
       msg: {
         titledeleteTask: 'Elimina Task',
         deleteTask: "Vuoi Eliminare {mytodo}?"
@@ -179,6 +189,7 @@ const msgglobal = {
       enterEndDateTime: 'Data e Ora Fine Evento',
       selnumpeople: 'Partecipanti',
       msgbooking: 'Messaggio da inviare',
+      showinfo: 'Vedi Info',
       bookingtextdefault: 'Mi prenoto all\'evento',
       bookingtextdefault_of: 'di'
     },
@@ -200,6 +211,15 @@ const msgglobal = {
     cookies: 'Usiamo i Cookie per una migliore prestazione web.'
   },
   es: {
+    otherpages: {
+      admin : {
+        menu: 'Administración',
+        eventlist: 'Lista Reserva',
+      },
+    },
+    sendmsg: {
+      write: 'escribe'
+    },
     dialog: {
       ok: 'Vale',
       yes: 'Sí',
@@ -209,6 +229,7 @@ const msgglobal = {
       update: 'Actualiza',
       today: 'Hoy',
       book: 'Reserva',
+      sendmsg: 'Envia Mensaje',
       msg: {
         titledeleteTask: 'Borrar Tarea',
         deleteTask: 'Quieres borrar {mytodo}?'
@@ -371,6 +392,7 @@ const msgglobal = {
       enterEndDateTime: 'Fecha y hora del evento final',
       selnumpeople: 'Partecipantes',
       msgbooking: 'Mensaje para enviar',
+      showinfo: 'Ver Info',
       bookingtextdefault: 'Reservo el evento',
       bookingtextdefault_of: 'de',
     },
@@ -392,6 +414,15 @@ const msgglobal = {
     cookies: 'Utilizamos cookies para un mejor rendimiento web.'
   },
   fr: {
+    otherpages: {
+      admin : {
+        menu: 'Administration',
+        eventlist: 'Liste de Réservation',
+      },
+    },
+    sendmsg: {
+      write: 'écrit'
+    },
     dialog: {
       ok: 'Bien',
       yes: 'Oui',
@@ -401,6 +432,7 @@ const msgglobal = {
       cancel: 'annuler',
       today: 'Aujourd\'hui',
       book: 'Réserve',
+      sendmsg: 'Envoyer Msg',
       msg: {
         titledeleteTask: 'Supprimer la tâche',
         deleteTask: 'Voulez-vous supprimer {mytodo}?'
@@ -562,6 +594,7 @@ const msgglobal = {
       enterEndDateTime: 'Date et heure de l\'événement final',
       selnumpeople: 'Participants',
       msgbooking: 'Message à envoyer',
+      showinfo: 'Voir Info',
       bookingtextdefault: 'Je réserve l\'événement',
       bookingtextdefault_of: 'du',
     },
@@ -583,6 +616,15 @@ const msgglobal = {
     cookies: 'Nous utilisons des cookies pour améliorer les performances Web.'
   },
   enUs: {
+    otherpages: {
+      admin : {
+        menu: 'Administration',
+        eventlist: 'Booking List',
+      },
+    },
+    sendmsg: {
+      write: 'write'
+    },
     dialog: {
       ok: 'Ok',
       yes: 'Yes',
@@ -592,6 +634,7 @@ const msgglobal = {
       cancel: 'Cancel',
       today: 'Today',
       book: 'Book',
+      sendmsg: 'Send Msg',
       msg: {
         titledeleteTask: 'Delete Task',
         deleteTask: 'Delete Task {mytodo}?'
@@ -752,6 +795,7 @@ const msgglobal = {
       enterEndDateTime: 'Event end date and time',
       selnumpeople: 'Participants',
       msgbooking: 'Message to send',
+      showinfo: 'Show Info',
       bookingtextdefault: 'I book the event',
       bookingtextdefault_of: 'of',
     },
@@ -773,6 +817,15 @@ const msgglobal = {
     cookies: 'We use cookies for better web performance.'
   },
   de: {
+    otherpages: {
+      admin : {
+        menu: 'Administration',
+        eventlist: 'Booking List',
+      },
+    },
+    sendmsg: {
+      write: 'write'
+    },
     dialog: {
       ok: 'Ok',
       yes: 'Yes',
@@ -782,6 +835,7 @@ const msgglobal = {
       cancel: 'Cancel',
       today: 'Today',
       book: 'Book',
+      sendmsg: 'Send Msg',
       msg: {
         titledeleteTask: 'Delete Task',
         deleteTask: 'Delete Task {mytodo}?'
@@ -944,6 +998,7 @@ const msgglobal = {
       enterEndDateTime: 'Event end date and time',
       selnumpeople: 'Participants',
       msgbooking: 'Message to send',
+      showinfo: 'Show Info',
       bookingtextdefault: 'I book the event',
       bookingtextdefault_of: 'of',
     },

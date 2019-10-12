@@ -132,32 +132,36 @@
             <div id="profile">
                 <q-img class="absolute-top" src="../../statics/images/landing_first_section.png"
                        style="height: 150px">
-                    <div class="absolute-bottom bg-transparent text-black center_img">
-
-                        <q-avatar class="q-mb-sm center_img">
-                            <img src="../../statics/images/avatar-1.svg">
-                        </q-avatar>
-                        <q-btn class="absolute-top-right" style="margin-top: 9px; margin-right: 12px; color: white;"
-                               dense flat round icon="close" @click="right = !right">
-                        </q-btn>
-                        <div v-if="Username" class="text-weight-bold text-user">{{ Username }} - {{ myName }}</div>
-                        <div v-else class="text-italic">
-                            {{ $t('user.loggati') }}
-                        </div>
-
-                        <!--<span class="text-white" v-if="Verificato"> {{$t('reg.verificato')}} </span>-->
-                        <!--<span class="text-white background-red" v-else> {{$t('reg.non_verificato')}} </span>-->
-
-                        <div v-if="Username" id="user-actions">
-                            <q-btn round color="primary" icon="person"></q-btn>
-                            <q-btn round color="warning" icon="lock"></q-btn>
-                            <q-btn round color="secondary" icon="exit_to_app" @click='logoutHandler'></q-btn>
-                        </div>
-
-                    </div>
                 </q-img>
+                <div class="absolute-top bg-transparent text-black center_img" style="margin-top: 10px;">
+
+                    <q-avatar class="q-mb-sm center_img">
+                        <img src="../../statics/images/avatar-1.svg">
+                    </q-avatar>
+                    <q-btn class="absolute-top-right" style="margin-right: 10px; color: white;"
+                           dense flat round icon="close" @click="right = !right">
+                    </q-btn>
+                    <div v-if="isLogged" class="text-weight-bold text-user">{{ Username }} - {{ myName }}</div>
+                    <div v-else class="text-user text-italic bg-red">
+                        {{ $t('user.loggati') }}
+                    </div>
+
+                    <div v-if="isLogged && !isVerified" class="text-verified">{{
+                        $t('components.authentication.email_verification.verify_email') }}
+                    </div>
+
+                    <!--<span class="text-white" v-if="Verificato"> {{$t('reg.verificato')}} </span>-->
+                    <!--<span class="text-white background-red" v-else> {{$t('reg.non_verificato')}} </span>-->
+
+                    <div v-if="isLogged" id="user-actions" class="text-center">
+                        <q-btn round color="primary" icon="person"></q-btn>
+                        <q-btn round color="warning" icon="lock"></q-btn>
+                        <q-btn round color="secondary" icon="exit_to_app" @click='logoutHandler'></q-btn>
+                    </div>
+
+                </div>
                 <div style="margin-top:120px;"></div>
-                <div v-show="!Username">
+                <div v-show="!isLogged">
                     <div class="q-ma-md" style="">
                         <CSignIn :mythis="mythis"
                                  @loginOk="loginOk"

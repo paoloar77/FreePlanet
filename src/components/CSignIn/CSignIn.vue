@@ -56,6 +56,11 @@
                            :disable="$v.$error || iswaitingforRes">{{$t('login.enter')}}
                     </q-btn>
                 </div>
+                <div align="center" style="margin-top:10px;">
+                    <q-btn flat rounded size="lg" color="primary" to="/signup">{{$t('reg.submit')}}
+                    </q-btn>
+                </div>
+
             </div>
         </form>
     </div>

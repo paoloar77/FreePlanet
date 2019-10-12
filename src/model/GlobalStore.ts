@@ -200,3 +200,4 @@ export interface IFunctionality {
   SHOW_ONLY_POLICY?: boolean
   BOOKING_EVENTS?: boolean
 }
+

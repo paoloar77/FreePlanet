@@ -151,7 +151,7 @@ export default class CSignIn extends Vue {
           //     console.log('ERROR Subscription = ' + e)
           //   })
         } else {
-          this.$emit('checkErrors', riscode)
+          this.$emit('SignIncheckErrors', riscode)
         }
 
         this.iswaitingforRes = false
@@ -160,7 +160,7 @@ export default class CSignIn extends Vue {
       .catch((error) => {
         // console.log('ERROR SIGNIN = ' + error)
 
-        this.$emit('checkErrors', error)
+        this.$emit('SignIncheckErrors', error)
       })
     // console.log('   END submit')
   }

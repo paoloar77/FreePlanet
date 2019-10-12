@@ -38,6 +38,21 @@ export const func_tools = {
       return DateFormatter.format(date)
     }
     return mydate
+  },
+
+  getDateTimeShortStr(mydate) {
+    const DateFormatter = new Intl.DateTimeFormat(func_tools.getLocale() || void 0, {
+      hour: 'numeric',
+      minute: 'numeric',
+      day: 'numeric',
+      month: 'short'
+      // timeZone: 'UTC'
+    })
+    if (DateFormatter) {
+      const date = new Date(mydate)
+      return DateFormatter.format(date)
+    }
+    return mydate
   }
 }
 

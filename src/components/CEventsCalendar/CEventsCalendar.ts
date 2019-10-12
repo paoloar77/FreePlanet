@@ -26,6 +26,7 @@ import { costanti } from '@src/store/Modules/costanti'
 import router from '@router'
 import { static_data } from '@src/db/static_data'
 import translate from '@src/globalroutines/util'
+import { lists } from '../../store/Modules/lists'
 
 @Component({
   name: 'CEventsCalendar',
@@ -339,10 +340,6 @@ export default class CEventsCalendar extends Vue {
     }
   }
 
-  public isCssColor(color) {
-    return !!color && !!color.match(/^(#|(rgb|hsl)a?\()/)
-  }
-
   public showEvent(eventparam: IEvents) {
     // console.log('showEvent - INIZIO')
     this.myevent = eventparam
@@ -355,22 +352,6 @@ export default class CEventsCalendar extends Vue {
     endTime = date.addToDate(endTime, { minutes: eventparam.duration })
     endTime = date.formatDate(endTime, 'HH:mm')
     return endTime
-  }
-
-  public displayClasses(eventparam) {
-    return {
-      [`bg-${eventparam.bgcolor}`]: !this.isCssColor(eventparam.bgcolor),
-      'text-white': !this.isCssColor(eventparam.bgcolor)
-    }
-  }
-
-  public displayStyles(eventparam) {
-    const s = { color: '' }
-    if (this.isCssColor(eventparam.bgcolor)) {
-      s['background-color'] = eventparam.bgcolor
-      s.color = colors.luminosity(eventparam.bgcolor) > 0.5 ? 'black' : 'white'
-    }
-    return s
   }
 
   public onDateChanged(mydate) {
@@ -412,13 +393,14 @@ export default class CEventsCalendar extends Vue {
   }
 
   public addBookEventMenu(eventparam) {
-    if (!UserStore.state.isLogged) {
+    if (!UserStore.state.isLogged || !UserStore.state.verified_email) {
       this.$router.push('/signin')
     } else {
       console.log('addBookEventMenu')
       this.resetForm()
       this.myevent = eventparam
-      this.bookEventForm.msgbooking = translate('cal.bookingtextdefault') + ' ' + tools.gettextevent(this.myevent)
+      // this.bookEventForm.msgbooking = translate('cal.bookingtextdefault') + ' ' + tools.gettextevent(this.myevent)
+      this.bookEventForm.msgbooking = ''
       this.bookEventForm.numpeople = 1
       this.bookEventpage.state = EState.Creating
 
@@ -567,6 +549,7 @@ export default class CEventsCalendar extends Vue {
     console.log('bookedevent', bookedevent)
 
     if (bookedevent) {
+      this.bookEventForm._id = bookedevent._id
       this.bookEventForm.numpeople = bookedevent.numpeople
       this.bookEventForm.infoevent = bookedevent.infoevent
       this.bookEventForm.msgbooking = bookedevent.msgbooking
@@ -581,7 +564,12 @@ export default class CEventsCalendar extends Vue {
 
   get hasModifiedBooking() {
     return (this.bookEventpage.bookedevent.numpeople !== this.bookEventForm.numpeople) ||
-      (this.bookEventpage.bookedevent.msgbooking !== this.bookEventForm.msgbooking)
+      (this.bookEventpage.bookedevent.msgbooking !== this.bookEventForm.msgbooking) ||
+      (this.bookEventpage.bookedevent.booked !== this.bookEventForm.booked)
+  }
+
+  public sendMsg(myevent: IEvents) {
+    // ..
   }
 
   public saveBookEvent(myevent: IEvents) {
@@ -593,7 +581,7 @@ export default class CEventsCalendar extends Vue {
       // close the dialog
       self.bookEventpage.show = false
 
-      self.bookEventForm.booked = true
+      // self.bookEventForm.booked = self.bookEventForm.bookedcheck
 
       const data: IBookedEvent = {
         id_bookedevent: myevent._id,
@@ -722,11 +710,6 @@ export default class CEventsCalendar extends Vue {
     return await CalendarStore.actions.BookEvent(eventparam)
   }
 
-  public async CancelBookingEvent(eventparam: IEvents) {
-    console.log('CancelBookingEvent ', eventparam._id)
-    tools.askConfirm(this.$q, translate('cal.titlebooking'), translate('cal.cancelbooking') + ' ' + tools.gettextevent(eventparam) + '?', translate('dialog.yes'), translate('dialog.no'), this, costanti.FuncDialog.CANCEL_BOOKING, 0, { param1: eventparam })
-  }
-
   public isAlreadyBooked(eventparam: IEvents) {
     return CalendarStore.getters.findEventBooked(eventparam, true)
   }
@@ -738,7 +721,7 @@ export default class CEventsCalendar extends Vue {
   }
 
   public badgeClasses(eventparam, type) {
-    const cssColor = this.isCssColor(eventparam.bgcolor)
+    const cssColor = tools.isCssColor(eventparam.bgcolor)
     const isHeader = type === 'header'
     return {
       [`text-white bg-${eventparam.bgcolor}`]: !cssColor,
@@ -751,7 +734,7 @@ export default class CEventsCalendar extends Vue {
   public badgeStyles(eventparam, type, timeStartPos, timeDurationHeight) {
     const s = { color: '', top: '', height: '' }
 
-    if (this.isCssColor(eventparam.bgcolor)) {
+    if (tools.isCssColor(eventparam.bgcolor)) {
       s['background-color'] = eventparam.bgcolor
       s.color = colors.luminosity(eventparam.bgcolor) > 0.5 ? 'black' : 'white'
     }
@@ -859,10 +842,19 @@ export default class CEventsCalendar extends Vue {
     return EState
   }
 
-  public getTitleBtnBooking() {
-    if (this.bookEventpage.state === EState.Creating)
-      return translate('dialog.book')
-    else
-      return translate('dialog.update')
+  get checkseinviaMsg() {
+    return (this.bookEventpage.state === EState.Creating) && (!this.bookEventForm.booked)
+  }
+
+  get getTitleBtnBooking() {
+    if (this.bookEventpage.state === EState.Creating) {
+        return this.$t('dialog.book')
+    } else {
+      return this.$t('dialog.update')
+    }
+  }
+
+  get mythis() {
+    return this
   }
 }
