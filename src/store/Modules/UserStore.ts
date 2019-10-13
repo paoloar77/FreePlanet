@@ -7,7 +7,7 @@ import router from '@router'
 import { serv_constants } from '../Modules/serv_constants'
 import { tools } from '../Modules/tools'
 import { toolsext } from '@src/store/Modules/toolsext'
-import { GlobalStore, UserStore, Todos, Projects, BookingStore, CalendarStore } from '@store'
+import { GlobalStore, UserStore, Todos, Projects, CalendarStore } from '@store'
 import globalroutines from './../../globalroutines/index'
 
 import { static_data } from '@src/db/static_data'
@@ -15,6 +15,7 @@ import { db_data } from '@src/db/db_data'
 
 import translate from './../../globalroutines/util'
 import * as Types from '@src/store/Api/ApiTypes'
+import { ICfgServer } from '@src/model'
 
 const bcrypt = require('bcryptjs')
 
@@ -91,6 +92,10 @@ namespace Getters {
       return '(' + userId + ')'
   }, 'getNameSurnameByUserId')
 
+  const getUsersList = b.read((mystate: IUserState) => {
+    return mystate.usersList
+  }, 'getUsersList')
+
   const IsMyFriend = b.read((state) => (userIdOwner) => {
     // ++TODO Check if userIdOwner is my friend
     // userIdOwner is my friend ?
@@ -104,7 +109,7 @@ namespace Getters {
   }, 'IsMyGroup')
 
   const getUserByUserId = b.read((mystate: IUserState) => (userId): IUserState => {
-    return mystate.usersList.find((item) => item.userId === userId)
+    return mystate.usersList.find((item) => item._id === userId)
   }, 'getUserByUserId')
 
   export const getters = {
@@ -134,6 +139,9 @@ namespace Getters {
     },
     get getUserByUserId() {
       return getUserByUserId()
+    },
+    get getUsersList() {
+      return getUsersList()
     }
     // get fullName() { return fullName();},
   }
@@ -169,6 +177,11 @@ namespace Mutations {
 
   function setpassword(state: IUserState, newstr: string) {
     state.password = newstr
+  }
+
+  function setusersList(mystate: IUserState, usersList: IUserList[]) {
+    // console.log('setusersList', usersList)
+    mystate.usersList = [...usersList]
   }
 
   function setemail(state: IUserState, newstr: string) {
@@ -267,7 +280,8 @@ namespace Mutations {
     setAuth: b.commit(setAuth),
     clearAuthData: b.commit(clearAuthData),
     setErrorCatch: b.commit(setErrorCatch),
-    getMsgError: b.commit(getMsgError)
+    getMsgError: b.commit(getMsgError),
+    setusersList: b.commit(setusersList)
   }
 }
 
@@ -304,6 +318,15 @@ namespace Actions {
         return { code: UserStore.getters.getServerCode, msg: error.getMsgError() }
       })
 
+  }
+
+  async function saveUserChange(context, user: IUserState) {
+    console.log('saveUserChange', user)
+
+    return await Api.SendReq(`/users/${user.userId}`, 'PATCH', { user })
+      .then((res) => {
+        return (res.data.code === serv_constants.RIS_CODE_OK)
+      })
   }
 
   async function requestpwd(context, paramquery: IUserState) {
@@ -583,14 +606,14 @@ namespace Actions {
     // state.isLogged = true
     state.isLogged = isLogged
     if (isLogged) {
-      console.log('state.isLogged', state.isLogged)
+      // console.log('state.isLogged', state.isLogged)
+
       GlobalStore.mutations.setleftDrawerOpen(localStorage.getItem(tools.localStorage.leftDrawerOpen) === 'true')
       GlobalStore.mutations.setCategorySel(localStorage.getItem(tools.localStorage.categorySel))
 
       GlobalStore.actions.checkUpdates()
     }
 
-    const p = await BookingStore.actions.loadAfterLogin()
     const p2 = await CalendarStore.actions.loadAfterLogin()
 
     const p3 = await GlobalStore.actions.loadAfterLogin()
@@ -601,7 +624,7 @@ namespace Actions {
     if (static_data.functionality.ENABLE_PROJECTS_LOADING)
       await Projects.actions.dbLoad({ checkPending: true, onlyiffirsttime: true })
 
-    console.log('setGlobal: END')
+    // console.log('setGlobal: END')
   }
 
   async function autologin_FromLocalStorage(context) {
@@ -675,6 +698,7 @@ namespace Actions {
     logout: b.dispatch(logout),
     requestpwd: b.dispatch(requestpwd),
     resetpwd: b.dispatch(resetpwd),
+    saveUserChange: b.dispatch(saveUserChange),
     signin: b.dispatch(signin),
     signup: b.dispatch(signup),
     vreg: b.dispatch(vreg)

@@ -47,19 +47,19 @@ const stateGetter = b.state()
 namespace Getters {
 
   const findEventBooked = b.read((mystate: ICalendarState) => (myevent: IEvents, isconfirmed: boolean) => {
-    return mystate.bookedevent.find((bookedevent) => (bookedevent.id_bookedevent === myevent._id) && ((isconfirmed && bookedevent.booked) || (!isconfirmed)))
+    return mystate.bookedevent.find((bookedevent) => (bookedevent.id_bookedevent === myevent._id) && (bookedevent.userId === UserStore.state.userId) && ((isconfirmed && bookedevent.booked) || (!isconfirmed)))
   }, 'findEventBooked')
 
-  const getNumParticipants = b.read((mystate: ICalendarState) => (myevent: IEvents) => {
-    const myarr = mystate.bookedevent.filter((bookedevent) => (bookedevent.id_bookedevent === myevent._id) && (bookedevent.booked))
+  const getNumParticipants = b.read((mystate: ICalendarState) => (myevent: IEvents, showall) => {
+    const myarr = mystate.bookedevent.filter((bookedevent) => (bookedevent.id_bookedevent === myevent._id) && (bookedevent.booked) && (showall || (!showall && bookedevent.userId === UserStore.state.userId) ))
     if (myarr)
       return myarr.reduce((sum, bookedevent) => sum + bookedevent.numpeople, 0)
     else
       return 0
   }, 'getNumParticipants')
 
-  const getEventsBookedByIdEvent = b.read((mystate: ICalendarState) => (idevent) => {
-    return mystate.bookedevent.filter((bookedevent) => (bookedevent.id_bookedevent === idevent) && (bookedevent.booked))
+  const getEventsBookedByIdEvent = b.read((mystate: ICalendarState) => (idevent, showall) => {
+    return mystate.bookedevent.filter((bookedevent) => (bookedevent.id_bookedevent === idevent) && (bookedevent.booked) && (showall || (!showall && bookedevent.userId === UserStore.state.userId) ))
   }, 'getEventsBookedByIdEvent')
 
   export const getters = {
@@ -89,7 +89,7 @@ namespace Mutations {
 
 namespace Actions {
   async function loadAfterLogin(context) {
-    console.log('CalendarStore: loadAfterLogin')
+    // console.log('CalendarStore: loadAfterLogin')
     // Load local data
     state.editable = db_data.userdata.calendar_editable
     state.eventlist = db_data.events
@@ -101,7 +101,7 @@ namespace Actions {
     }
 
     // Load local data
-    console.log('CALENDAR loadAfterLogin', 'userid=', UserStore.state.userId)
+    // console.log('CALENDAR loadAfterLogin', 'userid=', UserStore.state.userId)
 
     let ris = null
 

@@ -20,7 +20,6 @@ import QDateTimeScroller from '@quasar/quasar-app-extension-qscroller/src/compon
 import { CTodo } from '@src/components/todos/CTodo'
 import { SingleProject } from '@src/components/projects/SingleProject'
 import { IEvents } from '@src/model'
-import { BookingStore } from '@store'
 import { IBookedEvent, IBookedEventPage, EState } from '@src/model/Calendar'
 import { costanti } from '@src/store/Modules/costanti'
 import router from '@router'
@@ -48,6 +47,7 @@ export default class CEventsCalendar extends Vue {
   }
 
   public formbookEventDefault: IBookedEvent = {
+    userId: '',
     msgbooking: '',
     infoevent: '',
     numpeople: 1,
@@ -584,6 +584,7 @@ export default class CEventsCalendar extends Vue {
       // self.bookEventForm.booked = self.bookEventForm.bookedcheck
 
       const data: IBookedEvent = {
+        userId: UserStore.state.userId,
         id_bookedevent: myevent._id,
         numpeople: self.bookEventForm.numpeople,
         infoevent: tools.gettextevent(myevent),

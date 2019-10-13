@@ -128,7 +128,13 @@ $graytext: #555;
     margin: 10px;
     border: solid 1px #4198ef;
     border-radius: 1rem;
+    padding: 2px;
   }
+  &__table tr {
+    border: solid 1px #4198ef;
+    border-radius: 1rem;
+  }
+
 
   &__align_center_mobile {
     text-align: left;

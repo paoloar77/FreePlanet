@@ -480,10 +480,15 @@ namespace Actions {
       .then((res) => {
         state.networkDataReceived = true
 
-        console.log('******* checkUpdates RES :', res.data.cfgServer)
+        // console.log('******* checkUpdates RES :', res.data.cfgServer)
         if (res.data.cfgServer) {
           state.cfgServer = [...res.data.cfgServer]
-          console.log('res.data.cfgServer', res.data.cfgServer)
+          // console.log('res.data.cfgServer', res.data.cfgServer)
+        }
+
+        // console.log('res.data.userslist', res.data.usersList)
+        if (res.data.usersList) {
+          UserStore.mutations.setusersList(res.data.usersList)
         }
 
         // console.log('**********  res', 'state.todos', state.todos, 'checkPending', checkPending)

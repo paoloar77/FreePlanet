@@ -1398,7 +1398,7 @@ export const tools = {
   ,
 
   checkLangPassed(mylang) {
-    console.log('checkLangPassed')
+    // console.log('checkLangPassed')
 
     const mybrowserLang = Quasar.lang.isoName
 
@@ -2240,6 +2240,10 @@ export const tools = {
   CancelBookingEvent(mythis, eventparam: IEvents, bookeventid: string, notify: boolean) {
     console.log('CancelBookingEvent ', eventparam)
     tools.askConfirm(mythis.$q, translate('cal.titlebooking'), translate('cal.cancelbooking') + ' ' + tools.gettextevent(eventparam) + '?', translate('dialog.yes'), translate('dialog.no'), mythis, lists.MenuAction.DELETE, 0, { param1: bookeventid, param2: notify })
+  },
+  CancelUserRec(mythis, id) {
+    console.log('CancelUserRec', id)
+    tools.askConfirm(mythis.$q, translate('cal.titlebooking'), translate('cal.canceluser') + '?', translate('dialog.yes'), translate('dialog.no'), mythis, lists.MenuAction.DELETE, 0, { param1: id })
   }
 
 // getLocale() {

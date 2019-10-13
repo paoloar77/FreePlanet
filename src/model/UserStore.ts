@@ -35,7 +35,7 @@ export interface IUserState {
 }
 
 export interface IUserList {
-  userId: string
+  _id: string
   username: string
   name?: string
   surname?: string

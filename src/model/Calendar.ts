@@ -24,7 +24,7 @@ export interface IEvents {
 
 export interface IBookedEvent {
   _id?: any
-  userId: any
+  userId: string
   id_bookedevent?: any
   numpeople: number
   infoevent: string
