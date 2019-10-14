@@ -10,6 +10,7 @@ import translate from '../../../../globalroutines/util'
 import * as Types from '../../../Api/ApiTypes'
 import { db_data } from '@src/db/db_data'
 import { UserStore } from '@store'
+import { lists } from '@src/store/Modules/lists'
 
 // State
 const state: ICalendarState = {
@@ -46,12 +47,30 @@ const stateGetter = b.state()
 namespace Getters {
 
   const findEventBooked = b.read((mystate: ICalendarState) => (myevent: IEvents, isconfirmed: boolean) => {
-    return mystate.bookedevent.find((bookedevent) => (bookedevent.id_bookedevent === myevent._id) && ((isconfirmed && bookedevent.booked) || (!isconfirmed)))
+    return mystate.bookedevent.find((bookedevent) => (bookedevent.id_bookedevent === myevent._id) && (bookedevent.userId === UserStore.state.userId) && ((isconfirmed && bookedevent.booked) || (!isconfirmed)))
   }, 'findEventBooked')
+
+  const getNumParticipants = b.read((mystate: ICalendarState) => (myevent: IEvents, showall) => {
+    const myarr = mystate.bookedevent.filter((bookedevent) => (bookedevent.id_bookedevent === myevent._id) && (bookedevent.booked) && (showall || (!showall && bookedevent.userId === UserStore.state.userId) ))
+    if (myarr)
+      return myarr.reduce((sum, bookedevent) => sum + bookedevent.numpeople, 0)
+    else
+      return 0
+  }, 'getNumParticipants')
+
+  const getEventsBookedByIdEvent = b.read((mystate: ICalendarState) => (idevent, showall) => {
+    return mystate.bookedevent.filter((bookedevent) => (bookedevent.id_bookedevent === idevent) && (bookedevent.booked) && (showall || (!showall && bookedevent.userId === UserStore.state.userId) ))
+  }, 'getEventsBookedByIdEvent')
 
   export const getters = {
     get findEventBooked() {
       return findEventBooked()
+    },
+    get getNumParticipants() {
+      return getNumParticipants()
+    },
+    get getEventsBookedByIdEvent() {
+      return getEventsBookedByIdEvent()
     }
   }
 
@@ -70,7 +89,7 @@ namespace Mutations {
 
 namespace Actions {
   async function loadAfterLogin(context) {
-    console.log('CalendarStore: loadAfterLogin')
+    // console.log('CalendarStore: loadAfterLogin')
     // Load local data
     state.editable = db_data.userdata.calendar_editable
     state.eventlist = db_data.events
@@ -82,11 +101,13 @@ namespace Actions {
     }
 
     // Load local data
-    console.log('CALENDAR loadAfterLogin', 'userid=', UserStore.state.userId)
+    // console.log('CALENDAR loadAfterLogin', 'userid=', UserStore.state.userId)
 
     let ris = null
 
-    ris = await Api.SendReq('/booking/' + UserStore.state.userId + '/' + process.env.APP_ID, 'GET', null)
+    const showall = UserStore.state.isAdmin ? '1' : '0'
+
+    ris = await Api.SendReq('/booking/' + UserStore.state.userId + '/' + process.env.APP_ID + '/' + showall, 'GET', null)
       .then((res) => {
         if (res.data.bookedevent) {
           state.bookedevent = res.data.bookedevent
@@ -106,6 +127,7 @@ namespace Actions {
 
   function getparambyevent(bookevent) {
     return {
+      _id: bookevent._id,
       id_bookedevent: bookevent.id_bookedevent,
       infoevent: bookevent.infoevent,
       numpeople: bookevent.numpeople,
@@ -113,7 +135,7 @@ namespace Actions {
       datebooked: bookevent.datebooked,
       userId: UserStore.state.userId,
       booked: bookevent.booked,
-      modified: bookevent.modified,
+      modified: bookevent.modified
     }
   }
 
@@ -126,6 +148,7 @@ namespace Actions {
       .then((res) => {
         if (res.status === 200) {
           if (res.data.code === serv_constants.RIS_CODE_OK) {
+            bookevent._id = res.data.id
             if (bookevent.modified) {
 
               const foundIndex = state.bookedevent.findIndex((x) => x.id_bookedevent === bookevent.id_bookedevent)
@@ -147,20 +170,16 @@ namespace Actions {
 
   }
 
-  async function CancelBookingEvent(context, event: IEvents) {
-    console.log('CALSTORE: CancelBookingEvent', event)
+  async function CancelBookingEvent(context, { ideventbook, notify }) {
+    console.log('CALSTORE: CancelBookingEvent', ideventbook, notify)
 
-    const myeventtoCancel = state.bookedevent.find((eventbooked) => (eventbooked.id_bookedevent === event._id))
-
-    const param = getparambyevent(myeventtoCancel)
-    param.booked = false // Cancel Booking
-
-    return await Api.SendReq('/booking', 'POST', param)
+    return await Api.SendReq('/booking/' + ideventbook + '/' + notify + '/' + process.env.APP_ID, 'DELETE', null)
       .then((res) => {
         if (res.status === 200) {
           if (res.data.code === serv_constants.RIS_CODE_OK) {
 
-            state.bookedevent = state.bookedevent.filter((eventbooked) => (eventbooked.id_bookedevent !== event._id))
+            // Remove this record from my list
+            state.bookedevent = state.bookedevent.filter((eventbooked) => (eventbooked._id !== ideventbook))
 
             return true
           }
@@ -173,8 +192,6 @@ namespace Actions {
         // UserStore.mutations.setErrorCatch(error)
         return false
       })
-
-
   }
 
   export const actions = {

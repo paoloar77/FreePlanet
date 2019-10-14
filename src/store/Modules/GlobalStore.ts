@@ -19,6 +19,7 @@ import globalroutines from './../../globalroutines/index'
 
 
 import { cfgrouter } from '../../router/route-config'
+import { static_data } from '@src/db/static_data'
 // import { static_data } from '@src/db/static_data'
 
 let stateConnDefault = 'online'
@@ -285,6 +286,7 @@ namespace Actions {
   }
 
   function createPushSubscription(context) {
+    console.log('createPushSubscription')
 
     // If Already subscribed, don't send to the Server DB
     // if (state.wasAlreadySubOnDb) {
@@ -295,6 +297,9 @@ namespace Actions {
     // if (!static_data.functionality.PWA) {
     //   return
     // }
+
+    if (!static_data.functionality.PWA)
+      return
 
     if (!('serviceWorker' in navigator)) {
       return
@@ -417,23 +422,25 @@ namespace Actions {
       await globalroutines(null, 'clearalldata', table, null)
     }
 
-    if ('serviceWorker' in navigator) {
-      // REMOVE ALL SUBSCRIPTION
-      console.log('REMOVE ALL SUBSCRIPTION...')
-      await navigator.serviceWorker.ready.then((reg) => {
-        console.log('... Ready')
-        reg.pushManager.getSubscription().then((subscription) => {
-          console.log('    Found Subscription...')
-          if (subscription) {
-            subscription.unsubscribe().then((successful) => {
-              // You've successfully unsubscribed
-              console.log('You\'ve successfully unsubscribed')
-            }).catch((e) => {
-              // Unsubscription failed
-            })
-          }
+    if (static_data.functionality.PWA) {
+      if ('serviceWorker' in navigator) {
+        // REMOVE ALL SUBSCRIPTION
+        console.log('REMOVE ALL SUBSCRIPTION...')
+        await navigator.serviceWorker.ready.then((reg) => {
+          console.log('... Ready')
+          reg.pushManager.getSubscription().then((subscription) => {
+            console.log('    Found Subscription...')
+            if (subscription) {
+              subscription.unsubscribe().then((successful) => {
+                // You've successfully unsubscribed
+                console.log('You\'ve successfully unsubscribed')
+              }).catch((e) => {
+                // Unsubscription failed
+              })
+            }
+          })
         })
-      })
+      }
     }
 
     await deleteSubscriptionToServer(context)
@@ -473,10 +480,15 @@ namespace Actions {
       .then((res) => {
         state.networkDataReceived = true
 
-        console.log('******* checkUpdates RES :', res.data.cfgServer)
+        // console.log('******* checkUpdates RES :', res.data.cfgServer)
         if (res.data.cfgServer) {
           state.cfgServer = [...res.data.cfgServer]
-          console.log('res.data.cfgServer', res.data.cfgServer)
+          // console.log('res.data.cfgServer', res.data.cfgServer)
+        }
+
+        // console.log('res.data.userslist', res.data.usersList)
+        if (res.data.usersList) {
+          UserStore.mutations.setusersList(res.data.usersList)
         }
 
         // console.log('**********  res', 'state.todos', state.todos, 'checkPending', checkPending)

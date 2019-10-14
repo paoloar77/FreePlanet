@@ -1,218 +1,40 @@
-import { GlobalStore } from '@store'
-import { UserStore } from '../../../store/Modules'
 import Vue from 'vue'
 import { Component, Prop, Watch } from 'vue-property-decorator'
-import { serv_constants } from '../../../store/Modules/serv_constants'
-import { tools } from '../../../store/Modules/tools'
-import { toolsext } from '@src/store/Modules/toolsext'
-
-import { ISigninOptions, IUserState } from 'model'
-import { TSignin, validations } from './signin-validate'
-
-import { validationMixin } from 'vuelidate'
-
-import { Logo } from '../../../components/logo'
-
-import router from '@router'
-
+import { CSignIn } from '../../../components/CSignIn'
+import { toolsext } from '../../../store/Modules/toolsext'
+import { UserStore } from '../../../store/Modules'
 import globalroutines from '../../../globalroutines/index'
+import { tools } from '../../../store/Modules/tools'
+
 
 // import {Loading, QSpinnerFacebook, QSpinnerGears} from 'quasar'
 
 @Component({
-  mixins: [validationMixin],
-  validations,
-  components: { Logo }
+  components: { CSignIn }
 })
 
 export default class Signin extends Vue {
   public $v
   public $q
-  public loading: boolean
-  public $t: any
-  public iswaitingforRes: boolean = false
 
-  public signin: ISigninOptions = {
-    username: process.env.TEST_USERNAME || '',
-    password: process.env.TEST_PASSWORD || ''
+  public loginOk() {
+    tools.loginOk(this, true)
   }
 
-  public created() {
-    this.$v.$reset()
-
-    if (UserStore.state.resStatus === serv_constants.RIS_CODE__HTTP_FORBIDDEN_INVALID_TOKEN) {
-      tools.showNotif(this.$q, this.$t('fetch.error_doppiologin'))
-    }
-
-    // this.$myconfig.socialLogin.facebook = true
-    // console.log('PROVA fb:', this.$myconfig.socialLogin.facebook)
-  }
-
-  public env() {
-    return process.env
-  }
-
-
-  public getlinkforgetpwd() {
-    return '/requestresetpwd'
-  }
-
-  public errorMsg(cosa: string, item: any) {
-    try {
-      if (!item.$error) {
-        return ''
-      }
-      if (item.$params.email && !item.email) {
-        return this.$t('reg.err.email')
-      }
-
-      if (!item.required) {
-        return this.$t('reg.err.required')
-      }
-      if (!item.minLength) {
-        return this.$t('reg.err.atleast') + ` ${item.$params.minLength.min} ` + this.$t('reg.err.char')
-      }
-      if (!item.maxLength) {
-        return this.$t('reg.err.notmore') + ` ${item.$params.maxLength.max} ` + this.$t('reg.err.char')
-      }
-      return ''
-    } catch (error) {
-      // console.log("ERR : " + error);
-    }
+  public loginInCorso() {
+    tools.loginInCorso(this)
   }
 
   public checkErrors(riscode) {
-    // console.log('checkErrors: ', riscode)
-    try {
-      if (riscode === tools.OK) {
-        tools.showNotif(this.$q, this.$t('login.completato'), { color: 'positive', icon: 'check' })
-        this.$router.push('/')
-      } else if (riscode === serv_constants.RIS_CODE_LOGIN_ERR) {
-
-        // Wait N seconds to avoid calling many times...
-        return new Promise(function (resolve, reject) {
-          setTimeout(function () {
-            resolve('anything')
-          }, 3000)
-        }).then(() => {
-          setTimeout(() => {
-            this.$q.loading.hide()
-          }, 200)
-          tools.showNotif(this.$q, this.$t('login.errato'))
-          this.iswaitingforRes = false
-          this.$router.push('/signin')
-        })
-
-      } else if (riscode === tools.ERR_SERVERFETCH) {
-        tools.showNotif(this.$q, this.$t('fetch.errore_server'))
-      } else if (riscode === tools.ERR_GENERICO) {
-        const msg = this.$t('fetch.errore_generico') + UserStore.mutations.getMsgError(riscode)
-        tools.showNotif(this.$q, msg)
-      } else {
-        tools.showNotif(this.$q, 'Errore num ' + riscode)
-      }
-
-      if (riscode !== serv_constants.RIS_CODE_LOGIN_ERR) {
-        this.iswaitingforRes = false
-        setTimeout(() => {
-          this.$q.loading.hide()
-        }, 200)
-      }
-
-    } finally {
-
-    }
+    tools.SignIncheckErrors(this, riscode, true)
   }
 
-  public redirect(response) {
-    this.loading = false
-    window.location.href = response.data.redirect
+  public showNotif(msgcode) {
+    tools.showNotif(this.$q, this.$t(msgcode))
   }
 
-  public error(error) {
-    this.loading = false
-    this.$errorHandler(this, error)
+  public mythis() {
+    return this
   }
 
-  public facebook() {
-    this.loading = true
-    this.$axios.get('/backend/loginFacebook')
-      .then((response) => this.redirect(response))
-      .catch((error) => this.error(error))
-  }
-
-  public google() {
-
-  }
-
-  public submit() {
-    console.log('submit LOGIN')
-    this.$v.signin.$touch()
-
-    if (this.$v.signin.$error) {
-      tools.showNotif(this.$q, this.$t('reg.err.errore_generico'))
-      return
-    }
-
-    let msg = this.$t('login.incorso')
-    if (process.env.DEBUG) {
-      msg += ' ' + process.env.MONGODB_HOST
-    }
-    this.$q.loading.show({ message: msg })
-    // disable Button Login:
-    this.iswaitingforRes = true
-
-    if (process.env.DEBUG) {
-      console.log('this.signin', this.signin)
-    }
-
-    UserStore.actions.signin(this.signin)
-      .then((riscode) => {
-        // console.log('signin FINITO CALL: riscode=', riscode)
-        if (riscode === tools.OK) {
-          // router.push('/signin')
-        }
-        return riscode
-      })
-      .then((riscode) => {
-        if (process.env.DEBUG) {
-          console.log('  riscode=', riscode)
-        }
-
-        if (toolsext.getLocale() !== '') {
-          this.$i18n.locale = toolsext.getLocale()
-        }    // Set Lang
-        else {
-          UserStore.mutations.setlang(this.$i18n.locale)
-        }     // Set Lang
-
-
-        if (process.env.DEBUG) {
-          console.log('LANG ORA=', toolsext.getLocale())
-        }
-
-        globalroutines(this, 'loadapp', '')
-        return riscode
-      })
-      .then((riscode) => {
-        if (riscode === tools.OK) {
-          GlobalStore.actions.createPushSubscription()
-            .then((rissub) => {
-
-            })
-            .catch((e) => {
-              console.log('ERROR Subscription = ' + e)
-            })
-        }
-
-        this.checkErrors(riscode)
-
-      })
-      .catch((error) => {
-        console.log('ERROR SIGNIN = ' + error)
-
-        this.checkErrors(error)
-      })
-
-  }
 }

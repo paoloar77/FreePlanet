@@ -1,5 +1,5 @@
 import Api from '@api'
-import { ISignupOptions, ISigninOptions, IUserState } from 'model'
+import { ISignupOptions, ISigninOptions, IUserState, IUserList } from 'model'
 import { ILinkReg, IResult, IIdToken, IToken } from 'model/other'
 import { storeBuilder } from './Store/Store'
 import router from '@router'
@@ -7,13 +7,15 @@ import router from '@router'
 import { serv_constants } from '../Modules/serv_constants'
 import { tools } from '../Modules/tools'
 import { toolsext } from '@src/store/Modules/toolsext'
-import { GlobalStore, UserStore, Todos, Projects, BookingStore, CalendarStore } from '@store'
+import { GlobalStore, UserStore, Todos, Projects, CalendarStore } from '@store'
 import globalroutines from './../../globalroutines/index'
 
 import { static_data } from '@src/db/static_data'
+import { db_data } from '@src/db/db_data'
 
 import translate from './../../globalroutines/util'
 import * as Types from '@src/store/Api/ApiTypes'
+import { ICfgServer } from '@src/model'
 
 const bcrypt = require('bcryptjs')
 
@@ -33,7 +35,8 @@ const state: IUserState = {
   servercode: 0,
   x_auth_token: '',
   isLogged: false,
-  isAdmin: false
+  isAdmin: false,
+  usersList: []
 }
 
 const b = storeBuilder.module<IUserState>('UserModule', state)
@@ -81,6 +84,18 @@ namespace Getters {
     return state.servercode
   }, 'getServerCode')
 
+  const getNameSurnameByUserId = b.read((state: IUserState) => (userId: string) => {
+    const user = UserStore.getters.getUserByUserId(userId)
+    if (user)
+      return user.name + ' ' + user.surname
+    else
+      return '(' + userId + ')'
+  }, 'getNameSurnameByUserId')
+
+  const getUsersList = b.read((mystate: IUserState) => {
+    return mystate.usersList
+  }, 'getUsersList')
+
   const IsMyFriend = b.read((state) => (userIdOwner) => {
     // ++TODO Check if userIdOwner is my friend
     // userIdOwner is my friend ?
@@ -92,6 +107,10 @@ namespace Getters {
     // userIdOwner is on my groups ?
     return true
   }, 'IsMyGroup')
+
+  const getUserByUserId = b.read((mystate: IUserState) => (userId): IUserState => {
+    return mystate.usersList.find((item) => item._id === userId)
+  }, 'getUserByUserId')
 
   export const getters = {
     get isUserInvalid() {
@@ -114,6 +133,15 @@ namespace Getters {
     },
     get IsMyGroup() {
       return IsMyGroup()
+    },
+    get getNameSurnameByUserId() {
+      return getNameSurnameByUserId()
+    },
+    get getUserByUserId() {
+      return getUserByUserId()
+    },
+    get getUsersList() {
+      return getUsersList()
     }
     // get fullName() { return fullName();},
   }
@@ -138,8 +166,10 @@ namespace Mutations {
     state.tokens.push({ access: 'auth', token: state.x_auth_token, data_login: tools.getDateNow() })
 
     // ++Todo: Settings Users Admin
-    if (state.username === 'paoloar77') {
+    if (db_data.adminUsers.includes(state.username)) {
       state.isAdmin = true
+    } else {
+      state.isAdmin = false
     }
 
     // console.log('state.tokens', state.tokens)
@@ -147,6 +177,11 @@ namespace Mutations {
 
   function setpassword(state: IUserState, newstr: string) {
     state.password = newstr
+  }
+
+  function setusersList(mystate: IUserState, usersList: IUserList[]) {
+    // console.log('setusersList', usersList)
+    mystate.usersList = [...usersList]
   }
 
   function setemail(state: IUserState, newstr: string) {
@@ -198,9 +233,14 @@ namespace Mutations {
     state.name = ''
     state.surname = ''
     resetArrToken(state.tokens)
-    state.x_auth_token = ''
     state.verified_email = false
     state.categorySel = 'personal'
+
+    state.servercode = 0
+    state.resStatus = 0
+    state.isLogged = false
+    state.isAdmin = false
+    state.x_auth_token = ''
   }
 
   function setErrorCatch(state: IUserState, axerr: Types.AxiosError) {
@@ -240,7 +280,8 @@ namespace Mutations {
     setAuth: b.commit(setAuth),
     clearAuthData: b.commit(clearAuthData),
     setErrorCatch: b.commit(setErrorCatch),
-    getMsgError: b.commit(getMsgError)
+    getMsgError: b.commit(getMsgError),
+    setusersList: b.commit(setusersList)
   }
 }
 
@@ -277,6 +318,15 @@ namespace Actions {
         return { code: UserStore.getters.getServerCode, msg: error.getMsgError() }
       })
 
+  }
+
+  async function saveUserChange(context, user: IUserState) {
+    console.log('saveUserChange', user)
+
+    return await Api.SendReq(`/users/${user.userId}`, 'PATCH', { user })
+      .then((res) => {
+        return (res.data.code === serv_constants.RIS_CODE_OK)
+      })
   }
 
   async function requestpwd(context, paramquery: IUserState) {
@@ -384,7 +434,9 @@ namespace Actions {
               localStorage.setItem(tools.localStorage.token, state.x_auth_token)
               localStorage.setItem(tools.localStorage.expirationDate, expirationDate.toString())
               localStorage.setItem(tools.localStorage.verified_email, String(false))
-              state.isLogged = true
+
+              // Even if you has registered, you have to SignIn first
+              state.isLogged = false
               // dispatch('storeUser', authData);
               // dispatch('setLogoutTimer', myres.data.expiresIn);
 
@@ -554,14 +606,14 @@ namespace Actions {
     // state.isLogged = true
     state.isLogged = isLogged
     if (isLogged) {
-      console.log('state.isLogged')
+      // console.log('state.isLogged', state.isLogged)
+
       GlobalStore.mutations.setleftDrawerOpen(localStorage.getItem(tools.localStorage.leftDrawerOpen) === 'true')
       GlobalStore.mutations.setCategorySel(localStorage.getItem(tools.localStorage.categorySel))
 
       GlobalStore.actions.checkUpdates()
     }
 
-    const p = await BookingStore.actions.loadAfterLogin()
     const p2 = await CalendarStore.actions.loadAfterLogin()
 
     const p3 = await GlobalStore.actions.loadAfterLogin()
@@ -572,7 +624,7 @@ namespace Actions {
     if (static_data.functionality.ENABLE_PROJECTS_LOADING)
       await Projects.actions.dbLoad({ checkPending: true, onlyiffirsttime: true })
 
-    console.log('setGlobal: END')
+    // console.log('setGlobal: END')
   }
 
   async function autologin_FromLocalStorage(context) {
@@ -646,6 +698,7 @@ namespace Actions {
     logout: b.dispatch(logout),
     requestpwd: b.dispatch(requestpwd),
     resetpwd: b.dispatch(resetpwd),
+    saveUserChange: b.dispatch(saveUserChange),
     signin: b.dispatch(signin),
     signup: b.dispatch(signup),
     vreg: b.dispatch(vreg)

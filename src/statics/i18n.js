@@ -2,6 +2,17 @@ import msg_website from '../db/i18n_website'
 
 const msgglobal = {
   it: {
+    otherpages: {
+      admin : {
+        menu: 'Amministrazione',
+        eventlist: 'Prenotazioni',
+        usereventlist: 'Prenotazioni Utenti',
+        userlist: 'Lista Utenti',
+      },
+    },
+    sendmsg: {
+      write: 'scrive'
+    },
     dialog: {
       ok: 'Ok',
       yes: 'Si',
@@ -11,6 +22,7 @@ const msgglobal = {
       update: 'Aggiorna',
       today: 'Oggi',
       book: 'Prenota',
+      sendmsg: 'Invia Msg',
       msg: {
         titledeleteTask: 'Elimina Task',
         deleteTask: "Vuoi Eliminare {mytodo}?"
@@ -18,6 +30,10 @@ const msgglobal = {
     },
     comp: {
       Conta: "Conta",
+    },
+    db: {
+      recupdated: 'Record Aggiornato',
+      recfailed: 'Errore durante aggiornamento Record'
     },
     components: {
       authentication: {
@@ -50,6 +66,8 @@ const msgglobal = {
       incorso: 'Registrazione in corso...',
       richiesto: 'Campo Richiesto',
       email: 'Email',
+      date_reg: 'Data Reg.',
+      perm: 'Permessi',
       username: 'Nome Utente',
       name: 'Nome',
       surname: 'Cognome',
@@ -178,9 +196,13 @@ const msgglobal = {
       eventstartdatetime: 'Data e Ora Inizio Evento',
       enterEndDateTime: 'Data e Ora Fine Evento',
       selnumpeople: 'Partecipanti',
+      selnumpeople_short: 'Num',
       msgbooking: 'Messaggio da inviare',
+      showinfo: 'Vedi Info',
       bookingtextdefault: 'Mi prenoto all\'evento',
-      bookingtextdefault_of: 'di'
+      bookingtextdefault_of: 'di',
+      data: 'Data',
+      teachertitle: 'Insegnante',
     },
     newsletter: {
       title: 'Desideri ricevere la nostra Newsletter?',
@@ -200,6 +222,17 @@ const msgglobal = {
     cookies: 'Usiamo i Cookie per una migliore prestazione web.'
   },
   es: {
+    otherpages: {
+      admin : {
+        menu: 'Administración',
+        eventlist: 'Reserva',
+        usereventlist: 'Reserva Usuarios',
+        userlist: 'Lista de usuarios',
+      },
+    },
+    sendmsg: {
+      write: 'escribe'
+    },
     dialog: {
       ok: 'Vale',
       yes: 'Sí',
@@ -209,6 +242,7 @@ const msgglobal = {
       update: 'Actualiza',
       today: 'Hoy',
       book: 'Reserva',
+      sendmsg: 'Envia Mensaje',
       msg: {
         titledeleteTask: 'Borrar Tarea',
         deleteTask: 'Quieres borrar {mytodo}?'
@@ -216,6 +250,10 @@ const msgglobal = {
     },
     comp: {
       Conta: "Conta",
+    },
+    db: {
+      recupdated: 'Registro Actualizado',
+      recfailed: 'Error durante el registro de actualización'
     },
     components: {
       authentication: {
@@ -248,6 +286,8 @@ const msgglobal = {
       incorso: 'Registro en curso...',
       richiesto: 'Campo requerido',
       email: 'Email',
+      date_reg: 'Fecha Reg.',
+      perm: 'Permisos',
       username: 'Nombre usuario',
       name: 'Nombre',
       surname: 'Apellido',
@@ -370,9 +410,13 @@ const msgglobal = {
       eventstartdatetime: 'Evento de inicio de fecha y hora',
       enterEndDateTime: 'Fecha y hora del evento final',
       selnumpeople: 'Partecipantes',
+      selnumpeople_short: 'Num',
       msgbooking: 'Mensaje para enviar',
+      showinfo: 'Ver Info',
       bookingtextdefault: 'Reservo el evento',
       bookingtextdefault_of: 'de',
+      data: 'Fecha',
+      teachertitle: 'Maestro',
     },
     newsletter: {
       title: '¿Desea recibir nuestro boletín informativo?',
@@ -392,6 +436,17 @@ const msgglobal = {
     cookies: 'Utilizamos cookies para un mejor rendimiento web.'
   },
   fr: {
+    otherpages: {
+      admin : {
+        menu: 'Administration',
+        eventlist: 'Réservation',
+        usereventlist: 'Réservation Utilisateur',
+        userlist: 'Liste d\'utilisateurs',
+      },
+    },
+    sendmsg: {
+      write: 'écrit'
+    },
     dialog: {
       ok: 'Bien',
       yes: 'Oui',
@@ -401,6 +456,7 @@ const msgglobal = {
       cancel: 'annuler',
       today: 'Aujourd\'hui',
       book: 'Réserve',
+      sendmsg: 'Envoyer Msg',
       msg: {
         titledeleteTask: 'Supprimer la tâche',
         deleteTask: 'Voulez-vous supprimer {mytodo}?'
@@ -408,6 +464,10 @@ const msgglobal = {
     },
     comp: {
       Conta: "Conta",
+    },
+    db: {
+      recupdated: 'Enregistrement mis à jour',
+      recfailed: 'Erreur lors de la mise à jour'
     },
     components: {
       authentication: {
@@ -439,6 +499,8 @@ const msgglobal = {
       incorso: 'Inscription en cours...',
       richiesto: 'Champ obligatoire',
       email: 'Email',
+      date_reg: 'Date Inscript.',
+      perm: 'Autorisations',
       username: 'Nom d\'utilisateur',
       name: 'Nom',
       surname: 'Prénom',
@@ -561,9 +623,13 @@ const msgglobal = {
       eventstartdatetime: 'Date de début et heure de l\'événement',
       enterEndDateTime: 'Date et heure de l\'événement final',
       selnumpeople: 'Participants',
+      selnumpeople_short: 'Num',
       msgbooking: 'Message à envoyer',
+      showinfo: 'Voir Info',
       bookingtextdefault: 'Je réserve l\'événement',
       bookingtextdefault_of: 'du',
+      data: 'Date',
+      teachertitle: 'Professeur',
     },
     newsletter: {
       title: 'Souhaitez-vous recevoir notre newsletter?',
@@ -583,6 +649,17 @@ const msgglobal = {
     cookies: 'Nous utilisons des cookies pour améliorer les performances Web.'
   },
   enUs: {
+    otherpages: {
+      admin : {
+        menu: 'Administration',
+        eventlist: 'Booking',
+        usereventlist: 'Users Booking',
+        userlist: 'Users List',
+      },
+    },
+    sendmsg: {
+      write: 'write'
+    },
     dialog: {
       ok: 'Ok',
       yes: 'Yes',
@@ -592,6 +669,7 @@ const msgglobal = {
       cancel: 'Cancel',
       today: 'Today',
       book: 'Book',
+      sendmsg: 'Send Msg',
       msg: {
         titledeleteTask: 'Delete Task',
         deleteTask: 'Delete Task {mytodo}?'
@@ -599,6 +677,10 @@ const msgglobal = {
     },
     comp: {
       Conta: "Count",
+    },
+    db: {
+      recupdated: 'Record Updated',
+      recfailed: 'Error during update Record'
     },
     components: {
       authentication: {
@@ -630,6 +712,8 @@ const msgglobal = {
       incorso: 'Registration please wait...',
       richiesto: 'Field Required',
       email: 'Email',
+      date_reg: 'Reg. Date',
+      perm: 'Permissions',
       username_login: 'Username or email',
       username: 'Username',
       name: 'Name',
@@ -751,9 +835,13 @@ const msgglobal = {
       eventstartdatetime: 'Event start date and time',
       enterEndDateTime: 'Event end date and time',
       selnumpeople: 'Participants',
+      selnumpeople_short: 'Num',
       msgbooking: 'Message to send',
+      showinfo: 'Show Info',
       bookingtextdefault: 'I book the event',
       bookingtextdefault_of: 'of',
+      data: 'Date',
+      teachertitle: 'Teacher',
     },
     newsletter: {
       title: 'Would you like to receive our Newsletter?',
@@ -773,6 +861,17 @@ const msgglobal = {
     cookies: 'We use cookies for better web performance.'
   },
   de: {
+    otherpages: {
+      admin : {
+        menu: 'Administration',
+        eventlist: 'Booking',
+        usereventlist: 'Users Booking',
+        userlist: 'Users List',
+      },
+    },
+    sendmsg: {
+      write: 'write'
+    },
     dialog: {
       ok: 'Ok',
       yes: 'Yes',
@@ -782,6 +881,7 @@ const msgglobal = {
       cancel: 'Cancel',
       today: 'Today',
       book: 'Book',
+      sendmsg: 'Send Msg',
       msg: {
         titledeleteTask: 'Delete Task',
         deleteTask: 'Delete Task {mytodo}?'
@@ -789,6 +889,10 @@ const msgglobal = {
     },
     comp: {
       Conta: "Count",
+    },
+    db: {
+      recupdated: 'Record Updated',
+      recfailed: 'Error during update Record'
     },
     components: {
       authentication: {
@@ -821,6 +925,8 @@ const msgglobal = {
       incorso: 'Registration please wait...',
       richiesto: 'Field Required',
       email: 'Email',
+      date_reg: 'Reg. Date',
+      perm: 'Permissions',
       username_login: 'Username or email',
       username: 'Username',
       name: 'Name',
@@ -943,9 +1049,13 @@ const msgglobal = {
       eventstartdatetime: 'Event start date and time',
       enterEndDateTime: 'Event end date and time',
       selnumpeople: 'Participants',
+      selnumpeople_short: 'Num',
       msgbooking: 'Message to send',
+      showinfo: 'Show Info',
       bookingtextdefault: 'I book the event',
       bookingtextdefault_of: 'of',
+      data: 'Date',
+      teachertitle: 'Teacher',
     },
     newsletter: {
       title: 'Would you like to receive our Newsletter?',

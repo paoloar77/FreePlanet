@@ -10,7 +10,7 @@ export function registeredemail(email: string) {
     return res.status !== PayloadMessageTypes.statusfound
   }
 
-  return Axios.get(VALIDATE_USER_URL + email)
+  return Axios.get(VALIDATE_USER_URL + process.env.APP_ID + '/' + email)
     .then(onSuccess)
     .catch((err) => {
       return true

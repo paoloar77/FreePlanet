@@ -1,5 +1,3 @@
-import { IBookingState } from '@src/model/BookingStore'
-
 export * from './UserStore'
 export * from './GlobalStore'
 export * from './signin-option'
@@ -13,4 +11,3 @@ export * from './Projects'
 
 export * from './Calendar'
 export * from './Estimate'
-export * from './BookingStore'
