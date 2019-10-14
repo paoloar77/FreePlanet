@@ -17,6 +17,8 @@ export interface IUserState {
   surname?: string
   password?: string
   lang?: string
+  ipaddr?: string
+  perm?: number
   repeatPassword?: string
 
   tokens?: IToken[]
@@ -32,6 +34,7 @@ export interface IUserState {
   isLogged?: boolean
   isAdmin?: boolean
   usersList?: IUserList[]
+  countusers?: number
 }
 
 export interface IUserList {

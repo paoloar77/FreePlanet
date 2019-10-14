@@ -1,17 +1,26 @@
 <template>
     <div class="q-pa-sm">
+        <!--<div class="col-2 q-table__title">{{ mytitle }}</div>-->
+
+        <!--<q-space/>-->
+        <!--<p style="color:red"> Rows: {{ getrows }}</p>-->
+
+
         <q-table
                 :title="mytitle"
                 :data="serverData"
                 :columns="mycolumns"
                 :filter="filter"
-                :pagination.sync="paginationControl"
-                :row-key="colkey">
+                :pagination.sync="pagination"
+                :row-key="colkey"
+                :loading="loading"
+                @request="onRequest"
+                binary-state-sort
+        >
+
+
 
             <!--<template v-slot:top="props">-->
-            <div class="col-2 q-table__title">{{ mytitle }}</div>
-
-            <q-space/>
 
             <q-tr slot="body" slot-scope="props" :props="props">
 

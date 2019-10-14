@@ -20,6 +20,7 @@ import globalroutines from './../../globalroutines/index'
 
 import { cfgrouter } from '../../router/route-config'
 import { static_data } from '@src/db/static_data'
+import { IParamsQuery } from '@src/model/GlobalStore'
 // import { static_data } from '@src/db/static_data'
 
 let stateConnDefault = 'online'
@@ -504,6 +505,21 @@ namespace Actions {
 
   }
 
+  async function loadTable(context, params: IParamsQuery) {
+    console.log('loadTable', params)
+
+    return await Api.SendReq('/gettable', 'POST', params)
+      .then((res) => {
+        console.table(res)
+        return res.data
+      })
+      .catch((error) => {
+        console.log('error loadUsersList', error)
+        UserStore.mutations.setErrorCatch(error)
+        return null
+      })
+  }
+
   export const actions = {
     setConta: b.dispatch(setConta),
     createPushSubscription: b.dispatch(createPushSubscription),
@@ -512,7 +528,8 @@ namespace Actions {
     clearDataAfterLoginOnlyIfActiveConnection: b.dispatch(clearDataAfterLoginOnlyIfActiveConnection),
     prova: b.dispatch(prova),
     saveCfgServerKey: b.dispatch(saveCfgServerKey),
-    checkUpdates: b.dispatch(checkUpdates)
+    checkUpdates: b.dispatch(checkUpdates),
+    loadTable: b.dispatch(loadTable)
   }
 
 }

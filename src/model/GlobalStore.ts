@@ -201,3 +201,11 @@ export interface IFunctionality {
   BOOKING_EVENTS?: boolean
 }
 
+export interface IParamsQuery {
+  table: string
+  startRow: number
+  endRow: number
+  filter: string
+  sortBy: any
+  descending: number
+}

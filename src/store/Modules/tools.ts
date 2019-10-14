@@ -24,6 +24,7 @@ import { static_data } from '@src/db/static_data'
 import { IColl, ITimeLineEntry, ITimeLineMain } from '@src/model/GlobalStore'
 import { func_tools } from '@src/store/Modules/toolsext'
 import { serv_constants } from '@src/store/Modules/serv_constants'
+import { shared_consts } from '@src/common/shared_vuejs'
 
 export interface INotify {
   color?: string | 'primary'
@@ -69,6 +70,7 @@ export const tools = {
     username: 'uname',
     name: 'nm',
     surname: 'sn',
+    perm: 'pm',
     lang: 'lg'
   },
 
@@ -2244,6 +2246,9 @@ export const tools = {
   CancelUserRec(mythis, id) {
     console.log('CancelUserRec', id)
     tools.askConfirm(mythis.$q, translate('cal.titlebooking'), translate('cal.canceluser') + '?', translate('dialog.yes'), translate('dialog.no'), mythis, lists.MenuAction.DELETE, 0, { param1: id })
+  },
+  isBitActive(bit, whattofind) {
+    return ((bit & whattofind) === whattofind)
   }
 
 // getLocale() {
