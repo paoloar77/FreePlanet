@@ -141,7 +141,7 @@
                     <q-btn class="absolute-top-right" style="margin-right: 10px; color: white;"
                            dense flat round icon="close" @click="right = !right">
                     </q-btn>
-                    <div v-if="isLogged" class="text-weight-bold text-user">{{ Username }} - {{ myName }} <span v-if="isAdmin"> [Admin]</span></div>
+                    <div v-if="isLogged" class="text-weight-bold text-user">{{ Username }} - {{ myName }} <span v-if="isAdmin"> [Admin]</span><span v-if="isManager"> [Manager]</span></div>
                     <div v-else class="text-user text-italic bg-red">
                         {{ $t('user.loggati') }}
                     </div>

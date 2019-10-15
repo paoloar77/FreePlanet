@@ -11,7 +11,7 @@
                                 :label="tools.getLabelByItem(myitemmenu, mythis)"
                                 :icon="myitemmenu.materialIcon"
                                 expand-icon-class="my-menu-separat"
-                                header-class="my-menu"
+                                :header-class="getmymenuclass(myitemmenu)"
                                 active-class="my-menu-active">
 
                             <q-expansion-item v-for="(child2, index) in myitemmenu.routes2"

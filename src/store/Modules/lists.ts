@@ -13,7 +13,9 @@ export const lists = {
     EDIT: 160,
     ADD_PROJECT: 200,
     THEME: 210,
-    THEMEBG: 211
+    THEMEBG: 211,
+
+    DELETE_RECTABLE: 300,
   },
 
   selectTheme: [

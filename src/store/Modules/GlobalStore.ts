@@ -21,6 +21,8 @@ import globalroutines from './../../globalroutines/index'
 import { cfgrouter } from '../../router/route-config'
 import { static_data } from '@src/db/static_data'
 import { IParamsQuery } from '@src/model/GlobalStore'
+import { serv_constants } from '@src/store/Modules/serv_constants'
+import { IUserState } from '@src/model'
 // import { static_data } from '@src/db/static_data'
 
 let stateConnDefault = 'online'
@@ -520,6 +522,40 @@ namespace Actions {
       })
   }
 
+  async function saveFieldValue(context, mydata: object) {
+    console.log('saveFieldValue', mydata)
+
+    return await Api.SendReq(`/chval`, 'PATCH', { data: mydata })
+      .then((res) => {
+        if (res)
+          return (res.data.code === serv_constants.RIS_CODE_OK)
+        else
+          return false
+      })
+      .catch((error) => {
+        return false
+      })
+  }
+
+  async function DeleteRec(context, { table, id }) {
+    console.log('DeleteRec', id)
+
+    return await Api.SendReq('/delrec/' + table + '/' + id, 'DELETE', null)
+      .then((res) => {
+        if (res.status === 200) {
+          if (res.data.code === serv_constants.RIS_CODE_OK) {
+            return true
+          }
+        }
+        return false
+      })
+      .catch((error) => {
+        console.error(error)
+        return false
+      })
+  }
+
+
   export const actions = {
     setConta: b.dispatch(setConta),
     createPushSubscription: b.dispatch(createPushSubscription),
@@ -529,7 +565,9 @@ namespace Actions {
     prova: b.dispatch(prova),
     saveCfgServerKey: b.dispatch(saveCfgServerKey),
     checkUpdates: b.dispatch(checkUpdates),
-    loadTable: b.dispatch(loadTable)
+    saveFieldValue: b.dispatch(saveFieldValue),
+    loadTable: b.dispatch(loadTable),
+    DeleteRec: b.dispatch(DeleteRec)
   }
 
 }

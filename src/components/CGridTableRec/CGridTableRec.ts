@@ -5,15 +5,15 @@ import { GlobalStore, UserStore } from '../../store/Modules/index'
 import { tools } from '../../store/Modules/tools'
 
 import { shared_consts } from '../../common/shared_vuejs'
-import { ICategory } from '../../model'
+import { ICategory, IColGridTable } from '../../model'
 import { CTodo } from '../todos/CTodo'
 import { SingleProject } from '../projects/SingleProject'
+import { lists } from '../../store/Modules/lists'
 
 @Component({})
 export default class CGridTableRec extends Vue {
   @Prop({ required: true }) public mytable: string
   @Prop({ required: true }) public mytitle: string
-  @Prop({ required: true }) public mylist: any[]
   @Prop({ required: true }) public mycolumns: any[]
   @Prop({ required: true }) public colkey: string
   public $q
@@ -67,20 +67,28 @@ export default class CGridTableRec extends Vue {
   public SaveValue(newVal, valinitial) {
     console.log('SaveValue', newVal, 'selected', this.selected)
 
-    const mydata = {}
+    const mydata = {
+      // colkey: this.colkey,
+      id: this.idsel,
+      table: this.mytable,
+      fieldsvalue: {
 
-    mydata[this.colsel] = newVal
-    mydata[this.colkey] = this.idsel
-    this.valPrec = valinitial
+      }
+    }
 
-    console.log('this.idsel', this.idsel, 'this.colsel', this.colsel)
+    mydata.fieldsvalue[this.colsel] = newVal
+
     console.table(mydata)
 
-    this.$emit('save', mydata)
+    this.valPrec = valinitial
+
+    // console.log('this.idsel', this.idsel, 'this.colsel', this.colsel)
+    // console.table(mydata)
+
+    this.saveFieldValue(mydata)
   }
 
   public created() {
-
     // this.serverData = this.mylist.slice() // [{ chiave: 'chiave1', valore: 'valore 1' }]
   }
 
@@ -210,11 +218,45 @@ export default class CGridTableRec extends Vue {
     return this.returnedCount
   }
 
+  public getclassCol(col) {
+    return col.disable ? '' : 'colmodif'
+  }
+
+  public saveFieldValue(mydata) {
+    console.log('saveFieldValue', mydata)
+
+    // Save on Server
+    GlobalStore.actions.saveFieldValue(mydata).then((esito) => {
+      if (esito)
+        tools.showPositiveNotif(this.$q, this.$t('db.recupdated'))
+      else {
+        tools.showNegativeNotif(this.$q, this.$t('db.recfailed'))
+        this.undoVal()
+      }
+    })
+  }
+
   public mounted() {
+    this.mycolumns.forEach((rec: IColGridTable) => {
+      rec.label = this.$t(rec.label_trans)
+    })
+
     this.onRequest({
       pagination: this.pagination,
       filter: undefined
     })
+  }
+
+  public clickFunz(item, col: IColGridTable) {
+    if (col.action) {
+      tools.ActionRecTable(this, col.action, this.mytable, item._id, item)
+    }
+  }
+
+  public ActionAfterYes(action, item) {
+    if (action === lists.MenuAction.DELETE_RECTABLE) {
+      this.serverData.splice(this.serverData.indexOf(item), 1)
+    }
   }
 
 }

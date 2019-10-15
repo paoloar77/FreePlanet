@@ -1,5 +1,6 @@
 import { IAction } from '@src/model/Projects'
 import { Component } from 'vue-router/types/router'
+import { lists } from '@src/store/Modules/lists'
 
 export interface IPost {
   title: string
@@ -83,6 +84,7 @@ export interface IListRoutes {
   infooter?: boolean
   submenu?: boolean
   onlyAdmin?: boolean
+  onlyManager?: boolean
   meta?: any
   idelem?: string
   urlroute?: string
@@ -208,4 +210,18 @@ export interface IParamsQuery {
   filter: string
   sortBy: any
   descending: number
+}
+
+export interface IColGridTable {
+  name: string
+  required: boolean
+  label?: string
+  label_trans?: string
+  align?: string
+  field?: string
+  sortable?: boolean
+  disable?: boolean
+  titlepopupedit?: string
+  icon?: string
+  action?: any
 }

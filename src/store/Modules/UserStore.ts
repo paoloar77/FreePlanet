@@ -37,6 +37,7 @@ const state: IUserState = {
   x_auth_token: '',
   isLogged: false,
   isAdmin: false,
+  isManager: false,
   usersList: [],
   countusers: 0
 }
@@ -158,8 +159,9 @@ namespace Mutations {
     mystate.surname = data.surname
     mystate.perm = data.perm
     mystate.isAdmin = tools.isBitActive(mystate.perm, shared_consts.Permissions.Admin)
+    mystate.isManager = tools.isBitActive(mystate.perm, shared_consts.Permissions.Manager)
 
-    console.log('authUser', 'state.isAdmin', mystate.isAdmin)
+    // console.log('authUser', 'state.isAdmin', mystate.isAdmin)
     console.table(mystate)
     console.table(data)
     if (data.verified_email) {
@@ -324,21 +326,6 @@ namespace Actions {
 
   }
 
-  async function saveUserChange(context, user: IUserState) {
-    console.log('saveUserChange', user)
-
-    return await Api.SendReq(`/users/${user.userId}`, 'PATCH', { user })
-      .then((res) => {
-        if (res)
-          return (res.data.code === serv_constants.RIS_CODE_OK)
-        else
-          return false
-      })
-      .catch((error) => {
-        return false
-      })
-
-  }
 
   async function requestpwd(context, paramquery: IUserState) {
 
@@ -717,7 +704,6 @@ namespace Actions {
     logout: b.dispatch(logout),
     requestpwd: b.dispatch(requestpwd),
     resetpwd: b.dispatch(resetpwd),
-    saveUserChange: b.dispatch(saveUserChange),
     signin: b.dispatch(signin),
     signup: b.dispatch(signup),
     vreg: b.dispatch(vreg)

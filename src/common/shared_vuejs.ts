@@ -2,7 +2,8 @@ export const shared_consts = {
 
   Permissions: {
     Normal: 0,
-    Admin: 1
+    Admin: 1,
+    Manager: 2,
   },
 
   fieldsUserToChange() {

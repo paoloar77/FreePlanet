@@ -27,9 +27,9 @@
                 <q-td v-for="col in mycolumns" :key="col.name" :props="props">
                     <div v-if="col.action">
                         <q-btn flat round color="red" icon="fas fa-trash-alt"
-                               @click="col.clickfunz"></q-btn>
+                               @click="clickFunz(props.row, col)"></q-btn>
                     </div>
-                    <div v-else>
+                    <div v-else :class="getclassCol(col)">
                         {{ props.row[col.name] }}
                         <q-popup-edit v-model="props.row[col.name]" :disable="col.disable" :title="col.title" buttons
                                       @save="SaveValue" @show="selItem(props.row, col.field)">

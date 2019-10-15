@@ -33,6 +33,7 @@ export interface IUserState {
   x_auth_token?: string
   isLogged?: boolean
   isAdmin?: boolean
+  isManager?: boolean
   usersList?: IUserList[]
   countusers?: number
 }

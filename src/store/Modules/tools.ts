@@ -1,4 +1,4 @@
-import { Todos, Projects, UserStore, CalendarStore } from '@store'
+import { Todos, Projects, UserStore, CalendarStore, GlobalStore } from '@store'
 import globalroutines from './../../globalroutines/index'
 import { costanti } from './costanti'
 import { toolsext } from './toolsext'
@@ -1314,7 +1314,7 @@ export const tools = {
     return result
   },
 
-  executefunc(myself: any, func: number, par: IParamDialog) {
+  executefunc(myself: any, table, func: number, par: IParamDialog) {
     if (func === lists.MenuAction.DELETE) {
       console.log('param1', par.param1)
       CalendarStore.actions.CancelBookingEvent({ideventbook: par.param1, notify: par.param2 === true ? '1' : '0'}).then((ris) => {
@@ -1325,10 +1325,19 @@ export const tools = {
         } else
           tools.showNegativeNotif(myself.$q, myself.$t('cal.cancelederrorbooking'))
       })
+    } else if (func === lists.MenuAction.DELETE_RECTABLE) {
+      console.log('param1', par.param1)
+      GlobalStore.actions.DeleteRec({table, id: par.param1}).then((ris) => {
+        if (ris) {
+          myself.ActionAfterYes(func, par.param2)
+          tools.showPositiveNotif(myself.$q, myself.$t('db.deletedrecord'))
+        } else
+          tools.showNegativeNotif(myself.$q, myself.$t('db.recdelfailed'))
+      })
     }
   },
 
-  async askConfirm($q: any, mytitle, mytext, ok, cancel, myself: any, funcok: number, funccancel: number, par: IParamDialog) {
+  async askConfirm($q: any, mytitle, mytext, ok, cancel, myself: any, table, funcok: number, funccancel: number, par: IParamDialog) {
     return $q.dialog({
       message: mytext,
       ok: {
@@ -1340,11 +1349,11 @@ export const tools = {
       persistent: false
     }).onOk(() => {
       console.log('OK')
-      tools.executefunc(myself, funcok, par)
+      tools.executefunc(myself, table, funcok, par)
       return true
     }).onCancel(() => {
       console.log('CANCEL')
-      tools.executefunc(myself, funccancel, par)
+      tools.executefunc(myself, table, funccancel, par)
       return false
     })
   },
@@ -2241,11 +2250,11 @@ export const tools = {
   },
   CancelBookingEvent(mythis, eventparam: IEvents, bookeventid: string, notify: boolean) {
     console.log('CancelBookingEvent ', eventparam)
-    tools.askConfirm(mythis.$q, translate('cal.titlebooking'), translate('cal.cancelbooking') + ' ' + tools.gettextevent(eventparam) + '?', translate('dialog.yes'), translate('dialog.no'), mythis, lists.MenuAction.DELETE, 0, { param1: bookeventid, param2: notify })
+    tools.askConfirm(mythis.$q, translate('cal.titlebooking'), translate('cal.cancelbooking') + ' ' + tools.gettextevent(eventparam) + '?', translate('dialog.yes'), translate('dialog.no'), mythis, '', lists.MenuAction.DELETE, 0, { param1: bookeventid, param2: notify })
   },
-  CancelUserRec(mythis, id) {
-    console.log('CancelUserRec', id)
-    tools.askConfirm(mythis.$q, translate('cal.titlebooking'), translate('cal.canceluser') + '?', translate('dialog.yes'), translate('dialog.no'), mythis, lists.MenuAction.DELETE, 0, { param1: id })
+  ActionRecTable(mythis, action, table, id, item?) {
+    console.log('CancelRecTable', id)
+    return tools.askConfirm(mythis.$q, translate('db.deleterecord'), translate('db.deletetherecord'), translate('dialog.yes'), translate('dialog.no'), mythis, table, action, 0, { param1: id, param2: item })
   },
   isBitActive(bit, whattofind) {
     return ((bit & whattofind) === whattofind)

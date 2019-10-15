@@ -9,6 +9,9 @@ const msgglobal = {
         usereventlist: 'Prenotazioni Utenti',
         userlist: 'Lista Utenti',
       },
+      manage: {
+        menu: 'Gestione'
+      }
     },
     sendmsg: {
       write: 'scrive'
@@ -33,7 +36,11 @@ const msgglobal = {
     },
     db: {
       recupdated: 'Record Aggiornato',
-      recfailed: 'Errore durante aggiornamento Record'
+      recfailed: 'Errore durante aggiornamento Record',
+      deleterecord: 'Elimina Record',
+      deletetherecord: 'Eliminare il Record?',
+      deletedrecord: 'Record Cancellato',
+      recdelfailed: 'Errore durante la cancellazione del Record',
     },
     components: {
       authentication: {
@@ -149,7 +156,7 @@ const msgglobal = {
       titledenied: 'Permesso Notifiche Disabilitato!',
       title_subscribed: 'Sottoscrizione a FreePlanet.app!',
       subscribed: 'Ora potrai ricevere i messaggi e le notifiche.',
-      newVersionAvailable: 'Aggiorna'
+      newVersionAvailable: 'Aggiorna',
     },
     connection: 'Connessione',
     proj: {
@@ -229,6 +236,9 @@ const msgglobal = {
         usereventlist: 'Reserva Usuarios',
         userlist: 'Lista de usuarios',
       },
+      manage: {
+        menu: 'Gestionar'
+      }
     },
     sendmsg: {
       write: 'escribe'
@@ -253,7 +263,11 @@ const msgglobal = {
     },
     db: {
       recupdated: 'Registro Actualizado',
-      recfailed: 'Error durante el registro de actualización'
+      recfailed: 'Error durante el registro de actualización',
+      deleterecord: 'Eliminar registro',
+      deletetherecord: '¿Eliminar el registro?',
+      deletedrecord: 'Registro cancelado',
+      recdelfailed: 'Error durante la eliminación del registro',
     },
     components: {
       authentication: {
@@ -362,7 +376,7 @@ const msgglobal = {
       titledenied: 'Notificaciones permitidas deshabilitadas!',
       title_subscribed: 'Suscripción a FreePlanet.app!',
       subscribed: 'Ahora puedes recibir mensajes y notificaciones.',
-      newVersionAvailable: 'Actualiza'
+      newVersionAvailable: 'Actualiza',
     },
     connection: 'Connection',
     proj: {
@@ -443,6 +457,9 @@ const msgglobal = {
         usereventlist: 'Réservation Utilisateur',
         userlist: 'Liste d\'utilisateurs',
       },
+      manage: {
+        menu: 'Gérer'
+      }
     },
     sendmsg: {
       write: 'écrit'
@@ -467,7 +484,11 @@ const msgglobal = {
     },
     db: {
       recupdated: 'Enregistrement mis à jour',
-      recfailed: 'Erreur lors de la mise à jour'
+      recfailed: 'Erreur lors de la mise à jour',
+      deleterecord: 'Supprimer l\'enregistrement',
+      deletetherecord: 'Supprimer l\'enregistrement?',
+      deletedrecord: 'Enregistrement annulé',
+      recdelfailed: 'Erreur lors de la suppression de l\'enregistrement',
     },
     components: {
       authentication: {
@@ -575,7 +596,7 @@ const msgglobal = {
       titledenied: 'Notifications autorisées désactivées!',
       title_subscribed: 'Abonnement au Site Web!',
       subscribed: 'Maintenant, vous pouvez recevoir des messages et des notifications.',
-      newVersionAvailable: 'Mise à jour'
+      newVersionAvailable: 'Mise à jour',
     },
     connection: 'Connexion',
     proj: {
@@ -656,6 +677,9 @@ const msgglobal = {
         usereventlist: 'Users Booking',
         userlist: 'Users List',
       },
+      manage: {
+        menu: 'Manage'
+      }
     },
     sendmsg: {
       write: 'write'
@@ -680,7 +704,11 @@ const msgglobal = {
     },
     db: {
       recupdated: 'Record Updated',
-      recfailed: 'Error during update Record'
+      recfailed: 'Error during update Record',
+      deleterecord: 'Delete Record',
+      deletetherecord: 'Delete the Record?',
+      deletedrecord: 'Record Deleted',
+      recdelfailed: 'Error during deletion of the Record',
     },
     components: {
       authentication: {
@@ -787,7 +815,7 @@ const msgglobal = {
       titledenied: 'Notification Permission Denied!',
       title_subscribed: 'Subscribed to FreePlanet.app!',
       subscribed: 'You can now receive Notification and Messages.',
-      newVersionAvailable: 'Upgrade'
+      newVersionAvailable: 'Upgrade',
     },
     connection: 'Conexión',
     proj: {
@@ -868,6 +896,9 @@ const msgglobal = {
         usereventlist: 'Users Booking',
         userlist: 'Users List',
       },
+      manage: {
+        menu: 'Manage'
+      }
     },
     sendmsg: {
       write: 'write'
@@ -892,7 +923,11 @@ const msgglobal = {
     },
     db: {
       recupdated: 'Record Updated',
-      recfailed: 'Error during update Record'
+      recfailed: 'Error during update Record',
+      deleterecord: 'Delete Record',
+      deletetherecord: 'Delete the Record?',
+      deletedrecord: 'Record Deleted',
+      recdelfailed: 'Error during deletion of the Record',
     },
     components: {
       authentication: {
@@ -1001,7 +1036,7 @@ const msgglobal = {
       titledenied: 'Notification Permission Denied!',
       title_subscribed: 'Subscribed to FreePlanet.app!',
       subscribed: 'You can now receive Notification and Messages.',
-      newVersionAvailable: 'Upgrade'
+      newVersionAvailable: 'Upgrade',
     },
     connection: 'Conexión',
     proj: {
