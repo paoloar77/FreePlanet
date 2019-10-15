@@ -37,9 +37,19 @@ export default class CGridTableRec extends Vue {
   public filter: string = ''
   public selected: any
   public dark: boolean = true
+  public funcActivated = []
 
   public returnedData
   public returnedCount
+  public colVisib: any[] = []
+
+  get canEdit() {
+    return this.funcActivated.includes(lists.MenuAction.CAN_EDIT_TABLE)
+  }
+
+  get lists() {
+    return lists
+  }
 
   get tableClass() {
     if (this.dark) {
@@ -90,6 +100,11 @@ export default class CGridTableRec extends Vue {
 
   public created() {
     // this.serverData = this.mylist.slice() // [{ chiave: 'chiave1', valore: 'valore 1' }]
+    this.mycolumns.forEach((elem) => {
+      if (elem.field)
+        this.colVisib.push(elem.field)
+    })
+
   }
 
   get getrows() {
@@ -219,7 +234,7 @@ export default class CGridTableRec extends Vue {
   }
 
   public getclassCol(col) {
-    return col.disable ? '' : 'colmodif'
+    return (col.disable || !this.canEdit) ? '' : 'colmodif'
   }
 
   public saveFieldValue(mydata) {

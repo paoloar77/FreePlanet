@@ -2,6 +2,10 @@ import msg_website from '../db/i18n_website'
 
 const msgglobal = {
   it: {
+    grid: {
+      editvalues: 'Modifica Valori',
+      showprevedit: 'Mostra Eventi Passati'
+    },
     otherpages: {
       admin : {
         menu: 'Amministrazione',
@@ -229,6 +233,10 @@ const msgglobal = {
     cookies: 'Usiamo i Cookie per una migliore prestazione web.'
   },
   es: {
+    grid: {
+      editvalues: 'Cambiar valores',
+      showprevedit: 'Mostrar eventos pasados'
+    },
     otherpages: {
       admin : {
         menu: 'Administración',
@@ -450,6 +458,10 @@ const msgglobal = {
     cookies: 'Utilizamos cookies para un mejor rendimiento web.'
   },
   fr: {
+    grid: {
+      editvalues: 'Changer les valeurs',
+      showprevedit: 'Afficher les événements passés'
+    },
     otherpages: {
       admin : {
         menu: 'Administration',
@@ -670,6 +682,10 @@ const msgglobal = {
     cookies: 'Nous utilisons des cookies pour améliorer les performances Web.'
   },
   enUs: {
+    grid: {
+      editvalues: 'Edit Values',
+      showprevedit: 'Show Past Events'
+    },
     otherpages: {
       admin : {
         menu: 'Administration',
@@ -889,6 +905,10 @@ const msgglobal = {
     cookies: 'We use cookies for better web performance.'
   },
   de: {
+    grid: {
+      editvalues: 'Edit Values',
+      showprevedit: 'Show Past Events'
+    },
     otherpages: {
       admin : {
         menu: 'Administration',
