@@ -1317,7 +1317,10 @@ export const tools = {
   executefunc(myself: any, table, func: number, par: IParamDialog) {
     if (func === lists.MenuAction.DELETE) {
       console.log('param1', par.param1)
-      CalendarStore.actions.CancelBookingEvent({ideventbook: par.param1, notify: par.param2 === true ? '1' : '0'}).then((ris) => {
+      CalendarStore.actions.CancelBookingEvent({
+        ideventbook: par.param1,
+        notify: par.param2 === true ? '1' : '0'
+      }).then((ris) => {
         if (ris) {
           tools.showPositiveNotif(myself.$q, myself.$t('cal.canceledbooking') + ' "' + par.param1.title + '"')
           if (myself.bookEventpage)
@@ -1327,7 +1330,7 @@ export const tools = {
       })
     } else if (func === lists.MenuAction.DELETE_RECTABLE) {
       console.log('param1', par.param1)
-      GlobalStore.actions.DeleteRec({table, id: par.param1}).then((ris) => {
+      GlobalStore.actions.DeleteRec({ table, id: par.param1 }).then((ris) => {
         if (ris) {
           myself.ActionAfterYes(func, par.param2)
           tools.showPositiveNotif(myself.$q, myself.$t('db.deletedrecord'))
@@ -1622,8 +1625,15 @@ export const tools = {
       return date.formatDate(mytimestamp, 'DD/MM/YYYY')
     else
       return ''
-  }
-  ,
+  },
+
+  getstrDateTime(mytimestamp) {
+    // console.log('getstrDate', mytimestamp)
+    if (!!mytimestamp)
+      return date.formatDate(mytimestamp, 'DD/MM/YYYY HH:MM')
+    else
+      return ''
+  },
   getstrMMMDate(mytimestamp) {
     // console.log('getstrDate', mytimestamp)
     if (!!mytimestamp)
@@ -1825,13 +1835,25 @@ export const tools = {
   },
 
   heightgallery() {
+    return tools.heightGallVal().toString() + 'px'
+  },
+
+  heightGallVal() {
+    let maxh2 = 0
+
     if (Screen.width < 400) {
-      return '200px'
+      maxh2 = 350
     } else if (Screen.width < 600) {
-      return '300px'
+      maxh2 = 400
+    } else if (Screen.width < 800) {
+      maxh2 = 450
+    } else if (Screen.width < 1000) {
+      maxh2 = 500
     } else {
-      return '500px'
+      maxh2 = 600
     }
+
+    return maxh2
   },
 
   myheight_imgtitle(myheight?, myheightmobile?) {
@@ -1849,18 +1871,7 @@ export const tools = {
       maxheight = 500
     }
 
-    let maxh2 = 0
-    if (Screen.width < 400) {
-      maxh2 = 350
-    } else if (Screen.width < 600) {
-      maxh2 = 400
-    } else if (Screen.width < 800) {
-      maxh2 = 450
-    } else if (Screen.width < 1000) {
-      maxh2 = 500
-    } else {
-      maxh2 = 500
-    }
+    const maxh2 = this.heightGallVal()
 
     console.log('maxh2', maxh2)
     console.log('maxheight', maxheight)
@@ -2223,7 +2234,7 @@ export const tools = {
     } else if (riscode === tools.OK) {
       mythis.$router.push('/signin')
       tools.showNotif(mythis.$q, mythis.$t('components.authentication.email_verification.link_sent'), {
-        color: 'warning',
+        color: 'info',
         textColor: 'black'
       })
     } else {
@@ -2250,11 +2261,17 @@ export const tools = {
   },
   CancelBookingEvent(mythis, eventparam: IEvents, bookeventid: string, notify: boolean) {
     console.log('CancelBookingEvent ', eventparam)
-    tools.askConfirm(mythis.$q, translate('cal.titlebooking'), translate('cal.cancelbooking') + ' ' + tools.gettextevent(eventparam) + '?', translate('dialog.yes'), translate('dialog.no'), mythis, '', lists.MenuAction.DELETE, 0, { param1: bookeventid, param2: notify })
+    tools.askConfirm(mythis.$q, translate('cal.titlebooking'), translate('cal.cancelbooking') + ' ' + tools.gettextevent(eventparam) + '?', translate('dialog.yes'), translate('dialog.no'), mythis, '', lists.MenuAction.DELETE, 0, {
+      param1: bookeventid,
+      param2: notify
+    })
   },
   ActionRecTable(mythis, action, table, id, item?) {
     console.log('CancelRecTable', id)
-    return tools.askConfirm(mythis.$q, translate('db.deleterecord'), translate('db.deletetherecord'), translate('dialog.yes'), translate('dialog.no'), mythis, table, action, 0, { param1: id, param2: item })
+    return tools.askConfirm(mythis.$q, translate('db.deleterecord'), translate('db.deletetherecord'), translate('dialog.yes'), translate('dialog.no'), mythis, table, action, 0, {
+      param1: id,
+      param2: item
+    })
   },
   isBitActive(bit, whattofind) {
     return ((bit & whattofind) === whattofind)

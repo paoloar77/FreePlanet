@@ -4,12 +4,13 @@ const msgglobal = {
   it: {
     grid: {
       editvalues: 'Modifica Valori',
-      showprevedit: 'Mostra Eventi Passati'
+      showprevedit: 'Mostra Eventi Passati',
+      columns: 'Colonne',
     },
     otherpages: {
       admin : {
         menu: 'Amministrazione',
-        eventlist: 'Prenotazioni',
+        eventlist: 'Le tue Prenotazioni',
         usereventlist: 'Prenotazioni Utenti',
         userlist: 'Lista Utenti',
       },
@@ -59,7 +60,7 @@ const msgglobal = {
           verify_email: 'Verifica la tua email',
           go_login: 'Torna al Login',
           incorrect_input: 'Inserimento incorretto.',
-          link_sent: 'Per confermare la Registrazione, leggi la tua casella di posta e Clicca su "Verifica Email".\nSe non la trovi, cerca nella cartella Spam.'
+          link_sent: 'Ora leggi la tua email e conferma la registrazione'
         }
       }
     },
@@ -96,7 +97,7 @@ const msgglobal = {
         email: 'inserire una email valida',
         errore_generico: 'Si prega di compilare correttamente i campi',
         atleast: 'dev\'essere lungo almeno di',
-        complexity: 'deve contenere almeno 1 minuscola, 1 maiuscola e 1 cifra',
+        complexity: 'deve contenere almeno 1 minuscola, 1 maiuscola, 1 cifra e 1 carattere speciale',
         notmore: 'non dev\'essere lungo più di',
         char: 'caratteri',
         terms: 'Devi accettare le condizioni, per continuare.',
@@ -214,6 +215,7 @@ const msgglobal = {
       bookingtextdefault_of: 'di',
       data: 'Data',
       teachertitle: 'Insegnante',
+      peoplebooked: 'Prenotaz.',
     },
     newsletter: {
       title: 'Desideri ricevere la nostra Newsletter?',
@@ -235,12 +237,13 @@ const msgglobal = {
   es: {
     grid: {
       editvalues: 'Cambiar valores',
-      showprevedit: 'Mostrar eventos pasados'
+      showprevedit: 'Mostrar eventos pasados',
+      columns: 'Columnas',
     },
     otherpages: {
       admin : {
         menu: 'Administración',
-        eventlist: 'Reserva',
+        eventlist: 'Sus Reservas',
         usereventlist: 'Reserva Usuarios',
         userlist: 'Lista de usuarios',
       },
@@ -290,7 +293,7 @@ const msgglobal = {
           verify_email: 'Revisa tu email',
           go_login: 'Vuelve al Login',
           incorrect_input: 'Entrada correcta.',
-          link_sent: 'Para confirmar el registro, lea su buzón y haga clic en "Verificar correo electrónico".\n' + 'Si no lo encuentras, busca en la carpeta Spam.'
+          link_sent: 'Ahora lea su correo electrónico y confirme el registro'
         }
       }
     },
@@ -327,7 +330,7 @@ const msgglobal = {
         email: 'Debe ser una email válida.',
         errore_generico: 'Por favor, rellene los campos correctamente',
         atleast: 'debe ser al menos largo',
-        complexity: 'debe contener al menos 1 minúscula, 1 mayúscula y 1 dígito',
+        complexity: 'debe contener al menos 1 minúscula, 1 mayúscula, 1 dígito y 1 caractér especial',
         notmore: 'no tiene que ser más largo que',
         char: 'caracteres',
         terms: 'Debes aceptar las condiciones, para continuar..',
@@ -439,6 +442,7 @@ const msgglobal = {
       bookingtextdefault_of: 'de',
       data: 'Fecha',
       teachertitle: 'Maestro',
+      peoplebooked: 'Reserv.',
     },
     newsletter: {
       title: '¿Desea recibir nuestro boletín informativo?',
@@ -460,12 +464,13 @@ const msgglobal = {
   fr: {
     grid: {
       editvalues: 'Changer les valeurs',
-      showprevedit: 'Afficher les événements passés'
+      showprevedit: 'Afficher les événements passés',
+      columns: 'Colonnes',
     },
     otherpages: {
       admin : {
         menu: 'Administration',
-        eventlist: 'Réservation',
+        eventlist: 'Vos réservations',
         usereventlist: 'Réservation Utilisateur',
         userlist: 'Liste d\'utilisateurs',
       },
@@ -515,7 +520,7 @@ const msgglobal = {
           verify_email: 'Vérifiez votre email',
           go_login: 'Retour à la connexion',
           incorrect_input: 'Entrée correcte.',
-          link_sent: 'Pour confirmer l’enregistrement, lisez votre boîte aux lettres et cliquez sur "Vérifier le courrier électronique".".\n' + 'Si vous ne le trouvez pas, regardez dans le dossier Spam.'
+          link_sent: 'Maintenant, lisez votre email et confirmez votre inscription'
         }
       }
     },
@@ -551,7 +556,7 @@ const msgglobal = {
         email: 'Ce doit être un email valide.',
         errore_generico: 'S\'il vous plaît remplir les champs correctement',
         atleast: 'ça doit être au moins long',
-        complexity: 'doit contenir au moins 1 minuscule, 1 majuscule et 1 chiffre',
+        complexity: 'doit contenir au moins 1 minuscule, 1 majuscule, 1 chiffre et 1 caractère spécial',
         notmore: 'il ne doit pas être plus long que',
         char: 'caractères',
         terms: 'Vous devez accepter les conditions, pour continuer..',
@@ -663,6 +668,7 @@ const msgglobal = {
       bookingtextdefault_of: 'du',
       data: 'Date',
       teachertitle: 'Professeur',
+      peoplebooked: 'Réserv.',
     },
     newsletter: {
       title: 'Souhaitez-vous recevoir notre newsletter?',
@@ -684,12 +690,13 @@ const msgglobal = {
   enUs: {
     grid: {
       editvalues: 'Edit Values',
-      showprevedit: 'Show Past Events'
+      showprevedit: 'Show Past Events',
+      columns: 'Columns',
     },
     otherpages: {
       admin : {
         menu: 'Administration',
-        eventlist: 'Booking',
+        eventlist: 'Your Booking',
         usereventlist: 'Users Booking',
         userlist: 'Users List',
       },
@@ -739,7 +746,7 @@ const msgglobal = {
           verify_email: 'Verify your email',
           go_login: 'Back to Login',
           incorrect_input: 'Incorrect input.',
-          link_sent: 'To confirm the Registration, read your mailbox and click on "Verify email".\nIf you can not find it check your junk mail or spam.'
+          link_sent: 'Now read your email and confirm registration'
         }
       }
     },
@@ -775,7 +782,7 @@ const msgglobal = {
         email: 'must be a valid email',
         errore_generico: 'Please review fields again',
         atleast: 'must be at least',
-        complexity: 'must contains at least 1 lowercase letter, 1 uppercase letter, and 1 digit',
+        complexity: 'must contains at least 1 lowercase letter, 1 uppercase letter, 1 digit and one special symbol',
         notmore: 'must not be more than',
         char: 'characters long',
         terms: 'You need to agree with the terms & conditions.',
@@ -886,6 +893,7 @@ const msgglobal = {
       bookingtextdefault_of: 'of',
       data: 'Date',
       teachertitle: 'Teacher',
+      peoplebooked: 'Booked',
     },
     newsletter: {
       title: 'Would you like to receive our Newsletter?',
@@ -907,12 +915,13 @@ const msgglobal = {
   de: {
     grid: {
       editvalues: 'Edit Values',
-      showprevedit: 'Show Past Events'
+      showprevedit: 'Show Past Events',
+      columns: 'Columns',
     },
     otherpages: {
       admin : {
         menu: 'Administration',
-        eventlist: 'Booking',
+        eventlist: 'Your Booking',
         usereventlist: 'Users Booking',
         userlist: 'Users List',
       },
@@ -962,7 +971,7 @@ const msgglobal = {
           verify_email: 'Verify your email',
           go_login: 'Back to Login',
           incorrect_input: 'Incorrect input.',
-          link_sent: 'To confirm the Registration, read your mailbox and click on "Verify email".\nIf you can not find it check your junk mail or spam.'
+          link_sent: 'Now read your email and confirm registration'
         }
       }
     },
@@ -999,7 +1008,7 @@ const msgglobal = {
         email: 'must be a valid email',
         errore_generico: 'Please review fields again',
         atleast: 'must be at least',
-        complexity: 'must contains at least 1 lowercase letter, 1 uppercase letter, and 1 digit',
+        complexity: 'must contains at least 1 lowercase letter, 1 uppercase letter, 1 digit and one special symbol',
         notmore: 'must not be more than',
         char: 'characters long',
         terms: 'You need to agree with the terms & conditions.',
@@ -1111,6 +1120,7 @@ const msgglobal = {
       bookingtextdefault_of: 'of',
       data: 'Date',
       teachertitle: 'Teacher',
+      peoplebooked: 'Booked',
     },
     newsletter: {
       title: 'Would you like to receive our Newsletter?',

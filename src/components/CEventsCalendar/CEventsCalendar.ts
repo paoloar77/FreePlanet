@@ -858,4 +858,17 @@ export default class CEventsCalendar extends Vue {
   get mythis() {
     return this
   }
+
+  public isEventEnabled(myevent) {
+    // check if event is in the past
+    const datenow = tools.addDays(tools.getDateNow(), -1)
+
+    let dateEvent = new Date(myevent.date + ' 00:00:00')
+
+    if (myevent.days) {
+      dateEvent = tools.addDays(dateEvent, myevent.days)
+    }
+
+    return (dateEvent >= datenow)
+  }
 }

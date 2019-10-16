@@ -16,6 +16,8 @@ export default class CGridTableRec extends Vue {
   @Prop({ required: true }) public mytitle: string
   @Prop({ required: true }) public mycolumns: any[]
   @Prop({ required: true }) public colkey: string
+  @Prop({ required: false, default: '' }) public nodataLabel: string
+  @Prop({ required: false, default: '' }) public noresultLabel: string
   public $q
   public $t
   public loading: boolean = false
@@ -42,6 +44,7 @@ export default class CGridTableRec extends Vue {
   public returnedData
   public returnedCount
   public colVisib: any[] = []
+  public colExtra: any[] = []
 
   get canEdit() {
     return this.funcActivated.includes(lists.MenuAction.CAN_EDIT_TABLE)
@@ -101,8 +104,12 @@ export default class CGridTableRec extends Vue {
   public created() {
     // this.serverData = this.mylist.slice() // [{ chiave: 'chiave1', valore: 'valore 1' }]
     this.mycolumns.forEach((elem) => {
-      if (elem.field)
+      if (elem.field !== '')
         this.colVisib.push(elem.field)
+
+      if (elem.visible && elem.field === '')
+        this.colExtra.push(elem.name)
+
     })
 
   }
@@ -253,7 +260,8 @@ export default class CGridTableRec extends Vue {
 
   public mounted() {
     this.mycolumns.forEach((rec: IColGridTable) => {
-      rec.label = this.$t(rec.label_trans)
+      if (rec.label_trans)
+        rec.label = this.$t(rec.label_trans)
     })
 
     this.onRequest({
@@ -271,6 +279,26 @@ export default class CGridTableRec extends Vue {
   public ActionAfterYes(action, item) {
     if (action === lists.MenuAction.DELETE_RECTABLE) {
       this.serverData.splice(this.serverData.indexOf(item), 1)
+    }
+  }
+
+  public visCol(col) {
+    if (col.visuonlyEditVal) {
+      if (this.canEdit) {
+        return col.visuonlyEditVal
+      } else {
+        return false
+      }
+    } else {
+      return true
+    }
+  }
+
+  public visuValByType(col, val) {
+    if (col.isdate) {
+      return tools.getstrDateTime(val)
+    } else {
+      return val
     }
   }
 

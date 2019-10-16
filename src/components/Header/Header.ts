@@ -7,7 +7,7 @@ import { CSignIn } from '../../components/CSignIn'
 
 import { GlobalStore, UserStore } from '@modules'
 // import { StateConnection } from '../../model'
-import { Watch } from 'vue-property-decorator'
+import { Prop, Watch } from 'vue-property-decorator'
 import { tools } from '../../store/Modules/tools'
 import { toolsext } from '@src/store/Modules/toolsext'
 
@@ -24,6 +24,7 @@ import globalroutines from '../../globalroutines'
 })
 
 export default class Header extends Vue {
+  @Prop({ required: false, default: '' }) public extraContent: string
   public $t
   public $v
   public $q

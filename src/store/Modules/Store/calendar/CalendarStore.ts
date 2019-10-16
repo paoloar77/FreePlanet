@@ -105,7 +105,7 @@ namespace Actions {
 
     let ris = null
 
-    const showall = UserStore.state.isAdmin ? '1' : '0'
+    const showall = UserStore.state.isAdmin || UserStore.state.isManager ? '1' : '0'
 
     ris = await Api.SendReq('/booking/' + UserStore.state.userId + '/' + process.env.APP_ID + '/' + showall, 'GET', null)
       .then((res) => {

@@ -222,6 +222,9 @@ export interface IColGridTable {
   sortable?: boolean
   disable?: boolean
   titlepopupedit?: string
+  visible?: boolean
   icon?: string
   action?: any
+  foredit?: boolean
+  isdate?: boolean
 }

@@ -108,7 +108,7 @@
                        @click="right = !right">
                 </q-btn>
                 <q-btn v-if="static_data.functionality.SHOW_USER_MENU && isLogged" dense flat round
-                       icon="img:statics/images/avatar-1.svg" @click="right = !right">
+                       icon="img:statics/images/avatar/avatar3_small.png" @click="right = !right">
                 </q-btn>
 
             </q-toolbar>
@@ -136,12 +136,13 @@
                 <div class="absolute-top bg-transparent text-black center_img" style="margin-top: 10px;">
 
                     <q-avatar class="q-mb-sm center_img">
-                        <img src="../../statics/images/avatar-1.svg">
+                        <img src="../../statics/images/avatar/avatar3_small.png">
                     </q-avatar>
                     <q-btn class="absolute-top-right" style="margin-right: 10px; color: white;"
                            dense flat round icon="close" @click="right = !right">
                     </q-btn>
-                    <div v-if="isLogged" class="text-weight-bold text-user">{{ Username }} - {{ myName }} <span v-if="isAdmin"> [Admin]</span><span v-if="isManager"> [Manager]</span></div>
+                    <div v-if="isLogged" class="text-weight-bold text-user">{{ Username }} - {{ myName }} <span
+                            v-if="isAdmin"> [Admin]</span><span v-if="isManager"> [Manager]</span></div>
                     <div v-else class="text-user text-italic bg-red">
                         {{ $t('user.loggati') }}
                     </div>
@@ -172,8 +173,11 @@
                     </div>
                 </div>
 
-
             </div>
+            <div v-if="isLogged" class="q-mt-lg"><br><br></div>
+
+            <slot></slot>
+
         </q-drawer>
     </div>
 </template>

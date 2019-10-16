@@ -112,6 +112,10 @@ namespace Getters {
   }, 'IsMyGroup')
 
   const getUserByUserId = b.read((mystate: IUserState) => (userId): IUserState => {
+    // Check if is this User!
+    if (state.userId === userId)
+      return state
+
     return mystate.usersList.find((item) => item._id === userId)
   }, 'getUserByUserId')
 

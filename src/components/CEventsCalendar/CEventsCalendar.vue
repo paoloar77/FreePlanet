@@ -90,7 +90,7 @@ $t('
                     </q-card-section>
                     <q-card-actions align="right">
                         <q-btn rounded v-if="!myevent.nobookable && static_data.functionality.BOOKING_EVENTS"
-                               color="primary" @click="addBookEventMenu(myevent)"
+                               color="primary" @click="addBookEventMenu(myevent)" :disable="!isEventEnabled(myevent)"
                                :label="$t('cal.booking')">
                         </q-btn>
                         <q-btn v-else :label="$t('dialog.ok')" color="primary" v-close-popup></q-btn>
@@ -258,7 +258,7 @@ $t('
                             <div class="q-pa-xs">
                                 <q-card class="text-white windowcol">
                                     <q-card-section>
-                                        <q-checkbox :disable="(bookEventpage.bookedevent && bookEventpage.bookedevent.booked) || (bookEventpage.bookedevent === undefined)" style="color: black;" v-model="bookEventForm.booked" :label="$t('cal.bookingtextdefault')" color="green">
+                                        <q-checkbox :disable="((bookEventpage.bookedevent && bookEventpage.bookedevent.booked) || (bookEventpage.bookedevent === undefined)) || !isEventEnabled(myevent)" style="color: black;" v-model="bookEventForm.booked" :label="$t('cal.bookingtextdefault')" color="green">
                                         </q-checkbox>
 
                                         <div v-if="bookEventForm.booked" class="q-gutter-md centermydiv" style="max-width: 150px; margin-top:10px;">
@@ -550,7 +550,7 @@ $t('
                                 <q-btn rounded outline
                                        v-if="!event.nobookable && !isAlreadyBooked(event) && static_data.functionality.BOOKING_EVENTS"
                                        color="primary" @click="addBookEventMenu(event)"
-                                       :label="$t('cal.booking')">
+                                       :label="$t('cal.booking')" :disable="!isEventEnabled(event)">
                                 </q-btn>
                                 <q-btn rounded outline
                                        v-if="!event.nobookable && isAlreadyBooked(event) && static_data.functionality.BOOKING_EVENTS"

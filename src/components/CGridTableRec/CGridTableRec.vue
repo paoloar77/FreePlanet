@@ -10,6 +10,8 @@
                 @request="onRequest"
                 binary-state-sort
                 :visible-columns="colVisib"
+                :no-data-label="nodataLabel"
+                :no-results-label="noresultLabel"
         >
 
 
@@ -20,7 +22,7 @@
                             v-if="colVisib.includes(col.field)"
                             :key="col.name"
                             :props="props"
-                            class="text-italic text-red text-weight-bold"
+                            class="text-italic text-weight-bold"
                     >
                         {{ col.label }}
                     </q-th>
@@ -45,7 +47,7 @@
                         borderless
                         dense
                         options-dense
-                        display-value="Colonne"
+                        :display-value="$t('grid.columns')"
                         emit-value
                         map-options
                         :options="mycolumns"
@@ -57,20 +59,21 @@
             </template>
 
             <q-tr slot="body" slot-scope="props" :props="props">
-
                 <q-td v-for="col in mycolumns" :key="col.name" :props="props" v-if="colVisib.includes(col.field)">
-                    <div v-if="col.action">
-                        <q-btn flat round color="red" icon="fas fa-trash-alt"
-                               @click="clickFunz(props.row, col)"></q-btn>
-                    </div>
-                    <div v-else :class="getclassCol(col)">
-                        {{ props.row[col.name] }}
+                    <div :class="getclassCol(col)">
+                        {{ visuValByType(col, props.row[col.name]) }}
                         <q-popup-edit v-if="canEdit" v-model="props.row[col.name]" :disable="col.disable"
                                       :title="col.title" buttons
                                       @save="SaveValue" @show="selItem(props.row, col.field)">
                             <q-input v-model="props.row[col.name]"/>
 
                         </q-popup-edit>
+                    </div>
+                </q-td>
+                <q-td v-for="col in mycolumns" :key="col.name" :props="props" v-if="colExtra.includes(col.name)">
+                    <div v-if="col.action && visCol(col)">
+                        <q-btn flat round color="red" :icon="col.icon" size="sm"
+                               @click="clickFunz(props.row, col)"></q-btn>
                     </div>
                 </q-td>
             </q-tr>
