@@ -297,10 +297,6 @@ namespace Actions {
     //   return
     // }
 
-    // if (!static_data.functionality.PWA) {
-    //   return
-    // }
-
     if (!static_data.functionality.PWA)
       return
 

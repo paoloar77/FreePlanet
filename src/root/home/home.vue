@@ -201,7 +201,7 @@
                                 </div>
                                 <div class="flex justify-end">
                                     <div class="q-gutter-xs testo-banda clgutter">
-                                        <div class="text-h1 shadow-max">{{getenv('APP_NAME')}}</div>
+                                        <div class="text-h1 shadow-max">{{$t('msg.myAppName')}}</div>
                                         <div class="text-subtitle1 shadow text-italic q-pl-sm">
                                             {{$t('msg.sottoTitoloApp')}}
                                         </div>

@@ -1845,12 +1845,16 @@ export const tools = {
       maxh2 = 350
     } else if (Screen.width < 600) {
       maxh2 = 400
-    } else if (Screen.width < 800) {
+    } else if (Screen.width < 700) {
       maxh2 = 450
+    } else if (Screen.width < 800) {
+      maxh2 = 550
     } else if (Screen.width < 1000) {
-      maxh2 = 500
+      maxh2 = 650
+    } else if (Screen.width < 1200) {
+      maxh2 = 700
     } else {
-      maxh2 = 600
+      maxh2 = 750
     }
 
     return maxh2

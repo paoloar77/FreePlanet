@@ -31,32 +31,8 @@
   }
 }
 
-@media (max-width: 1600px) {
-  .myclimg {
-    max-height: 550px !important;
-    width: 100%;
-  }
-}
-
-@media (max-width: 1000px) {
-  .myclimg {
-    max-height: 450px !important;
-    width: 100%;
-  }
-}
-
-@media (max-width: 800px) {
-  .myclimg {
-    max-height: 400px !important;
-    width: 100%;
-  }
-}
-
 
 @media (max-width: 400px) {
-  .myclimg {
-    // height: inherit !important;
-  }
 
   // PER VERSIONE MOBILE
   .landing > section.padding_testo {

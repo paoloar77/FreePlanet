@@ -65,7 +65,7 @@ module.exports = function (ctx) {
       store: 'src/store/index.ts'
     },
     // app plugins (/src/plugins)
-    boot: ['vue-i18n', 'axios', 'vee-validate', 'myconfig', 'local-storage', 'error-handler', 'globalroutines', 'vue-idb', 'dragula', 'guard'],
+    boot: ['vue-i18n', 'vue-meta', 'axios', 'vee-validate', 'myconfig', 'local-storage', 'error-handler', 'globalroutines', 'vue-idb', 'dragula', 'guard'],
     css: [
       'app.styl'
     ],

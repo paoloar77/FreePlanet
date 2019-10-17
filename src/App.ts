@@ -27,12 +27,10 @@ export default class App extends Vue {
 
   public meta() {
     return {
-      keywords: { name: 'keywords', content: 'WebSite' },
-      // meta tags
-      meta: {
-        keywords: { name: 'keywords', content: 'MyKeywords' },
-        mykey: { name: 'mykey', content: 'Key 1' }
-      }
+      title: this.$t('msg.myAppName'),
+      keywords: [{ name: 'keywords', content: 'associazione shen, centro olistico lugo' },
+        { name: 'description', content: this.$t('msg.myAppDescription') }]
+      //   equiv: { 'http-equiv': 'Content-Type', 'content': 'text/html; charset=UTF-8' }
     }
   }
 
