@@ -26,6 +26,7 @@ import router from '@router'
 import { static_data } from '@src/db/static_data'
 import translate from '@src/globalroutines/util'
 import { lists } from '../../store/Modules/lists'
+import { GlobalStore } from '../../store/Modules'
 
 @Component({
   name: 'CEventsCalendar',
@@ -349,7 +350,7 @@ export default class CEventsCalendar extends Vue {
 
   public getEndTime(eventparam) {
     let endTime = new Date(eventparam.date + ' ' + eventparam.time + ':00')
-    endTime = date.addToDate(endTime, { minutes: eventparam.duration })
+    endTime = date.addToDate(endTime, { minutes: eventparam.dur })
     endTime = date.formatDate(endTime, 'HH:mm')
     return endTime
   }
@@ -394,7 +395,9 @@ export default class CEventsCalendar extends Vue {
 
   public addBookEventMenu(eventparam) {
     if (!UserStore.state.isLogged || !UserStore.state.verified_email) {
-      this.$router.push('/signin')
+      // Visu right Toolbar to make SignIn
+      GlobalStore.state.RightDrawerOpen = true
+      // this.$router.push('/signin')
     } else {
       console.log('addBookEventMenu')
       this.resetForm()
@@ -421,7 +424,7 @@ export default class CEventsCalendar extends Vue {
     if (eventparam.time) {
       timestamp = eventparam.date + ' ' + eventparam.time
       const startTime = new Date(timestamp)
-      const endTime = date.addToDate(startTime, { minutes: eventparam.duration })
+      const endTime = date.addToDate(startTime, { minutes: eventparam.dur })
       this.eventForm.dateTimeStart = this.formatDate(startTime) + ' ' + this.formatTime(startTime) // endTime.toString()
       this.eventForm.dateTimeEnd = this.formatDate(endTime) + ' ' + this.formatTime(endTime) // endTime.toString()
     } else {
@@ -513,8 +516,8 @@ export default class CEventsCalendar extends Vue {
       }
       const data: IEvents = {
         time: '',
-        duration: 0,
-        duration2: 0,
+        dur: 0,
+        dur2: 0,
         title: form.title,
         details: form.details,
         icon: form.icon,
@@ -524,7 +527,7 @@ export default class CEventsCalendar extends Vue {
       if (form.allDay === false) {
         // get time into separate var
         data.time = String(form.dateTimeStart).slice(11, 16)
-        data.duration = self.getDuration(form.dateTimeStart, form.dateTimeEnd, 'minutes')
+        data.dur = self.getDuration(form.dateTimeStart, form.dateTimeEnd, 'minutes')
       }
       if (update === true) {
         const index = self.findEventIndex(self.contextDay)
@@ -648,7 +651,7 @@ export default class CEventsCalendar extends Vue {
 
   public handleSwipe({ evt, ...info }) {
     if (this.dragging === false) {
-      if (info.duration >= 30 && this.ignoreNextSwipe === false) {
+      if (info.dur >= 30 && this.ignoreNextSwipe === false) {
         if (info.direction === 'right') {
           this.calendarPrev()
         } else if (info.direction === 'left') {
@@ -743,7 +746,7 @@ export default class CEventsCalendar extends Vue {
       s.top = timeStartPos(eventparam.time) + 'px'
     }
     if (timeDurationHeight) {
-      s.height = timeDurationHeight(eventparam.duration) + 'px'
+      s.height = timeDurationHeight(eventparam.dur) + 'px'
     }
     s['align-items'] = 'flex-start'
     return s
@@ -804,10 +807,10 @@ export default class CEventsCalendar extends Vue {
           if (eventsloc.length > 0) {
             // check for overlapping times
             const startTime = new Date(CalendarStore.state.eventlist[i].date + ' ' + CalendarStore.state.eventlist[i].time)
-            const endTime = date.addToDate(startTime, { minutes: CalendarStore.state.eventlist[i].duration })
+            const endTime = date.addToDate(startTime, { minutes: CalendarStore.state.eventlist[i].dur })
             for (let j = 0; j < eventsloc.length; ++j) {
               const startTime2 = new Date(eventsloc[j].date + ' ' + eventsloc[j].time)
-              const endTime2 = date.addToDate(startTime2, { minutes: eventsloc[j].duration2 })
+              const endTime2 = date.addToDate(startTime2, { minutes: eventsloc[j].dur2 })
               if (date.isBetweenDates(startTime, startTime2, endTime2) || date.isBetweenDates(endTime, startTime2, endTime2)) {
                 eventsloc[j].side = 'left'
                 // CalendarStore.state.eventlist[i].side = 'right'

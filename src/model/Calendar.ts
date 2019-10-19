@@ -1,11 +1,13 @@
 
 export interface IEvents {
   _id?: any
-  time?: string
-  duration?: number
-  duration2?: number
+  typol?: string
+  short_tit?: string
   title?: string
   details?: string
+  time?: string
+  dur?: number
+  dur2?: number
   date?: string
   side?: string
   bgcolor?: string
@@ -13,13 +15,19 @@ export interface IEvents {
   icon?: string
   img?: string
   where?: string
-  teacher?: string
-  teacher2?: string
+  contribtype?: number
+  teacher?: string  // teacherid
+  teacher2?: string // teacherid2
   avatar?: string
   avatar2?: string
   infoextra?: string
+  linkpage?: string
   linkpdf?: string
   nobookable?: boolean
+  news?: boolean
+  dupId?: any
+  canceled?: boolean
+  deleted?: boolean
 }
 
 export interface IBookedEvent {

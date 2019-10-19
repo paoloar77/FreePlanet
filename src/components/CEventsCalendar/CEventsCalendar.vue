@@ -1,10 +1,5 @@
-$t('
 <template>
     <div class="landing">
-        <CTitle imgbackground="../../statics/images/calendario_eventi.jpg"
-                headtitle="Calendario Eventi" sizes="max-height: 120px"></CTitle>
-
-
         <q-page class="column">
             <!-- display an myevent -->
             <q-dialog v-model="displayEvent">
@@ -469,7 +464,7 @@ $t('
                                 <div v-if="event.date" class="listaev__date">
                                     {{func_tools.getDateStr(event.date)}}
                                     <span v-if="event.time" class="cal__hours-content"> - {{ event.time }} <span
-                                            v-if="event.duration">- {{ getEndTime(event) }}</span></span>
+                                            v-if="event.dur">- {{ getEndTime(event) }}</span></span>
                                     <span v-if="event.days > 1"><br/>{{func_tools.getDateStr(tools.addDays(event.date, event.days - 1))}}</span>
                                 </div>
                             </div>

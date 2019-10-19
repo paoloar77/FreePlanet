@@ -48,6 +48,7 @@ export interface IGlobalState {
   mobileMode: boolean
   menuCollapse: boolean
   leftDrawerOpen: boolean
+  RightDrawerOpen: boolean
   category: string
   stateConnection: string
   networkDataReceived: boolean
@@ -214,7 +215,7 @@ export interface IParamsQuery {
 
 export interface IColGridTable {
   name: string
-  required: boolean
+  required?: boolean
   label?: string
   label_trans?: string
   align?: string
@@ -227,4 +228,12 @@ export interface IColGridTable {
   action?: any
   foredit?: boolean
   isdate?: boolean
+  visuonlyEditVal?: boolean
+}
+
+export interface ITableRec {
+  label: string
+  value: string
+  columns: IColGridTable[]
+  colkey: string
 }

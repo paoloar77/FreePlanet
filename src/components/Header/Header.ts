@@ -37,16 +37,11 @@ export default class Header extends Vue {
   public clCloudDownload: string = ''
   public clCloudUp_Indexeddb: string = ''
   public clCloudDown_Indexeddb: string = 'clIndexeddbsend'
-  public right: boolean = false
   public photo = ''
   public visuimg: boolean = true
 
-  get getappname(){
-    if (Screen.width < 400) {
-      return this.$t('msg.myAppNameShort')
-    } else {
-      return this.$t('msg.myAppName')
-    }
+  get tools() {
+    return tools
   }
 
   get conn_changed() {
@@ -108,6 +103,14 @@ export default class Header extends Vue {
   set leftDrawerOpen(value) {
     GlobalStore.state.leftDrawerOpen = value
     localStorage.setItem(tools.localStorage.leftDrawerOpen, value.toString())
+  }
+
+  get rightDrawerOpen() {
+    return GlobalStore.state.RightDrawerOpen
+  }
+
+  set rightDrawerOpen(value) {
+    GlobalStore.state.RightDrawerOpen = value
   }
 
   get lang() {
@@ -380,7 +383,7 @@ export default class Header extends Vue {
   }
 
   public clickregister() {
-    this.right = false
+    this.rightDrawerOpen = false
     this.$router.replace('/signup')
   }
 }

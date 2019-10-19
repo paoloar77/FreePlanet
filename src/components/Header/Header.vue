@@ -39,7 +39,7 @@
                     <q-avatar>
                         <img :src="imglogo" height="27">
                     </q-avatar>
-                    {{getappname}}
+                    {{tools.getappname()}}
                     <div slot="subtitle">{{$t('msg.myDescriz')}} {{ getAppVersion() }}</div>
                 </q-toolbar-title>
 
@@ -105,10 +105,10 @@
                 <!-- BUTTON USER BAR -->
 
                 <q-btn v-if="static_data.functionality.SHOW_USER_MENU && !isLogged" dense flat round icon="menu"
-                       @click="right = !right">
+                       @click="rightDrawerOpen = !rightDrawerOpen">
                 </q-btn>
                 <q-btn v-if="static_data.functionality.SHOW_USER_MENU && isLogged" dense flat round
-                       icon="img:statics/images/avatar/avatar3_small.png" @click="right = !right">
+                       icon="img:statics/images/avatar/avatar3_small.png" @click="rightDrawerOpen = !rightDrawerOpen">
                 </q-btn>
 
             </q-toolbar>
@@ -128,7 +128,7 @@
         </q-drawer>
 
         <!-- USER BAR -->
-        <q-drawer v-if="static_data.functionality.SHOW_USER_MENU" v-model="right" side="right" elevated>
+        <q-drawer v-if="static_data.functionality.SHOW_USER_MENU" v-model="rightDrawerOpen" side="right" elevated>
             <div id="profile">
                 <q-img class="absolute-top" src="../../statics/images/landing_first_section.png"
                        style="height: 150px">
@@ -139,7 +139,7 @@
                         <img src="../../statics/images/avatar/avatar3_small.png">
                     </q-avatar>
                     <q-btn class="absolute-top-right" style="margin-right: 10px; color: white;"
-                           dense flat round icon="close" @click="right = !right">
+                           dense flat round icon="close" @click="rightDrawerOpen = !rightDrawerOpen">
                     </q-btn>
                     <div v-if="isLogged" class="text-weight-bold text-user">{{ Username }} - {{ myName }} <span
                             v-if="isAdmin"> [Admin]</span><span v-if="isManager"> [Manager]</span></div>

@@ -33,6 +33,7 @@ export interface INotify {
 }
 
 export const tools = {
+  MAX_CHARACTERS: 60,
   projects: 'projects',
   todos: 'todos',
   EMPTY: 0,
@@ -1681,7 +1682,11 @@ export const tools = {
     if (!value) {
       return ''
     }
-    return value.substring(0, numchars) + '...'
+    try {
+      return value.substring(0, numchars) + '...'
+    }catch (e) {
+      return value
+    }
   },
 
   getDateNow() {
@@ -1877,8 +1882,8 @@ export const tools = {
 
     const maxh2 = this.heightGallVal()
 
-    console.log('maxh2', maxh2)
-    console.log('maxheight', maxheight)
+    // console.log('maxh2', maxh2)
+    // console.log('maxheight', maxheight)
 
     let ris = 0
 
@@ -1892,7 +1897,7 @@ export const tools = {
         ris = parseInt(myheightmobile, 10)
     }
 
-    console.log('ris', ris)
+    // console.log('ris', ris)
     return ris
   },
 
@@ -2199,7 +2204,8 @@ export const tools = {
           tools.showNotif(mythis.$q, mythis.$t('login.errato'), { color: 'negative', icon: 'notifications' })
           mythis.iswaitingforRes = false
           if (ispageLogin) {
-            mythis.$router.push('/signin')
+            GlobalStore.state.RightDrawerOpen = true
+            // mythis.$router.push('/signin')
           }
         })
 

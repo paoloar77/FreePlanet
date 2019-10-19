@@ -6,6 +6,7 @@ const msgglobal = {
       editvalues: 'Modifica Valori',
       showprevedit: 'Mostra Eventi Passati',
       columns: 'Colonne',
+      tableslist: 'Tabelle',
     },
     otherpages: {
       admin : {
@@ -13,6 +14,7 @@ const msgglobal = {
         eventlist: 'Le tue Prenotazioni',
         usereventlist: 'Prenotazioni Utenti',
         userlist: 'Lista Utenti',
+        tableslist: 'Lista Tabelle',
       },
       manage: {
         menu: 'Gestione'
@@ -78,6 +80,8 @@ const msgglobal = {
       incorso: 'Registrazione in corso...',
       richiesto: 'Campo Richiesto',
       email: 'Email',
+      cell: 'Móvil',
+      img: 'Imagen de archivo',
       date_reg: 'Data Reg.',
       perm: 'Permessi',
       username: 'Nome Utente',
@@ -239,6 +243,7 @@ const msgglobal = {
       editvalues: 'Cambiar valores',
       showprevedit: 'Mostrar eventos pasados',
       columns: 'Columnas',
+      tableslist: 'Tablas'
     },
     otherpages: {
       admin : {
@@ -246,6 +251,7 @@ const msgglobal = {
         eventlist: 'Sus Reservas',
         usereventlist: 'Reserva Usuarios',
         userlist: 'Lista de usuarios',
+        tableslist: 'Listado de tablas',
       },
       manage: {
         menu: 'Gestionar'
@@ -311,6 +317,8 @@ const msgglobal = {
       incorso: 'Registro en curso...',
       richiesto: 'Campo requerido',
       email: 'Email',
+      cell: 'Telefono',
+      img: 'File image',
       date_reg: 'Fecha Reg.',
       perm: 'Permisos',
       username: 'Nombre usuario',
@@ -466,6 +474,7 @@ const msgglobal = {
       editvalues: 'Changer les valeurs',
       showprevedit: 'Afficher les événements passés',
       columns: 'Colonnes',
+      tableslist: 'Tables',
     },
     otherpages: {
       admin : {
@@ -473,6 +482,7 @@ const msgglobal = {
         eventlist: 'Vos réservations',
         usereventlist: 'Réservation Utilisateur',
         userlist: 'Liste d\'utilisateurs',
+        tableslist: 'Liste des tables',
       },
       manage: {
         menu: 'Gérer'
@@ -537,6 +547,8 @@ const msgglobal = {
       incorso: 'Inscription en cours...',
       richiesto: 'Champ obligatoire',
       email: 'Email',
+      cell: 'Téléphone',
+      img: 'Fichier image',
       date_reg: 'Date Inscript.',
       perm: 'Autorisations',
       username: 'Nom d\'utilisateur',
@@ -692,6 +704,7 @@ const msgglobal = {
       editvalues: 'Edit Values',
       showprevedit: 'Show Past Events',
       columns: 'Columns',
+      tableslist: 'Tables',
     },
     otherpages: {
       admin : {
@@ -699,6 +712,7 @@ const msgglobal = {
         eventlist: 'Your Booking',
         usereventlist: 'Users Booking',
         userlist: 'Users List',
+        tableslist: 'List of tables',
       },
       manage: {
         menu: 'Manage'
@@ -763,6 +777,8 @@ const msgglobal = {
       incorso: 'Registration please wait...',
       richiesto: 'Field Required',
       email: 'Email',
+      cell: 'Phone',
+      img: 'File Image',
       date_reg: 'Reg. Date',
       perm: 'Permissions',
       username_login: 'Username or email',
@@ -917,6 +933,7 @@ const msgglobal = {
       editvalues: 'Edit Values',
       showprevedit: 'Show Past Events',
       columns: 'Columns',
+      tableslist: 'Tables',
     },
     otherpages: {
       admin : {
@@ -924,6 +941,7 @@ const msgglobal = {
         eventlist: 'Your Booking',
         usereventlist: 'Users Booking',
         userlist: 'Users List',
+        tableslist: 'List of tables',
       },
       manage: {
         menu: 'Manage'
@@ -989,6 +1007,8 @@ const msgglobal = {
       incorso: 'Registration please wait...',
       richiesto: 'Field Required',
       email: 'Email',
+      cell: 'Phone',
+      img: 'File Image',
       date_reg: 'Reg. Date',
       perm: 'Permissions',
       username_login: 'Username or email',

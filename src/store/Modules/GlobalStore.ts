@@ -17,7 +17,6 @@ import { GlobalStore, Projects, Todos, UserStore } from '@store'
 import messages from '../../statics/i18n'
 import globalroutines from './../../globalroutines/index'
 
-
 import { cfgrouter } from '../../router/route-config'
 import { static_data } from '@src/db/static_data'
 import { IParamsQuery } from '@src/model/GlobalStore'
@@ -41,6 +40,7 @@ const state: IGlobalState = {
   mobileMode: false,
   menuCollapse: true,
   leftDrawerOpen: true,
+  RightDrawerOpen: false,
   stateConnection: stateConnDefault,
   networkDataReceived: false,
   cfgServer: [],
@@ -504,15 +504,30 @@ namespace Actions {
   }
 
   async function loadTable(context, params: IParamsQuery) {
-    console.log('loadTable', params)
+    // console.log('loadTable', params)
 
     return await Api.SendReq('/gettable', 'POST', params)
       .then((res) => {
-        console.table(res)
+        // console.table(res)
         return res.data
       })
       .catch((error) => {
-        console.log('error loadUsersList', error)
+        console.log('error loadTable', error)
+        UserStore.mutations.setErrorCatch(error)
+        return null
+      })
+  }
+
+  async function saveTable(context, mydata: object) {
+    // console.log('saveTable', mydata)
+
+    return await Api.SendReq('/settable', 'POST', mydata)
+      .then((res) => {
+        // console.table(res)
+        return res.data
+      })
+      .catch((error) => {
+        console.log('error saveTable', error)
         UserStore.mutations.setErrorCatch(error)
         return null
       })
@@ -551,7 +566,6 @@ namespace Actions {
       })
   }
 
-
   export const actions = {
     setConta: b.dispatch(setConta),
     createPushSubscription: b.dispatch(createPushSubscription),
@@ -563,6 +577,7 @@ namespace Actions {
     checkUpdates: b.dispatch(checkUpdates),
     saveFieldValue: b.dispatch(saveFieldValue),
     loadTable: b.dispatch(loadTable),
+    saveTable: b.dispatch(saveTable),
     DeleteRec: b.dispatch(DeleteRec)
   }
 
