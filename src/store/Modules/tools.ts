@@ -45,6 +45,8 @@ export const tools = {
   DUPLICATE_EMAIL_ID: 11000,
   DUPLICATE_USERNAME_ID: 11100,
 
+  NOFIELD: 'nofield',
+
   TYPE_AUDIO: 1,
 
   NUMSEC_CHECKUPDATE: 20000,
@@ -1333,10 +1335,19 @@ export const tools = {
       console.log('param1', par.param1)
       GlobalStore.actions.DeleteRec({ table, id: par.param1 }).then((ris) => {
         if (ris) {
-          myself.ActionAfterYes(func, par.param2)
+          myself.ActionAfterYes(func, par.param2, null)
           tools.showPositiveNotif(myself.$q, myself.$t('db.deletedrecord'))
         } else
           tools.showNegativeNotif(myself.$q, myself.$t('db.recdelfailed'))
+      })
+    } else if (func === lists.MenuAction.DUPLICATE_RECTABLE) {
+      console.log('param1', par.param1)
+      GlobalStore.actions.DuplicateRec({ table, id: par.param1 }).then((ris) => {
+        if (ris) {
+          myself.ActionAfterYes(func, par.param2, ris.data)
+          tools.showPositiveNotif(myself.$q, myself.$t('db.duplicatedrecord'))
+        } else
+          tools.showNegativeNotif(myself.$q, myself.$t('db.recdupfailed'))
       })
     }
   },
@@ -1551,7 +1562,7 @@ export const tools = {
       }
     }
 
-    let i = 0
+    // let i2 = 0
     while (sortedList.length < linkedList.length) {
       // get the item with a previous item ID referencing the current item
       const nextItem = linkedList[map.get(currentId)]
@@ -1561,7 +1572,7 @@ export const tools = {
       sortedList.push(nextItem)
       // tools.logelemprj('FATTO:' + i, nextItem)
       currentId = String(nextItem._id)
-      i++
+      // i2++
     }
 
     if (sortedList.length < linkedList.length) {
@@ -1628,10 +1639,18 @@ export const tools = {
       return ''
   },
 
+  getstrTime(mytimestamp) {
+    // console.log('getstrDate', mytimestamp)
+    if (!!mytimestamp)
+      return date.formatDate(mytimestamp, 'HH:mm')
+    else
+      return ''
+  },
+
   getstrDateTime(mytimestamp) {
     // console.log('getstrDate', mytimestamp)
     if (!!mytimestamp)
-      return date.formatDate(mytimestamp, 'DD/MM/YYYY HH:MM')
+      return date.formatDate(mytimestamp, 'DD/MM/YYYY HH:mm')
     else
       return ''
   },
@@ -1683,8 +1702,11 @@ export const tools = {
       return ''
     }
     try {
-      return value.substring(0, numchars) + '...'
-    }catch (e) {
+      let mycar = value.substring(0, numchars)
+      if (value.length > numchars)
+        mycar += '...'
+      return mycar
+    } catch (e) {
       return value
     }
   },
@@ -2121,7 +2143,8 @@ export const tools = {
     return msg
   },
   gettextevent(myevent: IEvents) {
-    return '"' + myevent.title + '" (' + func_tools.getDateStr(myevent.date) + ') - ' + myevent.time
+    // return '"' + myevent.title + '" (' + func_tools.getDateStr(myevent.date) + ') - ' + myevent.time
+    return '"' + myevent.title + '" (' + tools.getstrDateTime(myevent.date)
   },
 
   setLangAtt(mylang) {

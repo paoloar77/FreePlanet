@@ -13,15 +13,16 @@ import { costanti } from '@src/store/Modules/costanti'
 import { tools } from '@src/store/Modules/tools'
 import { toolsext } from '@src/store/Modules/toolsext'
 import * as ApiTables from '@src/store/Modules/ApiTables'
-import { GlobalStore, Projects, Todos, UserStore } from '@store'
+import { CalendarStore, GlobalStore, Projects, Todos, UserStore } from '@store'
 import messages from '../../statics/i18n'
 import globalroutines from './../../globalroutines/index'
 
 import { cfgrouter } from '../../router/route-config'
 import { static_data } from '@src/db/static_data'
-import { IParamsQuery } from '@src/model/GlobalStore'
+import { IDataPass, IParamsQuery } from '@src/model/GlobalStore'
 import { serv_constants } from '@src/store/Modules/serv_constants'
 import { IUserState } from '@src/model'
+import { Calendar } from 'element-ui'
 // import { static_data } from '@src/db/static_data'
 
 let stateConnDefault = 'online'
@@ -268,6 +269,41 @@ namespace Mutations {
 
   }
 
+  function getListByTable(table): any[] {
+    if (table === 'events')
+      return CalendarStore.state.eventlist
+    else if (table === 'operators')
+      return CalendarStore.state.operators
+    else if (table === 'bookings')
+      return CalendarStore.state.bookedevent
+    else if (table === 'users')
+      return UserStore.state.usersList
+    else
+      return null
+
+  }
+
+  function UpdateValuesInMemory(mystate: IGlobalState, mydata: IDataPass) {
+
+    const id = mydata.id
+    const table = mydata.table
+
+    try {
+      const mylist = getListByTable(table)
+
+      const myrec = mylist.find((event) => event._id === id)
+      // console.log('myrec', myrec)
+      if (myrec) {
+        for (const [key, value] of Object.entries(mydata.fieldsvalue)) {
+          console.log('key', value, myrec[key])
+          myrec[key] = value
+        }
+      }
+    } catch (e) {
+      console.error(e)
+    }
+  }
+
   export const mutations = {
     setConta: b.commit(setConta),
     setleftDrawerOpen: b.commit(setleftDrawerOpen),
@@ -278,7 +314,8 @@ namespace Mutations {
     setPaoArray: b.commit(setPaoArray),
     setPaoArray_Delete: b.commit(setPaoArray_Delete),
     NewArray: b.commit(NewArray),
-    setShowType: b.commit(setShowType)
+    setShowType: b.commit(setShowType),
+    UpdateValuesInMemory: b.commit(UpdateValuesInMemory)
   }
 
 }
@@ -533,14 +570,15 @@ namespace Actions {
       })
   }
 
-  async function saveFieldValue(context, mydata: object) {
+  async function saveFieldValue(context, mydata: IDataPass) {
     console.log('saveFieldValue', mydata)
 
     return await Api.SendReq(`/chval`, 'PATCH', { data: mydata })
       .then((res) => {
-        if (res)
+        if (res) {
+          Mutations.mutations.UpdateValuesInMemory(mydata)
           return (res.data.code === serv_constants.RIS_CODE_OK)
-        else
+        } else
           return false
       })
       .catch((error) => {
@@ -566,6 +604,24 @@ namespace Actions {
       })
   }
 
+  async function DuplicateRec(context, { table, id }) {
+    console.log('DuplicateRec', id)
+
+    return await Api.SendReq('/duprec/' + table + '/' + id, 'POST', null)
+      .then((res) => {
+        if (res.status === 200) {
+          if (res.data.code === serv_constants.RIS_CODE_OK) {
+            return res.data.record
+          }
+        }
+        return null
+      })
+      .catch((error) => {
+        console.error(error)
+        return null
+      })
+  }
+
   export const actions = {
     setConta: b.dispatch(setConta),
     createPushSubscription: b.dispatch(createPushSubscription),
@@ -578,7 +634,8 @@ namespace Actions {
     saveFieldValue: b.dispatch(saveFieldValue),
     loadTable: b.dispatch(loadTable),
     saveTable: b.dispatch(saveTable),
-    DeleteRec: b.dispatch(DeleteRec)
+    DeleteRec: b.dispatch(DeleteRec),
+    DuplicateRec: b.dispatch(DuplicateRec)
   }
 
 }

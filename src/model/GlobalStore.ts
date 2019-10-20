@@ -227,7 +227,7 @@ export interface IColGridTable {
   icon?: string
   action?: any
   foredit?: boolean
-  isdate?: boolean
+  fieldtype?: string
   visuonlyEditVal?: boolean
 }
 
@@ -236,4 +236,10 @@ export interface ITableRec {
   value: string
   columns: IColGridTable[]
   colkey: string
+}
+
+export interface IDataPass {
+  id: string
+  table: string
+  fieldsvalue: object
 }

@@ -125,10 +125,10 @@ export default class CGridTableRec extends Vue {
       this.colVisib = []
       this.colExtra = []
       this.mycolumns.forEach((elem) => {
-        if (elem.field !== '')
+        if (elem.field !== tools.NOFIELD)
           this.colVisib.push(elem.field)
 
-        if (elem.visible && elem.field === '')
+        if (elem.visible && elem.field === tools.NOFIELD)
           this.colExtra.push(elem.name)
 
       })
@@ -298,9 +298,9 @@ export default class CGridTableRec extends Vue {
 
     // Save on Server
     GlobalStore.actions.saveFieldValue(mydata).then((esito) => {
-      if (esito)
+      if (esito) {
         tools.showPositiveNotif(this.$q, this.$t('db.recupdated'))
-      else {
+      } else {
         tools.showNegativeNotif(this.$q, this.$t('db.recfailed'))
         this.undoVal()
       }
@@ -325,10 +325,13 @@ export default class CGridTableRec extends Vue {
     }
   }
 
-  public ActionAfterYes(action, item) {
+  public ActionAfterYes(action, item, data) {
     if (action === lists.MenuAction.DELETE_RECTABLE) {
       if (this.serverData.length > 0)
         this.serverData.splice(this.serverData.indexOf(item), 1)
+    } else if (action === lists.MenuAction.DUPLICATE_RECTABLE) {
+      // Add record duplicated
+      this.serverData.push(data)
     }
   }
 
@@ -345,7 +348,7 @@ export default class CGridTableRec extends Vue {
   }
 
   public visuValByType(col, val) {
-    if (col.isdate) {
+    if (col.fieldtype === 'date') {
       if (val === undefined) {
         return '[]'
       } else {
@@ -369,7 +372,7 @@ export default class CGridTableRec extends Vue {
     let mytab = null
     if (this.tablesList) {
       if (!this.tablesel) {
-        this.tablesel = this.tablesList[0].value
+        this.tablesel = this.tablesList[1].value
       }
 
       mytab = this.tablesList.find((rec) => rec.value === this.tablesel)

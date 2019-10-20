@@ -16,6 +16,7 @@ export const lists = {
     THEMEBG: 211,
 
     DELETE_RECTABLE: 300,
+    DUPLICATE_RECTABLE: 310,
 
     CAN_EDIT_TABLE: 400,
     SHOW_PREV_REC: 401,

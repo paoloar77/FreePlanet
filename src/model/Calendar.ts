@@ -5,7 +5,7 @@ export interface IEvents {
   short_tit?: string
   title?: string
   details?: string
-  time?: string
+  withtime?: boolean
   dur?: number
   dur2?: number
   date?: string
@@ -18,8 +18,6 @@ export interface IEvents {
   contribtype?: number
   teacher?: string  // teacherid
   teacher2?: string // teacherid2
-  avatar?: string
-  avatar2?: string
   infoextra?: string
   linkpage?: string
   linkpdf?: string
@@ -42,6 +40,21 @@ export interface IBookedEvent {
   booked: boolean
 }
 
+export interface IOperators {
+  username: string
+  name: string
+  surname: string
+  email: string
+  cell: string
+  webpage?: string
+  img: string
+  skype?: string
+  days_working?: string
+  facebook?: string
+  disciplines?: string
+  offers?: string
+}
+
 export enum EState {
   None, Creating, Modifying
 }
@@ -56,6 +69,7 @@ export interface ICalendarState {
   editable: boolean
   eventlist: IEvents[]
   bookedevent: IBookedEvent[]
+  operators: IOperators[]
   // ---------------
   titlebarHeight: number
   locale: string,

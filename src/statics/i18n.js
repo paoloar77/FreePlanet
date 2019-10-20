@@ -32,7 +32,7 @@ const msgglobal = {
       update: 'Aggiorna',
       today: 'Oggi',
       book: 'Prenota',
-      sendmsg: 'Invia Msg',
+      sendmsg: 'Invia solo un Msg',
       msg: {
         titledeleteTask: 'Elimina Task',
         deleteTask: "Vuoi Eliminare {mytodo}?"
@@ -48,6 +48,8 @@ const msgglobal = {
       deletetherecord: 'Eliminare il Record?',
       deletedrecord: 'Record Cancellato',
       recdelfailed: 'Errore durante la cancellazione del Record',
+      duplicatedrecord: 'Record Duplicato',
+      recdupfailed: 'Errore durante la duplicazione del Record',
     },
     components: {
       authentication: {
@@ -221,6 +223,34 @@ const msgglobal = {
       teachertitle: 'Insegnante',
       peoplebooked: 'Prenotaz.',
     },
+    event: {
+      _id: 'id',
+      typol: 'Typology',
+      short_tit: 'Titolo Breve',
+      title: 'Titolo',
+      details: 'Dettagli',
+      withtime: 'Con Tempo',
+      dur: 'durata (min)',
+      dur2: 'durata2 (min)',
+      date: 'Data',
+      bgcolor: 'Colore Sfondo',
+      days: 'Giorni',
+      icon: 'Icona',
+      img: 'Nomefile Immagine',
+      where: 'Dove',
+      contribtype: 'Tipo Contributo',
+      teacher: 'Insegnante',  // teacherid
+      teacher2: 'Insegnante2', // teacherid2
+      infoextra: 'InfoExtra',
+      linkpage: 'WebSite',
+      linkpdf: 'Link ad un PDF',
+      nobookable: 'No Prenotabile',
+      news: 'Novità',
+      dupId: 'Id Duplicato',
+      canceled: 'Cancellato',
+      deleted: 'Eliminato',
+      duplicate: 'Duplica'
+    },
     newsletter: {
       title: 'Desideri ricevere la nostra Newsletter?',
       name: 'Il tuo Nome',
@@ -233,7 +263,7 @@ const msgglobal = {
       typesomething: 'Compilare correttamente il campo',
       acceptlicense: 'Accetto la licenza e i termini',
       license: 'Devi prima accettare la licenza e i termini',
-      submitted: 'Iscritto'
+      submitted: 'Iscritto',
     },
     privacy_policy:'Privacy Policy',
     cookies: 'Usiamo i Cookie per una migliore prestazione web.'
@@ -269,7 +299,7 @@ const msgglobal = {
       update: 'Actualiza',
       today: 'Hoy',
       book: 'Reserva',
-      sendmsg: 'Envia Mensaje',
+      sendmsg: 'Envia solo Mensaje',
       msg: {
         titledeleteTask: 'Borrar Tarea',
         deleteTask: 'Quieres borrar {mytodo}?'
@@ -285,6 +315,8 @@ const msgglobal = {
       deletetherecord: '¿Eliminar el registro?',
       deletedrecord: 'Registro cancelado',
       recdelfailed: 'Error durante la eliminación del registro',
+      duplicatedrecord: 'Registro Duplicado',
+      recdupfailed: 'Error durante la duplicación de registros',
     },
     components: {
       authentication: {
@@ -452,6 +484,34 @@ const msgglobal = {
       teachertitle: 'Maestro',
       peoplebooked: 'Reserv.',
     },
+    event: {
+      _id: 'id',
+      typol: 'Typology',
+      short_tit: 'Título Corto',
+      title: 'Título',
+      details: 'Detalles',
+      withtime: 'Con Tiempo',
+      dur: 'duración (min)',
+      dur2: 'duración2 (min)',
+      date: 'Fecha',
+      bgcolor: 'Color de fondo',
+      days: 'Días',
+      icon: 'Icono',
+      img: 'Nombre Imagen',
+      where: 'Dónde',
+      contribtype: 'Tipo de Contribución',
+      teacher: 'Profesor',  // teacherid
+      teacher2: 'Profesor2', // teacherid2
+      infoextra: 'InfoExtra',
+      linkpage: 'Sitio WEb',
+      linkpdf: 'Enlace ad un PDF',
+      nobookable: 'No Reservable',
+      news: 'Novedad',
+      dupId: 'Id Duplicado',
+      canceled: 'Cancelado',
+      deleted: 'Eliminado',
+      duplicate: 'Duplica',
+    },
     newsletter: {
       title: '¿Desea recibir nuestro boletín informativo?',
       name: 'Tu Nombre',
@@ -500,7 +560,7 @@ const msgglobal = {
       cancel: 'annuler',
       today: 'Aujourd\'hui',
       book: 'Réserve',
-      sendmsg: 'Envoyer Msg',
+      sendmsg: 'envoyer seul un msg',
       msg: {
         titledeleteTask: 'Supprimer la tâche',
         deleteTask: 'Voulez-vous supprimer {mytodo}?'
@@ -516,6 +576,8 @@ const msgglobal = {
       deletetherecord: 'Supprimer l\'enregistrement?',
       deletedrecord: 'Enregistrement annulé',
       recdelfailed: 'Erreur lors de la suppression de l\'enregistrement',
+      duplicatedrecord: 'Enregistrement en double',
+      recdupfailed: 'Erreur lors de la duplication des enregistrements',
     },
     components: {
       authentication: {
@@ -682,6 +744,34 @@ const msgglobal = {
       teachertitle: 'Professeur',
       peoplebooked: 'Réserv.',
     },
+    event: {
+      _id: 'id',
+      typol: 'Typologie',
+      short_tit: 'Titre abrégé\'',
+      title: 'Titre',
+      details: 'Détails',
+      withtime: 'avec le temps',
+      dur: 'durée (min)',
+      dur2: 'durée2 (min)',
+      date: 'Date',
+      bgcolor: 'Couleur de fond',
+      days: 'Journées',
+      icon: 'Icône',
+      img: 'Image du nom de fichier',
+      where: 'Où',
+      contribtype: 'Type de contribution',
+      teacher: 'Enseignant',  // teacherid
+      teacher2: 'Enseignant2', // teacherid2
+      infoextra: 'Extra Info',
+      linkpage: 'Site Web',
+      linkpdf: 'Lien vers un PDF',
+      nobookable: 'non réservable',
+      news: 'Nouvelles',
+      dupId: 'Id Double',
+      canceled: 'Annulé',
+      deleted: 'Supprimé',
+      duplicate: 'Duplique'
+    },
     newsletter: {
       title: 'Souhaitez-vous recevoir notre newsletter?',
       name: 'Ton nom',
@@ -730,7 +820,7 @@ const msgglobal = {
       cancel: 'Cancel',
       today: 'Today',
       book: 'Book',
-      sendmsg: 'Send Msg',
+      sendmsg: 'Send only a Msg',
       msg: {
         titledeleteTask: 'Delete Task',
         deleteTask: 'Delete Task {mytodo}?'
@@ -746,6 +836,8 @@ const msgglobal = {
       deletetherecord: 'Delete the Record?',
       deletedrecord: 'Record Deleted',
       recdelfailed: 'Error during deletion of the Record',
+      duplicatedrecord: 'Duplicate Record',
+      recdupfailed: 'Error during record duplication',
     },
     components: {
       authentication: {
@@ -911,6 +1003,34 @@ const msgglobal = {
       teachertitle: 'Teacher',
       peoplebooked: 'Booked',
     },
+    event: {
+      _id: 'id',
+      typol: 'Typology',
+      short_tit: 'Short Title',
+      title: 'Title',
+      details: 'Details',
+      withtime: 'With Time',
+      dur: 'Duration (min)',
+      dur2: 'Duration2 (min)',
+      date: 'Date',
+      bgcolor: 'Background color',
+      days: 'Days',
+      icon: 'Icon',
+      img: 'Nomefile Img',
+      where: 'Qhere',
+      contribtype: 'Contribute Type',
+      teacher: 'Teacher',  // teacherid
+      teacher2: 'Teacher2', // teacherid2
+      infoextra: 'Extra Info',
+      linkpage: 'WebSite',
+      linkpdf: 'PDF Link',
+      nobookable: 'No Bookable',
+      news: 'News',
+      dupId: 'Id Duplicate',
+      canceled: 'Canceled',
+      deleted: 'Deleted',
+      duplicate: 'Duplicate'
+    },
     newsletter: {
       title: 'Would you like to receive our Newsletter?',
       name: 'Your name',
@@ -959,7 +1079,7 @@ const msgglobal = {
       cancel: 'Cancel',
       today: 'Today',
       book: 'Book',
-      sendmsg: 'Send Msg',
+      sendmsg: 'Send only a Msg',
       msg: {
         titledeleteTask: 'Delete Task',
         deleteTask: 'Delete Task {mytodo}?'
@@ -975,6 +1095,8 @@ const msgglobal = {
       deletetherecord: 'Delete the Record?',
       deletedrecord: 'Record Deleted',
       recdelfailed: 'Error during deletion of the Record',
+      duplicatedrecord: 'Duplicate Record',
+      recdupfailed: 'Error during record duplication',
     },
     components: {
       authentication: {
@@ -1141,6 +1263,34 @@ const msgglobal = {
       data: 'Date',
       teachertitle: 'Teacher',
       peoplebooked: 'Booked',
+    },
+    event: {
+      _id: 'id',
+      typol: 'Typology',
+      short_tit: 'Short Title',
+      title: 'Title',
+      details: 'Details',
+      withtime: 'With Time',
+      dur: 'Duration (min)',
+      dur2: 'Duration2 (min)',
+      date: 'Date',
+      bgcolor: 'Background color',
+      days: 'Days',
+      icon: 'Icon',
+      img: 'Nomefile Img',
+      where: 'Qhere',
+      contribtype: 'Contribute Type',
+      teacher: 'Teacher',  // teacherid
+      teacher2: 'Teacher2', // teacherid2
+      infoextra: 'Extra Info',
+      linkpage: 'WebSite',
+      linkpdf: 'PDF Link',
+      nobookable: 'No Bookable',
+      news: 'News',
+      dupId: 'Id Duplicate',
+      canceled: 'Canceled',
+      deleted: 'Deleted',
+      duplicate: 'Duplicate'
     },
     newsletter: {
       title: 'Would you like to receive our Newsletter?',

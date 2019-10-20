@@ -1,5 +1,6 @@
 <template>
     <div class="q-pa-sm">
+
         <q-table
                 :data="serverData"
                 :columns="mycolumns"
@@ -83,8 +84,8 @@
 
             <q-tr v-if="mytable" slot="body" slot-scope="props" :props="props">
                 <q-td v-for="col in mycolumns" :key="col.name" :props="props" v-if="colVisib.includes(col.field)">
-                    <div v-if="col.isdate">
-                        <div style="max-width: 250px">
+                    <div v-if="col.fieldtype === 'date'">
+                        <div style="max-width: 250px; min-width: 200px">
                             <q-input dense v-model="props.row[col.name]">
                                 <template v-slot:prepend>
                                     <q-icon name="event" class="cursor-pointer">
@@ -116,6 +117,9 @@
                                 </template>
                             </q-input>
                         </div>
+                    </div>
+                    <div v-if="col.fieldtype === 'boolean'">
+                        <q-checkbox v-model="props.row[col.name])" label="" />
                     </div>
                     <div v-else>
                         <div :class="getclassCol(col)">
