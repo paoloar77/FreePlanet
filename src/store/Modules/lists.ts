@@ -13,7 +13,13 @@ export const lists = {
     EDIT: 160,
     ADD_PROJECT: 200,
     THEME: 210,
-    THEMEBG: 211
+    THEMEBG: 211,
+
+    DELETE_RECTABLE: 300,
+    DUPLICATE_RECTABLE: 310,
+
+    CAN_EDIT_TABLE: 400,
+    SHOW_PREV_REC: 401,
   },
 
   selectTheme: [

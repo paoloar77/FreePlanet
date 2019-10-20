@@ -60,7 +60,7 @@ export default class Home extends Vue {
   }
 
   get appname() {
-    return process.env.APP_NAME
+    return this.$t('msg.myAppName')
   }
 
   public beforeDestroy() {

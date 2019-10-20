@@ -1,4 +1,4 @@
-import { Todos, Projects, UserStore, CalendarStore } from '@store'
+import { Todos, Projects, UserStore, CalendarStore, GlobalStore } from '@store'
 import globalroutines from './../../globalroutines/index'
 import { costanti } from './costanti'
 import { toolsext } from './toolsext'
@@ -24,6 +24,7 @@ import { static_data } from '@src/db/static_data'
 import { IColl, ITimeLineEntry, ITimeLineMain } from '@src/model/GlobalStore'
 import { func_tools } from '@src/store/Modules/toolsext'
 import { serv_constants } from '@src/store/Modules/serv_constants'
+import { shared_consts } from '@src/common/shared_vuejs'
 
 export interface INotify {
   color?: string | 'primary'
@@ -32,6 +33,7 @@ export interface INotify {
 }
 
 export const tools = {
+  MAX_CHARACTERS: 60,
   projects: 'projects',
   todos: 'todos',
   EMPTY: 0,
@@ -42,6 +44,8 @@ export const tools = {
   ERR_AUTHENTICATION: -5,
   DUPLICATE_EMAIL_ID: 11000,
   DUPLICATE_USERNAME_ID: 11100,
+
+  NOFIELD: 'nofield',
 
   TYPE_AUDIO: 1,
 
@@ -69,6 +73,7 @@ export const tools = {
     username: 'uname',
     name: 'nm',
     surname: 'sn',
+    perm: 'pm',
     lang: 'lg'
   },
 
@@ -1312,10 +1317,13 @@ export const tools = {
     return result
   },
 
-  executefunc(myself: any, func: number, par: IParamDialog) {
+  executefunc(myself: any, table, func: number, par: IParamDialog) {
     if (func === lists.MenuAction.DELETE) {
       console.log('param1', par.param1)
-      CalendarStore.actions.CancelBookingEvent({ideventbook: par.param1, notify: par.param2 === true ? '1' : '0'}).then((ris) => {
+      CalendarStore.actions.CancelBookingEvent({
+        ideventbook: par.param1,
+        notify: par.param2 === true ? '1' : '0'
+      }).then((ris) => {
         if (ris) {
           tools.showPositiveNotif(myself.$q, myself.$t('cal.canceledbooking') + ' "' + par.param1.title + '"')
           if (myself.bookEventpage)
@@ -1323,10 +1331,28 @@ export const tools = {
         } else
           tools.showNegativeNotif(myself.$q, myself.$t('cal.cancelederrorbooking'))
       })
+    } else if (func === lists.MenuAction.DELETE_RECTABLE) {
+      console.log('param1', par.param1)
+      GlobalStore.actions.DeleteRec({ table, id: par.param1 }).then((ris) => {
+        if (ris) {
+          myself.ActionAfterYes(func, par.param2, null)
+          tools.showPositiveNotif(myself.$q, myself.$t('db.deletedrecord'))
+        } else
+          tools.showNegativeNotif(myself.$q, myself.$t('db.recdelfailed'))
+      })
+    } else if (func === lists.MenuAction.DUPLICATE_RECTABLE) {
+      console.log('param1', par.param1)
+      GlobalStore.actions.DuplicateRec({ table, id: par.param1 }).then((ris) => {
+        if (ris) {
+          myself.ActionAfterYes(func, par.param2, ris.data)
+          tools.showPositiveNotif(myself.$q, myself.$t('db.duplicatedrecord'))
+        } else
+          tools.showNegativeNotif(myself.$q, myself.$t('db.recdupfailed'))
+      })
     }
   },
 
-  async askConfirm($q: any, mytitle, mytext, ok, cancel, myself: any, funcok: number, funccancel: number, par: IParamDialog) {
+  async askConfirm($q: any, mytitle, mytext, ok, cancel, myself: any, table, funcok: number, funccancel: number, par: IParamDialog) {
     return $q.dialog({
       message: mytext,
       ok: {
@@ -1338,11 +1364,11 @@ export const tools = {
       persistent: false
     }).onOk(() => {
       console.log('OK')
-      tools.executefunc(myself, funcok, par)
+      tools.executefunc(myself, table, funcok, par)
       return true
     }).onCancel(() => {
       console.log('CANCEL')
-      tools.executefunc(myself, funccancel, par)
+      tools.executefunc(myself, table, funccancel, par)
       return false
     })
   },
@@ -1536,7 +1562,7 @@ export const tools = {
       }
     }
 
-    let i = 0
+    // let i2 = 0
     while (sortedList.length < linkedList.length) {
       // get the item with a previous item ID referencing the current item
       const nextItem = linkedList[map.get(currentId)]
@@ -1546,7 +1572,7 @@ export const tools = {
       sortedList.push(nextItem)
       // tools.logelemprj('FATTO:' + i, nextItem)
       currentId = String(nextItem._id)
-      i++
+      // i2++
     }
 
     if (sortedList.length < linkedList.length) {
@@ -1611,8 +1637,23 @@ export const tools = {
       return date.formatDate(mytimestamp, 'DD/MM/YYYY')
     else
       return ''
-  }
-  ,
+  },
+
+  getstrTime(mytimestamp) {
+    // console.log('getstrDate', mytimestamp)
+    if (!!mytimestamp)
+      return date.formatDate(mytimestamp, 'HH:mm')
+    else
+      return ''
+  },
+
+  getstrDateTime(mytimestamp) {
+    // console.log('getstrDate', mytimestamp)
+    if (!!mytimestamp)
+      return date.formatDate(mytimestamp, 'DD/MM/YYYY HH:mm')
+    else
+      return ''
+  },
   getstrMMMDate(mytimestamp) {
     // console.log('getstrDate', mytimestamp)
     if (!!mytimestamp)
@@ -1660,7 +1701,14 @@ export const tools = {
     if (!value) {
       return ''
     }
-    return value.substring(0, numchars) + '...'
+    try {
+      let mycar = value.substring(0, numchars)
+      if (value.length > numchars)
+        mycar += '...'
+      return mycar
+    } catch (e) {
+      return value
+    }
   },
 
   getDateNow() {
@@ -1814,13 +1862,29 @@ export const tools = {
   },
 
   heightgallery() {
+    return tools.heightGallVal().toString() + 'px'
+  },
+
+  heightGallVal() {
+    let maxh2 = 0
+
     if (Screen.width < 400) {
-      return '200px'
+      maxh2 = 350
     } else if (Screen.width < 600) {
-      return '300px'
+      maxh2 = 400
+    } else if (Screen.width < 700) {
+      maxh2 = 450
+    } else if (Screen.width < 800) {
+      maxh2 = 550
+    } else if (Screen.width < 1000) {
+      maxh2 = 650
+    } else if (Screen.width < 1200) {
+      maxh2 = 700
     } else {
-      return '500px'
+      maxh2 = 750
     }
+
+    return maxh2
   },
 
   myheight_imgtitle(myheight?, myheightmobile?) {
@@ -1838,21 +1902,10 @@ export const tools = {
       maxheight = 500
     }
 
-    let maxh2 = 0
-    if (Screen.width < 400) {
-      maxh2 = 350
-    } else if (Screen.width < 600) {
-      maxh2 = 400
-    } else if (Screen.width < 800) {
-      maxh2 = 450
-    } else if (Screen.width < 1000) {
-      maxh2 = 500
-    } else {
-      maxh2 = 500
-    }
+    const maxh2 = this.heightGallVal()
 
-    console.log('maxh2', maxh2)
-    console.log('maxheight', maxheight)
+    // console.log('maxh2', maxh2)
+    // console.log('maxheight', maxheight)
 
     let ris = 0
 
@@ -1866,7 +1919,7 @@ export const tools = {
         ris = parseInt(myheightmobile, 10)
     }
 
-    console.log('ris', ris)
+    // console.log('ris', ris)
     return ris
   },
 
@@ -2090,7 +2143,8 @@ export const tools = {
     return msg
   },
   gettextevent(myevent: IEvents) {
-    return '"' + myevent.title + '" (' + func_tools.getDateStr(myevent.date) + ') - ' + myevent.time
+    // return '"' + myevent.title + '" (' + func_tools.getDateStr(myevent.date) + ') - ' + myevent.time
+    return '"' + myevent.title + '" (' + tools.getstrDateTime(myevent.date)
   },
 
   setLangAtt(mylang) {
@@ -2173,7 +2227,8 @@ export const tools = {
           tools.showNotif(mythis.$q, mythis.$t('login.errato'), { color: 'negative', icon: 'notifications' })
           mythis.iswaitingforRes = false
           if (ispageLogin) {
-            mythis.$router.push('/signin')
+            GlobalStore.state.RightDrawerOpen = true
+            // mythis.$router.push('/signin')
           }
         })
 
@@ -2212,7 +2267,7 @@ export const tools = {
     } else if (riscode === tools.OK) {
       mythis.$router.push('/signin')
       tools.showNotif(mythis.$q, mythis.$t('components.authentication.email_verification.link_sent'), {
-        color: 'warning',
+        color: 'info',
         textColor: 'black'
       })
     } else {
@@ -2239,11 +2294,20 @@ export const tools = {
   },
   CancelBookingEvent(mythis, eventparam: IEvents, bookeventid: string, notify: boolean) {
     console.log('CancelBookingEvent ', eventparam)
-    tools.askConfirm(mythis.$q, translate('cal.titlebooking'), translate('cal.cancelbooking') + ' ' + tools.gettextevent(eventparam) + '?', translate('dialog.yes'), translate('dialog.no'), mythis, lists.MenuAction.DELETE, 0, { param1: bookeventid, param2: notify })
+    tools.askConfirm(mythis.$q, translate('cal.titlebooking'), translate('cal.cancelbooking') + ' ' + tools.gettextevent(eventparam) + '?', translate('dialog.yes'), translate('dialog.no'), mythis, '', lists.MenuAction.DELETE, 0, {
+      param1: bookeventid,
+      param2: notify
+    })
   },
-  CancelUserRec(mythis, id) {
-    console.log('CancelUserRec', id)
-    tools.askConfirm(mythis.$q, translate('cal.titlebooking'), translate('cal.canceluser') + '?', translate('dialog.yes'), translate('dialog.no'), mythis, lists.MenuAction.DELETE, 0, { param1: id })
+  ActionRecTable(mythis, action, table, id, item?) {
+    console.log('CancelRecTable', id)
+    return tools.askConfirm(mythis.$q, translate('db.deleterecord'), translate('db.deletetherecord'), translate('dialog.yes'), translate('dialog.no'), mythis, table, action, 0, {
+      param1: id,
+      param2: item
+    })
+  },
+  isBitActive(bit, whattofind) {
+    return ((bit & whattofind) === whattofind)
   }
 
 // getLocale() {

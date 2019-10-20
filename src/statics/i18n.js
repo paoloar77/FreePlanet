@@ -2,13 +2,23 @@ import msg_website from '../db/i18n_website'
 
 const msgglobal = {
   it: {
+    grid: {
+      editvalues: 'Modifica Valori',
+      showprevedit: 'Mostra Eventi Passati',
+      columns: 'Colonne',
+      tableslist: 'Tabelle',
+    },
     otherpages: {
       admin : {
         menu: 'Amministrazione',
-        eventlist: 'Prenotazioni',
+        eventlist: 'Le tue Prenotazioni',
         usereventlist: 'Prenotazioni Utenti',
         userlist: 'Lista Utenti',
+        tableslist: 'Lista Tabelle',
       },
+      manage: {
+        menu: 'Gestione'
+      }
     },
     sendmsg: {
       write: 'scrive'
@@ -22,7 +32,7 @@ const msgglobal = {
       update: 'Aggiorna',
       today: 'Oggi',
       book: 'Prenota',
-      sendmsg: 'Invia Msg',
+      sendmsg: 'Invia solo un Msg',
       msg: {
         titledeleteTask: 'Elimina Task',
         deleteTask: "Vuoi Eliminare {mytodo}?"
@@ -33,7 +43,13 @@ const msgglobal = {
     },
     db: {
       recupdated: 'Record Aggiornato',
-      recfailed: 'Errore durante aggiornamento Record'
+      recfailed: 'Errore durante aggiornamento Record',
+      deleterecord: 'Elimina Record',
+      deletetherecord: 'Eliminare il Record?',
+      deletedrecord: 'Record Cancellato',
+      recdelfailed: 'Errore durante la cancellazione del Record',
+      duplicatedrecord: 'Record Duplicato',
+      recdupfailed: 'Errore durante la duplicazione del Record',
     },
     components: {
       authentication: {
@@ -48,7 +64,7 @@ const msgglobal = {
           verify_email: 'Verifica la tua email',
           go_login: 'Torna al Login',
           incorrect_input: 'Inserimento incorretto.',
-          link_sent: 'Per confermare la Registrazione, leggi la tua casella di posta e Clicca su "Verifica Email".\nSe non la trovi, cerca nella cartella Spam.'
+          link_sent: 'Ora leggi la tua email e conferma la registrazione'
         }
       }
     },
@@ -66,6 +82,8 @@ const msgglobal = {
       incorso: 'Registrazione in corso...',
       richiesto: 'Campo Richiesto',
       email: 'Email',
+      cell: 'Móvil',
+      img: 'Imagen de archivo',
       date_reg: 'Data Reg.',
       perm: 'Permessi',
       username: 'Nome Utente',
@@ -85,7 +103,7 @@ const msgglobal = {
         email: 'inserire una email valida',
         errore_generico: 'Si prega di compilare correttamente i campi',
         atleast: 'dev\'essere lungo almeno di',
-        complexity: 'deve contenere almeno 1 minuscola, 1 maiuscola e 1 cifra',
+        complexity: 'deve contenere almeno 1 minuscola, 1 maiuscola, 1 cifra e 1 carattere speciale (!,$,#,%,-) ',
         notmore: 'non dev\'essere lungo più di',
         char: 'caratteri',
         terms: 'Devi accettare le condizioni, per continuare.',
@@ -149,7 +167,7 @@ const msgglobal = {
       titledenied: 'Permesso Notifiche Disabilitato!',
       title_subscribed: 'Sottoscrizione a FreePlanet.app!',
       subscribed: 'Ora potrai ricevere i messaggi e le notifiche.',
-      newVersionAvailable: 'Aggiorna'
+      newVersionAvailable: 'Aggiorna',
     },
     connection: 'Connessione',
     proj: {
@@ -203,6 +221,35 @@ const msgglobal = {
       bookingtextdefault_of: 'di',
       data: 'Data',
       teachertitle: 'Insegnante',
+      peoplebooked: 'Prenotaz.',
+    },
+    event: {
+      _id: 'id',
+      typol: 'Typology',
+      short_tit: 'Titolo Breve',
+      title: 'Titolo',
+      details: 'Dettagli',
+      withtime: 'Con Tempo',
+      dur: 'durata (min)',
+      dur2: 'durata2 (min)',
+      date: 'Data',
+      bgcolor: 'Colore Sfondo',
+      days: 'Giorni',
+      icon: 'Icona',
+      img: 'Nomefile Immagine',
+      where: 'Dove',
+      contribtype: 'Tipo Contributo',
+      teacher: 'Insegnante',  // teacherid
+      teacher2: 'Insegnante2', // teacherid2
+      infoextra: 'InfoExtra',
+      linkpage: 'WebSite',
+      linkpdf: 'Link ad un PDF',
+      nobookable: 'No Prenotabile',
+      news: 'Novità',
+      dupId: 'Id Duplicato',
+      canceled: 'Cancellato',
+      deleted: 'Eliminato',
+      duplicate: 'Duplica'
     },
     newsletter: {
       title: 'Desideri ricevere la nostra Newsletter?',
@@ -216,19 +263,29 @@ const msgglobal = {
       typesomething: 'Compilare correttamente il campo',
       acceptlicense: 'Accetto la licenza e i termini',
       license: 'Devi prima accettare la licenza e i termini',
-      submitted: 'Iscritto'
+      submitted: 'Iscritto',
     },
     privacy_policy:'Privacy Policy',
     cookies: 'Usiamo i Cookie per una migliore prestazione web.'
   },
   es: {
+    grid: {
+      editvalues: 'Cambiar valores',
+      showprevedit: 'Mostrar eventos pasados',
+      columns: 'Columnas',
+      tableslist: 'Tablas'
+    },
     otherpages: {
       admin : {
         menu: 'Administración',
-        eventlist: 'Reserva',
+        eventlist: 'Sus Reservas',
         usereventlist: 'Reserva Usuarios',
         userlist: 'Lista de usuarios',
+        tableslist: 'Listado de tablas',
       },
+      manage: {
+        menu: 'Gestionar'
+      }
     },
     sendmsg: {
       write: 'escribe'
@@ -242,7 +299,7 @@ const msgglobal = {
       update: 'Actualiza',
       today: 'Hoy',
       book: 'Reserva',
-      sendmsg: 'Envia Mensaje',
+      sendmsg: 'Envia solo Mensaje',
       msg: {
         titledeleteTask: 'Borrar Tarea',
         deleteTask: 'Quieres borrar {mytodo}?'
@@ -253,7 +310,13 @@ const msgglobal = {
     },
     db: {
       recupdated: 'Registro Actualizado',
-      recfailed: 'Error durante el registro de actualización'
+      recfailed: 'Error durante el registro de actualización',
+      deleterecord: 'Eliminar registro',
+      deletetherecord: '¿Eliminar el registro?',
+      deletedrecord: 'Registro cancelado',
+      recdelfailed: 'Error durante la eliminación del registro',
+      duplicatedrecord: 'Registro Duplicado',
+      recdupfailed: 'Error durante la duplicación de registros',
     },
     components: {
       authentication: {
@@ -268,7 +331,7 @@ const msgglobal = {
           verify_email: 'Revisa tu email',
           go_login: 'Vuelve al Login',
           incorrect_input: 'Entrada correcta.',
-          link_sent: 'Para confirmar el registro, lea su buzón y haga clic en "Verificar correo electrónico".\n' + 'Si no lo encuentras, busca en la carpeta Spam.'
+          link_sent: 'Ahora lea su correo electrónico y confirme el registro'
         }
       }
     },
@@ -286,6 +349,8 @@ const msgglobal = {
       incorso: 'Registro en curso...',
       richiesto: 'Campo requerido',
       email: 'Email',
+      cell: 'Telefono',
+      img: 'File image',
       date_reg: 'Fecha Reg.',
       perm: 'Permisos',
       username: 'Nombre usuario',
@@ -305,7 +370,7 @@ const msgglobal = {
         email: 'Debe ser una email válida.',
         errore_generico: 'Por favor, rellene los campos correctamente',
         atleast: 'debe ser al menos largo',
-        complexity: 'debe contener al menos 1 minúscula, 1 mayúscula y 1 dígito',
+        complexity: 'debe contener al menos 1 minúscula, 1 mayúscula, 1 dígito y 1 caractér especial (!,$,#,%,-)',
         notmore: 'no tiene que ser más largo que',
         char: 'caracteres',
         terms: 'Debes aceptar las condiciones, para continuar..',
@@ -362,7 +427,7 @@ const msgglobal = {
       titledenied: 'Notificaciones permitidas deshabilitadas!',
       title_subscribed: 'Suscripción a FreePlanet.app!',
       subscribed: 'Ahora puedes recibir mensajes y notificaciones.',
-      newVersionAvailable: 'Actualiza'
+      newVersionAvailable: 'Actualiza',
     },
     connection: 'Connection',
     proj: {
@@ -417,6 +482,35 @@ const msgglobal = {
       bookingtextdefault_of: 'de',
       data: 'Fecha',
       teachertitle: 'Maestro',
+      peoplebooked: 'Reserv.',
+    },
+    event: {
+      _id: 'id',
+      typol: 'Typology',
+      short_tit: 'Título Corto',
+      title: 'Título',
+      details: 'Detalles',
+      withtime: 'Con Tiempo',
+      dur: 'duración (min)',
+      dur2: 'duración2 (min)',
+      date: 'Fecha',
+      bgcolor: 'Color de fondo',
+      days: 'Días',
+      icon: 'Icono',
+      img: 'Nombre Imagen',
+      where: 'Dónde',
+      contribtype: 'Tipo de Contribución',
+      teacher: 'Profesor',  // teacherid
+      teacher2: 'Profesor2', // teacherid2
+      infoextra: 'InfoExtra',
+      linkpage: 'Sitio WEb',
+      linkpdf: 'Enlace ad un PDF',
+      nobookable: 'No Reservable',
+      news: 'Novedad',
+      dupId: 'Id Duplicado',
+      canceled: 'Cancelado',
+      deleted: 'Eliminado',
+      duplicate: 'Duplica',
     },
     newsletter: {
       title: '¿Desea recibir nuestro boletín informativo?',
@@ -436,13 +530,23 @@ const msgglobal = {
     cookies: 'Utilizamos cookies para un mejor rendimiento web.'
   },
   fr: {
+    grid: {
+      editvalues: 'Changer les valeurs',
+      showprevedit: 'Afficher les événements passés',
+      columns: 'Colonnes',
+      tableslist: 'Tables',
+    },
     otherpages: {
       admin : {
         menu: 'Administration',
-        eventlist: 'Réservation',
+        eventlist: 'Vos réservations',
         usereventlist: 'Réservation Utilisateur',
         userlist: 'Liste d\'utilisateurs',
+        tableslist: 'Liste des tables',
       },
+      manage: {
+        menu: 'Gérer'
+      }
     },
     sendmsg: {
       write: 'écrit'
@@ -456,7 +560,7 @@ const msgglobal = {
       cancel: 'annuler',
       today: 'Aujourd\'hui',
       book: 'Réserve',
-      sendmsg: 'Envoyer Msg',
+      sendmsg: 'envoyer seul un msg',
       msg: {
         titledeleteTask: 'Supprimer la tâche',
         deleteTask: 'Voulez-vous supprimer {mytodo}?'
@@ -467,7 +571,13 @@ const msgglobal = {
     },
     db: {
       recupdated: 'Enregistrement mis à jour',
-      recfailed: 'Erreur lors de la mise à jour'
+      recfailed: 'Erreur lors de la mise à jour',
+      deleterecord: 'Supprimer l\'enregistrement',
+      deletetherecord: 'Supprimer l\'enregistrement?',
+      deletedrecord: 'Enregistrement annulé',
+      recdelfailed: 'Erreur lors de la suppression de l\'enregistrement',
+      duplicatedrecord: 'Enregistrement en double',
+      recdupfailed: 'Erreur lors de la duplication des enregistrements',
     },
     components: {
       authentication: {
@@ -482,7 +592,7 @@ const msgglobal = {
           verify_email: 'Vérifiez votre email',
           go_login: 'Retour à la connexion',
           incorrect_input: 'Entrée correcte.',
-          link_sent: 'Pour confirmer l’enregistrement, lisez votre boîte aux lettres et cliquez sur "Vérifier le courrier électronique".".\n' + 'Si vous ne le trouvez pas, regardez dans le dossier Spam.'
+          link_sent: 'Maintenant, lisez votre email et confirmez votre inscription'
         }
       }
     },
@@ -499,6 +609,8 @@ const msgglobal = {
       incorso: 'Inscription en cours...',
       richiesto: 'Champ obligatoire',
       email: 'Email',
+      cell: 'Téléphone',
+      img: 'Fichier image',
       date_reg: 'Date Inscript.',
       perm: 'Autorisations',
       username: 'Nom d\'utilisateur',
@@ -518,7 +630,7 @@ const msgglobal = {
         email: 'Ce doit être un email valide.',
         errore_generico: 'S\'il vous plaît remplir les champs correctement',
         atleast: 'ça doit être au moins long',
-        complexity: 'doit contenir au moins 1 minuscule, 1 majuscule et 1 chiffre',
+        complexity: 'doit contenir au moins 1 minuscule, 1 majuscule, 1 chiffre et 1 caractère spécial (!,$,#,%,-)',
         notmore: 'il ne doit pas être plus long que',
         char: 'caractères',
         terms: 'Vous devez accepter les conditions, pour continuer..',
@@ -575,7 +687,7 @@ const msgglobal = {
       titledenied: 'Notifications autorisées désactivées!',
       title_subscribed: 'Abonnement au Site Web!',
       subscribed: 'Maintenant, vous pouvez recevoir des messages et des notifications.',
-      newVersionAvailable: 'Mise à jour'
+      newVersionAvailable: 'Mise à jour',
     },
     connection: 'Connexion',
     proj: {
@@ -630,6 +742,35 @@ const msgglobal = {
       bookingtextdefault_of: 'du',
       data: 'Date',
       teachertitle: 'Professeur',
+      peoplebooked: 'Réserv.',
+    },
+    event: {
+      _id: 'id',
+      typol: 'Typologie',
+      short_tit: 'Titre abrégé\'',
+      title: 'Titre',
+      details: 'Détails',
+      withtime: 'avec le temps',
+      dur: 'durée (min)',
+      dur2: 'durée2 (min)',
+      date: 'Date',
+      bgcolor: 'Couleur de fond',
+      days: 'Journées',
+      icon: 'Icône',
+      img: 'Image du nom de fichier',
+      where: 'Où',
+      contribtype: 'Type de contribution',
+      teacher: 'Enseignant',  // teacherid
+      teacher2: 'Enseignant2', // teacherid2
+      infoextra: 'Extra Info',
+      linkpage: 'Site Web',
+      linkpdf: 'Lien vers un PDF',
+      nobookable: 'non réservable',
+      news: 'Nouvelles',
+      dupId: 'Id Double',
+      canceled: 'Annulé',
+      deleted: 'Supprimé',
+      duplicate: 'Duplique'
     },
     newsletter: {
       title: 'Souhaitez-vous recevoir notre newsletter?',
@@ -649,13 +790,23 @@ const msgglobal = {
     cookies: 'Nous utilisons des cookies pour améliorer les performances Web.'
   },
   enUs: {
+    grid: {
+      editvalues: 'Edit Values',
+      showprevedit: 'Show Past Events',
+      columns: 'Columns',
+      tableslist: 'Tables',
+    },
     otherpages: {
       admin : {
         menu: 'Administration',
-        eventlist: 'Booking',
+        eventlist: 'Your Booking',
         usereventlist: 'Users Booking',
         userlist: 'Users List',
+        tableslist: 'List of tables',
       },
+      manage: {
+        menu: 'Manage'
+      }
     },
     sendmsg: {
       write: 'write'
@@ -669,7 +820,7 @@ const msgglobal = {
       cancel: 'Cancel',
       today: 'Today',
       book: 'Book',
-      sendmsg: 'Send Msg',
+      sendmsg: 'Send only a Msg',
       msg: {
         titledeleteTask: 'Delete Task',
         deleteTask: 'Delete Task {mytodo}?'
@@ -680,7 +831,13 @@ const msgglobal = {
     },
     db: {
       recupdated: 'Record Updated',
-      recfailed: 'Error during update Record'
+      recfailed: 'Error during update Record',
+      deleterecord: 'Delete Record',
+      deletetherecord: 'Delete the Record?',
+      deletedrecord: 'Record Deleted',
+      recdelfailed: 'Error during deletion of the Record',
+      duplicatedrecord: 'Duplicate Record',
+      recdupfailed: 'Error during record duplication',
     },
     components: {
       authentication: {
@@ -695,7 +852,7 @@ const msgglobal = {
           verify_email: 'Verify your email',
           go_login: 'Back to Login',
           incorrect_input: 'Incorrect input.',
-          link_sent: 'To confirm the Registration, read your mailbox and click on "Verify email".\nIf you can not find it check your junk mail or spam.'
+          link_sent: 'Now read your email and confirm registration'
         }
       }
     },
@@ -712,6 +869,8 @@ const msgglobal = {
       incorso: 'Registration please wait...',
       richiesto: 'Field Required',
       email: 'Email',
+      cell: 'Phone',
+      img: 'File Image',
       date_reg: 'Reg. Date',
       perm: 'Permissions',
       username_login: 'Username or email',
@@ -731,7 +890,7 @@ const msgglobal = {
         email: 'must be a valid email',
         errore_generico: 'Please review fields again',
         atleast: 'must be at least',
-        complexity: 'must contains at least 1 lowercase letter, 1 uppercase letter, and 1 digit',
+        complexity: 'must contains at least 1 lowercase letter, 1 uppercase letter, 1 digit and one special symbol (!,$,#,%,-)',
         notmore: 'must not be more than',
         char: 'characters long',
         terms: 'You need to agree with the terms & conditions.',
@@ -787,7 +946,7 @@ const msgglobal = {
       titledenied: 'Notification Permission Denied!',
       title_subscribed: 'Subscribed to FreePlanet.app!',
       subscribed: 'You can now receive Notification and Messages.',
-      newVersionAvailable: 'Upgrade'
+      newVersionAvailable: 'Upgrade',
     },
     connection: 'Conexión',
     proj: {
@@ -842,6 +1001,35 @@ const msgglobal = {
       bookingtextdefault_of: 'of',
       data: 'Date',
       teachertitle: 'Teacher',
+      peoplebooked: 'Booked',
+    },
+    event: {
+      _id: 'id',
+      typol: 'Typology',
+      short_tit: 'Short Title',
+      title: 'Title',
+      details: 'Details',
+      withtime: 'With Time',
+      dur: 'Duration (min)',
+      dur2: 'Duration2 (min)',
+      date: 'Date',
+      bgcolor: 'Background color',
+      days: 'Days',
+      icon: 'Icon',
+      img: 'Nomefile Img',
+      where: 'Qhere',
+      contribtype: 'Contribute Type',
+      teacher: 'Teacher',  // teacherid
+      teacher2: 'Teacher2', // teacherid2
+      infoextra: 'Extra Info',
+      linkpage: 'WebSite',
+      linkpdf: 'PDF Link',
+      nobookable: 'No Bookable',
+      news: 'News',
+      dupId: 'Id Duplicate',
+      canceled: 'Canceled',
+      deleted: 'Deleted',
+      duplicate: 'Duplicate'
     },
     newsletter: {
       title: 'Would you like to receive our Newsletter?',
@@ -861,13 +1049,23 @@ const msgglobal = {
     cookies: 'We use cookies for better web performance.'
   },
   de: {
+    grid: {
+      editvalues: 'Edit Values',
+      showprevedit: 'Show Past Events',
+      columns: 'Columns',
+      tableslist: 'Tables',
+    },
     otherpages: {
       admin : {
         menu: 'Administration',
-        eventlist: 'Booking',
+        eventlist: 'Your Booking',
         usereventlist: 'Users Booking',
         userlist: 'Users List',
+        tableslist: 'List of tables',
       },
+      manage: {
+        menu: 'Manage'
+      }
     },
     sendmsg: {
       write: 'write'
@@ -881,7 +1079,7 @@ const msgglobal = {
       cancel: 'Cancel',
       today: 'Today',
       book: 'Book',
-      sendmsg: 'Send Msg',
+      sendmsg: 'Send only a Msg',
       msg: {
         titledeleteTask: 'Delete Task',
         deleteTask: 'Delete Task {mytodo}?'
@@ -892,7 +1090,13 @@ const msgglobal = {
     },
     db: {
       recupdated: 'Record Updated',
-      recfailed: 'Error during update Record'
+      recfailed: 'Error during update Record',
+      deleterecord: 'Delete Record',
+      deletetherecord: 'Delete the Record?',
+      deletedrecord: 'Record Deleted',
+      recdelfailed: 'Error during deletion of the Record',
+      duplicatedrecord: 'Duplicate Record',
+      recdupfailed: 'Error during record duplication',
     },
     components: {
       authentication: {
@@ -907,7 +1111,7 @@ const msgglobal = {
           verify_email: 'Verify your email',
           go_login: 'Back to Login',
           incorrect_input: 'Incorrect input.',
-          link_sent: 'To confirm the Registration, read your mailbox and click on "Verify email".\nIf you can not find it check your junk mail or spam.'
+          link_sent: 'Now read your email and confirm registration'
         }
       }
     },
@@ -925,6 +1129,8 @@ const msgglobal = {
       incorso: 'Registration please wait...',
       richiesto: 'Field Required',
       email: 'Email',
+      cell: 'Phone',
+      img: 'File Image',
       date_reg: 'Reg. Date',
       perm: 'Permissions',
       username_login: 'Username or email',
@@ -944,7 +1150,7 @@ const msgglobal = {
         email: 'must be a valid email',
         errore_generico: 'Please review fields again',
         atleast: 'must be at least',
-        complexity: 'must contains at least 1 lowercase letter, 1 uppercase letter, and 1 digit',
+        complexity: 'must contains at least 1 lowercase letter, 1 uppercase letter, 1 digit and one special symbol (!,$,#,%,-)',
         notmore: 'must not be more than',
         char: 'characters long',
         terms: 'You need to agree with the terms & conditions.',
@@ -1001,7 +1207,7 @@ const msgglobal = {
       titledenied: 'Notification Permission Denied!',
       title_subscribed: 'Subscribed to FreePlanet.app!',
       subscribed: 'You can now receive Notification and Messages.',
-      newVersionAvailable: 'Upgrade'
+      newVersionAvailable: 'Upgrade',
     },
     connection: 'Conexión',
     proj: {
@@ -1056,6 +1262,35 @@ const msgglobal = {
       bookingtextdefault_of: 'of',
       data: 'Date',
       teachertitle: 'Teacher',
+      peoplebooked: 'Booked',
+    },
+    event: {
+      _id: 'id',
+      typol: 'Typology',
+      short_tit: 'Short Title',
+      title: 'Title',
+      details: 'Details',
+      withtime: 'With Time',
+      dur: 'Duration (min)',
+      dur2: 'Duration2 (min)',
+      date: 'Date',
+      bgcolor: 'Background color',
+      days: 'Days',
+      icon: 'Icon',
+      img: 'Nomefile Img',
+      where: 'Qhere',
+      contribtype: 'Contribute Type',
+      teacher: 'Teacher',  // teacherid
+      teacher2: 'Teacher2', // teacherid2
+      infoextra: 'Extra Info',
+      linkpage: 'WebSite',
+      linkpdf: 'PDF Link',
+      nobookable: 'No Bookable',
+      news: 'News',
+      dupId: 'Id Duplicate',
+      canceled: 'Canceled',
+      deleted: 'Deleted',
+      duplicate: 'Duplicate'
     },
     newsletter: {
       title: 'Would you like to receive our Newsletter?',

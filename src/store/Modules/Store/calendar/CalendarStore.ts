@@ -17,6 +17,7 @@ const state: ICalendarState = {
   editable: false,
   eventlist: [],
   bookedevent: [],
+  operators: [],
   // ---------------
   titlebarHeight: 0,
   locale: 'it-IT',
@@ -92,7 +93,7 @@ namespace Actions {
     // console.log('CalendarStore: loadAfterLogin')
     // Load local data
     state.editable = db_data.userdata.calendar_editable
-    state.eventlist = db_data.events
+    // state.eventlist = db_data.events
     // state.bookedevent = db_data.userdata.bookedevent
 
     if (UserStore.getters.isUserInvalid) {
@@ -105,15 +106,14 @@ namespace Actions {
 
     let ris = null
 
-    const showall = UserStore.state.isAdmin ? '1' : '0'
+    const showall = UserStore.state.isAdmin || UserStore.state.isManager ? '1' : '0'
 
     ris = await Api.SendReq('/booking/' + UserStore.state.userId + '/' + process.env.APP_ID + '/' + showall, 'GET', null)
       .then((res) => {
-        if (res.data.bookedevent) {
-          state.bookedevent = res.data.bookedevent
-        } else {
-          state.bookedevent = []
-        }
+        state.bookedevent = (res.data.bookedevent) ? res.data.bookedevent : []
+        state.eventlist = (res.data.eventlist) ? res.data.eventlist : []
+        state.operators = (res.data.operators) ? res.data.operators : []
+
       })
       .catch((error) => {
         console.log('error dbLoad', error)

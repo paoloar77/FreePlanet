@@ -16,6 +16,7 @@ import { db_data } from '@src/db/db_data'
 import translate from './../../globalroutines/util'
 import * as Types from '@src/store/Api/ApiTypes'
 import { ICfgServer } from '@src/model'
+import { shared_consts } from '../../common/shared_vuejs'
 
 const bcrypt = require('bcryptjs')
 
@@ -36,7 +37,9 @@ const state: IUserState = {
   x_auth_token: '',
   isLogged: false,
   isAdmin: false,
-  usersList: []
+  isManager: false,
+  usersList: [],
+  countusers: 0
 }
 
 const b = storeBuilder.module<IUserState>('UserModule', state)
@@ -109,6 +112,10 @@ namespace Getters {
   }, 'IsMyGroup')
 
   const getUserByUserId = b.read((mystate: IUserState) => (userId): IUserState => {
+    // Check if is this User!
+    if (state.userId === userId)
+      return state
+
     return mystate.usersList.find((item) => item._id === userId)
   }, 'getUserByUserId')
 
@@ -149,28 +156,28 @@ namespace Getters {
 }
 
 namespace Mutations {
-  function authUser(state: IUserState, data: IUserState) {
-    state.userId = data.userId
-    state.username = data.username
-    state.name = data.name
-    state.surname = data.surname
+  function authUser(mystate: IUserState, data: IUserState) {
+    mystate.userId = data.userId
+    mystate.username = data.username
+    mystate.name = data.name
+    mystate.surname = data.surname
+    mystate.perm = data.perm
+    mystate.isAdmin = tools.isBitActive(mystate.perm, shared_consts.Permissions.Admin)
+    mystate.isManager = tools.isBitActive(mystate.perm, shared_consts.Permissions.Manager)
+
+    // console.log('authUser', 'state.isAdmin', mystate.isAdmin)
+    console.table(mystate)
+    console.table(data)
     if (data.verified_email) {
-      state.verified_email = data.verified_email
+      mystate.verified_email = data.verified_email
     }
 
     if (data.categorySel) {
-      state.categorySel = data.categorySel
+      mystate.categorySel = data.categorySel
     }  // ??
 
-    resetArrToken(state.tokens)
-    state.tokens.push({ access: 'auth', token: state.x_auth_token, data_login: tools.getDateNow() })
-
-    // ++Todo: Settings Users Admin
-    if (db_data.adminUsers.includes(state.username)) {
-      state.isAdmin = true
-    } else {
-      state.isAdmin = false
-    }
+    resetArrToken(mystate.tokens)
+    mystate.tokens.push({ access: 'auth', token: mystate.x_auth_token, data_login: tools.getDateNow() })
 
     // console.log('state.tokens', state.tokens)
   }
@@ -239,15 +246,18 @@ namespace Mutations {
     state.servercode = 0
     state.resStatus = 0
     state.isLogged = false
-    state.isAdmin = false
     state.x_auth_token = ''
   }
 
   function setErrorCatch(state: IUserState, axerr: Types.AxiosError) {
-    if (state.servercode !== tools.ERR_SERVERFETCH) {
-      state.servercode = axerr.getCode()
+    try {
+      if (state.servercode !== tools.ERR_SERVERFETCH) {
+        state.servercode = axerr.getCode()
+      }
+      console.log('Err catch: (servercode:', axerr.getCode(), axerr.getMsgError(), ')')
+    } catch (e) {
+      console.log('Err catch:', axerr)
     }
-    console.log('Err catch: (servercode:', axerr.getCode(), axerr.getMsgError(), ')')
   }
 
   function getMsgError(state: IUserState, err: number) {
@@ -281,7 +291,7 @@ namespace Mutations {
     clearAuthData: b.commit(clearAuthData),
     setErrorCatch: b.commit(setErrorCatch),
     getMsgError: b.commit(getMsgError),
-    setusersList: b.commit(setusersList)
+    setusersList: b.commit(setusersList),
   }
 }
 
@@ -320,14 +330,6 @@ namespace Actions {
 
   }
 
-  async function saveUserChange(context, user: IUserState) {
-    console.log('saveUserChange', user)
-
-    return await Api.SendReq(`/users/${user.userId}`, 'PATCH', { user })
-      .then((res) => {
-        return (res.data.code === serv_constants.RIS_CODE_OK)
-      })
-  }
 
   async function requestpwd(context, paramquery: IUserState) {
 
@@ -524,12 +526,15 @@ namespace Actions {
             const surname = myuser.surname
             const verified_email = myuser.verified_email
 
+            console.table(myuser)
+
             Mutations.mutations.authUser({
               userId,
               username,
               name,
               surname,
-              verified_email
+              verified_email,
+              perm: myuser.perm
             })
 
             const now = tools.getDateNow()
@@ -540,6 +545,7 @@ namespace Actions {
             localStorage.setItem(tools.localStorage.username, username)
             localStorage.setItem(tools.localStorage.name, name)
             localStorage.setItem(tools.localStorage.surname, surname)
+            localStorage.setItem(tools.localStorage.perm, String(myuser.perm) || '')
             localStorage.setItem(tools.localStorage.token, state.x_auth_token)
             localStorage.setItem(tools.localStorage.expirationDate, expirationDate.toString())
             localStorage.setItem(tools.localStorage.isLogged, String(true))
@@ -576,6 +582,7 @@ namespace Actions {
     localStorage.removeItem(tools.localStorage.username)
     localStorage.removeItem(tools.localStorage.name)
     localStorage.removeItem(tools.localStorage.surname)
+    localStorage.removeItem(tools.localStorage.perm)
     localStorage.removeItem(tools.localStorage.isLogged)
     // localStorage.removeItem(rescodes.localStorage.leftDrawerOpen)
     localStorage.removeItem(tools.localStorage.verified_email)
@@ -647,6 +654,7 @@ namespace Actions {
           const name = String(localStorage.getItem(tools.localStorage.name))
           const surname = String(localStorage.getItem(tools.localStorage.surname))
           const verified_email = localStorage.getItem(tools.localStorage.verified_email) === 'true'
+          const perm = parseInt(localStorage.getItem(tools.localStorage.perm), 10)
 
           GlobalStore.state.wasAlreadySubOnDb = localStorage.getItem(tools.localStorage.wasAlreadySubOnDb) === 'true'
 
@@ -659,7 +667,8 @@ namespace Actions {
             username,
             name,
             surname,
-            verified_email
+            verified_email,
+            perm
           })
 
           isLogged = true
@@ -693,16 +702,17 @@ namespace Actions {
     }
   */
 
+
   export const actions = {
     autologin_FromLocalStorage: b.dispatch(autologin_FromLocalStorage),
     logout: b.dispatch(logout),
     requestpwd: b.dispatch(requestpwd),
     resetpwd: b.dispatch(resetpwd),
-    saveUserChange: b.dispatch(saveUserChange),
     signin: b.dispatch(signin),
     signup: b.dispatch(signup),
     vreg: b.dispatch(vreg)
   }
+
 }
 
 const stateGetter = b.state()

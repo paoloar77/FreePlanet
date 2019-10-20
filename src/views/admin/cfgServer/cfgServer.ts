@@ -29,7 +29,7 @@ export default class CfgServer extends Vue {
     { name: 'valore', label: 'Valore', field: 'valore', sortable: false }
   ]
 
-  public visibleColumns: ['chiave', 'userid', 'valore']
+  public colVisib: ['chiave', 'userid', 'valore']
   public separator: 'horizontal'
   public filter: string = ''
   public selected: any[] = []

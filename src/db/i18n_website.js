@@ -23,6 +23,7 @@ const msg_website = {
     msg: {
       hello: 'Buongiorno',
       myAppName: 'FreePlanet',
+      myAppDescription: 'Il primo Vero Social Libero, Equo e Solidale, dove Vive Consapevolezza e Aiuto Comunitario. Gratuito e senza Pubblicità',
       underconstruction: 'App in costruzione...',
       myDescriz: '',
       sottoTitoloApp: 'Il primo Vero Social',
@@ -144,6 +145,7 @@ const msg_website = {
     msg: {
       hello: 'Buenos Días',
       myAppName: 'FreePlanet',
+      myAppDescription: 'El primer Verdadero Social Libre, justo y Solidario Donde vive Conciencia y Ayuda comunitaria, Gratis y sin publicidad',
       underconstruction: 'App en construcción...',
       myDescriz: '',
       sottoTitoloApp: 'El primer Verdadero Social',
@@ -266,6 +268,7 @@ const msg_website = {
     msg: {
       hello: 'Hello!',
       myAppName: 'FreePlanet',
+      myAppDescription: 'The first Real Social Free, Fair and Equitable Where the conscience and community help live. Free and without advertising',
       underconstruction: 'App in construction...',
       myDescriz: '',
       sottoTitoloApp: 'The first Real Social',

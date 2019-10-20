@@ -1,5 +1,6 @@
 import { IAction } from '@src/model/Projects'
 import { Component } from 'vue-router/types/router'
+import { lists } from '@src/store/Modules/lists'
 
 export interface IPost {
   title: string
@@ -47,6 +48,7 @@ export interface IGlobalState {
   mobileMode: boolean
   menuCollapse: boolean
   leftDrawerOpen: boolean
+  RightDrawerOpen: boolean
   category: string
   stateConnection: string
   networkDataReceived: boolean
@@ -83,6 +85,7 @@ export interface IListRoutes {
   infooter?: boolean
   submenu?: boolean
   onlyAdmin?: boolean
+  onlyManager?: boolean
   meta?: any
   idelem?: string
   urlroute?: string
@@ -201,3 +204,42 @@ export interface IFunctionality {
   BOOKING_EVENTS?: boolean
 }
 
+export interface IParamsQuery {
+  table: string
+  startRow: number
+  endRow: number
+  filter: string
+  sortBy: any
+  descending: number
+}
+
+export interface IColGridTable {
+  name: string
+  required?: boolean
+  label?: string
+  label_trans?: string
+  align?: string
+  field?: string
+  sortable?: boolean
+  disable?: boolean
+  titlepopupedit?: string
+  visible?: boolean
+  icon?: string
+  action?: any
+  foredit?: boolean
+  fieldtype?: string
+  visuonlyEditVal?: boolean
+}
+
+export interface ITableRec {
+  label: string
+  value: string
+  columns: IColGridTable[]
+  colkey: string
+}
+
+export interface IDataPass {
+  id: string
+  table: string
+  fieldsvalue: object
+}

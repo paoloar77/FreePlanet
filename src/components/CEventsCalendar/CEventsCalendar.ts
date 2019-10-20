@@ -26,6 +26,7 @@ import router from '@router'
 import { static_data } from '@src/db/static_data'
 import translate from '@src/globalroutines/util'
 import { lists } from '../../store/Modules/lists'
+import { GlobalStore } from '../../store/Modules'
 
 @Component({
   name: 'CEventsCalendar',
@@ -348,8 +349,8 @@ export default class CEventsCalendar extends Vue {
   }
 
   public getEndTime(eventparam) {
-    let endTime = new Date(eventparam.date + ' ' + eventparam.time + ':00')
-    endTime = date.addToDate(endTime, { minutes: eventparam.duration })
+    let endTime = new Date(eventparam.date)
+    endTime = date.addToDate(endTime, { minutes: eventparam.dur })
     endTime = date.formatDate(endTime, 'HH:mm')
     return endTime
   }
@@ -394,7 +395,9 @@ export default class CEventsCalendar extends Vue {
 
   public addBookEventMenu(eventparam) {
     if (!UserStore.state.isLogged || !UserStore.state.verified_email) {
-      this.$router.push('/signin')
+      // Visu right Toolbar to make SignIn
+      GlobalStore.state.RightDrawerOpen = true
+      // this.$router.push('/signin')
     } else {
       console.log('addBookEventMenu')
       this.resetForm()
@@ -418,17 +421,17 @@ export default class CEventsCalendar extends Vue {
     this.resetForm()
     this.contextDay = { ...eventparam }
     let timestamp
-    if (eventparam.time) {
-      timestamp = eventparam.date + ' ' + eventparam.time
+    if (eventparam.withtime) {
+      timestamp = eventparam.date
       const startTime = new Date(timestamp)
-      const endTime = date.addToDate(startTime, { minutes: eventparam.duration })
+      const endTime = date.addToDate(startTime, { minutes: eventparam.dur })
       this.eventForm.dateTimeStart = this.formatDate(startTime) + ' ' + this.formatTime(startTime) // endTime.toString()
       this.eventForm.dateTimeEnd = this.formatDate(endTime) + ' ' + this.formatTime(endTime) // endTime.toString()
     } else {
       timestamp = eventparam.date
       this.eventForm.dateTimeStart = timestamp
     }
-    this.eventForm.allDay = !eventparam.time
+    this.eventForm.allDay = !eventparam.withtime
     this.eventForm.bgcolor = eventparam.bgcolor
     this.eventForm.icon = eventparam.icon
     this.eventForm.title = eventparam.title
@@ -512,9 +515,9 @@ export default class CEventsCalendar extends Vue {
         // an add
       }
       const data: IEvents = {
-        time: '',
-        duration: 0,
-        duration2: 0,
+        withtime: false,
+        dur: 0,
+        dur2: 0,
         title: form.title,
         details: form.details,
         icon: form.icon,
@@ -523,8 +526,8 @@ export default class CEventsCalendar extends Vue {
       }
       if (form.allDay === false) {
         // get time into separate var
-        data.time = String(form.dateTimeStart).slice(11, 16)
-        data.duration = self.getDuration(form.dateTimeStart, form.dateTimeEnd, 'minutes')
+        // data.time = String(form.dateTimeStart).slice(11, 16)
+        data.dur = self.getDuration(form.dateTimeStart, form.dateTimeEnd, 'minutes')
       }
       if (update === true) {
         const index = self.findEventIndex(self.contextDay)
@@ -648,7 +651,7 @@ export default class CEventsCalendar extends Vue {
 
   public handleSwipe({ evt, ...info }) {
     if (this.dragging === false) {
-      if (info.duration >= 30 && this.ignoreNextSwipe === false) {
+      if (info.dur >= 30 && this.ignoreNextSwipe === false) {
         if (info.direction === 'right') {
           this.calendarPrev()
         } else if (info.direction === 'left') {
@@ -682,7 +685,8 @@ export default class CEventsCalendar extends Vue {
       return this.draggedEvent.date !== day.date
     } else if (type === 'interval') {
       stopAndPrevent(ev)
-      return this.draggedEvent.date !== day.date && this.draggedEvent.time !== day.time
+      // return this.draggedEvent.date !== day.date && this.draggedEvent.time !== day.time
+      return this.draggedEvent.date !== day.date
     }
   }
 
@@ -694,7 +698,7 @@ export default class CEventsCalendar extends Vue {
       this.draggedEvent.side = void 0
     } else if (type === 'interval') {
       this.draggedEvent.date = day.date
-      this.draggedEvent.time = day.time
+      // this.draggedEvent.time = day.time
       this.draggedEvent.side = void 0
     }
   }
@@ -721,6 +725,16 @@ export default class CEventsCalendar extends Vue {
     return this.dateFormatter.format(mydate)
   }
 
+  public getTeacherName(teacherusername) {
+    const op = CalendarStore.state.operators.find((myop) => myop.username === teacherusername)
+    return (op) ? `${op.name} ${op.surname}` : ''
+  }
+
+  public getTeacherImg(teacherusername) {
+    const op = CalendarStore.state.operators.find((myop) => myop.username === teacherusername)
+    return (op) ? op.img : 'avatar/noimage.png'
+  }
+
   public badgeClasses(eventparam, type) {
     const cssColor = tools.isCssColor(eventparam.bgcolor)
     const isHeader = type === 'header'
@@ -740,10 +754,10 @@ export default class CEventsCalendar extends Vue {
       s.color = colors.luminosity(eventparam.bgcolor) > 0.5 ? 'black' : 'white'
     }
     if (timeStartPos) {
-      s.top = timeStartPos(eventparam.time) + 'px'
+      s.top = timeStartPos(tools.getstrTime(eventparam.date)) + 'px'
     }
     if (timeDurationHeight) {
-      s.height = timeDurationHeight(eventparam.duration) + 'px'
+      s.height = timeDurationHeight(eventparam.dur) + 'px'
     }
     s['align-items'] = 'flex-start'
     return s
@@ -783,7 +797,8 @@ export default class CEventsCalendar extends Vue {
 
     for (let i = 0; i < CalendarStore.state.eventlist.length; ++i) {
       // console.log('  ciclo i = ', i, CalendarStore.state.eventlist[i])
-      const dateEvent = new Date(CalendarStore.state.eventlist[i].date + ' 00:00:00')
+      // const dateEvent = new Date(CalendarStore.state.eventlist[i].date + ' 00:00:00')
+      const dateEvent = new Date(CalendarStore.state.eventlist[i].date)
 
       if (dateEvent >= datenow) {
         eventsloc.push(CalendarStore.state.eventlist[i])
@@ -799,15 +814,16 @@ export default class CEventsCalendar extends Vue {
     for (let i = 0; i < CalendarStore.state.eventlist.length; ++i) {
       let added = false
       // console.log('  ciclo i = ', i, CalendarStore.state.eventlist[i])
-      if (CalendarStore.state.eventlist[i].date === dt) {
-        if (CalendarStore.state.eventlist[i].time) {
+      if (tools.getstrYYMMDDDate(CalendarStore.state.eventlist[i].date) === dt) {
+        // if (CalendarStore.state.eventlist[i].time) {
           if (eventsloc.length > 0) {
             // check for overlapping times
-            const startTime = new Date(CalendarStore.state.eventlist[i].date + ' ' + CalendarStore.state.eventlist[i].time)
-            const endTime = date.addToDate(startTime, { minutes: CalendarStore.state.eventlist[i].duration })
+            // const startTime = new Date(CalendarStore.state.eventlist[i].date + ' ' + CalendarStore.state.eventlist[i].time)
+            const startTime = new Date(CalendarStore.state.eventlist[i].date)
+            const endTime = date.addToDate(startTime, { minutes: CalendarStore.state.eventlist[i].dur })
             for (let j = 0; j < eventsloc.length; ++j) {
-              const startTime2 = new Date(eventsloc[j].date + ' ' + eventsloc[j].time)
-              const endTime2 = date.addToDate(startTime2, { minutes: eventsloc[j].duration2 })
+              const startTime2 = new Date(eventsloc[j].date)
+              const endTime2 = date.addToDate(startTime2, { minutes: eventsloc[j].dur2 })
               if (date.isBetweenDates(startTime, startTime2, endTime2) || date.isBetweenDates(endTime, startTime2, endTime2)) {
                 eventsloc[j].side = 'left'
                 // CalendarStore.state.eventlist[i].side = 'right'
@@ -817,14 +833,15 @@ export default class CEventsCalendar extends Vue {
               }
             }
           }
-        }
+        // }
         if (!added) {
           // CalendarStore.state.eventlist[i].side = void 0
           eventsloc.push(CalendarStore.state.eventlist[i])
         }
       } else if (CalendarStore.state.eventlist[i].days) {
         // check for overlapping dates
-        const startDate = new Date(CalendarStore.state.eventlist[i].date + ' 00:00:00')
+        // const startDate = new Date(CalendarStore.state.eventlist[i].date + ' 00:00:00')
+        const startDate = new Date(CalendarStore.state.eventlist[i].date)
         const endDate = date.addToDate(startDate, { days: CalendarStore.state.eventlist[i].days })
         if (date.isBetweenDates(dt, startDate, endDate)) {
           eventsloc.push(CalendarStore.state.eventlist[i])
@@ -857,5 +874,19 @@ export default class CEventsCalendar extends Vue {
 
   get mythis() {
     return this
+  }
+
+  public isEventEnabled(myevent) {
+    // check if event is in the past
+    const datenow = tools.addDays(tools.getDateNow(), -1)
+
+    // let dateEvent = new Date(myevent.date + ' 00:00:00')
+    let dateEvent = new Date(myevent.date)
+
+    if (myevent.days) {
+      dateEvent = tools.addDays(dateEvent, myevent.days)
+    }
+
+    return (dateEvent >= datenow)
   }
 }

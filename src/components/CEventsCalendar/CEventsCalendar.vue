@@ -1,10 +1,5 @@
-$t('
 <template>
     <div class="landing">
-        <CTitle imgbackground="../../statics/images/calendario_eventi.jpg"
-                headtitle="Calendario Eventi" sizes="max-height: 120px"></CTitle>
-
-
         <q-page class="column">
             <!-- display an myevent -->
             <q-dialog v-model="displayEvent">
@@ -37,16 +32,16 @@ $t('
                                 <span class="cal__teacher-content">
                                         <q-chip>
                                             <q-avatar>
-                                                <img :src="`../../statics/images/avatar/` + myevent.avatar">
+                                                <img :src="`../../statics/images/` + getTeacherImg(myevent.teacher)">
                                             </q-avatar>
-                                            <span class="cal__teacher-content">{{myevent.teacher}}</span>
+                                            <span class="cal__teacher-content">{{getTeacherName(myevent.teacher)}}</span>
                                         </q-chip>
-                                        <span v-if="myevent.avatar2 && myevent.teacher2" class="margin_avatar2"></span>
-                                        <q-chip v-if="myevent.avatar2 && myevent.teacher2">
+                                        <span v-if="getTeacherImg(myevent.teacher2) && myevent.teacher2" class="margin_avatar2"></span>
+                                        <q-chip v-if="getTeacherImg(myevent.teacher2) && myevent.teacher2">
                                             <q-avatar>
-                                                <img :src="`../../statics/images/avatar/` + myevent.avatar2">
+                                                <img :src="`../../statics/images/` + getTeacherImg(myevent.teacher2)">
                                             </q-avatar>
-                                            <span class="cal__teacher-content">{{myevent.teacher2}}</span>
+                                            <span class="cal__teacher-content">{{getTeacherName(myevent.teacher2)}}</span>
                                         </q-chip>
                                     </span>
                             </div>
@@ -73,10 +68,10 @@ $t('
                                         <span class="cal__hours-content">{{ myevent.infoextra }}  </span>
                                     </span>
                                 <span v-else>
-                                        <span v-if="myevent.time" class="cal__hours">
+                                        <span v-if="myevent.withtime" class="cal__hours">
                                              -
                                             <span class="cal__hours-title">{{$t('cal.hours')}}: </span>
-                                            <span class="cal__hours-content">{{$t('cal.starttime')}} {{ myevent.time }} {{$t('cal.endtime')}}: {{
+                                            <span class="cal__hours-content">{{$t('cal.starttime')}} {{ tools.getstrTime(myevent.date) }} {{$t('cal.endtime')}}: {{
                                         getEndTime(myevent) }}</span>
                                         </span>
                                     </span>
@@ -90,7 +85,7 @@ $t('
                     </q-card-section>
                     <q-card-actions align="right">
                         <q-btn rounded v-if="!myevent.nobookable && static_data.functionality.BOOKING_EVENTS"
-                               color="primary" @click="addBookEventMenu(myevent)"
+                               color="primary" @click="addBookEventMenu(myevent)" :disable="!isEventEnabled(myevent)"
                                :label="$t('cal.booking')">
                         </q-btn>
                         <q-btn v-else :label="$t('dialog.ok')" color="primary" v-close-popup></q-btn>
@@ -247,10 +242,10 @@ $t('
                                         <span class="cal__hours-content">{{ myevent.infoextra }}  </span>
                                     </span>
                                 <span v-else>
-                                        <span v-if="myevent.time" class="cal__hours">
+                                        <span v-if="myevent.withtime" class="cal__hours">
                                              -
                                             <span class="cal__hours-title">{{$t('cal.hours')}}: </span>
-                                            <span class="cal__hours-content"><span v-if="!tools.isMobile()">{{$t('cal.starttime')}} </span>{{ myevent.time }} <span v-if="!tools.isMobile()">{{$t('cal.endtime')}} </span><span v-else> - </span> {{
+                                            <span class="cal__hours-content"><span v-if="!tools.isMobile()">{{$t('cal.starttime')}} </span>{{ tools.getstrTime(myevent.date) }} <span v-if="!tools.isMobile()">{{$t('cal.endtime')}} </span><span v-else> - </span> {{
                                                 getEndTime(myevent) }}</span>
                                         </span>
                                     </span>
@@ -258,7 +253,7 @@ $t('
                             <div class="q-pa-xs">
                                 <q-card class="text-white windowcol">
                                     <q-card-section>
-                                        <q-checkbox :disable="(bookEventpage.bookedevent && bookEventpage.bookedevent.booked) || (bookEventpage.bookedevent === undefined)" style="color: black;" v-model="bookEventForm.booked" :label="$t('cal.bookingtextdefault')" color="green">
+                                        <q-checkbox :disable="((bookEventpage.bookedevent && bookEventpage.bookedevent.booked) || (bookEventpage.bookedevent === undefined)) || !isEventEnabled(myevent)" style="color: black;" v-model="bookEventForm.booked" :label="$t('cal.bookingtextdefault')" color="green">
                                         </q-checkbox>
 
                                         <div v-if="bookEventForm.booked" class="q-gutter-md centermydiv" style="max-width: 150px; margin-top:10px;">
@@ -391,7 +386,7 @@ $t('
                         <div class="row justify-center">
                             <template v-for="(event, index) in eventsMap[date]">
                                 <q-badge
-                                        v-if="!event.time"
+                                        v-if="!event.withtime"
                                         :key="index"
                                         style="width: 100%; cursor: pointer;"
                                         class="ellipsis"
@@ -421,7 +416,7 @@ $t('
                     <template #day-body="{ date, timeStartPos, timeDurationHeight }">
                         <template v-for="(event, index) in getEvents(date)">
                             <q-badge
-                                    v-if="event.time"
+                                    v-if="event.withtime"
                                     :key="index"
                                     class="my-event justify-center ellipsis"
                                     :class="badgeClasses(event, 'body')"
@@ -468,8 +463,8 @@ $t('
                             <div v-else>
                                 <div v-if="event.date" class="listaev__date">
                                     {{func_tools.getDateStr(event.date)}}
-                                    <span v-if="event.time" class="cal__hours-content"> - {{ event.time }} <span
-                                            v-if="event.duration">- {{ getEndTime(event) }}</span></span>
+                                    <span v-if="event.withtime" class="cal__hours-content"> - {{ tools.getstrTime(event.date) }} <span
+                                            v-if="event.dur">- {{ getEndTime(event) }}</span></span>
                                     <span v-if="event.days > 1"><br/>{{func_tools.getDateStr(tools.addDays(event.date, event.days - 1))}}</span>
                                 </div>
                             </div>
@@ -511,16 +506,16 @@ $t('
 
                                 <q-chip>
                                     <q-avatar>
-                                        <img :src="`../../statics/images/avatar/` + event.avatar">
+                                        <img :src="`../../statics/images/` + getTeacherImg(event.teacher)">
                                     </q-avatar>
-                                    <span class="cal__teacher-content">{{event.teacher}}</span>
+                                    <span class="cal__teacher-content">{{getTeacherName(event.teacher)}}</span>
                                 </q-chip>
-                                <span v-if="event.avatar2" class="margin_avatar2"></span>
-                                <q-chip v-if="event.avatar2 && event.teacher2">
+                                <span v-if="getTeacherImg(event.teacher2)" class="margin_avatar2"></span>
+                                <q-chip v-if="getTeacherImg(event.teacher2) && event.teacher2">
                                     <q-avatar>
-                                        <img :src="`../../statics/images/avatar/` + event.avatar2">
+                                        <img :src="`../../statics/images/` + getTeacherImg(event.teacher2)">
                                     </q-avatar>
-                                    <span class="cal__teacher-content">{{event.teacher2}}</span>
+                                    <span class="cal__teacher-content">{{getTeacherName(event.teacher2)}}</span>
                                 </q-chip>
 
                                 <span v-if="event.where" class="">
@@ -550,7 +545,7 @@ $t('
                                 <q-btn rounded outline
                                        v-if="!event.nobookable && !isAlreadyBooked(event) && static_data.functionality.BOOKING_EVENTS"
                                        color="primary" @click="addBookEventMenu(event)"
-                                       :label="$t('cal.booking')">
+                                       :label="$t('cal.booking')" :disable="!isEventEnabled(event)">
                                 </q-btn>
                                 <q-btn rounded outline
                                        v-if="!event.nobookable && isAlreadyBooked(event) && static_data.functionality.BOOKING_EVENTS"

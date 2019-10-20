@@ -17,6 +17,8 @@ export interface IUserState {
   surname?: string
   password?: string
   lang?: string
+  ipaddr?: string
+  perm?: number
   repeatPassword?: string
 
   tokens?: IToken[]
@@ -31,7 +33,9 @@ export interface IUserState {
   x_auth_token?: string
   isLogged?: boolean
   isAdmin?: boolean
+  isManager?: boolean
   usersList?: IUserList[]
+  countusers?: number
 }
 
 export interface IUserList {
