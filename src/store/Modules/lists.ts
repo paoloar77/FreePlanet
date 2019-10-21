@@ -19,7 +19,7 @@ export const lists = {
     DUPLICATE_RECTABLE: 310,
 
     CAN_EDIT_TABLE: 400,
-    SHOW_PREV_REC: 401,
+    SHOW_PREV_REC: 401
   },
 
   selectTheme: [

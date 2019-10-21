@@ -30,6 +30,7 @@ const msgglobal = {
       delete: 'Elimina',
       cancel: 'Annulla',
       update: 'Aggiorna',
+      add: 'Aggiungi',
       today: 'Oggi',
       book: 'Prenota',
       sendmsg: 'Invia solo un Msg',
@@ -229,16 +230,16 @@ const msgglobal = {
       short_tit: 'Titolo Breve',
       title: 'Titolo',
       details: 'Dettagli',
-      withtime: 'Con Tempo',
-      dur: 'durata (min)',
-      dur2: 'durata2 (min)',
       date: 'Data',
       bgcolor: 'Colore Sfondo',
       days: 'Giorni',
       icon: 'Icona',
       img: 'Nomefile Immagine',
+      img_small: 'Img Piccola',
       where: 'Dove',
       contribtype: 'Tipo Contributo',
+      price: 'Quota',
+      infoafterprice: 'Note dopo la Quota',
       teacher: 'Insegnante',  // teacherid
       teacher2: 'Insegnante2', // teacherid2
       infoextra: 'InfoExtra',
@@ -249,7 +250,8 @@ const msgglobal = {
       dupId: 'Id Duplicato',
       canceled: 'Cancellato',
       deleted: 'Eliminato',
-      duplicate: 'Duplica'
+      duplicate: 'Duplica',
+      modified: 'Modificato'
     },
     newsletter: {
       title: 'Desideri ricevere la nostra Newsletter?',
@@ -297,6 +299,7 @@ const msgglobal = {
       delete: 'Borrar',
       cancel: 'Cancelar',
       update: 'Actualiza',
+      add: 'Aggrega',
       today: 'Hoy',
       book: 'Reserva',
       sendmsg: 'Envia solo Mensaje',
@@ -490,16 +493,16 @@ const msgglobal = {
       short_tit: 'Título Corto',
       title: 'Título',
       details: 'Detalles',
-      withtime: 'Con Tiempo',
-      dur: 'duración (min)',
-      dur2: 'duración2 (min)',
       date: 'Fecha',
       bgcolor: 'Color de fondo',
       days: 'Días',
       icon: 'Icono',
       img: 'Nombre Imagen',
+      img_small: 'Imagen Pequeña',
       where: 'Dónde',
       contribtype: 'Tipo de Contribución',
+      price: 'Precio',
+      infoafterprice: 'notas después del precio',
       teacher: 'Profesor',  // teacherid
       teacher2: 'Profesor2', // teacherid2
       infoextra: 'InfoExtra',
@@ -511,6 +514,7 @@ const msgglobal = {
       canceled: 'Cancelado',
       deleted: 'Eliminado',
       duplicate: 'Duplica',
+      modified: 'Modificado'
     },
     newsletter: {
       title: '¿Desea recibir nuestro boletín informativo?',
@@ -557,6 +561,7 @@ const msgglobal = {
       no: 'Non',
       delete: 'Supprimer',
       update: 'mises à jour',
+      add: 'Ajouter',
       cancel: 'annuler',
       today: 'Aujourd\'hui',
       book: 'Réserve',
@@ -750,16 +755,16 @@ const msgglobal = {
       short_tit: 'Titre abrégé\'',
       title: 'Titre',
       details: 'Détails',
-      withtime: 'avec le temps',
-      dur: 'durée (min)',
-      dur2: 'durée2 (min)',
       date: 'Date',
       bgcolor: 'Couleur de fond',
       days: 'Journées',
       icon: 'Icône',
       img: 'Image du nom de fichier',
+      img_small: 'Image petite',
       where: 'Où',
       contribtype: 'Type de contribution',
+      price: 'Prix',
+      infoafterprice: 'Notes après le prix',
       teacher: 'Enseignant',  // teacherid
       teacher2: 'Enseignant2', // teacherid2
       infoextra: 'Extra Info',
@@ -770,7 +775,8 @@ const msgglobal = {
       dupId: 'Id Double',
       canceled: 'Annulé',
       deleted: 'Supprimé',
-      duplicate: 'Duplique'
+      duplicate: 'Duplique',
+      modified: 'modifié'
     },
     newsletter: {
       title: 'Souhaitez-vous recevoir notre newsletter?',
@@ -817,6 +823,7 @@ const msgglobal = {
       no: 'No',
       delete: 'Delete',
       update: 'Update',
+      add: 'Add',
       cancel: 'Cancel',
       today: 'Today',
       book: 'Book',
@@ -1009,16 +1016,16 @@ const msgglobal = {
       short_tit: 'Short Title',
       title: 'Title',
       details: 'Details',
-      withtime: 'With Time',
-      dur: 'Duration (min)',
-      dur2: 'Duration2 (min)',
       date: 'Date',
       bgcolor: 'Background color',
       days: 'Days',
       icon: 'Icon',
       img: 'Nomefile Img',
+      img_small: 'Img Small',
       where: 'Qhere',
       contribtype: 'Contribute Type',
+      price: 'Price',
+      infoafterprice: 'Info after Price',
       teacher: 'Teacher',  // teacherid
       teacher2: 'Teacher2', // teacherid2
       infoextra: 'Extra Info',
@@ -1029,7 +1036,8 @@ const msgglobal = {
       dupId: 'Id Duplicate',
       canceled: 'Canceled',
       deleted: 'Deleted',
-      duplicate: 'Duplicate'
+      duplicate: 'Duplicate',
+      modified: 'Modified'
     },
     newsletter: {
       title: 'Would you like to receive our Newsletter?',
@@ -1076,6 +1084,7 @@ const msgglobal = {
       no: 'No',
       delete: 'Delete',
       update: 'Update',
+      add: 'Add',
       cancel: 'Cancel',
       today: 'Today',
       book: 'Book',
@@ -1270,16 +1279,16 @@ const msgglobal = {
       short_tit: 'Short Title',
       title: 'Title',
       details: 'Details',
-      withtime: 'With Time',
-      dur: 'Duration (min)',
-      dur2: 'Duration2 (min)',
       date: 'Date',
       bgcolor: 'Background color',
       days: 'Days',
       icon: 'Icon',
       img: 'Nomefile Img',
+      img_small: 'Img Small',
       where: 'Qhere',
       contribtype: 'Contribute Type',
+      price: 'Price',
+      infoafterprice: 'Info after Price',
       teacher: 'Teacher',  // teacherid
       teacher2: 'Teacher2', // teacherid2
       infoextra: 'Extra Info',
@@ -1290,7 +1299,8 @@ const msgglobal = {
       dupId: 'Id Duplicate',
       canceled: 'Canceled',
       deleted: 'Deleted',
-      duplicate: 'Duplicate'
+      duplicate: 'Duplicate',
+      modified: 'Modified'
     },
     newsletter: {
       title: 'Would you like to receive our Newsletter?',

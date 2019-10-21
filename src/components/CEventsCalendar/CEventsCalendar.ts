@@ -33,97 +33,6 @@ import { GlobalStore } from '../../store/Modules'
   components: { Logo, Footer, CTitle, CImgText, QDateTimeScroller, QDateScroller }
 })
 export default class CEventsCalendar extends Vue {
-  public $t: any
-  public $q
-  public calendarView = 'month'
-  public selectedDate = '2019-04-01'
-  public formDefault = {
-    title: '',
-    details: '',
-    allDay: false,
-    dateTimeStart: '',
-    dateTimeEnd: '',
-    icon: '',
-    bgcolor: '#0000FF'
-  }
-
-  public formbookEventDefault: IBookedEvent = {
-    userId: '',
-    msgbooking: '',
-    infoevent: '',
-    numpeople: 1,
-    datebooked: tools.getDateNow(),
-    booked: false,
-    modified: false
-  }
-
-  public mioalert = false
-
-  public dateFormatter: any = ''
-  public titleFormatter: any = null
-
-  public keyValue = 0
-  public direction = 'forward'
-  public weekdays = [1, 2, 3, 4, 5, 6, 0]
-  public viewOptions = [
-    { label: 'Day', value: 'day' },
-    { label: '5 Day', value: '5day' },
-    { label: 'Week', value: 'week' },
-    { label: 'Month', value: 'month' }
-  ]
-  public addEvent = false
-  public bookEventpage: IBookedEventPage = {
-    show: false,
-    bookedevent: null,
-    state: EState.None
-  }
-
-  public contextDay = null
-  public eventForm = { ...this.formDefault }
-  public bookEventForm = { ...this.formbookEventDefault }
-  public displayEvent = false
-  public myevent = null
-  // public events = []
-  public gmt = ''
-  public dragging = false
-  public draggedEvent = null
-  public ignoreNextSwipe = false
-  public showDateScrollerAllDay = false
-  public showDateTimeScrollerStart = false
-  public showDateTimeScrollerEnd = false
-
-  @Watch('locale')
-  public checkloc() {
-    this.updateFormatters()
-  }
-
-  public resources = [
-    {
-      label: 'John'
-    },
-    {
-      label: 'Mary'
-    },
-    {
-      label: 'Susan'
-    },
-    {
-      label: 'Olivia'
-    },
-    {
-      label: 'Board Room'
-    },
-    {
-      label: 'Room-1'
-    },
-    {
-      label: 'Room-2'
-    }
-  ]
-
-  public $refs: {
-    calendar: any
-  }
 
   // public eventdata =
   //   [
@@ -268,26 +177,6 @@ export default class CEventsCalendar extends Vue {
     return CalendarStore.state.editable
   }
 
-  public mounted() {
-    this.selectedDate = this.formatDate(tools.getDateNow())
-    this.$root.$on('calendar:next', this.calendarNext)
-    this.$root.$on('calendar:prev', this.calendarPrev)
-    this.$root.$on('calendar:today', this.calendarToday)
-    // CalendarStore.state.eventlist = events
-    this.updateFormatters()
-  }
-
-  public beforeMount() {
-    CalendarStore.state.locale = toolsext.getLocale()
-    this.updateFormatters()
-  }
-
-  public beforeDestroy() {
-    this.$root.$off('calendar:next', this.calendarNext)
-    this.$root.$off('calendar:prev', this.calendarPrev)
-    this.$root.$off('calendar:today', this.calendarToday)
-  }
-
   get containerStyle() {
     const styles = { height: '' }
     if (this.calendarView !== 'month' || (this.calendarView === 'month' && CalendarStore.state.dayHeight === 0)) {
@@ -300,15 +189,15 @@ export default class CEventsCalendar extends Vue {
   get eventsMap() {
     // console.log('eventsMap')
     const map = {}
-    CalendarStore.state.eventlist.forEach((myevent) => (map[myevent.date] = map[myevent.date] || []).push(myevent))
+    CalendarStore.state.eventlist.forEach((myevent) => (map[myevent.dateTimeStart.toDateString()] = map[myevent.dateTimeStart.toDateString()] || []).push(myevent))
     return map
   }
 
   get addOrUpdateEvent() {
     if (this.contextDay && this.contextDay.bgcolor) {
-      return 'Update'
+      return this.$t('dialog.update')
     }
-    return 'Add'
+    return this.$t('dialog.add')
   }
 
   get scrollerPopupStyle160() {
@@ -341,18 +230,161 @@ export default class CEventsCalendar extends Vue {
     }
   }
 
+  get tools() {
+    return tools
+  }
+
+  get toolsext() {
+    return toolsext
+  }
+
+  get func_tools() {
+    return func_tools
+  }
+
+  get hasModifiedBooking() {
+    return (this.bookEventpage.bookedevent.numpeople !== this.bookEventForm.numpeople) ||
+      (this.bookEventpage.bookedevent.msgbooking !== this.bookEventForm.msgbooking) ||
+      (this.bookEventpage.bookedevent.booked !== this.bookEventForm.booked)
+  }
+
+  get static_data() {
+    return static_data
+  }
+
+  get EState() {
+    return EState
+  }
+
+  get checkseinviaMsg() {
+    return (this.bookEventpage.state === EState.Creating) && (!this.bookEventForm.booked)
+  }
+
+  get getTitleBtnBooking() {
+    if (this.bookEventpage.state === EState.Creating) {
+      return this.$t('dialog.book')
+    } else {
+      return this.$t('dialog.update')
+    }
+  }
+
+  get mythis() {
+    return this
+  }
+  public $t: any
+  public $q
+  public calendarView = 'month'
+  public selectedDate = '2019-04-01'
+  public formDefault: IEvents = {
+    title: '',
+    details: '',
+    icon: '',
+    bgcolor: '#0000FF'
+  }
+
+  public formbookEventDefault: IBookedEvent = {
+    userId: '',
+    msgbooking: '',
+    infoevent: '',
+    numpeople: 1,
+    datebooked: tools.getDateNow(),
+    booked: false,
+    modified: false
+  }
+
+  public mioalert = false
+
+  public dateFormatter: any = ''
+  public titleFormatter: any = null
+
+  public keyValue = 0
+  public direction = 'forward'
+  public weekdays = [1, 2, 3, 4, 5, 6, 0]
+  public viewOptions = [
+    { label: 'Day', value: 'day' },
+    { label: '5 Day', value: '5day' },
+    { label: 'Week', value: 'week' },
+    { label: 'Month', value: 'month' }
+  ]
+  public addEvent = false
+  public bookEventpage: IBookedEventPage = {
+    show: false,
+    bookedevent: null,
+    state: EState.None
+  }
+
+  public contextDay = null
+  public eventForm = { ...this.formDefault }
+  public bookEventForm = { ...this.formbookEventDefault }
+  public displayEvent = false
+  public myevent = null
+  // public events = []
+  public gmt = ''
+  public dragging = false
+  public draggedEvent = null
+  public ignoreNextSwipe = false
+  public showDateScrollerAllDay = false
+  public showDateTimeScrollerStart = false
+  public showDateTimeScrollerEnd = false
+
+  public resources = [
+    {
+      label: 'John'
+    },
+    {
+      label: 'Mary'
+    },
+    {
+      label: 'Susan'
+    },
+    {
+      label: 'Olivia'
+    },
+    {
+      label: 'Board Room'
+    },
+    {
+      label: 'Room-1'
+    },
+    {
+      label: 'Room-2'
+    }
+  ]
+
+  public $refs: {
+    calendar: any
+  }
+
+  @Watch('locale')
+  public checkloc() {
+    this.updateFormatters()
+  }
+
+  public mounted() {
+    this.selectedDate = this.formatDate(tools.getDateNow())
+    this.$root.$on('calendar:next', this.calendarNext)
+    this.$root.$on('calendar:prev', this.calendarPrev)
+    this.$root.$on('calendar:today', this.calendarToday)
+    // CalendarStore.state.eventlist = events
+    this.updateFormatters()
+  }
+
+  public beforeMount() {
+    CalendarStore.state.locale = toolsext.getLocale()
+    this.updateFormatters()
+  }
+
+  public beforeDestroy() {
+    this.$root.$off('calendar:next', this.calendarNext)
+    this.$root.$off('calendar:prev', this.calendarPrev)
+    this.$root.$off('calendar:today', this.calendarToday)
+  }
+
   public showEvent(eventparam: IEvents) {
     // console.log('showEvent - INIZIO')
     this.myevent = eventparam
     this.displayEvent = true
     // console.log('showEvent - FINE ' + myevent)
-  }
-
-  public getEndTime(eventparam) {
-    let endTime = new Date(eventparam.date)
-    endTime = date.addToDate(endTime, { minutes: eventparam.dur })
-    endTime = date.formatDate(endTime, 'HH:mm')
-    return endTime
   }
 
   public onDateChanged(mydate) {
@@ -378,18 +410,7 @@ export default class CEventsCalendar extends Vue {
     }
     this.resetForm()
     this.contextDay = { ...day }
-    let timestamp
-    if (this.contextDay.hasTime === true) {
-      timestamp = this.getTimestamp(this.adjustTimestamp(this.contextDay))
-      const startTime = new Date(timestamp)
-      const endTime = date.addToDate(startTime, { hours: 1 })
-      this.eventForm.dateTimeEnd = this.formatDate(endTime) + ' ' + this.formatTime(endTime) // endTime.toString()
-    } else {
-      timestamp = this.contextDay.date + ' 00:00'
-    }
-    this.eventForm.dateTimeStart = timestamp
-    this.eventForm.allDay = this.contextDay.hasTime === false
-    this.eventForm.bgcolor = '#0000FF' // starting color
+
     this.addEvent = true // show dialog
   }
 
@@ -420,22 +441,12 @@ export default class CEventsCalendar extends Vue {
     console.log('editEvent - INIZIO')
     this.resetForm()
     this.contextDay = { ...eventparam }
-    let timestamp
-    if (eventparam.withtime) {
-      timestamp = eventparam.date
-      const startTime = new Date(timestamp)
-      const endTime = date.addToDate(startTime, { minutes: eventparam.dur })
-      this.eventForm.dateTimeStart = this.formatDate(startTime) + ' ' + this.formatTime(startTime) // endTime.toString()
-      this.eventForm.dateTimeEnd = this.formatDate(endTime) + ' ' + this.formatTime(endTime) // endTime.toString()
-    } else {
-      timestamp = eventparam.date
-      this.eventForm.dateTimeStart = timestamp
-    }
-    this.eventForm.allDay = !eventparam.withtime
-    this.eventForm.bgcolor = eventparam.bgcolor
-    this.eventForm.icon = eventparam.icon
-    this.eventForm.title = eventparam.title
-    this.eventForm.details = eventparam.details
+
+    this.eventForm =  {... eventparam }
+
+    this.eventForm.dateTimeStart = tools.getstrYYMMDDDateTime(eventparam.dateTimeStart)
+    this.eventForm.dateTimeEnd = tools.getstrYYMMDDDateTime(eventparam.dateTimeEnd)
+
     this.addEvent = true // show dialog
   }
 
@@ -450,7 +461,8 @@ export default class CEventsCalendar extends Vue {
     for (let i = 0; i < CalendarStore.state.eventlist.length; ++i) {
       if (eventparam.title === CalendarStore.state.eventlist[i].title &&
         eventparam.details === CalendarStore.state.eventlist[i].details &&
-        eventparam.date === CalendarStore.state.eventlist[i].date) {
+        eventparam.dateTimeStart === CalendarStore.state.eventlist[i].dateTimeStart &&
+        eventparam.dateTimeEnd === CalendarStore.state.eventlist[i].dateTimeEnd) {
         return i
       }
     }
@@ -469,18 +481,6 @@ export default class CEventsCalendar extends Vue {
     const year = d.getFullYear()
 
     return [year, tools.padTime(month), tools.padTime(day)].join('-')
-  }
-
-  get tools() {
-    return tools
-  }
-
-  get toolsext() {
-    return toolsext
-  }
-
-  get func_tools() {
-    return func_tools
   }
 
   public formatTime(mydate) {
@@ -514,21 +514,8 @@ export default class CEventsCalendar extends Vue {
       } else {
         // an add
       }
-      const data: IEvents = {
-        withtime: false,
-        dur: 0,
-        dur2: 0,
-        title: form.title,
-        details: form.details,
-        icon: form.icon,
-        bgcolor: form.bgcolor,
-        date: String(form.dateTimeStart).slice(0, 10).replace(/\//g, '-')
-      }
-      if (form.allDay === false) {
-        // get time into separate var
-        // data.time = String(form.dateTimeStart).slice(11, 16)
-        data.dur = self.getDuration(form.dateTimeStart, form.dateTimeEnd, 'minutes')
-      }
+      const data = { ...form }
+
       if (update === true) {
         const index = self.findEventIndex(self.contextDay)
         if (index >= 0) {
@@ -540,6 +527,27 @@ export default class CEventsCalendar extends Vue {
         // @ts-ignore
         CalendarStore.state.eventlist.push(data)
       }
+
+      // ++Save into the Database
+      const mydatatosave = {
+        id: data._id,
+        table: 'myevents',
+        fieldsvalue: data
+      }
+
+      GlobalStore.actions.saveFieldValue(mydatatosave).then((esito) => {
+        if (esito) {
+          tools.showPositiveNotif(this.$q, this.$t('db.recupdated'))
+        } else {
+          tools.showNegativeNotif(this.$q, this.$t('db.recfailed'))
+          // Undo...
+          const index = self.findEventIndex(self.contextDay)
+          if (index >= 0) {
+            // @ts-ignore
+            CalendarStore.state.eventlist.splice(index, 1, { ...self.contextDay })
+          }
+        }
+      })
 
       self.contextDay = null
     }
@@ -563,12 +571,6 @@ export default class CEventsCalendar extends Vue {
     this.bookEventpage.state = EState.Modifying
     this.bookEventpage.bookedevent = bookedevent
     this.bookEventpage.show = true
-  }
-
-  get hasModifiedBooking() {
-    return (this.bookEventpage.bookedevent.numpeople !== this.bookEventForm.numpeople) ||
-      (this.bookEventpage.bookedevent.msgbooking !== this.bookEventForm.msgbooking) ||
-      (this.bookEventpage.bookedevent.booked !== this.bookEventForm.booked)
   }
 
   public sendMsg(myevent: IEvents) {
@@ -608,23 +610,14 @@ export default class CEventsCalendar extends Vue {
     }
   }
 
-  public showOffset(days) {
-    if (days.length === 0) return
-
-    let val = ''
-    val = tools.padTime(new Date(this.getTimestamp(days[0])).getTimezoneOffset() / 60)
-    if (Number.isNaN(Number(val))) return ''
-    return 'GMT-' + val
-  }
-
   public adjustTimestamp(day) {
     day.minute = day.minute < 15 || day.minute >= 45 ? 0 : 30
     return day
   }
 
-  public getTimestamp(day) {
-    return day.date + ' ' + tools.padTime(day.hour) + ':' + tools.padTime(day.minute) + ':00.000'
-  }
+  // public getTimestamp(day) {
+  //   return day.date + ' ' + tools.padTime(day.hour) + ':' + tools.padTime(day.minute) + ':00.000'
+  // }
 
   public updateFormatters() {
     try {
@@ -682,11 +675,11 @@ export default class CEventsCalendar extends Vue {
   public onDragOver(ev, day, type) {
     if (type === 'day') {
       stopAndPrevent(ev)
-      return this.draggedEvent.date !== day.date
+      return this.draggedEvent.dateTimeStart !== day.dateTimeStart
     } else if (type === 'interval') {
       stopAndPrevent(ev)
       // return this.draggedEvent.date !== day.date && this.draggedEvent.time !== day.time
-      return this.draggedEvent.date !== day.date
+      return this.draggedEvent.dateTimeStart !== day.dateTimeStart
     }
   }
 
@@ -694,10 +687,10 @@ export default class CEventsCalendar extends Vue {
     ev.preventDefault()
     ev.stopPropagation()
     if (type === 'day') {
-      this.draggedEvent.date = day.date
+      this.draggedEvent.dateTimeStart = day.dateTimeStart
       this.draggedEvent.side = void 0
     } else if (type === 'interval') {
-      this.draggedEvent.date = day.date
+      this.draggedEvent.dateTimeStart = day.dateTimeStart
       // this.draggedEvent.time = day.time
       this.draggedEvent.side = void 0
     }
@@ -720,19 +713,27 @@ export default class CEventsCalendar extends Vue {
   }
 
   public getEventDate(eventparam) {
-    const parts = eventparam.date.split('-')
+    const parts = eventparam.dateTimeStart.split('-')
     const mydate = new Date(parts[0], parts[1] - 1, parts[2])
     return this.dateFormatter.format(mydate)
   }
 
   public getTeacherName(teacherusername) {
-    const op = CalendarStore.state.operators.find((myop) => myop.username === teacherusername)
-    return (op) ? `${op.name} ${op.surname}` : ''
+    return CalendarStore.getters.getTeacherName(teacherusername)
+  }
+
+  public getWhereIcon(where) {
+    const whererec = CalendarStore.getters.getWhereRec(where)
+    return (whererec) ? whererec.whereicon : ''
+  }
+  public getWhereName(where) {
+    const whererec = CalendarStore.getters.getWhereRec(where)
+    return (whererec) ? whererec.placename : ''
   }
 
   public getTeacherImg(teacherusername) {
-    const op = CalendarStore.state.operators.find((myop) => myop.username === teacherusername)
-    return (op) ? op.img : 'avatar/noimage.png'
+    const teacher = CalendarStore.getters.getTeacher(teacherusername)
+    return (teacher) ? teacher.img : ''
   }
 
   public badgeClasses(eventparam, type) {
@@ -754,10 +755,10 @@ export default class CEventsCalendar extends Vue {
       s.color = colors.luminosity(eventparam.bgcolor) > 0.5 ? 'black' : 'white'
     }
     if (timeStartPos) {
-      s.top = timeStartPos(tools.getstrTime(eventparam.date)) + 'px'
+      s.top = timeStartPos(tools.getstrTime(eventparam.dateTimeStart)) + 'px'
     }
     if (timeDurationHeight) {
-      s.height = timeDurationHeight(eventparam.dur) + 'px'
+      s.height = timeDurationHeight(this.func_tools.getMinutesDuration(eventparam.dateTimeStart, eventparam.dateTimeEnd)) + 'px'
     }
     s['align-items'] = 'flex-start'
     return s
@@ -798,7 +799,7 @@ export default class CEventsCalendar extends Vue {
     for (let i = 0; i < CalendarStore.state.eventlist.length; ++i) {
       // console.log('  ciclo i = ', i, CalendarStore.state.eventlist[i])
       // const dateEvent = new Date(CalendarStore.state.eventlist[i].date + ' 00:00:00')
-      const dateEvent = new Date(CalendarStore.state.eventlist[i].date)
+      const dateEvent = new Date(CalendarStore.state.eventlist[i].dateTimeEnd)
 
       if (dateEvent >= datenow) {
         eventsloc.push(CalendarStore.state.eventlist[i])
@@ -813,37 +814,30 @@ export default class CEventsCalendar extends Vue {
 
     for (let i = 0; i < CalendarStore.state.eventlist.length; ++i) {
       let added = false
-      // console.log('  ciclo i = ', i, CalendarStore.state.eventlist[i])
-      if (tools.getstrYYMMDDDate(CalendarStore.state.eventlist[i].date) === dt) {
-        // if (CalendarStore.state.eventlist[i].time) {
-          if (eventsloc.length > 0) {
-            // check for overlapping times
-            // const startTime = new Date(CalendarStore.state.eventlist[i].date + ' ' + CalendarStore.state.eventlist[i].time)
-            const startTime = new Date(CalendarStore.state.eventlist[i].date)
-            const endTime = date.addToDate(startTime, { minutes: CalendarStore.state.eventlist[i].dur })
-            for (let j = 0; j < eventsloc.length; ++j) {
-              const startTime2 = new Date(eventsloc[j].date)
-              const endTime2 = date.addToDate(startTime2, { minutes: eventsloc[j].dur2 })
-              if (date.isBetweenDates(startTime, startTime2, endTime2) || date.isBetweenDates(endTime, startTime2, endTime2)) {
-                eventsloc[j].side = 'left'
-                // CalendarStore.state.eventlist[i].side = 'right'
-                eventsloc.push(CalendarStore.state.eventlist[i])
-                added = true
-                break
-              }
+      if (tools.getstrYYMMDDDate(CalendarStore.state.eventlist[i].dateTimeStart) === dt) {
+        if (eventsloc.length > 0) {
+          // check for overlapping times
+          const startTime = CalendarStore.state.eventlist[i].dateTimeStart
+          const endTime = CalendarStore.state.eventlist[i].dateTimeEnd
+          for (let j = 0; j < eventsloc.length; ++j) {
+            const startTime2 = eventsloc[j].dateTimeStart
+            const endTime2 = eventsloc[j].dateTimeEnd
+            if (date.isBetweenDates(startTime, startTime2, endTime2) || date.isBetweenDates(endTime, startTime2, endTime2)) {
+              eventsloc[j].side = 'left'
+              eventsloc.push(CalendarStore.state.eventlist[i])
+              added = true
+              break
             }
           }
+        }
         // }
         if (!added) {
           // CalendarStore.state.eventlist[i].side = void 0
           eventsloc.push(CalendarStore.state.eventlist[i])
         }
-      } else if (CalendarStore.state.eventlist[i].days) {
+      } else if (func_tools.hasManyDays(CalendarStore.state.eventlist[i].dateTimeStart, CalendarStore.state.eventlist[i].dateTimeEnd)) {
         // check for overlapping dates
-        // const startDate = new Date(CalendarStore.state.eventlist[i].date + ' 00:00:00')
-        const startDate = new Date(CalendarStore.state.eventlist[i].date)
-        const endDate = date.addToDate(startDate, { days: CalendarStore.state.eventlist[i].days })
-        if (date.isBetweenDates(dt, startDate, endDate)) {
+        if (date.isBetweenDates(dt, CalendarStore.state.eventlist[i].dateTimeStart, CalendarStore.state.eventlist[i].dateTimeEnd)) {
           eventsloc.push(CalendarStore.state.eventlist[i])
           added = true
         }
@@ -852,41 +846,10 @@ export default class CEventsCalendar extends Vue {
     return eventsloc
   }
 
-  get static_data() {
-    return static_data
-  }
-
-  get EState() {
-    return EState
-  }
-
-  get checkseinviaMsg() {
-    return (this.bookEventpage.state === EState.Creating) && (!this.bookEventForm.booked)
-  }
-
-  get getTitleBtnBooking() {
-    if (this.bookEventpage.state === EState.Creating) {
-        return this.$t('dialog.book')
-    } else {
-      return this.$t('dialog.update')
-    }
-  }
-
-  get mythis() {
-    return this
-  }
-
   public isEventEnabled(myevent) {
     // check if event is in the past
     const datenow = tools.addDays(tools.getDateNow(), -1)
 
-    // let dateEvent = new Date(myevent.date + ' 00:00:00')
-    let dateEvent = new Date(myevent.date)
-
-    if (myevent.days) {
-      dateEvent = tools.addDays(dateEvent, myevent.days)
-    }
-
-    return (dateEvent >= datenow)
+    return (myevent.dateTimeEnd >= datenow)
   }
 }

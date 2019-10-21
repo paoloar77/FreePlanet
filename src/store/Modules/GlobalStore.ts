@@ -270,10 +270,12 @@ namespace Mutations {
   }
 
   function getListByTable(table): any[] {
-    if (table === 'events')
+    if (table === 'myevents')
       return CalendarStore.state.eventlist
     else if (table === 'operators')
       return CalendarStore.state.operators
+    else if (table === 'wheres')
+      return CalendarStore.state.wheres
     else if (table === 'bookings')
       return CalendarStore.state.bookedevent
     else if (table === 'users')

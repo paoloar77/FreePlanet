@@ -18,6 +18,7 @@ const state: ICalendarState = {
   eventlist: [],
   bookedevent: [],
   operators: [],
+  wheres: [],
   // ---------------
   titlebarHeight: 0,
   locale: 'it-IT',
@@ -63,6 +64,24 @@ namespace Getters {
     return mystate.bookedevent.filter((bookedevent) => (bookedevent.id_bookedevent === idevent) && (bookedevent.booked) && (showall || (!showall && bookedevent.userId === UserStore.state.userId) ))
   }, 'getEventsBookedByIdEvent')
 
+  const getTeacherName = b.read((mystate: ICalendarState) => (teacherusername) => {
+    const op = mystate.operators.find((myop) => myop.username === teacherusername)
+    return (op) ? `${op.name} ${op.surname}` : ''
+
+  }, 'getTeacherName')
+
+  const getTeacher = b.read((mystate: ICalendarState) => (teacherusername) => {
+    const op = mystate.operators.find((myop) => myop.username === teacherusername)
+    return (op)
+
+  }, 'getTeacher')
+
+  const getWhereRec = b.read((mystate: ICalendarState) => (wherecode) => {
+    const whererec = mystate.wheres.find((mywhere) => mywhere.code === wherecode)
+    return (whererec)
+
+  }, 'getWhereRec')
+
   export const getters = {
     get findEventBooked() {
       return findEventBooked()
@@ -72,6 +91,15 @@ namespace Getters {
     },
     get getEventsBookedByIdEvent() {
       return getEventsBookedByIdEvent()
+    },
+    get getTeacher() {
+      return getTeacher()
+    },
+    get getWhereRec() {
+      return getWhereRec()
+    },
+    get getTeacherName() {
+      return getTeacherName()
     }
   }
 
@@ -92,9 +120,7 @@ namespace Actions {
   async function loadAfterLogin(context) {
     // console.log('CalendarStore: loadAfterLogin')
     // Load local data
-    state.editable = db_data.userdata.calendar_editable
-    // state.eventlist = db_data.events
-    // state.bookedevent = db_data.userdata.bookedevent
+    state.editable = UserStore.state.isAdmin || UserStore.state.isManager
 
     if (UserStore.getters.isUserInvalid) {
       state.bookedevent = []
@@ -113,6 +139,7 @@ namespace Actions {
         state.bookedevent = (res.data.bookedevent) ? res.data.bookedevent : []
         state.eventlist = (res.data.eventlist) ? res.data.eventlist : []
         state.operators = (res.data.operators) ? res.data.operators : []
+        state.wheres = (res.data.wheres) ? res.data.wheres : []
 
       })
       .catch((error) => {

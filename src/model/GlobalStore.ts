@@ -226,6 +226,7 @@ export interface IColGridTable {
   visible?: boolean
   icon?: string
   action?: any
+  askaction?: string
   foredit?: boolean
   fieldtype?: string
   visuonlyEditVal?: boolean

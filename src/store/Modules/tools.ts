@@ -1664,8 +1664,10 @@ export const tools = {
   ,
   getstrYYMMDDDate(mytimestamp) {
     return date.formatDate(mytimestamp, 'YYYY-MM-DD')
-  }
-  ,
+  },
+  getstrYYMMDDDateTime(mytimestamp) {
+    return date.formatDate(mytimestamp, 'YYYY-MM-DD HH:mm')
+  },
 
 // mystrdate "26.04.2013"
   convertstrtoDate(mystrdate
@@ -2144,7 +2146,7 @@ export const tools = {
   },
   gettextevent(myevent: IEvents) {
     // return '"' + myevent.title + '" (' + func_tools.getDateStr(myevent.date) + ') - ' + myevent.time
-    return '"' + myevent.title + '" (' + tools.getstrDateTime(myevent.date)
+    return '"' + myevent.title + '" (' + tools.getstrDateTime(myevent.dateTimeStart)
   },
 
   setLangAtt(mylang) {
@@ -2299,9 +2301,9 @@ export const tools = {
       param2: notify
     })
   },
-  ActionRecTable(mythis, action, table, id, item?) {
-    console.log('CancelRecTable', id)
-    return tools.askConfirm(mythis.$q, translate('db.deleterecord'), translate('db.deletetherecord'), translate('dialog.yes'), translate('dialog.no'), mythis, table, action, 0, {
+  ActionRecTable(mythis, action, table, id, item, askaction) {
+    console.log('ActionRecTable', id)
+    return tools.askConfirm(mythis.$q, 'Action', translate(askaction) + '?', translate('dialog.yes'), translate('dialog.no'), mythis, table, action, 0, {
       param1: id,
       param2: item
     })
