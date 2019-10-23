@@ -86,40 +86,52 @@
                 <q-td v-for="col in mycolumns" :key="col.name" :props="props" v-if="colVisib.includes(col.field)">
                     <div v-if="col.fieldtype === 'date'">
                         <div style="max-width: 250px; min-width: 200px">
-                            <q-input dense v-model="props.row[col.name]">
-                                <template v-slot:prepend>
-                                    <q-icon name="event" class="cursor-pointer">
-                                        <q-popup-edit transition-show="scale" transition-hide="scale" v-if="canEdit" v-model="props.row[col.name]" :disable="col.disable"
-                                                      :title="col.title" buttons
-                                                      @save="SaveValue" @show="selItem(props.row, col.field)">
-                                            <q-date v-model="props.row[col.name]" mask="YYYY-MM-DD HH:mm" />
+                            <div class="flex flex-container">
+                                <q-icon name="event" class="cursor-pointer">
+                                    <q-popup-edit transition-show="scale" transition-hide="scale" v-if="canEdit"
+                                                  v-model="props.row[col.name]" :disable="col.disable"
+                                                  :title="col.title" buttons
+                                                  @save="SaveValue" @show="selItem(props.row, col.field)">
+                                        <q-date v-model="props.row[col.name]" mask="YYYY-MM-DD HH:mm"/>
 
-                                        </q-popup-edit>
-                                        <!--<q-popup-proxy transition-show="scale" transition-hide="scale">-->
-                                            <!--<q-date v-model="props.row[col.name]" mask="YYYY-MM-DD HH:mm" />-->
-                                        <!--</q-popup-proxy>-->
-                                    </q-icon>
-                                </template>
+                                    </q-popup-edit>
+                                    <!--<q-popup-proxy transition-show="scale" transition-hide="scale">-->
+                                    <!--<q-date v-model="props.row[col.name]" mask="YYYY-MM-DD HH:mm" />-->
+                                    <!--</q-popup-proxy>-->
+                                </q-icon>
+                                <div>
+                                    {{ visuValByType(col, props.row[col.name]) }}
+                                </div>
 
-                                <template v-slot:append>
-                                    <q-icon name="access_time" class="cursor-pointer">
-                                        <q-popup-edit transition-show="scale" transition-hide="scale" v-if="canEdit" v-model="props.row[col.name]" :disable="col.disable"
-                                                      :title="col.title" buttons
-                                                      @save="SaveValue" @show="selItem(props.row, col.field)">
-                                            <q-time v-model="props.row[col.name]" mask="YYYY-MM-DD HH:mm" format24h />
+                                <q-icon name="access_time" class="cursor-pointer">
+                                    <q-popup-edit transition-show="scale" transition-hide="scale" v-if="canEdit"
+                                                  v-model="props.row[col.name]" :disable="col.disable"
+                                                  :title="col.title" buttons
+                                                  @save="SaveValue" @show="selItem(props.row, col.field)">
+                                        <q-time v-model="props.row[col.name]" mask="YYYY-MM-DD HH:mm" format24h/>
 
-                                        </q-popup-edit>
+                                    </q-popup-edit>
 
-                                        <!--<q-popup-proxy transition-show="scale" transition-hide="scale">-->
-                                            <!--<q-time v-model="props.row[col.name]" mask="YYYY-MM-DD HH:mm" format24h />-->
-                                        <!--</q-popup-proxy>-->
-                                    </q-icon>
-                                </template>
-                            </q-input>
+                                    <!--<q-popup-proxy transition-show="scale" transition-hide="scale">-->
+                                    <!--<q-time v-model="props.row[col.name]" mask="YYYY-MM-DD HH:mm" format24h />-->
+                                    <!--</q-popup-proxy>-->
+                                </q-icon>
+                            </div>
                         </div>
                     </div>
-                    <div v-if="col.fieldtype === 'boolean'">
-                        <q-checkbox v-model="props.row[col.name])" label="" />
+                    <div v-else-if="col.fieldtype === 'boolean'">
+                        <div :class="getclassCol(col)">
+                            {{ visuValByType(col, props.row[col.name]) }}
+                            <q-popup-edit v-if="canEdit" v-model="props.row[col.name]" :disable="col.disable"
+                                          :title="col.title" buttons
+                                          @save="SaveValue" @show="selItem(props.row, col.field)">
+                                <q-checkbox v-model="props.row[col.name]" label="">
+
+                                </q-checkbox>
+                                {{ visuValByType(col, props.row[col.name]) }}
+
+                            </q-popup-edit>
+                        </div>
                     </div>
                     <div v-else>
                         <div :class="getclassCol(col)">

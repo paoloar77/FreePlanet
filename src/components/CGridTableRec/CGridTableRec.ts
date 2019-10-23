@@ -88,10 +88,9 @@ export default class CGridTableRec extends Vue {
   }
 
   public SaveValue(newVal, valinitial) {
-    console.log('SaveValue', newVal, 'selected', this.selected)
+    // console.log('SaveValue', newVal, 'selected', this.selected)
 
     const mydata = {
-      // colkey: this.colkey,
       id: this.idsel,
       table: this.mytable,
       fieldsvalue: {}
@@ -99,12 +98,7 @@ export default class CGridTableRec extends Vue {
 
     mydata.fieldsvalue[this.colsel] = newVal
 
-    console.table(mydata)
-
     this.valPrec = valinitial
-
-    // console.log('this.idsel', this.idsel, 'this.colsel', this.colsel)
-    // console.table(mydata)
 
     this.saveFieldValue(mydata)
   }
@@ -321,7 +315,7 @@ export default class CGridTableRec extends Vue {
 
   public clickFunz(item, col: IColGridTable) {
     if (col.action) {
-      tools.ActionRecTable(this, col.action, this.mytable, item._id, item)
+      tools.ActionRecTable(this, col.action, this.mytable, item._id, item, col.askaction)
     }
   }
 
@@ -331,7 +325,8 @@ export default class CGridTableRec extends Vue {
         this.serverData.splice(this.serverData.indexOf(item), 1)
     } else if (action === lists.MenuAction.DUPLICATE_RECTABLE) {
       // Add record duplicated
-      this.serverData.push(data)
+      // this.serverData.push(data)
+      this.refresh()
     }
   }
 
@@ -354,8 +349,12 @@ export default class CGridTableRec extends Vue {
       } else {
         return tools.getstrDateTime(val)
       }
+    } else if (col.fieldtype === 'boolean') {
+      return (val) ? this.$t('dialog.yes') : this.$t('dialog.no')
     } else {
-      if (val === undefined) {
+      if (val === undefined)
+        return '[]'
+      else if (val === '') {
         return '[]'
       } else {
         let mystr = tools.firstchars(val, tools.MAX_CHARACTERS)

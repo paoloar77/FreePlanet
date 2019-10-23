@@ -1,4 +1,5 @@
 import { UserStore } from '@store'
+import { date } from 'quasar'
 
 export const toolsext = {
   getLocale(vero?: boolean) {
@@ -33,11 +34,21 @@ export const func_tools = {
       year: 'numeric'
       // timeZone: 'UTC'
     })
-    if (DateFormatter) {
-      const date = new Date(mydate)
-      return DateFormatter.format(date)
+    try {
+      console.log('mydate', mydate, DateFormatter)
+      if (DateFormatter) {
+        const date1 = new Date(mydate)
+        return DateFormatter.format(date1)
+      }
+      return mydate
+    }catch (e) {
+      return ''
     }
-    return mydate
+
+  },
+
+  getMinutesDuration(mydatestart, mydateend) {
+    return date.getDateDiff(mydateend, mydatestart, 'minutes')
   },
 
   getDateTimeShortStr(mydate) {

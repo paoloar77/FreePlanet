@@ -270,10 +270,14 @@ namespace Mutations {
   }
 
   function getListByTable(table): any[] {
-    if (table === 'events')
+    if (table === 'myevents')
       return CalendarStore.state.eventlist
     else if (table === 'operators')
       return CalendarStore.state.operators
+    else if (table === 'wheres')
+      return CalendarStore.state.wheres
+    else if (table === 'contribtype')
+      return CalendarStore.state.contribtype
     else if (table === 'bookings')
       return CalendarStore.state.bookedevent
     else if (table === 'users')
@@ -491,6 +495,8 @@ namespace Actions {
     // console.log('loadAfterLogin')
     actions.clearDataAfterLoginOnlyIfActiveConnection()
 
+    await Actions.actions.loadSite()
+
     state.arrConfig = await globalroutines(null, 'readall', 'config', null)
   }
 
@@ -622,10 +628,39 @@ namespace Actions {
       })
   }
 
+  async function loadSite(context) {
+    // console.log('CalendarStore: loadAfterLogin')
+    // Load local data
+    CalendarStore.state.editable = UserStore.state.isAdmin || UserStore.state.isManager
+
+    const showall = UserStore.state.isAdmin || UserStore.state.isManager ? '1' : '0'
+
+    const myuserid = (UserStore.state.userId) ? UserStore.state.userId : '0'
+
+    const ris = await Api.SendReq('/loadsite/' + myuserid + '/' + process.env.APP_ID + '/' + showall, 'GET', null)
+      .then((res) => {
+        CalendarStore.state.bookedevent = (res.data.bookedevent) ? res.data.bookedevent : []
+        CalendarStore.state.eventlist = (res.data.eventlist) ? res.data.eventlist : []
+        CalendarStore.state.operators = (res.data.operators) ? res.data.operators : []
+        CalendarStore.state.wheres = (res.data.wheres) ? res.data.wheres : []
+        CalendarStore.state.contribtype = (res.data.contribtype) ? res.data.contribtype : []
+
+      })
+      .catch((error) => {
+        console.log('error dbLoad', error)
+        // UserStore.mutations.setErrorCatch(error)
+        return new Types.AxiosError(serv_constants.RIS_CODE_ERR, null, tools.ERR_GENERICO, error)
+      })
+
+    return ris
+
+  }
+
   export const actions = {
     setConta: b.dispatch(setConta),
     createPushSubscription: b.dispatch(createPushSubscription),
     loadAfterLogin: b.dispatch(loadAfterLogin),
+    loadSite: b.dispatch(loadSite),
     clearDataAfterLogout: b.dispatch(clearDataAfterLogout),
     clearDataAfterLoginOnlyIfActiveConnection: b.dispatch(clearDataAfterLoginOnlyIfActiveConnection),
     prova: b.dispatch(prova),

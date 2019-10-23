@@ -18,6 +18,8 @@ const state: ICalendarState = {
   eventlist: [],
   bookedevent: [],
   operators: [],
+  wheres: [],
+  contribtype: [],
   // ---------------
   titlebarHeight: 0,
   locale: 'it-IT',
@@ -63,6 +65,41 @@ namespace Getters {
     return mystate.bookedevent.filter((bookedevent) => (bookedevent.id_bookedevent === idevent) && (bookedevent.booked) && (showall || (!showall && bookedevent.userId === UserStore.state.userId) ))
   }, 'getEventsBookedByIdEvent')
 
+  const getTeacherName = b.read((mystate: ICalendarState) => (teacherusername) => {
+    const op = mystate.operators.find((myop) => myop.username === teacherusername)
+    return (op) ? `${op.name} ${op.surname}` : ''
+
+  }, 'getTeacherName')
+
+  const getTeacher = b.read((mystate: ICalendarState) => (teacherusername) => {
+    const op = mystate.operators.find((myop) => myop.username === teacherusername)
+    return (op)
+
+  }, 'getTeacher')
+
+  const getWhereRec = b.read((mystate: ICalendarState) => (wherecode) => {
+    const whererec = mystate.wheres.find((mywhere) => mywhere.code === wherecode)
+    return (whererec)
+
+  }, 'getWhereRec')
+
+  const getContribtypeRec = b.read((mystate: ICalendarState) => (id) => {
+    const ctrec = mystate.contribtype.find((mycontr) => mycontr._id === id)
+    return (ctrec)
+
+  }, 'getContribtypeRec')
+
+  const getContribtypeById = b.read((mystate: ICalendarState) => (id) => {
+    const ctrec = mystate.contribtype.find((mycontr) => mycontr._id === id)
+    return (ctrec) ? ctrec.label : ''
+
+  }, 'getContribtypeById')
+  const getContribtypeRecByLabel = b.read((mystate: ICalendarState) => (label) => {
+    const ctrec = mystate.contribtype.find((mycontr) => mycontr.label === label)
+    return (ctrec)
+
+  }, 'getContribtypeRecByLabel')
+
   export const getters = {
     get findEventBooked() {
       return findEventBooked()
@@ -72,6 +109,24 @@ namespace Getters {
     },
     get getEventsBookedByIdEvent() {
       return getEventsBookedByIdEvent()
+    },
+    get getTeacher() {
+      return getTeacher()
+    },
+    get getWhereRec() {
+      return getWhereRec()
+    },
+    get getContribtypeRec() {
+      return getContribtypeRec()
+    },
+    get getContribtypeById() {
+      return getContribtypeById()
+    },
+    get getContribtypeRecByLabel() {
+      return getContribtypeRecByLabel()
+    },
+    get getTeacherName() {
+      return getTeacherName()
     }
   }
 
@@ -89,41 +144,6 @@ namespace Mutations {
 }
 
 namespace Actions {
-  async function loadAfterLogin(context) {
-    // console.log('CalendarStore: loadAfterLogin')
-    // Load local data
-    state.editable = db_data.userdata.calendar_editable
-    // state.eventlist = db_data.events
-    // state.bookedevent = db_data.userdata.bookedevent
-
-    if (UserStore.getters.isUserInvalid) {
-      state.bookedevent = []
-      return false
-    }
-
-    // Load local data
-    // console.log('CALENDAR loadAfterLogin', 'userid=', UserStore.state.userId)
-
-    let ris = null
-
-    const showall = UserStore.state.isAdmin || UserStore.state.isManager ? '1' : '0'
-
-    ris = await Api.SendReq('/booking/' + UserStore.state.userId + '/' + process.env.APP_ID + '/' + showall, 'GET', null)
-      .then((res) => {
-        state.bookedevent = (res.data.bookedevent) ? res.data.bookedevent : []
-        state.eventlist = (res.data.eventlist) ? res.data.eventlist : []
-        state.operators = (res.data.operators) ? res.data.operators : []
-
-      })
-      .catch((error) => {
-        console.log('error dbLoad', error)
-        // UserStore.mutations.setErrorCatch(error)
-        return new Types.AxiosError(serv_constants.RIS_CODE_ERR, null, tools.ERR_GENERICO, error)
-      })
-
-    return ris
-
-  }
 
   function getparambyevent(bookevent) {
     return {
@@ -195,7 +215,6 @@ namespace Actions {
   }
 
   export const actions = {
-    loadAfterLogin: b.dispatch(loadAfterLogin),
     BookEvent: b.dispatch(BookEvent),
     CancelBookingEvent: b.dispatch(CancelBookingEvent)
   }

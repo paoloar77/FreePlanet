@@ -5,27 +5,28 @@ export interface IEvents {
   short_tit?: string
   title?: string
   details?: string
-  withtime?: boolean
-  dur?: number
-  dur2?: number
-  date?: string
+  dateTimeStart?: Date
+  dateTimeEnd?: Date
   side?: string
   bgcolor?: string
-  days?: number
   icon?: string
   img?: string
-  where?: string
-  contribtype?: number
-  teacher?: string  // teacherid
-  teacher2?: string // teacherid2
+  img_small?: string
+  wherecode?: string
+  contribtype?: string
+  price?: number
+  infoafterprice?: string
+  teacher?: string
+  teacher2?: string
   infoextra?: string
   linkpage?: string
   linkpdf?: string
   nobookable?: boolean
   news?: boolean
-  dupId?: any
   canceled?: boolean
   deleted?: boolean
+  dupId?: any
+  modified?: boolean
 }
 
 export interface IBookedEvent {
@@ -55,6 +56,18 @@ export interface IOperators {
   offers?: string
 }
 
+export interface IWheres {
+  code: string
+  placename: string
+  whereicon: string
+}
+
+export interface IContribtype {
+  _id: any
+  label: string
+  showprice: boolean
+}
+
 export enum EState {
   None, Creating, Modifying
 }
@@ -70,6 +83,8 @@ export interface ICalendarState {
   eventlist: IEvents[]
   bookedevent: IBookedEvent[]
   operators: IOperators[]
+  wheres: IWheres[]
+  contribtype: IContribtype[]
   // ---------------
   titlebarHeight: number
   locale: string,

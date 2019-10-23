@@ -621,8 +621,6 @@ namespace Actions {
       GlobalStore.actions.checkUpdates()
     }
 
-    const p2 = await CalendarStore.actions.loadAfterLogin()
-
     const p3 = await GlobalStore.actions.loadAfterLogin()
 
     if (static_data.functionality.ENABLE_TODOS_LOADING)
