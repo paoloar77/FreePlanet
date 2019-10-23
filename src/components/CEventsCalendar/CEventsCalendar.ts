@@ -13,6 +13,8 @@ import { colors, Screen, Platform, date } from 'quasar'
 
 import { CTitle } from '../../components/CTitle/index'
 import { CImgText } from '../../components/CImgText/index'
+import { CMySelect } from '../../components/CMySelect/index'
+import { CMyEditor } from '../../components/CMyEditor/index'
 import { stop, prevent, stopAndPrevent } from 'quasar/src/utils/event'
 
 import QDateScroller from '@quasar/quasar-app-extension-qscroller/src/component/QDateScroller'
@@ -30,9 +32,90 @@ import { GlobalStore } from '../../store/Modules'
 
 @Component({
   name: 'CEventsCalendar',
-  components: { Logo, Footer, CTitle, CImgText, QDateTimeScroller, QDateScroller }
+  components: { Logo, Footer, CTitle, CImgText, QDateTimeScroller, QDateScroller, CMySelect, CMyEditor }
 })
 export default class CEventsCalendar extends Vue {
+  public $q
+  public $t: any
+  public calendarView = 'month'
+  public selectedDate = '2019-04-01'
+  public formDefault: IEvents = {
+    title: '',
+    details: '',
+    dateTimeStart: tools.getstrYYMMDDDateTime(tools.getDateNow()),
+    dateTimeEnd: tools.getstrYYMMDDDateTime(tools.getDateNow()),
+    icon: '',
+    bgcolor: '#839ff2'
+  }
+
+  public formbookEventDefault: IBookedEvent = {
+    userId: '',
+    msgbooking: '',
+    infoevent: '',
+    numpeople: 1,
+    datebooked: tools.getDateNow(),
+    booked: false,
+    modified: false
+  }
+
+  public mioalert = false
+
+  public dateFormatter: any = ''
+  public titleFormatter: any = null
+
+  public keyValue = 0
+  public direction = 'forward'
+  public weekdays = [1, 2, 3, 4, 5, 6, 0]
+  public viewOptions = [
+    { label: 'Day', value: 'day' },
+    { label: '5 Day', value: '5day' },
+    { label: 'Week', value: 'week' },
+    { label: 'Month', value: 'month' }
+  ]
+  public addEvent = false
+  public bookEventpage: IBookedEventPage = {
+    show: false,
+    bookedevent: null,
+    state: EState.None
+  }
+
+  public contextDay = null
+  public eventForm: IEvents = { ...this.formDefault }
+  public bookEventForm = { ...this.formbookEventDefault }
+  public displayEvent = false
+  public myevent = null
+  // public events = []
+  public gmt = ''
+  public dragging = false
+  public draggedEvent = null
+  public ignoreNextSwipe = false
+  public showDateScrollerAllDay = false
+  public showDateTimeScrollerStart = false
+  public showDateTimeScrollerEnd = false
+
+  public resources = [
+    {
+      label: 'John'
+    },
+    {
+      label: 'Mary'
+    },
+    {
+      label: 'Susan'
+    },
+    {
+      label: 'Olivia'
+    },
+    {
+      label: 'Board Room'
+    },
+    {
+      label: 'Room-1'
+    },
+    {
+      label: 'Room-2'
+    }
+  ]
 
   // public eventdata =
   //   [
@@ -189,7 +272,7 @@ export default class CEventsCalendar extends Vue {
   get eventsMap() {
     // console.log('eventsMap')
     const map = {}
-    CalendarStore.state.eventlist.forEach((myevent) => (map[myevent.dateTimeStart.toDateString()] = map[myevent.dateTimeStart.toDateString()] || []).push(myevent))
+    CalendarStore.state.eventlist.forEach((myevent) => (map[tools.getstrDateTime(myevent.dateTimeStart)] = map[tools.getstrDateTime(myevent.dateTimeStart)] || []).push(myevent))
     return map
   }
 
@@ -271,85 +354,7 @@ export default class CEventsCalendar extends Vue {
   get mythis() {
     return this
   }
-  public $t: any
-  public $q
-  public calendarView = 'month'
-  public selectedDate = '2019-04-01'
-  public formDefault: IEvents = {
-    title: '',
-    details: '',
-    icon: '',
-    bgcolor: '#0000FF'
-  }
 
-  public formbookEventDefault: IBookedEvent = {
-    userId: '',
-    msgbooking: '',
-    infoevent: '',
-    numpeople: 1,
-    datebooked: tools.getDateNow(),
-    booked: false,
-    modified: false
-  }
-
-  public mioalert = false
-
-  public dateFormatter: any = ''
-  public titleFormatter: any = null
-
-  public keyValue = 0
-  public direction = 'forward'
-  public weekdays = [1, 2, 3, 4, 5, 6, 0]
-  public viewOptions = [
-    { label: 'Day', value: 'day' },
-    { label: '5 Day', value: '5day' },
-    { label: 'Week', value: 'week' },
-    { label: 'Month', value: 'month' }
-  ]
-  public addEvent = false
-  public bookEventpage: IBookedEventPage = {
-    show: false,
-    bookedevent: null,
-    state: EState.None
-  }
-
-  public contextDay = null
-  public eventForm = { ...this.formDefault }
-  public bookEventForm = { ...this.formbookEventDefault }
-  public displayEvent = false
-  public myevent = null
-  // public events = []
-  public gmt = ''
-  public dragging = false
-  public draggedEvent = null
-  public ignoreNextSwipe = false
-  public showDateScrollerAllDay = false
-  public showDateTimeScrollerStart = false
-  public showDateTimeScrollerEnd = false
-
-  public resources = [
-    {
-      label: 'John'
-    },
-    {
-      label: 'Mary'
-    },
-    {
-      label: 'Susan'
-    },
-    {
-      label: 'Olivia'
-    },
-    {
-      label: 'Board Room'
-    },
-    {
-      label: 'Room-1'
-    },
-    {
-      label: 'Room-2'
-    }
-  ]
 
   public $refs: {
     calendar: any
@@ -367,6 +372,7 @@ export default class CEventsCalendar extends Vue {
     this.$root.$on('calendar:today', this.calendarToday)
     // CalendarStore.state.eventlist = events
     this.updateFormatters()
+
   }
 
   public beforeMount() {
@@ -411,6 +417,9 @@ export default class CEventsCalendar extends Vue {
     this.resetForm()
     this.contextDay = { ...day }
 
+    this.eventForm.dateTimeStart = tools.getstrYYMMDDDateTime(day.date + ' 21:00:00')
+    this.eventForm.dateTimeEnd = tools.getstrYYMMDDDateTime(day.date + ' 22:00:00')
+
     this.addEvent = true // show dialog
   }
 
@@ -423,7 +432,6 @@ export default class CEventsCalendar extends Vue {
       console.log('addBookEventMenu')
       this.resetForm()
       this.myevent = eventparam
-      // this.bookEventForm.msgbooking = translate('cal.bookingtextdefault') + ' ' + tools.gettextevent(this.myevent)
       this.bookEventForm.msgbooking = ''
       this.bookEventForm.numpeople = 1
       this.bookEventpage.state = EState.Creating
@@ -440,9 +448,10 @@ export default class CEventsCalendar extends Vue {
   public editEvent(eventparam) {
     console.log('editEvent - INIZIO')
     this.resetForm()
+
     this.contextDay = { ...eventparam }
 
-    this.eventForm =  {... eventparam }
+    this.eventForm = { ...eventparam }
 
     this.eventForm.dateTimeStart = tools.getstrYYMMDDDateTime(eventparam.dateTimeStart)
     this.eventForm.dateTimeEnd = tools.getstrYYMMDDDateTime(eventparam.dateTimeEnd)
@@ -459,11 +468,13 @@ export default class CEventsCalendar extends Vue {
 
   public findEventIndex(eventparam) {
     for (let i = 0; i < CalendarStore.state.eventlist.length; ++i) {
-      if (eventparam.title === CalendarStore.state.eventlist[i].title &&
-        eventparam.details === CalendarStore.state.eventlist[i].details &&
-        eventparam.dateTimeStart === CalendarStore.state.eventlist[i].dateTimeStart &&
-        eventparam.dateTimeEnd === CalendarStore.state.eventlist[i].dateTimeEnd) {
-        return i
+      if (eventparam) {
+        if (eventparam.title === CalendarStore.state.eventlist[i].title &&
+          eventparam.details === CalendarStore.state.eventlist[i].details &&
+          eventparam.dateTimeStart === CalendarStore.state.eventlist[i].dateTimeStart &&
+          eventparam.dateTimeEnd === CalendarStore.state.eventlist[i].dateTimeEnd) {
+          return i
+        }
       }
     }
   }
@@ -498,6 +509,33 @@ export default class CEventsCalendar extends Vue {
     return diff
   }
 
+  public UpdateDbByFields(myrec, undo?) {
+    const self = this
+
+    const mydatatosave = {
+      id: myrec._id,
+      table: 'myevents',
+      fieldsvalue: myrec
+    }
+
+    GlobalStore.actions.saveFieldValue(mydatatosave).then((esito) => {
+      if (esito) {
+        tools.showPositiveNotif(this.$q, this.$t('db.recupdated'))
+      } else {
+        tools.showNegativeNotif(this.$q, this.$t('db.recfailed'))
+        // Undo...
+        if (undo) {
+          const index = self.findEventIndex(self.contextDay)
+          if (index >= 0) {
+            // @ts-ignore
+            CalendarStore.state.eventlist.splice(index, 1, { ...self.contextDay })
+          }
+        }
+      }
+    })
+
+  }
+
   public saveEvent() {
     const self = this
 
@@ -508,25 +546,13 @@ export default class CEventsCalendar extends Vue {
       self.addEvent = false
       const form = { ...self.eventForm }
       let update = false
-      if (self.contextDay.bgcolor) {
+      if (self.contextDay._id) {
         // an update
         update = true
       } else {
         // an add
       }
       const data = { ...form }
-
-      if (update === true) {
-        const index = self.findEventIndex(self.contextDay)
-        if (index >= 0) {
-          // @ts-ignore
-          CalendarStore.state.eventlist.splice(index, 1, { ...data })
-        }
-      } else {
-        // add to events array
-        // @ts-ignore
-        CalendarStore.state.eventlist.push(data)
-      }
 
       // ++Save into the Database
       const mydatatosave = {
@@ -535,19 +561,42 @@ export default class CEventsCalendar extends Vue {
         fieldsvalue: data
       }
 
-      GlobalStore.actions.saveFieldValue(mydatatosave).then((esito) => {
-        if (esito) {
-          tools.showPositiveNotif(this.$q, this.$t('db.recupdated'))
-        } else {
-          tools.showNegativeNotif(this.$q, this.$t('db.recfailed'))
-          // Undo...
-          const index = self.findEventIndex(self.contextDay)
-          if (index >= 0) {
-            // @ts-ignore
-            CalendarStore.state.eventlist.splice(index, 1, { ...self.contextDay })
-          }
+      if (update === true) {
+        this.UpdateDbByFields(data, true)
+      } else {
+        const mydataadd = {
+          table: 'myevents',
+          data
         }
-      })
+
+        GlobalStore.actions.saveTable(mydataadd).then((record) => {
+          if (record) {
+            tools.showPositiveNotif(this.$q, this.$t('db.recupdated'))
+
+            if (update === true) {
+              const index = self.findEventIndex(self.contextDay)
+              if (index >= 0) {
+                // @ts-ignore
+                CalendarStore.state.eventlist.splice(index, 1, { ...data })
+              }
+            } else {
+              data._id = record._id
+              // add to events array
+              // @ts-ignore
+              CalendarStore.state.eventlist.push(data)
+            }
+
+          } else {
+            tools.showNegativeNotif(this.$q, this.$t('db.recfailed'))
+            // Undo...
+            const index = self.findEventIndex(self.contextDay)
+            if (index >= 0) {
+              // @ts-ignore
+              CalendarStore.state.eventlist.splice(index, 1, { ...self.contextDay })
+            }
+          }
+        })
+      }
 
       self.contextDay = null
     }
@@ -592,7 +641,7 @@ export default class CEventsCalendar extends Vue {
         userId: UserStore.state.userId,
         id_bookedevent: myevent._id,
         numpeople: self.bookEventForm.numpeople,
-        infoevent: tools.gettextevent(myevent),
+        infoevent: tools.gettextevent(self, myevent),
         msgbooking: self.bookEventForm.msgbooking,
         booked: self.bookEventForm.booked,
         datebooked: tools.getDateNow(),
@@ -686,14 +735,29 @@ export default class CEventsCalendar extends Vue {
   public onDrop(ev, day, type) {
     ev.preventDefault()
     ev.stopPropagation()
+    console.log('day.dateTimeStart', day.dateTimeStart, day.date, 'day.time', day.time)
     if (type === 'day') {
-      this.draggedEvent.dateTimeStart = day.dateTimeStart
+      this.draggedEvent.dateTimeStart = day.date + ' ' + tools.getstrTime(this.draggedEvent.dateTimeStart)
+      this.draggedEvent.dateTimeEnd = day.date + ' ' + tools.getstrTime(this.draggedEvent.dateTimeEnd)
       this.draggedEvent.side = void 0
     } else if (type === 'interval') {
-      this.draggedEvent.dateTimeStart = day.dateTimeStart
+      const mins = date.getDateDiff(this.draggedEvent.dateTimeEnd, this.draggedEvent.dateTimeStart, 'minutes')
+      this.draggedEvent.dateTimeStart = day.date + ' ' + day.time
+      const mystart = new Date(this.draggedEvent.dateTimeStart)
+      this.draggedEvent.dateTimeEnd = tools.addMinutes(mystart, mins)
+      // this.draggedEvent.dateTimeEnd = day.dateTimeEnd
       // this.draggedEvent.time = day.time
       this.draggedEvent.side = void 0
     }
+    // console.log('Start', this.draggedEvent.dateTimeStart, 'End', this.draggedEvent.dateTimeEnd)
+
+    // Save Date
+    this.UpdateDbByFields({
+      _id: this.draggedEvent._id,
+      dateTimeStart: this.draggedEvent.dateTimeStart,
+      dateTimeEnd: this.draggedEvent.dateTimeEnd
+    }, true)
+
   }
 
   public resetDrag() {
@@ -712,10 +776,56 @@ export default class CEventsCalendar extends Vue {
     return CalendarStore.getters.findEventBooked(eventparam, true)
   }
 
+  public getImgEvent(event: IEvents) {
+    if (!!event.img)
+      return '../../statics/' + event.img
+    else
+      return '../../statics/images/noimg.png'
+  }
+
+  get getContribTypeArr() {
+    return CalendarStore.state.contribtype
+  }
+
+  get getTeachersArr() {
+    return CalendarStore.state.operators
+  }
+
+  get getWhereArr() {
+    return CalendarStore.state.wheres
+  }
+
+  public isShowPrice(event: IEvents) {
+    const rec = CalendarStore.getters.getContribtypeRec(event.contribtype)
+    return (rec) ? rec.showprice : true
+  }
+
+  public getContribtypeById(id) {
+    return CalendarStore.getters.getContribtypeById(id)
+  }
+
+  public createContribType(value) {
+    console.log('createContribType', value)
+    tools.createNewRecord(this, 'contribtype', { label: value }).then((myrec) => {
+      console.log('myrec')
+      CalendarStore.state.contribtype.push(myrec)
+    })
+  }
+
   public getEventDate(eventparam) {
     const parts = eventparam.dateTimeStart.split('-')
     const mydate = new Date(parts[0], parts[1] - 1, parts[2])
     return this.dateFormatter.format(mydate)
+  }
+
+  public getPrice(event: IEvents) {
+    let myprice = (event.price > 0) ? event.price + ' €' : ''
+    myprice = (event.price === -1) ? this.$t('event.askinfo') : myprice
+
+    if (event.infoafterprice)
+      myprice += ' ' + event.infoafterprice
+
+    return myprice
   }
 
   public getTeacherName(teacherusername) {
@@ -726,6 +836,7 @@ export default class CEventsCalendar extends Vue {
     const whererec = CalendarStore.getters.getWhereRec(where)
     return (whererec) ? whererec.whereicon : ''
   }
+
   public getWhereName(where) {
     const whererec = CalendarStore.getters.getWhereRec(where)
     return (whererec) ? whererec.placename : ''
@@ -835,7 +946,7 @@ export default class CEventsCalendar extends Vue {
           // CalendarStore.state.eventlist[i].side = void 0
           eventsloc.push(CalendarStore.state.eventlist[i])
         }
-      } else if (func_tools.hasManyDays(CalendarStore.state.eventlist[i].dateTimeStart, CalendarStore.state.eventlist[i].dateTimeEnd)) {
+      } else if (tools.hasManyDays(CalendarStore.state.eventlist[i].dateTimeStart, CalendarStore.state.eventlist[i].dateTimeEnd)) {
         // check for overlapping dates
         if (date.isBetweenDates(dt, CalendarStore.state.eventlist[i].dateTimeStart, CalendarStore.state.eventlist[i].dateTimeEnd)) {
           eventsloc.push(CalendarStore.state.eventlist[i])

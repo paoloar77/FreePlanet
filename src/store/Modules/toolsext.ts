@@ -34,18 +34,17 @@ export const func_tools = {
       year: 'numeric'
       // timeZone: 'UTC'
     })
-    if (DateFormatter) {
-      const date1 = new Date(mydate)
-      return DateFormatter.format(date1)
+    try {
+      console.log('mydate', mydate, DateFormatter)
+      if (DateFormatter) {
+        const date1 = new Date(mydate)
+        return DateFormatter.format(date1)
+      }
+      return mydate
+    }catch (e) {
+      return ''
     }
-    return mydate
-  },
 
-  hasManyDays(mydatestart, mydateend) {
-    if (mydateend)
-      return this.getDateStr(mydatestart) !== this.getDateStr(mydateend)
-    else
-      return false
   },
 
   getMinutesDuration(mydatestart, mydateend) {

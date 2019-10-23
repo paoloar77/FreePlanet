@@ -4,8 +4,9 @@
             <!-- display an myevent -->
             <q-dialog v-model="displayEvent">
                 <q-card v-if="myevent">
-                    <q-toolbar :class="tools.displayClasses(myevent)"
-                               :style="tools.displayStyles(myevent) + ` min-width: `+ tools.myheight_dialog() + `px;`">
+                    <q-toolbar class="bg-primary text-white" :style="`min-width: ` + tools.myheight_dialog() + `px;`">
+                        <!--<q-toolbar :class="tools.displayClasses(myevent)"-->
+                        <!--:style="tools.displayStyles(myevent) + ` min-width: `+ tools.myheight_dialog() + `px;`">-->
                         <q-toolbar-title>
                             {{ $t('cal.event') }}
                         </q-toolbar-title>
@@ -16,49 +17,61 @@
                         <q-btn flat round color="white" icon="cancel" v-close-popup></q-btn>
                     </q-toolbar>
                     <q-card-section class="inset-shadow">
-                        <q-img :src="`../../statics/`+myevent.img"
+                        <q-img :src="getImgEvent(myevent)"
                                class="absolute-top"
                                style="height: 150px;">
                         </q-img>
                         <div style="margin-top: 150px;">
                             <!--<div v-if="myevent.allday" class="text-caption">{{ getEventDate(myevent) }}</div>-->
 
-                            <div class="cal__title">{{myevent.title}}</div>
+
+                            <q-chip
+                                    :style="`background-color: ${myevent.bgcolor} !important; color: white !important;`"
+                                    text-color="white"
+                                    class="shadow-5 q-mb-md" dense>
+                                {{myevent.title}}
+                            </q-chip>
                             <div class="cal__details" v-html="myevent.details"></div>
                             <div v-if="myevent.teacher" class="cal__teacher">
                                     <span class="cal__teacher-title">{{$t('cal.teacher')}}: <span
                                             class="margin_with"></span></span>
                                 <!--<span class="cal__teacher-content">{{myevent.teacher}}</span>-->
                                 <span class="cal__teacher-content">
-                                        <q-chip>
-                                            <q-avatar>
-                                                <img :src="`../../statics/images/` + getTeacherImg(myevent.teacher)">
-                                            </q-avatar>
-                                            <span class="cal__teacher-content">{{getTeacherName(myevent.teacher)}}</span>
-                                        </q-chip>
-                                        <span v-if="getTeacherImg(myevent.teacher2) && myevent.teacher2"
-                                              class="margin_avatar2"></span>
-                                        <q-chip v-if="getTeacherImg(myevent.teacher2) && myevent.teacher2">
-                                            <q-avatar>
-                                                <img :src="`../../statics/images/` + getTeacherImg(myevent.teacher2)">
-                                            </q-avatar>
-                                            <span class="cal__teacher-content">{{getTeacherName(myevent.teacher2)}}</span>
-                                        </q-chip>
-                                    </span>
+                                    <q-chip>
+                                        <q-avatar>
+                                            <img :src="`../../statics/images/` + getTeacherImg(myevent.teacher)">
+                                        </q-avatar>
+                                        <span class="cal__teacher-content">{{getTeacherName(myevent.teacher)}}</span>
+                                    </q-chip>
+                                    <span v-if="getTeacherImg(myevent.teacher2) && myevent.teacher2"
+                                          class="margin_avatar2"></span>
+                                    <q-chip v-if="getTeacherImg(myevent.teacher2) && myevent.teacher2">
+                                        <q-avatar>
+                                            <img :src="`../../statics/images/` + getTeacherImg(myevent.teacher2)">
+                                        </q-avatar>
+                                        <span class="cal__teacher-content">{{getTeacherName(myevent.teacher2)}}</span>
+                                    </q-chip>
+                                </span>
                             </div>
                             <div v-if="myevent.wherecode" class="cal__where">
-                                <span v-if="tools.isMobile()"><br/></span>
+                                <!--<span v-if="tools.isMobile()"><br/></span>-->
                                 <span class="cal__where-title">{{$t('cal.where')}}: </span>
                                 <span class="cal__where-content">
-                                        <q-chip>
-                                            <q-avatar v-if="getWhereIcon(myevent.wherecode)">
-                                                <img :src="`../../statics/images/avatar/` + getWhereIcon(myevent.wherecode)">
-                                            </q-avatar>
-                                            <q-avatar color="blue" font-size="20px" text-color="white" icon="home">
-                                            </q-avatar>
-                                            <span class="cal__teacher-content">{{getWhereName(myevent.wherecode)}}</span>
-                                        </q-chip>
-                                    </span>
+                                    <q-chip>
+                                        <q-avatar v-if="getWhereIcon(myevent.wherecode)">
+                                            <img :src="`../../statics/images/avatar/` + getWhereIcon(myevent.wherecode)">
+                                        </q-avatar>
+                                        <q-avatar color="blue" font-size="20px" text-color="white" icon="home">
+                                        </q-avatar>
+                                        <span class="cal__teacher-content">{{getWhereName(myevent.wherecode)}}</span>
+                                    </q-chip>
+                                </span>
+                            </div>
+                            <div v-if="myevent.price && isShowPrice(myevent)" class="cal__quota">
+                                <span class="cal__quota-title">{{$t('event.price')}}:</span>
+                                <q-chip>
+                                    <span class="cal__quota-content">{{getPrice(myevent)}}</span>
+                                </q-chip>
                             </div>
                             <div v-if="myevent.dateTimeStart" class="cal__when">
                                 <span class="cal__where-title">{{$t('cal.when')}}: </span>
@@ -69,7 +82,7 @@
                                         <span class="cal__hours-content">{{ myevent.infoextra }}  </span>
                                     </span>
                                 <span v-else>
-                                        <span v-if="!func_tools.hasManyDays(myevent.dateTimeStart, myevent.dateTimeEnd)"
+                                        <span v-if="!tools.hasManyDays(myevent.dateTimeStart, myevent.dateTimeEnd)"
                                               class="cal__hours">
                                              -
                                             <span class="cal__hours-title">{{$t('cal.hours')}}: </span>
@@ -109,16 +122,22 @@
                         <q-form
                                 v-if="contextDay"
                                 ref='myevent'
-                                class="q-gutter-md">
-                            <q-input v-model="eventForm.title" autofocus label="Title"
+                                class="q-gutter-sm">
+                            <q-input color="grey-1" v-model="eventForm.title" autofocus
+                                     :input-style="`background-color: ${eventForm.bgcolor} !important; color: white !important; font-weight: bold; `"
+                                     borderless rounded dense :label="$t('event.title')"
                                      :rules="[v => v && v.length > 0 || 'Field cannot be empty']"></q-input>
-                            <q-input type="textarea" v-model="eventForm.details"
-                                     :label="$t('cal.details')"></q-input>
+
+                            <CMyEditor :value.sync="eventForm.details">
+
+                            </CMyEditor>
+
                             <!--<q-checkbox v-model="eventForm.allday" :label="$t('cal.alldayevent')"></q-checkbox>-->
 
-                            <div class="q-gutter-sm">
+                            <div class="q-gutter-sm row myflex">
                                 <q-input color="blue-6" outlined v-model="eventForm.dateTimeStart"
-                                         :label="$t('cal.eventstartdatetime')" mask="####-##-## ##:##">
+                                         :label="$t('cal.eventstartdatetime')" mask="####-##-## ##:##"
+                                         class="calendar_comp">
                                     <template #append>
                                         <q-icon name="event" class="cursor-pointer">
                                             <q-popup-proxy v-model="showDateTimeScrollerStart">
@@ -143,7 +162,8 @@
                                     </template>
                                 </q-input>
                                 <q-input color="blue-6" outlined v-model="eventForm.dateTimeEnd"
-                                         :label="$t('cal.enterEndDateTime')" mask="####-##-## ##:##">
+                                         :label="$t('cal.enterEndDateTime')" mask="####-##-## ##:##"
+                                         class="calendar_comp">
                                     <template #append>
                                         <q-icon name="event" class="cursor-pointer">
                                             <q-popup-proxy v-model="showDateTimeScrollerEnd">
@@ -167,40 +187,93 @@
                                         </q-icon>
                                     </template>
                                 </q-input>
+                                <q-input dense v-model="eventForm.infoextra" :label="$t('cal.infoextra')"></q-input>
                             </div>
 
-                            <q-input dense v-model="eventForm.teacher" :label="$t('event.teacher')"></q-input>
-                            <q-input dense v-model="eventForm.teacher2" :label="$t('event.teacher2')"></q-input>
+                            <div class="q-gutter-sm myflex">
 
-                            <q-input dense v-model="eventForm.infoextra" :label="$t('cal.infoextra')"></q-input>
+                                <CMySelect myclass="myflex" :label="$t('cal.teacher') + ' 1°'"
+                                           :value.sync="eventForm.teacher"
+                                           optval="username" :optlab="(item) => item.name + ' ' + item.surname"
+                                           :options="getTeachersArr" :useinput="false">
+                                </CMySelect>
+                                <CMySelect myclass="myflex" :label="$t('cal.teacher') + ' 2°'"
+                                           :value.sync="eventForm.teacher2"
+                                           optval="username" :optlab="(item) => item.name + ' ' + item.surname"
+                                           :options="getTeachersArr" :useinput="false">
+                                </CMySelect>
+                            </div>
 
-                            <q-input dense v-model="eventForm.icon" label="Icon"></q-input>
-                            <q-input
-                                    filled
-                                    v-model="eventForm.bgcolor">
-                                <template #append>
-                                    <q-icon name="colorize" class="cursor-pointer">
-                                        <q-popup-proxy>
-                                            <q-color v-model="eventForm.bgcolor"></q-color>
-                                        </q-popup-proxy>
-                                    </q-icon>
-                                </template>
-                            </q-input>
+                            <div class="q-gutter-sm myflex wrap">
+                                <CMySelect :label="$t('cal.where')" :value.sync="eventForm.wherecode" optval="code"
+                                           optlab="placename"
+                                           :options="getWhereArr" :useinput="false">
+                                </CMySelect>
+                                <q-checkbox class="myflex wrap" dense v-model="eventForm.news"
+                                            :label="$t('event.news')"></q-checkbox>
+                                <q-checkbox class="myflex wrap" dense v-model="eventForm.nobookable"
+                                            :label="$t('event.nobookable')"></q-checkbox>
+                                <q-checkbox class="myflex wrap" dense v-model="eventForm.canceled"
+                                            :label="$t('event.canceled')"></q-checkbox>
+                            </div>
 
-                            <q-input dense v-model="eventForm.img" :label="$t('event.img')"></q-input>
-                            <q-input dense v-model="eventForm.img_small" :label="$t('event.img_small')"></q-input>
-                            <q-input dense v-model="eventForm.wherecode" :label="$t('event.where')"></q-input>
-                            <q-input dense v-model="eventForm.contribtype" :label="$t('event.contribtype')"></q-input>
-                            <q-input dense v-model="eventForm.price" :label="$t('event.price')"></q-input>
-                            <q-input dense v-model="eventForm.infoafterprice" :label="$t('event.infoafterprice')"></q-input>
+                            <div class="q-gutter-sm row items-start">
 
-                            <q-input dense v-model="eventForm.linkpage" :label="$t('event.linkpage')"></q-input>
-                            <q-input dense v-model="eventForm.linkpdf" :label="$t('event.linkpdf')"></q-input>
-                            <q-checkbox dense v-model="eventForm.news" :label="$t('event.news')"></q-checkbox>
-                            <q-checkbox dense v-model="eventForm.nobookable" :label="$t('event.nobookable')"></q-checkbox>
-                            <q-checkbox dense v-model="eventForm.canceled" :label="$t('event.canceled')"></q-checkbox>
+                            </div>
 
+                            <div class="q-gutter-sm myflex">
 
+                                <q-input class="myflex" dense v-model="eventForm.img"
+                                         :label="$t('event.img')"></q-input>
+                                <q-input class="myflex" dense v-model="eventForm.img_small"
+                                         :label="$t('event.img_small')"></q-input>
+
+                            </div>
+
+                            <div class="q-gutter-sm myflex">
+
+                                <q-input
+                                        class="myflex"
+                                        :style="`background-color: ${eventForm.bgcolor} !important; color: white !important;`"
+                                        filled
+                                        color="white"
+                                        dense
+                                        :label="$t('event.bgcolor')"
+                                        v-model="eventForm.bgcolor">
+                                    <template #append>
+                                        <q-icon name="colorize" class="cursor-pointer" color="white">
+                                            <q-popup-proxy>
+                                                <q-color format-model="hex" v-model="eventForm.bgcolor"></q-color>
+                                            </q-popup-proxy>
+                                        </q-icon>
+                                    </template>
+                                </q-input>
+                                <q-input class="myflex" dense v-model="eventForm.icon"
+                                         :label="$t('event.icon')"></q-input>
+                            </div>
+
+                            <div class="q-gutter-sm myflex">
+
+                                <CMySelect :label="$t('event.contribtype')" :value.sync="eventForm.contribtype"
+                                           optval="_id" optlab="label"
+                                           :useinput="false"
+                                           :newvaluefunc="createContribType" :options="getContribTypeArr">
+                                </CMySelect>
+
+                                <div v-if="isShowPrice(eventForm)">
+                                    <q-input dense type="number" v-model="eventForm.price"
+                                             :label="$t('event.price')"></q-input>
+                                    <q-input dense v-model="eventForm.infoafterprice"
+                                             :label="$t('event.infoafterprice')"></q-input>
+                                </div>
+                            </div>
+
+                            <div class="q-gutter-sm myflex">
+                                <q-input class="myflex" dense v-model="eventForm.linkpage"
+                                         :label="$t('event.linkpage')"></q-input>
+                                <q-input class="myflex" dense v-model="eventForm.linkpdf"
+                                         :label="$t('event.linkpdf')"></q-input>
+                            </div>
 
                         </q-form>
                     </q-card-section>
@@ -221,23 +294,28 @@
                     </q-toolbar>
 
                     <q-card-section class="inset-shadow">
-                        <q-img :src="`../../statics/`+myevent.img"
+                        <q-img :src="getImgEvent(myevent)"
                                class="absolute-top"
                                style="height: 150px;">
                         </q-img>
                         <div style="margin-top: 150px;">
 
-                            <div class="cal__title">{{myevent.title}}</div>
+                            <q-chip
+                                    :style="`background-color: ${myevent.bgcolor} !important; color: white !important;`"
+                                    text-color="white"
+                                    class="shadow-5 q-mb-md" dense>
+                                {{myevent.title}}
+                            </q-chip>
                             <div v-if="myevent.dateTimeStart" class="cal__when">
                                 <span class="cal__where-title">{{$t('cal.when')}}: </span>
                                 <span class="cal__where-content">{{func_tools.getDateStr(myevent.dateTimeStart)}}</span>
-                                <span v-if="func_tools.hasManyDays(myevent.dateTimeStart)" class="cal__where-content"> - {{func_tools.getDateStr(myevent.dateTimeEnd)}}<br/></span>
+                                <span v-if="tools.hasManyDays(myevent.dateTimeStart)" class="cal__where-content"> - {{func_tools.getDateStr(myevent.dateTimeEnd)}}<br/></span>
                                 <span v-if="myevent.infoextra" class="cal__hours">
                                         <span class="cal__hours-title">{{$t('cal.hours')}}: </span>
                                         <span class="cal__hours-content">{{ myevent.infoextra }}  </span>
                                     </span>
                                 <span v-else>
-                                        <span v-if="!func_tools.hasManyDays(myevent.dateTimeStart, myevent.dateTimeEnd)"
+                                        <span v-if="!tools.hasManyDays(myevent.dateTimeStart, myevent.dateTimeEnd)"
                                               class="cal__hours">
                                              -
                                             <span class="cal__hours-title">{{$t('cal.hours')}}: </span>
@@ -262,7 +340,7 @@
                                                 :label="$t('cal.bookingtextdefault')" color="green">
                                         </q-checkbox>
 
-                                        <div v-if="bookEventForm.booked" class="q-gutter-md centermydiv"
+                                        <div v-if="bookEventForm.booked" class="q-gutter-sm centermydiv"
                                              style="max-width: 150px; margin-top:10px;">
                                             <q-select
                                                     rounded outlined v-model="bookEventForm.numpeople"
@@ -380,7 +458,7 @@
                                     :class="badgeClasses(event, 'day')"
                                     :style="badgeStyles(event, 'day')"
                                     @click.stop.prevent="showEvent(event)"
-                                    :draggable="true"
+                                    :draggable="tools.isManager()"
                                     @dragstart.native="(e) => onDragStart(e, event)"
                                     @dragend.native="(e) => onDragEnd(e, event)"
                                     @dragenter.native="(e) => onDragEnter(e, event)"
@@ -430,7 +508,7 @@
                                     :class="badgeClasses(event, 'body')"
                                     :style="badgeStyles(event, 'body', timeStartPos, timeDurationHeight)"
                                     @click.stop.prevent="showEvent(event)"
-                                    :draggable="true"
+                                    :draggable="tools.isManager()"
                                     @dragstart.native="(e) => onDragStart(e, event)"
                                     @dragend.native="(e) => onDragEnd(e, event)"
                                     @dragenter.native="(e) => onDragEnter(e, event)"
@@ -453,14 +531,20 @@
                 <tbody>
                 <tr v-for="(event, index) in getEventList()" class="listaev listaev__table">
                     <td :class="clEvent(event)">
-                        <p class="listaev__align_center_mobile">
-                            <img :src="`../../statics/`+event.img"
+                        <p class="listaev__align_chips">
+                            <img :src="getImgEvent(event)"
                                  class="text-left padding_cell listaev__tdimg listaev__img">
-                            <q-chip dense v-if="isAlreadyBooked(event)" class="cltexth4 chipbooked shadow-5"
+                            <q-chip dense v-if="isAlreadyBooked(event)" class="cltexth4 chipbooked shadow-5 q-mb-md"
                                     color="green" text-color="white"
-                                    icon="event_available"
-                                    dense>{{$t('cal.booked')}}
+                                    icon="event_available">{{$t('cal.booked')}}
                             </q-chip>
+
+                            <q-chip v-if="event.news" class="cltexth4 chipnews shadow-5 glossy text-right" color="red"
+                                    text-color="white" icon-right="star" icon="star" dense
+                                    style="">
+                                {{$t('event.news')}}
+                            </q-chip>
+
                         </p>
                         <div class="listaev__date listaev__align_center_mobile">
 
@@ -476,11 +560,11 @@
                             </div>
                         </div>
 
-                        <div class="">
+                        <div class="listaev__align_center_mobile">
 
                             <div style="margin: 10px;"></div>
 
-                            <div class="listaev__align_center_mobile">
+                            <div class="">
                                 <!-- Se c'è un link, allora -->
                                 <q-btn v-if="event.linkpdf" size="md" type="a"
                                        :href="`../../statics/` + event.linkpdf"
@@ -491,11 +575,13 @@
                                 </q-btn>
                                 <!-- altrimenti mostra solo Chip -->
                                 <div v-else>
-                                    <div v-if="tools.isMobile()" class="cltexth3"
+                                    <div v-if="tools.isMobile()" class="cltexth3 text-center"
                                          :style="`background-color: ${event.bgcolor} !important; color: white !important;`">
                                         {{event.title}}
                                     </div>
-                                    <q-chip v-else class="cltexth3" :color="event.bgcolor" text-color="white"
+                                    <q-chip v-else class="cltexth3 text-center"
+                                            :style="`background-color: ${event.bgcolor} !important; color: white !important;`"
+                                            text-color="white"
                                             :icon="event.icon"
                                             dense>{{event.title}}
                                     </q-chip>
@@ -537,6 +623,22 @@
                                         </q-chip>
                                     </span>
                             </div>
+                            <div v-if="event.contribtype" class="">
+                                <span class="cal__quota-title">{{$t('event.price')}}:<span
+                                        class="margin_with"></span></span>
+                                <span v-if="!isShowPrice(event)" class="">
+                                    <q-chip class="glossy" color="orange" text-color="white">
+                                        <span class="cal__quota-content">{{getContribtypeById(event.contribtype)}}</span>
+                                    </q-chip>
+                                </span>
+
+                                <q-chip v-if="event.price && isShowPrice(event)" class="glossy" color="orange"
+                                        text-color="white" icon-right="star">
+                                    <span class="cal__quota-content">{{getPrice(event)}}</span>
+                                </q-chip>
+                            </div>
+
+
                             <p class="text-center">
                                         <span v-if="event.linkpdf" class="">
                                             <q-btn size="md" type="a" :href="`../../statics/` + event.linkpdf"

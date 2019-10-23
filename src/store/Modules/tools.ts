@@ -1628,8 +1628,17 @@ export const tools = {
     } else {
       return 'red'
     }
-  }
-  ,
+  },
+  hasManyDays(mydatestart, mydateend) {
+    if (mydateend)
+      return tools.getstrDate(mydatestart) !== tools.getstrDate(mydateend)
+    else
+      return false
+  },
+
+  isManager() {
+    return UserStore.state.isManager
+  },
 
   getstrDate(mytimestamp) {
     // console.log('getstrDate', mytimestamp)
@@ -1651,6 +1660,14 @@ export const tools = {
     // console.log('getstrDate', mytimestamp)
     if (!!mytimestamp)
       return date.formatDate(mytimestamp, 'DD/MM/YYYY HH:mm')
+    else
+      return ''
+  },
+
+  getstrDateEmailTime(mythis, mytimestamp) {
+    // console.log('getstrDate', mytimestamp)
+    if (!!mytimestamp)
+      return date.formatDate(mytimestamp, 'DD/MM/YYYY') + ' ' + mythis.$t('starttime') + ' ' + date.formatDate(mytimestamp, 'HH:mm')
     else
       return ''
   },
@@ -1927,7 +1944,7 @@ export const tools = {
 
   myheight_dialog() {
     if (Screen.width < 400) {
-      return '350'
+      return '337'
     } else if (Screen.width < 600) {
       return '400'
     } else {
@@ -2031,6 +2048,10 @@ export const tools = {
 
   addDays(mydate, days) {
     return date.addToDate(mydate, { days })
+  },
+
+  addMinutes(mydate, minutes) {
+    return date.addToDate(mydate, { minutes })
   },
 
   gettitlemain(datamain: ITimeLineMain) {
@@ -2144,9 +2165,9 @@ export const tools = {
 
     return msg
   },
-  gettextevent(myevent: IEvents) {
+  gettextevent(mythis, myevent: IEvents) {
     // return '"' + myevent.title + '" (' + func_tools.getDateStr(myevent.date) + ') - ' + myevent.time
-    return '"' + myevent.title + '" (' + tools.getstrDateTime(myevent.dateTimeStart)
+    return '"' + myevent.title + '" (' + tools.getstrDateEmailTime(mythis, myevent.dateTimeStart) + ')'
   },
 
   setLangAtt(mylang) {
@@ -2282,21 +2303,21 @@ export const tools = {
   },
   displayClasses(eventparam) {
     return {
-      [`bg-${eventparam.bgcolor}`]: !tools.isCssColor(eventparam.bgcolor),
+      // [`bg-${eventparam.bgcolor}`]: !tools.isCssColor(eventparam.bgcolor),
       'text-white': !tools.isCssColor(eventparam.bgcolor)
     }
   },
   displayStyles(eventparam) {
     const s = { color: '' }
     if (tools.isCssColor(eventparam.bgcolor)) {
-      s['background-color'] = eventparam.bgcolor
+      // s['background-color'] = eventparam.bgcolor
       s.color = colors.luminosity(eventparam.bgcolor) > 0.5 ? 'black' : 'white'
     }
     return s
   },
   CancelBookingEvent(mythis, eventparam: IEvents, bookeventid: string, notify: boolean) {
     console.log('CancelBookingEvent ', eventparam)
-    tools.askConfirm(mythis.$q, translate('cal.titlebooking'), translate('cal.cancelbooking') + ' ' + tools.gettextevent(eventparam) + '?', translate('dialog.yes'), translate('dialog.no'), mythis, '', lists.MenuAction.DELETE, 0, {
+    tools.askConfirm(mythis.$q, translate('cal.titlebooking'), translate('cal.cancelbooking') + ' ' + tools.gettextevent(mythis, eventparam) + '?', translate('dialog.yes'), translate('dialog.no'), mythis, '', lists.MenuAction.DELETE, 0, {
       param1: bookeventid,
       param2: notify
     })
@@ -2308,6 +2329,25 @@ export const tools = {
       param2: item
     })
   },
+
+  async createNewRecord(mythis, table, data) {
+
+    const mydata = {
+      table,
+      data
+    }
+
+    return await GlobalStore.actions.saveTable(mydata)
+      .then((record) => {
+        if (record) {
+          tools.showPositiveNotif(mythis.$q, mythis.$t('db.recupdated'))
+        } else {
+          tools.showNegativeNotif(mythis.$q, mythis.$t('db.recfailed'))
+        }
+        return record
+      })
+  },
+
   isBitActive(bit, whattofind) {
     return ((bit & whattofind) === whattofind)
   }

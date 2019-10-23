@@ -62,6 +62,12 @@ export interface IWheres {
   whereicon: string
 }
 
+export interface IContribtype {
+  _id: any
+  label: string
+  showprice: boolean
+}
+
 export enum EState {
   None, Creating, Modifying
 }
@@ -78,6 +84,7 @@ export interface ICalendarState {
   bookedevent: IBookedEvent[]
   operators: IOperators[]
   wheres: IWheres[]
+  contribtype: IContribtype[]
   // ---------------
   titlebarHeight: number
   locale: string,

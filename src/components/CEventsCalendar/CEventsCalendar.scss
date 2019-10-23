@@ -34,7 +34,7 @@ $graytext: #555;
   letter-spacing: 0.03333em;
 
   &__title {
-    color: red;
+    color: white;
     font-weight: 700;
     font-size: 1rem;
     padding-bottom: 10px;
@@ -55,7 +55,7 @@ $graytext: #555;
   }
 
   &__where {
-    margin-top: 10px;
+    margin-top: 5px;
     color: blue;
 
     &-title {
@@ -67,7 +67,7 @@ $graytext: #555;
   }
 
   &__when {
-    margin-top: 10px;
+    margin-top: 5px;
     color: blue;
 
     &-title {
@@ -79,12 +79,22 @@ $graytext: #555;
   }
 
   &__teacher {
-    margin-top: 10px;
+    margin-top: 5px;
     &-title {
       color: $graytext;
     }
     &-content {
       color: darkblue;
+    }
+  }
+
+  &__quota {
+    margin-top: 5px;
+    &-title {
+      color: $graytext;
+    }
+    &-content {
+
     }
   }
 
@@ -141,6 +151,18 @@ $graytext: #555;
     @media (max-width: 718px) {
       text-align: center;
       display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+  }
+
+  &__align_chips {
+    text-align: left;
+    @media (max-width: 718px) {
+      text-align: center;
+      display: flex;
+      flex-direction: column-reverse;
+      align-items: center;
     }
   }
 
@@ -201,7 +223,18 @@ $graytext: #555;
   position: absolute;
   left: 40px;
   @media (max-width: 400px) {
+    left: initial;
     position: initial;
+  }
+}
+
+.chipnews {
+
+  position: absolute;
+  right: 0;
+  @media (max-width: 400px) {
+    position: initial;
+    right: initial;
   }
 }
 
@@ -212,4 +245,19 @@ $graytext: #555;
 
 .mysel{
   color: white;
+}
+
+.calendar_comp{
+  max-width: 170px;
+  @media (max-width: 400px) {
+    max-width: 400px;
+  }
+}
+
+.myflex{
+  display: flex;
+  flex: 1;
+  @media (max-width: 400px) {
+    flex-flow: column;
+  }
 }
