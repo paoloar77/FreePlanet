@@ -33,6 +33,8 @@ export interface INotify {
 }
 
 export const tools = {
+  TABEVENTS: 'myevents',
+
   MAX_CHARACTERS: 60,
   projects: 'projects',
   todos: 'todos',
@@ -1331,6 +1333,16 @@ export const tools = {
         } else
           tools.showNegativeNotif(myself.$q, myself.$t('cal.cancelederrorbooking'))
       })
+    } else if (func === lists.MenuAction.DELETE_EVENT) {
+      console.log('param1', par.param1, 'id', par.param1._id)
+      CalendarStore.actions.CancelEvent({ id: par.param1._id }).then((ris) => {
+        if (ris) {
+          // Remove this record from my list
+          CalendarStore.state.eventlist = CalendarStore.state.eventlist.filter((event) => (event._id !== par.param1._id))
+          tools.showPositiveNotif(myself.$q, myself.$t('cal.canceledevent') + ' "' + par.param1.title + '"')
+        } else
+          tools.showNegativeNotif(myself.$q, myself.$t('cal.cancelederrorevent'))
+      })
     } else if (func === lists.MenuAction.DELETE_RECTABLE) {
       console.log('param1', par.param1)
       GlobalStore.actions.DeleteRec({ table, id: par.param1 }).then((ris) => {
@@ -1656,21 +1668,53 @@ export const tools = {
       return ''
   },
 
+  getstrDateTimeEvent(mythis, myevent, withhtml) {
+    let mystr = ''
+    // is same day?
+    if (tools.getstrDate(myevent.dateTimeStart) === tools.getstrDate(myevent.dateTimeEnd)) {
+      if (withhtml) {
+        mystr += `<span class="cal__where-content">${tools.getstrDate(myevent.dateTimeStart)}</span>
+                    <span class="cal__hours-content">${mythis.$t('cal.starttime')} ${ tools.getstrTime(myevent.dateTimeStart) }
+                    ${ mythis.$t('cal.endtime')} ${ tools.getstrTime(myevent.dateTimeEnd) }`
+      } else {
+        mystr = `${tools.getstrDate(myevent.dateTimeStart)}
+                 ${mythis.$t('cal.starttime')} ${ tools.getstrTime(myevent.dateTimeStart) }          
+                 ${ mythis.$t('cal.endtime')}: ${ tools.getstrTime(myevent.dateTimeEnd) }`
+      }
+    } else {
+      mystr = `<span class="cal__where-content">${tools.getstrDate(myevent.dateTimeStart)}</span>
+                 <span class="cal__hours-content">${mythis.$t('cal.starttime')} ${ tools.getstrTime(myevent.dateTimeStart) } </span>
+                  ${ mythis.$t('cal.enddate')} ${tools.getstrDate(myevent.dateTimeEnd)}
+                  <span class="cal__hours-content">${ mythis.$t('cal.endtime')}: ${ tools.getstrTime(myevent.dateTimeEnd) } </span>`
+    }
+
+    if (myevent.infoextra) {
+      mystr += `<span class="cal__hours">
+                  <span class="cal__hours-title">${mythis.$t('cal.hours')}: </span>
+                  <span class="cal__hours-content">${ myevent.infoextra }  </span>
+              </span>
+            </span>`
+    }
+    return mystr
+  },
+
   getstrDateTime(mytimestamp) {
     // console.log('getstrDate', mytimestamp)
     if (!!mytimestamp)
       return date.formatDate(mytimestamp, 'DD/MM/YYYY HH:mm')
     else
       return ''
-  },
+  }
+  ,
 
   getstrDateEmailTime(mythis, mytimestamp) {
     // console.log('getstrDate', mytimestamp)
     if (!!mytimestamp)
-      return date.formatDate(mytimestamp, 'DD/MM/YYYY') + ' ' + mythis.$t('starttime') + ' ' + date.formatDate(mytimestamp, 'HH:mm')
+      return date.formatDate(mytimestamp, 'DD/MM/YYYY') + ' ' + mythis.$t('cal.starttime') + ' ' + date.formatDate(mytimestamp, 'HH:mm')
     else
       return ''
-  },
+  }
+  ,
   getstrMMMDate(mytimestamp) {
     // console.log('getstrDate', mytimestamp)
     if (!!mytimestamp)
@@ -1681,10 +1725,12 @@ export const tools = {
   ,
   getstrYYMMDDDate(mytimestamp) {
     return date.formatDate(mytimestamp, 'YYYY-MM-DD')
-  },
+  }
+  ,
   getstrYYMMDDDateTime(mytimestamp) {
     return date.formatDate(mytimestamp, 'YYYY-MM-DD HH:mm')
-  },
+  }
+  ,
 
 // mystrdate "26.04.2013"
   convertstrtoDate(mystrdate
@@ -1714,7 +1760,8 @@ export const tools = {
     }
     value = value.toString()
     return value.charAt(0).toUpperCase() + value.slice(1)
-  },
+  }
+  ,
 
   firstchars(value, numchars = 200) {
     if (!value) {
@@ -1728,7 +1775,8 @@ export const tools = {
     } catch (e) {
       return value
     }
-  },
+  }
+  ,
 
   getDateNow() {
     const mydate = new Date()
@@ -1745,18 +1793,21 @@ export const tools = {
   ,
   getTimestampsNow() {
     return new Date().valueOf()
-  },
+  }
+  ,
 
   isMainProject(idproj) {
     return idproj === process.env.PROJECT_ID_MAIN
-  },
+  }
+  ,
 
-  getUrlByTipoProj(tipoproj, name?: string) {
+  getUrlByTipoProj(tipoproj, name ?: string) {
     if (!!name)
       return '/' + name + '/'
     else
       return '/' + tipoproj + '/'
-  },
+  }
+  ,
 
   // convertMenuListInListRoutes(arrlista: IMenuList[]) {
   //   const lista = []
@@ -1784,15 +1835,18 @@ export const tools = {
       return Privacy.onlyme
     else
       return Privacy.all
-  },
+  }
+  ,
 
   getprivacywritebytipoproj(tipoproj) {
     return Privacy.onlyme
-  },
+  }
+  ,
 
   addRoute(myarr, values) {
     myarr.push(values)
-  },
+  }
+  ,
   displayConfirmNotification() {
     let options = null
     if ('serviceWorker' in navigator) {
@@ -1819,7 +1873,8 @@ export const tools = {
           })
       }
     }
-  },
+  }
+  ,
 
   dataURItoBlob(dataURI) {
     const byteString = atob(dataURI.split(',')[1])
@@ -1831,7 +1886,8 @@ export const tools = {
     }
     const blob = new Blob([ab], { type: mimeString })
     return blob
-  },
+  }
+  ,
 
   showNotificationExample() {
     let options = null
@@ -1858,11 +1914,13 @@ export const tools = {
           swreg.showNotification('aaa', options)
         })
     }
-  },
+  }
+  ,
 
   getemailto(text) {
     return 'mailto:' + text
-  },
+  }
+  ,
 
   askfornotification() {
     tools.showNotif(this.$q, this.$t('notification.waitingconfirm'), { color: 'positive', icon: 'notifications' })
@@ -1878,11 +1936,13 @@ export const tools = {
       }
     })
 
-  },
+  }
+  ,
 
   heightgallery() {
     return tools.heightGallVal().toString() + 'px'
-  },
+  }
+  ,
 
   heightGallVal() {
     let maxh2 = 0
@@ -1904,9 +1964,10 @@ export const tools = {
     }
 
     return maxh2
-  },
+  }
+  ,
 
-  myheight_imgtitle(myheight?, myheightmobile?) {
+  myheight_imgtitle(myheight ?, myheightmobile ?) {
     let maxheight = 0
     if (!!myheight) {
       maxheight = myheight
@@ -1940,7 +2001,8 @@ export const tools = {
 
     // console.log('ris', ris)
     return ris
-  },
+  }
+  ,
 
   myheight_dialog() {
     if (Screen.width < 400) {
@@ -1950,9 +2012,10 @@ export const tools = {
     } else {
       return '500'
     }
-  },
+  }
+  ,
 
-  styles_imgtitle(sized?: string) {
+  styles_imgtitle(sized ?: string) {
     if (!!sized) {
       return sized
     } else {
@@ -1962,7 +2025,8 @@ export const tools = {
         return 'max-height: 350px'
       }
     }
-  },
+  }
+  ,
 
   /*
       <q-img
@@ -1988,7 +2052,8 @@ export const tools = {
       '(min-width: 400px) and (max-width: 800px) 800w, ' +
       '(min-width: 800px) and (max-width: 1200px) 1200w, ' +
       '(min-width: 1200px) 1600w'
-  },
+  }
+  ,
 
   maxwidth_imgtitle() {
     if (Screen.width < 400) {
@@ -1996,11 +2061,13 @@ export const tools = {
     } else {
       return 'max-width: 350px'
     }
-  },
+  }
+  ,
 
   isMobile() {
     return (Screen.width < 400)
-  },
+  }
+  ,
 
   mywidth_imgtitle() {
     if (Screen.width < 400) {
@@ -2010,11 +2077,13 @@ export const tools = {
     } else {
       return '350'
     }
-  },
+  }
+  ,
 
   mymargin_imgtitle() {
     return 'auto'
-  },
+  }
+  ,
 
   showthumbnails() {
     if (Screen.width < 400) {
@@ -2024,7 +2093,8 @@ export const tools = {
     } else {
       return true
     }
-  },
+  }
+  ,
 
   padTime(val) {
     val = Math.floor(val)
@@ -2032,9 +2102,10 @@ export const tools = {
       return '0' + val
     }
     return val + ''
-  },
+  }
+  ,
 
-  getLocale(vero?: boolean) {
+  getLocale(vero ?: boolean) {
     if (UserStore) {
       if (UserStore.state) {
         return UserStore.state.lang
@@ -2044,15 +2115,18 @@ export const tools = {
       return process.env.LANG_DEFAULT
     else
       return ''
-  },
+  }
+  ,
 
   addDays(mydate, days) {
     return date.addToDate(mydate, { days })
-  },
+  }
+  ,
 
   addMinutes(mydate, minutes) {
     return date.addToDate(mydate, { minutes })
-  },
+  }
+  ,
 
   gettitlemain(datamain: ITimeLineMain) {
     if (datamain.titlemain[toolsext.getLocale()])
@@ -2061,7 +2135,8 @@ export const tools = {
       return datamain.titlemain[static_data.arrLangUsed[0]]
     }
 
-  },
+  }
+  ,
   getwwithwhocoll(datamain: ICollaborations) {
     if (datamain.withwhom_title[toolsext.getLocale()])
       return datamain.withwhom_title[toolsext.getLocale()]
@@ -2069,22 +2144,26 @@ export const tools = {
       return datamain.withwhom_title[static_data.arrLangUsed[0]]
     }
 
-  },
+  }
+  ,
   gettextcoll(data: IColl) {
     if (data.subtitle[toolsext.getLocale()])
       return data.subtitle[toolsext.getLocale()]
     else {
       return data.subtitle[static_data.arrLangUsed[0]]
     }
-  },
+  }
+  ,
   gettitlecoll(data: IColl) {
     if (data.title[toolsext.getLocale()])
       return data.title[toolsext.getLocale()]
     else {
       return data.title[static_data.arrLangUsed[0]]
     }
-  },
-  gettextdescr(data: ITimeLineEntry, numdescr = 'description') {
+  }
+  ,
+  gettextdescr(data: ITimeLineEntry, numdescr = 'description'
+  ) {
     if (!!data[numdescr]) {
       if (data[numdescr][toolsext.getLocale()])
         return data[numdescr][toolsext.getLocale()]
@@ -2094,7 +2173,8 @@ export const tools = {
     } else {
       return ''
     }
-  },
+  }
+  ,
 
   getlink(data: ITimeLineEntry) {
     if (data.link_text[toolsext.getLocale()])
@@ -2103,7 +2183,8 @@ export const tools = {
       return data.link_text[static_data.arrLangUsed[0]]
     }
 
-  },
+  }
+  ,
 
   getlinkurl(data: ITimeLineEntry) {
     if (data.link_url_lang) {
@@ -2153,7 +2234,8 @@ export const tools = {
       return { path: '', file: fileimg }
     }
 
-  },
+  }
+  ,
 
   convertHTMLtoText(myhtml) {
     let msg = myhtml
@@ -2164,7 +2246,8 @@ export const tools = {
     msg = msg.replace('<br>', '\n')
 
     return msg
-  },
+  }
+  ,
   gettextevent(mythis, myevent: IEvents) {
     // return '"' + myevent.title + '" (' + func_tools.getDateStr(myevent.date) + ') - ' + myevent.time
     return '"' + myevent.title + '" (' + tools.getstrDateEmailTime(mythis, myevent.dateTimeStart) + ')'
@@ -2185,7 +2268,8 @@ export const tools = {
 
     // this.$q.lang.set(mylang)
 
-  },
+  }
+  ,
   getappname(mythis) {
     if (mythis === undefined)
       return ''
@@ -2215,7 +2299,8 @@ export const tools = {
     globalroutines(mythis, 'loadapp', '')
 
     tools.SignIncheckErrors(mythis, tools.OK, ispageLogin)
-  },
+  }
+  ,
 
   loginInCorso(mythis) {
     // console.log('loginInCorso')
@@ -2225,9 +2310,10 @@ export const tools = {
       msg += ' ' + process.env.MONGODB_HOST
     }
     mythis.$q.loading.show({ message: msg })
-  },
+  }
+  ,
 
-  SignIncheckErrors(mythis, riscode, ispageLogin?: boolean) {
+  SignIncheckErrors(mythis, riscode, ispageLogin ?: boolean) {
     // console.log('SignIncheckErrors: ', riscode)
     try {
       if (riscode === tools.OK) {
@@ -2274,7 +2360,8 @@ export const tools = {
     } finally {
       // ...
     }
-  },
+  }
+  ,
 
   SignUpcheckErrors(mythis, riscode: number) {
     console.log('SignUpcheckErrors', riscode)
@@ -2297,16 +2384,19 @@ export const tools = {
       tools.showNotif(mythis.$q, 'Errore num ' + riscode)
     }
 
-  },
+  }
+  ,
   isCssColor(color) {
     return !!color && !!color.match(/^(#|(rgb|hsl)a?\()/)
-  },
+  }
+  ,
   displayClasses(eventparam) {
     return {
       // [`bg-${eventparam.bgcolor}`]: !tools.isCssColor(eventparam.bgcolor),
       'text-white': !tools.isCssColor(eventparam.bgcolor)
     }
-  },
+  }
+  ,
   displayStyles(eventparam) {
     const s = { color: '' }
     if (tools.isCssColor(eventparam.bgcolor)) {
@@ -2314,21 +2404,32 @@ export const tools = {
       s.color = colors.luminosity(eventparam.bgcolor) > 0.5 ? 'black' : 'white'
     }
     return s
-  },
+  }
+  ,
   CancelBookingEvent(mythis, eventparam: IEvents, bookeventid: string, notify: boolean) {
     console.log('CancelBookingEvent ', eventparam)
     tools.askConfirm(mythis.$q, translate('cal.titlebooking'), translate('cal.cancelbooking') + ' ' + tools.gettextevent(mythis, eventparam) + '?', translate('dialog.yes'), translate('dialog.no'), mythis, '', lists.MenuAction.DELETE, 0, {
       param1: bookeventid,
       param2: notify
     })
-  },
+  }
+  ,
+  CancelEvent(mythis, eventparam: IEvents) {
+    console.log('CancelEvent ', eventparam)
+    tools.askConfirm(mythis.$q, translate('cal.event'), translate('cal.cancelevent') + ' ' + tools.gettextevent(mythis, eventparam) + '?', translate('dialog.yes'), translate('dialog.no'), mythis, '', lists.MenuAction.DELETE_EVENT, 0, {
+      param1: eventparam,
+      param2: true
+    })
+  }
+  ,
   ActionRecTable(mythis, action, table, id, item, askaction) {
     console.log('ActionRecTable', id)
     return tools.askConfirm(mythis.$q, 'Action', translate(askaction) + '?', translate('dialog.yes'), translate('dialog.no'), mythis, table, action, 0, {
       param1: id,
       param2: item
     })
-  },
+  }
+  ,
 
   async createNewRecord(mythis, table, data) {
 
@@ -2337,16 +2438,18 @@ export const tools = {
       data
     }
 
-    return await GlobalStore.actions.saveTable(mydata)
-      .then((record) => {
-        if (record) {
-          tools.showPositiveNotif(mythis.$q, mythis.$t('db.recupdated'))
-        } else {
-          tools.showNegativeNotif(mythis.$q, mythis.$t('db.recfailed'))
-        }
-        return record
-      })
-  },
+    return await
+      GlobalStore.actions.saveTable(mydata)
+        .then((record) => {
+          if (record) {
+            tools.showPositiveNotif(mythis.$q, mythis.$t('db.recupdated'))
+          } else {
+            tools.showNegativeNotif(mythis.$q, mythis.$t('db.recfailed'))
+          }
+          return record
+        })
+  }
+  ,
 
   isBitActive(bit, whattofind) {
     return ((bit & whattofind) === whattofind)

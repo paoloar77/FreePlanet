@@ -15,8 +15,9 @@ import { db_data } from '@src/db/db_data'
 
 import translate from './../../globalroutines/util'
 import * as Types from '@src/store/Api/ApiTypes'
-import { ICfgServer } from '@src/model'
+import { ICalendarState, ICfgServer } from '@src/model'
 import { shared_consts } from '../../common/shared_vuejs'
+import { IMessage } from '@src/model/Calendar'
 
 const bcrypt = require('bcryptjs')
 
@@ -39,6 +40,7 @@ const state: IUserState = {
   isAdmin: false,
   isManager: false,
   usersList: [],
+  msgs: [],
   countusers: 0
 }
 
@@ -119,6 +121,12 @@ namespace Getters {
     return mystate.usersList.find((item) => item._id === userId)
   }, 'getUserByUserId')
 
+  const getlasts_messages = b.read((mystate: IUserState) => () => {
+    const ctrec = (mystate.msgs) ? mystate.msgs.slice(0, 5) : []
+    return (ctrec)
+
+  }, 'getlasts_messages')
+
   export const getters = {
     get isUserInvalid() {
       return isUserInvalid()
@@ -149,6 +157,9 @@ namespace Getters {
     },
     get getUsersList() {
       return getUsersList()
+    },
+    get getlasts_messages() {
+      return getlasts_messages()
     }
     // get fullName() { return fullName();},
   }
@@ -684,6 +695,29 @@ namespace Actions {
     }
   }
 
+  async function SendMsgEvent(context, msg: IMessage) {
+    console.log('SendMsgEvent', msg)
+
+    return await Api.SendReq('/sendmsg', 'POST', msg)
+      .then((res) => {
+        console.log('res', res)
+        if (res.status === 200) {
+          if (res.data.code === serv_constants.RIS_CODE_OK) {
+            msg._id = res.data.id
+            state.msgs.push(msg)
+            return true
+          }
+        }
+        return false
+      })
+      .catch((error) => {
+        console.error(error)
+        return false
+      })
+
+  }
+
+
   /*
     async function refreshUserInfos(){
       let {token, refresh_token} = JWT.fetch();
@@ -700,7 +734,6 @@ namespace Actions {
     }
   */
 
-
   export const actions = {
     autologin_FromLocalStorage: b.dispatch(autologin_FromLocalStorage),
     logout: b.dispatch(logout),
@@ -708,6 +741,7 @@ namespace Actions {
     resetpwd: b.dispatch(resetpwd),
     signin: b.dispatch(signin),
     signup: b.dispatch(signup),
+    SendMsgEvent: b.dispatch(SendMsgEvent),
     vreg: b.dispatch(vreg)
   }
 

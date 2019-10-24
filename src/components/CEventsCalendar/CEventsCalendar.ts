@@ -22,7 +22,7 @@ import QDateTimeScroller from '@quasar/quasar-app-extension-qscroller/src/compon
 import { CTodo } from '@src/components/todos/CTodo'
 import { SingleProject } from '@src/components/projects/SingleProject'
 import { IEvents } from '@src/model'
-import { IBookedEvent, IBookedEventPage, EState } from '@src/model/Calendar'
+import { IBookedEvent, IBookedEventPage, IMessagePage, EState, IMessage, IDest, IOrigin } from '@src/model/Calendar'
 import { costanti } from '@src/store/Modules/costanti'
 import router from '@router'
 import { static_data } from '@src/db/static_data'
@@ -58,6 +58,17 @@ export default class CEventsCalendar extends Vue {
     modified: false
   }
 
+  public formAskForDefault: IMessage = {
+    dest: {
+      idapp: process.env.APP_ID,
+      username: ''
+    },
+    origin: {
+      userId: ''
+    },
+    message: ''
+  }
+
   public mioalert = false
 
   public dateFormatter: any = ''
@@ -78,10 +89,16 @@ export default class CEventsCalendar extends Vue {
     bookedevent: null,
     state: EState.None
   }
+  public askInfopage: IMessagePage = {
+    show: false,
+    msg: null,
+    state: EState.None
+  }
 
   public contextDay = null
   public eventForm: IEvents = { ...this.formDefault }
   public bookEventForm = { ...this.formbookEventDefault }
+  public askInfoForm: IMessage = { ...this.formAskForDefault }
   public displayEvent = false
   public myevent = null
   // public events = []
@@ -355,7 +372,6 @@ export default class CEventsCalendar extends Vue {
     return this
   }
 
-
   public $refs: {
     calendar: any
   }
@@ -434,10 +450,33 @@ export default class CEventsCalendar extends Vue {
       this.myevent = eventparam
       this.bookEventForm.msgbooking = ''
       this.bookEventForm.numpeople = 1
+      this.bookEventForm.booked = true
       this.bookEventpage.state = EState.Creating
 
       this.displayEvent = false
       this.bookEventpage.show = true // show dialog
+    }
+  }
+
+  public askForInfoEventMenu(eventparam) {
+    if (!UserStore.state.isLogged || !UserStore.state.verified_email) {
+      // Visu right Toolbar to make SignIn
+      GlobalStore.state.RightDrawerOpen = true
+      // this.$router.push('/signin')
+    } else {
+      console.log('askForInfoEventMenu')
+      this.askInfoForm = { ...this.formAskForDefault }
+
+      this.myevent = eventparam
+
+      this.askInfoForm = {
+        message: ''
+      }
+
+      this.askInfopage.state = EState.Creating
+
+      this.displayEvent = false
+      this.askInfopage.show = true // show dialog
     }
   }
 
@@ -460,10 +499,7 @@ export default class CEventsCalendar extends Vue {
   }
 
   public deleteEvent(eventparam) {
-    const index = this.findEventIndex(eventparam)
-    if (index >= 0) {
-      CalendarStore.state.eventlist.splice(index, 1)
-    }
+    tools.CancelEvent(this, eventparam)
   }
 
   public findEventIndex(eventparam) {
@@ -514,7 +550,7 @@ export default class CEventsCalendar extends Vue {
 
     const mydatatosave = {
       id: myrec._id,
-      table: 'myevents',
+      table: tools.TABEVENTS,
       fieldsvalue: myrec
     }
 
@@ -557,7 +593,7 @@ export default class CEventsCalendar extends Vue {
       // ++Save into the Database
       const mydatatosave = {
         id: data._id,
-        table: 'myevents',
+        table: tools.TABEVENTS,
         fieldsvalue: data
       }
 
@@ -565,7 +601,7 @@ export default class CEventsCalendar extends Vue {
         this.UpdateDbByFields(data, true)
       } else {
         const mydataadd = {
-          table: 'myevents',
+          table: tools.TABEVENTS,
           data
         }
 
@@ -623,7 +659,36 @@ export default class CEventsCalendar extends Vue {
   }
 
   public sendMsg(myevent: IEvents) {
-    // ..
+    const self = this
+    this.askInfopage.show = false
+
+    const data: IMessage = {
+      idapp: process.env.APP_ID,
+      origin: {
+        userId: UserStore.state.userId,
+        page: '',
+        event_id: myevent._id,
+        infoevent: tools.gettextevent(this, myevent)
+      },
+      dest: {
+        idapp: process.env.APP_ID,
+        username: myevent.teacher
+      },
+      read: false,
+      deleted: false,
+      message: this.askInfoForm.message,
+      datemsg: tools.getDateNow()
+    }
+
+    this.SendMsgEvent(data).then((ris) => {
+      self.contextDay = null
+      if (ris)
+        tools.showPositiveNotif(self.$q, self.$t('cal.sendmsg_sent'))
+      else
+        tools.showNegativeNotif(self.$q, self.$t('cal.sendmsg_error'))
+    })
+
+
   }
 
   public saveBookEvent(myevent: IEvents) {
@@ -770,6 +835,10 @@ export default class CEventsCalendar extends Vue {
 
   public async BookEvent(eventparam: IBookedEvent) {
     return await CalendarStore.actions.BookEvent(eventparam)
+  }
+
+  public async SendMsgEvent(param: IMessage) {
+    return await UserStore.actions.SendMsgEvent(param)
   }
 
   public isAlreadyBooked(eventparam: IEvents) {
@@ -961,6 +1030,8 @@ export default class CEventsCalendar extends Vue {
     // check if event is in the past
     const datenow = tools.addDays(tools.getDateNow(), -1)
 
-    return (myevent.dateTimeEnd >= datenow)
+    // console.log('datenow', datenow, 'end', myevent.dateTimeEnd)
+
+    return (new Date(myevent.dateTimeEnd) >= datenow)
   }
 }

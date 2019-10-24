@@ -93,9 +93,7 @@
                 </q-btn-dropdown>
 
 
-                <!--
                 <message-popover></message-popover>
-                -->
 
                 <!--
                 <div class="right-itens">

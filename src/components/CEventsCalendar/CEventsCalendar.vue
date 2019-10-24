@@ -74,23 +74,9 @@
                                 </q-chip>
                             </div>
                             <div v-if="myevent.dateTimeStart" class="cal__when">
-                                <span class="cal__where-title">{{$t('cal.when')}}: </span>
-                                <span class="cal__where-content">{{ tools.getstrDate(myevent.dateTimeStart)}} - {{ tools.getstrDate(myevent.dateTimeEnd)}}</span>
-
-                                <span v-if="myevent.infoextra" class="cal__hours">
-                                        <span class="cal__hours-title">{{$t('cal.hours')}}: </span>
-                                        <span class="cal__hours-content">{{ myevent.infoextra }}  </span>
-                                    </span>
-                                <span v-else>
-                                        <span v-if="!tools.hasManyDays(myevent.dateTimeStart, myevent.dateTimeEnd)"
-                                              class="cal__hours">
-                                             -
-                                            <span class="cal__hours-title">{{$t('cal.hours')}}: </span>
-                                            <span class="cal__hours-content">{{$t('cal.starttime')}} {{ tools.getstrTime(myevent.dateTimeStart) }}
-                                                <span v-if="myevent.dateTimeEnd">{{ $t('cal.endtime')}}: {{ tools.getstrTime(myevent.dateTimeEnd) }}</span>
-                                            </span>
-                                        </span>
-                                    </span>
+                                <span class="cal__where-title">{{$t('cal.when')}}:
+                                    <span v-html="tools.getstrDateTimeEvent(mythis, myevent, true)"></span>
+                                </span>
                             </div>
                             <p v-if="myevent.linkpdf" style="margin-top: 10px; text-align: center">
                                 <q-btn size="md" type="a" :href="`../../statics/` + myevent.linkpdf"
@@ -307,29 +293,9 @@
                                 {{myevent.title}}
                             </q-chip>
                             <div v-if="myevent.dateTimeStart" class="cal__when">
-                                <span class="cal__where-title">{{$t('cal.when')}}: </span>
-                                <span class="cal__where-content">{{func_tools.getDateStr(myevent.dateTimeStart)}}</span>
-                                <span v-if="tools.hasManyDays(myevent.dateTimeStart)" class="cal__where-content"> - {{func_tools.getDateStr(myevent.dateTimeEnd)}}<br/></span>
-                                <span v-if="myevent.infoextra" class="cal__hours">
-                                        <span class="cal__hours-title">{{$t('cal.hours')}}: </span>
-                                        <span class="cal__hours-content">{{ myevent.infoextra }}  </span>
-                                    </span>
-                                <span v-else>
-                                        <span v-if="!tools.hasManyDays(myevent.dateTimeStart, myevent.dateTimeEnd)"
-                                              class="cal__hours">
-                                             -
-                                            <span class="cal__hours-title">{{$t('cal.hours')}}: </span>
-                                            <span class="cal__hours-content"><span v-if="!tools.isMobile()">{{$t('cal.starttime')}} </span>{{ tools.getstrTime(myevent.dateTimeStart) }}
-                                                <span v-if="myevent.dateTimeEnd">
-                                                    <span v-if="!tools.isMobile()">
-                                                    {{$t('cal.endtime')}}
-                                                    </span>
-                                                    <span v-else> - </span>
-                                                    {{ tools.getstrTime(myevent.dateTimeEnd) }}
-                                                </span>
-                                            </span>
-                                        </span>
-                                    </span>
+                                <span class="cal__where-title">{{$t('cal.when')}}:
+                                    <span v-html="tools.getstrDateTimeEvent(mythis, myevent, true)"></span>
+                                </span>
                             </div>
                             <div class="q-pa-xs">
                                 <q-card class="text-white windowcol">
@@ -369,12 +335,59 @@
                         <q-btn v-if="bookEventpage.state === EState.Modifying" flat :label="$t('cal.cancelbooking')"
                                color="negative"
                                @click="tools.CancelBookingEvent(mythis, myevent, bookEventForm._id, true)"></q-btn>
-                        <q-btn v-if="checkseinviaMsg" flat :label="$t('dialog.sendmsg')" color="primary"
+                        <q-btn v-if="checkseinviaMsg" flat :label="$t('dialog.sendonlymsg')" color="primary"
                                @click="sendMsg(myevent)"></q-btn>
                         <q-btn v-else flat :label="getTitleBtnBooking" color="primary" @click="saveBookEvent(myevent)"
                                :disable="!(bookEventpage.state === EState.Creating || hasModifiedBooking)"></q-btn>
 
 
+                        <q-btn flat :label="$t('dialog.cancel')" color="primary" v-close-popup></q-btn>
+                    </q-card-actions>
+                </q-card>
+            </q-dialog>
+
+            <q-dialog v-model="askInfopage.show" no-backdrop-dismiss>
+                <q-card v-if="askInfopage.show" :style="`min-width: `+ tools.myheight_dialog() + `px;`">
+                    <q-toolbar class="bg-primary text-white">
+                        <q-toolbar-title>
+                            {{$t('cal.booking')}}
+                        </q-toolbar-title>
+                        <q-btn flat round color="white" icon="close" v-close-popup></q-btn>
+                    </q-toolbar>
+
+                    <q-card-section class="inset-shadow">
+                        <q-img :src="getImgEvent(myevent)"
+                               class="absolute-top"
+                               style="height: 150px;">
+                        </q-img>
+                        <div style="margin-top: 150px;">
+
+                            <q-chip
+                                    :style="`background-color: ${myevent.bgcolor} !important; color: white !important;`"
+                                    text-color="white"
+                                    class="shadow-5 q-mb-md" dense>
+                                {{myevent.title}}
+                            </q-chip>
+                            <div v-if="myevent.dateTimeStart" class="cal__when">
+                                <span class="cal__where-title">{{$t('cal.when')}}:
+                                    <span v-html="tools.getstrDateTimeEvent(mythis, myevent, true)"></span>
+                                </span>
+                            </div>
+                            <div class="q-pa-xs">
+                                <q-card class="text-white windowcol">
+                                    <q-card-section>
+                                        <q-input v-model="askInfoForm.message" :label="$t('cal.msgbooking')+':'"
+                                                 autogrow>
+                                        </q-input>
+                                    </q-card-section>
+                                </q-card>
+
+                            </div>
+                        </div>
+                    </q-card-section>
+                    <q-card-actions align="right">
+                        <q-btn flat :label="$t('dialog.sendmsg')" color="primary"
+                               @click="sendMsg(myevent)"></q-btn>
                         <q-btn flat :label="$t('dialog.cancel')" color="primary" v-close-popup></q-btn>
                     </q-card-actions>
                 </q-card>
@@ -547,17 +560,7 @@
 
                         </p>
                         <div class="listaev__date listaev__align_center_mobile">
-
-                            <div v-if="event.infoextra">
-                                    <span class="listaev__date">{{func_tools.getDateStr(event.dateTimeStart)}} - <span
-                                            class="cal__hours-content">{{ event.infoextra }}</span> </span>
-                            </div>
-                            <div v-else>
-                                <div v-if="event.dateTimeStart" class="listaev__date">
-                                    {{tools.getstrDateTime(event.dateTimeStart)}} -
-                                    {{tools.getstrDateTime(event.dateTimeEnd)}}
-                                </div>
-                            </div>
+                            <span v-html="tools.getstrDateTimeEvent(mythis, event, true)"></span>
                         </div>
 
                         <div class="listaev__align_center_mobile">
@@ -649,12 +652,16 @@
                                         </span>
                             </p>
                             <div class="row justify-end">
-                                <q-btn rounded outline
+                                <q-btn rounded outline class="q-mx-sm"
+                                       color="primary" @click="askForInfoEventMenu(event)"
+                                       :label="$t('event.askinfo')">
+                                </q-btn>
+                                <q-btn rounded outline class="q-mx-sm"
                                        v-if="!event.nobookable && !isAlreadyBooked(event) && static_data.functionality.BOOKING_EVENTS"
                                        color="primary" @click="addBookEventMenu(event)"
                                        :label="$t('cal.booking')" :disable="!isEventEnabled(event)">
                                 </q-btn>
-                                <q-btn rounded outline
+                                <q-btn rounded outline class="q-mx-sm"
                                        v-if="!event.nobookable && isAlreadyBooked(event) && static_data.functionality.BOOKING_EVENTS"
                                        text-color="red"
                                        @click.native="EditBookEvent(event)"

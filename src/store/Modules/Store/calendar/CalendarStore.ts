@@ -1,5 +1,5 @@
 import Api from '@api'
-import { IBookedEvent, ICalendarState, IEvents } from 'model'
+import { IBookedEvent, ICalendarState, IEvents, IMessage } from 'model'
 import { ILinkReg, IResult, IIdToken, IToken } from 'model/other'
 import { storeBuilder } from '../Store'
 
@@ -9,7 +9,7 @@ import { tools } from '../../tools'
 import translate from '../../../../globalroutines/util'
 import * as Types from '../../../Api/ApiTypes'
 import { db_data } from '@src/db/db_data'
-import { UserStore } from '@store'
+import { GlobalStore, UserStore } from '@store'
 import { lists } from '@src/store/Modules/lists'
 
 // State
@@ -190,6 +190,10 @@ namespace Actions {
 
   }
 
+  async function CancelEvent(context, { id }) {
+    return await GlobalStore.actions.DeleteRec({table: tools.TABEVENTS, id } )
+  }
+
   async function CancelBookingEvent(context, { ideventbook, notify }) {
     console.log('CALSTORE: CancelBookingEvent', ideventbook, notify)
 
@@ -216,7 +220,8 @@ namespace Actions {
 
   export const actions = {
     BookEvent: b.dispatch(BookEvent),
-    CancelBookingEvent: b.dispatch(CancelBookingEvent)
+    CancelBookingEvent: b.dispatch(CancelBookingEvent),
+    CancelEvent: b.dispatch(CancelEvent)
   }
 
   // async function resetpwd(context, paramquery: ICalendarState) {

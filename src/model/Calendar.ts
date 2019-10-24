@@ -41,6 +41,29 @@ export interface IBookedEvent {
   booked: boolean
 }
 
+export interface IOrigin {
+  userId?: string
+  page?: string
+  event_id?: string
+  infoevent?: string
+}
+
+export interface IDest {
+  idapp?: string
+  username?: string
+}
+
+export interface IMessage {
+  _id?: any
+  idapp?: string
+  origin?: IOrigin
+  dest?: IDest
+  message: string
+  datemsg?: Date
+  read?: boolean
+  deleted?: boolean
+}
+
 export interface IOperators {
   username: string
   name: string
@@ -75,6 +98,12 @@ export enum EState {
 export interface IBookedEventPage {
   show: boolean
   bookedevent: IBookedEvent
+  state: EState
+}
+
+export interface IMessagePage {
+  show: boolean
+  msg: IMessage
   state: EState
 }
 

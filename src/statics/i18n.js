@@ -33,7 +33,8 @@ const msgglobal = {
       add: 'Aggiungi',
       today: 'Oggi',
       book: 'Prenota',
-      sendmsg: 'Invia solo un Msg',
+      sendmsg: 'Invia Messaggio',
+      sendonlymsg: 'Invia solo un Msg',
       msg: {
         titledeleteTask: 'Elimina Task',
         deleteTask: "Vuoi Eliminare {mytodo}?"
@@ -194,14 +195,20 @@ const msgglobal = {
     cal: {
       booked: 'Prenotato',
       booked_error: 'Prenotazione non avvenuta. Riprovare più tardi',
+      sendmsg_error: 'Messaggio non inviato. Riprovare più tardi',
+      sendmsg_sent: 'Messaggio Inviato',
       booking: 'Prenota Evento',
       titlebooking: 'Prenotazione',
       modifybooking: 'Modifica Prenotazione',
       cancelbooking: 'Cancella Prenotazione',
       canceledbooking: 'Prenotazione Cancellata',
       cancelederrorbooking: 'Cancellazione non effettuata, Riprovare più tardi',
+      cancelevent: 'Cancella Evento',
+      canceledevent: 'Evento Cancellato',
+      cancelederrorevent: 'Cancellazione Evento non effettuata, Riprovare',
       event: 'Evento',
       starttime: 'Dalle',
+      enddate: 'al',
       endtime: 'alle',
       duration: 'Durata',
       hours: 'Orario',
@@ -223,6 +230,11 @@ const msgglobal = {
       data: 'Data',
       teachertitle: 'Insegnante',
       peoplebooked: 'Prenotaz.',
+    },
+    msgs: {
+      message: 'Messaggio',
+      messages: 'Messaggi',
+      nomessage: 'Nessun Messaggio'
     },
     event: {
       _id: 'id',
@@ -303,7 +315,8 @@ const msgglobal = {
       add: 'Aggrega',
       today: 'Hoy',
       book: 'Reserva',
-      sendmsg: 'Envia solo Mensaje',
+      sendmsg: 'Envia Mensaje',
+      sendonlymsg: 'Envia solo Mensaje',
       msg: {
         titledeleteTask: 'Borrar Tarea',
         deleteTask: 'Quieres borrar {mytodo}?'
@@ -458,6 +471,8 @@ const msgglobal = {
     cal: {
       booked: 'Reservado',
       booked_error: 'Reserva fallida. Intenta nuevamente más tarde',
+      sendmsg_error: 'Mensaje no enviado Intenta nuevamente más tarde',
+      sendmsg_sent: 'Mensaje enviado',
       booking: 'Reserva Evento',
       titlebooking: 'Reserva',
       modifybooking: 'Edita Reserva',
@@ -466,6 +481,7 @@ const msgglobal = {
       cancelederrorbooking: 'Cancelación no realizada, intente nuevamente más tarde',
       event: 'Evento',
       starttime: 'Inicio',
+      enddate: 'a',
       endtime: 'fin',
       duration: 'Duración',
       hours: 'Tiempo',
@@ -487,6 +503,11 @@ const msgglobal = {
       data: 'Fecha',
       teachertitle: 'Maestro',
       peoplebooked: 'Reserv.',
+    },
+    msgs: {
+      message: 'Mensaje',
+      messages: 'Mensajes',
+      nomessage: 'Sin Mensaje'
     },
     event: {
       _id: 'id',
@@ -567,7 +588,8 @@ const msgglobal = {
       cancel: 'annuler',
       today: 'Aujourd\'hui',
       book: 'Réserve',
-      sendmsg: 'envoyer seul un msg',
+      sendmsg: 'envoyer msg',
+      sendonlymsg: 'envoyer seul un msg',
       msg: {
         titledeleteTask: 'Supprimer la tâche',
         deleteTask: 'Voulez-vous supprimer {mytodo}?'
@@ -721,6 +743,8 @@ const msgglobal = {
     cal: {
       booked: 'Réservé',
       booked_error: 'La réservation a échoué. Réessayez plus tard',
+      sendmsg_error: 'Message non envoyé. Réessayez plus tard',
+      sendmsg_sent: 'Message envoyé',
       booking: 'Réserver l\'événement',
       titlebooking: 'Réservation',
       modifybooking: 'changement de réservation',
@@ -729,6 +753,7 @@ const msgglobal = {
       cancelederrorbooking: 'Annulation non effectuée, réessayez plus tard',
       event: 'événement',
       starttime: 'Accueil',
+      enddate: 'au',
       endtime: 'fin',
       duration: 'Durée',
       hours: 'Le temps',
@@ -750,6 +775,11 @@ const msgglobal = {
       data: 'Date',
       teachertitle: 'Professeur',
       peoplebooked: 'Réserv.',
+    },
+    msgs: {
+      message: 'Message',
+      messages: 'Messages',
+      nomessage: 'Pas de message'
     },
     event: {
       _id: 'id',
@@ -830,7 +860,8 @@ const msgglobal = {
       cancel: 'Cancel',
       today: 'Today',
       book: 'Book',
-      sendmsg: 'Send only a Msg',
+      sendmsg: 'Send Message',
+      sendonlymsg: 'Send only a Msg',
       msg: {
         titledeleteTask: 'Delete Task',
         deleteTask: 'Delete Task {mytodo}?'
@@ -983,6 +1014,8 @@ const msgglobal = {
     cal: {
       booked: 'Booked',
       booked_error: 'Reservation failed. Try again later',
+      sendmsg_error: 'Message not sent. Try again later',
+      sendmsg_sent: 'Message sent',
       booking: 'Book the Event',
       titlebooking: 'Reservation',
       modifybooking: 'Modify Reservation',
@@ -991,6 +1024,7 @@ const msgglobal = {
       cancelederrorbooking: 'Cancellation unsuccessfully, try again later',
       event: 'Event',
       starttime: 'From',
+      enddate: 'to',
       endtime: 'to',
       duration: 'Duration',
       hours: 'Hours',
@@ -1012,6 +1046,11 @@ const msgglobal = {
       data: 'Date',
       teachertitle: 'Teacher',
       peoplebooked: 'Booked',
+    },
+    msgs: {
+      message: 'Messaggio',
+      messages: 'Messaggi',
+      nomessage: 'Nessun Messaggio'
     },
     event: {
       _id: 'id',
@@ -1092,7 +1131,8 @@ const msgglobal = {
       cancel: 'Cancel',
       today: 'Today',
       book: 'Book',
-      sendmsg: 'Send only a Msg',
+      sendmsg: 'Send Message',
+      sendonlymsg: 'Send only a Msg',
       msg: {
         titledeleteTask: 'Delete Task',
         deleteTask: 'Delete Task {mytodo}?'
@@ -1247,6 +1287,8 @@ const msgglobal = {
     cal: {
       booked: 'Booked',
       booked_error: 'Reservation failed. Try again later',
+      sendmsg_error: 'Message not sent. Try again later',
+      sendmsg_sent: 'Message sent',
       booking: 'Book the Event',
       titlebooking: 'Reservation',
       modifybooking: 'Modify Reservation',
@@ -1255,6 +1297,7 @@ const msgglobal = {
       cancelederrorbooking: 'Cancellation unsuccessfully, try again later',
       event: 'Event',
       starttime: 'From',
+      enddate: 'to',
       endtime: 'to',
       duration: 'Duration',
       hours: 'Hours',
@@ -1276,6 +1319,11 @@ const msgglobal = {
       data: 'Date',
       teachertitle: 'Teacher',
       peoplebooked: 'Booked',
+    },
+    msgs: {
+      message: 'Messaggio',
+      messages: 'Messaggi',
+      nomessage: 'Nessun Messaggio'
     },
     event: {
       _id: 'id',

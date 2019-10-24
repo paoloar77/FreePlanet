@@ -270,7 +270,7 @@ namespace Mutations {
   }
 
   function getListByTable(table): any[] {
-    if (table === 'myevents')
+    if (table === tools.TABEVENTS)
       return CalendarStore.state.eventlist
     else if (table === 'operators')
       return CalendarStore.state.operators
@@ -282,6 +282,8 @@ namespace Mutations {
       return CalendarStore.state.bookedevent
     else if (table === 'users')
       return UserStore.state.usersList
+    else if (table === 'sendmsgs')
+      return UserStore.state.msgs
     else
       return null
 
@@ -533,6 +535,12 @@ namespace Actions {
           UserStore.mutations.setusersList(res.data.usersList)
         }
 
+        if (res.data.msgs) {
+          UserStore.state.msgs = [...res.data.msgs]
+        }
+
+        console.log('UserStore.state.msgs', UserStore.state.msgs)
+
         // console.log('**********  res', 'state.todos', state.todos, 'checkPending', checkPending)
         // After Login will store into the indexedDb...
 
@@ -593,7 +601,7 @@ namespace Actions {
   }
 
   async function DeleteRec(context, { table, id }) {
-    console.log('DeleteRec', id)
+    console.log('DeleteRec', table, id)
 
     return await Api.SendReq('/delrec/' + table + '/' + id, 'DELETE', null)
       .then((res) => {

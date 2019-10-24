@@ -1,4 +1,5 @@
 import { IToken } from 'model/other'
+import { IMessage } from '@src/model/Calendar'
 
 export const DefaultUser = <IUserState>{
   email: '',
@@ -36,6 +37,7 @@ export interface IUserState {
   isManager?: boolean
   usersList?: IUserList[]
   countusers?: number
+  msgs?: IMessage[]
 }
 
 export interface IUserList {
