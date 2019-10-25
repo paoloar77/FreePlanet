@@ -6,7 +6,6 @@ import { UserStore } from '../../../store/Modules'
 import globalroutines from '../../../globalroutines/index'
 import { tools } from '../../../store/Modules/tools'
 
-
 // import {Loading, QSpinnerFacebook, QSpinnerGears} from 'quasar'
 
 @Component({
