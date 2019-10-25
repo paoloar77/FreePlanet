@@ -211,7 +211,7 @@ canvas {
 }
 
 .toolbar {
-  min-height: 30px;
+  min-height: 43px;
 }
 
 .right-itens a, .right-itens button {
@@ -296,3 +296,8 @@ canvas {
   margin-bottom: 5px;
 }
 
+.roundimg  {
+  border-radius: 50% !important;
+  color: red;
+  background-color: red;
+}

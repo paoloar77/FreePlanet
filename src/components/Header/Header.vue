@@ -102,11 +102,14 @@
 
                 <!-- BUTTON USER BAR -->
 
-                <q-btn v-if="static_data.functionality.SHOW_USER_MENU && !isLogged" dense flat round icon="menu"
+                <q-btn class="q-mx-xs" v-if="static_data.functionality.SHOW_USER_MENU && !isLogged" dense flat round icon="menu"
                        @click="rightDrawerOpen = !rightDrawerOpen">
                 </q-btn>
-                <q-btn v-if="static_data.functionality.SHOW_USER_MENU && isLogged" dense flat round
-                       icon="img:statics/images/avatar/avatar3_small.png" @click="rightDrawerOpen = !rightDrawerOpen">
+                <q-btn class="q-mx-xs" v-if="static_data.functionality.SHOW_USER_MENU && isLogged" round dense flat
+                       @click="rightDrawerOpen = !rightDrawerOpen">
+                    <q-avatar size="30px">
+                        <img :src="`statics/`+ getMyImg">
+                    </q-avatar>
                 </q-btn>
 
             </q-toolbar>
@@ -134,7 +137,7 @@
                 <div class="absolute-top bg-transparent text-black center_img" style="margin-top: 10px;">
 
                     <q-avatar class="q-mb-sm center_img">
-                        <img src="../../statics/images/avatar/avatar3_small.png">
+                        <img :src="`../../statics/` + getMyImg">
                     </q-avatar>
                     <q-btn class="absolute-top-right" style="margin-right: 10px; color: white;"
                            dense flat round icon="close" @click="rightDrawerOpen = !rightDrawerOpen">

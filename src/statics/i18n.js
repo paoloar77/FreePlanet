@@ -85,7 +85,7 @@ const msgglobal = {
       richiesto: 'Campo Richiesto',
       email: 'Email',
       cell: 'Móvil',
-      img: 'Imagen de archivo',
+      img: 'Immagine',
       date_reg: 'Data Reg.',
       perm: 'Permessi',
       username: 'Nome Utente',

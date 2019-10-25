@@ -4,7 +4,7 @@ import { UserStore } from '@store'
 import { tools } from '../../store/Modules/tools'
 import { toolsext } from '@src/store/Modules/toolsext'
 
-import { ISignupOptions, IUserState } from 'model'
+import { ISignupOptions, IUserState, IUserFields } from 'model'
 import { validations, TSignup } from './CSignUp-validate'
 
 import { validationMixin } from 'vuelidate'

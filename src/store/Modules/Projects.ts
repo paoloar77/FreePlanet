@@ -46,7 +46,7 @@ function getarrByCategory(category: string) {
 
 function initcat() {
   const rec = Getters.getters.getRecordEmpty()
-  rec.userId = UserStore.state.userId
+  rec.userId = UserStore.state.my._id
 
   return rec
 }
@@ -62,11 +62,11 @@ function getproj(projects, idproj, tipoproj: string) {
   let ris = null
 
   if (tipoproj === RouteNames.myprojects)
-    ris = projects.filter((proj) => (proj.id_parent === idproj) && (proj.userId === UserStore.state.userId) && (proj.privacyread === Privacy.onlyme))
+    ris = projects.filter((proj) => (proj.id_parent === idproj) && (proj.userId === UserStore.state.my._id) && (proj.privacyread === Privacy.onlyme))
   else if (tipoproj === RouteNames.projectsshared)
-    ris = projects.filter((proj) => (proj.id_parent === idproj) && (proj.userId === UserStore.state.userId) && (proj.privacyread !== Privacy.onlyme))
+    ris = projects.filter((proj) => (proj.id_parent === idproj) && (proj.userId === UserStore.state.my._id) && (proj.privacyread !== Privacy.onlyme))
   else if (tipoproj === RouteNames.projectsall)
-    ris = projects.filter((proj) => (proj.id_parent === idproj) && (proj.userId !== UserStore.state.userId) )
+    ris = projects.filter((proj) => (proj.id_parent === idproj) && (proj.userId !== UserStore.state.my._id) )
 
   // console.log('idproj', idproj, 'projects', projects, 'getproj', tipoproj, 'ris=', ris)
 
@@ -168,7 +168,7 @@ namespace Getters {
 
     if (!!UserStore.state) {
 
-      if (UserStore.state.userId === proj.userId)  // If it's the owner
+      if (UserStore.state.my._id === proj.userId)  // If it's the owner
         return true
 
       return (proj.privacyread === Privacy.all) ||
@@ -186,7 +186,7 @@ namespace Getters {
 
     if (!!UserStore) {
       if (!!UserStore.state)
-        return ((UserStore.state.userId === proj.userId) || (proj.privacywrite === Privacy.all))  // If it's the owner
+        return ((UserStore.state.my._id === proj.userId) || (proj.privacywrite === Privacy.all))  // If it's the owner
       else
         return false
     }
@@ -289,13 +289,13 @@ namespace Actions {
       }
     }
 
-    // if (UserStore.state.userId === '') {
+    // if (UserStore.state.my._id === '') {
     //   return false  // Login not made
     // }
 
-    console.log('dbLoad', nametable, checkPending, 'userid=', UserStore.state.userId)
+    console.log('dbLoad', nametable, checkPending, 'userid=', UserStore.state.my._id)
 
-    const ris = await Api.SendReq('/projects/' + UserStore.state.userId, 'GET', null)
+    const ris = await Api.SendReq('/projects/' + UserStore.state.my._id, 'GET', null)
       .then((res) => {
         if (res.data.projects) {  // console.log('RISULTANTE CATEGORIES DAL SERVER = ', res.data.categories)
           stateglob.projects = res.data.projects

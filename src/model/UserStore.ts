@@ -1,30 +1,38 @@
 import { IToken } from 'model/other'
 import { IMessage } from '@src/model/Calendar'
 
-export const DefaultUser = <IUserState>{
+export const DefaultUser: IUserFields = {
   email: '',
   username: '',
   name: '',
   surname: '',
   password: '',
-  lang: 'it'
 }
 
-export interface IUserState {
-  userId?: string
+export interface IUserFields {
+  _id?: string
   email?: string
   username?: string
   name?: string
   surname?: string
   password?: string
-  lang?: string
   ipaddr?: string
   perm?: number
+  img?: string
+  verified_email?: boolean
+  tokens?: IToken[]
+}
+
+/*
+password?: string
+ lang
+ */
+
+export interface IUserState {
+  my: IUserFields
+  lang?: string
   repeatPassword?: string
 
-  tokens?: IToken[]
-
-  verified_email?: boolean
   categorySel?: string
 
   tokenforgot?: string
@@ -35,14 +43,7 @@ export interface IUserState {
   isLogged?: boolean
   isAdmin?: boolean
   isManager?: boolean
-  usersList?: IUserList[]
+  usersList?: IUserFields[]
   countusers?: number
   msgs?: IMessage[]
-}
-
-export interface IUserList {
-  _id: string
-  username: string
-  name?: string
-  surname?: string
 }

@@ -50,11 +50,11 @@ const stateGetter = b.state()
 namespace Getters {
 
   const findEventBooked = b.read((mystate: ICalendarState) => (myevent: IEvents, isconfirmed: boolean) => {
-    return mystate.bookedevent.find((bookedevent) => (bookedevent.id_bookedevent === myevent._id) && (bookedevent.userId === UserStore.state.userId) && ((isconfirmed && bookedevent.booked) || (!isconfirmed)))
+    return mystate.bookedevent.find((bookedevent) => (bookedevent.id_bookedevent === myevent._id) && (bookedevent.userId === UserStore.state.my._id) && ((isconfirmed && bookedevent.booked) || (!isconfirmed)))
   }, 'findEventBooked')
 
   const getNumParticipants = b.read((mystate: ICalendarState) => (myevent: IEvents, showall) => {
-    const myarr = mystate.bookedevent.filter((bookedevent) => (bookedevent.id_bookedevent === myevent._id) && (bookedevent.booked) && (showall || (!showall && bookedevent.userId === UserStore.state.userId) ))
+    const myarr = mystate.bookedevent.filter((bookedevent) => (bookedevent.id_bookedevent === myevent._id) && (bookedevent.booked) && (showall || (!showall && bookedevent.userId === UserStore.state.my._id) ))
     if (myarr)
       return myarr.reduce((sum, bookedevent) => sum + bookedevent.numpeople, 0)
     else
@@ -62,7 +62,7 @@ namespace Getters {
   }, 'getNumParticipants')
 
   const getEventsBookedByIdEvent = b.read((mystate: ICalendarState) => (idevent, showall) => {
-    return mystate.bookedevent.filter((bookedevent) => (bookedevent.id_bookedevent === idevent) && (bookedevent.booked) && (showall || (!showall && bookedevent.userId === UserStore.state.userId) ))
+    return mystate.bookedevent.filter((bookedevent) => (bookedevent.id_bookedevent === idevent) && (bookedevent.booked) && (showall || (!showall && bookedevent.userId === UserStore.state.my._id) ))
   }, 'getEventsBookedByIdEvent')
 
   const getTeacherName = b.read((mystate: ICalendarState) => (teacherusername) => {
@@ -134,7 +134,7 @@ namespace Getters {
 
 namespace Mutations {
   // function authUser(state: ICalendarState, data: ICalendarState) {
-  //   state.userId = data.userId
+  //   state._id = data._id
   // }
   //
   // export const mutations = {
@@ -153,7 +153,7 @@ namespace Actions {
       numpeople: bookevent.numpeople,
       msgbooking: bookevent.msgbooking,
       datebooked: bookevent.datebooked,
-      userId: UserStore.state.userId,
+      userId: UserStore.state.my._id,
       booked: bookevent.booked,
       modified: bookevent.modified
     }

@@ -76,7 +76,8 @@ export const tools = {
     name: 'nm',
     surname: 'sn',
     perm: 'pm',
-    lang: 'lg'
+    lang: 'lg',
+    img: 'img'
   },
 
   Priority: {
@@ -1704,8 +1705,15 @@ export const tools = {
       return date.formatDate(mytimestamp, 'DD/MM/YYYY HH:mm')
     else
       return ''
-  }
-  ,
+  },
+
+  getstrDateTimeShort(mytimestamp) {
+    // console.log('getstrDate', mytimestamp)
+    if (!!mytimestamp)
+      return date.formatDate(mytimestamp, 'DD/MM HH:mm')
+    else
+      return ''
+  },
 
   getstrDateEmailTime(mythis, mytimestamp) {
     // console.log('getstrDate', mytimestamp)

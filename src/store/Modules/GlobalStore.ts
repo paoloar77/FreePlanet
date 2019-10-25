@@ -419,8 +419,8 @@ namespace Actions {
       options,
       subs: newSub,
       others: {
-        userId: UserStore.state.userId,
-        access: UserStore.state.tokens[0].access
+        userId: UserStore.state.my._id,
+        access: UserStore.state.my.tokens[0].access
       }
     }
 
@@ -515,7 +515,7 @@ namespace Actions {
   async function checkUpdates(context) {
     console.log('checkUpdates')
 
-    // if (UserStore.state.userId === '')
+    // if (UserStore.state.my._id === '')
     //   return false // Login not made
 
     state.networkDataReceived = false
@@ -643,7 +643,7 @@ namespace Actions {
 
     const showall = UserStore.state.isAdmin || UserStore.state.isManager ? '1' : '0'
 
-    const myuserid = (UserStore.state.userId) ? UserStore.state.userId : '0'
+    const myuserid = (UserStore.state.my._id) ? UserStore.state.my._id : '0'
 
     const ris = await Api.SendReq('/loadsite/' + myuserid + '/' + process.env.APP_ID + '/' + showall, 'GET', null)
       .then((res) => {

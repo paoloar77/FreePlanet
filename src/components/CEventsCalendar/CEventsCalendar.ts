@@ -440,7 +440,7 @@ export default class CEventsCalendar extends Vue {
   }
 
   public addBookEventMenu(eventparam) {
-    if (!UserStore.state.isLogged || !UserStore.state.verified_email) {
+    if (!UserStore.state.isLogged || !UserStore.state.my.verified_email) {
       // Visu right Toolbar to make SignIn
       GlobalStore.state.RightDrawerOpen = true
       // this.$router.push('/signin')
@@ -459,7 +459,7 @@ export default class CEventsCalendar extends Vue {
   }
 
   public askForInfoEventMenu(eventparam) {
-    if (!UserStore.state.isLogged || !UserStore.state.verified_email) {
+    if (!UserStore.state.isLogged || !UserStore.state.my.verified_email) {
       // Visu right Toolbar to make SignIn
       GlobalStore.state.RightDrawerOpen = true
       // this.$router.push('/signin')
@@ -665,7 +665,7 @@ export default class CEventsCalendar extends Vue {
     const data: IMessage = {
       idapp: process.env.APP_ID,
       origin: {
-        userId: UserStore.state.userId,
+        userId: UserStore.state.my._id,
         page: '',
         event_id: myevent._id,
         infoevent: tools.gettextevent(this, myevent)
@@ -688,7 +688,6 @@ export default class CEventsCalendar extends Vue {
         tools.showNegativeNotif(self.$q, self.$t('cal.sendmsg_error'))
     })
 
-
   }
 
   public saveBookEvent(myevent: IEvents) {
@@ -703,7 +702,7 @@ export default class CEventsCalendar extends Vue {
       // self.bookEventForm.booked = self.bookEventForm.bookedcheck
 
       const data: IBookedEvent = {
-        userId: UserStore.state.userId,
+        userId: UserStore.state.my._id,
         id_bookedevent: myevent._id,
         numpeople: self.bookEventForm.numpeople,
         infoevent: tools.gettextevent(self, myevent),

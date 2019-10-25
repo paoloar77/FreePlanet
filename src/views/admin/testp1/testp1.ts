@@ -68,18 +68,18 @@ export default class Testp1 extends Vue {
   }
 
   TestBtn2() {
-    GlobalStore.state.testp1.mioarray.push({chiave: 'pippo2', userId: UserStore.state.userId, valore: GlobalStore.state.testp1.contatore.toString() })
+    GlobalStore.state.testp1.mioarray.push({chiave: 'pippo2', userId: UserStore.state.my._id, valore: GlobalStore.state.testp1.contatore.toString() })
   }
 
   TestBtnModify() {
     // GlobalStore.state.testp1.mioarray[GlobalStore.state.testp1.mioarray.length - 1] = GlobalStore.state.testp1.mioarray[GlobalStore.state.testp1.mioarray.length - 1] + 1
-    GlobalStore.mutations.setPaoArray({chiave: 'pippo', userId: UserStore.state.userId, valore: '20' } )
+    GlobalStore.mutations.setPaoArray({chiave: 'pippo', userId: UserStore.state.my._id, valore: '20' } )
 
   }
 
   TestBtnCambiaTutto() {
     // GlobalStore.state.testp1.mioarray[GlobalStore.state.testp1.mioarray.length - 1] = GlobalStore.state.testp1.mioarray[GlobalStore.state.testp1.mioarray.length - 1] + 1
-    GlobalStore.mutations.NewArray([{chiave: 'nuovorec1', userId: UserStore.state.userId, valore: '1' }, {chiave: 'nuovorec2', userId: UserStore.state.userId, valore: '2' }] )
+    GlobalStore.mutations.NewArray([{chiave: 'nuovorec1', userId: UserStore.state.my._id, valore: '1' }, {chiave: 'nuovorec2', userId: UserStore.state.my._id, valore: '2' }] )
 
   }
 

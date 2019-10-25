@@ -9,10 +9,14 @@ import { tools } from '@src/store/Modules/tools'
 import { toolsext } from '@src/store/Modules/toolsext'
 import { ITodo, ITodosState } from '../../../model'
 import { Getter } from 'vuex-class'
+import { UserStore } from '../../../store/Modules'
+
+import MixinUsers from '../../../mixins/mixin-users'
 
 const namespace = 'UserModule'
 
 @Component({
+  mixins: [MixinUsers]
 })
 export default class MessagePopover extends Vue {
 
@@ -23,6 +27,20 @@ export default class MessagePopover extends Vue {
     // if (GlobalStore.state.posts.length < 1) {
     //   this.requestPosts()
     // }
+  }
+
+  get getNumMsg() {
+    return UserStore.getters.getlasts_messages().length
+  }
+
+  get getNumMsgUnread() {
+    // return UserStore.getters.getlasts_messages().length
+    return UserStore.getters.getnumMsgUnread()
+  }
+
+  get getNumNotifUnread() {
+    // return UserStore.getters.getlasts_messages().length
+    return 0
   }
 
   public randomDate(): Date {
