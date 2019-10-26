@@ -17,7 +17,6 @@ import translate from './../../globalroutines/util'
 import * as Types from '@src/store/Api/ApiTypes'
 import { ICalendarState, ICfgServer } from '@src/model'
 import { shared_consts } from '../../common/shared_vuejs'
-import { IMessage } from '@src/model/Calendar'
 
 const bcrypt = require('bcryptjs')
 
@@ -42,7 +41,6 @@ const state: IUserState = {
   isAdmin: false,
   isManager: false,
   usersList: [],
-  msgs: [],
   countusers: 0
 }
 
@@ -142,24 +140,12 @@ namespace Getters {
   const getImgByUsername = b.read((mystate: IUserState) => (username): string => {
     // Check if is this User!
     const myrec = UserStore.getters.getUserByUsername(username)
-    console.log('getImgByUsername', username, myrec)
     if (myrec && !!myrec.img) {
       return myrec.img
     } else {
       return 'images/avatar/avatar3_small.png'
     }
   }, 'getImgByUsername')
-
-  const getlasts_messages = b.read((mystate: IUserState) => () => {
-    const ctrec = (mystate.msgs) ? mystate.msgs.slice(0, 5) : []
-    // const ctrec = (mystate.msgs) ? mystate.msgs.slice().reverse().slice(0, 5) : []
-    return (ctrec)
-
-  }, 'getlasts_messages')
-
-  const getnumMsgUnread = b.read((mystate: IUserState) => () => {
-    return mystate.msgs.filter((msg) => !msg.read).length
-  }, 'getnumMsgUnread')
 
   export const getters = {
     get isUserInvalid() {
@@ -200,14 +186,7 @@ namespace Getters {
     },
     get getUsersList() {
       return getUsersList()
-    },
-    get getlasts_messages() {
-      return getlasts_messages()
-    },
-    get getnumMsgUnread() {
-      return getnumMsgUnread()
     }
-    // get fullName() { return fullName();},
   }
 
 }
@@ -720,28 +699,6 @@ namespace Actions {
     }
   }
 
-  async function SendMsgEvent(context, msg: IMessage) {
-    console.log('SendMsgEvent', msg)
-
-    return await Api.SendReq('/sendmsg', 'POST', msg)
-      .then((res) => {
-        console.log('res', res)
-        if (res.status === 200) {
-          if (res.data.code === serv_constants.RIS_CODE_OK) {
-            msg._id = res.data.id
-            state.msgs.push(msg)
-            return true
-          }
-        }
-        return false
-      })
-      .catch((error) => {
-        console.error(error)
-        return false
-      })
-
-  }
-
   /*
     async function refreshUserInfos(){
       let {token, refresh_token} = JWT.fetch();
@@ -765,7 +722,6 @@ namespace Actions {
     resetpwd: b.dispatch(resetpwd),
     signin: b.dispatch(signin),
     signup: b.dispatch(signup),
-    SendMsgEvent: b.dispatch(SendMsgEvent),
     vreg: b.dispatch(vreg)
   }
 

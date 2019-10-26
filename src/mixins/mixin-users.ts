@@ -1,11 +1,23 @@
 import Vue from 'vue'
-import { GlobalStore, UserStore } from '../store/Modules'
+import { GlobalStore, UserStore, MessageStore } from '../store/Modules'
+
 
 import Component from 'vue-class-component'
+import { func_tools } from '../store/Modules/toolsext'
+import { tools } from '../store/Modules/tools'
 
 // You can declare a mixin as the same style as components.
 @Component
 export default class MixinUsers extends Vue {
+  public mythis() {
+    return this
+  }
+  get func_tools() {
+    return func_tools
+  }
+  get tools() {
+    return tools
+  }
   public getUserByUsername(username) {
     return UserStore.getters.getNameSurnameByUsername(username)
   }
@@ -16,7 +28,7 @@ export default class MixinUsers extends Vue {
     return UserStore.state.my.username
   }
   get getMyImg() {
-    return UserStore.getters.getImgByUsername(UserStore.state.my.username)
+    return 'statics/' + UserStore.getters.getImgByUsername(UserStore.state.my.username)
   }
   get MenuCollapse() {
     return GlobalStore.state.menuCollapse
@@ -37,4 +49,13 @@ export default class MixinUsers extends Vue {
   get Email() {
     return UserStore.state.my.email
   }
+  get getNumMsg() {
+    return MessageStore.getters.getlasts_messages().length
+  }
+
+  get getNumMsgUnread() {
+    // return UserStore.getters.getlasts_messages().length
+    return MessageStore.getters.getnumMsgUnread()
+  }
+
 }

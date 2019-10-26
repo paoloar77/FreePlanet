@@ -43,10 +43,6 @@ export default class Header extends Vue {
   public photo = ''
   public visuimg: boolean = true
 
-  get tools() {
-    return tools
-  }
-
   get conn_changed() {
     return GlobalStore.state.stateConnection
   }

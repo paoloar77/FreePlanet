@@ -108,7 +108,7 @@
                 <q-btn class="q-mx-xs" v-if="static_data.functionality.SHOW_USER_MENU && isLogged" round dense flat
                        @click="rightDrawerOpen = !rightDrawerOpen">
                     <q-avatar size="30px">
-                        <img :src="`statics/`+ getMyImg">
+                        <img :src="getMyImg">
                     </q-avatar>
                 </q-btn>
 
@@ -137,7 +137,7 @@
                 <div class="absolute-top bg-transparent text-black center_img" style="margin-top: 10px;">
 
                     <q-avatar class="q-mb-sm center_img">
-                        <img :src="`../../statics/` + getMyImg">
+                        <img :src="`../../` + getMyImg">
                     </q-avatar>
                     <q-btn class="absolute-top-right" style="margin-right: 10px; color: white;"
                            dense flat round icon="close" @click="rightDrawerOpen = !rightDrawerOpen">

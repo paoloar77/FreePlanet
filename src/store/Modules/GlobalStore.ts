@@ -13,7 +13,7 @@ import { costanti } from '@src/store/Modules/costanti'
 import { tools } from '@src/store/Modules/tools'
 import { toolsext } from '@src/store/Modules/toolsext'
 import * as ApiTables from '@src/store/Modules/ApiTables'
-import { CalendarStore, GlobalStore, Projects, Todos, UserStore } from '@store'
+import { CalendarStore, GlobalStore, MessageStore, Projects, Todos, UserStore } from '@store'
 import messages from '../../statics/i18n'
 import globalroutines from './../../globalroutines/index'
 
@@ -283,7 +283,7 @@ namespace Mutations {
     else if (table === 'users')
       return UserStore.state.usersList
     else if (table === 'sendmsgs')
-      return UserStore.state.msgs
+      return MessageStore.state.last_msgs
     else
       return null
 
@@ -535,11 +535,11 @@ namespace Actions {
           UserStore.mutations.setusersList(res.data.usersList)
         }
 
-        if (res.data.msgs) {
-          UserStore.state.msgs = [...res.data.msgs]
+        if (res.data.last_msgs) {
+          MessageStore.state.last_msgs = [...res.data.last_msgs]
         }
 
-        console.log('UserStore.state.msgs', UserStore.state.msgs)
+        // console.log('MessageStore.state.last_msgs', MessageStore.state.last_msgs)
 
         // console.log('**********  res', 'state.todos', state.todos, 'checkPending', checkPending)
         // After Login will store into the indexedDb...

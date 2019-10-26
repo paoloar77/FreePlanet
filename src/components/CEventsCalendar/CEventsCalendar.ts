@@ -22,13 +22,14 @@ import QDateTimeScroller from '@quasar/quasar-app-extension-qscroller/src/compon
 import { CTodo } from '@src/components/todos/CTodo'
 import { SingleProject } from '@src/components/projects/SingleProject'
 import { IEvents } from '@src/model'
-import { IBookedEvent, IBookedEventPage, IMessagePage, EState, IMessage, IDest, IOrigin } from '@src/model/Calendar'
+import { IBookedEvent, IBookedEventPage, EState } from '@src/model/Calendar'
 import { costanti } from '@src/store/Modules/costanti'
 import router from '@router'
 import { static_data } from '@src/db/static_data'
 import translate from '@src/globalroutines/util'
 import { lists } from '../../store/Modules/lists'
 import { GlobalStore } from '../../store/Modules'
+import { IMessagePage, IMessage, IIdentity } from '../../model'
 
 @Component({
   name: 'CEventsCalendar',
@@ -64,7 +65,8 @@ export default class CEventsCalendar extends Vue {
       username: ''
     },
     origin: {
-      userId: ''
+      idapp: process.env.APP_ID,
+      username: ''
     },
     message: ''
   }
@@ -663,12 +665,15 @@ export default class CEventsCalendar extends Vue {
     this.askInfopage.show = false
 
     const data: IMessage = {
-      idapp: process.env.APP_ID,
-      origin: {
-        userId: UserStore.state.my._id,
+      source: {
         page: '',
         event_id: myevent._id,
         infoevent: tools.gettextevent(this, myevent)
+      },
+      idapp: process.env.APP_ID,
+      origin: {
+        idapp: process.env.APP_ID,
+        username: UserStore.state.username
       },
       dest: {
         idapp: process.env.APP_ID,

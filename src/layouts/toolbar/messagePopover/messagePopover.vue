@@ -15,11 +15,10 @@
                         </q-item>
                     </div>
 
-                    <q-item clickable v-ripple v-for="(msg, index) in lasts_messages()" :key="index">
+                    <q-item clickable v-ripple v-for="(msg, index) in lasts_messages()" :key="index" @click="clickChat(msg)">
 
                         <q-item-section avatar>
                             <q-avatar>
-                                {{msg.origin.username}}
                                 <img :src="getImgByUsername(msg.dest.username)">
                             </q-avatar>
                         </q-item-section>

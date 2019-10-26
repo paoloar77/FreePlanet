@@ -26,6 +26,9 @@ import { func_tools } from '@src/store/Modules/toolsext'
 import { serv_constants } from '@src/store/Modules/serv_constants'
 import { shared_consts } from '@src/common/shared_vuejs'
 
+import { dom } from 'quasar'
+const { height, width } = dom
+
 export interface INotify {
   color?: string | 'primary'
   textColor?: string
@@ -1737,8 +1740,11 @@ export const tools = {
   ,
   getstrYYMMDDDateTime(mytimestamp) {
     return date.formatDate(mytimestamp, 'YYYY-MM-DD HH:mm')
-  }
-  ,
+  },
+
+  getstrYYMMDDDateTimeAll(mytimestamp) {
+    return date.formatDate(mytimestamp, 'YYYY-MM-DD HH:mm:ss')
+  },
 
 // mystrdate "26.04.2013"
   convertstrtoDate(mystrdate
@@ -1801,8 +1807,11 @@ export const tools = {
   ,
   getTimestampsNow() {
     return new Date().valueOf()
-  }
-  ,
+  },
+
+  gettimestampByDate(mydate) {
+    return mydate.toString()
+  },
 
   isMainProject(idproj) {
     return idproj === process.env.PROJECT_ID_MAIN
@@ -2456,8 +2465,14 @@ export const tools = {
           }
           return record
         })
-  }
-  ,
+  },
+  getheight(mythis) {
+    // return height()
+    return mythis.$q.screen.height
+  },
+  getLastDateReadReset() {
+    return new Date(1999, 1, 1, 0, 0, 0)
+  },
 
   isBitActive(bit, whattofind) {
     return ((bit & whattofind) === whattofind)

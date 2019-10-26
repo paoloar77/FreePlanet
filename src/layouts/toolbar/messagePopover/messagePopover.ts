@@ -13,7 +13,7 @@ import { UserStore } from '../../../store/Modules'
 
 import MixinUsers from '../../../mixins/mixin-users'
 
-const namespace = 'UserModule'
+const namespace = 'MessageModule'
 
 @Component({
   mixins: [MixinUsers]
@@ -29,22 +29,17 @@ export default class MessagePopover extends Vue {
     // }
   }
 
-  get getNumMsg() {
-    return UserStore.getters.getlasts_messages().length
-  }
-
-  get getNumMsgUnread() {
-    // return UserStore.getters.getlasts_messages().length
-    return UserStore.getters.getnumMsgUnread()
+  public clickChat(msg: IMessage){
+    this.$router.replace('/messages/' + msg.dest.username)
   }
 
   get getNumNotifUnread() {
-    // return UserStore.getters.getlasts_messages().length
+
     return 0
   }
 
   public randomDate(): Date {
-    let myval = Math.floor(Math.random() * 10000000000)
+    const myval = Math.floor(Math.random() * 10000000000)
     return tools.getstrDateTime(new Date(tools.getTimestampsNow() - myval))
   }
 
@@ -77,10 +72,6 @@ export default class MessagePopover extends Vue {
       .get('posts')
       .then(response => { this.setPosts(response.data) })
       */
-  }
-
-  get tools() {
-    return tools
   }
 
   // public requestPosts() {

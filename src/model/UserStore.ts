@@ -1,12 +1,11 @@
 import { IToken } from 'model/other'
-import { IMessage } from '@src/model/Calendar'
 
 export const DefaultUser: IUserFields = {
   email: '',
   username: '',
   name: '',
   surname: '',
-  password: '',
+  password: ''
 }
 
 export interface IUserFields {
@@ -45,5 +44,4 @@ export interface IUserState {
   isManager?: boolean
   usersList?: IUserFields[]
   countusers?: number
-  msgs?: IMessage[]
 }

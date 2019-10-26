@@ -41,29 +41,6 @@ export interface IBookedEvent {
   booked: boolean
 }
 
-export interface IOrigin {
-  userId?: string
-  page?: string
-  event_id?: string
-  infoevent?: string
-}
-
-export interface IDest {
-  idapp?: string
-  username?: string
-}
-
-export interface IMessage {
-  _id?: any
-  idapp?: string
-  origin?: IOrigin
-  dest?: IDest
-  message: string
-  datemsg?: Date
-  read?: boolean
-  deleted?: boolean
-}
-
 export interface IOperators {
   username: string
   name: string
@@ -101,11 +78,6 @@ export interface IBookedEventPage {
   state: EState
 }
 
-export interface IMessagePage {
-  show: boolean
-  msg: IMessage
-  state: EState
-}
 
 export interface ICalendarState {
   editable: boolean

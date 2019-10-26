@@ -18,6 +18,9 @@ const msgglobal = {
       },
       manage: {
         menu: 'Gestione'
+      },
+      messages: {
+        menu: 'I tuoi Messaggi'
       }
     },
     sendmsg: {
@@ -300,6 +303,9 @@ const msgglobal = {
       },
       manage: {
         menu: 'Gestionar'
+      },
+      messages: {
+        menu: 'Tus mensajes'
       }
     },
     sendmsg: {
@@ -573,6 +579,9 @@ const msgglobal = {
       },
       manage: {
         menu: 'Gérer'
+      },
+      messages: {
+        menu: 'Vos messages'
       }
     },
     sendmsg: {
@@ -845,6 +854,9 @@ const msgglobal = {
       },
       manage: {
         menu: 'Manage'
+      },
+      messages: {
+        menu: 'Your Messages'
       }
     },
     sendmsg: {
@@ -1116,6 +1128,9 @@ const msgglobal = {
       },
       manage: {
         menu: 'Manage'
+      },
+      messages: {
+        menu: 'Your Messages'
       }
     },
     sendmsg: {
