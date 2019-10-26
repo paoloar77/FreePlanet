@@ -39,7 +39,7 @@
                           :label="$t('grid.editvalues')"></q-toggle>
 
                 <q-btn v-if="mytable" label="Refresh" color="primary" @click="refresh" class="q-mx-sm"></q-btn>
-                <q-btn v-if="mytable" flat dense color="primary" :disable="loading" label="Add Record"
+                <q-btn v-if="mytable" flat dense color="primary" :disable="loading || !canEdit" :label="$t('grid.addrecord')"
                        @click="createNewRecord"></q-btn>
 
                 <q-space/>
@@ -77,7 +77,7 @@
 
 
                 <q-inner-loading :showing="spinner_visible">
-                    <q-spinner-gears size="50px" color="primary"/>
+                    <q-spinner-tail size="2em" color="primary"/>
                 </q-inner-loading>
 
             </template>

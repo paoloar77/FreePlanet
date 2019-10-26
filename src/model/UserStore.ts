@@ -20,6 +20,7 @@ export interface IUserFields {
   img?: string
   verified_email?: boolean
   tokens?: IToken[]
+  lasttimeonline?: Date
 }
 
 /*

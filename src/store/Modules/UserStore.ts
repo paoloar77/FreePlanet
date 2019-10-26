@@ -138,9 +138,11 @@ namespace Getters {
   }, 'getUserByUsername')
 
   const getImgByUsername = b.read((mystate: IUserState) => (username): string => {
+    if (username === '')
+      return 'images/avatar/avatar3_small.png'
     // Check if is this User!
     const myrec = UserStore.getters.getUserByUsername(username)
-    if (myrec && !!myrec.img) {
+    if (myrec && !!myrec.img && myrec.img !== '' && myrec.img !== 'undefined') {
       return myrec.img
     } else {
       return 'images/avatar/avatar3_small.png'

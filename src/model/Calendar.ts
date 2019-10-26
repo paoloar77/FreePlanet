@@ -43,9 +43,6 @@ export interface IBookedEvent {
 
 export interface IOperators {
   username: string
-  name: string
-  surname: string
-  email: string
   cell: string
   webpage?: string
   img: string

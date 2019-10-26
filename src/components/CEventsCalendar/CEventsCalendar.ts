@@ -28,10 +28,12 @@ import router from '@router'
 import { static_data } from '@src/db/static_data'
 import translate from '@src/globalroutines/util'
 import { lists } from '../../store/Modules/lists'
-import { GlobalStore } from '../../store/Modules'
-import { IMessagePage, IMessage, IIdentity } from '../../model'
+import { GlobalStore, MessageStore } from '../../store/Modules'
+import { IMessagePage, IMessage, IIdentity, MsgDefault } from '../../model'
+import MixinUsers from '../../mixins/mixin-users'
 
 @Component({
+  mixins: [MixinUsers],
   name: 'CEventsCalendar',
   components: { Logo, Footer, CTitle, CImgText, QDateTimeScroller, QDateScroller, CMySelect, CMyEditor }
 })
@@ -370,10 +372,6 @@ export default class CEventsCalendar extends Vue {
     }
   }
 
-  get mythis() {
-    return this
-  }
-
   public $refs: {
     calendar: any
   }
@@ -666,26 +664,17 @@ export default class CEventsCalendar extends Vue {
 
     const data: IMessage = {
       source: {
-        page: '',
         event_id: myevent._id,
         infoevent: tools.gettextevent(this, myevent)
-      },
-      idapp: process.env.APP_ID,
-      origin: {
-        idapp: process.env.APP_ID,
-        username: UserStore.state.username
       },
       dest: {
         idapp: process.env.APP_ID,
         username: myevent.teacher
       },
-      read: false,
-      deleted: false,
-      message: this.askInfoForm.message,
-      datemsg: tools.getDateNow()
+      message: this.askInfoForm.message
     }
 
-    this.SendMsgEvent(data).then((ris) => {
+    MessageStore.actions.SendMsgEvent(data).then((ris) => {
       self.contextDay = null
       if (ris)
         tools.showPositiveNotif(self.$q, self.$t('cal.sendmsg_sent'))
@@ -841,10 +830,6 @@ export default class CEventsCalendar extends Vue {
     return await CalendarStore.actions.BookEvent(eventparam)
   }
 
-  public async SendMsgEvent(param: IMessage) {
-    return await UserStore.actions.SendMsgEvent(param)
-  }
-
   public isAlreadyBooked(eventparam: IEvents) {
     return CalendarStore.getters.findEventBooked(eventparam, true)
   }
@@ -880,7 +865,7 @@ export default class CEventsCalendar extends Vue {
   public createContribType(value) {
     console.log('createContribType', value)
     tools.createNewRecord(this, 'contribtype', { label: value }).then((myrec) => {
-      console.log('myrec')
+      // console.log('myrec')
       CalendarStore.state.contribtype.push(myrec)
     })
   }
@@ -901,10 +886,6 @@ export default class CEventsCalendar extends Vue {
     return myprice
   }
 
-  public getTeacherName(teacherusername) {
-    return CalendarStore.getters.getTeacherName(teacherusername)
-  }
-
   public getWhereIcon(where) {
     const whererec = CalendarStore.getters.getWhereRec(where)
     return (whererec) ? whererec.whereicon : ''
@@ -913,11 +894,6 @@ export default class CEventsCalendar extends Vue {
   public getWhereName(where) {
     const whererec = CalendarStore.getters.getWhereRec(where)
     return (whererec) ? whererec.placename : ''
-  }
-
-  public getTeacherImg(teacherusername) {
-    const teacher = CalendarStore.getters.getTeacher(teacherusername)
-    return (teacher) ? teacher.img : ''
   }
 
   public badgeClasses(eventparam, type) {

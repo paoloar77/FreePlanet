@@ -54,6 +54,7 @@
 
             <q-input v-if="viewtaskTop" ref="insertTask" color="blue-12" v-model="todotop" :label="$t('todo.inserttop')"
                      style="margin-left: 6px;"
+                     debounce="1000"
                      :after="[{icon: 'arrow_forward', content: true, handler () {}}]"
                      v-on:keyup.enter="dbInsert(true)">
                 <template v-slot:prepend>
@@ -116,9 +117,12 @@
             <q-input v-if="(TodosCount > 0 || !viewtaskTop) && CanIModifyTodo" ref="insertTaskBottom" v-model="todobottom"
                      style="margin-left: 6px;"
                      color="blue-12"
+                     debounce="1000"
                      :label="$t('todo.insertbottom')"
                      :after="[{icon: 'arrow_forward', content: true, handler () {}}]"
-                     v-on:keyup.enter="dbInsert(false)"/>
+                     v-on:keyup.enter="dbInsert(false)">
+
+            </q-input>
 
             <br>
 

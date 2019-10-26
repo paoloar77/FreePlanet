@@ -27,6 +27,7 @@ import { serv_constants } from '@src/store/Modules/serv_constants'
 import { shared_consts } from '@src/common/shared_vuejs'
 
 import { dom } from 'quasar'
+
 const { height, width } = dom
 
 export interface INotify {
@@ -2470,12 +2471,41 @@ export const tools = {
     // return height()
     return mythis.$q.screen.height
   },
+  getwidth(mythis) {
+    // return height()
+    return mythis.$q.screen.width
+  },
+
+  isIsoDate(str) {
+    if (!/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z/.test(str)) return false
+    const d = new Date(str)
+    return d.toISOString() === str
+  },
+
   getLastDateReadReset() {
     return new Date(1999, 1, 1, 0, 0, 0)
   },
 
   isBitActive(bit, whattofind) {
     return ((bit & whattofind) === whattofind)
+  },
+
+  SetBit(myval, bit) {
+    myval = myval | bit
+    return myval
+  },
+  getUnique(arr, comp) {
+
+    const unique = arr
+      .map(e => e[comp])
+
+      // store the keys of the unique objects
+      .map((e, i, final) => final.indexOf(e) === i && i)
+
+      // eliminate the dead keys & store unique objects
+      .filter(e => arr[e]).map(e => arr[e])
+
+    return unique
   }
 
 // getLocale() {

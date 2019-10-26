@@ -39,7 +39,7 @@ export default class CMySelect extends Vue {
 
   public mounted() {
     const rec = this.options.find((myrec) => myrec[`${this.optval}`] === this.value)
-    console.log('rec', rec)
+    // console.log('rec', rec)
     if (!this.useinput) {
       this.myvalue = this.value
     } else {
@@ -49,7 +49,7 @@ export default class CMySelect extends Vue {
         else
           this.myvalue = rec[`${this.optlab}`]
 
-        console.log('this.myvalue', this.myvalue, 'this.optval', this.optval, 'rec', rec[`${this.optval}`])
+        // console.log('this.myvalue', this.myvalue, 'this.optval', this.optval, 'rec', rec[`${this.optval}`])
       }
     }
   }

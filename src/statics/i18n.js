@@ -4,6 +4,7 @@ const msgglobal = {
   it: {
     grid: {
       editvalues: 'Modifica Valori',
+      addrecord: 'Aggiungi Riga',
       showprevedit: 'Mostra Eventi Passati',
       columns: 'Colonne',
       tableslist: 'Tabelle',
@@ -289,6 +290,7 @@ const msgglobal = {
   es: {
     grid: {
       editvalues: 'Cambiar valores',
+      addrecord: 'Agregar fila',
       showprevedit: 'Mostrar eventos pasados',
       columns: 'Columnas',
       tableslist: 'Tablas'
@@ -565,6 +567,7 @@ const msgglobal = {
   fr: {
     grid: {
       editvalues: 'Changer les valeurs',
+      addrecord: 'Ajouter une ligne',
       showprevedit: 'Afficher les événements passés',
       columns: 'Colonnes',
       tableslist: 'Tables',
@@ -840,6 +843,7 @@ const msgglobal = {
   enUs: {
     grid: {
       editvalues: 'Edit Values',
+      addrecord: 'Add Row',
       showprevedit: 'Show Past Events',
       columns: 'Columns',
       tableslist: 'Tables',
@@ -1114,6 +1118,7 @@ const msgglobal = {
   de: {
     grid: {
       editvalues: 'Edit Values',
+      addrecord: 'Add Row',
       showprevedit: 'Show Past Events',
       columns: 'Columns',
       tableslist: 'Tables',
