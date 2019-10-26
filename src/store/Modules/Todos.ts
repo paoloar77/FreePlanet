@@ -52,7 +52,7 @@ function gettodosByCategory(category: string): any[] {
 function initcat() {
 
   const rec = Getters.getters.getRecordEmpty()
-  rec.userId = UserStore.state.userId
+  rec.userId = UserStore.state.my._id
 
   return rec
 
@@ -67,7 +67,7 @@ namespace Getters {
     const objtodo: ITodo = {
       // _id: tools.getDateNow().toISOString(),  // Create NEW
       _id: objectId(),
-      userId: UserStore.state.userId,
+      userId: UserStore.state.my._id,
       descr: '',
       priority: tools.Priority.PRIORITY_NORMAL,
       statustodo: tools.Status.OPENED,
@@ -258,15 +258,15 @@ namespace Actions {
     if (!static_data.functionality.ENABLE_PROJECTS_LOADING)
       return null
 
-    console.log('dbLoad', nametable, checkPending, 'userid=', UserStore.state.userId)
+    console.log('dbLoad', nametable, checkPending, 'userid=', UserStore.state.my._id)
 
-    // if (UserStore.state.userId === '') {
+    // if (UserStore.state.my._id === '') {
     //   return new Types.AxiosError(0, null, 0, '')
     // }
 
     let ris = null
 
-    ris = await Api.SendReq('/todos/' + UserStore.state.userId, 'GET', null)
+    ris = await Api.SendReq('/todos/' + UserStore.state.my._id, 'GET', null)
       .then((res) => {
         if (res.data.todos) {  // console.log('RISULTANTE CATEGORIES DAL SERVER = ', res.data.categories)
           state.todos = res.data.todos

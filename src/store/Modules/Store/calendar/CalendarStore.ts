@@ -1,5 +1,5 @@
 import Api from '@api'
-import { IBookedEvent, ICalendarState, IEvents } from 'model'
+import { IBookedEvent, ICalendarState, IEvents, IMessage } from 'model'
 import { ILinkReg, IResult, IIdToken, IToken } from 'model/other'
 import { storeBuilder } from '../Store'
 
@@ -9,7 +9,7 @@ import { tools } from '../../tools'
 import translate from '../../../../globalroutines/util'
 import * as Types from '../../../Api/ApiTypes'
 import { db_data } from '@src/db/db_data'
-import { UserStore } from '@store'
+import { GlobalStore, UserStore } from '@store'
 import { lists } from '@src/store/Modules/lists'
 
 // State
@@ -50,11 +50,11 @@ const stateGetter = b.state()
 namespace Getters {
 
   const findEventBooked = b.read((mystate: ICalendarState) => (myevent: IEvents, isconfirmed: boolean) => {
-    return mystate.bookedevent.find((bookedevent) => (bookedevent.id_bookedevent === myevent._id) && (bookedevent.userId === UserStore.state.userId) && ((isconfirmed && bookedevent.booked) || (!isconfirmed)))
+    return mystate.bookedevent.find((bookedevent) => (bookedevent.id_bookedevent === myevent._id) && (bookedevent.userId === UserStore.state.my._id) && ((isconfirmed && bookedevent.booked) || (!isconfirmed)))
   }, 'findEventBooked')
 
   const getNumParticipants = b.read((mystate: ICalendarState) => (myevent: IEvents, showall) => {
-    const myarr = mystate.bookedevent.filter((bookedevent) => (bookedevent.id_bookedevent === myevent._id) && (bookedevent.booked) && (showall || (!showall && bookedevent.userId === UserStore.state.userId) ))
+    const myarr = mystate.bookedevent.filter((bookedevent) => (bookedevent.id_bookedevent === myevent._id) && (bookedevent.booked) && (showall || (!showall && bookedevent.userId === UserStore.state.my._id) ))
     if (myarr)
       return myarr.reduce((sum, bookedevent) => sum + bookedevent.numpeople, 0)
     else
@@ -62,7 +62,7 @@ namespace Getters {
   }, 'getNumParticipants')
 
   const getEventsBookedByIdEvent = b.read((mystate: ICalendarState) => (idevent, showall) => {
-    return mystate.bookedevent.filter((bookedevent) => (bookedevent.id_bookedevent === idevent) && (bookedevent.booked) && (showall || (!showall && bookedevent.userId === UserStore.state.userId) ))
+    return mystate.bookedevent.filter((bookedevent) => (bookedevent.id_bookedevent === idevent) && (bookedevent.booked) && (showall || (!showall && bookedevent.userId === UserStore.state.my._id) ))
   }, 'getEventsBookedByIdEvent')
 
   const getTeacherName = b.read((mystate: ICalendarState) => (teacherusername) => {
@@ -134,7 +134,7 @@ namespace Getters {
 
 namespace Mutations {
   // function authUser(state: ICalendarState, data: ICalendarState) {
-  //   state.userId = data.userId
+  //   state._id = data._id
   // }
   //
   // export const mutations = {
@@ -153,7 +153,7 @@ namespace Actions {
       numpeople: bookevent.numpeople,
       msgbooking: bookevent.msgbooking,
       datebooked: bookevent.datebooked,
-      userId: UserStore.state.userId,
+      userId: UserStore.state.my._id,
       booked: bookevent.booked,
       modified: bookevent.modified
     }
@@ -190,6 +190,10 @@ namespace Actions {
 
   }
 
+  async function CancelEvent(context, { id }) {
+    return await GlobalStore.actions.DeleteRec({table: tools.TABEVENTS, id } )
+  }
+
   async function CancelBookingEvent(context, { ideventbook, notify }) {
     console.log('CALSTORE: CancelBookingEvent', ideventbook, notify)
 
@@ -216,7 +220,8 @@ namespace Actions {
 
   export const actions = {
     BookEvent: b.dispatch(BookEvent),
-    CancelBookingEvent: b.dispatch(CancelBookingEvent)
+    CancelBookingEvent: b.dispatch(CancelBookingEvent),
+    CancelEvent: b.dispatch(CancelEvent)
   }
 
   // async function resetpwd(context, paramquery: ICalendarState) {

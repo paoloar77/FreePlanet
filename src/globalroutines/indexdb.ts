@@ -15,7 +15,7 @@ function saveConfigIndexDb(context) {
     _id: costanti.CONFIG_ID_CFG,
     lang: toolsext.getLocale(),
     token: UserStore.state.x_auth_token,
-    userId: UserStore.state.userId
+    userId: UserStore.state.my._id
   }
 
   writeConfigIndexDb('config', data)

@@ -1,5 +1,5 @@
 import Api from '@api'
-import { ISignupOptions, ISigninOptions, IUserState, IUserList } from 'model'
+import { ISignupOptions, ISigninOptions, IUserState, IUserFields } from 'model'
 import { ILinkReg, IResult, IIdToken, IToken } from 'model/other'
 import { storeBuilder } from './Store/Store'
 import router from '@router'
@@ -15,23 +15,25 @@ import { db_data } from '@src/db/db_data'
 
 import translate from './../../globalroutines/util'
 import * as Types from '@src/store/Api/ApiTypes'
-import { ICfgServer } from '@src/model'
+import { ICalendarState, ICfgServer } from '@src/model'
 import { shared_consts } from '../../common/shared_vuejs'
 
 const bcrypt = require('bcryptjs')
 
 // State
 const state: IUserState = {
-  userId: '',
-  email: '',
-  username: '',
-  name: '',
-  surname: '',
-  password: '',
+  my: {
+    _id: '',
+    email: '',
+    username: '',
+    name: '',
+    surname: '',
+    password: '',
+    tokens: [],
+    verified_email: false
+  },
   lang: process.env.LANG_DEFAULT,
   repeatPassword: '',
-  tokens: [],
-  verified_email: false,
   categorySel: 'personal',
   servercode: 0,
   x_auth_token: '',
@@ -51,15 +53,15 @@ namespace Getters {
 
   const isUserInvalid = b.read((mystate) => {
     try {
-      const ris = (mystate.userId === undefined) || (mystate.userId.trim() === '') || (mystate.tokens[0] === undefined)
-      // console.log('state.userId', state.userId, 'ris', ris)
+      const ris = (mystate.my._id === undefined) || (mystate.my._id.trim() === '') || (mystate.my.tokens[0] === undefined)
+      // console.log('state._id', state._id, 'ris', ris)
       return ris
     } catch (e) {
       return true
     }
   }, 'isUserInvalid')
 
-  const lang = b.read((state) => {
+  const lang = b.read((mystate) => {
     if (state.lang !== '') {
       return state.lang
     } else {
@@ -68,9 +70,9 @@ namespace Getters {
   }, 'lang')
 
   // const tok = b.read(state => {
-  //   if (state.tokens) {
-  //     if (typeof state.tokens[0] !== 'undefined') {
-  //       return state.tokens[0].token
+  //   if (state.my.tokens) {
+  //     if (typeof state.my.tokens[0] !== 'undefined') {
+  //       return state.my.tokens[0].token
   //     } else {
   //       return ''
   //     }
@@ -79,15 +81,15 @@ namespace Getters {
   //   }
   // }, 'tok')
 
-  const isServerError = b.read((state) => {
+  const isServerError = b.read((mystate) => {
     return (state.servercode === tools.ERR_SERVERFETCH)
   }, 'isServerError')
 
-  const getServerCode = b.read((state) => {
+  const getServerCode = b.read((mystate) => {
     return state.servercode
   }, 'getServerCode')
 
-  const getNameSurnameByUserId = b.read((state: IUserState) => (userId: string) => {
+  const getNameSurnameByUserId = b.read((mystate: IUserState) => (userId: string) => {
     const user = UserStore.getters.getUserByUserId(userId)
     if (user)
       return user.name + ' ' + user.surname
@@ -95,29 +97,55 @@ namespace Getters {
       return '(' + userId + ')'
   }, 'getNameSurnameByUserId')
 
+  const getNameSurnameByUsername = b.read((mystate: IUserState) => (username: string) => {
+    const user = UserStore.getters.getUserByUsername(username)
+    if (user)
+      return user.name + ' ' + user.surname
+    else
+      return '(' + username + ')'
+  }, 'getNameSurnameByUsername')
+
   const getUsersList = b.read((mystate: IUserState) => {
     return mystate.usersList
   }, 'getUsersList')
 
-  const IsMyFriend = b.read((state) => (userIdOwner) => {
+  const IsMyFriend = b.read((mystate) => (userIdOwner) => {
     // ++TODO Check if userIdOwner is my friend
     // userIdOwner is my friend ?
     return true
   }, 'IsMyFriend')
 
-  const IsMyGroup = b.read((state) => (userIdOwner) => {
+  const IsMyGroup = b.read((mystate) => (userIdOwner) => {
     // ++TODO Check if userIdOwner is on my groups
     // userIdOwner is on my groups ?
     return true
   }, 'IsMyGroup')
 
-  const getUserByUserId = b.read((mystate: IUserState) => (userId): IUserState => {
+  const getUserByUserId = b.read((mystate: IUserState) => (userId): IUserFields => {
     // Check if is this User!
-    if (state.userId === userId)
-      return state
+    if (state.my._id === userId)
+      return state.my
 
     return mystate.usersList.find((item) => item._id === userId)
   }, 'getUserByUserId')
+
+  const getUserByUsername = b.read((mystate: IUserState) => (username): IUserFields => {
+    // Check if is this User!
+    if (state.my.username === username)
+      return state.my
+
+    return mystate.usersList.find((item) => item.username === username)
+  }, 'getUserByUsername')
+
+  const getImgByUsername = b.read((mystate: IUserState) => (username): string => {
+    // Check if is this User!
+    const myrec = UserStore.getters.getUserByUsername(username)
+    if (myrec && !!myrec.img) {
+      return myrec.img
+    } else {
+      return 'images/avatar/avatar3_small.png'
+    }
+  }, 'getImgByUsername')
 
   export const getters = {
     get isUserInvalid() {
@@ -147,85 +175,92 @@ namespace Getters {
     get getUserByUserId() {
       return getUserByUserId()
     },
+    get getNameSurnameByUsername() {
+      return getNameSurnameByUsername()
+    },
+    get getImgByUsername() {
+      return getImgByUsername()
+    },
+    get getUserByUsername() {
+      return getUserByUsername()
+    },
     get getUsersList() {
       return getUsersList()
     }
-    // get fullName() { return fullName();},
   }
 
 }
 
 namespace Mutations {
-  function authUser(mystate: IUserState, data: IUserState) {
-    mystate.userId = data.userId
-    mystate.username = data.username
-    mystate.name = data.name
-    mystate.surname = data.surname
-    mystate.perm = data.perm
-    mystate.isAdmin = tools.isBitActive(mystate.perm, shared_consts.Permissions.Admin)
-    mystate.isManager = tools.isBitActive(mystate.perm, shared_consts.Permissions.Manager)
+  function authUser(mystate: IUserState, data: IUserFields) {
+    mystate.my = {...data}
+
+    mystate.isAdmin = tools.isBitActive(mystate.my.perm, shared_consts.Permissions.Admin)
+    mystate.isManager = tools.isBitActive(mystate.my.perm, shared_consts.Permissions.Manager)
 
     // console.log('authUser', 'state.isAdmin', mystate.isAdmin)
     console.table(mystate)
     console.table(data)
-    if (data.verified_email) {
-      mystate.verified_email = data.verified_email
-    }
 
-    if (data.categorySel) {
-      mystate.categorySel = data.categorySel
-    }  // ??
+    // if (data.my.verified_email) {
+    //   mystate.my.verified_email = data.my.verified_email
+    // }
+    //
+    // if (data.categorySel) {
+    //   mystate.categorySel = data.categorySel
+    // }  // ??
 
-    resetArrToken(mystate.tokens)
-    mystate.tokens.push({ access: 'auth', token: mystate.x_auth_token, data_login: tools.getDateNow() })
+    mystate.my.tokens = []
+    resetArrToken(mystate.my.tokens)
+    mystate.my.tokens.push({ access: 'auth', token: mystate.x_auth_token, data_login: tools.getDateNow() })
 
-    // console.log('state.tokens', state.tokens)
+    // console.log('state.my.tokens', state.my.tokens)
   }
 
-  function setpassword(state: IUserState, newstr: string) {
-    state.password = newstr
+  function setpassword(mystate: IUserState, newstr: string) {
+    mystate.my.password = newstr
   }
 
-  function setusersList(mystate: IUserState, usersList: IUserList[]) {
+  function setusersList(mystate: IUserState, usersList: IUserFields[]) {
     // console.log('setusersList', usersList)
     mystate.usersList = [...usersList]
   }
 
-  function setemail(state: IUserState, newstr: string) {
-    state.email = newstr
+  function setemail(mystate: IUserState, newstr: string) {
+    mystate.my.email = newstr
   }
 
-  function setlang(state: IUserState, newstr: string) {
+  function setlang(mystate: IUserState, newstr: string) {
     console.log('SETLANG', newstr)
-    state.lang = newstr
+    mystate.lang = newstr
     tools.setLangAtt(newstr)
     localStorage.setItem(tools.localStorage.lang, state.lang)
   }
 
-  function UpdatePwd(state: IUserState, x_auth_token: string) {
-    state.x_auth_token = x_auth_token
-    if (!state.tokens) {
-      state.tokens = []
+  function UpdatePwd(mystate: IUserState, x_auth_token: string) {
+    mystate.x_auth_token = x_auth_token
+    if (!mystate.my.tokens) {
+      mystate.my.tokens = []
     }
-    state.tokens.push({ access: 'auth', token: x_auth_token, data_login: tools.getDateNow() })
+    mystate.my.tokens.push({ access: 'auth', token: x_auth_token, data_login: tools.getDateNow() })
   }
 
-  function setServerCode(state: IUserState, num: number) {
-    state.servercode = num
+  function setServerCode(mystate: IUserState, num: number) {
+    mystate.servercode = num
   }
 
-  function setResStatus(state: IUserState, status: number) {
-    state.resStatus = status
+  function setResStatus(mystate: IUserState, status: number) {
+    mystate.resStatus = status
   }
 
-  function setAuth(state: IUserState, x_auth_token: string) {
+  function setAuth(mystate: IUserState, x_auth_token: string) {
 
-    state.x_auth_token = x_auth_token
+    mystate.x_auth_token = x_auth_token
   }
 
   function resetArrToken(arrtokens) {
-    if (!arrtokens.tokens) {
-      arrtokens.tokens = []
+    if (!arrtokens) {
+      arrtokens = []
     }
 
     // Take only the others access (from others Browser)
@@ -234,25 +269,25 @@ namespace Mutations {
     })
   }
 
-  function clearAuthData(state: IUserState) {
-    state.userId = ''
-    state.username = ''
-    state.name = ''
-    state.surname = ''
-    resetArrToken(state.tokens)
-    state.verified_email = false
-    state.categorySel = 'personal'
+  function clearAuthData(mystate: IUserState) {
+    mystate.my._id = ''
+    mystate.my.username = ''
+    mystate.my.name = ''
+    mystate.my.surname = ''
+    resetArrToken(mystate.my.tokens)
+    mystate.my.verified_email = false
+    mystate.categorySel = 'personal'
 
-    state.servercode = 0
-    state.resStatus = 0
-    state.isLogged = false
-    state.x_auth_token = ''
+    mystate.servercode = 0
+    mystate.resStatus = 0
+    mystate.isLogged = false
+    mystate.x_auth_token = ''
   }
 
-  function setErrorCatch(state: IUserState, axerr: Types.AxiosError) {
+  function setErrorCatch(mystate: IUserState, axerr: Types.AxiosError) {
     try {
-      if (state.servercode !== tools.ERR_SERVERFETCH) {
-        state.servercode = axerr.getCode()
+      if (mystate.servercode !== tools.ERR_SERVERFETCH) {
+        mystate.servercode = axerr.getCode()
       }
       console.log('Err catch: (servercode:', axerr.getCode(), axerr.getMsgError(), ')')
     } catch (e) {
@@ -260,11 +295,11 @@ namespace Mutations {
     }
   }
 
-  function getMsgError(state: IUserState, err: number) {
+  function getMsgError(mystate: IUserState, err: number) {
     let msgerrore = ''
     if (err !== tools.OK) {
-      msgerrore = 'Error [' + state.servercode + ']: '
-      if (state.servercode === tools.ERR_SERVERFETCH) {
+      msgerrore = 'Error [' + mystate.servercode + ']: '
+      if (mystate.servercode === tools.ERR_SERVERFETCH) {
         msgerrore = translate('fetch.errore_server')
       } else {
         msgerrore = translate('fetch.errore_generico')
@@ -291,7 +326,7 @@ namespace Mutations {
     clearAuthData: b.commit(clearAuthData),
     setErrorCatch: b.commit(setErrorCatch),
     getMsgError: b.commit(getMsgError),
-    setusersList: b.commit(setusersList),
+    setusersList: b.commit(setusersList)
   }
 }
 
@@ -311,8 +346,8 @@ namespace Actions {
   async function resetpwd(context, paramquery: IUserState) {
 
     const usertosend = {
-      email: paramquery.email,
-      password: paramquery.password,
+      email: paramquery.my.email,
+      password: paramquery.my.password,
       tokenforgot: paramquery.tokenforgot
     }
     console.log(usertosend)
@@ -330,11 +365,10 @@ namespace Actions {
 
   }
 
-
   async function requestpwd(context, paramquery: IUserState) {
 
     const usertosend = {
-      email: paramquery.email
+      email: paramquery.my.email
     }
     console.log(usertosend)
 
@@ -408,31 +442,21 @@ namespace Actions {
             Mutations.mutations.setServerCode(res.status)
 
             if (res.status === 200) {
-              const userId = newuser._id
-              const username = authData.username
-              const name = authData.name
-              const surname = authData.surname
               if (process.env.DEV) {
-                console.log('USERNAME = ' + username)
-                console.log('IDUSER= ' + userId)
+                console.log('USERNAME = ' + newuser.username)
+                console.log('IDUSER= ' + newuser._id)
               }
 
-              Mutations.mutations.authUser({
-                userId,
-                username,
-                name,
-                surname,
-                verified_email: false
-              })
+              Mutations.mutations.authUser(newuser)
 
               const now = tools.getDateNow()
               // const expirationDate = new Date(now.getTime() + myres.data.expiresIn * 1000);
               const expirationDate = new Date(now.getTime() * 1000)
               localStorage.setItem(tools.localStorage.lang, state.lang)
-              localStorage.setItem(tools.localStorage.userId, userId)
-              localStorage.setItem(tools.localStorage.username, username)
-              localStorage.setItem(tools.localStorage.name, name)
-              localStorage.setItem(tools.localStorage.surname, surname)
+              localStorage.setItem(tools.localStorage.userId, newuser._id)
+              localStorage.setItem(tools.localStorage.username, newuser.username)
+              localStorage.setItem(tools.localStorage.name, newuser.name)
+              localStorage.setItem(tools.localStorage.surname, newuser.surname)
               localStorage.setItem(tools.localStorage.token, state.x_auth_token)
               localStorage.setItem(tools.localStorage.expirationDate, expirationDate.toString())
               localStorage.setItem(tools.localStorage.verified_email, String(false))
@@ -518,38 +542,26 @@ namespace Actions {
         if (res.success) {
           GlobalStore.mutations.SetwasAlreadySubOnDb(res.data.subsExistonDb)
 
-          const myuser: IUserState = res.data.usertosend
+          const myuser: IUserFields = res.data.usertosend
           if (myuser) {
-            const userId = myuser.userId
-            const username = authData.username
-            const name = myuser.name
-            const surname = myuser.surname
-            const verified_email = myuser.verified_email
-
             console.table(myuser)
 
-            Mutations.mutations.authUser({
-              userId,
-              username,
-              name,
-              surname,
-              verified_email,
-              perm: myuser.perm
-            })
+            Mutations.mutations.authUser(myuser)
 
             const now = tools.getDateNow()
             // const expirationDate = new Date(now.getTime() + myres.data.expiresIn * 1000);
             const expirationDate = new Date(now.getTime() * 1000)
             localStorage.setItem(tools.localStorage.lang, state.lang)
-            localStorage.setItem(tools.localStorage.userId, userId)
-            localStorage.setItem(tools.localStorage.username, username)
-            localStorage.setItem(tools.localStorage.name, name)
-            localStorage.setItem(tools.localStorage.surname, surname)
+            localStorage.setItem(tools.localStorage.userId, myuser._id)
+            localStorage.setItem(tools.localStorage.username, myuser.username)
+            localStorage.setItem(tools.localStorage.name, myuser.name)
+            localStorage.setItem(tools.localStorage.surname, myuser.surname)
             localStorage.setItem(tools.localStorage.perm, String(myuser.perm) || '')
+            localStorage.setItem(tools.localStorage.img, String(myuser.img) || '')
             localStorage.setItem(tools.localStorage.token, state.x_auth_token)
             localStorage.setItem(tools.localStorage.expirationDate, expirationDate.toString())
             localStorage.setItem(tools.localStorage.isLogged, String(true))
-            localStorage.setItem(tools.localStorage.verified_email, String(verified_email))
+            localStorage.setItem(tools.localStorage.verified_email, String(myuser.verified_email))
             localStorage.setItem(tools.localStorage.wasAlreadySubOnDb, String(GlobalStore.state.wasAlreadySubOnDb))
 
           }
@@ -582,6 +594,7 @@ namespace Actions {
     localStorage.removeItem(tools.localStorage.username)
     localStorage.removeItem(tools.localStorage.name)
     localStorage.removeItem(tools.localStorage.surname)
+    localStorage.removeItem(tools.localStorage.img)
     localStorage.removeItem(tools.localStorage.perm)
     localStorage.removeItem(tools.localStorage.isLogged)
     // localStorage.removeItem(rescodes.localStorage.leftDrawerOpen)
@@ -647,26 +660,28 @@ namespace Actions {
         const expirationDate = new Date(String(expirationDateStr))
         const now = tools.getDateNow()
         if (now < expirationDate) {
-          const userId = String(localStorage.getItem(tools.localStorage.userId))
+          const _id = String(localStorage.getItem(tools.localStorage.userId))
           const username = String(localStorage.getItem(tools.localStorage.username))
           const name = String(localStorage.getItem(tools.localStorage.name))
           const surname = String(localStorage.getItem(tools.localStorage.surname))
           const verified_email = localStorage.getItem(tools.localStorage.verified_email) === 'true'
           const perm = parseInt(localStorage.getItem(tools.localStorage.perm), 10)
+          const img = String(localStorage.getItem(tools.localStorage.img))
 
           GlobalStore.state.wasAlreadySubOnDb = localStorage.getItem(tools.localStorage.wasAlreadySubOnDb) === 'true'
 
-          console.log('*************  autologin userId', userId)
+          console.log('*************  autologin _id', _id)
 
           UserStore.mutations.setAuth(token)
 
           Mutations.mutations.authUser({
-            userId,
+            _id,
             username,
             name,
             surname,
             verified_email,
-            perm
+            perm,
+            img
           })
 
           isLogged = true
@@ -675,7 +690,7 @@ namespace Actions {
 
       await setGlobal(isLogged)
 
-      // console.log('autologin userId STATE ', state.userId)
+      // console.log('autologin _id STATE ', state._id)
 
       return true
     } catch (e) {
@@ -699,7 +714,6 @@ namespace Actions {
       }
     }
   */
-
 
   export const actions = {
     autologin_FromLocalStorage: b.dispatch(autologin_FromLocalStorage),

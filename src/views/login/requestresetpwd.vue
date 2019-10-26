@@ -62,12 +62,12 @@
   import Vue from 'vue'
   import { email, required } from "vuelidate/lib/validators"
   import { UserStore } from "../../store/Modules";
-  import { IUserState } from "../../model";
+  import { IUserFields, IUserState } from "../../model"
   import { tools } from "../../store/Modules/tools";
   import { toolsext } from '@src/store/Modules/toolsext'
   export default class RequestResetPwd extends Vue{
     emailsent = false
-    form: IUserState = {
+    form: IUserFields = {
       email: '',
       tokenforgot: ''
     }

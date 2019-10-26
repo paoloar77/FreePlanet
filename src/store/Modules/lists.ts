@@ -17,6 +17,7 @@ export const lists = {
 
     DELETE_RECTABLE: 300,
     DUPLICATE_RECTABLE: 310,
+    DELETE_EVENT: 320,
 
     CAN_EDIT_TABLE: 400,
     SHOW_PREV_REC: 401

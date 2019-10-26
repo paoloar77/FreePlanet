@@ -13,7 +13,7 @@ import { costanti } from '@src/store/Modules/costanti'
 import { tools } from '@src/store/Modules/tools'
 import { toolsext } from '@src/store/Modules/toolsext'
 import * as ApiTables from '@src/store/Modules/ApiTables'
-import { CalendarStore, GlobalStore, Projects, Todos, UserStore } from '@store'
+import { CalendarStore, GlobalStore, MessageStore, Projects, Todos, UserStore } from '@store'
 import messages from '../../statics/i18n'
 import globalroutines from './../../globalroutines/index'
 
@@ -270,7 +270,7 @@ namespace Mutations {
   }
 
   function getListByTable(table): any[] {
-    if (table === 'myevents')
+    if (table === tools.TABEVENTS)
       return CalendarStore.state.eventlist
     else if (table === 'operators')
       return CalendarStore.state.operators
@@ -282,6 +282,8 @@ namespace Mutations {
       return CalendarStore.state.bookedevent
     else if (table === 'users')
       return UserStore.state.usersList
+    else if (table === 'sendmsgs')
+      return MessageStore.state.last_msgs
     else
       return null
 
@@ -417,8 +419,8 @@ namespace Actions {
       options,
       subs: newSub,
       others: {
-        userId: UserStore.state.userId,
-        access: UserStore.state.tokens[0].access
+        userId: UserStore.state.my._id,
+        access: UserStore.state.my.tokens[0].access
       }
     }
 
@@ -513,7 +515,7 @@ namespace Actions {
   async function checkUpdates(context) {
     console.log('checkUpdates')
 
-    // if (UserStore.state.userId === '')
+    // if (UserStore.state.my._id === '')
     //   return false // Login not made
 
     state.networkDataReceived = false
@@ -532,6 +534,12 @@ namespace Actions {
         if (res.data.usersList) {
           UserStore.mutations.setusersList(res.data.usersList)
         }
+
+        if (res.data.last_msgs) {
+          MessageStore.state.last_msgs = [...res.data.last_msgs]
+        }
+
+        // console.log('MessageStore.state.last_msgs', MessageStore.state.last_msgs)
 
         // console.log('**********  res', 'state.todos', state.todos, 'checkPending', checkPending)
         // After Login will store into the indexedDb...
@@ -593,7 +601,7 @@ namespace Actions {
   }
 
   async function DeleteRec(context, { table, id }) {
-    console.log('DeleteRec', id)
+    console.log('DeleteRec', table, id)
 
     return await Api.SendReq('/delrec/' + table + '/' + id, 'DELETE', null)
       .then((res) => {
@@ -635,7 +643,7 @@ namespace Actions {
 
     const showall = UserStore.state.isAdmin || UserStore.state.isManager ? '1' : '0'
 
-    const myuserid = (UserStore.state.userId) ? UserStore.state.userId : '0'
+    const myuserid = (UserStore.state.my._id) ? UserStore.state.my._id : '0'
 
     const ris = await Api.SendReq('/loadsite/' + myuserid + '/' + process.env.APP_ID + '/' + showall, 'GET', null)
       .then((res) => {

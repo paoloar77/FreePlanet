@@ -78,6 +78,7 @@ export interface IBookedEventPage {
   state: EState
 }
 
+
 export interface ICalendarState {
   editable: boolean
   eventlist: IEvents[]

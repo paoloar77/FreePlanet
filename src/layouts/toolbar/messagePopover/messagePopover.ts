@@ -1,35 +1,46 @@
 import Vue from 'vue'
 import { Component, Prop } from 'vue-property-decorator'
 
-import { GlobalStore } from '@store'
-import { IPost } from '../../../model/index'
+import { GlobalStore, CalendarStore } from '@store'
+import { ICalendarState, IMessage, IPost, IUserState } from '../../../model/index'
 
 import './messagePopover.scss'
 import { tools } from '@src/store/Modules/tools'
 import { toolsext } from '@src/store/Modules/toolsext'
+import { ITodo, ITodosState } from '../../../model'
+import { Getter } from 'vuex-class'
+import { UserStore } from '../../../store/Modules'
+
+import MixinUsers from '../../../mixins/mixin-users'
+
+const namespace = 'MessageModule'
 
 @Component({
+  mixins: [MixinUsers]
 })
 export default class MessagePopover extends Vue {
-  posts: IPost[] = []
+
+  @Getter('getlasts_messages', { namespace })
+  public lasts_messages: (state: IUserState) => IMessage[]
 
   public created() {
-    if (GlobalStore.state.posts.length < 1) {
-      this.requestPosts()
-    }
+    // if (GlobalStore.state.posts.length < 1) {
+    //   this.requestPosts()
+    // }
   }
 
-  get filteredPosts() {
-    if (this.posts.length >= 1)
-      return this.posts.slice(0, 5)
-    else
-      return []
+  public clickChat(msg: IMessage){
+    this.$router.replace('/messages/' + msg.dest.username)
   }
 
+  get getNumNotifUnread() {
+
+    return 0
+  }
 
   public randomDate(): Date {
-    let myval = Math.floor(Math.random() * 10000000000)
-    return new Date(tools.getTimestampsNow() - myval)
+    const myval = Math.floor(Math.random() * 10000000000)
+    return tools.getstrDateTime(new Date(tools.getTimestampsNow() - myval))
   }
 
   public randomAvatarUrl() {
@@ -63,10 +74,10 @@ export default class MessagePopover extends Vue {
       */
   }
 
-  public requestPosts() {
-    // console.log('requestPosts...')
-    let prova = [{ title: 'primo' }, { title: 'Secondo' }]
-    this.posts.push(...prova)
-
-  }
+  // public requestPosts() {
+  //   // console.log('requestPosts...')
+  //   let prova = [{ title: 'primo' }, { title: 'Secondo' }]
+  //   this.posts.push(...prova)
+  //
+  // }
 }

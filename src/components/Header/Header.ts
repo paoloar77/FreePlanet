@@ -15,8 +15,11 @@ import Quasar, { Screen } from 'quasar'
 import { static_data } from '../../db/static_data'
 import globalroutines from '../../globalroutines'
 
+import MixinUsers from '../../mixins/mixin-users'
+
 @Component({
   name: 'Header',
+  mixins: [MixinUsers],
   components: {
     drawer,
     messagePopover, CSignIn
@@ -39,10 +42,6 @@ export default class Header extends Vue {
   public clCloudDown_Indexeddb: string = 'clIndexeddbsend'
   public photo = ''
   public visuimg: boolean = true
-
-  get tools() {
-    return tools
-  }
 
   get conn_changed() {
     return GlobalStore.state.stateConnection
@@ -315,28 +314,6 @@ export default class Header extends Vue {
     }, 100)
   }
 
-  get MenuCollapse() {
-    return GlobalStore.state.menuCollapse
-    // return true
-  }
-
-  get Username() {
-    return UserStore.state.username
-  }
-  get myName() {
-    return UserStore.state.name
-  }
-  get mySurname() {
-    return UserStore.state.surname
-  }
-  get Verificato() {
-    return UserStore.state.verified_email
-  }
-
-  get Email() {
-    return UserStore.state.email
-  }
-
   public logoutHandler() {
     UserStore.actions.logout()
       .then(() => {
@@ -359,7 +336,7 @@ export default class Header extends Vue {
   }
 
   get isVerified() {
-    return UserStore.state.verified_email
+    return UserStore.state.my.verified_email
   }
 
   public loginOk() {

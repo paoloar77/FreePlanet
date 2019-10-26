@@ -293,7 +293,7 @@ export default class SingleProject extends Vue {
   }
 
   get isMyProject() {
-    return this.itemproject.userId === UserStore.state.userId
+    return this.itemproject.userId === UserStore.state.my._id
   }
 
   get tipoProj() {

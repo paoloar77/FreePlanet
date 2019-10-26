@@ -47,7 +47,7 @@ export default class CfgServer extends Vue {
   public selItem(item) {
     console.log('item', item)
     this.keysel = item.chiave
-    this.userIdsel = item.userid
+    this.userIdsel = item.userId
     console.log('this.keysel', this.keysel)
   }
 
