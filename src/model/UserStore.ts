@@ -28,6 +28,11 @@ password?: string
  lang
  */
 
+export interface IPerm {
+  _id: number
+  label: string
+}
+
 export interface IUserState {
   my: IUserFields
   lang?: string
@@ -43,6 +48,8 @@ export interface IUserState {
   isLogged?: boolean
   isAdmin?: boolean
   isManager?: boolean
+  isTeacher?: boolean
   usersList?: IUserFields[]
+  permissionsList?: IPerm[]
   countusers?: number
 }

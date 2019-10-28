@@ -96,6 +96,13 @@ export const tools = {
     COMPLETED: 10
   },
 
+  FieldType: {
+    boolean: 1,
+    date: 2,
+    string: 4,
+    binary: 8
+  },
+
   SelectListNumPeople: [
     {
       id: 1,

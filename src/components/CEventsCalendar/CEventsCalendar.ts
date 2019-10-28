@@ -31,11 +31,12 @@ import { lists } from '../../store/Modules/lists'
 import { GlobalStore, MessageStore } from '../../store/Modules'
 import { IMessagePage, IMessage, IIdentity, MsgDefault } from '../../model'
 import MixinUsers from '../../mixins/mixin-users'
+import { CDateTime } from '../CDateTime'
 
 @Component({
   mixins: [MixinUsers],
   name: 'CEventsCalendar',
-  components: { Logo, Footer, CTitle, CImgText, QDateTimeScroller, QDateScroller, CMySelect, CMyEditor }
+  components: { Logo, Footer, CTitle, CImgText, QDateTimeScroller, QDateScroller, CMySelect, CMyEditor, CDateTime }
 })
 export default class CEventsCalendar extends Vue {
   public $q
@@ -110,9 +111,6 @@ export default class CEventsCalendar extends Vue {
   public dragging = false
   public draggedEvent = null
   public ignoreNextSwipe = false
-  public showDateScrollerAllDay = false
-  public showDateTimeScrollerStart = false
-  public showDateTimeScrollerEnd = false
 
   public resources = [
     {
@@ -315,21 +313,6 @@ export default class CEventsCalendar extends Vue {
         maxHeight: '400px',
         height: '400px',
         width: '160px'
-      }
-    }
-  }
-
-  get scrollerPopupStyle280() {
-    if (this.$q.screen.lt.sm) {
-      return {
-        width: '100vw',
-        height: '100vh'
-      }
-    } else {
-      return {
-        maxHeight: '400px',
-        height: '400px',
-        width: '280px'
       }
     }
   }

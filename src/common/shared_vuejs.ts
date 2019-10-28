@@ -1,9 +1,22 @@
 export const shared_consts = {
 
   Permissions: {
-    Normal: 0,
-    Admin: 1,
-    Manager: 2,
+    Normal: {
+      value: 0,
+      label: '[None]'
+    },
+    Admin: {
+      value: 1,
+      label: 'Admin'
+    },
+    Manager: {
+      value: 2,
+      label: 'Manager'
+    },
+    Teacher: {
+      value: 4,
+      label: 'Teacher'
+    }
   },
 
   MessageOptions: {

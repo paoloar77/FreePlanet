@@ -121,58 +121,16 @@
                             <!--<q-checkbox v-model="eventForm.allday" :label="$t('cal.alldayevent')"></q-checkbox>-->
 
                             <div class="q-gutter-sm row myflex">
-                                <q-input color="blue-6" outlined v-model="eventForm.dateTimeStart"
-                                         :label="$t('cal.eventstartdatetime')" mask="####-##-## ##:##"
-                                         class="calendar_comp">
-                                    <template #append>
-                                        <q-icon name="event" class="cursor-pointer">
-                                            <q-popup-proxy v-model="showDateTimeScrollerStart">
-
-                                                <q-date-time-scroller
-                                                        v-model="eventForm.dateTimeStart"
-                                                        :locale="locale"
-                                                        :hour24-format="true"
-                                                        :rounded-borders="true"
-                                                        border-color="#2196f3"
-                                                        bar-color="#2196f3"
-                                                        color="white"
-                                                        background-color="primary"
-                                                        inner-color="primary"
-                                                        inner-background-color="white"
-                                                        :style="scrollerPopupStyle280"
-                                                        @close="() => { showDateTimeScrollerStart = false }"
-                                                />
-
-                                            </q-popup-proxy>
-                                        </q-icon>
-                                    </template>
-                                </q-input>
-                                <q-input color="blue-6" outlined v-model="eventForm.dateTimeEnd"
-                                         :label="$t('cal.enterEndDateTime')" mask="####-##-## ##:##"
-                                         class="calendar_comp">
-                                    <template #append>
-                                        <q-icon name="event" class="cursor-pointer">
-                                            <q-popup-proxy v-model="showDateTimeScrollerEnd">
-
-                                                <q-date-time-scroller
-                                                        v-model="eventForm.dateTimeEnd"
-                                                        :locale="locale"
-                                                        :hour24-format="true"
-                                                        :rounded-borders="true"
-                                                        border-color="#2196f3"
-                                                        bar-color="#2196f3"
-                                                        color="white"
-                                                        background-color="primary"
-                                                        inner-color="primary"
-                                                        inner-background-color="white"
-                                                        :style="scrollerPopupStyle280"
-                                                        @close="() => { showDateTimeScrollerEnd = false }"
-                                                />
-
-                                            </q-popup-proxy>
-                                        </q-icon>
-                                    </template>
-                                </q-input>
+                                <CDateTime
+                                        :value.sync="eventForm.dateTimeStart"
+                                        :label="$t('cal.eventstartdatetime')"
+                                        :readonly="false">
+                                </CDateTime>
+                                <CDateTime
+                                        :value.sync="eventForm.dateTimeEnd"
+                                        :label="$t('cal.enterEndDateTime')"
+                                        :readonly="false">
+                                </CDateTime>
                                 <q-input dense v-model="eventForm.infoextra" :label="$t('cal.infoextra')"></q-input>
                             </div>
 

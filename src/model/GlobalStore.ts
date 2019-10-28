@@ -228,7 +228,9 @@ export interface IColGridTable {
   action?: any
   askaction?: string
   foredit?: boolean
-  fieldtype?: string
+  fieldtype?: number
+  jointable?: string
+  resultjoin?: string[]
   visuonlyEditVal?: boolean
 }
 

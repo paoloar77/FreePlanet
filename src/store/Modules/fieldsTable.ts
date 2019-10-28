@@ -1,6 +1,7 @@
 import { IColGridTable } from '../../model'
 import { lists } from './lists'
 import { tools } from '@src/store/Modules/tools'
+import { shared_consts } from '@src/common/shared_vuejs'
 
 const DeleteRec = {
   name: 'deleterec',
@@ -30,9 +31,10 @@ function AddCol(params: IColGridTable) {
     icon: (params.icon === undefined) ? '' : params.icon,
     action: (params.action === undefined) ? '' : params.action,
     foredit: (params.foredit === undefined) ? true : params.foredit,
-    fieldtype: (params.fieldtype === undefined) ? 'string' : params.fieldtype,
+    fieldtype: (params.fieldtype === undefined) ? tools.FieldType.string : params.fieldtype,
     visuonlyEditVal: (params.visuonlyEditVal === undefined) ? false : params.visuonlyEditVal,
-    askaction: (params.askaction === undefined) ? '' : params.askaction
+    askaction: (params.askaction === undefined) ? '' : params.askaction,
+    jointable: (params.jointable === undefined) ? '' : params.jointable
   }
 }
 
@@ -45,7 +47,13 @@ const colTableWhere = [
 
 const colcontribtype = [
   AddCol({ name: 'label', label_trans: 'proj.longdescr' }),
-  AddCol({ name: 'showprice', label_trans: 'event.showprice', fieldtype: 'boolean' }),
+  AddCol({ name: 'showprice', label_trans: 'event.showprice', fieldtype: tools.FieldType.boolean }),
+  AddCol(DeleteRec)
+]
+
+const colTablePermission = [
+  AddCol({ name: '_id', label_trans: 'others.value' }),
+  AddCol({ name: 'label', label_trans: 'proj.longdescr' }),
   AddCol(DeleteRec)
 ]
 
@@ -65,7 +73,7 @@ const colTableEvents = [
   AddCol({ name: 'short_tit', label_trans: 'event.short_tit' }),
   AddCol({ name: 'title', label_trans: 'event.title' }),
   AddCol({ name: 'details', label_trans: 'event.details' }),
-  AddCol({ name: 'dateTimeStart', label_trans: 'event.dateTimeStart', fieldtype: 'date' }),
+  AddCol({ name: 'dateTimeStart', label_trans: 'event.dateTimeStart', fieldtype: tools.FieldType.date }),
   AddCol({ name: 'dateTimeEnd', label_trans: 'event.dateTimeEnd' }),
   AddCol({ name: 'bgcolor', label_trans: 'event.bgcolor' }),
   AddCol({ name: 'icon', label_trans: 'event.icon' }),
@@ -80,12 +88,12 @@ const colTableEvents = [
   AddCol({ name: 'infoextra', label_trans: 'event.infoextra' }),
   AddCol({ name: 'linkpage', label_trans: 'event.linkpage' }),
   AddCol({ name: 'linkpdf', label_trans: 'event.linkpdf' }),
-  AddCol({ name: 'nobookable', label_trans: 'event.nobookable', fieldtype: 'boolean' }),
-  AddCol({ name: 'news', label_trans: 'event.news', fieldtype: 'boolean' }),
-  AddCol({ name: 'canceled', label_trans: 'event.canceled', fieldtype: 'boolean' }),
-  AddCol({ name: 'deleted', label_trans: 'event.deleted', fieldtype: 'boolean' }),
+  AddCol({ name: 'nobookable', label_trans: 'event.nobookable', fieldtype: tools.FieldType.boolean }),
+  AddCol({ name: 'news', label_trans: 'event.news', fieldtype: tools.FieldType.boolean }),
+  AddCol({ name: 'canceled', label_trans: 'event.canceled', fieldtype: tools.FieldType.boolean }),
+  AddCol({ name: 'deleted', label_trans: 'event.deleted', fieldtype: tools.FieldType.boolean }),
   AddCol({ name: 'dupId', label_trans: 'event.dupId' }),
-  AddCol({ name: 'modified', label_trans: 'event.modified', fieldtype: 'boolean' }),
+  AddCol({ name: 'modified', label_trans: 'event.modified', fieldtype: tools.FieldType.boolean }),
   AddCol(DeleteRec),
   AddCol({
     name: 'copyrec',
@@ -103,6 +111,26 @@ const colTableEvents = [
 ]
 
 export const fieldsTable = {
+  getColByTable(table) {
+    if (table === 'permissions') {
+      return ['value', 'label']
+    }
+  },
+  getTableJoinByName(table) {
+    if (table === 'permissions') {
+      return [shared_consts.Permissions.Normal, shared_consts.Permissions.Admin, shared_consts.Permissions.Manager, shared_consts.Permissions.Teacher]
+    }
+  },
+  getrecTableList(mytable) {
+    return this.tablesList.find((rec) => rec.value === mytable)
+  },
+  getKeyByTable(mytable): string {
+    const myrec = this.getrecTableList(mytable)
+    if (myrec)
+      return ((myrec.colkey) ? myrec.colkey : '_id')
+    else
+      return '_id'
+  },
   tablesList: [
     {
       value: 'operators',
@@ -127,6 +155,12 @@ export const fieldsTable = {
       label: 'Tipi di Contributi',
       columns: colcontribtype,
       colkey: '_id'
+    },
+    {
+      value: 'permissions',
+      label: 'Permessi',
+      columns: colTablePermission,
+      colkey: 'value'
     }
   ],
 
@@ -136,8 +170,8 @@ export const fieldsTable = {
     AddCol({ name: 'name', label_trans: 'reg.name' }),
     AddCol({ name: 'surname', label_trans: 'reg.surname' }),
     AddCol({ name: 'email', label_trans: 'reg.email' }),
-    AddCol({ name: 'date_reg', label_trans: 'reg.date_reg', fieldtype: 'date' }),
-    AddCol({ name: 'perm', label_trans: 'reg.perm' }),
+    AddCol({ name: 'date_reg', label_trans: 'reg.date_reg', fieldtype: tools.FieldType.date }),
+    AddCol({ name: 'perm', label_trans: 'reg.perm', fieldtype: tools.FieldType.binary, jointable: 'permissions' }),
     AddCol({ name: 'img', label_trans: 'reg.img', sortable: false }),
     AddCol(DeleteRec),
     AddCol({

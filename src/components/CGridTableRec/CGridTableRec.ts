@@ -9,8 +9,13 @@ import { ICategory, IColGridTable, ITableRec } from '../../model'
 import { CTodo } from '../todos/CTodo'
 import { SingleProject } from '../projects/SingleProject'
 import { lists } from '../../store/Modules/lists'
+import { IParamsQuery } from '../../model/GlobalStore'
+import { fieldsTable } from '../../store/Modules/fieldsTable'
+import { CDateTime } from '../CDateTime'
 
-@Component({})
+@Component({
+  components: { CDateTime }
+})
 export default class CGridTableRec extends Vue {
   @Prop({ required: false }) public prop_mytable: string
   @Prop({ required: true }) public prop_mytitle: string
@@ -24,6 +29,7 @@ export default class CGridTableRec extends Vue {
   public mytitle: string
   public mycolumns: any[]
   public colkey: string
+  public search: string = ''
 
   public tablesel: string = ''
 
@@ -42,12 +48,12 @@ export default class CGridTableRec extends Vue {
   public spinner_visible: boolean = false
 
   public idsel: string = ''
-  public colsel: string = ''
+  public colsel: IColGridTable = {name: ''}
   public valPrec: string = ''
 
   public separator: 'horizontal'
   public filter: string = ''
-  public selected: any
+  public rowsel: any
   public dark: boolean = true
   public funcActivated = []
 
@@ -70,25 +76,27 @@ export default class CGridTableRec extends Vue {
     }
   }
 
-  public selItem(item, colsel) {
+  public selItem(item, col: IColGridTable) {
     // console.log('item', item)
-    this.selected = item
+    this.rowsel = item
     this.idsel = item._id
-    this.colsel = colsel
+    this.colsel = col
+
+    this.updateValueExtra(col, this.rowsel[col.name])
     // console.log('this.idsel', this.idsel)
   }
 
   public undoVal() {
-    console.log('undoVal', 'colsel', this.colsel, 'valprec', this.valPrec, 'this.colkey', this.colkey, 'this.selected', this.selected)
+    console.log('undoVal', 'colsel', this.colsel, 'valprec', this.valPrec, 'this.colkey', this.colkey, 'this.selected', this.rowsel)
     console.table(this.serverData)
     if (this.colsel)
-      this.selected[this.colsel] = this.valPrec
+      this.rowsel[this.colsel.field] = this.valPrec
     // this.serverData[this.colsel] = this.valPrec
 
   }
 
   public SaveValue(newVal, valinitial) {
-    // console.log('SaveValue', newVal, 'selected', this.selected)
+    console.log('SaveValue', newVal, 'rowsel', this.rowsel)
 
     const mydata = {
       id: this.idsel,
@@ -96,7 +104,7 @@ export default class CGridTableRec extends Vue {
       fieldsvalue: {}
     }
 
-    mydata.fieldsvalue[this.colsel] = newVal
+    mydata.fieldsvalue[this.colsel.field] = newVal
 
     this.valPrec = valinitial
 
@@ -135,7 +143,7 @@ export default class CGridTableRec extends Vue {
 
   public onRequest(props) {
     const { page, rowsPerPage, rowsNumber, sortBy, descending } = props.pagination
-    const filter = props.filter
+    const filter = this.filter
 
     if (!this.mytable)
       return
@@ -146,7 +154,7 @@ export default class CGridTableRec extends Vue {
 
     // update rowsCount with appropriate value
 
-    // get all rows if "All" (0) is selected
+    // get all rows if "All" (0) is rowsel
     const fetchCount = rowsPerPage === 0 ? rowsNumber : rowsPerPage
 
     // calculate starting row of data
@@ -193,7 +201,7 @@ export default class CGridTableRec extends Vue {
         myobj[sortBy] = 1
     }
 
-    const params = {
+    const params: IParamsQuery = {
       table: this.mytable,
       startRow,
       endRow,
@@ -269,7 +277,10 @@ export default class CGridTableRec extends Vue {
   }
 
   public getclassCol(col) {
-    return (col.disable || !this.canEdit) ? '' : 'colmodif'
+    let mycl = (col.disable || !this.canEdit) ? '' : 'colmodif'
+    mycl += (col.fieldtype === tools.FieldType.date) ? ' coldate flex flex-container' : ''
+
+    return mycl
   }
 
   public async createNewRecord() {
@@ -279,6 +290,11 @@ export default class CGridTableRec extends Vue {
       table: this.mytable,
       data: {}
     }
+
+    // const mykey = fieldsTable.getKeyByTable(this.mytable)
+
+    // mydata.data[mykey] = ''
+
     const data = await GlobalStore.actions.saveTable(mydata)
 
     this.serverData.push(data)
@@ -307,9 +323,13 @@ export default class CGridTableRec extends Vue {
   }
 
   public refresh() {
+    if (this.search !== '')
+      this.filter = this.search
+    else
+      this.filter = ''
+
     this.onRequest({
-      pagination: this.pagination,
-      filter: undefined
+      pagination: this.pagination
     })
   }
 
@@ -318,6 +338,7 @@ export default class CGridTableRec extends Vue {
       tools.ActionRecTable(this, col.action, this.mytable, item._id, item, col.askaction)
     }
   }
+
 
   public ActionAfterYes(action, item, data) {
     if (action === lists.MenuAction.DELETE_RECTABLE) {
@@ -343,14 +364,19 @@ export default class CGridTableRec extends Vue {
   }
 
   public visuValByType(col, val) {
-    if (col.fieldtype === 'date') {
+    if (col.fieldtype === tools.FieldType.date) {
       if (val === undefined) {
         return '[]'
       } else {
         return tools.getstrDateTime(val)
       }
-    } else if (col.fieldtype === 'boolean') {
+    } else if (col.fieldtype === tools.FieldType.boolean) {
       return (val) ? this.$t('dialog.yes') : this.$t('dialog.no')
+    } else if (col.fieldtype === tools.FieldType.binary) {
+      if (val === undefined)
+        return '[]'
+      else
+        return val
     } else {
       if (val === undefined)
         return '[]'
@@ -395,4 +421,51 @@ export default class CGridTableRec extends Vue {
     this.updatedcol()
     this.refresh()
   }
+
+  get tools() {
+    return tools
+  }
+
+  get db_fieldsTable() {
+    return fieldsTable
+  }
+
+  public doSearch() {
+
+    this.refresh()
+  }
+
+  public setResultJoin(col: IColGridTable, row) {
+    let myval = 0
+    const tabjoin = fieldsTable.getTableJoinByName(col.jointable)
+    col.resultjoin.forEach((mycol) => {
+      myval = tools.SetBit(myval, mycol)
+    })
+
+    row[col.name] = myval
+
+    console.log('col.resultjoin')
+    console.table(col.resultjoin)
+    console.log('row[col.name]', row[col.name])
+  }
+
+  public updateValueExtra(col: IColGridTable, myval) {
+    if (col.jointable) {
+      const tabjoin = fieldsTable.getTableJoinByName(col.jointable)
+      const arr = []
+      if (myval !== undefined && tabjoin !== undefined) {
+        tabjoin.forEach((mybit) => {
+          if (tools.isBitActive(myval, mybit.value))
+            arr.push(mybit)
+        })
+      }
+
+      col.resultjoin = arr
+
+      console.log('col', col.field, 'myval', myval, 'arr', arr)
+      console.log('resultjoin')
+      console.table(col.resultjoin)
+    }
+  }
+
 }
