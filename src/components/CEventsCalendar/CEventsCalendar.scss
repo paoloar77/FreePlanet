@@ -247,13 +247,6 @@ $graytext: #555;
   color: white;
 }
 
-.calendar_comp{
-  max-width: 170px;
-  @media (max-width: 400px) {
-    max-width: 400px;
-  }
-}
-
 .myflex{
   display: flex;
   flex: 1;

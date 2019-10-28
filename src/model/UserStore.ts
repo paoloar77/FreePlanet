@@ -20,12 +20,18 @@ export interface IUserFields {
   img?: string
   verified_email?: boolean
   tokens?: IToken[]
+  lasttimeonline?: Date
 }
 
 /*
 password?: string
  lang
  */
+
+export interface IPerm {
+  _id: number
+  label: string
+}
 
 export interface IUserState {
   my: IUserFields
@@ -42,6 +48,8 @@ export interface IUserState {
   isLogged?: boolean
   isAdmin?: boolean
   isManager?: boolean
+  isTeacher?: boolean
   usersList?: IUserFields[]
+  permissionsList?: IPerm[]
   countusers?: number
 }

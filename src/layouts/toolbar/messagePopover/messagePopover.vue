@@ -1,7 +1,7 @@
 <template>
     <div>
         <q-btn flat round dense icon="fas fa-comment" class="q-mx-xs" >
-            <q-badge floating color="red">{{getNumMsgUnread}}</q-badge>
+            <q-badge v-if="getNumMsgUnread > 0" floating color="red">{{getNumMsgUnread}}</q-badge>
             <q-menu self="top right">
                 <q-list bordered class="rounded-borders" style="max-width: 350px; min-width: 250px;">
                     <q-item-label header>{{$t('msgs.messages')}}</q-item-label>
@@ -19,14 +19,14 @@
 
                         <q-item-section avatar>
                             <q-avatar>
-                                <img :src="getImgByUsername(msg.dest.username)">
+                                <img :src="getImgByMsg(msg)">
                             </q-avatar>
                         </q-item-section>
 
                         <q-item-section>
-                            <q-item-label lines="1">{{getUserByUsername(msg.dest.username)}}</q-item-label>
+                            <q-item-label lines="1">{{getUsernameChatByMsg(msg)}}</q-item-label>
                             <q-item-label caption lines="2">
-                                {{msg.message}}
+                                {{getMsgText(msg, false)}}
                             </q-item-label>
                         </q-item-section>
 

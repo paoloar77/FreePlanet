@@ -4,6 +4,7 @@ const msgglobal = {
   it: {
     grid: {
       editvalues: 'Modifica Valori',
+      addrecord: 'Aggiungi Riga',
       showprevedit: 'Mostra Eventi Passati',
       columns: 'Colonne',
       tableslist: 'Tabelle',
@@ -17,7 +18,9 @@ const msgglobal = {
         tableslist: 'Lista Tabelle',
       },
       manage: {
-        menu: 'Gestione'
+        menu: 'Gestione',
+        manager: 'Gestore',
+        nessuno: 'Nessuno'
       },
       messages: {
         menu: 'I tuoi Messaggi'
@@ -49,6 +52,7 @@ const msgglobal = {
     db: {
       recupdated: 'Record Aggiornato',
       recfailed: 'Errore durante aggiornamento Record',
+      reccanceled: 'Annullato Aggiornamento. Ripristinato valore precendente',
       deleterecord: 'Elimina Record',
       deletetherecord: 'Eliminare il Record?',
       deletedrecord: 'Record Cancellato',
@@ -195,6 +199,10 @@ const msgglobal = {
       themecolor: 'Tema Colore',
       themebgcolor: 'Tema Colore Sfondo'
     },
+    where: {
+      code: 'Id',
+      whereicon: 'Icona',
+    },
     cal: {
       booked: 'Prenotato',
       booked_error: 'Prenotazione non avvenuta. Riprovare più tardi',
@@ -289,6 +297,7 @@ const msgglobal = {
   es: {
     grid: {
       editvalues: 'Cambiar valores',
+      addrecord: 'Agregar fila',
       showprevedit: 'Mostrar eventos pasados',
       columns: 'Columnas',
       tableslist: 'Tablas'
@@ -302,7 +311,9 @@ const msgglobal = {
         tableslist: 'Listado de tablas',
       },
       manage: {
-        menu: 'Gestionar'
+        menu: 'Gestionar',
+        manager: 'Gerente',
+        nessuno: 'Nadie'
       },
       messages: {
         menu: 'Tus mensajes'
@@ -334,6 +345,7 @@ const msgglobal = {
     db: {
       recupdated: 'Registro Actualizado',
       recfailed: 'Error durante el registro de actualización',
+      reccanceled: 'Actualización cancelada Restaurar valor anterior',
       deleterecord: 'Eliminar registro',
       deletetherecord: '¿Eliminar el registro?',
       deletedrecord: 'Registro cancelado',
@@ -474,6 +486,10 @@ const msgglobal = {
       themecolor: 'Tema Colores',
       themebgcolor: 'Tema Colores Fondo'
     },
+    where: {
+      code: 'Id',
+      whereicon: 'Icono',
+    },
     cal: {
       booked: 'Reservado',
       booked_error: 'Reserva fallida. Intenta nuevamente más tarde',
@@ -565,6 +581,7 @@ const msgglobal = {
   fr: {
     grid: {
       editvalues: 'Changer les valeurs',
+      addrecord: 'Ajouter une ligne',
       showprevedit: 'Afficher les événements passés',
       columns: 'Colonnes',
       tableslist: 'Tables',
@@ -578,7 +595,9 @@ const msgglobal = {
         tableslist: 'Liste des tables',
       },
       manage: {
-        menu: 'Gérer'
+        menu: 'Gérer',
+        manager: 'Directeur',
+        nessuno: 'Aucun'
       },
       messages: {
         menu: 'Vos messages'
@@ -610,6 +629,7 @@ const msgglobal = {
     db: {
       recupdated: 'Enregistrement mis à jour',
       recfailed: 'Erreur lors de la mise à jour',
+      reccanceled: 'Mise à jour annulée. Restaurer la valeur précédente',
       deleterecord: 'Supprimer l\'enregistrement',
       deletetherecord: 'Supprimer l\'enregistrement?',
       deletedrecord: 'Enregistrement annulé',
@@ -749,6 +769,10 @@ const msgglobal = {
       themecolor: 'Tema Colores',
       themebgcolor: 'Tema Colores Fondo'
     },
+    where: {
+      code: 'Id',
+      whereicon: 'icône',
+    },
     cal: {
       booked: 'Réservé',
       booked_error: 'La réservation a échoué. Réessayez plus tard',
@@ -840,6 +864,7 @@ const msgglobal = {
   enUs: {
     grid: {
       editvalues: 'Edit Values',
+      addrecord: 'Add Row',
       showprevedit: 'Show Past Events',
       columns: 'Columns',
       tableslist: 'Tables',
@@ -853,7 +878,9 @@ const msgglobal = {
         tableslist: 'List of tables',
       },
       manage: {
-        menu: 'Manage'
+        menu: 'Manage',
+        manager: 'Manager',
+        nessuno: 'None'
       },
       messages: {
         menu: 'Your Messages'
@@ -885,6 +912,7 @@ const msgglobal = {
     db: {
       recupdated: 'Record Updated',
       recfailed: 'Error during update Record',
+      reccanceled: 'Canceled Update. Restore previous value',
       deleterecord: 'Delete Record',
       deletetherecord: 'Delete the Record?',
       deletedrecord: 'Record Deleted',
@@ -1023,6 +1051,10 @@ const msgglobal = {
       themecolor: 'Theme Color',
       themebgcolor: 'Theme Color Background'
     },
+    where: {
+      code: 'Id',
+      whereicon: 'Icon',
+    },
     cal: {
       booked: 'Booked',
       booked_error: 'Reservation failed. Try again later',
@@ -1114,6 +1146,7 @@ const msgglobal = {
   de: {
     grid: {
       editvalues: 'Edit Values',
+      addrecord: 'Add Row',
       showprevedit: 'Show Past Events',
       columns: 'Columns',
       tableslist: 'Tables',
@@ -1127,7 +1160,9 @@ const msgglobal = {
         tableslist: 'List of tables',
       },
       manage: {
-        menu: 'Manage'
+        menu: 'Manage',
+        manager: 'Manager',
+        nessuno: 'None'
       },
       messages: {
         menu: 'Your Messages'
@@ -1159,6 +1194,7 @@ const msgglobal = {
     db: {
       recupdated: 'Record Updated',
       recfailed: 'Error during update Record',
+      reccanceled: 'Canceled Update. Restore previous value',
       deleterecord: 'Delete Record',
       deletetherecord: 'Delete the Record?',
       deletedrecord: 'Record Deleted',
@@ -1298,6 +1334,10 @@ const msgglobal = {
       totalphases: 'Total Phase',
       themecolor: 'Theme Color',
       themebgcolor: 'Theme Color Background'
+    },
+    where: {
+      code: 'Id',
+      whereicon: 'Icon',
     },
     cal: {
       booked: 'Booked',

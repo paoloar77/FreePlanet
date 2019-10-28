@@ -35,11 +35,16 @@
 
                 <!--<p style="color:red"> Rows: {{ getrows }}</p>-->
 
+                <q-input v-model="search" filled dense type="search" hint="Search" v-on:keyup.enter="doSearch">
+                    <template v-slot:after>
+                        <q-btn v-if="mytable" label="" color="primary" @click="refresh" icon="search"></q-btn>
+                    </template>
+                </q-input>
                 <q-toggle v-if="mytable" v-model="funcActivated" :val="lists.MenuAction.CAN_EDIT_TABLE" class="q-mx-sm"
                           :label="$t('grid.editvalues')"></q-toggle>
 
-                <q-btn v-if="mytable" label="Refresh" color="primary" @click="refresh" class="q-mx-sm"></q-btn>
-                <q-btn v-if="mytable" flat dense color="primary" :disable="loading" label="Add Record"
+                <q-btn v-if="mytable" flat dense color="primary" :disable="loading || !canEdit"
+                       :label="$t('grid.addrecord')"
                        @click="createNewRecord"></q-btn>
 
                 <q-space/>
@@ -77,58 +82,65 @@
 
 
                 <q-inner-loading :showing="spinner_visible">
-                    <q-spinner-gears size="50px" color="primary"/>
+                    <q-spinner-tail size="2em" color="primary"/>
                 </q-inner-loading>
 
             </template>
 
             <q-tr v-if="mytable" slot="body" slot-scope="props" :props="props">
                 <q-td v-for="col in mycolumns" :key="col.name" :props="props" v-if="colVisib.includes(col.field)">
-                    <div v-if="col.fieldtype === 'date'">
-                        <div style="max-width: 250px; min-width: 200px">
-                            <div class="flex flex-container">
-                                <q-icon name="event" class="cursor-pointer">
-                                    <q-popup-edit transition-show="scale" transition-hide="scale" v-if="canEdit"
-                                                  v-model="props.row[col.name]" :disable="col.disable"
-                                                  :title="col.title" buttons
-                                                  @save="SaveValue" @show="selItem(props.row, col.field)">
-                                        <q-date v-model="props.row[col.name]" mask="YYYY-MM-DD HH:mm"/>
-
-                                    </q-popup-edit>
-                                    <!--<q-popup-proxy transition-show="scale" transition-hide="scale">-->
-                                    <!--<q-date v-model="props.row[col.name]" mask="YYYY-MM-DD HH:mm" />-->
-                                    <!--</q-popup-proxy>-->
-                                </q-icon>
-                                <div>
-                                    {{ visuValByType(col, props.row[col.name]) }}
-                                </div>
-
-                                <q-icon name="access_time" class="cursor-pointer">
-                                    <q-popup-edit transition-show="scale" transition-hide="scale" v-if="canEdit"
-                                                  v-model="props.row[col.name]" :disable="col.disable"
-                                                  :title="col.title" buttons
-                                                  @save="SaveValue" @show="selItem(props.row, col.field)">
-                                        <q-time v-model="props.row[col.name]" mask="YYYY-MM-DD HH:mm" format24h/>
-
-                                    </q-popup-edit>
-
-                                    <!--<q-popup-proxy transition-show="scale" transition-hide="scale">-->
-                                    <!--<q-time v-model="props.row[col.name]" mask="YYYY-MM-DD HH:mm" format24h />-->
-                                    <!--</q-popup-proxy>-->
-                                </q-icon>
-                            </div>
+                    <div v-if="col.fieldtype === tools.FieldType.date">
+                        <div :class="getclassCol(col)">
+                            <CDateTime
+                                    class="cursor-pointer"
+                                    :value.sync="props.row[col.name]"
+                                    :label="col.title"
+                                    :dense="true"
+                                    :readonly="true"
+                                    @savetoclose="SaveValue"
+                                    @show="selItem(props.row, col)"
+                                    >
+                            </CDateTime>
                         </div>
                     </div>
-                    <div v-else-if="col.fieldtype === 'boolean'">
+                    <div v-else-if="col.fieldtype === tools.FieldType.boolean">
                         <div :class="getclassCol(col)">
                             {{ visuValByType(col, props.row[col.name]) }}
                             <q-popup-edit v-if="canEdit" v-model="props.row[col.name]" :disable="col.disable"
                                           :title="col.title" buttons
-                                          @save="SaveValue" @show="selItem(props.row, col.field)">
+                                          @save="SaveValue" @show="selItem(props.row, col)">
                                 <q-checkbox v-model="props.row[col.name]" label="">
 
                                 </q-checkbox>
                                 {{ visuValByType(col, props.row[col.name]) }}
+
+                            </q-popup-edit>
+                        </div>
+                    </div>
+                    <div v-else-if="col.fieldtype === tools.FieldType.binary">
+                        <div :class="getclassCol(col)">
+
+                            <CMyChipList
+                                    :value="props.row[col.name]"
+                                    :options="db_fieldsTable.getTableJoinByName(col.jointable)"
+                                    :optval="db_fieldsTable.getKeyByTable(col.jointable)"
+                                    :optlab="db_fieldsTable.getLabelByTable(col.jointable)"
+                                    :opticon="db_fieldsTable.getIconByTable(col.jointable)"
+                            ></CMyChipList>
+
+                            <q-popup-edit v-if="canEdit" v-model="props.row[col.name]" :disable="col.disable"
+                                          :title="col.title" buttons
+                                          @save="SaveValue" @show="selItem(props.row, col)">
+
+                                <CMyToggleList :label="col.title"
+                                        :options="db_fieldsTable.getTableJoinByName(col.jointable)"
+                                               :value.sync="props.row[col.name]"
+                                               :optval="db_fieldsTable.getKeyByTable(col.jointable)"
+                                               :optlab="db_fieldsTable.getLabelByTable(col.jointable)"
+
+                                >
+
+                                </CMyToggleList>
 
                             </q-popup-edit>
                         </div>
@@ -138,7 +150,7 @@
                             {{ visuValByType(col, props.row[col.name]) }}
                             <q-popup-edit v-if="canEdit" v-model="props.row[col.name]" :disable="col.disable"
                                           :title="col.title" buttons
-                                          @save="SaveValue" @show="selItem(props.row, col.field)">
+                                          @save="SaveValue" @show="selItem(props.row, col)">
                                 <q-input v-model="props.row[col.name]"/>
 
                             </q-popup-edit>

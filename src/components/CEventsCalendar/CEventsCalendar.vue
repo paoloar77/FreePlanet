@@ -39,17 +39,17 @@
                                 <span class="cal__teacher-content">
                                     <q-chip>
                                         <q-avatar>
-                                            <img :src="`../../statics/images/` + getTeacherImg(myevent.teacher)">
+                                            <img :src="`../../statics/images/` + getImgByUsername(myevent.teacher)">
                                         </q-avatar>
-                                        <span class="cal__teacher-content">{{getTeacherName(myevent.teacher)}}</span>
+                                        <span class="cal__teacher-content">{{getUserByUsername(myevent.teacher)}}</span>
                                     </q-chip>
-                                    <span v-if="getTeacherImg(myevent.teacher2) && myevent.teacher2"
+                                    <span v-if="getImgByUsername(myevent.teacher2) && myevent.teacher2"
                                           class="margin_avatar2"></span>
-                                    <q-chip v-if="getTeacherImg(myevent.teacher2) && myevent.teacher2">
+                                    <q-chip v-if="getImgByUsername(myevent.teacher2) && myevent.teacher2">
                                         <q-avatar>
-                                            <img :src="`../../statics/images/` + getTeacherImg(myevent.teacher2)">
+                                            <img :src="`../../statics/images/` + getImgByUsername(myevent.teacher2)">
                                         </q-avatar>
-                                        <span class="cal__teacher-content">{{getTeacherName(myevent.teacher2)}}</span>
+                                        <span class="cal__teacher-content">{{getUserByUsername(myevent.teacher2)}}</span>
                                     </q-chip>
                                 </span>
                             </div>
@@ -75,7 +75,7 @@
                             </div>
                             <div v-if="myevent.dateTimeStart" class="cal__when">
                                 <span class="cal__where-title">{{$t('cal.when')}}:
-                                    <span v-html="tools.getstrDateTimeEvent(mythis, myevent, true)"></span>
+                                    <span v-html="tools.getstrDateTimeEvent(mythis(), myevent, true)"></span>
                                 </span>
                             </div>
                             <p v-if="myevent.linkpdf" style="margin-top: 10px; text-align: center">
@@ -121,58 +121,16 @@
                             <!--<q-checkbox v-model="eventForm.allday" :label="$t('cal.alldayevent')"></q-checkbox>-->
 
                             <div class="q-gutter-sm row myflex">
-                                <q-input color="blue-6" outlined v-model="eventForm.dateTimeStart"
-                                         :label="$t('cal.eventstartdatetime')" mask="####-##-## ##:##"
-                                         class="calendar_comp">
-                                    <template #append>
-                                        <q-icon name="event" class="cursor-pointer">
-                                            <q-popup-proxy v-model="showDateTimeScrollerStart">
-
-                                                <q-date-time-scroller
-                                                        v-model="eventForm.dateTimeStart"
-                                                        :locale="locale"
-                                                        :hour24-format="true"
-                                                        :rounded-borders="true"
-                                                        border-color="#2196f3"
-                                                        bar-color="#2196f3"
-                                                        color="white"
-                                                        background-color="primary"
-                                                        inner-color="primary"
-                                                        inner-background-color="white"
-                                                        :style="scrollerPopupStyle280"
-                                                        @close="() => { showDateTimeScrollerStart = false }"
-                                                />
-
-                                            </q-popup-proxy>
-                                        </q-icon>
-                                    </template>
-                                </q-input>
-                                <q-input color="blue-6" outlined v-model="eventForm.dateTimeEnd"
-                                         :label="$t('cal.enterEndDateTime')" mask="####-##-## ##:##"
-                                         class="calendar_comp">
-                                    <template #append>
-                                        <q-icon name="event" class="cursor-pointer">
-                                            <q-popup-proxy v-model="showDateTimeScrollerEnd">
-
-                                                <q-date-time-scroller
-                                                        v-model="eventForm.dateTimeEnd"
-                                                        :locale="locale"
-                                                        :hour24-format="true"
-                                                        :rounded-borders="true"
-                                                        border-color="#2196f3"
-                                                        bar-color="#2196f3"
-                                                        color="white"
-                                                        background-color="primary"
-                                                        inner-color="primary"
-                                                        inner-background-color="white"
-                                                        :style="scrollerPopupStyle280"
-                                                        @close="() => { showDateTimeScrollerEnd = false }"
-                                                />
-
-                                            </q-popup-proxy>
-                                        </q-icon>
-                                    </template>
-                                </q-input>
+                                <CDateTime
+                                        :value.sync="eventForm.dateTimeStart"
+                                        :label="$t('cal.eventstartdatetime')"
+                                        :readonly="false">
+                                </CDateTime>
+                                <CDateTime
+                                        :value.sync="eventForm.dateTimeEnd"
+                                        :label="$t('cal.enterEndDateTime')"
+                                        :readonly="false">
+                                </CDateTime>
                                 <q-input dense v-model="eventForm.infoextra" :label="$t('cal.infoextra')"></q-input>
                             </div>
 
@@ -294,7 +252,7 @@
                             </q-chip>
                             <div v-if="myevent.dateTimeStart" class="cal__when">
                                 <span class="cal__where-title">{{$t('cal.when')}}:
-                                    <span v-html="tools.getstrDateTimeEvent(mythis, myevent, true)"></span>
+                                    <span v-html="tools.getstrDateTimeEvent(mythis(), myevent, true)"></span>
                                 </span>
                             </div>
                             <div class="q-pa-xs">
@@ -334,7 +292,7 @@
                     <q-card-actions align="right">
                         <q-btn v-if="bookEventpage.state === EState.Modifying" flat :label="$t('cal.cancelbooking')"
                                color="negative"
-                               @click="tools.CancelBookingEvent(mythis, myevent, bookEventForm._id, true)"></q-btn>
+                               @click="tools.CancelBookingEvent(mythis(), myevent, bookEventForm._id, true)"></q-btn>
                         <q-btn v-if="checkseinviaMsg" flat :label="$t('dialog.sendonlymsg')" color="primary"
                                @click="sendMsg(myevent)"></q-btn>
                         <q-btn v-else flat :label="getTitleBtnBooking" color="primary" @click="saveBookEvent(myevent)"
@@ -370,7 +328,7 @@
                             </q-chip>
                             <div v-if="myevent.dateTimeStart" class="cal__when">
                                 <span class="cal__where-title">{{$t('cal.when')}}:
-                                    <span v-html="tools.getstrDateTimeEvent(mythis, myevent, true)"></span>
+                                    <span v-html="tools.getstrDateTimeEvent(mythis(), myevent, true)"></span>
                                 </span>
                             </div>
                             <div class="q-pa-xs">
@@ -560,7 +518,7 @@
 
                         </p>
                         <div class="listaev__date listaev__align_center_mobile">
-                            <span v-html="tools.getstrDateTimeEvent(mythis, event, true)"></span>
+                            <span v-html="tools.getstrDateTimeEvent(mythis(), event, true)"></span>
                         </div>
 
                         <div class="listaev__align_center_mobile">
@@ -600,16 +558,16 @@
 
                                 <q-chip>
                                     <q-avatar>
-                                        <img :src="`../../statics/images/` + getTeacherImg(event.teacher)">
+                                        <img :src="`../../statics/images/` + getImgByUsername(event.teacher)">
                                     </q-avatar>
-                                    <span class="cal__teacher-content">{{getTeacherName(event.teacher)}}</span>
+                                    <span class="cal__teacher-content">{{getUserByUsername(event.teacher)}}</span>
                                 </q-chip>
-                                <span v-if="getTeacherImg(event.teacher2)" class="margin_avatar2"></span>
-                                <q-chip v-if="getTeacherImg(event.teacher2) && event.teacher2">
+                                <span v-if="getImgByUsername(event.teacher2)" class="margin_avatar2"></span>
+                                <q-chip v-if="getImgByUsername(event.teacher2) && event.teacher2">
                                     <q-avatar>
-                                        <img :src="`../../statics/images/` + getTeacherImg(event.teacher2)">
+                                        <img :src="`../../statics/images/` + getImgByUsername(event.teacher2)">
                                     </q-avatar>
-                                    <span class="cal__teacher-content">{{getTeacherName(event.teacher2)}}</span>
+                                    <span class="cal__teacher-content">{{getUserByUsername(event.teacher2)}}</span>
                                 </q-chip>
 
                                 <span v-if="event.wherecode" class="">

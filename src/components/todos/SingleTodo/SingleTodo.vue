@@ -13,6 +13,7 @@
         <div class="flex-item donotdrag divdescrTot">
             <q-input v-if="sel && inEdit && itemtodo.statustodo !== tools.Status.COMPLETED" hide-underline type="textarea" ref="inputdescr"
                      v-model.trim="precDescr"
+                     debounce="1000"
                      autogrow
                      borderless
                      :readonly="!CanIModifyTodo"

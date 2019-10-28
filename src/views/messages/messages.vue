@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="q-pr-md">
         <q-layout view="hHh Lpr lff" container :style="`height: ` + getheight + `px`"
                   class="shadow-2 rounded-borders messages_page">
             <q-drawer
@@ -8,7 +8,7 @@
                     :mini="!mydrawer || miniState"
                     @click.capture="drawerClick"
 
-                    :width="300"
+                    :width="widthdrawer"
                     :breakpoint="300"
                     bordered
                     content-class="bg-grey-3">
@@ -36,14 +36,14 @@
 
                             <q-item-section avatar>
                                 <q-avatar>
-                                    <img :src="getImgByUsername(msg.dest.username)">
+                                    <img :src="getImgByMsg(msg)">
                                 </q-avatar>
                             </q-item-section>
 
                             <q-item-section>
-                                <q-item-label lines="1">{{getUserByUsername(msg.dest.username)}}</q-item-label>
+                                <q-item-label lines="1">{{getUsernameChatByMsg(msg)}}</q-item-label>
                                 <q-item-label caption lines="2">
-                                    {{msg.message}}
+                                    {{getMsgText(msg, false)}}
                                 </q-item-label>
                             </q-item-section>
 
@@ -68,62 +68,102 @@
                 </div>
             </q-drawer>
 
-            <q-page-container>
-                <q-page class="q-px-lg q-py-md">
-                    <div>
-                        <q-item clickable v-if="!!chatsel.username">
+            <div class="row column">
+                <div>
+                    <q-page-container style="">
+                        <q-page class="q-px-lg q-py-md">
+                            <div>
+                                <q-item clickable v-if="!!chatsel.username" @scroll="myonScroll">
 
-                            <q-item-section avatar>
-                                <q-avatar>
-                                    <img :src="getImgByUsername(chatsel.username)">
-                                </q-avatar>
-                            </q-item-section>
-
-                            <q-item-section>
-                                <q-item-label lines="1">{{getUserByUsername(chatsel.username)}}</q-item-label>
-                                <q-item-label caption lines="2">
-                                    {{func_tools.getDateTimeShortStr(chatsel.lasttimeActive)}}
-                                </q-item-label>
-                            </q-item-section>
-                        </q-item>
-                    </div>
-                    <q-separator/>
-                    <div class="q-pa-md row" style="flex-direction: column;">
-                        <q-item clickable v-for="(msg, index) in msgchat_records()" :key="index" v-if="msg.dest">
-                            <div class="chat_dest" v-if="msg.dest.username === getMyUsername()">
-                                <q-chat-message
-                                        :name="getUserByUsername(msg.origin.username)"
-                                        :text="getMsgText(msg)"
-                                        :stamp="tools.getstrDateTimeShort(msg.datemsg)"
-                                        text-color="black"
-                                        bg-color="grey-2">
-                                    <template v-slot:avatar>
-                                        <q-avatar size="sm">
-                                            <img :src="getImgByUsername(msg.origin.username)">
+                                    <q-item-section avatar>
+                                        <q-avatar>
+                                            <img :src="getImgByUsername(chatsel.username)">
                                         </q-avatar>
-                                    </template>
-                                </q-chat-message>
-                            </div>
-                            <div class="chat_my" v-else>
-                                <q-chat-message
-                                        name="me"
-                                        :text="getMsgText(msg)"
-                                        :stamp="tools.getstrDateTimeShort(msg.datemsg)"
-                                        sent
-                                        bg-color="blue-2">
-                                    <template v-slot:avatar>
-                                        <q-avatar size="sm">
-                                            <img :src="getMyImg">
-                                        </q-avatar>
-                                    </template>
+                                    </q-item-section>
 
-                                </q-chat-message>
+                                    <q-item-section>
+                                        <q-item-label lines="1">{{getUserByUsername(chatsel.username)}}</q-item-label>
+                                        <q-item-label caption lines="2">
+                                            {{func_tools.getDateTimeShortStr(chatsel.lasttimeActive)}}
+                                        </q-item-label>
+                                    </q-item-section>
+                                </q-item>
                             </div>
+                            <q-separator/>
+                            <div class="q-pa-md">
+                                <q-item clickable v-for="(msg, index) in msgchat_records()" :key="index"
+                                        v-if="msg.dest">
 
-                        </q-item>
+                                    <div class="chat_dest" v-if="msg.dest.username === getMyUsername()">
+                                        <q-chat-message
+                                                :name="getUsernameChatByMsg(msg)"
+                                                :text="getMsgText(msg, true)"
+                                                :stamp="tools.getstrDateTimeShort(msg.datemsg)"
+                                                text-color="black"
+                                                bg-color="grey-2">
+                                            <template v-slot:avatar>
+                                                <q-avatar size="sm">
+                                                    <img :src="getImgByMsg(msg)">
+                                                </q-avatar>
+                                            </template>
+                                        </q-chat-message>
+                                    </div>
+                                    <div class="chat_my" v-else>
+                                        <q-chat-message
+                                                name="me"
+                                                :text="getMsgText(msg, true)"
+                                                :stamp="tools.getstrDateTimeShort(msg.datemsg)"
+                                                sent
+                                                bg-color="blue-2">
+                                            <template v-slot:avatar>
+                                                <q-avatar size="sm">
+                                                    <img :src="getMyImg">
+                                                </q-avatar>
+                                            </template>
+
+                                        </q-chat-message>
+                                    </div>
+
+                                </q-item>
+                                <div id="last"></div>
+                                <q-inner-loading id="spinner" :showing="loading">
+                                    <q-spinner-tail
+                                            color="primary"
+                                            size="4em">
+                                    </q-spinner-tail>
+                                </q-inner-loading>
+                            </div>
+                        </q-page>
+                    </q-page-container>
+                </div>
+                <div class="bottomfixed row" :style="styletextbar">
+                    <div class="" style="max-width: 50px; align-self: center; order: 1;">
+                        <q-btn rounded
+                               size="sm"
+                               icon="fas fa-smile">
+                        </q-btn>
                     </div>
-                </q-page>
-            </q-page-container>
+                    <div class="" style="max-height: 100px; flex-grow:1; order: 2;">
+                        <q-input
+                                bordered
+                                rounded
+                                v-model="mytexttosend"
+                                debounce="1000"
+                                filled
+                                autogrow
+                                input-style="max-height: 95px;">
+                        </q-input>
+                    </div>
+                    <div class="" style="max-width: 50px; align-self: center; order: 3;">
+                        <q-btn push
+                               rounded
+                               size="sm"
+                               icon="send"
+                        @click="sendMsg">
+                        </q-btn>
+                    </div>
+                </div>
+            </div>
         </q-layout>
     </div>
 </template>

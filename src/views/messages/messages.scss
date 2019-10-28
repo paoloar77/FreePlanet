@@ -25,9 +25,23 @@
 }
 
 .chat_dest{
-
+  display: flex;
+  flex: 1;
+  justify-content: flex-start;
 }
 
 .chat_my{
+  display: flex;
+  flex: 1;
+  justify-content: flex-end;
+}
 
+.bottomfixed {
+  // right: 0;
+  // position: fixed;
+  z-index: 9999;
+  // box-sizing: border-box;
+  margin-right: 0;
+  margin-left: auto;
+  // bottom: 0;
 }

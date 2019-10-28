@@ -27,6 +27,7 @@ import { serv_constants } from '@src/store/Modules/serv_constants'
 import { shared_consts } from '@src/common/shared_vuejs'
 
 import { dom } from 'quasar'
+
 const { height, width } = dom
 
 export interface INotify {
@@ -36,6 +37,23 @@ export interface INotify {
 }
 
 export const tools = {
+  listBestColor: [
+    'blue',
+    'green',
+    'purple',
+    'deep-purple',
+    'indigo',
+    'light-blue',
+    'cyan',
+    'teal',
+    'lime',
+    'orange',
+    'deeporange',
+    'grey',
+    'blue-gray',
+    'yellow'
+  ],
+
   TABEVENTS: 'myevents',
 
   MAX_CHARACTERS: 60,
@@ -93,6 +111,13 @@ export const tools = {
     NONE: 0,
     OPENED: 1,
     COMPLETED: 10
+  },
+
+  FieldType: {
+    boolean: 1,
+    date: 2,
+    string: 4,
+    binary: 8
   },
 
   SelectListNumPeople: [
@@ -1397,6 +1422,10 @@ export const tools = {
     tools.showNotif(q, msg, { color: 'negative', icon: 'notifications' })
   },
 
+  showNeutralNotif(q: any, msg) {
+    tools.showNotif(q, msg, { color: 'warning', icon: 'notifications' })
+  },
+
   showNotif(q: any, msg, data ?: INotify | null
   ) {
     let myicon = data ? data.icon : 'ion-add'
@@ -2470,12 +2499,51 @@ export const tools = {
     // return height()
     return mythis.$q.screen.height
   },
+  getwidth(mythis) {
+    // return height()
+    return mythis.$q.screen.width
+  },
+
+  isIsoDate(str) {
+    if (!/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z/.test(str)) return false
+    const d = new Date(str)
+    return d.toISOString() === str
+  },
+
   getLastDateReadReset() {
     return new Date(1999, 1, 1, 0, 0, 0)
   },
 
   isBitActive(bit, whattofind) {
-    return ((bit & whattofind) === whattofind)
+    if (whattofind > 0)
+      return ((bit & whattofind) === whattofind)
+    else
+      return false
+  },
+
+  SetBit(myval, bit) {
+    myval = myval | bit
+    return myval
+  },
+  getUnique(arr, comp) {
+
+    const unique = arr
+      .map(e => e[comp])
+
+      // store the keys of the unique objects
+      .map((e, i, final) => final.indexOf(e) === i && i)
+
+      // eliminate the dead keys & store unique objects
+      .filter(e => arr[e]).map(e => arr[e])
+
+    return unique
+  },
+
+  getColorByIndexBest(index) {
+    if (index < this.listBestColor.length - 1)
+      return this.listBestColor[index]
+    else
+      return 'primary'
   }
 
 // getLocale() {

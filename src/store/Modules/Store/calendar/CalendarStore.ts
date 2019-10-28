@@ -65,18 +65,6 @@ namespace Getters {
     return mystate.bookedevent.filter((bookedevent) => (bookedevent.id_bookedevent === idevent) && (bookedevent.booked) && (showall || (!showall && bookedevent.userId === UserStore.state.my._id) ))
   }, 'getEventsBookedByIdEvent')
 
-  const getTeacherName = b.read((mystate: ICalendarState) => (teacherusername) => {
-    const op = mystate.operators.find((myop) => myop.username === teacherusername)
-    return (op) ? `${op.name} ${op.surname}` : ''
-
-  }, 'getTeacherName')
-
-  const getTeacher = b.read((mystate: ICalendarState) => (teacherusername) => {
-    const op = mystate.operators.find((myop) => myop.username === teacherusername)
-    return (op)
-
-  }, 'getTeacher')
-
   const getWhereRec = b.read((mystate: ICalendarState) => (wherecode) => {
     const whererec = mystate.wheres.find((mywhere) => mywhere.code === wherecode)
     return (whererec)
@@ -110,9 +98,6 @@ namespace Getters {
     get getEventsBookedByIdEvent() {
       return getEventsBookedByIdEvent()
     },
-    get getTeacher() {
-      return getTeacher()
-    },
     get getWhereRec() {
       return getWhereRec()
     },
@@ -124,12 +109,8 @@ namespace Getters {
     },
     get getContribtypeRecByLabel() {
       return getContribtypeRecByLabel()
-    },
-    get getTeacherName() {
-      return getTeacherName()
     }
   }
-
 }
 
 namespace Mutations {

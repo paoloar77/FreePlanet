@@ -9,6 +9,7 @@
                      v-model.trim="precDescr"
                      autogrow
                      borderless
+                     debounce="1000"
                      :label="getlabeltext"
                      dense
                      @focus="getFocus($event)"

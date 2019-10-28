@@ -41,6 +41,7 @@ const state: IUserState = {
   isAdmin: false,
   isManager: false,
   usersList: [],
+  permissionsList: [],
   countusers: 0
 }
 
@@ -138,9 +139,11 @@ namespace Getters {
   }, 'getUserByUsername')
 
   const getImgByUsername = b.read((mystate: IUserState) => (username): string => {
+    if (username === '')
+      return 'images/avatar/avatar3_small.png'
     // Check if is this User!
     const myrec = UserStore.getters.getUserByUsername(username)
-    if (myrec && !!myrec.img) {
+    if (myrec && !!myrec.img && myrec.img !== '' && myrec.img !== 'undefined') {
       return myrec.img
     } else {
       return 'images/avatar/avatar3_small.png'
@@ -195,8 +198,9 @@ namespace Mutations {
   function authUser(mystate: IUserState, data: IUserFields) {
     mystate.my = {...data}
 
-    mystate.isAdmin = tools.isBitActive(mystate.my.perm, shared_consts.Permissions.Admin)
-    mystate.isManager = tools.isBitActive(mystate.my.perm, shared_consts.Permissions.Manager)
+    mystate.isAdmin = tools.isBitActive(mystate.my.perm, shared_consts.Permissions.Admin.value)
+    mystate.isManager = tools.isBitActive(mystate.my.perm, shared_consts.Permissions.Manager.value)
+    mystate.isTeacher = tools.isBitActive(mystate.my.perm, shared_consts.Permissions.Teacher.value)
 
     // console.log('authUser', 'state.isAdmin', mystate.isAdmin)
     console.table(mystate)

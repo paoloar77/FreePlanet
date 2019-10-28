@@ -23,6 +23,7 @@ import { IDataPass, IParamsQuery } from '@src/model/GlobalStore'
 import { serv_constants } from '@src/store/Modules/serv_constants'
 import { IUserState } from '@src/model'
 import { Calendar } from 'element-ui'
+import { fieldsTable } from '@src/store/Modules/fieldsTable'
 // import { static_data } from '@src/db/static_data'
 
 let stateConnDefault = 'online'
@@ -284,6 +285,8 @@ namespace Mutations {
       return UserStore.state.usersList
     else if (table === 'sendmsgs')
       return MessageStore.state.last_msgs
+    else if (table === 'permissions')
+      return UserStore.state.permissionsList
     else
       return null
 
@@ -296,8 +299,9 @@ namespace Mutations {
 
     try {
       const mylist = getListByTable(table)
+      const mykey = fieldsTable.getKeyByTable(table)
 
-      const myrec = mylist.find((event) => event._id === id)
+      const myrec = mylist.find((event) => event[mykey] === id)
       // console.log('myrec', myrec)
       if (myrec) {
         for (const [key, value] of Object.entries(mydata.fieldsvalue)) {
@@ -533,6 +537,10 @@ namespace Actions {
         // console.log('res.data.userslist', res.data.usersList)
         if (res.data.usersList) {
           UserStore.mutations.setusersList(res.data.usersList)
+        }
+
+        if (res.data.permissionsList) {
+          UserStore.state.permissionsList = res.data.permissionsList
         }
 
         if (res.data.last_msgs) {

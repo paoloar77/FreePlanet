@@ -76,7 +76,6 @@ export default class Category extends Vue {
     this.updatetable()
   }
 
-
   created() {
     this.loadCat()
   }

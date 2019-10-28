@@ -228,7 +228,9 @@ export interface IColGridTable {
   action?: any
   askaction?: string
   foredit?: boolean
-  fieldtype?: string
+  fieldtype?: number
+  jointable?: string
+  resultjoin?: string[]
   visuonlyEditVal?: boolean
 }
 
@@ -237,6 +239,8 @@ export interface ITableRec {
   value: string
   columns: IColGridTable[]
   colkey: string
+  collabel: string
+  colicon?: string
 }
 
 export interface IDataPass {
