@@ -92,11 +92,11 @@
                     <div v-if="col.fieldtype === tools.FieldType.date">
                         <div :class="getclassCol(col)">
                             <CDateTime
+                                    :label="col.label"
                                     class="cursor-pointer"
                                     :value.sync="props.row[col.name]"
-                                    :label="col.title"
                                     :dense="true"
-                                    :readonly="true"
+                                    :canEdit="canEdit"
                                     @savetoclose="SaveValue"
                                     @show="selItem(props.row, col)"
                                     >

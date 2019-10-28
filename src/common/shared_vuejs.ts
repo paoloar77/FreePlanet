@@ -4,17 +4,20 @@ export const shared_consts = {
     Admin: {
       value: 1,
       label: 'pages.Admin',
-      icon: 'fas fa-user-shield'
+      icon: 'fas fa-user-shield',
+      color: 'red'
     },
     Manager: {
       value: 2,
       label: 'otherpages.manage.manager',
-      icon: 'fas fa-tools'
+      icon: 'fas fa-tools',
+      color: 'green'
     },
     Teacher: {
       value: 4,
       label: 'event.teacher',
-      icon: 'fas fa-user-tie'
+      icon: 'fas fa-user-tie',
+      color: 'blue'
     }
   },
 

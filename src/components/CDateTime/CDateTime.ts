@@ -5,18 +5,20 @@ import { toolsext } from '@src/store/Modules/toolsext'
 
 import { date } from 'quasar'
 import { CalendarStore } from '../../store/Modules'
+import MixinBase from '../../mixins/mixin-base'
 
 @Component({
-  name: 'CDateTime'
+  name: 'CDateTime',
+  mixins: [MixinBase]
 })
 
 export default class CDateTime extends Vue {
   public $q
   public $t
   @Prop() public value!: Date
-  @Prop({ required: false, default: '' }) public label: string
+  @Prop({ required: true, default: 'Val:' }) public label: string
   @Prop({ required: false, default: '' }) public data_class!: string
-  @Prop({ required: false, default: false }) public readonly!: boolean
+  @Prop({ required: false, default: true }) public canEdit!: boolean
   @Prop({ required: false, default: false }) public disable!: boolean
   @Prop({ required: false, default: '' }) public bgcolor!: string
   @Prop({ required: false, default: false }) public dense: boolean
@@ -74,10 +76,18 @@ export default class CDateTime extends Vue {
 
   public mounted() {
     this.myvalue = this.value
+    console.log('myvalue', this.myvalue)
   }
 
   public changeval(newval) {
     // console.log('changeval', newval)
     this.$emit('update:value', newval)
+  }
+
+  public mystyle() {
+    if (this.label !== '')
+      return ''
+    else
+      return ''
   }
 }
