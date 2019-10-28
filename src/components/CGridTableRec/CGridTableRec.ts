@@ -12,9 +12,11 @@ import { lists } from '../../store/Modules/lists'
 import { IParamsQuery } from '../../model/GlobalStore'
 import { fieldsTable } from '../../store/Modules/fieldsTable'
 import { CDateTime } from '../CDateTime'
+import { CMyToggleList } from '../CMyToggleList'
+import { CMyChipList } from '../CMyChipList'
 
 @Component({
-  components: { CDateTime }
+  components: { CDateTime, CMyToggleList, CMyChipList }
 })
 export default class CGridTableRec extends Vue {
   @Prop({ required: false }) public prop_mytable: string
@@ -81,9 +83,6 @@ export default class CGridTableRec extends Vue {
     this.rowsel = item
     this.idsel = item._id
     this.colsel = col
-
-    this.updateValueExtra(col, this.rowsel[col.name])
-    // console.log('this.idsel', this.idsel)
   }
 
   public undoVal() {
@@ -363,7 +362,7 @@ export default class CGridTableRec extends Vue {
     }
   }
 
-  public visuValByType(col, val) {
+  public visuValByType(col: IColGridTable, val) {
     if (col.fieldtype === tools.FieldType.date) {
       if (val === undefined) {
         return '[]'
@@ -374,9 +373,9 @@ export default class CGridTableRec extends Vue {
       return (val) ? this.$t('dialog.yes') : this.$t('dialog.no')
     } else if (col.fieldtype === tools.FieldType.binary) {
       if (val === undefined)
-        return '[]'
+        return '[---]'
       else
-        return val
+        return fieldsTable.getArrStrByValueBinary(this, col, val)
     } else {
       if (val === undefined)
         return '[]'
@@ -433,39 +432,6 @@ export default class CGridTableRec extends Vue {
   public doSearch() {
 
     this.refresh()
-  }
-
-  public setResultJoin(col: IColGridTable, row) {
-    let myval = 0
-    const tabjoin = fieldsTable.getTableJoinByName(col.jointable)
-    col.resultjoin.forEach((mycol) => {
-      myval = tools.SetBit(myval, mycol)
-    })
-
-    row[col.name] = myval
-
-    console.log('col.resultjoin')
-    console.table(col.resultjoin)
-    console.log('row[col.name]', row[col.name])
-  }
-
-  public updateValueExtra(col: IColGridTable, myval) {
-    if (col.jointable) {
-      const tabjoin = fieldsTable.getTableJoinByName(col.jointable)
-      const arr = []
-      if (myval !== undefined && tabjoin !== undefined) {
-        tabjoin.forEach((mybit) => {
-          if (tools.isBitActive(myval, mybit.value))
-            arr.push(mybit)
-        })
-      }
-
-      col.resultjoin = arr
-
-      console.log('col', col.field, 'myval', myval, 'arr', arr)
-      console.log('resultjoin')
-      console.table(col.resultjoin)
-    }
   }
 
 }

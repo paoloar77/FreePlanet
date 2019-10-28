@@ -239,6 +239,8 @@ export interface ITableRec {
   value: string
   columns: IColGridTable[]
   colkey: string
+  collabel: string
+  colicon?: string
 }
 
 export interface IDataPass {

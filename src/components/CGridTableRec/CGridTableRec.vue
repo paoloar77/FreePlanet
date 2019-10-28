@@ -119,29 +119,28 @@
                     </div>
                     <div v-else-if="col.fieldtype === tools.FieldType.binary">
                         <div :class="getclassCol(col)">
-                            {{ visuValByType(col, props.row[col.name]) }}
+
+                            <CMyChipList
+                                    :value="props.row[col.name]"
+                                    :options="db_fieldsTable.getTableJoinByName(col.jointable)"
+                                    :optval="db_fieldsTable.getKeyByTable(col.jointable)"
+                                    :optlab="db_fieldsTable.getLabelByTable(col.jointable)"
+                                    :opticon="db_fieldsTable.getIconByTable(col.jointable)"
+                            ></CMyChipList>
+
                             <q-popup-edit v-if="canEdit" v-model="props.row[col.name]" :disable="col.disable"
                                           :title="col.title" buttons
                                           @save="SaveValue" @show="selItem(props.row, col)">
 
-                                <q-select
-                                        v-model="col.resultjoin"
-                                        multiple
-                                        borderless
-                                        dense
-                                        options-dense
-                                        display-value="Valori:"
-                                        emit-value
-                                        map-options
+                                <CMyToggleList :label="col.title"
                                         :options="db_fieldsTable.getTableJoinByName(col.jointable)"
-                                        @input="setResultJoin(col, props.row)"
-                                        :option-value="db_fieldsTable.getKeyByTable(col.jointable)"
-                                        style="min-width: 150px">
+                                               :value.sync="props.row[col.name]"
+                                               :optval="db_fieldsTable.getKeyByTable(col.jointable)"
+                                               :optlab="db_fieldsTable.getLabelByTable(col.jointable)"
 
-                                </q-select>
+                                >
 
-                                <q-input v-model="props.row[col.name]"/>
-                                {{ visuValByType(col, props.row[col.name]) }}
+                                </CMyToggleList>
 
                             </q-popup-edit>
                         </div>

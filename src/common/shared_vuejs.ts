@@ -1,21 +1,20 @@
 export const shared_consts = {
 
   Permissions: {
-    Normal: {
-      value: 0,
-      label: '[None]'
-    },
     Admin: {
       value: 1,
-      label: 'Admin'
+      label: 'pages.Admin',
+      icon: 'fas fa-user-shield'
     },
     Manager: {
       value: 2,
-      label: 'Manager'
+      label: 'otherpages.manage.manager',
+      icon: 'fas fa-tools'
     },
     Teacher: {
       value: 4,
-      label: 'Teacher'
+      label: 'event.teacher',
+      icon: 'fas fa-user-tie'
     }
   },
 

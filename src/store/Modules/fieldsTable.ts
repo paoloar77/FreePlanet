@@ -40,7 +40,7 @@ function AddCol(params: IColGridTable) {
 
 const colTableWhere = [
   AddCol({ name: 'code', label_trans: 'where.code' }),
-  AddCol({ name: 'placename', label_trans: 'where.placename' }),
+  AddCol({ name: 'placename', label_trans: 'cal.where' }),
   AddCol({ name: 'whereicon', label_trans: 'where.whereicon' }),
   AddCol(DeleteRec)
 ]
@@ -111,6 +111,30 @@ const colTableEvents = [
 ]
 
 export const fieldsTable = {
+  getArrStrByValueBinary(mythis, col: IColGridTable, val) {
+    const arr = this.getArrByValueBinary(mythis, col, val)
+    if (arr.length > 0)
+      return arr.join(' - ')
+    else
+      return '[---]'
+  },
+
+  getArrByValueBinary(mythis, col: IColGridTable, val) {
+    if (col.jointable) {
+      const mylist = this.getTableJoinByName(col.jointable)
+      const key = this.getKeyByTable(col.jointable)
+      const myres = []
+      mylist.forEach((myrec) => {
+        if (tools.isBitActive(val, myrec[key]))
+          myres.push(mythis.$t(myrec.label))
+      })
+
+      return myres
+    } else {
+      return []
+    }
+  },
+
   getColByTable(table) {
     if (table === 'permissions') {
       return ['value', 'label']
@@ -118,7 +142,7 @@ export const fieldsTable = {
   },
   getTableJoinByName(table) {
     if (table === 'permissions') {
-      return [shared_consts.Permissions.Normal, shared_consts.Permissions.Admin, shared_consts.Permissions.Manager, shared_consts.Permissions.Teacher]
+      return [shared_consts.Permissions.Admin, shared_consts.Permissions.Manager, shared_consts.Permissions.Teacher]
     }
   },
   getrecTableList(mytable) {
@@ -131,36 +155,56 @@ export const fieldsTable = {
     else
       return '_id'
   },
+  getLabelByTable(mytable): string {
+    const myrec = this.getrecTableList(mytable)
+    if (myrec)
+      return ((myrec.collabel) ? myrec.collabel : 'label')
+    else
+      return 'label'
+  },
+  getIconByTable(mytable): string {
+    const myrec = this.getrecTableList(mytable)
+    if (myrec)
+      return ((myrec.icon) ? myrec.icon : '')
+    else
+      return ''
+  },
   tablesList: [
     {
       value: 'operators',
       label: 'Insegnanti',
       columns: colTableOperator,
-      colkey: '_id'
+      colkey: '_id',
+      collabel: 'username'
     },
     {
       value: 'wheres',
       label: 'Luoghi',
       columns: colTableWhere,
-      colkey: '_id'
+      colkey: '_id',
+      collabel: 'placename'
     },
     {
       value: tools.TABEVENTS,
       label: 'Eventi',
       columns: colTableEvents,
-      colkey: '_id'
+      colkey: '_id',
+      collabel: 'title'
     },
     {
       value: 'contribtype',
       label: 'Tipi di Contributi',
       columns: colcontribtype,
-      colkey: '_id'
+      colkey: '_id',
+      collabel: 'label'
     },
     {
       value: 'permissions',
       label: 'Permessi',
       columns: colTablePermission,
-      colkey: 'value'
+      colkey: 'value',
+      collabel: 'label',
+      colicon: 'icon'
     }
   ],
 

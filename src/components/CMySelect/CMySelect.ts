@@ -31,7 +31,7 @@ export default class CMySelect extends Vue {
   }
 
   public changeval(newval) {
-    console.log('changeval', newval)
+    // console.log('changeval', newval)
     // const newvallab = newval[`${this.optval}`]
     // this.myvalue = newvallab
     this.$emit('update:value', newval)

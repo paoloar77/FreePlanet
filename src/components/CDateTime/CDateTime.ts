@@ -38,8 +38,12 @@ export default class CDateTime extends Vue {
       this.valueprec = this.myvalue
       this.$emit('show')
     } else {
-      if (!this.saveit)
-        this.myvalue = this.valueprec
+      if (!this.saveit) {
+        if (this.myvalue !== this.valueprec) {
+          this.myvalue = this.valueprec
+          tools.showNeutralNotif(this.$q, this.$t('db.reccanceled'))
+        }
+      }
     }
   }
 
@@ -73,7 +77,7 @@ export default class CDateTime extends Vue {
   }
 
   public changeval(newval) {
-    console.log('changeval', newval)
+    // console.log('changeval', newval)
     this.$emit('update:value', newval)
   }
 }

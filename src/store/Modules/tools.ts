@@ -37,6 +37,23 @@ export interface INotify {
 }
 
 export const tools = {
+  listBestColor: [
+    'blue',
+    'green',
+    'purple',
+    'deep-purple',
+    'indigo',
+    'light-blue',
+    'cyan',
+    'teal',
+    'lime',
+    'orange',
+    'deeporange',
+    'grey',
+    'blue-gray',
+    'yellow'
+  ],
+
   TABEVENTS: 'myevents',
 
   MAX_CHARACTERS: 60,
@@ -1405,6 +1422,10 @@ export const tools = {
     tools.showNotif(q, msg, { color: 'negative', icon: 'notifications' })
   },
 
+  showNeutralNotif(q: any, msg) {
+    tools.showNotif(q, msg, { color: 'warning', icon: 'notifications' })
+  },
+
   showNotif(q: any, msg, data ?: INotify | null
   ) {
     let myicon = data ? data.icon : 'ion-add'
@@ -2494,7 +2515,10 @@ export const tools = {
   },
 
   isBitActive(bit, whattofind) {
-    return ((bit & whattofind) === whattofind)
+    if (whattofind > 0)
+      return ((bit & whattofind) === whattofind)
+    else
+      return false
   },
 
   SetBit(myval, bit) {
@@ -2513,6 +2537,13 @@ export const tools = {
       .filter(e => arr[e]).map(e => arr[e])
 
     return unique
+  },
+
+  getColorByIndexBest(index) {
+    if (index < this.listBestColor.length - 1)
+      return this.listBestColor[index]
+    else
+      return 'primary'
   }
 
 // getLocale() {
