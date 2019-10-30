@@ -10,6 +10,8 @@
                         <q-toolbar-title>
                             {{ $t('cal.event') }}
                         </q-toolbar-title>
+                        <q-btn v-if="editable" flat round color="white" icon="fas fa-copy" v-close-popup
+                               @click="duplicateEvent(myevent)"></q-btn>
                         <q-btn v-if="editable" flat round color="white" icon="delete" v-close-popup
                                @click="deleteEvent(myevent)"></q-btn>
                         <q-btn v-if="editable" flat round color="white" icon="edit" v-close-popup

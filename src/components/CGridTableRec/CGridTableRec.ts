@@ -338,7 +338,6 @@ export default class CGridTableRec extends Vue {
     }
   }
 
-
   public ActionAfterYes(action, item, data) {
     if (action === lists.MenuAction.DELETE_RECTABLE) {
       if (this.serverData.length > 0)

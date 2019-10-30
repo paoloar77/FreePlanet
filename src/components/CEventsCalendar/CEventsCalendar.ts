@@ -492,6 +492,17 @@ export default class CEventsCalendar extends Vue {
     tools.CancelEvent(this, eventparam)
   }
 
+  public duplicateEvent(eventparam) {
+    GlobalStore.actions.DuplicateRec({ table: tools.TABEVENTS, id: eventparam._id }).then((rec) => {
+      rec.dateTimeStart = new Date()
+      rec.dateTimeEnd = new Date()
+      CalendarStore.state.eventlist.push(rec)
+      this.editEvent(rec)
+
+    })
+    // tools.ActionRecTable(this, lists.MenuAction.DUPLICATE_RECTABLE, tools.TABEVENTS, eventparam._id, eventparam, 'db.duplicatedrecord')
+  }
+
   public findEventIndex(eventparam) {
     for (let i = 0; i < CalendarStore.state.eventlist.length; ++i) {
       if (eventparam) {
