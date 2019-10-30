@@ -39,15 +39,15 @@
                                 <span class="cal__teacher-content">
                                     <q-chip>
                                         <q-avatar>
-                                            <img :src="`../../statics/images/` + getImgByUsername(myevent.teacher)">
+                                            <img :src="getImgByUsername(myevent.teacher)">
                                         </q-avatar>
                                         <span class="cal__teacher-content">{{getUserByUsername(myevent.teacher)}}</span>
                                     </q-chip>
-                                    <span v-if="getImgByUsername(myevent.teacher2) && myevent.teacher2"
+                                    <span v-if="getImgByUsername(myevent.teacher2) && isValidUsername(myevent.teacher2)"
                                           class="margin_avatar2"></span>
-                                    <q-chip v-if="getImgByUsername(myevent.teacher2) && myevent.teacher2">
+                                    <q-chip v-if="getImgByUsername(myevent.teacher2) && isValidUsername(myevent.teacher2)">
                                         <q-avatar>
-                                            <img :src="`../../statics/images/` + getImgByUsername(myevent.teacher2)">
+                                            <img :src="getImgByUsername(myevent.teacher2)">
                                         </q-avatar>
                                         <span class="cal__teacher-content">{{getUserByUsername(myevent.teacher2)}}</span>
                                     </q-chip>
@@ -109,10 +109,15 @@
                                 v-if="contextDay"
                                 ref='myevent'
                                 class="q-gutter-sm">
+                            <q-input color="grey-1" v-model="eventForm.short_tit" autofocus
+                                     :input-style="`background-color: ${eventForm.bgcolor} !important; color: white !important; font-weight: bold; `"
+                                     borderless rounded dense :label="$t('event.short_tit')"
+                                     ></q-input>
+
                             <q-input color="grey-1" v-model="eventForm.title" autofocus
                                      :input-style="`background-color: ${eventForm.bgcolor} !important; color: white !important; font-weight: bold; `"
                                      borderless rounded dense :label="$t('event.title')"
-                                     :rules="[v => v && v.length > 0 || 'Field cannot be empty']"></q-input>
+                                     :rules="[v => v && v.length > 0 || $t('event.notempty')]"></q-input>
 
                             <CMyEditor :value.sync="eventForm.details">
 
@@ -425,7 +430,7 @@
                             <q-badge
                                     :key="index"
                                     style="width: 100%; cursor: pointer;"
-                                    class="ellipsis"
+                                    class=""
                                     :class="badgeClasses(event, 'day')"
                                     :style="badgeStyles(event, 'day')"
                                     @click.stop.prevent="showEvent(event)"
@@ -435,9 +440,12 @@
                                     @dragenter.native="(e) => onDragEnter(e, event)"
                                     @touchmove.native="(e) => {}"
                             >
-                                <q-icon v-if="event.icon" :name="event.icon" class="q-mr-xs"></q-icon>
-                                <span class="ellipsis">{{ event.title }}</span>
+
+                                <span class="">{{ getTitleEv(event) }}</span>
                             </q-badge>
+                            <div class="text-center"><img :src="getImgEvent(event)"
+                                 class="text-center listaev__tdimg_small">
+                            </div>
                         </template>
                     </template>
 
@@ -475,7 +483,7 @@
                         <template v-for="(event, index) in getEvents(date)">
                             <q-badge
                                     :key="index"
-                                    class="my-event justify-center ellipsis"
+                                    class="my-event justify-center"
                                     :class="badgeClasses(event, 'body')"
                                     :style="badgeStyles(event, 'body', timeStartPos, timeDurationHeight)"
                                     @click.stop.prevent="showEvent(event)"
@@ -486,7 +494,7 @@
                                     @touchmove.native="(e) => {}"
                             >
                                 <q-icon v-if="event.icon" :name="event.icon" class="q-mr-xs"></q-icon>
-                                <span class="ellipsis">{{ event.title }}</span>
+                                <span class="">{{ getTitleEv(event) }}</span>
                             </q-badge>
                         </template>
                     </template>
@@ -558,14 +566,14 @@
 
                                 <q-chip>
                                     <q-avatar>
-                                        <img :src="`../../statics/images/` + getImgByUsername(event.teacher)">
+                                        <img :src="getImgByUsername(event.teacher)">
                                     </q-avatar>
                                     <span class="cal__teacher-content">{{getUserByUsername(event.teacher)}}</span>
                                 </q-chip>
-                                <span v-if="getImgByUsername(event.teacher2)" class="margin_avatar2"></span>
-                                <q-chip v-if="getImgByUsername(event.teacher2) && event.teacher2">
+                                <span v-if="getImgByUsername(event.teacher2) && isValidUsername(event.teacher2)" class="margin_avatar2"></span>
+                                <q-chip v-if="getImgByUsername(event.teacher2) && isValidUsername(event.teacher2)">
                                     <q-avatar>
-                                        <img :src="`../../statics/images/` + getImgByUsername(event.teacher2)">
+                                        <img :src="getImgByUsername(event.teacher2)">
                                     </q-avatar>
                                     <span class="cal__teacher-content">{{getUserByUsername(event.teacher2)}}</span>
                                 </q-chip>

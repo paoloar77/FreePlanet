@@ -201,6 +201,7 @@ export interface IFunctionality {
   ENABLE_PROJECTS_LOADING?: boolean
   SHOW_NEWSLETTER?: boolean
   SHOW_ONLY_POLICY?: boolean
+  SHOW_MESSAGES?: boolean
   BOOKING_EVENTS?: boolean
 }
 

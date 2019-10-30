@@ -252,7 +252,14 @@ export default class CEventsCalendar extends Vue {
   }
 
   get dayHeight() {
-    return CalendarStore.state.dayHeight
+    if (Screen.height < 500)
+      return 100
+    if (Screen.height < 700)
+      return 110
+    else if (Screen.height < 800)
+      return 120
+    else
+      return 140
   }
 
   get theme() {
@@ -996,5 +1003,9 @@ export default class CEventsCalendar extends Vue {
     // console.log('datenow', datenow, 'end', myevent.dateTimeEnd)
 
     return (new Date(myevent.dateTimeEnd) >= datenow)
+  }
+
+  public getTitleEv(event: IEvents) {
+    return (!!event.short_tit) ? event.short_tit : event.title
   }
 }

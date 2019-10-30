@@ -275,6 +275,7 @@ const msgglobal = {
       canceled: 'Cancellato',
       deleted: 'Eliminato',
       duplicate: 'Duplica',
+      notempty: 'Il campo non può essere vuoto',
       modified: 'Modificato'
     },
     newsletter: {
@@ -559,6 +560,7 @@ const msgglobal = {
       canceled: 'Cancelado',
       deleted: 'Eliminado',
       duplicate: 'Duplica',
+      notempty: 'El campo no puede estar vacío.',
       modified: 'Modificado'
     },
     newsletter: {
@@ -842,6 +844,7 @@ const msgglobal = {
       canceled: 'Annulé',
       deleted: 'Supprimé',
       duplicate: 'Duplique',
+      notempty: 'Le champ ne peut pas être vide',
       modified: 'modifié'
     },
     newsletter: {
@@ -1124,6 +1127,7 @@ const msgglobal = {
       canceled: 'Canceled',
       deleted: 'Deleted',
       duplicate: 'Duplicate',
+      notempty: 'Field cannot be empty',
       modified: 'Modified'
     },
     newsletter: {
@@ -1408,6 +1412,7 @@ const msgglobal = {
       canceled: 'Canceled',
       deleted: 'Deleted',
       duplicate: 'Duplicate',
+      notempty: 'Field cannot be empty',
       modified: 'Modified'
     },
     newsletter: {

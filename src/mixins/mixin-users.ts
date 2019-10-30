@@ -30,6 +30,10 @@ export default class MixinUsers extends Vue {
     return `statics/` + UserStore.getters.getImgByUsername(username)
   }
 
+  public isValidUsername(username) {
+    return username && username !== 'nessuno' && username !== 'none'
+  }
+
   public getMyUsername() {
     return UserStore.state.my.username
   }

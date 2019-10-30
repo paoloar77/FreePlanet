@@ -92,8 +92,9 @@
                     </q-list>
                 </q-btn-dropdown>
 
-
-                <message-popover></message-popover>
+                <div v-if="static_data.functionality.SHOW_MESSAGES">
+                    <message-popover></message-popover>
+                </div>
 
                 <!--
                 <div class="right-itens">
@@ -102,7 +103,8 @@
 
                 <!-- BUTTON USER BAR -->
 
-                <q-btn class="q-mx-xs" v-if="static_data.functionality.SHOW_USER_MENU && !isLogged" dense flat round icon="menu"
+                <q-btn class="q-mx-xs" v-if="static_data.functionality.SHOW_USER_MENU && !isLogged" dense flat round
+                       icon="menu"
                        @click="rightDrawerOpen = !rightDrawerOpen">
                 </q-btn>
                 <q-btn class="q-mx-xs" v-if="static_data.functionality.SHOW_USER_MENU && isLogged" round dense flat

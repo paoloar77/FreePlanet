@@ -36,10 +36,10 @@ const state: ICalendarState = {
   showWorkWeeks: false,
   intervalRange: { min: 9, max: 23 },
   intervalRangeStep: 1,
-  intervalHeight: 35,
-  resourceHeight: 60,
+  intervalHeight: 35, // 35
+  resourceHeight: 80, // 60
   resourceWidth: 100,
-  dayHeight: 100,
+  dayHeight: 150,
   enableThemes: false,
   theme: {}
 }

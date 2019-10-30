@@ -134,6 +134,14 @@ $graytext: #555;
     height: 150px;
   }
 
+  &__tdimg_small {
+    width: auto;
+    height: 50px !important;
+    @media (max-width: 800px) {
+      height: 40px !important;
+    }
+  }
+
   &__table {
     margin: 10px;
     border: solid 1px #4198ef;
