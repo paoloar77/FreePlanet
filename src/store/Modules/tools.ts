@@ -1719,7 +1719,7 @@ export const tools = {
       } else {
         mystr = `${tools.getstrDate(myevent.dateTimeStart)}
                  ${mythis.$t('cal.starttime')} ${ tools.getstrTime(myevent.dateTimeStart) }          
-                 ${ mythis.$t('cal.endtime')}: ${ tools.getstrTime(myevent.dateTimeEnd) }`
+                 ${ mythis.$t('cal.endtime')} ${ tools.getstrTime(myevent.dateTimeEnd) }`
       }
     } else {
       mystr = `<span class="cal__where-content">${tools.getstrDate(myevent.dateTimeStart)}</span>
@@ -1783,10 +1783,7 @@ export const tools = {
   },
 
 // mystrdate "26.04.2013"
-  convertstrtoDate(mystrdate
-                     :
-                     string
-  ) {
+  convertstrtoDate(mystrdate: string) {
     if (mystrdate.length < 10) {
       return null
     }
@@ -2552,10 +2549,14 @@ export const tools = {
     else
       return 'primary'
   },
-  getCookie(mytok) {
+  getCookie(mytok, oldval?) {
     const ris = Cookies.get(mytok)
-    console.log('getToken', ris)
-    return ris
+    console.log('getCookie', ris)
+    if (!!ris) {
+      return ris
+    } else {
+      return oldval
+    }
   },
 
   setCookie(mytok, value: string) {
@@ -2564,6 +2565,17 @@ export const tools = {
 
   removeCookie(mytok) {
     return Cookies.remove(mytok)
+  },
+  notshowPwd(payload) {
+    const mypay = {...payload}
+    try{
+      if (!!mypay.password) {
+        mypay.password = '**********'
+      }
+    }catch (e) {
+      console.log('error', e)
+    }
+    return mypay
   }
 
 // getLocale() {

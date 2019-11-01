@@ -199,15 +199,15 @@ namespace Getters {
 
 namespace Mutations {
   function authUser(mystate: IUserState, data: IUserFields) {
-    mystate.my = {...data}
+    mystate.my = { ...data }
 
     mystate.isAdmin = tools.isBitActive(mystate.my.perm, shared_consts.Permissions.Admin.value)
     mystate.isManager = tools.isBitActive(mystate.my.perm, shared_consts.Permissions.Manager.value)
     mystate.isTeacher = tools.isBitActive(mystate.my.perm, shared_consts.Permissions.Teacher.value)
 
     // console.log('authUser', 'state.isAdmin', mystate.isAdmin)
-    console.table(mystate)
-    console.table(data)
+    // console.table(mystate)
+    // console.table(data)
 
     // if (data.my.verified_email) {
     //   mystate.my.verified_email = data.my.verified_email
@@ -564,7 +564,10 @@ namespace Actions {
             localStorage.setItem(tools.localStorage.name, myuser.name)
             localStorage.setItem(tools.localStorage.surname, myuser.surname)
             localStorage.setItem(tools.localStorage.perm, String(myuser.perm) || '')
-            localStorage.setItem(tools.localStorage.img, String(myuser.profile.img) || '')
+            if (myuser.profile !== undefined)
+              localStorage.setItem(tools.localStorage.img, (!!myuser.profile.img) ? String(myuser.profile.img) || '' : '')
+            else
+              localStorage.setItem(tools.localStorage.img, '')
             localStorage.setItem(tools.localStorage.token, state.x_auth_token)
             localStorage.setItem(tools.localStorage.expirationDate, expirationDate.toString())
             localStorage.setItem(tools.localStorage.isLogged, String(true))

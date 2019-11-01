@@ -50,7 +50,7 @@ export default class CGridTableRec extends Vue {
   public spinner_visible: boolean = false
 
   public idsel: string = ''
-  public colsel: IColGridTable = {name: ''}
+  public colsel: IColGridTable = { name: '' }
   public valPrec: string = ''
 
   public separator: 'horizontal'
@@ -118,6 +118,7 @@ export default class CGridTableRec extends Vue {
   }
 
   public updatedcol() {
+    console.log('updatedcol')
     if (this.mycolumns) {
       this.colVisib = []
       this.colExtra = []
@@ -137,6 +138,7 @@ export default class CGridTableRec extends Vue {
   }
 
   public onRequest(props) {
+    console.log('onRequest')
     const { page, rowsPerPage, rowsNumber, sortBy, descending } = props.pagination
     const filter = this.filter
 
@@ -314,19 +316,28 @@ export default class CGridTableRec extends Vue {
 
   public mounted() {
 
-    this.canEdit = tools.getCookie(tools.CAN_EDIT) === 'true'
+    this.canEdit = tools.getCookie(tools.CAN_EDIT, this.canEdit) === 'true'
 
-    this.tablesel = tools.getCookie('tablesel')
+    this.tablesel = tools.getCookie('tablesel', this.tablesel)
+    if (this.tablesel === '') {
+      if (!!this.tablesList)
+        this.tablesel = this.tablesList[0].value
+      else
+        this.tablesel = this.mytable
+    }
 
     this.changeTable(false)
 
   }
 
   public refresh() {
-    if (this.search !== '')
+    // console.log('this.search', this.search)
+    if (!!this.search && this.search !== '')
       this.filter = this.search
     else
       this.filter = ''
+
+    // console.log('this.filter', this.filter)
 
     this.onRequest({
       pagination: this.pagination
@@ -409,7 +420,7 @@ export default class CGridTableRec extends Vue {
       mytab = this.tablesList.find((rec) => rec.value === this.tablesel)
     }
 
-    console.log('this.tablesel', this.tablesel)
+    console.log('this.tablesel', this.tablesel, 'mytab', mytab)
 
     if (mytab) {
       this.mytitle = mytab.label
@@ -417,10 +428,17 @@ export default class CGridTableRec extends Vue {
       this.mycolumns = [...mytab.columns]
     }
 
-    this.mycolumns.forEach((rec: IColGridTable) => {
-      if (rec.label_trans)
-        rec.label = this.$t(rec.label_trans)
-    })
+    console.log('this.mycolumns')
+    console.log(this.mycolumns)
+    console.log('this.tablesList:')
+    console.table(this.tablesList)
+
+    if (!!this.mycolumns) {
+      this.mycolumns.forEach((rec: IColGridTable) => {
+        if (rec.label_trans)
+          rec.label = this.$t(rec.label_trans)
+      })
+    }
 
     if (mytab) {
       this.mytable = mytab.value
@@ -431,7 +449,7 @@ export default class CGridTableRec extends Vue {
     this.updatedcol()
 
     if (!!this.mytable) {
-      const myselcol = tools.getCookie(this.mytable)
+      const myselcol = tools.getCookie(this.mytable, '')
       if (!!myselcol && myselcol.length > 0) {
         this.colVisib = myselcol.split('|')
       }
