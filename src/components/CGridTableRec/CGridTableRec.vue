@@ -35,13 +35,14 @@
 
                 <!--<p style="color:red"> Rows: {{ getrows }}</p>-->
 
-                <q-input v-model="search" filled dense type="search" hint="Search" v-on:keyup.enter="doSearch">
+                <q-input v-model="search" filled dense type="search" debounce="500" hint="Search" v-on:keyup.enter="doSearch">
                     <template v-slot:after>
                         <q-btn v-if="mytable" label="" color="primary" @click="refresh" icon="search"></q-btn>
                     </template>
                 </q-input>
-                <q-toggle v-if="mytable" v-model="funcActivated" :val="lists.MenuAction.CAN_EDIT_TABLE" class="q-mx-sm"
-                          :label="$t('grid.editvalues')"></q-toggle>
+                <q-toggle v-if="mytable" v-model="canEdit" :val="lists.MenuAction.CAN_EDIT_TABLE" class="q-mx-sm"
+                          :label="$t('grid.editvalues')" @input="changefuncAct"
+                ></q-toggle>
 
                 <q-btn v-if="mytable" flat dense color="primary" :disable="loading || !canEdit"
                        :label="$t('grid.addrecord')"
@@ -64,7 +65,8 @@
                         map-options
                         :options="mycolumns"
                         option-value="name"
-                        style="min-width: 150px">
+                        style="min-width: 150px"
+                        @input="changeCol">
 
                 </q-select>
 
@@ -94,7 +96,8 @@
                             <CDateTime
                                     :label="col.label"
                                     class="cursor-pointer"
-                                    :value.sync="props.row[col.name]"
+                                    :valueDate="props.row[col.name]"
+                                    :readonly="false"
                                     :dense="true"
                                     :canEdit="canEdit"
                                     @savetoclose="SaveValue"
@@ -145,13 +148,33 @@
                             </q-popup-edit>
                         </div>
                     </div>
-                    <div v-else>
+                    <div v-else-if="col.fieldtype === tools.FieldType.string">
                         <div :class="getclassCol(col)">
                             {{ visuValByType(col, props.row[col.name]) }}
                             <q-popup-edit v-if="canEdit" v-model="props.row[col.name]" :disable="col.disable"
                                           :title="col.title" buttons
                                           @save="SaveValue" @show="selItem(props.row, col)">
-                                <q-input v-model="props.row[col.name]"/>
+                                <q-input v-model="props.row[col.name]"
+                                         autofocus
+                                >
+
+                                </q-input>
+
+                            </q-popup-edit>
+                        </div>
+                    </div>
+                    <div v-else-if="col.fieldtype === tools.FieldType.html">
+                        <div :class="getclassCol(col)">
+                            {{ visuValByType(col, props.row[col.name]) }}
+                            <q-popup-edit v-if="canEdit" v-model="props.row[col.name]" :disable="col.disable"
+                                          :title="col.title" buttons
+                                          @save="SaveValue" @show="selItem(props.row, col)">
+                                <q-input v-model="props.row[col.name]"
+                                         autofocus
+                                         @keyup.enter.stop
+                                         type="textarea">
+
+                                </q-input>
 
                             </q-popup-edit>
                         </div>

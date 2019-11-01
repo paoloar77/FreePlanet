@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import { GlobalStore, UserStore, MessageStore } from '../store/Modules'
 
-
 import Component from 'vue-class-component'
 import { func_tools } from '../store/Modules/toolsext'
 import { tools } from '../store/Modules/tools'

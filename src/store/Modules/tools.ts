@@ -30,6 +30,10 @@ import { dom } from 'quasar'
 
 const { height, width } = dom
 
+import Cookies from 'js-cookie'
+
+const TokenKey = 'Admin-Token'
+
 export interface INotify {
   color?: string | 'primary'
   textColor?: string
@@ -37,6 +41,8 @@ export interface INotify {
 }
 
 export const tools = {
+  CAN_EDIT: 'q-ce',
+
   listBestColor: [
     'blue',
     'green',
@@ -117,7 +123,8 @@ export const tools = {
     boolean: 1,
     date: 2,
     string: 4,
-    binary: 8
+    binary: 8,
+    html: 16
   },
 
   SelectListNumPeople: [
@@ -2544,6 +2551,19 @@ export const tools = {
       return this.listBestColor[index]
     else
       return 'primary'
+  },
+  getCookie(mytok) {
+    const ris = Cookies.get(mytok)
+    console.log('getToken', ris)
+    return ris
+  },
+
+  setCookie(mytok, value: string) {
+    return Cookies.set(mytok, value)
+  },
+
+  removeCookie(mytok) {
+    return Cookies.remove(mytok)
   }
 
 // getLocale() {

@@ -59,12 +59,19 @@ const colTablePermission = [
 
 const colTableOperator = [
   AddCol({ name: 'username', label_trans: 'reg.username' }),
-  // AddCol({ name: 'name', label_trans: 'reg.name' }),
-  // AddCol({ name: 'surname', label_trans: 'reg.surname' }),
-  // AddCol({ name: 'webpage', label_trans: 'reg.webpage' }),
-  // AddCol({ name: 'email', label_trans: 'reg.email' }),
-  // AddCol({ name: 'cell', label_trans: 'reg.cell' }),
-  // AddCol({ name: 'img', label_trans: 'reg.img' }),
+  AddCol({ name: 'name', label_trans: 'reg.name' }),
+  AddCol({ name: 'surname', label_trans: 'reg.surname' }),
+  AddCol({ name: 'email', label_trans: 'reg.email' }),
+  AddCol({ name: 'img', label_trans: 'event.img' }),
+  AddCol({ name: 'cell', label_trans: 'reg.cell' }),
+  AddCol({ name: 'qualification', label_trans: 'op.qualification' }),
+  AddCol({ name: 'disciplines', label_trans: 'op.disciplines' }),
+  AddCol({ name: 'certifications', label_trans: 'op.certifications' }),
+  AddCol({ name: 'intro', label_trans: 'op.intro' , fieldtype: tools.FieldType.html }),
+  AddCol({ name: 'info', label_trans: 'op.info', fieldtype: tools.FieldType.html }),
+  AddCol({ name: 'webpage', label_trans: 'op.webpage' }),
+  AddCol({ name: 'days_working', label_trans: 'op.days_working' }),
+  AddCol({ name: 'facebook', label_trans: 'op.facebook' }),
   AddCol(DeleteRec)]
 
 const colTableEvents = [
@@ -74,7 +81,7 @@ const colTableEvents = [
   AddCol({ name: 'title', label_trans: 'event.title' }),
   AddCol({ name: 'details', label_trans: 'event.details' }),
   AddCol({ name: 'dateTimeStart', label_trans: 'event.dateTimeStart', fieldtype: tools.FieldType.date }),
-  AddCol({ name: 'dateTimeEnd', label_trans: 'event.dateTimeEnd' }),
+  AddCol({ name: 'dateTimeEnd', label_trans: 'event.dateTimeEnd', fieldtype: tools.FieldType.date }),
   AddCol({ name: 'bgcolor', label_trans: 'event.bgcolor' }),
   AddCol({ name: 'icon', label_trans: 'event.icon' }),
   AddCol({ name: 'img_small', label_trans: 'event.img_small' }),
@@ -214,6 +221,7 @@ export const fieldsTable = {
     AddCol({ name: 'name', label_trans: 'reg.name' }),
     AddCol({ name: 'surname', label_trans: 'reg.surname' }),
     AddCol({ name: 'email', label_trans: 'reg.email' }),
+    AddCol({ name: 'cell', label_trans: 'reg.cell' }),
     AddCol({ name: 'date_reg', label_trans: 'reg.date_reg', fieldtype: tools.FieldType.date }),
     AddCol({ name: 'perm', label_trans: 'reg.perm', fieldtype: tools.FieldType.binary, jointable: 'permissions' }),
     AddCol({ name: 'img', label_trans: 'reg.img', sortable: false }),

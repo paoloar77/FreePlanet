@@ -3,7 +3,7 @@ import { Component, Prop, Watch } from 'vue-property-decorator'
 
 import { tools } from '../../store/Modules/tools'
 import { toolsext } from '@src/store/Modules/toolsext'
-import { IPerson } from '../../model/GlobalStore'
+import { IOperators } from '../../model/GlobalStore'
 
 @Component({
   name: 'CCard',
@@ -16,28 +16,28 @@ import { IPerson } from '../../model/GlobalStore'
 
 export default class CCard extends Vue {
   @Prop({ required: true, default: 'one' }) public tab
+  @Prop({ required: true }) public op: IOperators
 
   public clicca() {
     this.tab = 'two'
   }
 
-  @Prop({ required: true }) public op: IPerson
-
   get tools() {
     return tools
   }
 
-  get myop() {
+  get myop(): IOperators {
     if (!!this.op) {
       return this.op
     } else {
       return {
-        index: 0,
         tab: '',
+        username: '',
         name: '',
-        sub1: '',
-        sub2: '',
-        sub3: '',
+        surname: '',
+        qualification: '',
+        disciplines: '',
+        certifications: '',
         img: '',
         cell: '',
         email: '',

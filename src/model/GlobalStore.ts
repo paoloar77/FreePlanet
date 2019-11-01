@@ -98,21 +98,22 @@ export interface IListRoutes {
   separator?: boolean
 }
 
-export interface IPerson {
-  index?: number
-  tab?: string
+export interface IOperators {
+  username: string
   name: string
-  sub1: string
-  sub2?: string
-  sub3?: string
-  img: string
-  cell?: string
+  surname: string
   email?: string
+  qualification?: string
+  disciplines?: string
+  certifications?: string
+  img?: string
+  cell?: string
   paginaweb?: string
   paginafb?: string
   intro?: string
   info?: string
   vario?: string
+  tab?: string
 }
 
 export interface IPreloadImages {

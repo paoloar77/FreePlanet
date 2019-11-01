@@ -21,7 +21,7 @@ import { CMyChipList } from '../CMyChipList'
 export default class CGridTableRec extends Vue {
   @Prop({ required: false }) public prop_mytable: string
   @Prop({ required: true }) public prop_mytitle: string
-  @Prop({ required: false, default: [] }) public prop_mycolumns: any[]
+  @Prop({ required: false, default: null }) public prop_mycolumns: any[]
   @Prop({ required: false, default: '' }) public prop_colkey: string
   @Prop({ required: false, default: '' }) public nodataLabel: string
   @Prop({ required: false, default: '' }) public noresultLabel: string
@@ -57,16 +57,12 @@ export default class CGridTableRec extends Vue {
   public filter: string = ''
   public rowsel: any
   public dark: boolean = true
-  public funcActivated = []
+  public canEdit: boolean = false
 
   public returnedData
   public returnedCount
   public colVisib: any[] = []
   public colExtra: any[] = []
-
-  get canEdit() {
-    return this.funcActivated.includes(lists.MenuAction.CAN_EDIT_TABLE)
-  }
 
   get lists() {
     return lists
@@ -79,7 +75,7 @@ export default class CGridTableRec extends Vue {
   }
 
   public selItem(item, col: IColGridTable) {
-    // console.log('item', item)
+    console.log('selItem', item)
     this.rowsel = item
     this.idsel = item._id
     this.colsel = col
@@ -317,6 +313,11 @@ export default class CGridTableRec extends Vue {
   }
 
   public mounted() {
+
+    this.canEdit = tools.getCookie(tools.CAN_EDIT) === 'true'
+
+    this.tablesel = tools.getCookie('tablesel')
+
     this.changeTable(false)
 
   }
@@ -382,24 +383,33 @@ export default class CGridTableRec extends Vue {
         return '[]'
       } else {
         let mystr = tools.firstchars(val, tools.MAX_CHARACTERS)
-        if (val.length > tools.MAX_CHARACTERS)
-          mystr += '...'
+        if (val) {
+          if (val.length > tools.MAX_CHARACTERS)
+            mystr += '...'
+        } else {
+          return val
+        }
         return mystr
       }
     }
   }
 
+  public changeCol(newval) {
+    tools.setCookie(this.mytable, this.colVisib.join('|'))
+  }
+
   public changeTable(mysel) {
-    // console.log('changeTable')
+    if (this.tablesel === undefined || this.tablesel === '')
+      return
+
+    console.log('changeTable mysel=', mysel, 'tablesel', this.tablesel)
 
     let mytab = null
     if (this.tablesList) {
-      if (!this.tablesel) {
-        this.tablesel = this.tablesList[1].value
-      }
-
       mytab = this.tablesList.find((rec) => rec.value === this.tablesel)
     }
+
+    console.log('this.tablesel', this.tablesel)
 
     if (mytab) {
       this.mytitle = mytab.label
@@ -416,7 +426,17 @@ export default class CGridTableRec extends Vue {
       this.mytable = mytab.value
     }
 
+    tools.setCookie('tablesel', this.tablesel)
+
     this.updatedcol()
+
+    if (!!this.mytable) {
+      const myselcol = tools.getCookie(this.mytable)
+      if (!!myselcol && myselcol.length > 0) {
+        this.colVisib = myselcol.split('|')
+      }
+    }
+
     this.refresh()
   }
 
@@ -429,8 +449,11 @@ export default class CGridTableRec extends Vue {
   }
 
   public doSearch() {
-
     this.refresh()
+  }
+
+  public changefuncAct(newval) {
+    tools.setCookie(tools.CAN_EDIT, newval)
   }
 
 }

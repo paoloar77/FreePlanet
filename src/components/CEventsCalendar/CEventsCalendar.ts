@@ -32,9 +32,10 @@ import { GlobalStore, MessageStore } from '../../store/Modules'
 import { IMessagePage, IMessage, IIdentity, MsgDefault } from '../../model'
 import MixinUsers from '../../mixins/mixin-users'
 import { CDateTime } from '../CDateTime'
+import MixinOperator from '../../mixins/mixin-operator'
 
 @Component({
-  mixins: [MixinUsers],
+  mixins: [MixinOperator, MixinUsers],
   name: 'CEventsCalendar',
   components: { Logo, Footer, CTitle, CImgText, QDateTimeScroller, QDateScroller, CMySelect, CMyEditor, CDateTime }
 })
@@ -397,6 +398,14 @@ export default class CEventsCalendar extends Vue {
     this.myevent = eventparam
     this.displayEvent = true
     // console.log('showEvent - FINE ' + myevent)
+  }
+
+  public selectEvent(eventparam: IEvents) {
+    if (this.myevent === eventparam)
+      this.myevent = null
+    else
+      this.myevent = eventparam
+
   }
 
   public onDateChanged(mydate) {
@@ -1018,5 +1027,11 @@ export default class CEventsCalendar extends Vue {
 
   public getTitleEv(event: IEvents) {
     return (!!event.short_tit) ? event.short_tit : event.title
+  }
+
+  public getStyleByEvent(event: IEvents) {
+    if (event === this.myevent) {
+      return 'border: inset; border-color: darkblue; border-width: 3px; padding: 5px !important; '
+    }
   }
 }

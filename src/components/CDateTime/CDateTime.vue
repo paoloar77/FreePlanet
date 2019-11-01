@@ -37,11 +37,11 @@
             </template>
             <template v-slot:append>
                 <q-icon v-if="canEdit" name="event" class="cursor-pointer">
-                    <q-popup-proxy v-model="showDateTimeScroller">
+                    <q-popup-proxy v-model="showDateTimeScroller" @before-show="Opening" @before-hide="Closing">
 
                         <q-date-time-scroller
                                 v-model="myvalue"
-                                :locale="locale"
+                                :locale="toolsext.getLocale()"
                                 :hour24-format="true"
                                 :rounded-borders="true"
                                 border-color="#2196f3"

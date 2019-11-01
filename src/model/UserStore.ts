@@ -5,7 +5,23 @@ export const DefaultUser: IUserFields = {
   username: '',
   name: '',
   surname: '',
-  password: ''
+  password: '',
+  profile: {
+    img: ''
+  }
+}
+
+const enum ESexType {
+  None = 0,
+  Male = 1,
+  Female = 2
+}
+
+export interface IUserProfile {
+  img?: string
+  cell?: string
+  dateofbirth?: Date
+  sex?: ESexType
 }
 
 export interface IUserFields {
@@ -17,10 +33,10 @@ export interface IUserFields {
   password?: string
   ipaddr?: string
   perm?: number
-  img?: string
   verified_email?: boolean
   tokens?: IToken[]
   lasttimeonline?: Date
+  profile?: IUserProfile
 }
 
 /*

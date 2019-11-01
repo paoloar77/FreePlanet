@@ -30,7 +30,10 @@ const state: IUserState = {
     surname: '',
     password: '',
     tokens: [],
-    verified_email: false
+    verified_email: false,
+    profile: {
+      img: ''
+    }
   },
   lang: process.env.LANG_DEFAULT,
   repeatPassword: '',
@@ -143,8 +146,8 @@ namespace Getters {
       return 'images/avatar/avatar3_small.png'
     // Check if is this User!
     const myrec = UserStore.getters.getUserByUsername(username)
-    if (myrec && !!myrec.img && myrec.img !== '' && myrec.img !== 'undefined') {
-      return myrec.img
+    if (myrec && myrec.profile && !!myrec.profile.img && myrec.profile.img !== '' && myrec.profile.img !== 'undefined') {
+      return myrec.profile.img
     } else {
       return 'images/avatar/avatar3_small.png'
     }
@@ -561,7 +564,7 @@ namespace Actions {
             localStorage.setItem(tools.localStorage.name, myuser.name)
             localStorage.setItem(tools.localStorage.surname, myuser.surname)
             localStorage.setItem(tools.localStorage.perm, String(myuser.perm) || '')
-            localStorage.setItem(tools.localStorage.img, String(myuser.img) || '')
+            localStorage.setItem(tools.localStorage.img, String(myuser.profile.img) || '')
             localStorage.setItem(tools.localStorage.token, state.x_auth_token)
             localStorage.setItem(tools.localStorage.expirationDate, expirationDate.toString())
             localStorage.setItem(tools.localStorage.isLogged, String(true))
@@ -685,7 +688,7 @@ namespace Actions {
             surname,
             verified_email,
             perm,
-            img
+            profile: { img }
           })
 
           isLogged = true
