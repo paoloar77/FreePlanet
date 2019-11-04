@@ -76,9 +76,7 @@
                                 <q-item clickable v-if="!!chatsel.username" @scroll="myonScroll">
 
                                     <q-item-section avatar>
-                                        <q-avatar>
-                                            <img :src="getImgByUsername(chatsel.username)">
-                                        </q-avatar>
+                                        <CMyAvatar :username="chatsel.username"></CMyAvatar>
                                     </q-item-section>
 
                                     <q-item-section>
@@ -116,9 +114,7 @@
                                                 sent
                                                 bg-color="blue-2">
                                             <template v-slot:avatar>
-                                                <q-avatar size="sm">
-                                                    <img :src="getMyImg">
-                                                </q-avatar>
+                                                <CMyAvatar size="sm" :username="Username"></CMyAvatar>
                                             </template>
 
                                         </q-chat-message>

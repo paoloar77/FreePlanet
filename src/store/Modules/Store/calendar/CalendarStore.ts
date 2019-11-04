@@ -86,13 +86,13 @@ namespace Getters {
 
   const getImgTeacherByUsername = b.read((mystate: ICalendarState) => (username): string => {
     if (username === '')
-      return 'images/avatar/avatar3_small.png'
+      return ''
     // Check if is this User!
     const myop = CalendarStore.getters.getOperatorByUsername(username)
     if (myop && !!myop.img && myop.img !== '' && myop.img !== 'undefined') {
       return myop.img
     } else {
-      return 'images/avatar/avatar3_small.png'
+      return ''
     }
   }, 'getImgTeacherByUsername')
 

@@ -33,11 +33,12 @@ import { IMessagePage, IMessage, IIdentity, MsgDefault } from '../../model'
 import MixinUsers from '../../mixins/mixin-users'
 import { CDateTime } from '../CDateTime'
 import MixinOperator from '../../mixins/mixin-operator'
+import { CMyAvatar } from '../CMyAvatar'
 
 @Component({
   mixins: [MixinOperator, MixinUsers],
   name: 'CEventsCalendar',
-  components: { Logo, Footer, CTitle, CImgText, QDateTimeScroller, QDateScroller, CMySelect, CMyEditor, CDateTime }
+  components: { Logo, Footer, CTitle, CImgText, QDateTimeScroller, QDateScroller, CMySelect, CMyEditor, CDateTime, CMyAvatar }
 })
 export default class CEventsCalendar extends Vue {
   public $q
@@ -442,6 +443,10 @@ export default class CEventsCalendar extends Vue {
     if (!UserStore.state.isLogged || !UserStore.state.my.verified_email) {
       // Visu right Toolbar to make SignIn
       GlobalStore.state.RightDrawerOpen = true
+      tools.showNeutralNotif(this.$q, this.$t('login.needlogin'))
+      tools.scrollToTop()
+      // window.scrollTo(0, 0)
+
       // this.$router.push('/signin')
     } else {
       console.log('addBookEventMenu')
@@ -461,6 +466,10 @@ export default class CEventsCalendar extends Vue {
     if (!UserStore.state.isLogged || !UserStore.state.my.verified_email) {
       // Visu right Toolbar to make SignIn
       GlobalStore.state.RightDrawerOpen = true
+
+      tools.showNeutralNotif(this.$q, this.$t('login.needlogin'))
+      tools.scrollToTop()
+
       // this.$router.push('/signin')
     } else {
       console.log('askForInfoEventMenu')

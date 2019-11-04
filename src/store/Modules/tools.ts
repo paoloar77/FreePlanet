@@ -4,6 +4,9 @@ import { costanti } from './costanti'
 import { toolsext } from './toolsext'
 import { translation } from './translation'
 import Quasar, { colors, date, Screen } from 'quasar'
+import { scroll } from 'quasar'
+const { getScrollTarget, setScrollPosition } = scroll
+
 import {
   IBookedEvent,
   ICollaborations,
@@ -124,8 +127,21 @@ export const tools = {
     date: 2,
     string: 4,
     binary: 8,
-    html: 16
+    html: 16,
+    select: 32,
+    number: 64,
+    typeinrec: 128,
   },
+
+  FieldTypeArr: [
+    { label: 'Boolean', value: 1 },
+    { label: 'Date', value: 2 },
+    { label: 'String', value: 4 },
+    { label: 'Binary', value: 8 },
+    { label: 'Html', value: 16 },
+    { label: 'Select', value: 32 },
+    { label: 'Number', value: 64 }
+  ],
 
   SelectListNumPeople: [
     {
@@ -1430,7 +1446,7 @@ export const tools = {
   },
 
   showNeutralNotif(q: any, msg) {
-    tools.showNotif(q, msg, { color: 'warning', icon: 'notifications' })
+    tools.showNotif(q, msg, { color: 'info', icon: 'notifications' })
   },
 
   showNotif(q: any, msg, data ?: INotify | null
@@ -2567,16 +2583,32 @@ export const tools = {
     return Cookies.remove(mytok)
   },
   notshowPwd(payload) {
-    const mypay = {...payload}
-    try{
+    const mypay = { ...payload }
+    try {
       if (!!mypay.password) {
         mypay.password = '**********'
       }
-    }catch (e) {
+    } catch (e) {
       console.log('error', e)
     }
     return mypay
+  },
+  scrollToTop() {
+    const element = document.getElementById('mypage')
+    this.scrollToElement(element)
+  },
+  scrollToElementId(myid) {
+    const element = document.getElementById(myid)
+    this.scrollToElement(element)
+  },
+  scrollToElement(el) {
+    const target = getScrollTarget(el)
+    const offset = el.offsetTop
+    const duration = 500
+    console.log('target', target, 'offset', offset, 'duration', duration)
+    setScrollPosition(target, offset, duration)
   }
+
 
 // getLocale() {
   //   if (navigator.languages && navigator.languages.length > 0) {

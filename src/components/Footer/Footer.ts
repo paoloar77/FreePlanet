@@ -12,6 +12,7 @@ import { static_data } from '@src/db/static_data'
 
 import Quasar from 'quasar'
 import { FormNewsletter } from '../FormNewsletter'
+import { IUserState } from '../../model'
 
 @Component({
   name: 'Footer',
@@ -32,18 +33,25 @@ export default class Footer extends Vue {
   }
 
   get TelegramSupport() {
-    return db_data.TELEGRAM_SUPPORT
+    return GlobalStore.getters.getValueSettingsByKey('TELEGRAM_SUPPORT')
+  }
+
+  get Whatsapp_Cell() {
+    return GlobalStore.getters.getValueSettingsByKey('WHATSAPP_CELL')
   }
 
   get FBPage() {
-    return db_data.URL_FACEBOOK
+    const fb = GlobalStore.getters.getValueSettingsByKey('URL_FACEBOOK')
+    return fb
   }
 
   get InstagramPage() {
-    return db_data.URL_INSTAGRAM
+    const insta = GlobalStore.getters.getValueSettingsByKey('URL_INSTAGRAM')
+    return insta
   }
 
-  get static_data(){
+  get static_data() {
     return static_data
   }
+
 }

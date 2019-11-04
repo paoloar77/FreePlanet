@@ -80,6 +80,9 @@
         <q-page-scroller position="bottom-right" :scroll-offset="850" :offset="[18, 18]" style="opacity: 0.3">
             <q-btn fab icon="keyboard_arrow_up" color="accent"/>
         </q-page-scroller>
+        <q-page-sticky position="bottom-right" :offset="[18, 78]">
+            <q-btn fab icon="fab fa-whatsapp" color="green" />
+        </q-page-sticky>
     </div>
 </template>
 

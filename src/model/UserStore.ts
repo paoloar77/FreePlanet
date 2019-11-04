@@ -1,16 +1,5 @@
 import { IToken } from 'model/other'
 
-export const DefaultUser: IUserFields = {
-  email: '',
-  username: '',
-  name: '',
-  surname: '',
-  password: '',
-  profile: {
-    img: ''
-  }
-}
-
 const enum ESexType {
   None = 0,
   Male = 1,

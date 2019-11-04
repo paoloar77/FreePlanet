@@ -20,21 +20,23 @@ import { shared_consts } from '../../common/shared_vuejs'
 
 const bcrypt = require('bcryptjs')
 
+const DefaultUser: IUserFields = {
+  _id: '',
+  email: '',
+  username: '',
+  name: '',
+  surname: '',
+  password: '',
+  tokens: [],
+  verified_email: false,
+  profile: {
+    img: ''
+  }
+}
+
 // State
 const state: IUserState = {
-  my: {
-    _id: '',
-    email: '',
-    username: '',
-    name: '',
-    surname: '',
-    password: '',
-    tokens: [],
-    verified_email: false,
-    profile: {
-      img: ''
-    }
-  },
+  my: DefaultUser,
   lang: process.env.LANG_DEFAULT,
   repeatPassword: '',
   categorySel: 'personal',
@@ -143,13 +145,14 @@ namespace Getters {
 
   const getImgByUsername = b.read((mystate: IUserState) => (username): string => {
     if (username === '')
-      return 'images/avatar/avatar3_small.png'
+      return ''
     // Check if is this User!
     const myrec = UserStore.getters.getUserByUsername(username)
+    // console.log('myrec', myrec)
     if (myrec && myrec.profile && !!myrec.profile.img && myrec.profile.img !== '' && myrec.profile.img !== 'undefined') {
       return myrec.profile.img
     } else {
-      return 'images/avatar/avatar3_small.png'
+      return ''
     }
   }, 'getImgByUsername')
 
@@ -192,7 +195,7 @@ namespace Getters {
     },
     get getUsersList() {
       return getUsersList()
-    }
+    },
   }
 
 }
@@ -613,6 +616,7 @@ namespace Actions {
     localStorage.removeItem(tools.localStorage.wasAlreadySubOnDb)
 
     state.isLogged = false
+    state.my = { ...DefaultUser }
 
     await GlobalStore.actions.clearDataAfterLogout()
 
@@ -634,7 +638,6 @@ namespace Actions {
   async function setGlobal(isLogged: boolean) {
     console.log('setGlobal')
     // state.isLogged = true
-    state.isLogged = isLogged
     if (isLogged) {
       // console.log('state.isLogged', state.isLogged)
 
@@ -646,12 +649,17 @@ namespace Actions {
 
     const p3 = await GlobalStore.actions.loadAfterLogin()
 
+    state.isLogged = isLogged
+
     if (static_data.functionality.ENABLE_TODOS_LOADING)
       await Todos.actions.dbLoad({ checkPending: true })
 
     if (static_data.functionality.ENABLE_PROJECTS_LOADING)
       await Projects.actions.dbLoad({ checkPending: true, onlyiffirsttime: true })
 
+    GlobalStore.state.finishLoading = true
+
+    return true
     // console.log('setGlobal: END')
   }
 
@@ -698,11 +706,11 @@ namespace Actions {
         }
       }
 
-      await setGlobal(isLogged)
+      return await setGlobal(isLogged)
 
       // console.log('autologin _id STATE ', state._id)
 
-      return true
+      // return true
     } catch (e) {
       console.error('ERR autologin ', e.message)
       return false

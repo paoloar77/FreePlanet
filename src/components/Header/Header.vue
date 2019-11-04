@@ -109,9 +109,7 @@
                 </q-btn>
                 <q-btn class="q-mx-xs" v-if="static_data.functionality.SHOW_USER_MENU && isLogged" round dense flat
                        @click="rightDrawerOpen = !rightDrawerOpen">
-                    <q-avatar size="30px">
-                        <img :src="getMyImg">
-                    </q-avatar>
+                    <CMyAvatar :myimg="getMyImg"></CMyAvatar>
                 </q-btn>
 
             </q-toolbar>
@@ -130,6 +128,7 @@
 
         </q-drawer>
 
+
         <!-- USER BAR -->
         <q-drawer v-if="static_data.functionality.SHOW_USER_MENU" v-model="rightDrawerOpen" side="right" elevated>
             <div id="profile">
@@ -138,9 +137,8 @@
                 </q-img>
                 <div class="absolute-top bg-transparent text-black center_img" style="margin-top: 10px;">
 
-                    <q-avatar class="q-mb-sm center_img">
-                        <img :src="`../../` + getMyImg">
-                    </q-avatar>
+                    <CMyAvatar :myimg="getMyImg"></CMyAvatar>
+
                     <q-btn class="absolute-top-right" style="margin-right: 10px; color: white;"
                            dense flat round icon="close" @click="rightDrawerOpen = !rightDrawerOpen">
                     </q-btn>

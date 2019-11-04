@@ -53,7 +53,8 @@ export default class MixinUsers extends Vue {
   }
 
   get getMyImg() {
-    return 'statics/' + UserStore.getters.getImgByUsername(UserStore.state.my.username)
+    const ris = UserStore.getters.getImgByUsername(UserStore.state.my.username)
+    return (ris !== '') ? 'statics/' + ris : ''
   }
 
   get MenuCollapse() {

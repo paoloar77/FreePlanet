@@ -55,17 +55,13 @@
                                 <!--<span class="cal__teacher-content">{{myevent.teacher}}</span>-->
                                 <span class="cal__teacher-content">
                                     <q-chip>
-                                        <q-avatar>
-                                            <img :src="getImgTeacherByUsername(myevent.teacher)">
-                                        </q-avatar>
+                                        <CMyAvatar :myimg="getImgTeacherByUsername(myevent.teacher)"></CMyAvatar>
                                         <span class="cal__teacher-content">{{getTeacherByUsername(myevent.teacher)}}</span>
                                     </q-chip>
                                     <span v-if="getImgTeacherByUsername(myevent.teacher2) && isValidUsername(myevent.teacher2)"
                                           class="margin_avatar2"></span>
                                     <q-chip v-if="getImgTeacherByUsername(myevent.teacher2) && isValidUsername(myevent.teacher2)">
-                                        <q-avatar>
-                                            <img :src="getImgTeacherByUsername(myevent.teacher2)">
-                                        </q-avatar>
+                                        <CMyAvatar :myimg="getImgTeacherByUsername(myevent.teacher2)"></CMyAvatar>
                                         <span class="cal__teacher-content">{{getTeacherByUsername(myevent.teacher2)}}</span>
                                     </q-chip>
                                 </span>
@@ -297,6 +293,7 @@
 
                                         <q-input v-model="bookEventForm.msgbooking" :label="$t('cal.msgbooking')+':'"
                                                  type="textarea" debounce="500"
+                                                 input-class="myinput-area"
                                         >
                                         </q-input>
                                     </q-card-section>
@@ -358,7 +355,8 @@
                                 <q-card class="text-white windowcol">
                                     <q-card-section>
                                         <q-input v-model="askInfoForm.message" :label="$t('cal.msgbooking')+':'"
-                                                 autofocus debounce="500" type="textarea">
+                                                 autofocus debounce="500" type="textarea"
+                                                 input-class="myinput-area">
                                         </q-input>
                                     </q-card-section>
                                 </q-card>
@@ -610,17 +608,13 @@
                                             class="margin_with"></span></span>
 
                                 <q-chip>
-                                    <q-avatar>
-                                        <img :src="getImgTeacherByUsername(event.teacher)">
-                                    </q-avatar>
+                                    <CMyAvatar :myimg="getImgTeacherByUsername(event.teacher)"></CMyAvatar>
                                     <span class="cal__teacher-content">{{getTeacherByUsername(event.teacher)}}</span>
                                 </q-chip>
                                 <span v-if="getImgTeacherByUsername(event.teacher2) && isValidUsername(event.teacher2)"
                                       class="margin_avatar2"></span>
                                 <q-chip v-if="getImgTeacherByUsername(event.teacher2) && isValidUsername(event.teacher2)">
-                                    <q-avatar>
-                                        <img :src="getImgTeacherByUsername(event.teacher2)">
-                                    </q-avatar>
+                                    <CMyAvatar :myimg="getImgTeacherByUsername(event.teacher2)"></CMyAvatar>
                                     <span class="cal__teacher-content">{{getTeacherByUsername(event.teacher2)}}</span>
                                 </q-chip>
 

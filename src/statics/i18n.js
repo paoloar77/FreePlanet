@@ -144,6 +144,7 @@ const msgglobal = {
       enter: 'Login',
       errato: "Username o password errata. Riprovare",
       completato: 'Login effettuato!',
+      needlogin: 'E\' necessario effettuare il login prima di continuare'
     },
     reset: {
       title_reset_pwd: "Reimposta la tua Password",
@@ -442,6 +443,7 @@ const msgglobal = {
       enter: 'Entra',
       errato: "Nombre de usuario, correo o contraseña incorrectos. inténtelo de nuevo",
       completato: 'Login realizado!',
+      needlogin: 'Debes iniciar sesión antes de continuar',
     },
     reset: {
       title_reset_pwd: "Restablece tu contraseña",
@@ -737,6 +739,7 @@ const msgglobal = {
       enter: 'Entrez',
       errato: "Nom d'utilisateur, email ou mot de passe incorrect. réessayer",
       completato: 'Connexion faite!',
+      needlogin: 'Vous devez vous connecter avant de continuer',
     },
     reset: {
       title_reset_pwd: "Réinitialiser votre mot de passe",
@@ -1031,6 +1034,7 @@ const msgglobal = {
       enter: 'Login',
       errato: "Username or password wrong. Please retry again",
       completato: 'Login successfully!',
+      needlogin: 'You must login before continuing',
     },
     reset: {
       title_reset_pwd: "Reset your Password",
@@ -1327,6 +1331,7 @@ const msgglobal = {
       enter: 'Login',
       errato: "Username or password wrong. Please retry again",
       completato: 'Login successfully!',
+      needlogin: 'You must login before continuing',
     },
     reset: {
       title_reset_pwd: "Reset your Password",

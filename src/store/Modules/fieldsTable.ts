@@ -2,6 +2,7 @@ import { IColGridTable } from '../../model'
 import { lists } from './lists'
 import { tools } from '@src/store/Modules/tools'
 import { shared_consts } from '@src/common/shared_vuejs'
+import { GlobalStore } from '@store'
 
 const DeleteRec = {
   name: 'deleterec',
@@ -24,6 +25,7 @@ function AddCol(params: IColGridTable) {
     label_trans: (params.label_trans === undefined) ? '' : params.label_trans,
     align: (params.align === undefined) ? 'left' : params.align,
     field: (params.field === undefined) ? params.name : params.field,
+    subfield: (params.subfield === undefined) ? '' : params.subfield,
     sortable: (params.sortable === undefined) ? true : params.sortable,
     disable: (params.disable === undefined) ? false : params.disable,
     titlepopupedit: (params.titlepopupedit === undefined) ? '' : params.titlepopupedit,
@@ -40,7 +42,7 @@ function AddCol(params: IColGridTable) {
 
 const colTableWhere = [
   AddCol({ name: 'code', label_trans: 'where.code' }),
-  AddCol({ name: 'placename', label_trans: 'cal.where' }),
+  AddCol({ name: 'placename', label_trans: 'cal.where'} ),
   AddCol({ name: 'whereicon', label_trans: 'where.whereicon' }),
   AddCol(DeleteRec)
 ]
@@ -48,6 +50,15 @@ const colTableWhere = [
 const colcontribtype = [
   AddCol({ name: 'label', label_trans: 'proj.longdescr' }),
   AddCol({ name: 'showprice', label_trans: 'event.showprice', fieldtype: tools.FieldType.boolean }),
+  AddCol(DeleteRec)
+]
+
+const colsettings = [
+  AddCol({ name: 'key', label_trans: 'col.label' }),
+  AddCol({ name: 'type', label_trans: 'col.type', fieldtype: tools.FieldType.select, jointable: 'fieldstype' }),
+  AddCol({ name: 'value_str', label_trans: 'col.value', fieldtype: tools.FieldType.string }),
+  AddCol({ name: 'value_date', label_trans: 'cal.data', fieldtype: tools.FieldType.date }),
+  AddCol({ name: 'value_num', label_trans: 'cal.num', fieldtype: tools.FieldType.number }),
   AddCol(DeleteRec)
 ]
 
@@ -86,12 +97,12 @@ const colTableEvents = [
   AddCol({ name: 'icon', label_trans: 'event.icon' }),
   AddCol({ name: 'img_small', label_trans: 'event.img_small' }),
   AddCol({ name: 'img', label_trans: 'event.img' }),
-  AddCol({ name: 'wherecode', label_trans: 'event.where' }),
-  AddCol({ name: 'contribtype', label_trans: 'event.contribtype' }),
+  AddCol({ name: 'wherecode', label_trans: 'event.where', fieldtype: tools.FieldType.select, jointable: 'wheres' }),
+  AddCol({ name: 'contribtype', label_trans: 'event.contribtype', fieldtype: tools.FieldType.select, jointable: 'contribtype' }),
   AddCol({ name: 'price', label_trans: 'event.price' }),
   AddCol({ name: 'infoafterprice', label_trans: 'event.infoafterprice' }),
-  AddCol({ name: 'teacher', label_trans: 'event.teacher' }),
-  AddCol({ name: 'teacher2', label_trans: 'event.teacher2' }),
+  AddCol({ name: 'teacher', label_trans: 'event.teacher', fieldtype: tools.FieldType.select, jointable: 'operators' }),
+  AddCol({ name: 'teacher2', label_trans: 'event.teacher2', fieldtype: tools.FieldType.select, jointable: 'operators' }),
   AddCol({ name: 'infoextra', label_trans: 'event.infoextra' }),
   AddCol({ name: 'linkpage', label_trans: 'event.linkpage' }),
   AddCol({ name: 'linkpdf', label_trans: 'event.linkpdf' }),
@@ -142,15 +153,41 @@ export const fieldsTable = {
     }
   },
 
+  getValueByTable(col: IColGridTable, val) {
+    if (col.jointable) {
+      const mylist = this.getTableJoinByName(col.jointable)
+      const key = this.getKeyByTable(col.jointable)
+      const collab = this.getLabelByTable(col.jointable)
+
+      // console.table(mylist)
+      // console.log('key=', key, 'collab', collab, 'val', val)
+
+      const myris = mylist.find((myrec) => myrec[key] === val)
+      // console.log('myris', myris)
+      if (myris) {
+        return myris[collab]
+      } else {
+        return ''
+      }
+
+    } else {
+      return ''
+    }
+  },
+
   getColByTable(table) {
     if (table === 'permissions') {
       return ['value', 'label']
     }
   },
   getTableJoinByName(table) {
-    if (table === 'permissions') {
+    if (table === 'permissions')
       return [shared_consts.Permissions.Admin, shared_consts.Permissions.Manager, shared_consts.Permissions.Teacher]
-    }
+    else if (table === 'fieldstype')
+      return tools.FieldTypeArr
+    else
+      return GlobalStore.getters.getListByTable(table)
+
   },
   getrecTableList(mytable) {
     return this.tablesList.find((rec) => rec.value === mytable)
@@ -181,14 +218,14 @@ export const fieldsTable = {
       value: 'operators',
       label: 'Insegnanti',
       columns: colTableOperator,
-      colkey: '_id',
+      colkey: 'username',
       collabel: 'username'
     },
     {
       value: 'wheres',
       label: 'Luoghi',
       columns: colTableWhere,
-      colkey: '_id',
+      colkey: 'code',
       collabel: 'placename'
     },
     {
@@ -212,7 +249,20 @@ export const fieldsTable = {
       colkey: 'value',
       collabel: 'label',
       colicon: 'icon'
-    }
+    },
+    {
+      value: 'fieldstype',
+      label: 'Tipi di Campi',
+      colkey: 'value',
+      collabel: 'label'
+    },
+    {
+      value: 'settings',
+      label: 'Impostazioni',
+      columns: colsettings,
+      colkey: 'key',
+      collabel: 'key'
+    },
   ],
 
   // IColGridTable
@@ -222,9 +272,9 @@ export const fieldsTable = {
     AddCol({ name: 'surname', label_trans: 'reg.surname' }),
     AddCol({ name: 'email', label_trans: 'reg.email' }),
     AddCol({ name: 'cell', label_trans: 'reg.cell' }),
+    AddCol({ name: 'profile.img', field: 'profile', subfield: 'img', label_trans: 'reg.img', sortable: false }),
     AddCol({ name: 'date_reg', label_trans: 'reg.date_reg', fieldtype: tools.FieldType.date }),
     AddCol({ name: 'perm', label_trans: 'reg.perm', fieldtype: tools.FieldType.binary, jointable: 'permissions' }),
-    AddCol({ name: 'img', label_trans: 'reg.img', sortable: false }),
     AddCol(DeleteRec),
     AddCol({
       name: 'copyrec',

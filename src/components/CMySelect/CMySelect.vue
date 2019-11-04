@@ -2,8 +2,9 @@
     <div>
         <div v-if="useinput">
             <q-select
+                    rounded
+                    outlined
                     :input-class="myclass"
-                    filled
                     v-model="myvalue"
                     :use-input="useinput"
                     input-debounce="0"
@@ -20,8 +21,10 @@
         </div>
         <div v-else>
             <q-select
+                    rounded
+                    outlined
+                    dense
                     :input-class="myclass"
-                    filled
                     v-model="myvalue"
                     :options="options"
                     :option-value="optval"

@@ -26,6 +26,14 @@ export interface ICfgData {
   userId?: string
 }
 
+export interface ISettings {
+  key?: string
+  type?: number
+  value_str?: string
+  value_date?: Date,
+  value_num?: number
+}
+
 export interface ITestp1 {
   contatore: number
   mioarray: ICfgServer[]
@@ -40,6 +48,7 @@ export interface IConfig {
 }
 
 export interface IGlobalState {
+  finishLoading: boolean
   conta: number
   wasAlreadySubOnDb: boolean
   wasAlreadySubscribed: boolean
@@ -60,6 +69,7 @@ export interface IGlobalState {
   listatodo: IMenuList[]
   arrConfig: IConfig[]
   lastaction: IAction
+  settings: ISettings[],
 }
 
 export interface IMenuList {
@@ -217,6 +227,7 @@ export interface IParamsQuery {
 
 export interface IColGridTable {
   name: string
+  subfield?: string
   required?: boolean
   label?: string
   label_trans?: string

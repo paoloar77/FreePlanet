@@ -20,7 +20,7 @@
                 <q-tr :props="props">
                     <q-th
                             v-for="col in props.cols"
-                            v-if="colVisib.includes(col.field)"
+                            v-if="colVisib.includes(col.field + col.subfield)"
                             :key="col.name"
                             :props="props"
                             class="text-italic text-weight-bold"
@@ -56,8 +56,9 @@
                 <q-select
                         v-if="mytable"
                         v-model="colVisib"
+                        rounded
+                        outlined
                         multiple
-                        borderless
                         dense
                         options-dense
                         :display-value="$t('grid.columns')"
@@ -90,95 +91,16 @@
             </template>
 
             <q-tr v-if="mytable" slot="body" slot-scope="props" :props="props">
-                <q-td v-for="col in mycolumns" :key="col.name" :props="props" v-if="colVisib.includes(col.field)">
-                    <div v-if="col.fieldtype === tools.FieldType.date">
-                        <div :class="getclassCol(col)">
-                            <CDateTime
-                                    :label="col.label"
-                                    class="cursor-pointer"
-                                    :valueDate="props.row[col.name]"
-                                    :readonly="false"
-                                    :dense="true"
-                                    :canEdit="canEdit"
-                                    @savetoclose="SaveValue"
-                                    @show="selItem(props.row, col)"
-                                    >
-                            </CDateTime>
-                        </div>
-                    </div>
-                    <div v-else-if="col.fieldtype === tools.FieldType.boolean">
-                        <div :class="getclassCol(col)">
-                            {{ visuValByType(col, props.row[col.name]) }}
-                            <q-popup-edit v-if="canEdit" v-model="props.row[col.name]" :disable="col.disable"
-                                          :title="col.title" buttons
-                                          @save="SaveValue" @show="selItem(props.row, col)">
-                                <q-checkbox v-model="props.row[col.name]" label="">
+                <q-td v-for="col in mycolumns" :key="col.name" :props="props" v-if="colVisib.includes(col.field + col.subfield)">
+                    <CMyPopupEdit :canEdit="canEdit"
+                                  :col="col"
+                                  :row.sync="props.row"
+                                  :field="col.field"
+                                  :subfield="col.subfield"
+                                  @save="SaveValue"
+                                  @show="selItem(props.row, col)">
 
-                                </q-checkbox>
-                                {{ visuValByType(col, props.row[col.name]) }}
-
-                            </q-popup-edit>
-                        </div>
-                    </div>
-                    <div v-else-if="col.fieldtype === tools.FieldType.binary">
-                        <div :class="getclassCol(col)">
-
-                            <CMyChipList
-                                    :value="props.row[col.name]"
-                                    :options="db_fieldsTable.getTableJoinByName(col.jointable)"
-                                    :optval="db_fieldsTable.getKeyByTable(col.jointable)"
-                                    :optlab="db_fieldsTable.getLabelByTable(col.jointable)"
-                                    :opticon="db_fieldsTable.getIconByTable(col.jointable)"
-                            ></CMyChipList>
-
-                            <q-popup-edit v-if="canEdit" v-model="props.row[col.name]" :disable="col.disable"
-                                          :title="col.title" buttons
-                                          @save="SaveValue" @show="selItem(props.row, col)">
-
-                                <CMyToggleList :label="col.title"
-                                        :options="db_fieldsTable.getTableJoinByName(col.jointable)"
-                                               :value.sync="props.row[col.name]"
-                                               :optval="db_fieldsTable.getKeyByTable(col.jointable)"
-                                               :optlab="db_fieldsTable.getLabelByTable(col.jointable)"
-
-                                >
-
-                                </CMyToggleList>
-
-                            </q-popup-edit>
-                        </div>
-                    </div>
-                    <div v-else-if="col.fieldtype === tools.FieldType.string">
-                        <div :class="getclassCol(col)">
-                            {{ visuValByType(col, props.row[col.name]) }}
-                            <q-popup-edit v-if="canEdit" v-model="props.row[col.name]" :disable="col.disable"
-                                          :title="col.title" buttons
-                                          @save="SaveValue" @show="selItem(props.row, col)">
-                                <q-input v-model="props.row[col.name]"
-                                         autofocus
-                                >
-
-                                </q-input>
-
-                            </q-popup-edit>
-                        </div>
-                    </div>
-                    <div v-else-if="col.fieldtype === tools.FieldType.html">
-                        <div :class="getclassCol(col)">
-                            {{ visuValByType(col, props.row[col.name]) }}
-                            <q-popup-edit v-if="canEdit" v-model="props.row[col.name]" :disable="col.disable"
-                                          :title="col.title" buttons
-                                          @save="SaveValue" @show="selItem(props.row, col)">
-                                <q-input v-model="props.row[col.name]"
-                                         autofocus
-                                         @keyup.enter.stop
-                                         type="textarea">
-
-                                </q-input>
-
-                            </q-popup-edit>
-                        </div>
-                    </div>
+                    </CMyPopupEdit>
                 </q-td>
                 <q-td v-for="col in mycolumns" :key="col.name" :props="props" v-if="colExtra.includes(col.name)">
                     <div v-if="col.action && visCol(col)">
