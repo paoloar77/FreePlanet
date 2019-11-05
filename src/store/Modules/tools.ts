@@ -1379,7 +1379,7 @@ export const tools = {
         notify: par.param2 === true ? '1' : '0'
       }).then((ris) => {
         if (ris) {
-          tools.showPositiveNotif(myself.$q, myself.$t('cal.canceledbooking') + ' "' + par.param1.title + '"')
+          tools.showPositiveNotif(myself.$q, myself.$t('cal.canceledbooking') + ' "' + par.param3 + '"')
           if (myself.bookEventpage)
             myself.bookEventpage.show = false
         } else
@@ -2476,7 +2476,8 @@ export const tools = {
     console.log('CancelBookingEvent ', eventparam)
     tools.askConfirm(mythis.$q, translate('cal.titlebooking'), translate('cal.cancelbooking') + ' ' + tools.gettextevent(mythis, eventparam) + '?', translate('dialog.yes'), translate('dialog.no'), mythis, '', lists.MenuAction.DELETE, 0, {
       param1: bookeventid,
-      param2: notify
+      param2: notify,
+      param3: eventparam.title
     })
   }
   ,
@@ -2607,8 +2608,25 @@ export const tools = {
     const duration = 500
     console.log('target', target, 'offset', offset, 'duration', duration)
     setScrollPosition(target, offset, duration)
-  }
+  },
+  getCellForWhatsapp(numbercell) {
+    let mynum = numbercell.replace(/\-/g, '')
+    const intcode = GlobalStore.getters.getValueSettingsByKey('INT_CODE')
+    if (numbercell.substring(0, 1) !== '+')
+      mynum = intcode + mynum
+    else
+      mynum = mynum.substring(1)
 
+    return mynum
+  },
+
+  getHttpForWhatsapp(numbercell) {
+    const mynum = this.getCellForWhatsapp(numbercell)
+    if (mynum)
+      return 'https://wa.me/' + mynum
+    else
+      return ''
+  }
 
 // getLocale() {
   //   if (navigator.languages && navigator.languages.length > 0) {

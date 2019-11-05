@@ -13,8 +13,10 @@ import { static_data } from '@src/db/static_data'
 import Quasar from 'quasar'
 import { FormNewsletter } from '../FormNewsletter'
 import { IUserState } from '../../model'
+import MixinBase from '../../mixins/mixin-base'
 
 @Component({
+  mixins: [MixinBase],
   name: 'Footer',
   components: { Logo, FormNewsletter }
 })
@@ -52,6 +54,10 @@ export default class Footer extends Vue {
 
   get static_data() {
     return static_data
+  }
+
+  get ChatWhatsapp() {
+    return tools.getHttpForWhatsapp(this.Whatsapp_Cell)
   }
 
 }

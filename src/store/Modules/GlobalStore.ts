@@ -328,12 +328,14 @@ namespace Mutations {
       const mylist = Getters.getters.getListByTable(table)
       const mykey = fieldsTable.getKeyByTable(table)
 
-      const myrec = mylist.find((event) => event[mykey] === id)
-      // console.log('myrec', myrec)
-      if (myrec) {
-        for (const [key, value] of Object.entries(mydata.fieldsvalue)) {
-          console.log('key', value, myrec[key])
-          myrec[key] = value
+      if (!!mylist) {
+        const myrec = mylist.find((event) => event[mykey] === id)
+        // console.log('myrec', myrec)
+        if (myrec) {
+          for (const [key, value] of Object.entries(mydata.fieldsvalue)) {
+            console.log('key', value, myrec[key])
+            myrec[key] = value
+          }
         }
       }
     } catch (e) {

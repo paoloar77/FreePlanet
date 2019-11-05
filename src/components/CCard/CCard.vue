@@ -20,7 +20,15 @@
                 <div v-if="myop.certifications" class="text-subtitle-certificato">{{myop.certifications}}</div>
                 <div class="op__cell">
                     <q-icon class="flex-icon" name="mobile_friendly"></q-icon>
-                    {{myop.cell}}
+                    <span class="q-mx-sm">{{myop.cell}}</span>
+
+                    <q-btn fab-mini icon="fab fa-whatsapp"
+                           color="green" type="a"
+                           size="xs"
+
+                           :href="tools.getHttpForWhatsapp(myop.cell)" target="__blank">
+
+                    </q-btn>
                 </div>
                 <div class="op__email">
                     <q-icon class="flex-icon" name="contact_mail"> </q-icon>&nbsp;
