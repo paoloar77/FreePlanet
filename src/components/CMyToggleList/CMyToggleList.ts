@@ -36,7 +36,7 @@ export default class CMyToggleList extends Vue {
   public mounted() {
     this.myarrvalues = []
 
-    console.table(this.options)
+    // console.table(this.options)
     this.options.forEach((rec) => {
       const mydata = {
         label: this.$t(rec[this.optlab]),

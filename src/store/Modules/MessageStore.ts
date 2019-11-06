@@ -122,7 +122,7 @@ namespace Actions {
     data.datemsg = tools.getDateNow()
     data.status = StatusMessage.WaitingToSend
     // Options
-    // data.options = tools.SetBit(data.options, shared_consts.MessageOptions.Notify_ByEmail)
+    data.options = tools.SetBit(data.options, shared_consts.MessageOptions.Notify_ByEmail)
     data.options = tools.SetBit(data.options, shared_consts.MessageOptions.Notify_ByPushNotification)
 
     console.log('DOPO:')

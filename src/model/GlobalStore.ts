@@ -26,6 +26,14 @@ export interface ICfgData {
   userId?: string
 }
 
+export interface ISettings {
+  key?: string
+  type?: number
+  value_str?: string
+  value_date?: Date,
+  value_num?: number
+}
+
 export interface ITestp1 {
   contatore: number
   mioarray: ICfgServer[]
@@ -40,6 +48,7 @@ export interface IConfig {
 }
 
 export interface IGlobalState {
+  finishLoading: boolean
   conta: number
   wasAlreadySubOnDb: boolean
   wasAlreadySubscribed: boolean
@@ -60,6 +69,7 @@ export interface IGlobalState {
   listatodo: IMenuList[]
   arrConfig: IConfig[]
   lastaction: IAction
+  settings: ISettings[],
 }
 
 export interface IMenuList {
@@ -98,21 +108,22 @@ export interface IListRoutes {
   separator?: boolean
 }
 
-export interface IPerson {
-  index?: number
-  tab?: string
+export interface IOperators {
+  username: string
   name: string
-  sub1: string
-  sub2?: string
-  sub3?: string
-  img: string
-  cell?: string
+  surname: string
   email?: string
+  qualification?: string
+  disciplines?: string
+  certifications?: string
+  img?: string
+  cell?: string
   paginaweb?: string
   paginafb?: string
   intro?: string
   info?: string
   vario?: string
+  tab?: string
 }
 
 export interface IPreloadImages {
@@ -201,6 +212,7 @@ export interface IFunctionality {
   ENABLE_PROJECTS_LOADING?: boolean
   SHOW_NEWSLETTER?: boolean
   SHOW_ONLY_POLICY?: boolean
+  SHOW_MESSAGES?: boolean
   BOOKING_EVENTS?: boolean
 }
 
@@ -215,6 +227,7 @@ export interface IParamsQuery {
 
 export interface IColGridTable {
   name: string
+  subfield?: string
   required?: boolean
   label?: string
   label_trans?: string

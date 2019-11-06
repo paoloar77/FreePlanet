@@ -5,18 +5,21 @@ import { toolsext } from '@src/store/Modules/toolsext'
 
 import { date } from 'quasar'
 import { CalendarStore } from '../../store/Modules'
+import MixinBase from '../../mixins/mixin-base'
 
 @Component({
-  name: 'CDateTime'
+  name: 'CDateTime',
+  mixins: [MixinBase]
 })
 
 export default class CDateTime extends Vue {
   public $q
   public $t
-  @Prop() public value!: Date
-  @Prop({ required: false, default: '' }) public label: string
+  @Prop({ required: false, default: null }) public value: Date
+  @Prop({ required: false, default: null }) public valueDate: Date
+  @Prop({ required: true, default: 'Val:' }) public label: string
   @Prop({ required: false, default: '' }) public data_class!: string
-  @Prop({ required: false, default: false }) public readonly!: boolean
+  @Prop({ required: false, default: true }) public canEdit!: boolean
   @Prop({ required: false, default: false }) public disable!: boolean
   @Prop({ required: false, default: '' }) public bgcolor!: string
   @Prop({ required: false, default: false }) public dense: boolean
@@ -31,20 +34,34 @@ export default class CDateTime extends Vue {
     return 'calendar_comp ' + this.data_class
   }
 
-  @Watch('showDateTimeScroller')
+  // @Watch('showDateTimeScroller')
+
   public Opening() {
-    if (this.showDateTimeScroller) {
-      this.saveit = false
-      this.valueprec = this.myvalue
-      this.$emit('show')
-    } else {
-      if (!this.saveit) {
-        if (this.myvalue !== this.valueprec) {
-          this.myvalue = this.valueprec
-          tools.showNeutralNotif(this.$q, this.$t('db.reccanceled'))
-        }
+    // console.log('Opening', 'myvalue', this.myvalue, 'value', this.value)
+    this.saveit = false
+    this.valueprec = this.myvalue
+    this.$emit('show')
+  }
+
+  public Closing() {
+    // console.log('Closing')
+    if (!this.saveit) {
+      if (this.myvalue !== this.valueprec) {
+        this.myvalue = this.valueprec
+        tools.showNeutralNotif(this.$q, this.$t('db.reccanceled'))
       }
     }
+  }
+
+  @Watch('valueDate')
+  public changevalueDate() {
+    this.myvalue = tools.getstrYYMMDDDateTime(this.valueDate)
+    // console.log('changevalueDate myvalue', this.myvalue)
+  }
+  @Watch('value')
+  public changevalue() {
+    this.myvalue = this.value
+    // console.log('changevalue myvalue', this.myvalue)
   }
 
   public savetoclose() {
@@ -72,12 +89,24 @@ export default class CDateTime extends Vue {
     return CalendarStore.state.locale
   }
 
-  public mounted() {
-    this.myvalue = this.value
+  public created() {
+    if (this.value !== null)
+      this.myvalue = this.value
+    else
+      this.myvalue = tools.getstrYYMMDDDateTime(this.valueDate)
+
+    // console.log('myvalue', this.myvalue)
   }
 
   public changeval(newval) {
-    // console.log('changeval', newval)
+    // console.log('changeval', newval, 'value=', this.value, 'myvalue=', this.myvalue)
     this.$emit('update:value', newval)
+  }
+
+  public mystyle() {
+    if (this.label !== '')
+      return ''
+    else
+      return ''
   }
 }

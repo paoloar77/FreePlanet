@@ -10,11 +10,28 @@
                         <q-toolbar-title>
                             {{ $t('cal.event') }}
                         </q-toolbar-title>
+                        <q-btn v-if="editable" flat round color="white" icon="fas fa-copy">
+                            <q-menu
+                                    transition-show="flip-right"
+                                    transition-hide="flip-left">
+                                <q-list style="min-width: 100px">
+                                    <q-item clickable @click="duplicateEvent(myevent, 7)">
+                                        <q-item-section>Tra 1 Settimana</q-item-section>
+                                    </q-item>
+                                    <q-item clickable @click="duplicateEvent(myevent, 14)">
+                                        <q-item-section>Tra 2 Settimane</q-item-section>
+                                    </q-item>
+                                    <q-item clickable @click="duplicateEvent(myevent, 7, 4)">
+                                        <q-item-section>4 Eventi ogni Settimana</q-item-section>
+                                    </q-item>
+                                </q-list>
+                            </q-menu>
+                        </q-btn>
                         <q-btn v-if="editable" flat round color="white" icon="delete" v-close-popup
                                @click="deleteEvent(myevent)"></q-btn>
                         <q-btn v-if="editable" flat round color="white" icon="edit" v-close-popup
                                @click="editEvent(myevent)"></q-btn>
-                        <q-btn flat round color="white" icon="cancel" v-close-popup></q-btn>
+                        <q-btn flat round color="white" icon="cancel" v-close-popup @click="myevent = null; displayEvent = false"></q-btn>
                     </q-toolbar>
                     <q-card-section class="inset-shadow">
                         <q-img :src="getImgEvent(myevent)"
@@ -38,18 +55,14 @@
                                 <!--<span class="cal__teacher-content">{{myevent.teacher}}</span>-->
                                 <span class="cal__teacher-content">
                                     <q-chip>
-                                        <q-avatar>
-                                            <img :src="`../../statics/images/` + getImgByUsername(myevent.teacher)">
-                                        </q-avatar>
-                                        <span class="cal__teacher-content">{{getUserByUsername(myevent.teacher)}}</span>
+                                        <CMyAvatar :myimg="getImgTeacherByUsername(myevent.teacher)"></CMyAvatar>
+                                        <span class="cal__teacher-content">{{getTeacherByUsername(myevent.teacher)}}</span>
                                     </q-chip>
-                                    <span v-if="getImgByUsername(myevent.teacher2) && myevent.teacher2"
+                                    <span v-if="getImgTeacherByUsername(myevent.teacher2) && isValidUsername(myevent.teacher2)"
                                           class="margin_avatar2"></span>
-                                    <q-chip v-if="getImgByUsername(myevent.teacher2) && myevent.teacher2">
-                                        <q-avatar>
-                                            <img :src="`../../statics/images/` + getImgByUsername(myevent.teacher2)">
-                                        </q-avatar>
-                                        <span class="cal__teacher-content">{{getUserByUsername(myevent.teacher2)}}</span>
+                                    <q-chip v-if="getImgTeacherByUsername(myevent.teacher2) && isValidUsername(myevent.teacher2)">
+                                        <CMyAvatar :myimg="getImgTeacherByUsername(myevent.teacher2)"></CMyAvatar>
+                                        <span class="cal__teacher-content">{{getTeacherByUsername(myevent.teacher2)}}</span>
                                     </q-chip>
                                 </span>
                             </div>
@@ -109,10 +122,15 @@
                                 v-if="contextDay"
                                 ref='myevent'
                                 class="q-gutter-sm">
+                            <q-input color="grey-1" v-model="eventForm.short_tit" autofocus
+                                     :input-style="`background-color: ${eventForm.bgcolor} !important; color: white !important; font-weight: bold; `"
+                                     borderless rounded dense :label="$t('event.short_tit')"
+                            ></q-input>
+
                             <q-input color="grey-1" v-model="eventForm.title" autofocus
                                      :input-style="`background-color: ${eventForm.bgcolor} !important; color: white !important; font-weight: bold; `"
                                      borderless rounded dense :label="$t('event.title')"
-                                     :rules="[v => v && v.length > 0 || 'Field cannot be empty']"></q-input>
+                                     :rules="[v => v && v.length > 0 || $t('event.notempty')]"></q-input>
 
                             <CMyEditor :value.sync="eventForm.details">
 
@@ -274,7 +292,9 @@
                                         </div>
 
                                         <q-input v-model="bookEventForm.msgbooking" :label="$t('cal.msgbooking')+':'"
-                                                 autogrow>
+                                                 type="textarea" debounce="500"
+                                                 input-class="myinput-area"
+                                        >
                                         </q-input>
                                     </q-card-section>
                                 </q-card>
@@ -335,7 +355,8 @@
                                 <q-card class="text-white windowcol">
                                     <q-card-section>
                                         <q-input v-model="askInfoForm.message" :label="$t('cal.msgbooking')+':'"
-                                                 autogrow>
+                                                 autofocus debounce="500" type="textarea"
+                                                 input-class="myinput-area">
                                         </q-input>
                                     </q-card-section>
                                 </q-card>
@@ -425,7 +446,6 @@
                             <q-badge
                                     :key="index"
                                     style="width: 100%; cursor: pointer;"
-                                    class="ellipsis"
                                     :class="badgeClasses(event, 'day')"
                                     :style="badgeStyles(event, 'day')"
                                     @click.stop.prevent="showEvent(event)"
@@ -435,9 +455,12 @@
                                     @dragenter.native="(e) => onDragEnter(e, event)"
                                     @touchmove.native="(e) => {}"
                             >
-                                <q-icon v-if="event.icon" :name="event.icon" class="q-mr-xs"></q-icon>
-                                <span class="ellipsis">{{ event.title }}</span>
+
+                                <span class="">{{ getTitleEv(event) }}</span>
                             </q-badge>
+                            <div class="text-center"><img :src="getImgEvent(event)"
+                                                          class="text-center listaev__tdimg_small">
+                            </div>
                         </template>
                     </template>
 
@@ -475,7 +498,7 @@
                         <template v-for="(event, index) in getEvents(date)">
                             <q-badge
                                     :key="index"
-                                    class="my-event justify-center ellipsis"
+                                    class="my-event justify-center"
                                     :class="badgeClasses(event, 'body')"
                                     :style="badgeStyles(event, 'body', timeStartPos, timeDurationHeight)"
                                     @click.stop.prevent="showEvent(event)"
@@ -486,7 +509,7 @@
                                     @touchmove.native="(e) => {}"
                             >
                                 <q-icon v-if="event.icon" :name="event.icon" class="q-mr-xs"></q-icon>
-                                <span class="ellipsis">{{ event.title }}</span>
+                                <span class="">{{ getTitleEv(event) }}</span>
                             </q-badge>
                         </template>
                     </template>
@@ -502,21 +525,49 @@
                 <tbody>
                 <tr v-for="(event, index) in getEventList()" class="listaev listaev__table">
                     <td :class="clEvent(event)">
-                        <p class="listaev__align_chips">
+                        <div class="listaev__align_chips">
                             <img :src="getImgEvent(event)"
-                                 class="text-left padding_cell listaev__tdimg listaev__img">
+                                 @click="selectEvent(event)"
+                                 class="text-left padding_cell listaev__tdimg listaev__img cursor-pointer"
+                                :style="getStyleByEvent(event)">
                             <q-chip dense v-if="isAlreadyBooked(event)" class="cltexth4 chipbooked shadow-5 q-mb-md"
                                     color="green" text-color="white"
                                     icon="event_available">{{$t('cal.booked')}}
                             </q-chip>
 
+                            <q-chip v-if="event === myevent && !displayEvent && editable" class="text-center shadow-5 glossy bg-blue chipmodif">
+
+                                <q-btn v-if="editable" flat round color="white" icon="fas fa-copy">
+                                    <q-menu
+                                            transition-show="flip-right"
+                                            transition-hide="flip-left">
+                                        <q-list style="min-width: 100px">
+                                            <q-item clickable @click="duplicateEvent(myevent, 7)">
+                                                <q-item-section>Tra 1 Settimana</q-item-section>
+                                            </q-item>
+                                            <q-item clickable @click="duplicateEvent(myevent, 14)">
+                                                <q-item-section>Tra 2 Settimane</q-item-section>
+                                            </q-item>
+                                            <q-item clickable @click="duplicateEvent(myevent, 7, 4)">
+                                                <q-item-section>4 Eventi ogni Settimana</q-item-section>
+                                            </q-item>
+                                        </q-list>
+                                    </q-menu>
+                                </q-btn>
+                                <q-btn v-if="editable" flat round color="white" icon="delete"  v-close-popup
+                                       @click="deleteEvent(myevent)"></q-btn>
+                                <q-btn v-if="editable" flat round color="white" icon="edit"  v-close-popup
+                                       @click="editEvent(myevent)"></q-btn>
+                                <q-btn flat round color="white" icon="cancel" @click="selectEvent(null)"></q-btn>
+                            </q-chip>
                             <q-chip v-if="event.news" class="cltexth4 chipnews shadow-5 glossy text-right" color="red"
                                     text-color="white" icon-right="star" icon="star" dense
                                     style="">
                                 {{$t('event.news')}}
                             </q-chip>
 
-                        </p>
+                        </div>
+
                         <div class="listaev__date listaev__align_center_mobile">
                             <span v-html="tools.getstrDateTimeEvent(mythis(), event, true)"></span>
                         </div>
@@ -557,17 +608,14 @@
                                             class="margin_with"></span></span>
 
                                 <q-chip>
-                                    <q-avatar>
-                                        <img :src="`../../statics/images/` + getImgByUsername(event.teacher)">
-                                    </q-avatar>
-                                    <span class="cal__teacher-content">{{getUserByUsername(event.teacher)}}</span>
+                                    <CMyAvatar :myimg="getImgTeacherByUsername(event.teacher)"></CMyAvatar>
+                                    <span class="cal__teacher-content">{{getTeacherByUsername(event.teacher)}}</span>
                                 </q-chip>
-                                <span v-if="getImgByUsername(event.teacher2)" class="margin_avatar2"></span>
-                                <q-chip v-if="getImgByUsername(event.teacher2) && event.teacher2">
-                                    <q-avatar>
-                                        <img :src="`../../statics/images/` + getImgByUsername(event.teacher2)">
-                                    </q-avatar>
-                                    <span class="cal__teacher-content">{{getUserByUsername(event.teacher2)}}</span>
+                                <span v-if="getImgTeacherByUsername(event.teacher2) && isValidUsername(event.teacher2)"
+                                      class="margin_avatar2"></span>
+                                <q-chip v-if="getImgTeacherByUsername(event.teacher2) && isValidUsername(event.teacher2)">
+                                    <CMyAvatar :myimg="getImgTeacherByUsername(event.teacher2)"></CMyAvatar>
+                                    <span class="cal__teacher-content">{{getTeacherByUsername(event.teacher2)}}</span>
                                 </q-chip>
 
                                 <span v-if="event.wherecode" class="">

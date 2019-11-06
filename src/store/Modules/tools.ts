@@ -4,6 +4,9 @@ import { costanti } from './costanti'
 import { toolsext } from './toolsext'
 import { translation } from './translation'
 import Quasar, { colors, date, Screen } from 'quasar'
+import { scroll } from 'quasar'
+const { getScrollTarget, setScrollPosition } = scroll
+
 import {
   IBookedEvent,
   ICollaborations,
@@ -30,6 +33,10 @@ import { dom } from 'quasar'
 
 const { height, width } = dom
 
+import Cookies from 'js-cookie'
+
+const TokenKey = 'Admin-Token'
+
 export interface INotify {
   color?: string | 'primary'
   textColor?: string
@@ -37,6 +44,8 @@ export interface INotify {
 }
 
 export const tools = {
+  CAN_EDIT: 'q-ce',
+
   listBestColor: [
     'blue',
     'green',
@@ -117,8 +126,22 @@ export const tools = {
     boolean: 1,
     date: 2,
     string: 4,
-    binary: 8
+    binary: 8,
+    html: 16,
+    select: 32,
+    number: 64,
+    typeinrec: 128,
   },
+
+  FieldTypeArr: [
+    { label: 'Boolean', value: 1 },
+    { label: 'Date', value: 2 },
+    { label: 'String', value: 4 },
+    { label: 'Binary', value: 8 },
+    { label: 'Html', value: 16 },
+    { label: 'Select', value: 32 },
+    { label: 'Number', value: 64 }
+  ],
 
   SelectListNumPeople: [
     {
@@ -1356,7 +1379,7 @@ export const tools = {
         notify: par.param2 === true ? '1' : '0'
       }).then((ris) => {
         if (ris) {
-          tools.showPositiveNotif(myself.$q, myself.$t('cal.canceledbooking') + ' "' + par.param1.title + '"')
+          tools.showPositiveNotif(myself.$q, myself.$t('cal.canceledbooking') + ' "' + par.param3 + '"')
           if (myself.bookEventpage)
             myself.bookEventpage.show = false
         } else
@@ -1423,7 +1446,7 @@ export const tools = {
   },
 
   showNeutralNotif(q: any, msg) {
-    tools.showNotif(q, msg, { color: 'warning', icon: 'notifications' })
+    tools.showNotif(q, msg, { color: 'info', icon: 'notifications' })
   },
 
   showNotif(q: any, msg, data ?: INotify | null
@@ -1712,7 +1735,7 @@ export const tools = {
       } else {
         mystr = `${tools.getstrDate(myevent.dateTimeStart)}
                  ${mythis.$t('cal.starttime')} ${ tools.getstrTime(myevent.dateTimeStart) }          
-                 ${ mythis.$t('cal.endtime')}: ${ tools.getstrTime(myevent.dateTimeEnd) }`
+                 ${ mythis.$t('cal.endtime')} ${ tools.getstrTime(myevent.dateTimeEnd) }`
       }
     } else {
       mystr = `<span class="cal__where-content">${tools.getstrDate(myevent.dateTimeStart)}</span>
@@ -1776,10 +1799,7 @@ export const tools = {
   },
 
 // mystrdate "26.04.2013"
-  convertstrtoDate(mystrdate
-                     :
-                     string
-  ) {
+  convertstrtoDate(mystrdate: string) {
     if (mystrdate.length < 10) {
       return null
     }
@@ -2456,7 +2476,8 @@ export const tools = {
     console.log('CancelBookingEvent ', eventparam)
     tools.askConfirm(mythis.$q, translate('cal.titlebooking'), translate('cal.cancelbooking') + ' ' + tools.gettextevent(mythis, eventparam) + '?', translate('dialog.yes'), translate('dialog.no'), mythis, '', lists.MenuAction.DELETE, 0, {
       param1: bookeventid,
-      param2: notify
+      param2: notify,
+      param3: eventparam.title
     })
   }
   ,
@@ -2544,6 +2565,67 @@ export const tools = {
       return this.listBestColor[index]
     else
       return 'primary'
+  },
+  getCookie(mytok, oldval?) {
+    const ris = Cookies.get(mytok)
+    console.log('getCookie', ris)
+    if (!!ris) {
+      return ris
+    } else {
+      return oldval
+    }
+  },
+
+  setCookie(mytok, value: string) {
+    return Cookies.set(mytok, value)
+  },
+
+  removeCookie(mytok) {
+    return Cookies.remove(mytok)
+  },
+  notshowPwd(payload) {
+    const mypay = { ...payload }
+    try {
+      if (!!mypay.password) {
+        mypay.password = '**********'
+      }
+    } catch (e) {
+      console.log('error', e)
+    }
+    return mypay
+  },
+  scrollToTop() {
+    const element = document.getElementById('mypage')
+    this.scrollToElement(element)
+  },
+  scrollToElementId(myid) {
+    const element = document.getElementById(myid)
+    this.scrollToElement(element)
+  },
+  scrollToElement(el) {
+    const target = getScrollTarget(el)
+    const offset = el.offsetTop
+    const duration = 500
+    console.log('target', target, 'offset', offset, 'duration', duration)
+    setScrollPosition(target, offset, duration)
+  },
+  getCellForWhatsapp(numbercell) {
+    let mynum = numbercell.replace(/\-/g, '')
+    const intcode = GlobalStore.getters.getValueSettingsByKey('INT_CODE')
+    if (numbercell.substring(0, 1) !== '+')
+      mynum = intcode + mynum
+    else
+      mynum = mynum.substring(1)
+
+    return mynum
+  },
+
+  getHttpForWhatsapp(numbercell) {
+    const mynum = this.getCellForWhatsapp(numbercell)
+    if (mynum)
+      return 'https://wa.me/' + mynum
+    else
+      return ''
   }
 
 // getLocale() {

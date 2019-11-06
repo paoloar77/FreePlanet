@@ -1,3 +1,4 @@
+import { IOperators } from '@src/model/GlobalStore'
 
 export interface IEvents {
   _id?: any
@@ -41,18 +42,6 @@ export interface IBookedEvent {
   booked: boolean
 }
 
-export interface IOperators {
-  username: string
-  cell: string
-  webpage?: string
-  img: string
-  skype?: string
-  days_working?: string
-  facebook?: string
-  disciplines?: string
-  offers?: string
-}
-
 export interface IWheres {
   code: string
   placename: string
@@ -74,7 +63,6 @@ export interface IBookedEventPage {
   bookedevent: IBookedEvent
   state: EState
 }
-
 
 export interface ICalendarState {
   editable: boolean

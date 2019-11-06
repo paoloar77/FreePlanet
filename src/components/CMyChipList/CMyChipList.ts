@@ -25,10 +25,15 @@ export default class CMyChipList extends Vue {
     return tools
   }
 
-  public mounted() {
+  @Watch('value', { immediate: true, deep: true })
+  public valchange() {
+    this.refreshval()
+  }
+
+  public refreshval() {
     this.myarrvalues = []
 
-    console.table(this.options)
+    // console.table(this.options)
     this.options.forEach((rec, index) => {
       if (tools.isBitActive(this.value, rec[this.optval])) {
         const mydata = {
@@ -51,7 +56,10 @@ export default class CMyChipList extends Vue {
     if (this.myarrvalues.length === 0)
       this.myarrvalues.push({ label: this.$t('otherpages.manage.nessuno'), color: 'gray' })
 
-    console.log('arrvalues=', this.myarrvalues)
+    // console.log('arrvalues=', this.myarrvalues)
+  }
 
+  public mounted() {
+    this.refreshval()
   }
 }

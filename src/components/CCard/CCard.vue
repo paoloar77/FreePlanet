@@ -1,9 +1,9 @@
 <template>
     <q-card class="my-card text-center">
-        <q-img :src="myop.img" class="myimg">
+        <q-img :src="`statics/images/` + myop.img" class="myimg">
             <div class="absolute-bottom text-spacetrans text-shadow">
-                <div class="text-h6 text-trans">{{myop.name}}</div>
-                <div class="text-subtitle-carica text-trans">{{myop.sub1}}</div>
+                <div class="text-h6 text-trans">{{myop.name}} {{myop.surname}}</div>
+                <div class="text-subtitle-carica text-trans">{{myop.qualification}}</div>
             </div>
         </q-img>
 
@@ -16,11 +16,19 @@
 
         <q-tab-panels v-model="tab" animated>
             <q-tab-panel name="one">
-                <div class="text-subtitle-carica">{{myop.sub2}}</div>
-                <div v-if="myop.sub3" class="text-subtitle-certificato">{{myop.sub3}}</div>
+                <div class="text-subtitle-carica">{{myop.disciplines}}</div>
+                <div v-if="myop.certifications" class="text-subtitle-certificato">{{myop.certifications}}</div>
                 <div class="op__cell">
                     <q-icon class="flex-icon" name="mobile_friendly"></q-icon>
-                    {{myop.cell}}
+                    <span class="q-mx-sm">{{myop.cell}}</span>
+
+                    <q-btn fab-mini icon="fab fa-whatsapp"
+                           color="green" type="a"
+                           size="xs"
+
+                           :href="tools.getHttpForWhatsapp(myop.cell)" target="__blank">
+
+                    </q-btn>
                 </div>
                 <div class="op__email">
                     <q-icon class="flex-icon" name="contact_mail"> </q-icon>&nbsp;
@@ -45,7 +53,7 @@
         </q-tab-panels>
 
         <!--<q-card-section>-->
-        <!--<div class="text-subtitle3">{{myop.sub2}}</div>-->
+        <!--<div class="text-subtitle3">{{myop.disciplines}}</div>-->
         <!--{{myop.info}}-->
         <!--</q-card-section>-->
     </q-card>

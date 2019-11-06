@@ -16,13 +16,14 @@ import { static_data } from '../../db/static_data'
 import globalroutines from '../../globalroutines'
 
 import MixinUsers from '../../mixins/mixin-users'
+import { CMyAvatar } from '../CMyAvatar'
 
 @Component({
   name: 'Header',
   mixins: [MixinUsers],
   components: {
     drawer,
-    messagePopover, CSignIn
+    messagePopover, CSignIn, CMyAvatar
   }
 })
 

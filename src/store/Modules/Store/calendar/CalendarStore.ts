@@ -9,8 +9,9 @@ import { tools } from '../../tools'
 import translate from '../../../../globalroutines/util'
 import * as Types from '../../../Api/ApiTypes'
 import { db_data } from '@src/db/db_data'
-import { GlobalStore, UserStore } from '@store'
+import { CalendarStore, GlobalStore, UserStore } from '@store'
 import { lists } from '@src/store/Modules/lists'
+import { IUserState } from '@src/model'
 
 // State
 const state: ICalendarState = {
@@ -36,10 +37,10 @@ const state: ICalendarState = {
   showWorkWeeks: false,
   intervalRange: { min: 9, max: 23 },
   intervalRangeStep: 1,
-  intervalHeight: 35,
-  resourceHeight: 60,
+  intervalHeight: 35, // 35
+  resourceHeight: 80, // 60
   resourceWidth: 100,
-  dayHeight: 100,
+  dayHeight: 150,
   enableThemes: false,
   theme: {}
 }
@@ -77,6 +78,24 @@ namespace Getters {
 
   }, 'getContribtypeRec')
 
+  const getOperatorByUsername = b.read((mystate: ICalendarState) => (username) => {
+    const ctrec = mystate.operators.find((rec) => rec.username === username)
+    return (ctrec)
+
+  }, 'getOperatorByUsername')
+
+  const getImgTeacherByUsername = b.read((mystate: ICalendarState) => (username): string => {
+    if (username === '')
+      return ''
+    // Check if is this User!
+    const myop = CalendarStore.getters.getOperatorByUsername(username)
+    if (myop && !!myop.img && myop.img !== '' && myop.img !== 'undefined') {
+      return myop.img
+    } else {
+      return ''
+    }
+  }, 'getImgTeacherByUsername')
+
   const getContribtypeById = b.read((mystate: ICalendarState) => (id) => {
     const ctrec = mystate.contribtype.find((mycontr) => mycontr._id === id)
     return (ctrec) ? ctrec.label : ''
@@ -109,6 +128,12 @@ namespace Getters {
     },
     get getContribtypeRecByLabel() {
       return getContribtypeRecByLabel()
+    },
+    get getOperatorByUsername() {
+      return getOperatorByUsername()
+    },
+    get getImgTeacherByUsername() {
+      return getImgTeacherByUsername()
     }
   }
 }

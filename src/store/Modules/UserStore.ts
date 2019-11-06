@@ -20,18 +20,23 @@ import { shared_consts } from '../../common/shared_vuejs'
 
 const bcrypt = require('bcryptjs')
 
+const DefaultUser: IUserFields = {
+  _id: '',
+  email: '',
+  username: '',
+  name: '',
+  surname: '',
+  password: '',
+  tokens: [],
+  verified_email: false,
+  profile: {
+    img: ''
+  }
+}
+
 // State
 const state: IUserState = {
-  my: {
-    _id: '',
-    email: '',
-    username: '',
-    name: '',
-    surname: '',
-    password: '',
-    tokens: [],
-    verified_email: false
-  },
+  my: DefaultUser,
   lang: process.env.LANG_DEFAULT,
   repeatPassword: '',
   categorySel: 'personal',
@@ -140,13 +145,14 @@ namespace Getters {
 
   const getImgByUsername = b.read((mystate: IUserState) => (username): string => {
     if (username === '')
-      return 'images/avatar/avatar3_small.png'
+      return ''
     // Check if is this User!
     const myrec = UserStore.getters.getUserByUsername(username)
-    if (myrec && !!myrec.img && myrec.img !== '' && myrec.img !== 'undefined') {
-      return myrec.img
+    // console.log('myrec', myrec)
+    if (myrec && myrec.profile && !!myrec.profile.img && myrec.profile.img !== '' && myrec.profile.img !== 'undefined') {
+      return myrec.profile.img
     } else {
-      return 'images/avatar/avatar3_small.png'
+      return ''
     }
   }, 'getImgByUsername')
 
@@ -189,22 +195,22 @@ namespace Getters {
     },
     get getUsersList() {
       return getUsersList()
-    }
+    },
   }
 
 }
 
 namespace Mutations {
   function authUser(mystate: IUserState, data: IUserFields) {
-    mystate.my = {...data}
+    mystate.my = { ...data }
 
     mystate.isAdmin = tools.isBitActive(mystate.my.perm, shared_consts.Permissions.Admin.value)
     mystate.isManager = tools.isBitActive(mystate.my.perm, shared_consts.Permissions.Manager.value)
     mystate.isTeacher = tools.isBitActive(mystate.my.perm, shared_consts.Permissions.Teacher.value)
 
     // console.log('authUser', 'state.isAdmin', mystate.isAdmin)
-    console.table(mystate)
-    console.table(data)
+    // console.table(mystate)
+    // console.table(data)
 
     // if (data.my.verified_email) {
     //   mystate.my.verified_email = data.my.verified_email
@@ -561,7 +567,10 @@ namespace Actions {
             localStorage.setItem(tools.localStorage.name, myuser.name)
             localStorage.setItem(tools.localStorage.surname, myuser.surname)
             localStorage.setItem(tools.localStorage.perm, String(myuser.perm) || '')
-            localStorage.setItem(tools.localStorage.img, String(myuser.img) || '')
+            if (myuser.profile !== undefined)
+              localStorage.setItem(tools.localStorage.img, (!!myuser.profile.img) ? String(myuser.profile.img) || '' : '')
+            else
+              localStorage.setItem(tools.localStorage.img, '')
             localStorage.setItem(tools.localStorage.token, state.x_auth_token)
             localStorage.setItem(tools.localStorage.expirationDate, expirationDate.toString())
             localStorage.setItem(tools.localStorage.isLogged, String(true))
@@ -607,6 +616,7 @@ namespace Actions {
     localStorage.removeItem(tools.localStorage.wasAlreadySubOnDb)
 
     state.isLogged = false
+    state.my = { ...DefaultUser }
 
     await GlobalStore.actions.clearDataAfterLogout()
 
@@ -628,7 +638,6 @@ namespace Actions {
   async function setGlobal(isLogged: boolean) {
     console.log('setGlobal')
     // state.isLogged = true
-    state.isLogged = isLogged
     if (isLogged) {
       // console.log('state.isLogged', state.isLogged)
 
@@ -640,12 +649,17 @@ namespace Actions {
 
     const p3 = await GlobalStore.actions.loadAfterLogin()
 
+    state.isLogged = isLogged
+
     if (static_data.functionality.ENABLE_TODOS_LOADING)
       await Todos.actions.dbLoad({ checkPending: true })
 
     if (static_data.functionality.ENABLE_PROJECTS_LOADING)
       await Projects.actions.dbLoad({ checkPending: true, onlyiffirsttime: true })
 
+    GlobalStore.state.finishLoading = true
+
+    return true
     // console.log('setGlobal: END')
   }
 
@@ -685,18 +699,18 @@ namespace Actions {
             surname,
             verified_email,
             perm,
-            img
+            profile: { img }
           })
 
           isLogged = true
         }
       }
 
-      await setGlobal(isLogged)
+      return await setGlobal(isLogged)
 
       // console.log('autologin _id STATE ', state._id)
 
-      return true
+      // return true
     } catch (e) {
       console.error('ERR autologin ', e.message)
       return false

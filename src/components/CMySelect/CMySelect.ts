@@ -3,7 +3,6 @@ import { Component, Prop, Watch } from 'vue-property-decorator'
 
 import { tools } from '../../store/Modules/tools'
 import { toolsext } from '@src/store/Modules/toolsext'
-import { IPerson } from '../../model/GlobalStore'
 
 @Component({
   name: 'CMySelect'
@@ -26,14 +25,7 @@ export default class CMySelect extends Vue {
     return tools
   }
 
-  public nothing() {
-
-  }
-
   public changeval(newval) {
-    // console.log('changeval', newval)
-    // const newvallab = newval[`${this.optval}`]
-    // this.myvalue = newvallab
     this.$emit('update:value', newval)
   }
 

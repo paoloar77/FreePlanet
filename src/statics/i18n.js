@@ -91,7 +91,7 @@ const msgglobal = {
       incorso: 'Registrazione in corso...',
       richiesto: 'Campo Richiesto',
       email: 'Email',
-      cell: 'Móvil',
+      cell: 'Telefono',
       img: 'Immagine',
       date_reg: 'Data Reg.',
       perm: 'Permessi',
@@ -128,12 +128,23 @@ const msgglobal = {
 
       }
     },
+    op: {
+      qualification: 'Qualifica',
+      disciplines: 'Discipline',
+      certifications: 'Certificazioni',
+      intro: 'Introduzione',
+      info: 'Biografia',
+      webpage: 'Pagina Web',
+      days_working: 'Giorni Lavorativi',
+      facebook: 'Pagina Facebook',
+    },
     login: {
       page_title: 'Login',
       incorso: 'Login in corso',
       enter: 'Login',
       errato: "Username o password errata. Riprovare",
       completato: 'Login effettuato!',
+      needlogin: 'E\' necessario effettuare il login prima di continuare'
     },
     reset: {
       title_reset_pwd: "Reimposta la tua Password",
@@ -253,7 +264,8 @@ const msgglobal = {
       short_tit: 'Titolo Breve',
       title: 'Titolo',
       details: 'Dettagli',
-      date: 'Data',
+      dateTimeStart: 'Data Inizio',
+      dateTimeEnd: 'Data Fine',
       bgcolor: 'Colore Sfondo',
       days: 'Giorni',
       icon: 'Icona',
@@ -275,6 +287,7 @@ const msgglobal = {
       canceled: 'Cancellato',
       deleted: 'Eliminato',
       duplicate: 'Duplica',
+      notempty: 'Il campo non può essere vuoto',
       modified: 'Modificato'
     },
     newsletter: {
@@ -384,7 +397,7 @@ const msgglobal = {
       incorso: 'Registro en curso...',
       richiesto: 'Campo requerido',
       email: 'Email',
-      cell: 'Telefono',
+      cell: 'Móvil',
       img: 'File image',
       date_reg: 'Fecha Reg.',
       perm: 'Permisos',
@@ -414,12 +427,23 @@ const msgglobal = {
         sameaspassword: 'Las contraseñas deben ser idénticas',
       }
     },
+    op: {
+      qualification: 'Calificación',
+      disciplines: 'Disciplinas',
+      certifications: 'Certificaciones',
+      intro: 'Introducción',
+      info: 'Biografia',
+      webpage: 'Página web',
+      days_working: 'Días laborables',
+      facebook: 'Página de Facebook',
+    },
     login: {
       page_title: 'Login',
       incorso: 'Login en curso',
       enter: 'Entra',
       errato: "Nombre de usuario, correo o contraseña incorrectos. inténtelo de nuevo",
       completato: 'Login realizado!',
+      needlogin: 'Debes iniciar sesión antes de continuar',
     },
     reset: {
       title_reset_pwd: "Restablece tu contraseña",
@@ -537,7 +561,8 @@ const msgglobal = {
       short_tit: 'Título Corto',
       title: 'Título',
       details: 'Detalles',
-      date: 'Fecha',
+      dateTimeStart: 'Fecha de Inicio',
+      dateTimeEnd: 'Fecha Final',
       bgcolor: 'Color de fondo',
       days: 'Días',
       icon: 'Icono',
@@ -559,6 +584,7 @@ const msgglobal = {
       canceled: 'Cancelado',
       deleted: 'Eliminado',
       duplicate: 'Duplica',
+      notempty: 'El campo no puede estar vacío.',
       modified: 'Modificado'
     },
     newsletter: {
@@ -697,12 +723,23 @@ const msgglobal = {
         sameaspassword: 'Les mots de passe doivent être identiques',
       }
     },
+    op: {
+      qualification: 'Qualification',
+      disciplines: 'Disciplines',
+      certifications: 'Certifications',
+      intro: 'Introduction',
+      info: 'Biographie',
+      webpage: 'Page Web',
+      days_working: 'Jours ouvrés',
+      facebook: 'Page Facebook',
+    },
     login: {
       page_title: 'Login',
       incorso: 'Connexion en cours',
       enter: 'Entrez',
       errato: "Nom d'utilisateur, email ou mot de passe incorrect. réessayer",
       completato: 'Connexion faite!',
+      needlogin: 'Vous devez vous connecter avant de continuer',
     },
     reset: {
       title_reset_pwd: "Réinitialiser votre mot de passe",
@@ -820,7 +857,8 @@ const msgglobal = {
       short_tit: 'Titre abrégé\'',
       title: 'Titre',
       details: 'Détails',
-      date: 'Date',
+      dateTimeStart: 'Data Initiale',
+      dateTimeEnd: 'Date de fin',
       bgcolor: 'Couleur de fond',
       days: 'Journées',
       icon: 'Icône',
@@ -842,6 +880,7 @@ const msgglobal = {
       canceled: 'Annulé',
       deleted: 'Supprimé',
       duplicate: 'Duplique',
+      notempty: 'Le champ ne peut pas être vide',
       modified: 'modifié'
     },
     newsletter: {
@@ -980,11 +1019,22 @@ const msgglobal = {
         sameaspassword: 'Passwords must be identical',
       }
     },
+    op: {
+      qualification: 'Qualification',
+      disciplines: 'Disciplines',
+      certifications: 'Certifications',
+      intro: 'Introduction',
+      info: 'Biography',
+      webpage: 'Web Page',
+      days_working: 'Working Days',
+      facebook: 'Facebook Page',
+    },
     login: {
       incorso: 'Login...',
       enter: 'Login',
       errato: "Username or password wrong. Please retry again",
       completato: 'Login successfully!',
+      needlogin: 'You must login before continuing',
     },
     reset: {
       title_reset_pwd: "Reset your Password",
@@ -1102,7 +1152,8 @@ const msgglobal = {
       short_tit: 'Short Title',
       title: 'Title',
       details: 'Details',
-      date: 'Date',
+      dateTimeStart: 'Date Start',
+      dateTimeEnd: 'Date End',
       bgcolor: 'Background color',
       days: 'Days',
       icon: 'Icon',
@@ -1124,6 +1175,7 @@ const msgglobal = {
       canceled: 'Canceled',
       deleted: 'Deleted',
       duplicate: 'Duplicate',
+      notempty: 'Field cannot be empty',
       modified: 'Modified'
     },
     newsletter: {
@@ -1263,12 +1315,23 @@ const msgglobal = {
         sameaspassword: 'Passwords must be identical',
       }
     },
+    op: {
+      qualification: 'Qualification',
+      disciplines: 'Disciplines',
+      certifications: 'Certifications',
+      intro: 'Introduction',
+      info: 'Biography',
+      webpage: 'Web Page',
+      days_working: 'Working Days',
+      facebook: 'Facebook Page',
+    },
     login: {
       page_title: 'Login',
       incorso: 'Login...',
       enter: 'Login',
       errato: "Username or password wrong. Please retry again",
       completato: 'Login successfully!',
+      needlogin: 'You must login before continuing',
     },
     reset: {
       title_reset_pwd: "Reset your Password",
@@ -1386,7 +1449,8 @@ const msgglobal = {
       short_tit: 'Short Title',
       title: 'Title',
       details: 'Details',
-      date: 'Date',
+      dateTimeStart: 'Date Start',
+      dateTimeEnd: 'Date End',
       bgcolor: 'Background color',
       days: 'Days',
       icon: 'Icon',
@@ -1408,6 +1472,7 @@ const msgglobal = {
       canceled: 'Canceled',
       deleted: 'Deleted',
       duplicate: 'Duplicate',
+      notempty: 'Field cannot be empty',
       modified: 'Modified'
     },
     newsletter: {

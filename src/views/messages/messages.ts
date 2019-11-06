@@ -9,10 +9,7 @@ import { IChat, IMessage, IUserState, MsgDefault, StatusMessage } from '../../mo
 import { Getter } from 'vuex-class'
 import { IMsgUsers } from '../../model/MessageStore'
 import MixinUsers from '../../mixins/mixin-users'
-
-import { scroll } from 'quasar'
-
-const { getScrollTarget, setScrollPosition } = scroll
+import { CMyAvatar } from '../../components/CMyAvatar'
 
 // import {Loading, QSpinnerFacebook, QSpinnerGears} from 'quasar'
 
@@ -21,7 +18,7 @@ const namespace = 'MessageModule'
 @Component({
   name: 'Messages',
   mixins: [MixinUsers],
-  components: {}
+  components: { CMyAvatar }
 })
 
 export default class Messages extends Vue {
@@ -81,14 +78,6 @@ export default class Messages extends Vue {
     return mystr
   }
 
-  public scrollToElement(el) {
-    const target = getScrollTarget(el)
-    const offset = el.offsetTop
-    const duration = 1000
-    // console.log('target', target, 'offset', offset, 'duration', duration)
-    setScrollPosition(target, offset, duration)
-  }
-
   public refreshdata(username: string) {
     this.loading = true
 
@@ -103,7 +92,7 @@ export default class Messages extends Vue {
       this.loading = false
 
       const element = document.getElementById('last')
-      this.scrollToElement(element)
+      tools.scrollToElement(element)
 
       // this.changemsgs('', '')
 
@@ -224,7 +213,7 @@ export default class Messages extends Vue {
       data.status = StatusMessage.Sending
 
       const element = document.getElementById('last')
-      this.scrollToElement(element)
+      tools.scrollToElement(element)
 
       if (!ris)
         tools.showNegativeNotif(self.$q, self.$t('cal.sendmsg_error'))

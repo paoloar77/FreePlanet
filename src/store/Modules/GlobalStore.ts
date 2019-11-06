@@ -34,6 +34,7 @@ getstateConnSaved()
   })
 
 const state: IGlobalState = {
+  finishLoading: false,
   conta: 0,
   wasAlreadySubscribed: false,
   wasAlreadySubOnDb: false,
@@ -66,7 +67,8 @@ const state: IGlobalState = {
     table: '',
     type: 0,
     _id: 0
-  }
+  },
+  settings: []
 }
 
 async function getConfig(id) {
@@ -152,6 +154,45 @@ namespace Getters {
     return ris
   }, 't')
 
+  const getListByTable = b.read((state) => (table) => {
+    if (table === tools.TABEVENTS)
+      return CalendarStore.state.eventlist
+    else if (table === 'operators')
+      return CalendarStore.state.operators
+    else if (table === 'wheres')
+      return CalendarStore.state.wheres
+    else if (table === 'contribtype')
+      return CalendarStore.state.contribtype
+    else if (table === 'bookings')
+      return CalendarStore.state.bookedevent
+    else if (table === 'users')
+      return UserStore.state.usersList
+    else if (table === 'sendmsgs')
+      return MessageStore.state.last_msgs
+    else if (table === 'settings')
+      return UserStore.state.settings
+    else if (table === 'permissions')
+      return UserStore.state.permissionsList
+    else
+      return null
+
+  }, 'getListByTable')
+
+  const getValueSettingsByKey = b.read((mystate: IGlobalState) => (key): any => {
+    const myrec = mystate.settings.find((rec) => rec.key === key)
+    if (!!myrec) {
+      if (myrec.type === tools.FieldType.date)
+        return myrec.value_date
+      if (myrec.type === tools.FieldType.number)
+        return myrec.value_num
+      else
+        return myrec.value_str
+    } else {
+      return ''
+    }
+
+  }, 'getValueSettingsByKey')
+
   export const getters = {
     get testpao1_getter_contatore() {
       return testpao1_getter_contatore()
@@ -185,6 +226,14 @@ namespace Getters {
 
     get getmenu() {
       return getmenu()
+    },
+
+    get getListByTable() {
+      return getListByTable()
+    },
+
+    get getValueSettingsByKey() {
+      return getValueSettingsByKey()
     },
 
     get t() {
@@ -270,43 +319,23 @@ namespace Mutations {
 
   }
 
-  function getListByTable(table): any[] {
-    if (table === tools.TABEVENTS)
-      return CalendarStore.state.eventlist
-    else if (table === 'operators')
-      return CalendarStore.state.operators
-    else if (table === 'wheres')
-      return CalendarStore.state.wheres
-    else if (table === 'contribtype')
-      return CalendarStore.state.contribtype
-    else if (table === 'bookings')
-      return CalendarStore.state.bookedevent
-    else if (table === 'users')
-      return UserStore.state.usersList
-    else if (table === 'sendmsgs')
-      return MessageStore.state.last_msgs
-    else if (table === 'permissions')
-      return UserStore.state.permissionsList
-    else
-      return null
-
-  }
-
   function UpdateValuesInMemory(mystate: IGlobalState, mydata: IDataPass) {
 
     const id = mydata.id
     const table = mydata.table
 
     try {
-      const mylist = getListByTable(table)
+      const mylist = Getters.getters.getListByTable(table)
       const mykey = fieldsTable.getKeyByTable(table)
 
-      const myrec = mylist.find((event) => event[mykey] === id)
-      // console.log('myrec', myrec)
-      if (myrec) {
-        for (const [key, value] of Object.entries(mydata.fieldsvalue)) {
-          console.log('key', value, myrec[key])
-          myrec[key] = value
+      if (!!mylist) {
+        const myrec = mylist.find((event) => event[mykey] === id)
+        // console.log('myrec', myrec)
+        if (myrec) {
+          for (const [key, value] of Object.entries(mydata.fieldsvalue)) {
+            console.log('key', value, myrec[key])
+            myrec[key] = value
+          }
         }
       }
     } catch (e) {
@@ -653,13 +682,14 @@ namespace Actions {
 
     const myuserid = (UserStore.state.my._id) ? UserStore.state.my._id : '0'
 
-    const ris = await Api.SendReq('/loadsite/' + myuserid + '/' + process.env.APP_ID + '/' + showall, 'GET', null)
+    return await Api.SendReq('/loadsite/' + myuserid + '/' + process.env.APP_ID + '/' + showall, 'GET', null)
       .then((res) => {
         CalendarStore.state.bookedevent = (res.data.bookedevent) ? res.data.bookedevent : []
         CalendarStore.state.eventlist = (res.data.eventlist) ? res.data.eventlist : []
         CalendarStore.state.operators = (res.data.operators) ? res.data.operators : []
         CalendarStore.state.wheres = (res.data.wheres) ? res.data.wheres : []
         CalendarStore.state.contribtype = (res.data.contribtype) ? res.data.contribtype : []
+        GlobalStore.state.settings = (res.data.settings) ? [...res.data.settings] : []
 
       })
       .catch((error) => {
@@ -667,8 +697,6 @@ namespace Actions {
         // UserStore.mutations.setErrorCatch(error)
         return new Types.AxiosError(serv_constants.RIS_CODE_ERR, null, tools.ERR_GENERICO, error)
       })
-
-    return ris
 
   }
 

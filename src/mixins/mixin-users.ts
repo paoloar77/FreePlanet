@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import { GlobalStore, UserStore, MessageStore } from '../store/Modules'
 
-
 import Component from 'vue-class-component'
 import { func_tools } from '../store/Modules/toolsext'
 import { tools } from '../store/Modules/tools'
@@ -30,6 +29,10 @@ export default class MixinUsers extends Vue {
     return `statics/` + UserStore.getters.getImgByUsername(username)
   }
 
+  public isValidUsername(username) {
+    return username && username !== 'nessuno' && username !== 'none'
+  }
+
   public getMyUsername() {
     return UserStore.state.my.username
   }
@@ -50,7 +53,8 @@ export default class MixinUsers extends Vue {
   }
 
   get getMyImg() {
-    return 'statics/' + UserStore.getters.getImgByUsername(UserStore.state.my.username)
+    const ris = UserStore.getters.getImgByUsername(UserStore.state.my.username)
+    return (ris !== '') ? 'statics/' + ris : ''
   }
 
   get MenuCollapse() {

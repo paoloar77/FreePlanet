@@ -134,6 +134,14 @@ $graytext: #555;
     height: 150px;
   }
 
+  &__tdimg_small {
+    width: auto;
+    height: 50px !important;
+    @media (max-width: 800px) {
+      height: 40px !important;
+    }
+  }
+
   &__table {
     margin: 10px;
     border: solid 1px #4198ef;
@@ -167,7 +175,7 @@ $graytext: #555;
   }
 
   &__img {
-    padding: 0.5rem !important;
+    padding: 0.25rem !important;
     float: left;
     width: 150px;
     height: 150px;
@@ -179,6 +187,14 @@ $graytext: #555;
       text-align: center;
       margin: 0 auto;
     }
+  }
+
+  &__img:hover {
+    transition: transform .2s;
+    transform: scale(1.05);
+    border: inset;
+    border-color: blue;
+    border-width: 1px;
   }
 
 }
@@ -231,6 +247,20 @@ $graytext: #555;
 .chipnews {
 
   position: absolute;
+  right: 0;
+  @media (max-width: 400px) {
+    position: initial;
+    right: initial;
+  }
+}
+
+.chipmodif {
+
+  position: absolute;
+  margin-top: -10px;
+  overflow: hidden;
+  z-index: 9999;
+  box-sizing: border-box;
   right: 0;
   @media (max-width: 400px) {
     position: initial;

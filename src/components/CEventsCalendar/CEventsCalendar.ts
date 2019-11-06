@@ -32,11 +32,13 @@ import { GlobalStore, MessageStore } from '../../store/Modules'
 import { IMessagePage, IMessage, IIdentity, MsgDefault } from '../../model'
 import MixinUsers from '../../mixins/mixin-users'
 import { CDateTime } from '../CDateTime'
+import MixinOperator from '../../mixins/mixin-operator'
+import { CMyAvatar } from '../CMyAvatar'
 
 @Component({
-  mixins: [MixinUsers],
+  mixins: [MixinOperator, MixinUsers],
   name: 'CEventsCalendar',
-  components: { Logo, Footer, CTitle, CImgText, QDateTimeScroller, QDateScroller, CMySelect, CMyEditor, CDateTime }
+  components: { Logo, Footer, CTitle, CImgText, QDateTimeScroller, QDateScroller, CMySelect, CMyEditor, CDateTime, CMyAvatar }
 })
 export default class CEventsCalendar extends Vue {
   public $q
@@ -252,7 +254,14 @@ export default class CEventsCalendar extends Vue {
   }
 
   get dayHeight() {
-    return CalendarStore.state.dayHeight
+    if (Screen.height < 500)
+      return 100
+    if (Screen.height < 700)
+      return 110
+    else if (Screen.height < 800)
+      return 120
+    else
+      return 140
   }
 
   get theme() {
@@ -392,6 +401,14 @@ export default class CEventsCalendar extends Vue {
     // console.log('showEvent - FINE ' + myevent)
   }
 
+  public selectEvent(eventparam: IEvents) {
+    if (this.myevent === eventparam)
+      this.myevent = null
+    else
+      this.myevent = eventparam
+
+  }
+
   public onDateChanged(mydate) {
     this.calendarView = 'day'
   }
@@ -426,6 +443,10 @@ export default class CEventsCalendar extends Vue {
     if (!UserStore.state.isLogged || !UserStore.state.my.verified_email) {
       // Visu right Toolbar to make SignIn
       GlobalStore.state.RightDrawerOpen = true
+      tools.showNeutralNotif(this.$q, this.$t('login.needlogin'))
+      tools.scrollToTop()
+      // window.scrollTo(0, 0)
+
       // this.$router.push('/signin')
     } else {
       console.log('addBookEventMenu')
@@ -445,6 +466,10 @@ export default class CEventsCalendar extends Vue {
     if (!UserStore.state.isLogged || !UserStore.state.my.verified_email) {
       // Visu right Toolbar to make SignIn
       GlobalStore.state.RightDrawerOpen = true
+
+      tools.showNeutralNotif(this.$q, this.$t('login.needlogin'))
+      tools.scrollToTop()
+
       // this.$router.push('/signin')
     } else {
       console.log('askForInfoEventMenu')
@@ -483,6 +508,19 @@ export default class CEventsCalendar extends Vue {
 
   public deleteEvent(eventparam) {
     tools.CancelEvent(this, eventparam)
+  }
+
+  public duplicateEvent(eventparam, numgg, numev: number = 1 ) {
+    for (let i = 0; i < numev; ++i) {
+      GlobalStore.actions.DuplicateRec({ table: tools.TABEVENTS, id: eventparam._id }).then((rec) => {
+        rec.dateTimeStart = tools.addDays(new Date(rec.dateTimeStart), numgg * (i + 1))
+        rec.dateTimeEnd = tools.addDays(new Date(rec.dateTimeEnd), numgg * (i + 1))
+        CalendarStore.state.eventlist.push(rec)
+        this.editEvent(rec)
+
+      })
+    }
+    // tools.ActionRecTable(this, lists.MenuAction.DUPLICATE_RECTABLE, tools.TABEVENTS, eventparam._id, eventparam, 'db.duplicatedrecord')
   }
 
   public findEventIndex(eventparam) {
@@ -996,5 +1034,15 @@ export default class CEventsCalendar extends Vue {
     // console.log('datenow', datenow, 'end', myevent.dateTimeEnd)
 
     return (new Date(myevent.dateTimeEnd) >= datenow)
+  }
+
+  public getTitleEv(event: IEvents) {
+    return (!!event.short_tit) ? event.short_tit : event.title
+  }
+
+  public getStyleByEvent(event: IEvents) {
+    if (event === this.myevent) {
+      return 'border: inset; border-color: darkblue; border-width: 3px; padding: 5px !important; '
+    }
   }
 }

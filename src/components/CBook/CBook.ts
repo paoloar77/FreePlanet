@@ -3,7 +3,7 @@ import { Component, Prop, Watch } from 'vue-property-decorator'
 
 import { tools } from '../../store/Modules/tools'
 import { toolsext } from '@src/store/Modules/toolsext'
-import { IPerson } from '../../model/GlobalStore'
+import { IOperators } from '../../model/GlobalStore'
 
 @Component({
   name: 'CBook',
@@ -21,7 +21,7 @@ export default class CBook extends Vue {
     this.tab = 'two'
   }
 
-  @Prop({ required: true }) public op: IPerson
+  @Prop({ required: true }) public op: IOperators
 
   get tools() {
     return tools
@@ -35,9 +35,9 @@ export default class CBook extends Vue {
         index: 0,
         tab: '',
         name: '',
-        sub1: '',
+        qualification: '',
         sub2: '',
-        sub3: '',
+        certifications: '',
         img: '',
         cell: '',
         email: '',

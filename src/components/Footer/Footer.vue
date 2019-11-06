@@ -26,7 +26,34 @@
                             <p class="mycontacts_title">{{$t('homepage.titlecontatti')}}</p>
 
 
-                            <p class="mycontacts_text" v-html="$t('homepage.contacts')"></p>
+                            <p class="mycontacts_text">
+                                <i v-if="getValDb('MAIN_EMAIL')" aria-hidden="true"
+                                   class="q-icon fas fa-envelope q-mx-sm"></i>
+                                <a :href="`mailto:` + getValDb('MAIN_EMAIL')" class="links">{{ getValDb('MAIN_EMAIL')
+                                    }}</a><br>
+                                <br>
+                                <span v-for="rec in getarrValDb('CONTACTS_EMAIL_CELL')">
+                                    {{ rec.name }}: {{ rec.phone }}
+                                    <a v-if="!!tools.getHttpForWhatsapp(rec.phone)" :href="tools.getHttpForWhatsapp(rec.phone)" target="_blank">
+                                        <i aria-hidden="true" class="q-icon fab fa-whatsapp icon_contact links"></i></a>
+                                    <br>
+                                    <i v-if="rec.email" aria-hidden="true"
+                                       class="q-icon fas fa-envelope q-mx-sm"></i> <a :href="`mailto:`+ rec.email "
+                                                                                      class="links">{{rec.email}}</a>
+                                    <br>
+                                </span>
+                                <span v-if="getValDb('CALL_WORKING_DAYS')"><br>orari per chiamate:<br>
+                                    <span v-html="getValDb('CALL_WORKING_DAYS')"></span></span>
+                                <!--Elisa Ghizzardi: 338-9344724 <a href="mailto:elisa.ghizzardi@yahoo.com" class="links">elisa.ghizzardi@yahoo.com</a><br>
+
+                                Cristina Barattoni: 335-8233721 <a href="mailto:info@cristinabarattoni.it"
+                                                                    class="links">info@cristinabarattoni.it</a><br><br>'
+                                +
+                                'orari per chiamate:<br>lun-ven: 12:30-13:30; 17:00-19.30<br>sab-dom: 10-18
+
+                                -->
+
+                            </p>
                         </div>
                         <div class="landing__footer-icons row flex-center">
                             <a v-if="!!FBPage" :href="FBPage" target="_blank">
@@ -37,6 +64,9 @@
 
                             <a v-if="!!TelegramSupport" :href="TelegramSupport" target="_blank">
                                 <i aria-hidden="true" class="q-icon fab fa-telegram icon_contact links"></i></a>
+
+                            <a v-if="!!Whatsapp_Cell" :href="ChatWhatsapp" target="_blank">
+                                <i aria-hidden="true" class="q-icon fab fa-whatsapp icon_contact links"></i></a>
 
 
                             <!--<a href="" target="_blank"><i aria-hidden="true" class="q-icon fab fa-github"> </i></a>-->
@@ -52,7 +82,8 @@
                     </div>
 
                     <p class="text-center">
-                        <router-link v-if="static_data.functionality.SHOW_ONLY_POLICY" to="/policy"><span class="footer_link">{{$t('privacy_policy')}}</span></router-link>
+                        <router-link v-if="static_data.functionality.SHOW_ONLY_POLICY" to="/policy"><span
+                                class="footer_link">{{$t('privacy_policy')}}</span></router-link>
                     </p>
 
                 </div>
@@ -77,9 +108,13 @@
                 </div>
             </div>
         </section>
-        <q-page-scroller position="bottom-right" :scroll-offset="850" :offset="[18, 18]" style="opacity: 0.3">
+        <q-page-scroller position="bottom-right" :scroll-offset="850" :offset="[18, 78]" style="opacity: 0.3">
             <q-btn fab icon="keyboard_arrow_up" color="accent"/>
         </q-page-scroller>
+        <q-page-sticky v-if="ChatWhatsapp" position="bottom-right" :offset="[18, 18]">
+            <q-btn fab icon="fab fa-whatsapp" color="green" type="a" :href="ChatWhatsapp" target="__blank"
+                   class="mybtn_sticky"/>
+        </q-page-sticky>
     </div>
 </template>
 
