@@ -36,6 +36,7 @@ export default class CCard extends Vue {
         name: '',
         surname: '',
         qualification: '',
+        usertelegram: '',
         disciplines: '',
         certifications: '',
         img: '',

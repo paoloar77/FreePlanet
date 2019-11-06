@@ -74,6 +74,9 @@ export default class MenuOne extends Vue {
     if (elem.onlyManager)
       menu += ' isManager'
 
+    if (elem.extraclass)
+      menu += ' ' + elem.extraclass
+
     return menu
   }
 }

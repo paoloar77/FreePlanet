@@ -2626,6 +2626,13 @@ export const tools = {
       return 'https://wa.me/' + mynum
     else
       return ''
+  },
+
+  getHttpForTelegram(usertelegram) {
+    if (usertelegram)
+      return 'https://t.me/' + usertelegram
+    else
+      return ''
   }
 
 // getLocale() {

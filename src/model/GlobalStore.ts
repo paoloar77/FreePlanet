@@ -96,6 +96,7 @@ export interface IListRoutes {
   submenu?: boolean
   onlyAdmin?: boolean
   onlyManager?: boolean
+  extraclass?: string
   meta?: any
   idelem?: string
   urlroute?: string
@@ -118,6 +119,7 @@ export interface IOperators {
   certifications?: string
   img?: string
   cell?: string
+  usertelegram?: string
   paginaweb?: string
   paginafb?: string
   intro?: string

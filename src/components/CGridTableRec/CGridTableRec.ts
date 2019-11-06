@@ -180,6 +180,10 @@ export default class CGridTableRec extends Vue {
     const startRow = (page - 1) * rowsPerPage
     const endRow = startRow + fetchCount
 
+    console.log('startRow', startRow)
+
+    this.serverData = []
+
     // fetch data from "server"
     this.fetchFromServer(startRow, endRow, filter, sortBy, descending).then((ris) => {
 
@@ -189,11 +193,13 @@ export default class CGridTableRec extends Vue {
       if (this.returnedData === []) {
         this.serverData = []
       } else {
-        if (this.serverData.length > 0)
-          this.serverData.splice(0, this.serverData.length, ...this.returnedData)
-        else
-          this.serverData = [...this.returnedData]
+        // if (this.serverData.length > 0)
+        //   this.serverData.splice(0, this.serverData.length, ...this.returnedData)
+        // else
+        this.serverData = [...this.returnedData]
       }
+
+      console.log('this.serverData', this.serverData)
 
       // don't forget to update local pagination object
       this.pagination.page = page
@@ -358,7 +364,7 @@ export default class CGridTableRec extends Vue {
     // console.log('this.filter', this.filter)
 
     this.onRequest({
-      pagination: this.pagination,
+      pagination: this.pagination
     })
   }
 

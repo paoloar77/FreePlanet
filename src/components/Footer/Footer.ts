@@ -42,6 +42,11 @@ export default class Footer extends Vue {
     return GlobalStore.getters.getValueSettingsByKey('WHATSAPP_CELL')
   }
 
+  get Telegram_UsernameHttp() {
+
+    return tools.getHttpForTelegram(GlobalStore.getters.getValueSettingsByKey('TELEGRAM_USERNAME'))
+  }
+
   get FBPage() {
     const fb = GlobalStore.getters.getValueSettingsByKey('URL_FACEBOOK')
     return fb

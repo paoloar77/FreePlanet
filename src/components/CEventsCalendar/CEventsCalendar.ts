@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { Component, Prop, Watch } from 'vue-property-decorator'
+import { Component, Mixins, Prop, Watch } from 'vue-property-decorator'
 import { CalendarStore, UserStore } from '@store'
 
 import { Logo } from '../../components/logo/index'
@@ -31,16 +31,17 @@ import { lists } from '../../store/Modules/lists'
 import { GlobalStore, MessageStore } from '../../store/Modules'
 import { IMessagePage, IMessage, IIdentity, MsgDefault } from '../../model'
 import MixinUsers from '../../mixins/mixin-users'
-import { CDateTime } from '../CDateTime'
 import MixinOperator from '../../mixins/mixin-operator'
+import MixinEvents from '../../mixins/mixin-events'
+import { CDateTime } from '../CDateTime'
 import { CMyAvatar } from '../CMyAvatar'
 
 @Component({
-  mixins: [MixinOperator, MixinUsers],
+  mixins: [MixinOperator, MixinUsers, MixinEvents],
   name: 'CEventsCalendar',
   components: { Logo, Footer, CTitle, CImgText, QDateTimeScroller, QDateScroller, CMySelect, CMyEditor, CDateTime, CMyAvatar }
 })
-export default class CEventsCalendar extends Vue {
+export default class CEventsCalendar extends MixinEvents {
   public $q
   public $t: any
   public calendarView = 'month'
@@ -48,6 +49,7 @@ export default class CEventsCalendar extends Vue {
   public formDefault: IEvents = {
     title: '',
     details: '',
+    bodytext: '',
     dateTimeStart: tools.getstrYYMMDDDateTime(tools.getDateNow()),
     dateTimeEnd: tools.getstrYYMMDDDateTime(tools.getDateNow()),
     icon: '',
@@ -284,9 +286,6 @@ export default class CEventsCalendar extends Vue {
     return (CalendarStore.state.intervalRange.max - CalendarStore.state.intervalRange.min) * (1 / CalendarStore.state.intervalRangeStep)
   }
 
-  get editable() {
-    return CalendarStore.state.editable
-  }
 
   get containerStyle() {
     const styles = { height: '' }
@@ -851,17 +850,6 @@ export default class CEventsCalendar extends Vue {
     return await CalendarStore.actions.BookEvent(eventparam)
   }
 
-  public isAlreadyBooked(eventparam: IEvents) {
-    return CalendarStore.getters.findEventBooked(eventparam, true)
-  }
-
-  public getImgEvent(event: IEvents) {
-    if (!!event.img)
-      return '../../statics/' + event.img
-    else
-      return '../../statics/images/noimg.png'
-  }
-
   get getContribTypeArr() {
     return CalendarStore.state.contribtype
   }
@@ -872,15 +860,6 @@ export default class CEventsCalendar extends Vue {
 
   get getWhereArr() {
     return CalendarStore.state.wheres
-  }
-
-  public isShowPrice(event: IEvents) {
-    const rec = CalendarStore.getters.getContribtypeRec(event.contribtype)
-    return (rec) ? rec.showprice : true
-  }
-
-  public getContribtypeById(id) {
-    return CalendarStore.getters.getContribtypeById(id)
   }
 
   public createContribType(value) {
@@ -895,26 +874,6 @@ export default class CEventsCalendar extends Vue {
     const parts = eventparam.dateTimeStart.split('-')
     const mydate = new Date(parts[0], parts[1] - 1, parts[2])
     return this.dateFormatter.format(mydate)
-  }
-
-  public getPrice(event: IEvents) {
-    let myprice = (event.price > 0) ? event.price + ' €' : ''
-    myprice = (event.price === -1) ? this.$t('event.askinfo') : myprice
-
-    if (event.infoafterprice)
-      myprice += ' ' + event.infoafterprice
-
-    return myprice
-  }
-
-  public getWhereIcon(where) {
-    const whererec = CalendarStore.getters.getWhereRec(where)
-    return (whererec) ? whererec.whereicon : ''
-  }
-
-  public getWhereName(where) {
-    const whererec = CalendarStore.getters.getWhereRec(where)
-    return (whererec) ? whererec.placename : ''
   }
 
   public badgeClasses(eventparam, type) {
@@ -1027,22 +986,8 @@ export default class CEventsCalendar extends Vue {
     return eventsloc
   }
 
-  public isEventEnabled(myevent) {
-    // check if event is in the past
-    const datenow = tools.addDays(tools.getDateNow(), -1)
-
-    // console.log('datenow', datenow, 'end', myevent.dateTimeEnd)
-
-    return (new Date(myevent.dateTimeEnd) >= datenow)
-  }
-
   public getTitleEv(event: IEvents) {
     return (!!event.short_tit) ? event.short_tit : event.title
   }
 
-  public getStyleByEvent(event: IEvents) {
-    if (event === this.myevent) {
-      return 'border: inset; border-color: darkblue; border-width: 3px; padding: 5px !important; '
-    }
-  }
 }

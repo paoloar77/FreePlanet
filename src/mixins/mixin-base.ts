@@ -31,12 +31,16 @@ export default class MixinBase extends Vue {
   public getarrValDb(keystr) {
     const myval = GlobalStore.getters.getValueSettingsByKey(keystr)
     // console.log('myval', myval)
-    if (myval) {
-      const myrec = JSON.parse(myval)
-      // console.log('*************** getarrValDb')
-      // console.table(myrec)
-      return myrec
-    } else {
+    try {
+      if (myval) {
+        const myrec = JSON.parse(myval)
+        // console.log('*************** getarrValDb')
+        // console.table(myrec)
+        return myrec
+      } else {
+        return []
+      }
+    }catch (e) {
       return []
     }
   }

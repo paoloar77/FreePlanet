@@ -35,7 +35,9 @@
                                 <span v-for="rec in getarrValDb('CONTACTS_EMAIL_CELL')">
                                     {{ rec.name }}: {{ rec.phone }}
                                     <a v-if="!!tools.getHttpForWhatsapp(rec.phone)" :href="tools.getHttpForWhatsapp(rec.phone)" target="_blank">
-                                        <i aria-hidden="true" class="q-icon fab fa-whatsapp icon_contact links"></i></a>
+                                        <i aria-hidden="true" class="q-icon fab fa-whatsapp icon_contact links q-mx-xs"></i></a>
+                                    <a v-if="!!tools.getHttpForTelegram(rec.usertelegram)" :href="tools.getHttpForTelegram(rec.usertelegram)" target="_blank">
+                                        <i aria-hidden="true" class="q-icon fab fa-telegram icon_contact links q-mx-xs"></i></a>
                                     <br>
                                     <i v-if="rec.email" aria-hidden="true"
                                        class="q-icon fas fa-envelope q-mx-sm"></i> <a :href="`mailto:`+ rec.email "
@@ -67,6 +69,9 @@
 
                             <a v-if="!!Whatsapp_Cell" :href="ChatWhatsapp" target="_blank">
                                 <i aria-hidden="true" class="q-icon fab fa-whatsapp icon_contact links"></i></a>
+
+                            <a v-if="!!Telegram_UsernameHttp" :href="Telegram_UsernameHttp" target="_blank">
+                                <i aria-hidden="true" class="q-icon fab fa-telegram icon_contact links"></i></a>
 
 
                             <!--<a href="" target="_blank"><i aria-hidden="true" class="q-icon fab fa-github"> </i></a>-->

@@ -74,7 +74,7 @@
                                         <q-avatar v-if="getWhereIcon(myevent.wherecode)">
                                             <img :src="`../../statics/images/avatar/` + getWhereIcon(myevent.wherecode)">
                                         </q-avatar>
-                                        <q-avatar color="blue" font-size="20px" text-color="white" icon="home">
+                                        <q-avatar v-else color="blue" font-size="20px" text-color="white" icon="home">
                                         </q-avatar>
                                         <span class="cal__teacher-content">{{getWhereName(myevent.wherecode)}}</span>
                                     </q-chip>
@@ -528,8 +528,8 @@
                         <div class="listaev__align_chips">
                             <img :src="getImgEvent(event)"
                                  @click="selectEvent(event)"
-                                 class="text-left padding_cell listaev__tdimg listaev__img cursor-pointer"
-                                :style="getStyleByEvent(event)">
+                                 class="text-left padding_cell listaev__tdimg listaev__img cursor-pointer q-mx-sm"
+                                :style="getStyleByEvent(event, event === myevent)">
                             <q-chip dense v-if="isAlreadyBooked(event)" class="cltexth4 chipbooked shadow-5 q-mb-md"
                                     color="green" text-color="white"
                                     icon="event_available">{{$t('cal.booked')}}
@@ -587,16 +587,25 @@
                                 </q-btn>
                                 <!-- altrimenti mostra solo Chip -->
                                 <div v-else>
-                                    <div v-if="tools.isMobile()" class="cltexth3 text-center"
-                                         :style="`background-color: ${event.bgcolor} !important; color: white !important;`">
-                                        {{event.title}}
-                                    </div>
-                                    <q-chip v-else class="cltexth3 text-center"
-                                            :style="`background-color: ${event.bgcolor} !important; color: white !important;`"
-                                            text-color="white"
-                                            :icon="event.icon"
-                                            dense>{{event.title}}
-                                    </q-chip>
+                                    <q-btn size="md" type="a"
+                                           :to="`/event/` + event._id"
+                                           target="_blank"
+                                           :style="`background-color: ${event.bgcolor} !important; color: white !important;`"
+                                           ripple rounded
+                                           :label="event.title" :icon="event.icon"
+                                           :color="event.bgcolor" text-color="white" glossy>
+
+                                    </q-btn>
+                                    <!--<div v-if="tools.isMobile()" class="cltexth3 text-center"-->
+                                         <!--:style="`background-color: ${event.bgcolor} !important; color: white !important;`">-->
+                                        <!--{{event.title}}-->
+                                    <!--</div>-->
+                                    <!--<q-chip v-else class="cltexth3 text-center"-->
+                                            <!--:style="`background-color: ${event.bgcolor} !important; color: white !important;`"-->
+                                            <!--text-color="white"-->
+                                            <!--:icon="event.icon"-->
+                                            <!--dense>{{event.title}}-->
+                                    <!--</q-chip>-->
                                 </div>
                             </div>
 
