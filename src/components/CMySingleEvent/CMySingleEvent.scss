@@ -1,3 +1,5 @@
+$graytext: #555;
+
 .listaev {
   color: black;
   font-size: 0.75rem;
@@ -84,3 +86,84 @@
   }
 
 }
+
+.cal {
+  color: black;
+  font-size: 0.75rem;
+  font-weight: 400;
+  line-height: 1.25rem;
+  letter-spacing: 0.03333em;
+
+  &__title {
+    color: white;
+    font-weight: 700;
+    font-size: 1rem;
+    padding-bottom: 10px;
+  }
+
+  &__details {
+    color: black;
+  }
+
+  &__hours {
+    color: blue;
+    &-title {
+      color: $graytext;
+    }
+    &-content {
+      font-weight: 400;
+    }
+  }
+
+  &__where {
+    margin-top: 5px;
+    color: blue;
+
+    &-title {
+      color: $graytext;
+    }
+    &-content {
+      color: darkblue;
+    }
+  }
+
+  &__when {
+    margin-top: 5px;
+    color: blue;
+
+    &-title {
+      color: $graytext;
+    }
+    &-content {
+      color: darkblue;
+    }
+  }
+
+  &__teacher {
+    margin-top: 5px;
+    &-title {
+      color: $graytext;
+    }
+    &-content {
+      color: darkblue;
+    }
+  }
+
+  &__quota {
+    margin-top: 5px;
+    &-title {
+      color: $graytext;
+    }
+    &-content {
+
+    }
+  }
+
+  &__img {
+    width: 100px;
+    height: 100px;
+    padding: 10px;
+  }
+
+}
+

@@ -3,7 +3,7 @@
         <q-img v-if="imgbackground" :src="getsrc"
                :style="tools.styles_imgtitle(sizes)">
 
-            <div class="absolute-bottom text-body1 text-center">
+            <div class="absolute-bottom text-body1 text-center" :style="styleadd">
                 <h2 class="titletext">{{headtitle}}</h2>
             </div>
         </q-img>

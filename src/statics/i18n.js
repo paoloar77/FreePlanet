@@ -247,7 +247,7 @@ const msgglobal = {
       selnumpeople: 'Partecipanti',
       selnumpeople_short: 'Num',
       msgbooking: 'Messaggio da inviare',
-      showinfo: 'Vedi Info',
+      showpdf: 'Vedi PDF',
       bookingtextdefault: 'Mi prenoto all\'evento',
       bookingtextdefault_of: 'di',
       data: 'Data',
@@ -277,6 +277,7 @@ const msgglobal = {
       contribtype: 'Tipo Contributo',
       price: 'Contributo',
       askinfo: 'Chiedi Info',
+      showpage: 'Vedi Pagina',
       infoafterprice: 'Note dopo la Quota',
       teacher: 'Insegnante',  // teacherid
       teacher2: 'Insegnante2', // teacherid2
@@ -546,7 +547,7 @@ const msgglobal = {
       selnumpeople: 'Partecipantes',
       selnumpeople_short: 'Num',
       msgbooking: 'Mensaje para enviar',
-      showinfo: 'Ver Info',
+      showpdf: 'Ver PDF',
       bookingtextdefault: 'Reservo el evento',
       bookingtextdefault_of: 'de',
       data: 'Fecha',
@@ -576,6 +577,7 @@ const msgglobal = {
       contribtype: 'Tipo de Contribución',
       price: 'Precio',
       askinfo: 'Solicitar información',
+      showpage: 'Ver página',
       infoafterprice: 'notas después del precio',
       teacher: 'Profesor',  // teacherid
       teacher2: 'Profesor2', // teacherid2
@@ -844,7 +846,7 @@ const msgglobal = {
       selnumpeople: 'Participants',
       selnumpeople_short: 'Num',
       msgbooking: 'Message à envoyer',
-      showinfo: 'Voir Info',
+      showpdf: 'Voir PDF',
       bookingtextdefault: 'Je réserve l\'événement',
       bookingtextdefault_of: 'du',
       data: 'Date',
@@ -874,6 +876,7 @@ const msgglobal = {
       contribtype: 'Type de contribution',
       price: 'Prix',
       askinfo: 'Demander des infos',
+      showpage: 'Voir la page',
       infoafterprice: 'Notes après le prix',
       teacher: 'Enseignant',  // teacherid
       teacher2: 'Enseignant2', // teacherid2
@@ -1141,7 +1144,7 @@ const msgglobal = {
       selnumpeople: 'Participants',
       selnumpeople_short: 'Num',
       msgbooking: 'Message to send',
-      showinfo: 'Show Info',
+      showpdf: 'Show PDF',
       bookingtextdefault: 'I book the event',
       bookingtextdefault_of: 'of',
       data: 'Date',
@@ -1171,6 +1174,7 @@ const msgglobal = {
       contribtype: 'Contribute Type',
       price: 'Price',
       askinfo: 'Ask for Info',
+      showpage: 'Show Page',
       infoafterprice: 'Info after Price',
       teacher: 'Teacher',  // teacherid
       teacher2: 'Teacher2', // teacherid2
@@ -1440,7 +1444,7 @@ const msgglobal = {
       selnumpeople: 'Participants',
       selnumpeople_short: 'Num',
       msgbooking: 'Message to send',
-      showinfo: 'Show Info',
+      showpdf: 'Show PDF',
       bookingtextdefault: 'I book the event',
       bookingtextdefault_of: 'of',
       data: 'Date',
@@ -1470,6 +1474,7 @@ const msgglobal = {
       contribtype: 'Contribute Type',
       price: 'Price',
       askinfo: 'Ask for Info',
+      showpage: 'Show Page',
       infoafterprice: 'Info after Price',
       teacher: 'Teacher',  // teacherid
       teacher2: 'Teacher2', // teacherid2

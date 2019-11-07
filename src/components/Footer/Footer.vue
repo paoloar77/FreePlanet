@@ -98,16 +98,16 @@
                         <div v-if="myitemmenu.infooter">
 
                             <div v-if="myitemmenu.solotitle">
-                                <span class="footer_link">{{tools.getLabelByItem(myitemmenu, mythis)}}</span><br/>
+                                <span class="footer_link">{{tools.getLabelByItem(myitemmenu, mythisfoot)}}</span><br/>
                             </div>
                             <div v-else>
                                 <router-link :to="myitemmenu.path">
                                     <span class="footer_link"><span
                                             v-if="myitemmenu.level_child > 0">&nbsp;&nbsp;&nbsp;</span>
-                                        {{tools.getLabelByItem(myitemmenu, mythis)}}</span><br/>
+                                        {{tools.getLabelByItem(myitemmenu, mythisfoot)}}</span><br/>
                                 </router-link>
                             </div>
-                            <!--<a :href="myitemmenu.path"><span class="footer_link">{{tools.getLabelByItem(myitemmenu, mythis)}}</span></a><br/>-->
+                            <!--<a :href="myitemmenu.path"><span class="footer_link">{{tools.getLabelByItem(myitemmenu, mythisfoot)}}</span></a><br/>-->
                         </div>
                     </div>
                 </div>

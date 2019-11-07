@@ -2,7 +2,7 @@
     <div>
         <CMyPage v-if="myevent" :imgbackground="myevent.img" :title="myevent.title" keywords="" description="">
 
-            <div class="q-ma-md">
+            <div class="q-mx-md">
                 <div class="listaev__align_chips q-ma-md">
                     <img :src="getImgEvent(myevent)"
                          @click="selectEvent(myevent)"
@@ -79,7 +79,7 @@
 
                     <div style="margin: 10px;"></div>
 
-                    <p v-if="myevent.bodytext" class="listaev__details text-left" v-html="myevent.bodytext"></p>
+                    <p v-if="myevent.bodytext" class="listaev__details text-left q-mb-md" v-html="myevent.bodytext"></p>
                     <p v-else class="listaev__details" v-html="myevent.details"></p>
 
                     <div v-if="myevent.teacher" class="">
@@ -97,7 +97,7 @@
                             <span class="cal__teacher-content">{{getTeacherByUsername(myevent.teacher2)}}</span>
                         </q-chip>
 
-                        <span v-if="myevent.wherecode" class="">
+                        <span v-if="myevent.wherecode" class="q-ma-md">
                                         <span v-if="tools.isMobile()"><br/></span>
                                         <span class="cal__where-title">{{$t('cal.where')}}: </span>
 
@@ -112,7 +112,7 @@
                                         </q-chip>
                                     </span>
                     </div>
-                    <div v-if="myevent.contribtype" class="">
+                    <div v-if="myevent.contribtype" class="q-ma-sm">
                                 <span class="cal__quota-title">{{$t('event.price')}}:<span
                                         class="margin_with"></span></span>
                         <span v-if="!isShowPrice(myevent)" class="">
@@ -128,21 +128,26 @@
                     </div>
 
 
-                    <p class="text-center">
-                                        <span v-if="myevent.linkpdf" class="">
-                                            <q-btn size="md" type="a" :href="`../../statics/` + myevent.linkpdf"
-                                                   target="_blank" rounded color="primary" icon="info"
-                                                   :label="$t('cal.showinfo')">
+                    <div class="row justify-start q-ma-md">
+                        <q-btn v-if="myevent.linkpdf"
+                               size="md" type="a" :href="`../../statics/` + myevent.linkpdf"
+                               target="_blank" rounded outline
+                               color="primary" icon="info"
+                               :label="$t('cal.showpdf')">
 
-                                            </q-btn>
-                                        </span>
-                    </p>
-                    <div class="row justify-end">
+                        </q-btn>
+                        <q-btn v-if="myevent.bodytext" rounded outline class="q-mx-sm"
+                               color="primary"
+                               :to="`/event/` + myevent._id"
+                               :label="$t('event.showpage')">
+                        </q-btn>
+                    </div>
+                    <div class="row justify-end q-ma-md">
                         <q-btn rounded outline class="q-mx-sm"
                                color="primary" @click="askForInfoEventMenu(myevent)"
                                :label="$t('event.askinfo')">
                         </q-btn>
-                        <q-btn rounded outline class="q-mx-sm"
+                        <q-btn rounded class="q-mx-sm"
                                v-if="!myevent.nobookable && !isAlreadyBooked(myevent) && static_data.functionality.BOOKING_EVENTS"
                                color="primary" @click="addBookEventMenu(myevent)"
                                :label="$t('cal.booking')" :disable="!isEventEnabled(myevent)">

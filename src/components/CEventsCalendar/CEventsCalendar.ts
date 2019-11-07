@@ -48,6 +48,7 @@ export default class CEventsCalendar extends MixinEvents {
   public $t: any
   public calendarView = 'month'
   public selectedDate = '2019-04-01'
+  public tabeditor: string = 'details'
   public formDefault: IEvents = {
     title: '',
     details: '',
@@ -497,6 +498,13 @@ export default class CEventsCalendar extends MixinEvents {
     return (this.isAlreadyBooked(event) ? 'text-left bg-light-green-1' : 'text-left')
   }
 
+  public checkFieldUndef() {
+    if (this.eventForm.bodytext === undefined)
+      this.eventForm.bodytext = ''
+    if (this.eventForm.details === undefined)
+      this.eventForm.details = ''
+  }
+
   public editEvent(eventparam) {
     console.log('editEvent - INIZIO')
     this.resetForm()
@@ -504,6 +512,8 @@ export default class CEventsCalendar extends MixinEvents {
     this.contextDay = { ...eventparam }
 
     this.eventForm = { ...eventparam }
+
+    this.checkFieldUndef()
 
     this.eventForm.dateTimeStart = tools.getstrYYMMDDDateTime(eventparam.dateTimeStart)
     this.eventForm.dateTimeEnd = tools.getstrYYMMDDDateTime(eventparam.dateTimeEnd)

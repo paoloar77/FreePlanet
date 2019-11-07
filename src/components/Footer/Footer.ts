@@ -30,7 +30,7 @@ export default class Footer extends Vue {
     return tools
   }
 
-  get mythis() {
+  get mythisfoot() {
     return this
   }
 

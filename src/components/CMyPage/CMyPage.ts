@@ -35,6 +35,7 @@ export default class CMyPage extends Vue {
   @Prop({ required: false, default: '' }) public img: string
   @Prop({ required: false, default: '' }) public imgbackground: string
   @Prop({ required: false, default: '' }) public sizes: string
+  @Prop({ required: false, default: '' }) public styleadd: string
   public $t
   public $q
 

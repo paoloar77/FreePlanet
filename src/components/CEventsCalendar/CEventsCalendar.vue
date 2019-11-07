@@ -75,7 +75,7 @@
                                             <img :src="`../../statics/images/avatar/` + getWhereIcon(myevent.wherecode)">
                                         </q-avatar>
                                         <q-avatar v-else color="blue" font-size="20px" text-color="white" icon="home">
-                                        </q-avatar>
+                                        </q-avatar>showpage
                                         <span class="cal__teacher-content">{{getWhereName(myevent.wherecode)}}</span>
                                     </q-chip>
                                 </span>
@@ -93,7 +93,7 @@
                         </div>
                         <p v-if="myevent.linkpdf" style="margin-top: 10px; text-align: center">
                             <q-btn size="md" type="a" :href="`../../statics/` + myevent.linkpdf"
-                                   target="_blank" rounded color="primary" icon="info" :label="$t('cal.showinfo')">
+                                   target="_blank" rounded color="primary" icon="info" :label="$t('cal.showpdf')">
                             </q-btn>
                         </p>
                     </div>
@@ -132,9 +132,35 @@
                                  borderless rounded dense :label="$t('event.title')"
                                  :rules="[v => v && v.length > 0 || $t('event.notempty')]"></q-input>
 
-                        <CMyEditor :value.sync="eventForm.details">
 
-                        </CMyEditor>
+                        <q-tabs
+                                v-model="tabeditor"
+                                dense
+                                class="text-grey"
+                                active-color="primary"
+                                indicator-color="primary"
+                                align="justify"
+                                narrow-indicator
+                        >
+                            <q-tab name="details" label="Descrizione"/>
+                            <q-tab name="container" label="Contenuto"/>
+                        </q-tabs>
+
+
+                        <q-tab-panels v-model="tabeditor" animated>
+                            <q-tab-panel name="details">
+                                <CMyEditor :value.sync="eventForm.details">
+
+                                </CMyEditor>
+                            </q-tab-panel>
+                            <q-tab-panel name="container">
+                                <CMyEditor :value.sync="eventForm.bodytext">
+
+                                </CMyEditor>
+                            </q-tab-panel>
+
+                        </q-tab-panels>
+
 
                         <!--<q-checkbox v-model="eventForm.allday" :label="$t('cal.alldayevent')"></q-checkbox>-->
 
@@ -304,7 +330,7 @@
 
                         <p v-if="myevent.linkpdf" style="margin-top: 10px; text-align: center">
                             <q-btn size="md" type="a" :href="`../../statics/` + myevent.linkpdf"
-                                   target="_blank" rounded color="primary" icon="info" :label="$t('cal.showinfo')">
+                                   target="_blank" rounded color="primary" icon="info" :label="$t('cal.showpdf')">
                             </q-btn>
                         </p>
                     </div>
@@ -377,7 +403,7 @@
         <!-- the calendar -->
         <q-page v-if="visuAllCal" class="column" style="min-height: 500px !important;">
 
-            <div >
+            <div>
                 <q-toolbar class="mytoolbar">
                     <q-btn color="primary" round icon="keyboard_arrow_left" @click="calendarPrev"/>
                     <q-btn color="primary" round icon="keyboard_arrow_right" @click="calendarNext"/>
@@ -669,16 +695,20 @@
                                 </div>
 
 
-                                <p class="text-center">
-                                        <span v-if="event.linkpdf" class="">
-                                            <q-btn size="md" type="a" :href="`../../statics/` + event.linkpdf"
-                                                   target="_blank" rounded color="primary" icon="info"
-                                                   :label="$t('cal.showinfo')">
-
-                                            </q-btn>
-                                        </span>
-                                </p>
                                 <div class="row justify-end">
+                                    <div class="justify-start">
+                                        <q-btn v-if="event.linkpdf" size="md" type="a"
+                                               :href="`../../statics/` + event.linkpdf"
+                                               target="_blank" rounded color="primary" icon="info"
+                                               :label="$t('cal.showpdf')">
+
+                                        </q-btn>
+                                        <q-btn v-if="event.bodytext" rounded outline class="q-mx-sm"
+                                               color="primary"
+                                               :to="`/event/` + event._id"
+                                               :label="$t('event.showpage')">
+                                        </q-btn>
+                                    </div>
                                     <q-btn rounded outline class="q-mx-sm"
                                            color="primary" @click="askForInfoEventMenu(event)"
                                            :label="$t('event.askinfo')">
