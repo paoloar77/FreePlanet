@@ -1,0 +1,86 @@
+.listaev {
+  color: black;
+  font-size: 0.75rem;
+  font-weight: 400;
+  line-height: 1.25rem;
+  letter-spacing: 0.03333em;
+
+  &__date {
+    font-weight: bold;
+    color: #2ba0fd;
+    font-size: 1rem;
+  }
+
+  &__title {
+    color: red;
+    font-weight: 700;
+    letter-spacing: 0.066em;
+  }
+
+  &__details {
+    color: black;
+  }
+
+  &__tdimg {
+    width: 150px;
+    height: 150px;
+  }
+
+  &__tdimg_small {
+    width: auto;
+    height: 50px !important;
+    @media (max-width: 800px) {
+      height: 40px !important;
+    }
+  }
+
+  &__table {
+    margin: 10px;
+    border: solid 1px #4198ef;
+    border-radius: 1rem;
+    padding: 2px;
+  }
+  &__table tr {
+    border: solid 1px #4198ef;
+    border-radius: 1rem;
+  }
+
+
+  &__align_center_mobile {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  &__align_chips {
+    text-align: center;
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+  }
+
+  &__img {
+    padding: 0.25rem !important;
+    float: left;
+    width: 150px;
+    height: 150px;
+    border-radius: 1rem;
+
+    @media (max-width: 718px) {
+      // PER VERSIONE MOBILE
+      float: none;
+      text-align: center;
+      margin: 0 auto;
+    }
+  }
+
+  &__img:hover {
+    transition: transform .2s;
+    transform: scale(1.05);
+    border: inset;
+    border-color: blue;
+    border-width: 1px;
+  }
+
+}

@@ -35,13 +35,15 @@ import MixinOperator from '../../mixins/mixin-operator'
 import MixinEvents from '../../mixins/mixin-events'
 import { CDateTime } from '../CDateTime'
 import { CMyAvatar } from '../CMyAvatar'
+import { CMySingleEvent } from '../CMySingleEvent'
 
 @Component({
   mixins: [MixinOperator, MixinUsers, MixinEvents],
   name: 'CEventsCalendar',
-  components: { Logo, Footer, CTitle, CImgText, QDateTimeScroller, QDateScroller, CMySelect, CMyEditor, CDateTime, CMyAvatar }
+  components: { Logo, Footer, CTitle, CImgText, QDateTimeScroller, QDateScroller, CMySelect, CMyEditor, CDateTime, CMyAvatar, CMySingleEvent }
 })
 export default class CEventsCalendar extends MixinEvents {
+  @Prop ({required: false, default: null}) public mysingleevent: IEvents
   public $q
   public $t: any
   public calendarView = 'month'
@@ -190,6 +192,10 @@ export default class CEventsCalendar extends MixinEvents {
   //       }
   //     }
   //   ]
+
+  get visuAllCal() {
+    return this.mysingleevent === null
+  }
 
   get title_cal() {
     if (this.titleFormatter && this.locale) {
@@ -984,6 +990,15 @@ export default class CEventsCalendar extends MixinEvents {
       }
     }
     return eventsloc
+  }
+
+  public isEventEnabled(myevent) {
+    // check if event is in the past
+    const datenow = tools.addDays(tools.getDateNow(), -1)
+
+    // console.log('datenow', datenow, 'end', myevent.dateTimeEnd)
+
+    return (new Date(myevent.dateTimeEnd) >= datenow)
   }
 
   public getTitleEv(event: IEvents) {
