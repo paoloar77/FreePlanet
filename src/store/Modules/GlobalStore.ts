@@ -676,11 +676,11 @@ namespace Actions {
   async function loadSite(context) {
     // console.log('CalendarStore: loadAfterLogin')
     // Load local data
-    CalendarStore.state.editable = UserStore.state.isAdmin || UserStore.state.isManager
-
     const showall = UserStore.state.isAdmin || UserStore.state.isManager ? '1' : '0'
 
     const myuserid = (UserStore.state.my._id) ? UserStore.state.my._id : '0'
+
+    CalendarStore.state.editable = false
 
     return await Api.SendReq('/loadsite/' + myuserid + '/' + process.env.APP_ID + '/' + showall, 'GET', null)
       .then((res) => {
@@ -690,6 +690,8 @@ namespace Actions {
         CalendarStore.state.wheres = (res.data.wheres) ? res.data.wheres : []
         CalendarStore.state.contribtype = (res.data.contribtype) ? res.data.contribtype : []
         GlobalStore.state.settings = (res.data.settings) ? [...res.data.settings] : []
+
+        CalendarStore.state.editable = UserStore.state.isAdmin || UserStore.state.isManager
 
       })
       .catch((error) => {

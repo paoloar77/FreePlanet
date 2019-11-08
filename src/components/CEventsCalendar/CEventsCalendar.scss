@@ -153,6 +153,9 @@ $graytext: #555;
     border-radius: 1rem;
   }
 
+  &__table tr:hover {
+    background-color: #deecef;
+  }
 
   &__align_center_mobile {
     text-align: left;
@@ -270,14 +273,14 @@ $graytext: #555;
 
 .windowcol {
   background-color: #ffffff;
-          // background: radial-gradient(circle, #ffffff 0%, #94dbfb 100%)
+  // background: radial-gradient(circle, #ffffff 0%, #94dbfb 100%)
 }
 
-.mysel{
+.mysel {
   color: white;
 }
 
-.myflex{
+.myflex {
   display: flex;
   flex: 1;
   @media (max-width: 400px) {

@@ -72,7 +72,7 @@
                             <span class="cal__where-content">
                                     <q-chip>
                                         <q-avatar v-if="getWhereIcon(myevent.wherecode)">
-                                            <img :src="`../../statics/images/avatar/` + getWhereIcon(myevent.wherecode)">
+                                            <img :src="`../../statics/images/avatar/` + getWhereIcon(myevent.wherecode)" alt="Località">
                                         </q-avatar>
                                         <q-avatar v-else color="blue" font-size="20px" text-color="white" icon="home">
                                         </q-avatar>showpage
@@ -487,7 +487,7 @@
                                 <span class="">{{ getTitleEv(event) }}</span>
                             </q-badge>
                             <div class="text-center"><img :src="getImgEvent(event)"
-                                                          class="text-center listaev__tdimg_small">
+                                                          class="text-center listaev__tdimg_small" alt="Evento">
                             </div>
                         </template>
                     </template>
@@ -595,7 +595,7 @@
                                            @click="deleteEvent(myevent)"></q-btn>
                                     <q-btn v-if="editable" flat round color="white" icon="edit" v-close-popup
                                            @click="editEvent(myevent)"></q-btn>
-                                    <q-btn flat round color="white" icon="cancel" @click="selectEvent(null)"></q-btn>
+                                    <q-btn v-if="editable" flat round color="white" icon="cancel" @click="selectEvent(null)"></q-btn>
                                 </q-chip>
                                 <q-chip v-if="event.news" class="cltexth4 chipnews shadow-5 glossy text-right"
                                         color="red"
@@ -629,7 +629,8 @@
                                                :to="`/event/` + event._id"
                                                target="_blank"
                                                :style="`background-color: ${event.bgcolor} !important; color: white !important;`"
-                                               ripple rounded
+                                               ripple
+                                               rounded
                                                :label="event.title" :icon="event.icon"
                                                :color="event.bgcolor" text-color="white" glossy>
 
@@ -709,16 +710,16 @@
                                                :label="$t('event.showpage')">
                                         </q-btn>
                                     </div>
-                                    <q-btn rounded outline class="q-mx-sm"
+                                    <q-btn rounded outline class="q-ma-sm"
                                            color="primary" @click="askForInfoEventMenu(event)"
                                            :label="$t('event.askinfo')">
                                     </q-btn>
-                                    <q-btn rounded outline class="q-mx-sm"
+                                    <q-btn rounded outline class="q-ma-sm"
                                            v-if="!event.nobookable && !isAlreadyBooked(event) && static_data.functionality.BOOKING_EVENTS"
                                            color="primary" @click="addBookEventMenu(event)"
                                            :label="$t('cal.booking')" :disable="!isEventEnabled(event)">
                                     </q-btn>
-                                    <q-btn rounded outline class="q-mx-sm"
+                                    <q-btn rounded outline class="q-ma-sm"
                                            v-if="!event.nobookable && isAlreadyBooked(event) && static_data.functionality.BOOKING_EVENTS"
                                            text-color="red"
                                            @click.native="EditBookEvent(event)"

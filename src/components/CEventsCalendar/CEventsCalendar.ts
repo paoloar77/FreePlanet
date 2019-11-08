@@ -40,10 +40,22 @@ import { CMySingleEvent } from '../CMySingleEvent'
 @Component({
   mixins: [MixinOperator, MixinUsers, MixinEvents],
   name: 'CEventsCalendar',
-  components: { Logo, Footer, CTitle, CImgText, QDateTimeScroller, QDateScroller, CMySelect, CMyEditor, CDateTime, CMyAvatar, CMySingleEvent }
+  components: {
+    Logo,
+    Footer,
+    CTitle,
+    CImgText,
+    QDateTimeScroller,
+    QDateScroller,
+    CMySelect,
+    CMyEditor,
+    CDateTime,
+    CMyAvatar,
+    CMySingleEvent
+  }
 })
 export default class CEventsCalendar extends MixinEvents {
-  @Prop ({required: false, default: null}) public mysingleevent: IEvents
+  @Prop({ required: false, default: null }) public mysingleevent: IEvents
   public $q
   public $t: any
   public calendarView = 'month'
@@ -524,14 +536,15 @@ export default class CEventsCalendar extends MixinEvents {
     tools.CancelEvent(this, eventparam)
   }
 
-  public duplicateEvent(eventparam, numgg, numev: number = 1 ) {
+  public duplicateEvent(eventparam, numgg, numev: number = 1) {
     for (let i = 0; i < numev; ++i) {
       GlobalStore.actions.DuplicateRec({ table: tools.TABEVENTS, id: eventparam._id }).then((rec) => {
-        rec.dateTimeStart = tools.addDays(new Date(rec.dateTimeStart), numgg * (i + 1))
-        rec.dateTimeEnd = tools.addDays(new Date(rec.dateTimeEnd), numgg * (i + 1))
-        CalendarStore.state.eventlist.push(rec)
-        this.editEvent(rec)
-
+        if (rec) {
+          rec.dateTimeStart = tools.addDays(new Date(rec.dateTimeStart), numgg * (i + 1))
+          rec.dateTimeEnd = tools.addDays(new Date(rec.dateTimeEnd), numgg * (i + 1))
+          CalendarStore.state.eventlist.push(rec)
+          this.editEvent(rec)
+        }
       })
     }
     // tools.ActionRecTable(this, lists.MenuAction.DUPLICATE_RECTABLE, tools.TABEVENTS, eventparam._id, eventparam, 'db.duplicatedrecord')

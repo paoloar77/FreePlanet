@@ -1742,7 +1742,7 @@ export const tools = {
       mystr = `<span class="cal__where-content">${tools.getstrDate(myevent.dateTimeStart)}</span>
                  <span class="cal__hours-content">${mythis.$t('cal.starttime')} ${ tools.getstrTime(myevent.dateTimeStart) } </span>
                   ${ mythis.$t('cal.enddate')} ${tools.getstrDate(myevent.dateTimeEnd)}
-                  <span class="cal__hours-content">${ mythis.$t('cal.endtime')}: ${ tools.getstrTime(myevent.dateTimeEnd) } </span>`
+                  <span class="cal__hours-content">${ mythis.$t('cal.endtime')} ${ tools.getstrTime(myevent.dateTimeEnd) } </span>`
     }
 
     if (myevent.infoextra) {

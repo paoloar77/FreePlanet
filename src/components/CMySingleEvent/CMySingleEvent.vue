@@ -12,31 +12,34 @@
                             color="green" text-color="white"
                             icon="event_available">{{$t('cal.booked')}}
                     </q-chip>
-                    <q-chip v-if="selected" class="text-center shadow-5 glossy bg-blue chipmodif">
+                    <div v-if="selected">
+                        <q-chip v-if="editable" class="text-center shadow-5 glossy bg-blue chipmodif">
 
-                        <q-btn v-if="editable" flat round color="white" icon="fas fa-copy">
-                            <q-menu
-                                    transition-show="flip-right"
-                                    transition-hide="flip-left">
-                                <q-list style="min-width: 100px">
-                                    <q-item clickable @click="duplicateEvent(myevent, 7)">
-                                        <q-item-section>Tra 1 Settimana</q-item-section>
-                                    </q-item>
-                                    <q-item clickable @click="duplicateEvent(myevent, 14)">
-                                        <q-item-section>Tra 2 Settimane</q-item-section>
-                                    </q-item>
-                                    <q-item clickable @click="duplicateEvent(myevent, 7, 4)">
-                                        <q-item-section>4 Eventi ogni Settimana</q-item-section>
-                                    </q-item>
-                                </q-list>
-                            </q-menu>
-                        </q-btn>
-                        <q-btn v-if="editable" flat round color="white" icon="delete" v-close-popup
-                               @click="deleteEvent(myevent)"></q-btn>
-                        <q-btn v-if="editable" flat round color="white" icon="edit" v-close-popup
-                               @click="editEvent(myevent)"></q-btn>
-                        <q-btn flat round color="white" icon="cancel" @click="selectEvent(null)"></q-btn>
-                    </q-chip>
+                            <q-btn v-if="editable" flat round color="white" icon="fas fa-copy">
+                                <q-menu
+                                        transition-show="flip-right"
+                                        transition-hide="flip-left">
+                                    <q-list style="min-width: 100px">
+                                        <q-item clickable @click="duplicateEvent(myevent, 7)">
+                                            <q-item-section>Tra 1 Settimana</q-item-section>
+                                        </q-item>
+                                        <q-item clickable @click="duplicateEvent(myevent, 14)">
+                                            <q-item-section>Tra 2 Settimane</q-item-section>
+                                        </q-item>
+                                        <q-item clickable @click="duplicateEvent(myevent, 7, 4)">
+                                            <q-item-section>4 Eventi ogni Settimana</q-item-section>
+                                        </q-item>
+                                    </q-list>
+                                </q-menu>
+                            </q-btn>
+                            <q-btn v-if="editable" flat round color="white" icon="delete" v-close-popup
+                                   @click="deleteEvent(myevent)"></q-btn>
+                            <q-btn v-if="editable" flat round color="white" icon="edit" v-close-popup
+                                   @click="editEvent(myevent)"></q-btn>
+                            <q-btn v-if="editable" flat round color="white" icon="cancel"
+                                   @click="selectEvent(null)"></q-btn>
+                        </q-chip>
+                    </div>
                     <q-chip v-if="myevent.news" class="cltexth4 chipnews shadow-5 glossy text-right" color="red"
                             text-color="white" icon-right="star" icon="star" dense
                             style="">
@@ -142,7 +145,7 @@
                                :label="$t('event.showpage')">
                         </q-btn>
                     </div>
-                    <div class="row justify-end q-ma-md">
+                    <div class="row justify-end q-mb-lg">
                         <q-btn rounded outline class="q-mx-sm"
                                color="primary" @click="askForInfoEventMenu(myevent)"
                                :label="$t('event.askinfo')">

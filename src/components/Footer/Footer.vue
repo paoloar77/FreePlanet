@@ -31,18 +31,20 @@
                                    class="q-icon fas fa-envelope q-mx-sm"></i>
                                 <a :href="`mailto:` + getValDb('MAIN_EMAIL')" class="links">{{ getValDb('MAIN_EMAIL')
                                     }}</a><br>
-                                <br>
+                                <q-separator dark spaced></q-separator>
                                 <span v-for="rec in getarrValDb('CONTACTS_EMAIL_CELL')">
                                     {{ rec.name }}: {{ rec.phone }}
+                                    <br>
                                     <a v-if="!!tools.getHttpForWhatsapp(rec.phone)" :href="tools.getHttpForWhatsapp(rec.phone)" target="_blank">
-                                        <i aria-hidden="true" class="q-icon fab fa-whatsapp icon_contact links q-mx-xs"></i></a>
+                                        <i aria-hidden="true" class="q-icon fab fa-whatsapp landing__footer-icons icon_contact links q-mx-xs"></i></a>
                                     <a v-if="!!tools.getHttpForTelegram(rec.usertelegram)" :href="tools.getHttpForTelegram(rec.usertelegram)" target="_blank">
-                                        <i aria-hidden="true" class="q-icon fab fa-telegram icon_contact links q-mx-xs"></i></a>
+                                        <i aria-hidden="true" class="q-icon fab fa-telegram landing__footer-icons icon_contact links q-mx-xs"></i></a>
                                     <br>
                                     <i v-if="rec.email" aria-hidden="true"
                                        class="q-icon fas fa-envelope q-mx-sm"></i> <a :href="`mailto:`+ rec.email "
                                                                                       class="links">{{rec.email}}</a>
                                     <br>
+                                    <q-separator dark spaced></q-separator>
                                 </span>
                                 <span v-if="getValDb('CALL_WORKING_DAYS')"><br>orari per chiamate:<br>
                                     <span v-html="getValDb('CALL_WORKING_DAYS')"></span></span>
