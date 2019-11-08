@@ -293,7 +293,6 @@ export default class CEventsCalendar extends MixinEvents {
     return (CalendarStore.state.intervalRange.max - CalendarStore.state.intervalRange.min) * (1 / CalendarStore.state.intervalRangeStep)
   }
 
-
   get containerStyle() {
     const styles = { height: '' }
     if (this.calendarView !== 'month' || (this.calendarView === 'month' && CalendarStore.state.dayHeight === 0)) {
