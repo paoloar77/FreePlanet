@@ -5,6 +5,7 @@ import { toolsext } from './toolsext'
 import { translation } from './translation'
 import Quasar, { colors, date, Screen } from 'quasar'
 import { scroll } from 'quasar'
+
 const { getScrollTarget, setScrollPosition } = scroll
 
 import {
@@ -2633,7 +2634,25 @@ export const tools = {
       return 'https://t.me/' + usertelegram
     else
       return ''
+  },
+  metafunc(mythis) {
+    return {
+      title: mythis.$t('msg.myAppName'),
+      titleTemplate: (title) => `${mythis.mymeta.title} - ${mythis.$t('msg.myAppName')}`,
+      meta: {
+        keywords: {
+          name: 'keywords',
+          content: mythis.mymeta.keywords
+        },
+        description: {
+          name: 'description',
+          content: mythis.mymeta.description
+        },
+        equiv: { 'http-equiv': 'Content-Type', 'content': 'text/html; charset=UTF-8' }
+      }
+    }
   }
+
 
 // getLocale() {
   //   if (navigator.languages && navigator.languages.length > 0) {

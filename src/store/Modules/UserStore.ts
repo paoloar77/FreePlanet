@@ -660,6 +660,8 @@ namespace Actions {
     GlobalStore.state.finishLoading = true
     console.log('finishLoading', GlobalStore.state.finishLoading)
 
+    // document.dispatchEvent(new Event('custom-post-render-event'))
+
     return true
     // console.log('setGlobal: END')
   }

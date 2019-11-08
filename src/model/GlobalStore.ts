@@ -47,6 +47,12 @@ export interface IConfig {
   value: string
 }
 
+export interface IMetaTags {
+  title?: string
+  keywords?: string
+  description?: string
+}
+
 export interface IGlobalState {
   finishLoading: boolean
   conta: number
