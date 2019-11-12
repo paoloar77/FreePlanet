@@ -128,7 +128,6 @@
 
         </q-drawer>
 
-
         <!-- USER BAR -->
         <q-drawer v-if="static_data.functionality.SHOW_USER_MENU" v-model="rightDrawerOpen" side="right" elevated>
             <div id="profile">

@@ -34,6 +34,25 @@ export interface ISettings {
   value_num?: number
 }
 
+export interface ITeachUname {
+  username?: string
+}
+
+export interface IDiscipline {
+  typol_code?: string
+  order?: number
+  label?: string
+  description?: string
+  linkpage?: string
+  color?: string
+  icon?: string
+  img_small?: string
+  showinhome?: boolean
+  showinnewsletter?: boolean
+  img?: string
+  teachers?: ITeachUname[]
+}
+
 export interface ITestp1 {
   contatore: number
   mioarray: ICfgServer[]
@@ -76,6 +95,7 @@ export interface IGlobalState {
   arrConfig: IConfig[]
   lastaction: IAction
   settings: ISettings[],
+  disciplines: IDiscipline[],
 }
 
 export interface IMenuList {

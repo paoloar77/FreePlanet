@@ -53,6 +53,22 @@ const colcontribtype = [
   AddCol(DeleteRec)
 ]
 
+const coldisciplines = [
+  AddCol({ name: 'typol_code', label_trans: 'disc.typol_code' }),
+  AddCol({ name: 'order', label_trans: 'disc.order', fieldtype: tools.FieldType.number  }),
+  AddCol({ name: 'label', label_trans: 'event.title' }),
+  AddCol({ name: 'description', label_trans: 'proj.longdescr' }),
+  AddCol({ name: 'linkpage', label_trans: 'event.linkpage' }),
+  AddCol({ name: 'color', label_trans: 'event.color' }),
+  AddCol({ name: 'icon', label_trans: 'event.icon' }),
+  AddCol({ name: 'img', label_trans: 'event.img' }),
+  AddCol({ name: 'img_small', label_trans: 'event.img_small' }),
+  AddCol({ name: 'showinhome', label_trans: 'event.showinhome', fieldtype: tools.FieldType.boolean }),
+  AddCol({ name: 'showinnewsletter', label_trans: 'event.showinnewsletter', fieldtype: tools.FieldType.boolean }),
+  AddCol({ name: 'teachers', label_trans: 'event.teacher', fieldtype: tools.FieldType.multiselect, jointable: 'operators' }),
+  AddCol(DeleteRec)
+]
+
 const colsettings = [
   AddCol({ name: 'key', label_trans: 'col.label' }),
   AddCol({ name: 'type', label_trans: 'col.type', fieldtype: tools.FieldType.select, jointable: 'fieldstype' }),
@@ -88,7 +104,7 @@ const colTableOperator = [
 
 const colTableEvents = [
   AddCol({ name: '_id', label_trans: 'event._id' }),
-  AddCol({ name: 'typol', label_trans: 'event.typol' }),
+  AddCol({ name: 'typol', label_trans: 'event.typol', fieldtype: tools.FieldType.select, jointable: 'disciplines' }),
   AddCol({ name: 'short_tit', label_trans: 'event.short_tit' }),
   AddCol({ name: 'title', label_trans: 'event.title' }),
   AddCol({ name: 'details', label_trans: 'event.details', fieldtype: tools.FieldType.html }),
@@ -245,6 +261,13 @@ export const fieldsTable = {
       collabel: 'label'
     },
     {
+      value: 'disciplines',
+      label: 'Discipline',
+      columns: coldisciplines,
+      colkey: '_id',
+      collabel: 'label'
+    },
+    {
       value: 'permissions',
       label: 'Permessi',
       columns: colTablePermission,
@@ -264,7 +287,7 @@ export const fieldsTable = {
       columns: colsettings,
       colkey: 'key',
       collabel: 'key'
-    },
+    }
   ],
 
   // IColGridTable

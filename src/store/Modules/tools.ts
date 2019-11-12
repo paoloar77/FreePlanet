@@ -132,6 +132,7 @@ export const tools = {
     select: 32,
     number: 64,
     typeinrec: 128,
+    multiselect: 256,
   },
 
   FieldTypeArr: [
@@ -2524,6 +2525,35 @@ export const tools = {
   getwidth(mythis) {
     // return height()
     return mythis.$q.screen.width
+  },
+
+  getwidthscale(mythis, mywidth, maxwidth) {
+    if (this.isMobile()) {
+      return mywidth
+    } else {
+      let myw = mywidth + ((this.getwidth(mythis) - mywidth - 300) * 0.4)
+      if (myw > maxwidth)
+        myw = maxwidth
+
+      return myw
+    }
+  },
+
+  getheightbywidth(mythis, mywidth, myheight, maxwidth) {
+    const myw = this.getwidthscale(mythis, mywidth, maxwidth)
+    return myw * (myheight / mywidth)
+  },
+
+  getheightscale(mythis, myheight, maxheight) {
+    if (this.isMobile()) {
+      return myheight
+    } else {
+      let myh = myheight + ((this.getheight(mythis) - myheight) * 0.3)
+      if (myh > maxheight)
+        myh = maxheight
+
+      return myh
+    }
   },
 
   isIsoDate(str) {

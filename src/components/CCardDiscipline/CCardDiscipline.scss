@@ -1,0 +1,84 @@
+$heightBtn: 100%;
+$grayshadow: #555;
+
+.text-subtitle-carica {
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.75rem;
+  letter-spacing: .00937em;
+  text-shadow: .1rem .1rem .1rem $grayshadow;
+}
+
+.text-subtitle-certificato {
+  font-size: 0.75rem;
+  line-height: 1rem;
+}
+
+@media (max-width: 718px) {
+  // PER VERSIONE MOBILE
+  .text-subtitle-carica {
+    font-size: 1rem;
+  }
+}
+
+.my-card-discipline {
+  width: 100%;
+  max-width: 350px;
+  min-width: 300px;
+  padding: 1rem 1rem;
+
+  box-shadow: none;
+  border-radius: 20px;
+  margin: 1rem 1rem;
+  transition: transform .2s ease-out;
+}
+
+.my-card-discipline:hover {
+  transition: transform .2s ease-in;
+  transform: scale(1.03);
+}
+
+.disc {
+  text-align: center !important;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.75rem;
+  letter-spacing: .00937em;
+  text-shadow: .1rem .1rem .1rem $grayshadow;
+
+  &__title {
+    //color: white;
+    text-shadow: .125rem .125rem .125rem #2d2260;
+  }
+
+  &__cell {
+    font-size: 1rem;
+    color: red;
+  }
+
+  &__email {
+    font-size: 1rem;
+    color: #3b5998;
+  }
+
+  &__description {
+    font-size: 1rem;
+    color: #000000;
+  }
+
+  &__email a {
+    text-decoration: none;
+  }
+
+}
+
+.myimg {
+  border-radius: 30px !important;
+  margin: 30px auto 10px;
+}
+
+.q-img {
+  &__image {
+    border-radius: 30px !important;
+  }
+}

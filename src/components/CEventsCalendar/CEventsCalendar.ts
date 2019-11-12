@@ -890,6 +890,10 @@ export default class CEventsCalendar extends MixinEvents {
     return CalendarStore.state.wheres
   }
 
+  get getDisciplines() {
+    return GlobalStore.state.disciplines
+  }
+
   public createContribType(value) {
     console.log('createContribType', value)
     tools.createNewRecord(this, 'contribtype', { label: value }).then((myrec) => {

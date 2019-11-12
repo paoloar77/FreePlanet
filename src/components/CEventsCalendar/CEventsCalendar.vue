@@ -122,6 +122,12 @@
                             v-if="contextDay"
                             ref='myevent'
                             class="q-gutter-sm">
+
+                        <CMySelect :label="$t('event.typol')" :value.sync="eventForm.typol" optval="typol_code"
+                                   optlab="label"
+                                   :options="getDisciplines" :useinput="false">
+                        </CMySelect>
+
                         <q-input color="grey-1" v-model="eventForm.short_tit" autofocus
                                  :input-style="`background-color: ${eventForm.bgcolor} !important; color: white !important; font-weight: bold; `"
                                  borderless rounded dense :label="$t('event.short_tit')"
@@ -131,6 +137,7 @@
                                  :input-style="`background-color: ${eventForm.bgcolor} !important; color: white !important; font-weight: bold; `"
                                  borderless rounded dense :label="$t('event.title')"
                                  :rules="[v => v && v.length > 0 || $t('event.notempty')]"></q-input>
+
 
 
                         <q-tabs

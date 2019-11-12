@@ -68,7 +68,8 @@ const state: IGlobalState = {
     type: 0,
     _id: 0
   },
-  settings: []
+  settings: [],
+  disciplines: []
 }
 
 async function getConfig(id) {
@@ -163,6 +164,8 @@ namespace Getters {
       return CalendarStore.state.wheres
     else if (table === 'contribtype')
       return CalendarStore.state.contribtype
+    else if (table === 'disciplines')
+      return GlobalStore.state.disciplines
     else if (table === 'bookings')
       return CalendarStore.state.bookedevent
     else if (table === 'users')
@@ -690,6 +693,7 @@ namespace Actions {
         CalendarStore.state.wheres = (res.data.wheres) ? res.data.wheres : []
         CalendarStore.state.contribtype = (res.data.contribtype) ? res.data.contribtype : []
         GlobalStore.state.settings = (res.data.settings) ? [...res.data.settings] : []
+        GlobalStore.state.disciplines = (res.data.disciplines) ? [...res.data.disciplines] : []
 
         CalendarStore.state.editable = UserStore.state.isAdmin || UserStore.state.isManager
 

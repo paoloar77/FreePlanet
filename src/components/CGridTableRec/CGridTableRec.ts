@@ -97,7 +97,7 @@ export default class CGridTableRec extends Vue {
   }
 
   public SaveValue(newVal, valinitial) {
-    console.log('SaveValue', newVal, 'rowsel', this.rowsel)
+    // console.log('SaveValue', newVal, 'rowsel', this.rowsel)
 
     // Update value in table memory
     if (this.colsel.subfield !== '') {
