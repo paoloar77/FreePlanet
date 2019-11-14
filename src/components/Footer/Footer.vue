@@ -3,16 +3,40 @@
         <section class="landing__footer">
             <div class="row justify-between items-start q-col-gutter-xs">
                 <div class="col-12 col-sm-4 ">
-                    <p style="text-align: center">
-                        <logo></logo>
-                    </p>
                     <!--<span v-html="$t('homepage.footer.description')">-->
                     <!--</span>-->
 
 
-                    <FormNewsletter v-if="static_data.functionality.SHOW_NEWSLETTER" :idwebsite="tools.appid()"
-                                    :locale="tools.getLocale()">
-                    </FormNewsletter>
+                    <CFacebookFrame myclass="text-center" :urlfbpage="getValDb('FBPAGE_FRAME')" title="getValDb('FBPAGE_TITLE')">
+
+                    </CFacebookFrame>
+
+                    <div class="landing__footer-icons row flex-center q-mt-md">
+                        <a v-if="!!FBPage" :href="FBPage" target="_blank">
+                            <i aria-hidden="true" class="q-icon fab fa-facebook-f icon_contact links"> </i></a>
+
+                        <a v-if="!!InstagramPage" :href="InstagramPage" target="_blank">
+                            <i aria-hidden="true" class="q-icon fab fa-instagram icon_contact links"> </i></a>
+
+                        <a v-if="!!TelegramSupport" :href="TelegramSupport" target="_blank">
+                            <i aria-hidden="true" class="q-icon fab fa-telegram icon_contact links"></i></a>
+
+                        <a v-if="!!Whatsapp_Cell" :href="ChatWhatsapp" target="_blank">
+                            <i aria-hidden="true" class="q-icon fab fa-whatsapp icon_contact links"></i></a>
+
+                        <a v-if="!!Telegram_UsernameHttp" :href="Telegram_UsernameHttp" target="_blank">
+                            <i aria-hidden="true" class="q-icon fab fa-telegram icon_contact links"></i></a>
+
+
+                        <!--<a href="" target="_blank"><i aria-hidden="true" class="q-icon fab fa-github"> </i></a>-->
+                        <!--<a href="https://twitter.com/" target="_blank"><i aria-hidden="true" class="q-icon fab fa-twitter"> </i></a>-->
+                        <!--<a href="https://discord.gg/5TDhbDg" target="_blank"><i aria-hidden="true"-->
+                        <!--class="q-icon fab fa-discord"> </i></a><a-->
+                        <!--href="https://forum.quasar-framework.org/" target="_blank"><i aria-hidden="true"-->
+                        <!--class="q-icon fas fa-comments"> </i></a><a-->
+                        <!--href="https://www.patreon.com/quasarframework" target="_blank"><i aria-hidden="true"-->
+                        <!--class="q-icon fab fa-patreon"> </i></a>-->
+                    </div>
 
                     <!--<div class="q-mt-xs copyrights">-->
                     <!--<p class="mycontacts_text" v-html="$t('homepage.copyrights')"></p>-->
@@ -26,67 +50,41 @@
                             <p class="mycontacts_title">{{$t('homepage.titlecontatti')}}</p>
 
 
-                            <p class="mycontacts_text">
+                            <div class="mycontacts_text">
                                 <i v-if="getValDb('MAIN_EMAIL')" aria-hidden="true"
                                    class="q-icon fas fa-envelope q-mx-sm"></i>
                                 <a :href="`mailto:` + getValDb('MAIN_EMAIL')" class="links">{{ getValDb('MAIN_EMAIL')
                                     }}</a><br>
-                                <q-separator dark spaced></q-separator>
-                                <span v-for="rec in getarrValDb('CONTACTS_EMAIL_CELL')">
+                                <div style="margin-bottom: 20px;"></div>
+                                <div v-for="rec in getarrValDb('CONTACTS_EMAIL_CELL')" class="mycontacts_text"
+                                     style="margin-bottom: 0px;">
                                     {{ rec.name }}: {{ rec.phone }}
-                                    <br>
-                                    <a v-if="!!tools.getHttpForWhatsapp(rec.phone)" :href="tools.getHttpForWhatsapp(rec.phone)" target="_blank">
-                                        <i aria-hidden="true" class="q-icon fab fa-whatsapp landing__footer-icons icon_contact links q-mx-xs"></i></a>
-                                    <a v-if="!!tools.getHttpForTelegram(rec.usertelegram)" :href="tools.getHttpForTelegram(rec.usertelegram)" target="_blank">
-                                        <i aria-hidden="true" class="q-icon fab fa-telegram landing__footer-icons icon_contact links q-mx-xs"></i></a>
                                     <br>
                                     <i v-if="rec.email" aria-hidden="true"
                                        class="q-icon fas fa-envelope q-mx-sm"></i> <a :href="`mailto:`+ rec.email "
                                                                                       class="links">{{rec.email}}</a>
+
+                                    <a v-if="!!tools.getHttpForWhatsapp(rec.phone)"
+                                       :href="tools.getHttpForWhatsapp(rec.phone)" target="_blank">
+                                        <i aria-hidden="true"
+                                           class="q-icon fab fa-whatsapp landing__footer-icons icon_contact links q-mx-xs"></i></a>
+                                    <a v-if="!!tools.getHttpForTelegram(rec.usertelegram)"
+                                       :href="tools.getHttpForTelegram(rec.usertelegram)" target="_blank">
+                                        <i aria-hidden="true"
+                                           class="q-icon fab fa-telegram landing__footer-icons icon_contact links q-mx-xs"></i></a>
                                     <br>
-                                    <q-separator dark spaced></q-separator>
-                                </span>
+                                </div>
                                 <span v-if="getValDb('CALL_WORKING_DAYS')"><br>orari per chiamate:<br>
                                     <span v-html="getValDb('CALL_WORKING_DAYS')"></span></span>
-                                <!--Elisa Ghizzardi: 338-9344724 <a href="mailto:elisa.ghizzardi@yahoo.com" class="links">elisa.ghizzardi@yahoo.com</a><br>
 
-                                Cristina Barattoni: 335-8233721 <a href="mailto:info@cristinabarattoni.it"
-                                                                    class="links">info@cristinabarattoni.it</a><br><br>'
-                                +
-                                'orari per chiamate:<br>lun-ven: 12:30-13:30; 17:00-19.30<br>sab-dom: 10-18
-
-                                -->
-
-                            </p>
-                        </div>
-                        <div class="landing__footer-icons row flex-center">
-                            <a v-if="!!FBPage" :href="FBPage" target="_blank">
-                                <i aria-hidden="true" class="q-icon fab fa-facebook-f icon_contact links"> </i></a>
-
-                            <a v-if="!!InstagramPage" :href="InstagramPage" target="_blank">
-                                <i aria-hidden="true" class="q-icon fab fa-instagram icon_contact links"> </i></a>
-
-                            <a v-if="!!TelegramSupport" :href="TelegramSupport" target="_blank">
-                                <i aria-hidden="true" class="q-icon fab fa-telegram icon_contact links"></i></a>
-
-                            <a v-if="!!Whatsapp_Cell" :href="ChatWhatsapp" target="_blank">
-                                <i aria-hidden="true" class="q-icon fab fa-whatsapp icon_contact links"></i></a>
-
-                            <a v-if="!!Telegram_UsernameHttp" :href="Telegram_UsernameHttp" target="_blank">
-                                <i aria-hidden="true" class="q-icon fab fa-telegram icon_contact links"></i></a>
-
-
-                            <!--<a href="" target="_blank"><i aria-hidden="true" class="q-icon fab fa-github"> </i></a>-->
-                            <!--<a href="https://twitter.com/" target="_blank"><i aria-hidden="true" class="q-icon fab fa-twitter"> </i></a>-->
-                            <!--<a href="https://discord.gg/5TDhbDg" target="_blank"><i aria-hidden="true"-->
-                            <!--class="q-icon fab fa-discord"> </i></a><a-->
-                            <!--href="https://forum.quasar-framework.org/" target="_blank"><i aria-hidden="true"-->
-                            <!--class="q-icon fas fa-comments"> </i></a><a-->
-                            <!--href="https://www.patreon.com/quasarframework" target="_blank"><i aria-hidden="true"-->
-                            <!--class="q-icon fab fa-patreon"> </i></a>-->
+                            </div>
                         </div>
 
                     </div>
+
+                    <FormNewsletter v-if="static_data.functionality.SHOW_NEWSLETTER" :idwebsite="tools.appid()"
+                                    :locale="tools.getLocale()">
+                    </FormNewsletter>
 
                     <p class="text-center">
                         <router-link v-if="static_data.functionality.SHOW_ONLY_POLICY" to="/policy"><span
@@ -96,6 +94,9 @@
                 </div>
 
                 <div class="col-12 col-sm-4 q-pa-md" v-for="">
+                    <p style="text-align: center">
+                        <logo></logo>
+                    </p>
                     <div v-for="myitemmenu in static_data.routes">
                         <div v-if="myitemmenu.infooter">
 

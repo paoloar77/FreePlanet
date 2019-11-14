@@ -36,6 +36,7 @@ import MixinEvents from '../../mixins/mixin-events'
 import { CDateTime } from '../CDateTime'
 import { CMyAvatar } from '../CMyAvatar'
 import { CMySingleEvent } from '../CMySingleEvent'
+import { CMyTeacher } from '../CMyTeacher'
 
 @Component({
   mixins: [MixinOperator, MixinUsers, MixinEvents],
@@ -51,11 +52,12 @@ import { CMySingleEvent } from '../CMySingleEvent'
     CMyEditor,
     CDateTime,
     CMyAvatar,
-    CMySingleEvent
+    CMySingleEvent, CMyTeacher
   }
 })
 export default class CEventsCalendar extends MixinEvents {
   @Prop({ required: false, default: null }) public mysingleevent: IEvents
+  @Prop({ required: false, default: 0 }) public showfirstN: number
   public $q
   public $t: any
   public calendarView = 'month'
@@ -920,7 +922,7 @@ export default class CEventsCalendar extends MixinEvents {
   }
 
   public badgeStyles(eventparam, type, timeStartPos, timeDurationHeight) {
-    const s = { color: '', top: '', height: '' }
+    const s = { color: '', top: '', height: '', opacity: 1 }
 
     if (tools.isCssColor(eventparam.bgcolor)) {
       s['background-color'] = eventparam.bgcolor
@@ -932,6 +934,11 @@ export default class CEventsCalendar extends MixinEvents {
     if (timeDurationHeight) {
       s.height = timeDurationHeight(this.func_tools.getMinutesDuration(eventparam.dateTimeStart, eventparam.dateTimeEnd)) + 'px'
     }
+
+    if (!this.isEventEnabled(eventparam)) {
+      s.opacity = 0.5
+    }
+
     s['align-items'] = 'flex-start'
     return s
   }
@@ -964,21 +971,11 @@ export default class CEventsCalendar extends MixinEvents {
   }
 
   public getEventList() {
-    const eventsloc = []
-
-    const datenow = tools.addDays(tools.getDateNow(), -1)
-
-    for (let i = 0; i < CalendarStore.state.eventlist.length; ++i) {
-      // console.log('  ciclo i = ', i, CalendarStore.state.eventlist[i])
-      // const dateEvent = new Date(CalendarStore.state.eventlist[i].date + ' 00:00:00')
-      const dateEvent = new Date(CalendarStore.state.eventlist[i].dateTimeEnd)
-
-      if (dateEvent >= datenow) {
-        eventsloc.push(CalendarStore.state.eventlist[i])
-      }
-    }
-
-    return eventsloc
+    const mylist = CalendarStore.state.eventlist.filter((rec) => (new Date(rec.dateTimeEnd) >= tools.getDateNowEvent()))
+    if (this.showfirstN > 0)
+      return mylist.slice(0, this.showfirstN)
+    else
+      return mylist
   }
 
   public getEvents(dt) {

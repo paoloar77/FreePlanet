@@ -69,7 +69,8 @@ const state: IGlobalState = {
     _id: 0
   },
   settings: [],
-  disciplines: []
+  disciplines: [],
+  autoplaydisc: 8000
 }
 
 async function getConfig(id) {

@@ -193,6 +193,32 @@ export const fieldsTable = {
     }
   },
 
+  getMultiValueByTable(col: IColGridTable, arrval) {
+    if (col.jointable) {
+      const mylist = this.getTableJoinByName(col.jointable)
+      const key = this.getKeyByTable(col.jointable)
+      const collab = this.getLabelByTable(col.jointable)
+
+      // console.table(mylist)
+      // console.log('key=', key, 'collab', collab, 'val', val)
+
+      const myris = mylist.filter((myrec) => arrval.includes(myrec[key]))
+      // console.log('myris', myris)
+      if (myris) {
+        console.log('collab', collab)
+        if (tools.isObject(collab))
+          return myris.map(collab)
+        else
+          return myris.map((rec) => rec[collab])
+      } else {
+        return ''
+      }
+
+    } else {
+      return ''
+    }
+  },
+
   getColByTable(table) {
     if (table === 'permissions') {
       return ['value', 'label']
@@ -224,6 +250,10 @@ export const fieldsTable = {
     else
       return 'label'
   },
+  getTitleByTable(mytable): string {
+    const myrec = this.getrecTableList(mytable)
+    return myrec.label
+  },
   getIconByTable(mytable): string {
     const myrec = this.getrecTableList(mytable)
     if (myrec)
@@ -237,7 +267,7 @@ export const fieldsTable = {
       label: 'Insegnanti',
       columns: colTableOperator,
       colkey: 'username',
-      collabel: 'username'
+      collabel: (rec) => rec.name + ' ' + rec.surname
     },
     {
       value: 'wheres',

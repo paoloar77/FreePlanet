@@ -30,6 +30,7 @@ const msgglobal = {
       write: 'scrive'
     },
     dialog: {
+      close: 'Chiudi',
       ok: 'Ok',
       yes: 'Si',
       no: 'No',
@@ -231,6 +232,8 @@ const msgglobal = {
       cancelederrorevent: 'Cancellazione Evento non effettuata, Riprovare',
       event: 'Evento',
       starttime: 'Dalle',
+      nextevent: 'Prossimo Evento',
+      readall: 'Leggi tutto',
       enddate: 'al',
       endtime: 'alle',
       duration: 'Durata',
@@ -253,6 +256,7 @@ const msgglobal = {
       data: 'Data',
       teachertitle: 'Insegnante',
       peoplebooked: 'Prenotaz.',
+      showlastschedule: 'Vedi tutto il Calendario',
     },
     msgs: {
       message: 'Messaggio',
@@ -339,6 +343,7 @@ const msgglobal = {
       write: 'escribe'
     },
     dialog: {
+      close: 'Cerrar',
       ok: 'Vale',
       yes: 'Sí',
       no: 'No',
@@ -531,6 +536,8 @@ const msgglobal = {
       cancelederrorbooking: 'Cancelación no realizada, intente nuevamente más tarde',
       event: 'Evento',
       starttime: 'Inicio',
+      nextevent: 'Próximo evento',
+      readall: 'Lee todo',
       enddate: 'a',
       endtime: 'fin',
       duration: 'Duración',
@@ -553,6 +560,7 @@ const msgglobal = {
       data: 'Fecha',
       teachertitle: 'Maestro',
       peoplebooked: 'Reserv.',
+      showlastschedule: 'Ver todo el calendario',
     },
     msgs: {
       message: 'Mensaje',
@@ -639,6 +647,7 @@ const msgglobal = {
       write: 'écrit'
     },
     dialog: {
+      close: 'Fermer',
       ok: 'Bien',
       yes: 'Oui',
       no: 'Non',
@@ -830,6 +839,8 @@ const msgglobal = {
       cancelederrorbooking: 'Annulation non effectuée, réessayez plus tard',
       event: 'événement',
       starttime: 'Accueil',
+      nextevent: 'Prochain événement',
+      readall: 'Tout lire',
       enddate: 'au',
       endtime: 'fin',
       duration: 'Durée',
@@ -852,6 +863,7 @@ const msgglobal = {
       data: 'Date',
       teachertitle: 'Professeur',
       peoplebooked: 'Réserv.',
+      showlastschedule: 'Voir tout le calendrier',
     },
     msgs: {
       message: 'Message',
@@ -938,6 +950,7 @@ const msgglobal = {
       write: 'write'
     },
     dialog: {
+      close: 'Close',
       ok: 'Ok',
       yes: 'Yes',
       no: 'No',
@@ -1128,6 +1141,8 @@ const msgglobal = {
       cancelederrorbooking: 'Cancellation unsuccessfully, try again later',
       event: 'Event',
       starttime: 'From',
+      nextevent: 'Next Event',
+      readall: 'Read All',
       enddate: 'to',
       endtime: 'to',
       duration: 'Duration',
@@ -1150,6 +1165,7 @@ const msgglobal = {
       data: 'Date',
       teachertitle: 'Teacher',
       peoplebooked: 'Booked',
+      showlastschedule: 'See Full Schedule',
     },
     msgs: {
       message: 'Messaggio',
@@ -1236,6 +1252,7 @@ const msgglobal = {
       write: 'write'
     },
     dialog: {
+      close: 'Close',
       ok: 'Ok',
       yes: 'Yes',
       no: 'No',
@@ -1428,6 +1445,8 @@ const msgglobal = {
       cancelederrorbooking: 'Cancellation unsuccessfully, try again later',
       event: 'Event',
       starttime: 'From',
+      nextevent: 'Next Event',
+      readall: 'Read All',
       enddate: 'to',
       endtime: 'to',
       duration: 'Duration',
@@ -1450,6 +1469,7 @@ const msgglobal = {
       data: 'Date',
       teachertitle: 'Teacher',
       peoplebooked: 'Booked',
+      showlastschedule: 'See Full Schedule',
     },
     msgs: {
       message: 'Messaggio',

@@ -172,7 +172,7 @@ export default class Header extends Vue {
       if (this.static_data.functionality.SHOW_IF_IS_SERVER_CONNECTION) {
 
         if (!!oldValue) {
-          tools.showNotif(this.$q, this.$t('connection') + ` ${value}`, {
+          tools.showNotif(this.$q, this.$t('connection') + ` disc__value}`, {
             color,
             icon: 'wifi'
           })

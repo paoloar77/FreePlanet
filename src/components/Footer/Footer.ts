@@ -14,11 +14,12 @@ import Quasar from 'quasar'
 import { FormNewsletter } from '../FormNewsletter'
 import { IUserState } from '../../model'
 import MixinBase from '../../mixins/mixin-base'
+import { CFacebookFrame } from '../CFacebookFrame'
 
 @Component({
   mixins: [MixinBase],
   name: 'Footer',
-  components: { Logo, FormNewsletter }
+  components: { Logo, FormNewsletter, CFacebookFrame }
 })
 
 export default class Footer extends Vue {

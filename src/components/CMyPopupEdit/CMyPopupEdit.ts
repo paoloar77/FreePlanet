@@ -107,6 +107,11 @@ export default class CMyPopupEdit extends Vue {
         return '[---]'
       else
         return fieldsTable.getValueByTable(col, val)
+    } else if (col.fieldtype === tools.FieldType.multiselect) {
+      if (val === undefined)
+        return '[---]'
+      else
+        return fieldsTable.getMultiValueByTable(col, val)
     } else {
       if (val === undefined)
         return '[]'
@@ -134,5 +139,9 @@ export default class CMyPopupEdit extends Vue {
     } else {
       return ''
     }
+  }
+
+  public changeCol() {
+
   }
 }

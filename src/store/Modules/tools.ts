@@ -1726,6 +1726,44 @@ export const tools = {
       return ''
   },
 
+  getstrShortDate(mydate) {
+    const DateFormatter = new Intl.DateTimeFormat(func_tools.getLocale() || void 0, {
+      weekday: 'long',
+      day: 'numeric',
+      month: 'short',
+      year: 'numeric'
+      // timeZone: 'UTC'
+    })
+    try {
+      if (DateFormatter) {
+        const date1 = new Date(mydate)
+        return DateFormatter.format(date1)
+      }
+      return mydate
+    } catch (e) {
+      return ''
+    }
+
+  },
+  getstrVeryShortDate(mydate) {
+    const DateFormatter = new Intl.DateTimeFormat(func_tools.getLocale() || void 0, {
+      weekday: 'short',
+      day: 'numeric',
+      month: 'short',
+      // timeZone: 'UTC'
+    })
+    try {
+      if (DateFormatter) {
+        const date1 = new Date(mydate)
+        return DateFormatter.format(date1)
+      }
+      return mydate
+    } catch (e) {
+      return ''
+    }
+
+  },
+
   getstrDateTimeEvent(mythis, myevent, withhtml) {
     let mystr = ''
     // is same day?
@@ -1753,6 +1791,34 @@ export const tools = {
               </span>
             </span>`
     }
+    return mystr
+  },
+
+  getstrDateTimeEventSimple(mythis, myevent) {
+    let mystr = ''
+    // is same day?
+    if (tools.getstrShortDate(myevent.dateTimeStart) === tools.getstrShortDate(myevent.dateTimeEnd)) {
+      mystr = `${tools.getstrShortDate(myevent.dateTimeStart)}
+                 h. ${ tools.getstrTime(myevent.dateTimeStart) }`
+    } else {
+      mystr = `${tools.getstrShortDate(myevent.dateTimeStart)} - ${ tools.getstrShortDate(myevent.dateTimeEnd) }`
+
+    }
+
+    return mystr
+  },
+
+  getstrDateTimeEventShort(mythis, myevent) {
+    let mystr = ''
+    // is same day?
+    if (tools.getstrShortDate(myevent.dateTimeStart) === tools.getstrShortDate(myevent.dateTimeEnd)) {
+      mystr = `${tools.getstrVeryShortDate(myevent.dateTimeStart)}
+                 h. ${ tools.getstrTime(myevent.dateTimeStart) }`
+    } else {
+      mystr = `${tools.getstrVeryShortDate(myevent.dateTimeStart)} - ${ tools.getstrVeryShortDate(myevent.dateTimeEnd) }`
+
+    }
+
     return mystr
   },
 
@@ -1814,7 +1880,7 @@ export const tools = {
     } else {
       return null
     }
-    console.log('mystrdate', mystrdate, strdate, mydate)
+    // console.log('mystrdate', mystrdate, strdate, mydate)
     return mydate
   }
   ,
@@ -1846,8 +1912,10 @@ export const tools = {
   getDateNow() {
     const mydate = new Date()
     return mydate
-  }
-  ,
+  },
+  getDateNowEvent() {
+    return tools.addDays(tools.getDateNow(), -1)
+  },
   getDateNull() {
     return new Date(0)
   }
@@ -2080,8 +2148,7 @@ export const tools = {
     } else {
       return '500'
     }
-  }
-  ,
+  },
 
   styles_imgtitle(sized ?: string) {
     if (!!sized) {
@@ -2277,6 +2344,15 @@ export const tools = {
     else
       return item.text
 
+  },
+
+  getimgev(ev) {
+    if (!!ev.img_small)
+      return `statics/` + ev.img_small
+    else if (!!ev.img)
+      return `statics/` + ev.img
+    else
+      return ''
   },
 
   getimgbysize(dir: string, file: string) {
@@ -2524,14 +2600,20 @@ export const tools = {
   },
   getwidth(mythis) {
     // return height()
-    return mythis.$q.screen.width
+    let myw = mythis.$q.screen.width
+    if (GlobalStore.state.leftDrawerOpen)
+      myw -= 300
+    // if (GlobalStore.state.RightDrawerOpen)
+    //   myw -= 300
+    return myw
+
   },
 
   getwidthscale(mythis, mywidth, maxwidth) {
     if (this.isMobile()) {
       return mywidth
     } else {
-      let myw = mywidth + ((this.getwidth(mythis) - mywidth - 300) * 0.4)
+      let myw = mywidth + ((this.getwidth(mythis) - mywidth) * 0.4)
       if (myw > maxwidth)
         myw = maxwidth
 
@@ -2641,6 +2723,8 @@ export const tools = {
     setScrollPosition(target, offset, duration)
   },
   getCellForWhatsapp(numbercell) {
+    if (!numbercell)
+      return ''
     let mynum = numbercell.replace(/\-/g, '')
     const intcode = GlobalStore.getters.getValueSettingsByKey('INT_CODE')
     if (numbercell.substring(0, 1) !== '+')
@@ -2652,6 +2736,8 @@ export const tools = {
   },
 
   getHttpForWhatsapp(numbercell) {
+    if (!numbercell)
+      return ''
     const mynum = this.getCellForWhatsapp(numbercell)
     if (mynum)
       return 'https://wa.me/' + mynum
@@ -2681,8 +2767,11 @@ export const tools = {
         equiv: { 'http-equiv': 'Content-Type', 'content': 'text/html; charset=UTF-8' }
       }
     }
+  },
+  isObject(anything) {
+    //Object.create(null) instanceof Object → false
+    return Object(anything) === anything
   }
-
 
 // getLocale() {
   //   if (navigator.languages && navigator.languages.length > 0) {

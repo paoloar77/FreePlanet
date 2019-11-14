@@ -25,8 +25,12 @@ export default class MixinBase extends Vue {
     return tools
   }
 
-  public getValDb(keystr) {
-    return GlobalStore.getters.getValueSettingsByKey(keystr)
+  public getValDb(keystr, def?) {
+    const ris = GlobalStore.getters.getValueSettingsByKey(keystr)
+    if (ris === '')
+      return def
+    else
+      return ris
   }
   public getarrValDb(keystr) {
     const myval = GlobalStore.getters.getValueSettingsByKey(keystr)

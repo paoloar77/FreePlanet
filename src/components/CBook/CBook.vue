@@ -9,7 +9,7 @@
 
         <q-tabs v-model="tab" class="text-teal">
             <q-tab label="Info" name="one"></q-tab>
-            <q-tab label="Storia" name="two"></q-tab>
+            <q-tab label="Biografia" name="two"></q-tab>
         </q-tabs>
 
         <q-separator></q-separator>

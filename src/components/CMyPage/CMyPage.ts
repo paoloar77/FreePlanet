@@ -23,6 +23,7 @@ export default class CMyPage extends Vue {
   @Prop({ required: false, default: '' }) public imgbackground: string
   @Prop({ required: false, default: '' }) public sizes: string
   @Prop({ required: false, default: '' }) public styleadd: string
+  @Prop({ required: false, default: false }) public nofooter: boolean
   public $t
   public $q
 

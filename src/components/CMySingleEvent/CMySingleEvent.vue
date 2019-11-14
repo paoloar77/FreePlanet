@@ -1,6 +1,6 @@
 <template>
     <div>
-        <CMyPage v-if="myevent" :imgbackground="myevent.img" :title="myevent.title" keywords="" description="">
+        <CMyPage v-if="myevent" :imgbackground="myevent.img" :title="myevent.title" keywords="" description="" nofooter="true">
 
             <div class="q-mx-md">
                 <div class="listaev__align_chips q-ma-md">
@@ -89,16 +89,8 @@
                                     <span class="cal__teacher-title">{{$t('cal.teacher')}}: <span
                                             class="margin_with"></span></span>
 
-                        <q-chip>
-                            <CMyAvatar :myimg="getImgTeacherByUsername(myevent.teacher)"></CMyAvatar>
-                            <span class="cal__teacher-content">{{getTeacherByUsername(myevent.teacher)}}</span>
-                        </q-chip>
-                        <span v-if="getImgTeacherByUsername(myevent.teacher2) && isValidUsername(myevent.teacher2)"
-                              class="margin_avatar2"></span>
-                        <q-chip v-if="getImgTeacherByUsername(myevent.teacher2) && isValidUsername(myevent.teacher2)">
-                            <CMyAvatar :myimg="getImgTeacherByUsername(myevent.teacher2)"></CMyAvatar>
-                            <span class="cal__teacher-content">{{getTeacherByUsername(myevent.teacher2)}}</span>
-                        </q-chip>
+                        <CMyTeacher :username="myevent.teacher"></CMyTeacher>
+                        <CMyTeacher :username="myevent.teacher2"></CMyTeacher>
 
                         <span v-if="myevent.wherecode" class="q-ma-md">
                                         <span v-if="tools.isMobile()"><br/></span>
@@ -141,7 +133,7 @@
                         </q-btn>
                         <q-btn v-if="myevent.bodytext" rounded outline class="q-mx-sm"
                                color="primary"
-                               :to="`/event/` + myevent._id"
+                               :to="`/event/${myevent.typol}/${myevent._id}`"
                                :label="$t('event.showpage')">
                         </q-btn>
                     </div>

@@ -22,4 +22,14 @@ export default class CFacebookFrame extends Vue {
   public geturlfbpageEncoded() {
     return encodeURIComponent(this.urlfbpage)
   }
+
+  get mywidth() {
+    let myw = 340
+    if (tools.getwidth(this) < 400)
+      return myw
+    if ((tools.getwidth(this) > 400) && (tools.getwidth(this) < 1100))
+      return Math.round((tools.getwidth(this) / 3) - 30)
+    else
+      return myw
+  }
 }

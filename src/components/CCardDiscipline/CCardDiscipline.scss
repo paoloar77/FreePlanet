@@ -25,15 +25,33 @@ $grayshadow: #555;
   width: 100%;
   max-width: 350px;
   min-width: 300px;
-  padding: 1rem 1rem;
+  padding: 0;
 
   box-shadow: none;
-  border-radius: 20px;
-  margin: 1rem 1rem;
+  border-radius: 30px;
+}
+
+.my-card-shadow {
+  width: 100%;
+  max-width: 350px;
+  min-width: 300px;
+  padding-bottom: 20px;
+  margin-left: 0;
+  margin-right: 0;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  border-radius: 30px;
+
   transition: transform .2s ease-out;
 }
 
-.my-card-discipline:hover {
+.yes_shadow {
+  -webkit-box-shadow: 0 0 24px 0 rgba(0, 0, 0, 0.16);
+  box-shadow: 0 0 24px 0 rgba(0, 0, 0, 0.16);
+}
+
+
+.my-card-shadow:hover {
   transition: transform .2s ease-in;
   transform: scale(1.03);
 }
@@ -73,8 +91,8 @@ $grayshadow: #555;
 }
 
 .myimg {
+  height: 200px;
   border-radius: 30px !important;
-  margin: 30px auto 10px;
 }
 
 .q-img {

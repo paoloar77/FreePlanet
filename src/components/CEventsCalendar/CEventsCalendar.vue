@@ -50,21 +50,11 @@
                         </q-chip>
                         <div class="cal__details" v-html="myevent.details"></div>
                         <div v-if="myevent.teacher" class="cal__teacher">
-                                    <span class="cal__teacher-title">{{$t('cal.teacher')}}: <span
-                                            class="margin_with"></span></span>
+                            <span class="cal__teacher-title">{{$t('cal.teacher')}}: <span
+                                    class="margin_with"></span></span>
                             <!--<span class="cal__teacher-content">{{myevent.teacher}}</span>-->
-                            <span class="cal__teacher-content">
-                                    <q-chip>
-                                        <CMyAvatar :myimg="getImgTeacherByUsername(myevent.teacher)"></CMyAvatar>
-                                        <span class="cal__teacher-content">{{getTeacherByUsername(myevent.teacher)}}</span>
-                                    </q-chip>
-                                    <span v-if="getImgTeacherByUsername(myevent.teacher2) && isValidUsername(myevent.teacher2)"
-                                          class="margin_avatar2"></span>
-                                    <q-chip v-if="getImgTeacherByUsername(myevent.teacher2) && isValidUsername(myevent.teacher2)">
-                                        <CMyAvatar :myimg="getImgTeacherByUsername(myevent.teacher2)"></CMyAvatar>
-                                        <span class="cal__teacher-content">{{getTeacherByUsername(myevent.teacher2)}}</span>
-                                    </q-chip>
-                                </span>
+                            <CMyTeacher :username="myevent.teacher"></CMyTeacher>
+                            <CMyTeacher :username="myevent.teacher2"></CMyTeacher>
                         </div>
                         <div v-if="myevent.wherecode" class="cal__where">
                             <!--<span v-if="tools.isMobile()"><br/></span>-->
@@ -72,7 +62,8 @@
                             <span class="cal__where-content">
                                     <q-chip>
                                         <q-avatar v-if="getWhereIcon(myevent.wherecode)">
-                                            <img :src="`../../statics/images/avatar/` + getWhereIcon(myevent.wherecode)" alt="Località">
+                                            <img :src="`../../statics/images/avatar/` + getWhereIcon(myevent.wherecode)"
+                                                 alt="Località">
                                         </q-avatar>
                                         <q-avatar v-else color="blue" font-size="20px" text-color="white" icon="home">
                                         </q-avatar>showpage
@@ -137,7 +128,6 @@
                                  :input-style="`background-color: ${eventForm.bgcolor} !important; color: white !important; font-weight: bold; `"
                                  borderless rounded dense :label="$t('event.title')"
                                  :rules="[v => v && v.length > 0 || $t('event.notempty')]"></q-input>
-
 
 
                         <q-tabs
@@ -408,7 +398,7 @@
         <!--v-touch-swipe.mouse.left.right="handleSwipe" -->
 
         <!-- the calendar -->
-        <q-page v-if="visuAllCal" class="column" style="min-height: 500px !important;">
+        <q-page v-if="visuAllCal && showfirstN === 0" class="column" style="min-height: 500px !important;">
 
             <div>
                 <q-toolbar class="mytoolbar">
@@ -554,16 +544,8 @@
         </q-page>
 
         <div class="q-mt-md">
-            <p v-if="visuAllCal" class="text-subtitle1 text-red text-center">LISTA PROSSIMI EVENTI:</p>
-
-            <!--<q-intersection-->
-            <!--v-for="index in 10"-->
-            <!--:key="index"-->
-            <!--transition="scale"-->
-            <!--class="example-item"-->
-            <!--&gt;-->
-
             <div v-if="!mysingleevent">
+                <p class="text-subtitle1 text-red bg-amber text-center ">LISTA PROSSIMI <span v-if="showfirstN > 0">{{ showfirstN }}</span> EVENTI:</p>
                 <q-markup-table wrap-cells bordered separator="horizontal" class="listaev__table">
                     <tbody>
                     <tr v-for="(event, index) in getEventList()" class="listaev listaev__table">
@@ -602,7 +584,8 @@
                                            @click="deleteEvent(myevent)"></q-btn>
                                     <q-btn v-if="editable" flat round color="white" icon="edit" v-close-popup
                                            @click="editEvent(myevent)"></q-btn>
-                                    <q-btn v-if="editable" flat round color="white" icon="cancel" @click="selectEvent(null)"></q-btn>
+                                    <q-btn v-if="editable" flat round color="white" icon="cancel"
+                                           @click="selectEvent(null)"></q-btn>
                                 </q-chip>
                                 <q-chip v-if="event.news" class="cltexth4 chipnews shadow-5 glossy text-right"
                                         color="red"
@@ -623,36 +606,26 @@
 
                                 <div class="">
                                     <!-- Se c'è un link, allora -->
-                                    <q-btn v-if="event.linkpdf" size="md" type="a"
-                                           :href="`../../statics/` + event.linkpdf"
+                                    <q-btn size="md" type="a"
+                                           :to="`/event/${event.typol}/${event._id}`"
                                            target="_blank"
-                                           ripple rounded :label="event.title" :icon="event.icon"
+                                           :style="`background-color: ${event.bgcolor} !important; color: white !important;`"
+                                           ripple
+                                           rounded
+                                           :label="event.title" :icon="event.icon"
                                            :color="event.bgcolor" text-color="white" glossy>
 
                                     </q-btn>
-                                    <!-- altrimenti mostra solo Chip -->
-                                    <div v-else>
-                                        <q-btn size="md" type="a"
-                                               :to="`/event/` + event._id"
-                                               target="_blank"
-                                               :style="`background-color: ${event.bgcolor} !important; color: white !important;`"
-                                               ripple
-                                               rounded
-                                               :label="event.title" :icon="event.icon"
-                                               :color="event.bgcolor" text-color="white" glossy>
-
-                                        </q-btn>
-                                        <!--<div v-if="tools.isMobile()" class="cltexth3 text-center"-->
-                                        <!--:style="`background-color: ${event.bgcolor} !important; color: white !important;`">-->
-                                        <!--{{event.title}}-->
-                                        <!--</div>-->
-                                        <!--<q-chip v-else class="cltexth3 text-center"-->
-                                        <!--:style="`background-color: ${event.bgcolor} !important; color: white !important;`"-->
-                                        <!--text-color="white"-->
-                                        <!--:icon="event.icon"-->
-                                        <!--dense>{{event.title}}-->
-                                        <!--</q-chip>-->
-                                    </div>
+                                    <!--<div v-if="tools.isMobile()" class="cltexth3 text-center"-->
+                                    <!--:style="`background-color: ${event.bgcolor} !important; color: white !important;`">-->
+                                    <!--{{event.title}}-->
+                                    <!--</div>-->
+                                    <!--<q-chip v-else class="cltexth3 text-center"-->
+                                    <!--:style="`background-color: ${event.bgcolor} !important; color: white !important;`"-->
+                                    <!--text-color="white"-->
+                                    <!--:icon="event.icon"-->
+                                    <!--dense>{{event.title}}-->
+                                    <!--</q-chip>-->
                                 </div>
 
                                 <div style="margin: 10px;"></div>
@@ -662,16 +635,8 @@
                                     <span class="cal__teacher-title">{{$t('cal.teacher')}}: <span
                                             class="margin_with"></span></span>
 
-                                    <q-chip>
-                                        <CMyAvatar :myimg="getImgTeacherByUsername(event.teacher)"></CMyAvatar>
-                                        <span class="cal__teacher-content">{{getTeacherByUsername(event.teacher)}}</span>
-                                    </q-chip>
-                                    <span v-if="getImgTeacherByUsername(event.teacher2) && isValidUsername(event.teacher2)"
-                                          class="margin_avatar2"></span>
-                                    <q-chip v-if="getImgTeacherByUsername(event.teacher2) && isValidUsername(event.teacher2)">
-                                        <CMyAvatar :myimg="getImgTeacherByUsername(event.teacher2)"></CMyAvatar>
-                                        <span class="cal__teacher-content">{{getTeacherByUsername(event.teacher2)}}</span>
-                                    </q-chip>
+                                    <CMyTeacher :username="event.teacher"></CMyTeacher>
+                                    <CMyTeacher :username="event.teacher2"></CMyTeacher>
 
                                     <span v-if="event.wherecode" class="">
                                         <span v-if="tools.isMobile()"><br/></span>
@@ -704,19 +669,19 @@
 
 
                                 <div class="row justify-end">
-                                    <div class="justify-start">
-                                        <q-btn v-if="event.linkpdf" size="md" type="a"
-                                               :href="`../../statics/` + event.linkpdf"
-                                               target="_blank" rounded color="primary" icon="info"
-                                               :label="$t('cal.showpdf')">
+                                    <q-btn v-if="event.linkpdf" size="md" type="a"
+                                           :href="`../../statics/` + event.linkpdf"
+                                           target="_blank" rounded color="primary" icon="info"
+                                           class="q-ma-sm"
+                                           :label="$t('cal.showpdf')">
 
-                                        </q-btn>
-                                        <q-btn v-if="event.bodytext" rounded outline class="q-mx-sm"
-                                               color="primary"
-                                               :to="`/event/` + event._id"
-                                               :label="$t('event.showpage')">
-                                        </q-btn>
-                                    </div>
+                                    </q-btn>
+                                    <q-btn v-if="event.bodytext" rounded outline
+                                           class="q-ma-sm"
+                                           color="primary"
+                                           :to="`/event/${event.typol}/${event._id}`"
+                                           :label="$t('event.showpage')">
+                                    </q-btn>
                                     <q-btn rounded outline class="q-ma-sm"
                                            color="primary" @click="askForInfoEventMenu(event)"
                                            :label="$t('event.askinfo')">
@@ -744,6 +709,14 @@
                     </tr>
                     </tbody>
                 </q-markup-table>
+
+                <div class="q-ma-lg text-center">
+                    <q-btn rounded type="a" to="/calendarioeventi" color="primary" icon="event" size="lg"
+                           :label="$t('cal.showlastschedule')">
+                    </q-btn>
+
+                </div>
+
             </div>
             <div v-else>
                 <CMySingleEvent :myevent="mysingleevent" calendarView="month" :iseditable="editable"
@@ -756,49 +729,6 @@
 
                 </CMySingleEvent>
             </div>
-            <!--</q-intersection>-->
-            <!-- Example of a Dialog with a Card -->
-            <!--
-                            <q-dialog v-model="card">
-                                <q-card>
-                                    <q-img src="https://media-cdn.tripadvisor.com/media/photo-s/0a/47/a8/91/chicken-salad-sandwich.jpg" />
-
-                                    <q-card-section>
-                                        <q-btn
-                                                fab
-                                                color="primary"
-                                                icon="place"
-                                                class="absolute"
-                                                style="top: 0; right: 12px; transform: translateY(-50%);"
-                                        />
-
-                                        <div class="row no-wrap items-center">
-                                            <div class="col text-h6 ellipsis">Cafe Basilico</div>
-                                            <div class="col-auto text-grey q-pt-md">
-                                                <q-icon name="place" /> 250 ft
-                                            </div>
-                                        </div>
-
-                                        <q-rating v-model="stars" :max="5" size="32px" />
-                                    </q-card-section>
-
-                                    <q-card-section>
-                                        <div class="text-subtitle1">$・Italian, Cafe</div>
-                                        <div class="text-subtitle2 text-grey">Small plates, salads & sandwiches in an intimate setting.</div>
-                                    </q-card-section>
-
-                                    <q-separator />
-
-                                    <q-card-actions>
-                                        <q-btn flat round icon="event" v-close-popup />
-                                        <q-btn flat v-close-popup>5:30PM</q-btn>
-                                        <q-btn flat v-close-popup>7:30PM</q-btn>
-                                        <q-btn flat v-close-popup>9:00PM</q-btn>
-                                        <q-btn flat color="primary" v-close-popup>Reserve</q-btn>
-                                    </q-card-actions>
-                                </q-card>
-                            </q-dialog>
-            -->
         </div>
     </div>
 </template>

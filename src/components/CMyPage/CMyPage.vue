@@ -7,7 +7,9 @@
             </CImgTitle>
         </div>
         <slot></slot>
-        <Footer></Footer>
+        <div v-if="!nofooter">
+            <Footer></Footer>
+        </div>
     </div>
 </template>
 

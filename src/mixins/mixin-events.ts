@@ -14,17 +14,20 @@ export default class MixinEvents extends Vue {
 
   public getImgEvent(event: IEvents) {
     if (!!event.img)
-      return '../../statics/' + event.img
+      return 'statics/' + event.img
     else
-      return '../../statics/images/noimg.png'
+      return 'statics/images/noimg.png'
   }
 
+
   public getStyleByEvent(event: IEvents, visu: boolean) {
-    if (visu) {
-      return 'border: inset; border-color: darkblue; border-width: 3px; padding: 5px !important; '
-    } else {
-      return ''
+    let myst = 'border: inset; border-color: darkblue; border-width: 3px; padding: 5px !important; '
+
+    if (!this.isEventEnabled(event)) {
+      myst += ' opacity: 0.5'
     }
+
+    return myst
   }
 
   public isAlreadyBooked(eventparam: IEvents) {

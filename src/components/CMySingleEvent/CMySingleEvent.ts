@@ -12,7 +12,7 @@ import { static_data } from '@src/db/static_data'
 import { Screen } from 'quasar'
 
 import { CImgText } from '../../components/CImgText/index'
-import { CCard, CMyAvatar, CMyPage } from '@components'
+import { CCard, CMyAvatar, CMyTeacher, CMyPage } from '@components'
 import MixinOperator from '@src/mixins/mixin-operator'
 import MixinEvents from '../../mixins/mixin-events'
 import { IEvents } from '@src/model'
@@ -22,20 +22,13 @@ import MixinUsers from '@src/mixins/mixin-users'
 @Component({
   name: 'CMySingleEvent',
   mixins: [MixinOperator, MixinBase, MixinEvents, MixinUsers],
-  components: { Logo, Footer, CImgText, CCard, CMyPage, CMyAvatar }
+  components: { Logo, Footer, CImgText, CCard, CMyPage, CMyAvatar, CMyTeacher }
 })
 export default class CMySingleEvent extends MixinEvents {
+  @Prop({ required: true }) public myevent: IEvents
   public $q
   public $t
-  public myevent: IEvents = null
   public selected: boolean = false
-
-  @Watch('$route.params.eventid')
-  public changeevent() {
-    // this.mytypetransgroup = ''
-    this.myevent = CalendarStore.state.eventlist.find((rec) => rec._id === this.$route.params.eventid)
-    // console.log('myevent', this.myevent, 'eventid=', this.$route.params.eventid)
-  }
 
   public selectEvent(eventparam: IEvents) {
     this.selected = !this.selected
@@ -50,8 +43,7 @@ export default class CMySingleEvent extends MixinEvents {
   }
 
   public mounted() {
-    this.changeevent()
-    console.log('myevent', this.myevent)
+    // console.log('MYSINGLEEVENT: myevent', this.myevent)
   }
 
   get static_data() {

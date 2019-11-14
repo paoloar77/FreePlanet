@@ -96,6 +96,7 @@ export interface IGlobalState {
   lastaction: IAction
   settings: ISettings[],
   disciplines: IDiscipline[],
+  autoplaydisc: number
 }
 
 export interface IMenuList {
