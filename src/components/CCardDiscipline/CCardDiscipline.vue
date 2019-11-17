@@ -14,12 +14,12 @@
             </q-card-section>
 
             <q-card-section v-if="ExistLesson()" class="text-blue">
-                {{ $t('cal.nextevent') }}:
+                <span v-if="!tools.isMobile()">{{ $t('cal.nextevent') }}:</span>
                 <q-btn rounded type="a" :to="getLinkEvent" color="primary" icon="event" :label="NextEventDate()">
                 </q-btn>
             </q-card-section>
 
-            <q-separator inset></q-separator>
+            <span v-if="!tools.isMobile()"><q-separator inset></q-separator></span>
 
             <q-card-section class="row justify-center">
                 <div v-for="(teach, index) in discipline.teachers" :key="index"

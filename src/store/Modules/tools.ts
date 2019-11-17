@@ -1770,6 +1770,24 @@ export const tools = {
 
   },
 
+  getstrVeryVeryShortDate(mydate) {
+    const DateFormatter = new Intl.DateTimeFormat(func_tools.getLocale() || void 0, {
+      weekday: 'long',
+      day: 'numeric',
+      // timeZone: 'UTC'
+    })
+    try {
+      if (DateFormatter) {
+        const date1 = new Date(mydate)
+        return DateFormatter.format(date1)
+      }
+      return mydate
+    } catch (e) {
+      return ''
+    }
+
+  },
+
   getstrDateTimeEvent(mythis, myevent, withhtml) {
     let mystr = ''
     // is same day?
@@ -1805,9 +1823,9 @@ export const tools = {
     // is same day?
     if (tools.getstrShortDate(myevent.dateTimeStart) === tools.getstrShortDate(myevent.dateTimeEnd)) {
       mystr = `${tools.getstrShortDate(myevent.dateTimeStart)}
-                 h. ${ tools.getstrTime(myevent.dateTimeStart) }`
+                 - ${ tools.getstrTime(myevent.dateTimeStart) }`
     } else {
-      mystr = `${tools.getstrShortDate(myevent.dateTimeStart)} - ${ tools.getstrShortDate(myevent.dateTimeEnd) }`
+      mystr = `${tools.getstrVeryVeryShortDate(myevent.dateTimeStart)} - ${ tools.getstrShortDate(myevent.dateTimeEnd) }`
 
     }
 

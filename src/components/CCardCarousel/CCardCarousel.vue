@@ -34,7 +34,7 @@
                 ref="carousel"
                 transition-next="slide-left"
                 transition-prev="slide-right"
-                height="650px"
+                height="600px"
                 width="100%"
         >
             <template v-slot:control>
@@ -70,7 +70,7 @@
                               :img-src="`statics/`+myrec.img_small"
                               :name="index">
                 <div class="row q-ma-xs">
-                    <CCardDiscipline :discipline="myrec" mystyle="height: 550px" :autoplay.sync="autoplaydisc">
+                    <CCardDiscipline :discipline="myrec" mystyle="height: 500px" :autoplay.sync="autoplaydisc">
 
                     </CCardDiscipline>
                 </div>

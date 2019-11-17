@@ -297,21 +297,23 @@
                                 </span>
                         </div>
                         <div class="q-pa-xs">
-                            <q-card class="text-white windowcol">
-                                <q-card-section>
-                                    <q-checkbox
-                                            :disable="((bookEventpage.bookedevent && bookEventpage.bookedevent.booked) || (bookEventpage.bookedevent === undefined)) || !isEventEnabled(myevent)"
-                                            style="color: black;" v-model="bookEventForm.booked"
-                                            :label="$t('cal.bookingtextdefault')" color="green">
-                                    </q-checkbox>
+                            <q-card class="text-white windowcol" style="display: block; ">
+                                <q-card-section class="q-pa-xs">
+                                    <div style="display: inline-flex; " class="q-px-xs centermydiv">
+                                        <q-checkbox
+                                                :disable="((bookEventpage.bookedevent && bookEventpage.bookedevent.booked) || (bookEventpage.bookedevent === undefined)) || !isEventEnabled(myevent)"
+                                                style="color: black;" v-model="bookEventForm.booked"
+                                                :label="$t('cal.bookingtextdefault')" color="green">
+                                        </q-checkbox>
 
-                                    <div v-if="bookEventForm.booked" class="q-gutter-sm centermydiv"
-                                         style="max-width: 150px; margin-top:10px;">
-                                        <q-select
-                                                rounded outlined v-model="bookEventForm.numpeople"
-                                                :options="tools.SelectListNumPeople"
-                                                :label="$t('cal.selnumpeople')" emit-value map-options>
-                                        </q-select>
+                                        <div v-if="bookEventForm.booked" class="q-gutter-xs q-mx-xs"
+                                             style="min-width: 140px;">
+                                            <q-select
+                                                    rounded outlined v-model="bookEventForm.numpeople"
+                                                    :options="tools.SelectListNumPeople"
+                                                    :label="$t('cal.selnumpeople')" emit-value map-options>
+                                            </q-select>
+                                        </div>
                                     </div>
 
                                     <q-input v-model="bookEventForm.msgbooking" :label="$t('cal.msgbooking')+':'"
@@ -545,7 +547,8 @@
 
         <div class="q-mt-md">
             <div v-if="!mysingleevent">
-                <p class="text-subtitle1 text-red bg-amber text-center ">LISTA PROSSIMI <span v-if="showfirstN > 0">{{ showfirstN }}</span> EVENTI:</p>
+                <p class="text-subtitle1 text-red bg-amber text-center ">LISTA PROSSIMI <span v-if="showfirstN > 0">{{ showfirstN }}</span>
+                    EVENTI:</p>
                 <q-markup-table wrap-cells bordered separator="horizontal" class="listaev__table">
                     <tbody>
                     <tr v-for="(event, index) in getEventList()" class="listaev listaev__table">

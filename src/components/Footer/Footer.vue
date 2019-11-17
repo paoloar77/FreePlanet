@@ -7,7 +7,7 @@
                     <!--</span>-->
 
 
-                    <CFacebookFrame myclass="text-center" :urlfbpage="getValDb('FBPAGE_FRAME')" title="getValDb('FBPAGE_TITLE')">
+                    <CFacebookFrame myclass="text-center" :fbimage="getValDb('FBPAGE_IMG')" :urlfbpage="getValDb('FBPAGE_FRAME')" title="getValDb('FBPAGE_TITLE')">
 
                     </CFacebookFrame>
 
