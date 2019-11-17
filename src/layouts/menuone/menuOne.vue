@@ -4,7 +4,7 @@
             <template v-for="(parent, index) in getmenu">
                 <!--<div class="q-list-header">{{replaceUnderlineToSpace(index)}}</div>-->
                 <div v-for="myitemmenu in static_data.routes">
-                    <div v-if="!!myitemmenu.routes2 && myitemmenu.inmenu && visumenu(myitemmenu)">
+                    <div v-if="!!myitemmenu.routes2 && myitemmenu.inmenu && tools.visumenu(myitemmenu)">
                         <q-expansion-item
                                 :header-inset-level="myitemmenu.level_parent"
                                 :content-inset-level="myitemmenu.level_parent"
@@ -42,7 +42,7 @@
                         </q-expansion-item>
                     </div>
                     <div v-else>
-                        <div v-if="myitemmenu.inmenu && !myitemmenu.submenu && visumenu(myitemmenu)">
+                        <div v-if="myitemmenu.inmenu && !myitemmenu.submenu && tools.visumenu(myitemmenu)">
                             <q-slide-transition :duration=200>
                                 <div v-show="true">
                                     <q-expansion-item

@@ -294,7 +294,7 @@ export const fieldsTable = {
       value: 'disciplines',
       label: 'Discipline',
       columns: coldisciplines,
-      colkey: '_id',
+      colkey: 'typol_code',
       collabel: 'label'
     },
     {

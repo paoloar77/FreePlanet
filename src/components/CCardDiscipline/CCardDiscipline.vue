@@ -10,7 +10,7 @@
             </q-img>
 
             <q-card-section>
-                <div class="disc__description">{{discipline.description}}</div>
+                <div class="disc__description" v-html="discipline.description"></div>
             </q-card-section>
 
             <q-card-section v-if="ExistLesson()" class="text-blue">

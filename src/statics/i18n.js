@@ -165,6 +165,7 @@ const msgglobal = {
         undefined: 'non definito'
       }
     },
+    showbigmap: 'Mostra la mappa più grande',
     todo: {
       titleprioritymenu: 'Priorità:',
       inserttop: 'Inserisci il Task in cima',
@@ -471,6 +472,7 @@ const msgglobal = {
         undefined: 'no definido'
       }
     },
+    showbigmap: 'Mostrar el mapa más grande',
     todo: {
       titleprioritymenu: 'Prioridad:',
       inserttop: 'Ingrese una nueva Tarea arriba',
@@ -774,6 +776,7 @@ const msgglobal = {
         undefined: 'non défini'
       }
     },
+    showbigmap: 'Montrer la plus grande carte',
     todo: {
       titleprioritymenu: 'Prioridad:',
       inserttop: 'Ingrese una nueva Tarea arriba',
@@ -1076,6 +1079,7 @@ const msgglobal = {
         undefined: 'undefined'
       }
     },
+    showbigmap: 'Show the largest map',
     todo: {
       titleprioritymenu: 'Priority:',
       inserttop: 'Insert Task at the top',
@@ -1380,6 +1384,7 @@ const msgglobal = {
         undefined: 'undefined'
       }
     },
+    showbigmap: 'Show the largest map',
     todo: {
       titleprioritymenu: 'Priority:',
       inserttop: 'Insert Task at the top',

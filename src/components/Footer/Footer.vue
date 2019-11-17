@@ -98,7 +98,7 @@
                         <logo></logo>
                     </p>
                     <div v-for="myitemmenu in static_data.routes">
-                        <div v-if="myitemmenu.infooter">
+                        <div v-if="myitemmenu.infooter && tools.visumenu(myitemmenu)">
 
                             <div v-if="myitemmenu.solotitle">
                                 <span class="footer_link">{{tools.getLabelByItem(myitemmenu, mythisfoot)}}</span><br/>

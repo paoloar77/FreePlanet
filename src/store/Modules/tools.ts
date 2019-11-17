@@ -1373,6 +1373,12 @@ export const tools = {
     return result
   },
 
+  visumenu(elem) {  // : IListRoutes
+    return (elem.onlyAdmin && UserStore.state.isAdmin) || (elem.onlyManager && UserStore.state.isManager)
+      || ((!elem.onlyAdmin) && (!elem.onlyManager))
+  },
+
+
   executefunc(myself: any, table, func: number, par: IParamDialog) {
     if (func === lists.MenuAction.DELETE) {
       console.log('param1', par.param1)

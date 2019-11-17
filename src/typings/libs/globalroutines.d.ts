@@ -5,4 +5,3 @@ declare module 'vue/types/vue' {
     $globalroutines: globalroutines
   }
 }
-

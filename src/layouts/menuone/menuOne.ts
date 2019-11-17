@@ -32,11 +32,6 @@ export default class MenuOne extends Vue {
     return GlobalStore.getters.getmenu
   }
 
-  public visumenu(elem) {  // : IListRoutes
-    return (elem.onlyAdmin && UserStore.state.isAdmin) || (elem.onlyManager && UserStore.state.isManager)
-      || ((!elem.onlyAdmin) && (!elem.onlyManager))
-  }
-
   public setParentVisibilityBasedOnRoute(parent) {
     parent.routes.forEach((item) => {
       if (this.$route.path === item.path) {
