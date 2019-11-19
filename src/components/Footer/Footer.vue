@@ -7,35 +7,47 @@
                     <!--</span>-->
 
 
-                    <CFacebookFrame myclass="text-center" :fbimage="getValDb('FBPAGE_IMG')" :urlfbpage="getValDb('FBPAGE_FRAME')" title="getValDb('FBPAGE_TITLE')">
+                    <CFacebookFrame myclass="text-center" :fbimage="getValDb('FBPAGE_IMG')"
+                                    :urlfbpage="getValDb('FBPAGE_FRAME')" title="getValDb('FBPAGE_TITLE')">
 
                     </CFacebookFrame>
 
-                    <div class="landing__footer-icons row flex-center q-mt-md">
-                        <a v-if="!!FBPage" :href="FBPage" target="_blank">
-                            <i aria-hidden="true" class="q-icon fab fa-facebook-f icon_contact links"> </i></a>
+                    <div class=" q-my-md">
+                        <div class="landing__footer-icons row flex-center margin_buttons">
+                            <a v-if="!!FBPage" :href="FBPage" target="_blank">
+                                <i aria-hidden="true" class="q-icon fab fa-facebook-f icon_contact links"> </i></a>
 
-                        <a v-if="!!InstagramPage" :href="InstagramPage" target="_blank">
-                            <i aria-hidden="true" class="q-icon fab fa-instagram icon_contact links"> </i></a>
+                            <a v-if="!!InstagramPage" :href="InstagramPage" target="_blank">
+                                <i aria-hidden="true" class="q-icon fab fa-instagram icon_contact links"> </i></a>
 
-                        <a v-if="!!TelegramSupport" :href="TelegramSupport" target="_blank">
-                            <i aria-hidden="true" class="q-icon fab fa-telegram icon_contact links"></i></a>
+                            <a v-if="!!TwitterPage" :href="TwitterPage" target="_blank">
+                                <i aria-hidden="true" class="q-icon fab fa-twitter icon_contact links"> </i></a>
 
-                        <a v-if="!!Whatsapp_Cell" :href="ChatWhatsapp" target="_blank">
-                            <i aria-hidden="true" class="q-icon fab fa-whatsapp icon_contact links"></i></a>
+                            <a v-if="!!TelegramSupport" :href="TelegramSupport" target="_blank">
+                                <i aria-hidden="true" class="q-icon fab fa-telegram icon_contact links"></i></a>
 
-                        <a v-if="!!Telegram_UsernameHttp" :href="Telegram_UsernameHttp" target="_blank">
-                            <i aria-hidden="true" class="q-icon fab fa-telegram icon_contact links"></i></a>
+                            <a v-if="!!Whatsapp_Cell" :href="ChatWhatsapp" target="_blank">
+                                <i aria-hidden="true" class="q-icon fab fa-whatsapp icon_contact links"></i></a>
+
+                            <a v-if="!!Telegram_UsernameHttp" :href="Telegram_UsernameHttp" target="_blank">
+                                <i aria-hidden="true" class="q-icon fab fa-telegram icon_contact links"></i></a>
 
 
-                        <!--<a href="" target="_blank"><i aria-hidden="true" class="q-icon fab fa-github"> </i></a>-->
-                        <!--<a href="https://twitter.com/" target="_blank"><i aria-hidden="true" class="q-icon fab fa-twitter"> </i></a>-->
-                        <!--<a href="https://discord.gg/5TDhbDg" target="_blank"><i aria-hidden="true"-->
-                        <!--class="q-icon fab fa-discord"> </i></a><a-->
-                        <!--href="https://forum.quasar-framework.org/" target="_blank"><i aria-hidden="true"-->
-                        <!--class="q-icon fas fa-comments"> </i></a><a-->
-                        <!--href="https://www.patreon.com/quasarframework" target="_blank"><i aria-hidden="true"-->
-                        <!--class="q-icon fab fa-patreon"> </i></a>-->
+                            <!--<a href="" target="_blank"><i aria-hidden="true" class="q-icon fab fa-github"> </i></a>-->
+                            <!--<a href="https://twitter.com/" target="_blank"><i aria-hidden="true" class="q-icon fab fa-twitter"> </i></a>-->
+                            <!--<a href="https://discord.gg/5TDhbDg" target="_blank"><i aria-hidden="true"-->
+                            <!--class="q-icon fab fa-discord"> </i></a><a-->
+                            <!--href="https://forum.quasar-framework.org/" target="_blank"><i aria-hidden="true"-->
+                            <!--class="q-icon fas fa-comments"> </i></a><a-->
+                            <!--href="https://www.patreon.com/quasarframework" target="_blank"><i aria-hidden="true"-->
+                            <!--class="q-icon fab fa-patreon"> </i></a>-->
+                        </div>
+                    </div>
+
+                    <div class="text-center">
+                        <span v-html="getValDb('MAP_TITLE')"></span>
+                        <br>
+                        <a :href="getValDb('URLMAP')" target="_blank" class="footer_link">Apri Mappa</a>
                     </div>
 
                     <!--<div class="q-mt-xs copyrights">-->
@@ -56,23 +68,39 @@
                                 <a :href="`mailto:` + getValDb('MAIN_EMAIL')" class="links">{{ getValDb('MAIN_EMAIL')
                                     }}</a><br>
                                 <div style="margin-bottom: 20px;"></div>
-                                <div v-for="rec in getarrValDb('CONTACTS_EMAIL_CELL')" class="mycontacts_text"
+                                <div v-for="rec in getarrValDb('CONTACTS_EMAIL_CELL')"
+                                     class="mycontacts_text margin_buttons_footer"
                                      style="margin-bottom: 0px;">
-                                    {{ rec.name }}: {{ rec.phone }}
-                                    <br>
-                                    <i v-if="rec.email" aria-hidden="true"
-                                       class="q-icon fas fa-envelope q-mx-sm"></i> <a :href="`mailto:`+ rec.email "
-                                                                                      class="links">{{rec.email}}</a>
+                                    <div>
+                                        {{ rec.name }}: {{ rec.phone }}
+                                    </div>
+                                    <div>
+                                        <i v-if="rec.email" aria-hidden="true"
+                                           class="q-icon fas fa-envelope q-ma-sm"></i> <a :href="`mailto:`+ rec.email "
+                                                                                          class="links">{{rec.email}}</a>
+                                    </div>
 
-                                    <a v-if="!!tools.getHttpForWhatsapp(rec.phone)"
-                                       :href="tools.getHttpForWhatsapp(rec.phone)" target="_blank">
-                                        <i aria-hidden="true"
-                                           class="q-icon fab fa-whatsapp landing__footer-icons icon_contact links q-mx-xs"></i></a>
-                                    <a v-if="!!tools.getHttpForTelegram(rec.usertelegram)"
-                                       :href="tools.getHttpForTelegram(rec.usertelegram)" target="_blank">
-                                        <i aria-hidden="true"
-                                           class="q-icon fab fa-telegram landing__footer-icons icon_contact links q-mx-xs"></i></a>
-                                    <br>
+                                    <div class="row justify-center margin_buttons_footer">
+                                        <q-btn v-if="rec.email" fab-mini icon="fas fa-envelope"
+                                               color="blue-grey-6" type="a"
+                                               size="sm"
+                                               :href="tools.getemailto(rec.email)" target="__blank">
+                                        </q-btn>
+                                        <q-btn v-if="tools.getHttpForWhatsapp(rec.phone)" fab-mini
+                                               icon="fab fa-whatsapp"
+                                               color="green" type="a"
+                                               size="sm"
+                                               :href="tools.getHttpForWhatsapp(rec.phone)" target="__blank">
+                                        </q-btn>
+
+                                        <q-btn v-if="tools.getHttpForTelegram(rec.usertelegram)" fab-mini
+                                               icon="fab fa-telegram"
+                                               color="blue" type="a"
+                                               size="sm"
+                                               :href="tools.getHttpForTelegram(rec.usertelegram)" target="__blank">
+                                        </q-btn>
+                                    </div>
+
                                 </div>
                                 <span v-if="getValDb('CALL_WORKING_DAYS')"><br>orari per chiamate:<br>
                                     <span v-html="getValDb('CALL_WORKING_DAYS')"></span></span>

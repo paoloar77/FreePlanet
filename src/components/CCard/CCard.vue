@@ -20,23 +20,23 @@
                 <div v-if="myop.certifications" class="text-subtitle-certificato">{{myop.certifications}}</div>
                 <div class="op__cell">
                     <q-icon class="flex-icon" name="mobile_friendly"></q-icon>
-                    <span class="q-mx-sm">{{myop.cell}}</span>
+                    <span class="q-ma-sm">{{myop.cell}}</span>
 
-                    <div class="row justify-center q-gutter-xs ">
+                    <div class="row justify-center margin_buttons q-gutter-lg">
                         <q-btn v-if="myop.email" fab-mini icon="fas fa-envelope"
                                color="blue-grey-6" type="a"
-                               size="xs"
+                               size="sm"
                                :href="tools.getemailto(myop.email)" target="__blank">
                         </q-btn>
                         <q-btn v-if="tools.getHttpForWhatsapp(myop.cell)" fab-mini icon="fab fa-whatsapp"
                                color="green" type="a"
-                               size="xs"
+                               size="sm"
                                :href="tools.getHttpForWhatsapp(myop.cell)" target="__blank">
                         </q-btn>
 
                         <q-btn v-if="tools.getHttpForTelegram(myop.usertelegram)" fab-mini icon="fab fa-telegram"
                                color="blue" type="a"
-                               size="xs"
+                               size="sm"
                                :href="tools.getHttpForTelegram(myop.usertelegram)" target="__blank">
                         </q-btn>
                     </div>

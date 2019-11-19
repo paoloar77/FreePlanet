@@ -307,6 +307,10 @@ export default class Header extends Vue {
     return '../../' + tools.getimglogo()
   }
 
+  get getappname() {
+    return tools.getappname(this)
+  }
+
   public toggleanimation() {
     console.log('toggleanimation')
     this.visuimg = false

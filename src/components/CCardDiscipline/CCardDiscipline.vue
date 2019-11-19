@@ -1,7 +1,7 @@
 <template>
     <div class="my-card-shadow yes_shadow" style="opacity: 1 !important;">
         <q-card class="my-card-discipline text-center inset-shadow" :style="mystyle">
-            <q-img :src="`statics/` + discipline.img_small" class="myimg">
+            <q-img :src="`statics/` + discipline.img_small" class="myimg" :alt="discipline.label">
                 <div class="absolute-bottom text-spacetrans">
                     <q-btn rounded :to="discipline.linkpage">
                         <div class="text-h5 disc__title shadow-max">{{discipline.label}}</div>

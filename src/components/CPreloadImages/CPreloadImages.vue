@@ -1,7 +1,7 @@
 <template>
     <div id="preloader">
         <div v-for="(image, index) in arrimg">
-            <img :src="getimg(image)" width="1" height="1"/>
+            <img :src="getimg(image)" width="1" height="1" :alt="getaltimg(image)"/>
         </div>
     </div>
 </template>

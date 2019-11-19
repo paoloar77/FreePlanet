@@ -37,7 +37,7 @@ $textcol_scuro: darkblue;
 
 
 .landing__footer-icons {
-  font-size: 1.75rem
+  font-size: 2rem
 }
 
 .landing__footer-icons a {
@@ -183,4 +183,13 @@ $textcol_scuro: darkblue;
 
 .footer_link:hover {
   color:white;
+}
+
+
+.margin_buttons_footer {
+  margin: -4px -4px;
+}
+
+.margin_buttons_footer > * {
+  margin: 4px 8px;
 }

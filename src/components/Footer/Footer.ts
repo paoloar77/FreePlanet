@@ -54,8 +54,11 @@ export default class Footer extends Vue {
   }
 
   get InstagramPage() {
-    const insta = GlobalStore.getters.getValueSettingsByKey('URL_INSTAGRAM')
-    return insta
+    return GlobalStore.getters.getValueSettingsByKey('URL_INSTAGRAM')
+  }
+
+  get TwitterPage() {
+    return GlobalStore.getters.getValueSettingsByKey('URL_TWITTER')
   }
 
   get static_data() {

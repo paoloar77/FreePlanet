@@ -7,7 +7,8 @@
                     <img :src="getImgEvent(myevent)"
                          @click="selectEvent(myevent)"
                          class="text-left padding_cell listaev__tdimg listaev__img cursor-pointer"
-                         :style="getStyleByEvent(myevent, true)">
+                         :style="getStyleByEvent(myevent, true)"
+                         :alt="myevent.title">
                     <q-chip dense v-if="isAlreadyBooked(myevent)" class="cltexth4 chipbooked shadow-5 q-mb-md"
                             color="green" text-color="white"
                             icon="event_available">{{$t('cal.booked')}}
@@ -98,7 +99,7 @@
 
                                         <q-chip>
                                             <q-avatar v-if="getWhereIcon(myevent.wherecode)">
-                                                <img :src="`../../statics/images/avatar/` + getWhereIcon(myevent.wherecode)">
+                                                <img :src="`../../statics/images/avatar/` + getWhereIcon(myevent.wherecode)" alt="località">
                                             </q-avatar>
                                             <q-avatar v-else color="blue" font-size="20px" text-color="white"
                                                       icon="home">

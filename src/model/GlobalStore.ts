@@ -157,6 +157,7 @@ export interface IOperators {
 
 export interface IPreloadImages {
   imgname: string
+  alt: string
   mobile: boolean
 }
 

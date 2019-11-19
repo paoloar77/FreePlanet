@@ -10,7 +10,7 @@
                 </q-toolbar>
                 <q-card-section class="text-center inset-shadow">
                     <div style="width: 200px; float: left;">
-                        <q-img :src="`statics/images/` + myop.img" class="myimg">
+                        <q-img :src="`statics/images/` + myop.img" class="myimg" :alt="`${myop.name} ${myop.surname}`">
                         </q-img>
                     </div>
 
@@ -22,21 +22,21 @@
                         <q-icon class="flex-icon" name="mobile_friendly" v-if="myop.cell"></q-icon>
                         <span class="q-mx-sm">{{myop.cell}}</span>
 
-                        <div class="row justify-center q-gutter-xs ">
+                        <div class="row justify-center margin_buttons">
                             <q-btn v-if="myop.email" fab-mini icon="fas fa-envelope"
                                    color="blue-grey-6" type="a"
-                                   size="xs"
+                                   size="sm"
                                    :href="tools.getemailto(myop.email)" target="__blank">
                             </q-btn>
                             <q-btn v-if="tools.getHttpForWhatsapp(myop.cell)" fab-mini icon="fab fa-whatsapp"
                                    color="green" type="a"
-                                   size="xs"
+                                   size="sm"
                                    :href="tools.getHttpForWhatsapp(myop.cell)" target="__blank">
                             </q-btn>
 
                             <q-btn v-if="tools.getHttpForTelegram(myop.usertelegram)" fab-mini icon="fab fa-telegram"
                                    color="blue" type="a"
-                                   size="xs"
+                                   size="sm"
                                    :href="tools.getHttpForTelegram(myop.usertelegram)" target="__blank">
                             </q-btn>
                         </div>

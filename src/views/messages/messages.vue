@@ -36,7 +36,7 @@
 
                             <q-item-section avatar>
                                 <q-avatar>
-                                    <img :src="getImgByMsg(msg)">
+                                    <img :src="getImgByMsg(msg)" :alt="getUsernameChatByMsg(msg)">
                                 </q-avatar>
                             </q-item-section>
 
@@ -101,7 +101,7 @@
                                                 bg-color="grey-2">
                                             <template v-slot:avatar>
                                                 <q-avatar size="sm">
-                                                    <img :src="getImgByMsg(msg)">
+                                                    <img :src="getImgByMsg(msg)" :alt="getUsernameChatByMsg(msg)">
                                                 </q-avatar>
                                             </template>
                                         </q-chat-message>

@@ -2394,6 +2394,15 @@ export const tools = {
     return ris
   },
 
+  getaltimg(dir: string, file: string, alt?: string) {
+    const myimage = dir + file
+    const myrec = static_data.preLoadImages.find((rec) => rec.imgname === myimage)
+    if (myrec)
+      return (myrec) ? myrec.alt : 'my image'
+    else
+      return alt
+  },
+
   getimgFullpathbysize(fileimg: string) {
     const ind = fileimg.lastIndexOf('/')
     if (ind > 0) {

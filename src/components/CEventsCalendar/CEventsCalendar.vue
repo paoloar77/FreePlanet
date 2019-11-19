@@ -36,7 +36,8 @@
                 <q-card-section class="inset-shadow">
                     <q-img :src="getImgEvent(myevent)"
                            class="absolute-top"
-                           style="height: 150px;">
+                           style="height: 150px;"
+                           :alt="myevent.title">
                     </q-img>
                     <div style="margin-top: 150px;">
                         <!--<div v-if="myevent.allday" class="text-caption">{{ getEventDate(myevent) }}</div>-->
@@ -66,7 +67,7 @@
                                                  alt="Località">
                                         </q-avatar>
                                         <q-avatar v-else color="blue" font-size="20px" text-color="white" icon="home">
-                                        </q-avatar>showpage
+                                        </q-avatar>
                                         <span class="cal__teacher-content">{{getWhereName(myevent.wherecode)}}</span>
                                     </q-chip>
                                 </span>
@@ -281,7 +282,8 @@
                 <q-card-section class="inset-shadow">
                     <q-img :src="getImgEvent(myevent)"
                            class="absolute-top"
-                           style="height: 150px;">
+                           style="height: 150px;"
+                           :alt="myevent.title">
                     </q-img>
                     <div style="margin-top: 150px;">
 
@@ -361,7 +363,8 @@
                 <q-card-section class="inset-shadow">
                     <q-img :src="getImgEvent(myevent)"
                            class="absolute-top"
-                           style="height: 150px;">
+                           style="height: 150px;"
+                           :alt="myevent.title">
                     </q-img>
                     <div style="margin-top: 150px;">
 
@@ -486,7 +489,7 @@
                                 <span class="">{{ getTitleEv(event) }}</span>
                             </q-badge>
                             <div class="text-center"><img :src="getImgEvent(event)"
-                                                          class="text-center listaev__tdimg_small" alt="Evento">
+                                                          class="text-center listaev__tdimg_small" :alt="event.title">
                             </div>
                         </template>
                     </template>
@@ -557,7 +560,8 @@
                                 <img :src="getImgEvent(event)"
                                      @click="selectEvent(event)"
                                      class="text-left padding_cell listaev__tdimg listaev__img cursor-pointer q-mx-sm"
-                                     :style="getStyleByEvent(event, event === myevent)">
+                                     :style="getStyleByEvent(event, event === myevent)"
+                                     :alt="event.title">
                                 <q-chip dense v-if="isAlreadyBooked(event)" class="cltexth4 chipbooked shadow-5 q-mb-md"
                                         color="green" text-color="white"
                                         icon="event_available">{{$t('cal.booked')}}
@@ -647,7 +651,7 @@
 
                                         <q-chip>
                                             <q-avatar v-if="getWhereIcon(event.wherecode)">
-                                                <img :src="`../../statics/images/avatar/` + getWhereIcon(event.wherecode)">
+                                                <img :src="`../../statics/images/avatar/` + getWhereIcon(event.wherecode)" :alt="event.wherecode">
                                             </q-avatar>
                                             <q-avatar color="blue" font-size="20px" text-color="white" icon="home">
                                             </q-avatar>
@@ -714,7 +718,7 @@
                 </q-markup-table>
 
                 <div class="q-ma-lg text-center">
-                    <q-btn rounded type="a" to="/calendarioeventi" color="primary" icon="event" size="lg"
+                    <q-btn rounded type="a" to="/calendario-eventi" color="primary" icon="event" size="lg"
                            :label="$t('cal.showlastschedule')">
                     </q-btn>
 

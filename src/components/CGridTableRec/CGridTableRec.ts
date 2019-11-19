@@ -363,6 +363,10 @@ export default class CGridTableRec extends Vue {
 
     // console.log('this.filter', this.filter)
 
+    this.refresh_table()
+  }
+
+  public refresh_table() {
     this.onRequest({
       pagination: this.pagination
     })
@@ -376,8 +380,10 @@ export default class CGridTableRec extends Vue {
 
   public ActionAfterYes(action, item, data) {
     if (action === lists.MenuAction.DELETE_RECTABLE) {
-      if (this.serverData.length > 0)
+      if (this.serverData.length > 0) {
         this.serverData.splice(this.serverData.indexOf(item), 1)
+        this.refresh_table()
+      }
     } else if (action === lists.MenuAction.DUPLICATE_RECTABLE) {
       // Add record duplicated
       // this.serverData.push(data)

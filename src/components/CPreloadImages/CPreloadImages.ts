@@ -26,4 +26,8 @@ export default class CPreloadImages extends Vue {
     }
   }
 
+  public getaltimg(recimg: IPreloadImages) {
+    return recimg.alt
+  }
+
 }

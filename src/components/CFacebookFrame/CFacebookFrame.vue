@@ -9,9 +9,8 @@
         <!--</div>-->
 
         <a :href="urlfbpage" target="_blank">
-            <q-img :src="`statics/` + fbimage" class="myclassfb">
+            <q-img :src="`statics/` + fbimage" class="imgautosize" alt="facebook page">
             </q-img>
-
         </a>
 
         <!--
