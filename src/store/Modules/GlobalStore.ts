@@ -70,7 +70,9 @@ const state: IGlobalState = {
   },
   settings: [],
   disciplines: [],
-  autoplaydisc: 8000
+  autoplaydisc: 8000,
+  newstosent: [],
+  mailinglist: []
 }
 
 async function getConfig(id) {
@@ -167,6 +169,10 @@ namespace Getters {
       return CalendarStore.state.contribtype
     else if (table === 'disciplines')
       return GlobalStore.state.disciplines
+    else if (table === tools.TABNEWSLETTER)
+      return GlobalStore.state.newstosent
+    else if (table === tools.TABMAILINGLIST)
+      return GlobalStore.state.mailinglist
     else if (table === 'bookings')
       return CalendarStore.state.bookedevent
     else if (table === 'users')
@@ -369,7 +375,6 @@ namespace Actions {
   }
 
   function createPushSubscription(context) {
-    console.log('createPushSubscription')
 
     // If Already subscribed, don't send to the Server DB
     // if (state.wasAlreadySubOnDb) {
@@ -388,7 +393,7 @@ namespace Actions {
       return
     }
 
-    // console.log('createPushSubscription')
+    console.log('createPushSubscription')
 
     let reg
     const mykey = process.env.PUBLICKEY_PUSH
@@ -696,6 +701,11 @@ namespace Actions {
         GlobalStore.state.settings = (res.data.settings) ? [...res.data.settings] : []
         GlobalStore.state.disciplines = (res.data.disciplines) ? [...res.data.disciplines] : []
 
+        if (showall) {
+          GlobalStore.state.newstosent = (res.data.newstosent) ? [...res.data.newstosent] : []
+          GlobalStore.state.mailinglist = (res.data.mailinglist) ? [...res.data.mailinglist] : []
+        }
+
         CalendarStore.state.editable = UserStore.state.isAdmin || UserStore.state.isManager
 
       })
@@ -705,6 +715,18 @@ namespace Actions {
         return new Types.AxiosError(serv_constants.RIS_CODE_ERR, null, tools.ERR_GENERICO, error)
       })
 
+  }
+
+  async function sendEmailTest(context) {
+    const usertosend = {
+      locale: tools.getLocale()
+    }
+    console.log(usertosend)
+
+    return await Api.SendReq('/signup_news/testemail', 'POST', usertosend)
+      .then((res) => {
+        return res
+      })
   }
 
   export const actions = {
@@ -721,6 +743,7 @@ namespace Actions {
     loadTable: b.dispatch(loadTable),
     saveTable: b.dispatch(saveTable),
     DeleteRec: b.dispatch(DeleteRec),
+    sendEmailTest: b.dispatch(sendEmailTest),
     DuplicateRec: b.dispatch(DuplicateRec)
   }
 

@@ -42,7 +42,7 @@ function AddCol(params: IColGridTable) {
 
 const colTableWhere = [
   AddCol({ name: 'code', label_trans: 'where.code' }),
-  AddCol({ name: 'placename', label_trans: 'cal.where'} ),
+  AddCol({ name: 'placename', label_trans: 'cal.where' }),
   AddCol({ name: 'whereicon', label_trans: 'where.whereicon' }),
   AddCol(DeleteRec)
 ]
@@ -53,9 +53,24 @@ const colcontribtype = [
   AddCol(DeleteRec)
 ]
 
+const colnewstosent = [
+  AddCol({ name: 'label', label_trans: 'event.title' }),
+  AddCol({ name: 'datetoSent', label_trans: 'news.datetoSent', fieldtype: tools.FieldType.date }),
+  AddCol({ name: 'activate', label_trans: 'news.activate', fieldtype: tools.FieldType.boolean }),
+  AddCol({ name: 'numemail_tot', label_trans: 'news.numemail_tot', fieldtype: tools.FieldType.number }),
+  AddCol({ name: 'numemail_sent', label_trans: 'news.numemail_sent', fieldtype: tools.FieldType.number }),
+  AddCol({ name: 'datestartJob', label_trans: 'news.datestartJob', fieldtype: tools.FieldType.date }),
+  AddCol({ name: 'datefinishJob', label_trans: 'news.datefinishJob', fieldtype: tools.FieldType.date }),
+  AddCol({ name: 'lastemailsent_Job', label_trans: 'news.lastemailsent_Job', fieldtype: tools.FieldType.date }),
+  AddCol({ name: 'starting_job', label_trans: 'news.starting_job', fieldtype: tools.FieldType.boolean }),
+  AddCol({ name: 'finish_job', label_trans: 'news.finish_job', fieldtype: tools.FieldType.boolean }),
+  AddCol({ name: 'error_job', label_trans: 'news.error_job', fieldtype: tools.FieldType.string }),
+  AddCol(DeleteRec)
+]
+
 const coldisciplines = [
   AddCol({ name: 'typol_code', label_trans: 'disc.typol_code' }),
-  AddCol({ name: 'order', label_trans: 'disc.order', fieldtype: tools.FieldType.number  }),
+  AddCol({ name: 'order', label_trans: 'disc.order', fieldtype: tools.FieldType.number }),
   AddCol({ name: 'label', label_trans: 'event.title' }),
   AddCol({ name: 'description', label_trans: 'proj.longdescr' }),
   AddCol({ name: 'linkpage', label_trans: 'event.linkpage' }),
@@ -65,7 +80,12 @@ const coldisciplines = [
   AddCol({ name: 'img_small', label_trans: 'event.img_small' }),
   AddCol({ name: 'showinhome', label_trans: 'event.showinhome', fieldtype: tools.FieldType.boolean }),
   AddCol({ name: 'showinnewsletter', label_trans: 'event.showinnewsletter', fieldtype: tools.FieldType.boolean }),
-  AddCol({ name: 'teachers', label_trans: 'event.teacher', fieldtype: tools.FieldType.multiselect, jointable: 'operators' }),
+  AddCol({
+    name: 'teachers',
+    label_trans: 'event.teacher',
+    fieldtype: tools.FieldType.multiselect,
+    jointable: 'operators'
+  }),
   AddCol(DeleteRec)
 ]
 
@@ -84,6 +104,14 @@ const colTablePermission = [
   AddCol(DeleteRec)
 ]
 
+const colmailinglist = [
+  AddCol({ name: 'name', label_trans: 'reg.name' }),
+  AddCol({ name: 'surname', label_trans: 'reg.surname' }),
+  AddCol({ name: 'email', label_trans: 'reg.email' }),
+  AddCol({ name: 'lastid_newstosent', label_trans: 'reg.lastid_newstosent', fieldtype: tools.FieldType.string } ),
+  AddCol(DeleteRec)
+]
+
 const colTableOperator = [
   AddCol({ name: 'username', label_trans: 'reg.username' }),
   AddCol({ name: 'name', label_trans: 'reg.name' }),
@@ -95,7 +123,7 @@ const colTableOperator = [
   AddCol({ name: 'qualification', label_trans: 'op.qualification' }),
   AddCol({ name: 'disciplines', label_trans: 'op.disciplines' }),
   AddCol({ name: 'certifications', label_trans: 'op.certifications' }),
-  AddCol({ name: 'intro', label_trans: 'op.intro' , fieldtype: tools.FieldType.html }),
+  AddCol({ name: 'intro', label_trans: 'op.intro', fieldtype: tools.FieldType.html }),
   AddCol({ name: 'info', label_trans: 'op.info', fieldtype: tools.FieldType.html }),
   AddCol({ name: 'webpage', label_trans: 'op.webpage' }),
   AddCol({ name: 'days_working', label_trans: 'op.days_working' }),
@@ -116,11 +144,21 @@ const colTableEvents = [
   AddCol({ name: 'img_small', label_trans: 'event.img_small' }),
   AddCol({ name: 'img', label_trans: 'event.img' }),
   AddCol({ name: 'wherecode', label_trans: 'event.where', fieldtype: tools.FieldType.select, jointable: 'wheres' }),
-  AddCol({ name: 'contribtype', label_trans: 'event.contribtype', fieldtype: tools.FieldType.select, jointable: 'contribtype' }),
+  AddCol({
+    name: 'contribtype',
+    label_trans: 'event.contribtype',
+    fieldtype: tools.FieldType.select,
+    jointable: 'contribtype'
+  }),
   AddCol({ name: 'price', label_trans: 'event.price' }),
   AddCol({ name: 'infoafterprice', label_trans: 'event.infoafterprice' }),
   AddCol({ name: 'teacher', label_trans: 'event.teacher', fieldtype: tools.FieldType.select, jointable: 'operators' }),
-  AddCol({ name: 'teacher2', label_trans: 'event.teacher2', fieldtype: tools.FieldType.select, jointable: 'operators' }),
+  AddCol({
+    name: 'teacher2',
+    label_trans: 'event.teacher2',
+    fieldtype: tools.FieldType.select,
+    jointable: 'operators'
+  }),
   AddCol({ name: 'infoextra', label_trans: 'event.infoextra' }),
   AddCol({ name: 'linkpage', label_trans: 'event.linkpage' }),
   AddCol({ name: 'linkpdf', label_trans: 'event.linkpdf' }),
@@ -296,6 +334,20 @@ export const fieldsTable = {
       columns: coldisciplines,
       colkey: 'typol_code',
       collabel: 'label'
+    },
+    {
+      value: 'newstosent',
+      label: 'Newsletter da Inviare',
+      columns: colnewstosent,
+      colkey: '_id',
+      collabel: 'label'
+    },
+    {
+      value: 'mailinglist',
+      label: 'MailingList',
+      columns: colmailinglist,
+      colkey: '_id',
+      collabel: (rec) => rec.name + ' ' + rec.surname
     },
     {
       value: 'permissions',

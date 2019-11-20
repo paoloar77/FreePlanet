@@ -40,6 +40,10 @@ export default class CDateTime extends Vue {
     // console.log('Opening', 'myvalue', this.myvalue, 'value', this.value)
     this.saveit = false
     this.valueprec = this.myvalue
+    if (this.myvalue === undefined) {
+      this.valueDate = new Date()
+      this.myvalue = tools.getstrYYMMDDDateTime(this.valueDate)
+    }
     this.$emit('show')
   }
 
@@ -55,8 +59,9 @@ export default class CDateTime extends Vue {
 
   @Watch('valueDate')
   public changevalueDate() {
-    this.myvalue = tools.getstrYYMMDDDateTime(this.valueDate)
-    // console.log('changevalueDate myvalue', this.myvalue)
+    if (this.valueDate)
+      this.myvalue = tools.getstrYYMMDDDateTime(this.valueDate)
+    console.log('changevalueDate myvalue', this.myvalue)
   }
   @Watch('value')
   public changevalue() {
@@ -95,7 +100,7 @@ export default class CDateTime extends Vue {
     else
       this.myvalue = tools.getstrYYMMDDDateTime(this.valueDate)
 
-    // console.log('myvalue', this.myvalue)
+    console.log('created myvalue', this.myvalue)
   }
 
   public changeval(newval) {

@@ -10,6 +10,8 @@ const msgglobal = {
       tableslist: 'Tabelle',
     },
     otherpages: {
+      error404: 'error404',
+      error404def: 'error404def',
       admin : {
         menu: 'Amministrazione',
         eventlist: 'Le tue Prenotazioni',
@@ -217,7 +219,13 @@ const msgglobal = {
       code: 'Id',
       whereicon: 'Icona',
     },
+    col: {
+      label: 'Etichetta',
+      value: 'Valore',
+      type: 'Tipo'
+    },
     cal: {
+      num: 'Numero',
       booked: 'Prenotato',
       booked_error: 'Prenotazione non avvenuta. Riprovare più tardi',
       sendmsg_error: 'Messaggio non inviato. Riprovare più tardi',
@@ -525,7 +533,13 @@ const msgglobal = {
       code: 'Id',
       whereicon: 'Icono',
     },
+    col: {
+      label: 'Etichetta',
+      value: 'Valore',
+      type: 'Tipo'
+    },
     cal: {
+      num: 'Número',
       booked: 'Reservado',
       booked_error: 'Reserva fallida. Intenta nuevamente más tarde',
       sendmsg_error: 'Mensaje no enviado Intenta nuevamente más tarde',
@@ -829,7 +843,13 @@ const msgglobal = {
       code: 'Id',
       whereicon: 'icône',
     },
+    col: {
+      label: 'Etichetta',
+      value: 'Valore',
+      type: 'Tipo'
+    },
     cal: {
+      num: 'Nombre',
       booked: 'Réservé',
       booked_error: 'La réservation a échoué. Réessayez plus tard',
       sendmsg_error: 'Message non envoyé. Réessayez plus tard',
@@ -1132,7 +1152,13 @@ const msgglobal = {
       code: 'Id',
       whereicon: 'Icon',
     },
+    col: {
+      label: 'Etichetta',
+      value: 'Valore',
+      type: 'Tipo'
+    },
     cal: {
+      num: 'Number',
       booked: 'Booked',
       booked_error: 'Reservation failed. Try again later',
       sendmsg_error: 'Message not sent. Try again later',
@@ -1437,7 +1463,13 @@ const msgglobal = {
       code: 'Id',
       whereicon: 'Icon',
     },
+    col: {
+      label: 'Etichetta',
+      value: 'Valore',
+      type: 'Tipo'
+    },
     cal: {
+      num: 'Number',
       booked: 'Booked',
       booked_error: 'Reservation failed. Try again later',
       sendmsg_error: 'Message not sent. Try again later',

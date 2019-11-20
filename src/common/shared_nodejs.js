@@ -1,1 +1,1 @@
-../../../freeplanet_serverside/server/tools/shared_nodejs.js
+/home/paolo/myproject/freeplanet_serverside/src/server/tools/shared_nodejs.js

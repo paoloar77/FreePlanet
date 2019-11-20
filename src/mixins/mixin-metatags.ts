@@ -11,4 +11,12 @@ export default class MixinMetaTags extends Vue {
   public setmeta(mymeta: IMetaTags) {
     this.mymeta = mymeta
   }
+
+  public getsrcbyimg(myimg) {
+    // return this.src
+    const filefull = tools.getimgFullpathbysize(myimg)
+
+    return tools.getimgbysize(filefull.path, filefull.file)
+  }
+
 }

@@ -65,6 +65,8 @@ export const tools = {
   ],
 
   TABEVENTS: 'myevents',
+  TABNEWSLETTER: 'newstosent',
+  TABMAILINGLIST: 'mailinglist',
 
   MAX_CHARACTERS: 60,
   projects: 'projects',
@@ -2644,11 +2646,16 @@ export const tools = {
 
   getwidthscale(mythis, mywidth, maxwidth) {
     if (this.isMobile()) {
+      if (mywidth > this.getwidth(mythis) - 20)
+        mywidth = this.getwidth(mythis) - 20
+
       return mywidth
     } else {
       let myw = mywidth + ((this.getwidth(mythis) - mywidth) * 0.4)
       if (myw > maxwidth)
         myw = maxwidth
+      if (myw > this.getwidth(mythis) - 20)
+        myw = this.getwidth(mythis) - 20
 
       return myw
     }

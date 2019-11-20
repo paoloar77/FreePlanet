@@ -38,6 +38,28 @@ export interface ITeachUname {
   username?: string
 }
 
+export interface INewsToSent {
+  _id: string
+  idapp?: string
+  label?: string
+  numemail_tot?: number
+  numemail_sent?: number
+  datetoSent?: Date
+  datestartJob?: Date
+  datefinishJob?: Date
+  lastemailsent_Job?: Date
+  starting_job?: boolean
+  finish_job?: boolean
+  error_job?: string
+}
+
+export interface IMailinglist {
+  name?: string
+  surname?: string
+  email: string
+  lastid_newstosent?: string
+}
+
 export interface IDiscipline {
   typol_code?: string
   order?: number
@@ -96,6 +118,8 @@ export interface IGlobalState {
   lastaction: IAction
   settings: ISettings[],
   disciplines: IDiscipline[],
+  newstosent: INewsToSent[],
+  mailinglist: IMailinglist[],
   autoplaydisc: number
 }
 
