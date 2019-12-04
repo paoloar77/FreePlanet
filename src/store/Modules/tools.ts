@@ -67,6 +67,8 @@ export const tools = {
   TABEVENTS: 'myevents',
   TABNEWSLETTER: 'newstosent',
   TABMAILINGLIST: 'mailinglist',
+  TABTEMPLEMAIL: 'templemail',
+  TABOPZEMAIL: 'opzemail',
 
   MAX_CHARACTERS: 60,
   projects: 'projects',
@@ -135,6 +137,7 @@ export const tools = {
     number: 64,
     typeinrec: 128,
     multiselect: 256,
+    password: 512,
   },
 
   FieldTypeArr: [
@@ -1380,7 +1383,6 @@ export const tools = {
       || ((!elem.onlyAdmin) && (!elem.onlyManager))
   },
 
-
   executefunc(myself: any, table, func: number, par: IParamDialog) {
     if (func === lists.MenuAction.DELETE) {
       console.log('param1', par.param1)
@@ -1852,6 +1854,22 @@ export const tools = {
     // console.log('getstrDate', mytimestamp)
     if (!!mytimestamp)
       return date.formatDate(mytimestamp, 'DD/MM/YYYY HH:mm')
+    else
+      return ''
+  },
+
+  getstrDateTimeAll(mytimestamp) {
+    // console.log('getstrDate', mytimestamp)
+    if (!!mytimestamp)
+      return date.formatDate(mytimestamp, 'DD/MM/YYYY HH:mm:ss')
+    else
+      return ''
+  },
+
+  getstrTimeAll(mytimestamp) {
+    // console.log('getstrDate', mytimestamp)
+    if (!!mytimestamp)
+      return date.formatDate(mytimestamp, 'HH:mm:ss')
     else
       return ''
   },
@@ -2615,7 +2633,7 @@ export const tools = {
 
     const mydata = {
       table,
-      data
+      data,
     }
 
     return await
@@ -2719,13 +2737,13 @@ export const tools = {
     else
       return 'primary'
   },
-  getCookie(mytok, oldval?) {
+  getCookie(mytok, def?) {
     const ris = Cookies.get(mytok)
     console.log('getCookie', ris)
     if (!!ris) {
       return ris
     } else {
-      return oldval
+      return def
     }
   },
 
@@ -2766,7 +2784,7 @@ export const tools = {
     if (!numbercell)
       return ''
     let mynum = numbercell.replace(/\-/g, '')
-    const intcode = GlobalStore.getters.getValueSettingsByKey('INT_CODE')
+    const intcode = GlobalStore.getters.getValueSettingsByKey('INT_CODE', false)
     if (numbercell.substring(0, 1) !== '+')
       mynum = intcode + mynum
     else

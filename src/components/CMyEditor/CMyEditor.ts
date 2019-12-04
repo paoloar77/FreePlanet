@@ -5,14 +5,17 @@ import { tools } from '../../store/Modules/tools'
 import { toolsext } from '@src/store/Modules/toolsext'
 
 import { QEditor } from 'quasar'
+import { CTitleBanner } from '../CTitleBanner'
 
 @Component({
-  name: 'CMyEditor'
+  name: 'CMyEditor',
+  components: { CTitleBanner }
 })
 
 export default class CMyEditor extends Vue {
   public $q
   public editor = null
+  @Prop({ required: false, default: '' }) public title
   @Prop({ required: true }) public value
   @Prop({ required: false, default: '' }) public myclass
 

@@ -61,7 +61,7 @@ export default class CDateTime extends Vue {
   public changevalueDate() {
     if (this.valueDate)
       this.myvalue = tools.getstrYYMMDDDateTime(this.valueDate)
-    console.log('changevalueDate myvalue', this.myvalue)
+    // console.log('changevalueDate myvalue', this.myvalue)
   }
   @Watch('value')
   public changevalue() {
@@ -72,7 +72,7 @@ export default class CDateTime extends Vue {
   public savetoclose() {
     this.saveit = true
     this.showDateTimeScroller = false
-    this.$emit('savetoclose', this.myvalue, this.valueprec)
+    // this.$emit('savetoclose', this.myvalue, this.valueprec)
   }
 
   get scrollerPopupStyle280() {

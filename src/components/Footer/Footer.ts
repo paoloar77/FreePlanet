@@ -36,29 +36,29 @@ export default class Footer extends Vue {
   }
 
   get TelegramSupport() {
-    return GlobalStore.getters.getValueSettingsByKey('TELEGRAM_SUPPORT')
+    return GlobalStore.getters.getValueSettingsByKey('TELEGRAM_SUPPORT', false)
   }
 
   get Whatsapp_Cell() {
-    return GlobalStore.getters.getValueSettingsByKey('WHATSAPP_CELL')
+    return GlobalStore.getters.getValueSettingsByKey('WHATSAPP_CELL', false)
   }
 
   get Telegram_UsernameHttp() {
 
-    return tools.getHttpForTelegram(GlobalStore.getters.getValueSettingsByKey('TELEGRAM_USERNAME'))
+    return tools.getHttpForTelegram(GlobalStore.getters.getValueSettingsByKey('TELEGRAM_USERNAME', false))
   }
 
   get FBPage() {
-    const fb = GlobalStore.getters.getValueSettingsByKey('URL_FACEBOOK')
+    const fb = GlobalStore.getters.getValueSettingsByKey('URL_FACEBOOK', false)
     return fb
   }
 
   get InstagramPage() {
-    return GlobalStore.getters.getValueSettingsByKey('URL_INSTAGRAM')
+    return GlobalStore.getters.getValueSettingsByKey('URL_INSTAGRAM', false)
   }
 
   get TwitterPage() {
-    return GlobalStore.getters.getValueSettingsByKey('URL_TWITTER')
+    return GlobalStore.getters.getValueSettingsByKey('URL_TWITTER', false)
   }
 
   get static_data() {

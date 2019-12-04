@@ -32,6 +32,10 @@
                         :optlab="db_fieldsTable.getLabelByTable(col.jointable)"
                         :opticon="db_fieldsTable.getIconByTable(col.jointable)"></CMyChipList>
             </div>
+            <div v-else-if="col.fieldtype === tools.FieldType.boolean">
+                <q-toggle dark color="green" v-model="myvalue" :label="col.title"
+                          @input="Savedb"></q-toggle>
+            </div>
             <div v-else>
                 {{ visuValByType(myvalue, col, row) }}
             </div>
@@ -65,6 +69,15 @@
                 <div v-else-if="col.fieldtype === tools.FieldType.string">
                     <q-input v-model="myvalue"
                              autogrow
+                             @keyup.enter.stop
+                             autofocus>
+
+                    </q-input>
+                </div>
+                <div v-else-if="col.fieldtype === tools.FieldType.password">
+                    <q-input v-model="myvalue"
+                             type="password"
+                             @keyup.enter.stop
                              autofocus>
 
                     </q-input>
@@ -84,10 +97,13 @@
                     </CMyToggleList>
                 </div>
                 <div v-else-if="col.fieldtype === tools.FieldType.html">
-                    <q-input v-model="myvalue"
-                             autofocus
-                             @keyup.enter.stop
-                             type="textarea"></q-input>
+                    <CMyEditor :value.sync="myvalue" :title="col.title" @keyup.enter.stop>
+
+                    </CMyEditor>
+                    <!--<q-input v-model="myvalue"-->
+                             <!--autofocus-->
+                             <!--@keyup.enter.stop-->
+                             <!--type="textarea"></q-input>-->
                 </div>
                 <div v-else-if="col.fieldtype === tools.FieldType.select">
                     <CMySelect :label="col.title"

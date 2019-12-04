@@ -18,6 +18,7 @@ const msgglobal = {
         usereventlist: 'Prenotazioni Utenti',
         userlist: 'Lista Utenti',
         tableslist: 'Lista Tabelle',
+        newsletter: 'Newsletter',
       },
       manage: {
         menu: 'Gestione',
@@ -76,7 +77,9 @@ const msgglobal = {
           verify_email: 'Verifica la tua email',
           go_login: 'Torna al Login',
           incorrect_input: 'Inserimento incorretto.',
-          link_sent: 'Ora leggi la tua email e conferma la registrazione'
+          link_sent: 'Ora leggi la tua email e conferma la registrazione',
+          title_unsubscribe: 'Disiscrizione alla newsletter',
+          title_unsubscribe_done: 'Disiscrizione completata correttamente',
         }
       }
     },
@@ -88,6 +91,15 @@ const msgglobal = {
     user: {
       notregistered: 'Devi registrarti al servizio prima di porter memorizzare i dati',
       loggati: 'Utente non loggato'
+    },
+    templemail: {
+      subject: 'Oggetto Email',
+      testoheadermail: 'Intestazione Email',
+      content: 'Contenuto',
+      img: 'Immagine 1',
+      img2: 'Immagine 2',
+      content2: 'Contenuto 2',
+      options: 'Opzioni',
     },
     reg: {
       page_title: 'Registrazione',
@@ -338,6 +350,7 @@ const msgglobal = {
         usereventlist: 'Reserva Usuarios',
         userlist: 'Lista de usuarios',
         tableslist: 'Listado de tablas',
+        newsletter: 'Newsletter',
       },
       manage: {
         menu: 'Gestionar',
@@ -396,7 +409,9 @@ const msgglobal = {
           verify_email: 'Revisa tu email',
           go_login: 'Vuelve al Login',
           incorrect_input: 'Entrada correcta.',
-          link_sent: 'Ahora lea su correo electrónico y confirme el registro'
+          link_sent: 'Ahora lea su correo electrónico y confirme el registro',
+          title_unsubscribe: 'Anular suscripción al boletín',
+          title_unsubscribe_done: 'Suscripción completada con éxito',
         }
       }
     },
@@ -408,6 +423,15 @@ const msgglobal = {
     user: {
       notregistered: 'Debe registrarse en el servicio antes de poder almacenar los datos',
       loggati: 'Usuario no ha iniciado sesión'
+    },
+    templemail: {
+      subject: 'Objecto Email',
+      testoheadermail: 'Encabezamiento Email',
+      content: 'Contenido',
+      img: 'Imagen 1',
+      img2: 'Imagen 2',
+      content2: 'Contenuto 2',
+      options: 'Opciones',
     },
     reg: {
       page_title: 'Registro',
@@ -649,6 +673,7 @@ const msgglobal = {
         usereventlist: 'Réservation Utilisateur',
         userlist: 'Liste d\'utilisateurs',
         tableslist: 'Liste des tables',
+        newsletter: 'Newsletter',
       },
       manage: {
         menu: 'Gérer',
@@ -707,7 +732,9 @@ const msgglobal = {
           verify_email: 'Vérifiez votre email',
           go_login: 'Retour à la connexion',
           incorrect_input: 'Entrée correcte.',
-          link_sent: 'Maintenant, lisez votre email et confirmez votre inscription'
+          link_sent: 'Maintenant, lisez votre email et confirmez votre inscription',
+          title_unsubscribe: 'Se désabonner de la newsletter',
+          title_unsubscribe_done: 'Abonnement terminé avec succès',
         }
       }
     },
@@ -719,6 +746,15 @@ const msgglobal = {
     user: {
       notregistered: 'Vous devez vous inscrire auprès du service avant de pouvoir stocker les données.',
       loggati: 'L\'utilisateur n\'est pas connecté'
+    },
+    templemail: {
+      subject: 'Objet Email',
+      testoheadermail: 'en-tête de courrier électronique',
+      content: 'Contenu',
+      img: 'Image 1',
+      img2: 'Image 2',
+      content2: 'Contenu 2',
+      options: 'Options',
     },
     reg: {
       incorso: 'Inscription en cours...',
@@ -959,6 +995,7 @@ const msgglobal = {
         usereventlist: 'Users Booking',
         userlist: 'Users List',
         tableslist: 'List of tables',
+        newsletter: 'Newsletter',
       },
       manage: {
         menu: 'Manage',
@@ -1017,7 +1054,9 @@ const msgglobal = {
           verify_email: 'Verify your email',
           go_login: 'Back to Login',
           incorrect_input: 'Incorrect input.',
-          link_sent: 'Now read your email and confirm registration'
+          link_sent: 'Now read your email and confirm registration',
+          title_unsubscribe: 'Unsubscribe to the newsletter',
+          title_unsubscribe_done: 'Subscription completed successfully',
         }
       }
     },
@@ -1029,6 +1068,15 @@ const msgglobal = {
     user: {
       notregistered: 'You need first to SignUp before storing data',
       loggati: 'User not logged in'
+    },
+    templemail: {
+      subject: 'Subject Email',
+      testoheadermail: 'Header Email',
+      content: 'Content',
+      img: 'Image 1',
+      img2: 'Image 2',
+      content2: 'Content 2',
+      options: 'Options',
     },
     reg: {
       incorso: 'Registration please wait...',
@@ -1268,6 +1316,7 @@ const msgglobal = {
         usereventlist: 'Users Booking',
         userlist: 'Users List',
         tableslist: 'List of tables',
+        newsletter: 'Newsletter',
       },
       manage: {
         menu: 'Manage',
@@ -1326,7 +1375,9 @@ const msgglobal = {
           verify_email: 'Verify your email',
           go_login: 'Back to Login',
           incorrect_input: 'Incorrect input.',
-          link_sent: 'Now read your email and confirm registration'
+          link_sent: 'Now read your email and confirm registration',
+          title_unsubscribe: 'Disiscrizione alla newsletter',
+          title_unsubscribe_done: 'Disiscrizione completata correttamente',
         }
       }
     },
@@ -1338,6 +1389,15 @@ const msgglobal = {
     user: {
       notregistered: 'You need first to SignUp before storing data',
       loggati: 'User not logged in'
+    },
+    templemail: {
+      subject: 'Subject Email',
+      testoheadermail: 'Header Email',
+      content: 'Content',
+      img: 'Image 1',
+      img2: 'Image 2',
+      content2: 'Content 2',
+      options: 'Options',
     },
     reg: {
       page_title: 'Registration',

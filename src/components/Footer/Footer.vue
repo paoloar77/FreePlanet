@@ -7,8 +7,8 @@
                     <!--</span>-->
 
 
-                    <CFacebookFrame myclass="text-center" :fbimage="getValDb('FBPAGE_IMG')"
-                                    :urlfbpage="getValDb('FBPAGE_FRAME')" title="getValDb('FBPAGE_TITLE')">
+                    <CFacebookFrame myclass="text-center" :fbimage="getValDb('FBPAGE_IMG', false)"
+                                    :urlfbpage="getValDb('FBPAGE_FRAME')" :title="getValDb('FBPAGE_TITLE', false)">
 
                     </CFacebookFrame>
 
@@ -45,9 +45,9 @@
                     </div>
 
                     <div class="text-center">
-                        <span v-html="getValDb('MAP_TITLE')"></span>
+                        <span v-html="getValDb('MAP_TITLE', false)"></span>
                         <br>
-                        <a :href="getValDb('URLMAP')" target="_blank" class="footer_link">Apri Mappa</a>
+                        <a :href="getValDb('URLMAP', false)" target="_blank" class="footer_link">Apri Mappa</a>
                     </div>
 
                     <!--<div class="q-mt-xs copyrights">-->
@@ -63,12 +63,12 @@
 
 
                             <div class="mycontacts_text">
-                                <i v-if="getValDb('MAIN_EMAIL')" aria-hidden="true"
+                                <i v-if="getValDb('MAIN_EMAIL', false)" aria-hidden="true"
                                    class="q-icon fas fa-envelope q-mx-sm"></i>
-                                <a :href="`mailto:` + getValDb('MAIN_EMAIL')" class="links">{{ getValDb('MAIN_EMAIL')
+                                <a :href="`mailto:` + getValDb('MAIN_EMAIL', false)" class="links">{{ getValDb('MAIN_EMAIL')
                                     }}</a><br>
                                 <div style="margin-bottom: 20px;"></div>
-                                <div v-for="rec in getarrValDb('CONTACTS_EMAIL_CELL')"
+                                <div v-for="rec in getarrValDb('CONTACTS_EMAIL_CELL', false)"
                                      class="mycontacts_text margin_buttons_footer"
                                      style="margin-bottom: 0px;">
                                     <div>
@@ -102,8 +102,8 @@
                                     </div>
 
                                 </div>
-                                <span v-if="getValDb('CALL_WORKING_DAYS')"><br>orari per chiamate:<br>
-                                    <span v-html="getValDb('CALL_WORKING_DAYS')"></span></span>
+                                <span v-if="getValDb('CALL_WORKING_DAYS', false)"><br>orari per chiamate:<br>
+                                    <span v-html="getValDb('CALL_WORKING_DAYS', false)"></span></span>
 
                             </div>
                         </div>

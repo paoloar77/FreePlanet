@@ -12,13 +12,14 @@ import { lists } from '../../store/Modules/lists'
 import { IParamsQuery } from '../../model/GlobalStore'
 import { fieldsTable } from '../../store/Modules/fieldsTable'
 import { CMyPopupEdit } from '../CMyPopupEdit'
+import { CTitleBanner } from '../CTitleBanner'
 
 @Component({
-  components: { CMyPopupEdit }
+  components: { CMyPopupEdit, CTitleBanner }
 })
 export default class CGridTableRec extends Vue {
-  @Prop({ required: false }) public prop_mytable: string
   @Prop({ required: true }) public prop_mytitle: string
+  @Prop({ required: false }) public prop_mytable: string
   @Prop({ required: false, default: null }) public prop_mycolumns: any[]
   @Prop({ required: false, default: '' }) public prop_colkey: string
   @Prop({ required: false, default: '' }) public nodataLabel: string
@@ -52,7 +53,7 @@ export default class CGridTableRec extends Vue {
   public valPrec: string = ''
 
   public separator: 'horizontal'
-  public filter = undefined
+  public myfilter = undefined
   public rowsel: any
   public dark: boolean = true
   public canEdit: boolean = false
@@ -61,6 +62,11 @@ export default class CGridTableRec extends Vue {
   public returnedCount
   public colVisib: any[] = []
   public colExtra: any[] = []
+
+  public rowclicksel: any = null
+  public colclicksel: any = null
+
+  public selected: any = []
 
   get lists() {
     return lists
@@ -96,16 +102,36 @@ export default class CGridTableRec extends Vue {
 
   }
 
+  public SaveValdb(newVal, valinitial) {
+    // console.log('SaveValdb', newVal)
+    // console.log('SaveValue', newVal, 'rowsel', this.rowsel)
+
+    this.colsel = this.colclicksel
+    // console.log('this.colsel', this.colsel)
+    this.SaveValue(newVal, valinitial)
+    this.colsel = null
+  }
+
+  public showandsel(row, col, newval, valinitial) {
+    // console.log('showandsel', row, col, newval)
+    this.rowsel = row
+    this.colsel = col
+    this.idsel = row._id
+    this.SaveValue(newval, valinitial)
+  }
+
   public SaveValue(newVal, valinitial) {
     // console.log('SaveValue', newVal, 'rowsel', this.rowsel)
 
-    // Update value in table memory
-    if (this.colsel.subfield !== '') {
-      if (this.rowsel[this.colsel.field] === undefined)
-        this.rowsel[this.colsel.field] = {}
-      this.rowsel[this.colsel.field][this.colsel.subfield] = newVal
-    } else {
-      this.rowsel[this.colsel.field] = newVal
+    if (this.colsel) {
+      // Update value in table memory
+      if (this.colsel.subfield !== '') {
+        if (this.rowsel[this.colsel.field] === undefined)
+          this.rowsel[this.colsel.field] = {}
+        this.rowsel[this.colsel.field][this.colsel.subfield] = newVal
+      } else {
+        this.rowsel[this.colsel.field] = newVal
+      }
     }
 
     const mydata = {
@@ -140,7 +166,7 @@ export default class CGridTableRec extends Vue {
   }
 
   public updatedcol() {
-    console.log('updatedcol')
+    // console.log('updatedcol')
     if (this.mycolumns) {
       this.colVisib = []
       this.colExtra = []
@@ -160,9 +186,9 @@ export default class CGridTableRec extends Vue {
   }
 
   public onRequest(props) {
-    console.log('onRequest', 'filter = ' , this.filter)
+    console.log('onRequest', 'myfilter = ', this.myfilter)
     const { page, rowsPerPage, rowsNumber, sortBy, descending } = props.pagination
-    const filter = this.filter
+    const myfilter = this.myfilter
 
     if (!this.mytable)
       return
@@ -185,9 +211,9 @@ export default class CGridTableRec extends Vue {
     this.serverData = []
 
     // fetch data from "server"
-    this.fetchFromServer(startRow, endRow, filter, sortBy, descending).then((ris) => {
+    this.fetchFromServer(startRow, endRow, myfilter, sortBy, descending).then((ris) => {
 
-      this.pagination.rowsNumber = this.getRowsNumberCount(filter)
+      this.pagination.rowsNumber = this.getRowsNumberCount(myfilter)
 
       // clear out existing data and add new
       if (this.returnedData === []) {
@@ -215,7 +241,7 @@ export default class CGridTableRec extends Vue {
 
   // emulate ajax call
   // SELECT * FROM ... WHERE...LIMIT...
-  public async fetchFromServer(startRow, endRow, filter, sortBy, descending) {
+  public async fetchFromServer(startRow, endRow, myfilter, sortBy, descending) {
 
     let myobj = null
     if (sortBy) {
@@ -230,7 +256,7 @@ export default class CGridTableRec extends Vue {
       table: this.mytable,
       startRow,
       endRow,
-      filter,
+      filter: myfilter,
       sortBy: myobj,
       descending
     }
@@ -247,15 +273,15 @@ export default class CGridTableRec extends Vue {
 
     return true
 
-    // if (!filter) {
+    // if (!myfilter) {
     //   data = this.original.slice(startRow, startRow + count)
     // }
     // else {
     //   let found = 0
     //   for (let index = startRow, items = 0; index < this.original.length && items < count; ++index) {
     //     let row = this.original[index]
-    //     // match filter?
-    //     if (!row['name'].includes(filter)) {
+    //     // match myfilter?
+    //     if (!row['name'].includes(myfilter)) {
     //       // get a different row, until one is found
     //       continue
     //     }
@@ -285,14 +311,14 @@ export default class CGridTableRec extends Vue {
   }
 
   // emulate 'SELECT count(*) FROM ...WHERE...'
-  public getRowsNumberCount(filter) {
+  public getRowsNumberCount(myfilter) {
 
-    // if (!filter) {
+    // if (!myfilter) {
     //   return this.original.length
     // }
     // let count = 0
     // this.original.forEach((treat) => {
-    //   if (treat['name'].includes(filter)) {
+    //   if (treat['name'].includes(myfilter)) {
     //     ++count
     //   }
     // })
@@ -337,9 +363,11 @@ export default class CGridTableRec extends Vue {
 
   public mounted() {
 
-    this.canEdit = tools.getCookie(tools.CAN_EDIT, this.canEdit) === 'true'
+    if (!!this.tablesList) {
+      this.canEdit = tools.getCookie(tools.CAN_EDIT, this.canEdit) === 'true'
+      this.tablesel = tools.getCookie('tablesel', this.tablesel)
+    }
 
-    this.tablesel = tools.getCookie('tablesel', this.tablesel)
     if (this.tablesel === '') {
       if (!!this.tablesList)
         this.tablesel = this.tablesList[0].value
@@ -357,11 +385,11 @@ export default class CGridTableRec extends Vue {
     console.log('refresh')
     // console.log('this.search', this.search)
     if (!!this.search && this.search !== '')
-      this.filter = this.search
+      this.myfilter = this.search
     else
-      this.filter = undefined
+      this.myfilter = undefined
 
-    // console.log('this.filter', this.filter)
+    // console.log('this.myfilter', this.myfilter)
 
     this.refresh_table()
   }
@@ -411,7 +439,9 @@ export default class CGridTableRec extends Vue {
     if (this.tablesel === undefined || this.tablesel === '')
       return
 
-    console.log('changeTable mysel=', mysel, 'tablesel', this.tablesel)
+    // console.log('changeTable mysel=', mysel, 'tablesel', this.tablesel)
+    // console.log('this.tablesList=')
+    // console.table(this.tablesList)
 
     let mytab = null
     if (this.tablesList) {
@@ -457,6 +487,11 @@ export default class CGridTableRec extends Vue {
       const myselcol = tools.getCookie(this.mytable, '')
       if (!!myselcol && myselcol.length > 0) {
         this.colVisib = myselcol.split('|')
+      } else {
+        this.mycolumns.forEach((elem) => {
+          if (elem.field !== tools.NOFIELD)
+            this.colVisib.push(elem.field + elem.subfield)
+        })
       }
     }
 
@@ -479,4 +514,21 @@ export default class CGridTableRec extends Vue {
     tools.setCookie(tools.CAN_EDIT, newval)
   }
 
+  public clickrowcol(row, col) {
+    if (!this.canEdit) {
+      if (this.rowclicksel) {
+        this.rowclicksel = null
+      } else {
+        this.rowclicksel = row
+        this.colclicksel = col
+      }
+    }
+  }
+
+  public getclrow(myrow) {
+    if (this.rowclicksel === myrow)
+      return 'colsel'
+    else
+      return ''
+  }
 }

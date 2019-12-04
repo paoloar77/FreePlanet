@@ -1,4 +1,4 @@
-import { ICfgServer, IConfig, IGlobalState, IListRoutes, IMenuList, StateConnection } from 'model'
+import { ICfgServer, IConfig, IGlobalState, IListRoutes, IMenuList, ISettings, StateConnection } from 'model'
 import { storeBuilder } from './Store/Store'
 
 import Vue from 'vue'
@@ -68,6 +68,9 @@ const state: IGlobalState = {
     type: 0,
     _id: 0
   },
+  serv_settings: [],
+  templemail: [],
+  opzemail: [],
   settings: [],
   disciplines: [],
   autoplaydisc: 8000,
@@ -171,6 +174,10 @@ namespace Getters {
       return GlobalStore.state.disciplines
     else if (table === tools.TABNEWSLETTER)
       return GlobalStore.state.newstosent
+    else if (table === tools.TABTEMPLEMAIL)
+      return GlobalStore.state.templemail
+    else if (table === tools.TABOPZEMAIL)
+      return GlobalStore.state.opzemail
     else if (table === tools.TABMAILINGLIST)
       return GlobalStore.state.mailinglist
     else if (table === 'bookings')
@@ -188,13 +195,24 @@ namespace Getters {
 
   }, 'getListByTable')
 
-  const getValueSettingsByKey = b.read((mystate: IGlobalState) => (key): any => {
-    const myrec = mystate.settings.find((rec) => rec.key === key)
+  const getrecSettingsByKey = b.read((mystate: IGlobalState) => (key, serv): ISettings => {
+    if (serv)
+      return mystate.serv_settings.find((rec) => rec.key === key)
+    else
+      return mystate.settings.find((rec) => rec.key === key)
+  }, 'getrecSettingsByKey')
+
+  const getValueSettingsByKey = b.read((mystate: IGlobalState) => (key, serv): any => {
+
+    const myrec = getters.getrecSettingsByKey(key, serv)
+
     if (!!myrec) {
       if (myrec.type === tools.FieldType.date)
         return myrec.value_date
-      if (myrec.type === tools.FieldType.number)
+      else if (myrec.type === tools.FieldType.number)
         return myrec.value_num
+      else if (myrec.type === tools.FieldType.boolean)
+        return myrec.value_bool
       else
         return myrec.value_str
     } else {
@@ -244,6 +262,10 @@ namespace Getters {
 
     get getValueSettingsByKey() {
       return getValueSettingsByKey()
+    },
+
+    get getrecSettingsByKey() {
+      return getrecSettingsByKey()
     },
 
     get t() {
@@ -353,6 +375,31 @@ namespace Mutations {
     }
   }
 
+  function setValueSettingsByKey(mystate: IGlobalState, { key, value, serv }) {
+    // Update the Server
+
+    // Update in Memory
+    let myrec = null
+    if (serv)
+      myrec = mystate.serv_settings.find((rec) => rec.key === key)
+    else
+      myrec = mystate.settings.find((rec) => rec.key === key)
+
+    if (!!myrec) {
+      if (myrec.type === tools.FieldType.date)
+        myrec.value_date = value
+      else if (myrec.type === tools.FieldType.number)
+        myrec.value_num = value
+      else if (myrec.type === tools.FieldType.boolean)
+        myrec.value_bool = value
+      else
+        myrec.value_str = value
+
+      console.log('setValueSettingsByKey value', value, 'myrec', myrec)
+    }
+
+  }
+
   export const mutations = {
     setConta: b.commit(setConta),
     setleftDrawerOpen: b.commit(setleftDrawerOpen),
@@ -364,7 +411,8 @@ namespace Mutations {
     setPaoArray_Delete: b.commit(setPaoArray_Delete),
     NewArray: b.commit(NewArray),
     setShowType: b.commit(setShowType),
-    UpdateValuesInMemory: b.commit(UpdateValuesInMemory)
+    UpdateValuesInMemory: b.commit(UpdateValuesInMemory),
+    setValueSettingsByKey: b.commit(setValueSettingsByKey)
   }
 
 }
@@ -717,13 +765,14 @@ namespace Actions {
 
   }
 
-  async function sendEmailTest(context) {
+  async function sendEmailTest(context, { previewonly }) {
     const usertosend = {
-      locale: tools.getLocale()
+      locale: tools.getLocale(),
+      previewonly
     }
     console.log(usertosend)
 
-    return await Api.SendReq('/signup_news/testemail', 'POST', usertosend)
+    return await Api.SendReq('/news/testemail', 'POST', usertosend)
       .then((res) => {
         return res
       })

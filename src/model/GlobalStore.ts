@@ -26,12 +26,22 @@ export interface ICfgData {
   userId?: string
 }
 
+export interface ITemplEmail {
+  subject?: string
+  content?: string
+  options?: ISettings[]
+}
+
 export interface ISettings {
+  _id?: string
+  idapp?: string
   key?: string
   type?: number
   value_str?: string
   value_date?: Date,
   value_num?: number
+  value_bool?: boolean
+  serv?: boolean
 }
 
 export interface ITeachUname {
@@ -116,9 +126,12 @@ export interface IGlobalState {
   listatodo: IMenuList[]
   arrConfig: IConfig[]
   lastaction: IAction
+  serv_settings: ISettings[],
   settings: ISettings[],
   disciplines: IDiscipline[],
   newstosent: INewsToSent[],
+  templemail: ITemplEmail[],
+  opzemail: ISettings[],
   mailinglist: IMailinglist[],
   autoplaydisc: number
 }
@@ -308,10 +321,29 @@ export interface ITableRec {
   colkey: string
   collabel: string
   colicon?: string
+  onlyAdmin?: boolean
 }
 
 export interface IDataPass {
   id: string
   table: string
   fieldsvalue: object
+}
+
+export interface INewsState {
+  lastnewstosent: INewsToSent
+  nextnewstosent: INewsToSent
+  totemail: number
+  totsubscribed: number
+  totunsubscribed: number
+  totsentlastid: number
+}
+
+export const DefaultNewsState: INewsState = {
+  lastnewstosent: null,
+  nextnewstosent: null,
+  totemail: 0,
+  totsubscribed: 0,
+  totunsubscribed: 0,
+  totsentlastid: 0,
 }

@@ -4,7 +4,7 @@
         <q-table
                 :data="serverData"
                 :columns="mycolumns"
-                :filter="filter"
+                :filter="myfilter"
                 :pagination.sync="pagination"
                 :row-key="colkey"
                 :loading="loading"
@@ -35,7 +35,8 @@
 
                 <!--<p style="color:red"> Rows: {{ getrows }}</p>-->
 
-                <q-input v-model="search" filled dense type="search" debounce="500" hint="Search" v-on:keyup.enter="doSearch">
+                <q-input v-model="search" filled dense type="search" debounce="500" hint="Search"
+                         v-on:keyup.enter="doSearch">
                     <template v-slot:after>
                         <q-btn v-if="mytable" label="" color="primary" @click="refresh" icon="search"></q-btn>
                     </template>
@@ -91,16 +92,20 @@
             </template>
 
             <q-tr v-if="mytable" slot="body" slot-scope="props" :props="props">
-                <q-td v-for="col in mycolumns" :key="col.name" :props="props" v-if="colVisib.includes(col.field + col.subfield)">
-                    <CMyPopupEdit :canEdit="canEdit"
-                                  :col="col"
-                                  :row.sync="props.row"
-                                  :field="col.field"
-                                  :subfield="col.subfield"
-                                  @save="SaveValue"
-                                  @show="selItem(props.row, col)">
+                <q-td v-for="col in mycolumns" :key="col.name" :props="props"
+                      v-if="colVisib.includes(col.field + col.subfield)" @click="clickrowcol(props.row, col)">
+                        <div :class="getclrow(props.row)">
+                        <CMyPopupEdit :canEdit="canEdit"
+                                      :col="col"
+                                      :row.sync="props.row"
+                                      :field="col.field"
+                                      :subfield="col.subfield"
+                                      @save="SaveValue"
+                                      @show="selItem(props.row, col)"
+                                      @showandsave="showandsel">
 
-                    </CMyPopupEdit>
+                        </CMyPopupEdit>
+                        </div>
                 </q-td>
                 <q-td v-for="col in mycolumns" :key="col.name" :props="props" v-if="colExtra.includes(col.name)">
                     <div v-if="col.action && visCol(col)">
@@ -119,6 +124,38 @@
             -->
             <!---->
         </q-table>
+
+        <div v-if="rowclicksel">
+            <CTitleBanner title="Record:"></CTitleBanner>
+
+            <div class="q-ma-xs q-pa-xs text-center rounded-borders q-list--bordered"
+                 v-for="mycol in mycolumns" :key="mycol.name"
+                 v-if="colVisib.includes(mycol.field + mycol.subfield)">
+                <div class="row items-center justify-center q-gutter-md q-ma-xs">
+                    <div class="q-ma-xs">
+                        <q-field rounded outlined bg-color="orange-3" dense>
+                            <template v-slot:control>
+                                <div class="self-center full-width no-outline" tabindex="0">{{mycol.label}}</div>
+                            </template>
+                        </q-field>
+                    </div>
+                    <div class="q-ma-sm q-pa-sm colmodif col-grow rounded-borders " style="border: 1px solid #bbb"
+                         @click="colclicksel = mycol">
+                        <CMyPopupEdit :canEdit="true"
+                                      :col="mycol"
+                                      :showall="true"
+                                      :row="rowclicksel"
+                                      :field="mycol.field"
+                                      :subfield="mycol.subfield"
+                                      @save="SaveValdb"
+                                      @show="selItem(rowclicksel, mycol)"
+                                      @showandsave="showandsel">
+
+                        </CMyPopupEdit>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 <script lang="ts" src="./CGridTableRec.ts">

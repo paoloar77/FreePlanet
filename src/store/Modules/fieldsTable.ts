@@ -2,7 +2,7 @@ import { IColGridTable } from '../../model'
 import { lists } from './lists'
 import { tools } from '@src/store/Modules/tools'
 import { shared_consts } from '@src/common/shared_vuejs'
-import { GlobalStore } from '@store'
+import { GlobalStore, UserStore } from '@store'
 
 const DeleteRec = {
   name: 'deleterec',
@@ -15,6 +15,19 @@ const DeleteRec = {
   askaction: 'db.deletetherecord',
   required: true,
   visuonlyEditVal: true
+}
+
+const DuplicateRec = {
+  name: 'copyrec',
+  label_trans: 'event.duplicate',
+  align: 'right',
+  field: tools.NOFIELD,
+  sortable: false,
+  icon: 'fas fa-copy',
+  action: lists.MenuAction.DUPLICATE_RECTABLE,
+  askaction: 'db.duplicatedrecord',
+  visuonlyEditVal: true,
+  visible: true
 }
 
 function AddCol(params: IColGridTable) {
@@ -40,20 +53,31 @@ function AddCol(params: IColGridTable) {
   }
 }
 
-const colTableWhere = [
-  AddCol({ name: 'code', label_trans: 'where.code' }),
-  AddCol({ name: 'placename', label_trans: 'cal.where' }),
-  AddCol({ name: 'whereicon', label_trans: 'where.whereicon' }),
-  AddCol(DeleteRec)
+export const colopzemail = [
+  AddCol({ name: 'key', label_trans: 'col.key' }),
+  AddCol({ name: 'label_it', label_trans: 'col.label' }),
+  AddCol(DeleteRec),
+  AddCol(DuplicateRec)
 ]
 
-const colcontribtype = [
-  AddCol({ name: 'label', label_trans: 'proj.longdescr' }),
-  AddCol({ name: 'showprice', label_trans: 'event.showprice', fieldtype: tools.FieldType.boolean }),
-  AddCol(DeleteRec)
+export const coltemplemail = [
+  AddCol({ name: 'subject', label_trans: 'templemail.subject' }),
+  AddCol({ name: 'testoheadermail', label_trans: 'templemail.testoheadermail', fieldtype: tools.FieldType.html }),
+  AddCol({ name: 'content', label_trans: 'templemail.content', fieldtype: tools.FieldType.html }),
+  AddCol({ name: 'img', label_trans: 'templemail.img' }),
+  AddCol({ name: 'content2', label_trans: 'templemail.content2', fieldtype: tools.FieldType.html }),
+  AddCol({ name: 'img2', label_trans: 'templemail.img2' }),
+  AddCol({
+    name: 'options',
+    label_trans: 'templemail.options',
+    fieldtype: tools.FieldType.multiselect,
+    jointable: 'opzemail'
+  }),
+  AddCol(DeleteRec),
+  AddCol(DuplicateRec)
 ]
 
-const colnewstosent = [
+export const colnewstosent = [
   AddCol({ name: 'label', label_trans: 'event.title' }),
   AddCol({ name: 'datetoSent', label_trans: 'news.datetoSent', fieldtype: tools.FieldType.date }),
   AddCol({ name: 'activate', label_trans: 'news.activate', fieldtype: tools.FieldType.boolean }),
@@ -65,6 +89,20 @@ const colnewstosent = [
   AddCol({ name: 'starting_job', label_trans: 'news.starting_job', fieldtype: tools.FieldType.boolean }),
   AddCol({ name: 'finish_job', label_trans: 'news.finish_job', fieldtype: tools.FieldType.boolean }),
   AddCol({ name: 'error_job', label_trans: 'news.error_job', fieldtype: tools.FieldType.string }),
+  AddCol(DeleteRec),
+  AddCol(DuplicateRec)
+]
+
+const colTableWhere = [
+  AddCol({ name: 'code', label_trans: 'where.code' }),
+  AddCol({ name: 'placename', label_trans: 'cal.where' }),
+  AddCol({ name: 'whereicon', label_trans: 'where.whereicon' }),
+  AddCol(DeleteRec)
+]
+
+const colcontribtype = [
+  AddCol({ name: 'label', label_trans: 'proj.longdescr' }),
+  AddCol({ name: 'showprice', label_trans: 'event.showprice', fieldtype: tools.FieldType.boolean }),
   AddCol(DeleteRec)
 ]
 
@@ -86,16 +124,8 @@ const coldisciplines = [
     fieldtype: tools.FieldType.multiselect,
     jointable: 'operators'
   }),
-  AddCol(DeleteRec)
-]
-
-const colsettings = [
-  AddCol({ name: 'key', label_trans: 'col.label' }),
-  AddCol({ name: 'type', label_trans: 'col.type', fieldtype: tools.FieldType.select, jointable: 'fieldstype' }),
-  AddCol({ name: 'value_str', label_trans: 'col.value', fieldtype: tools.FieldType.string }),
-  AddCol({ name: 'value_date', label_trans: 'cal.data', fieldtype: tools.FieldType.date }),
-  AddCol({ name: 'value_num', label_trans: 'cal.num', fieldtype: tools.FieldType.number }),
-  AddCol(DeleteRec)
+  AddCol(DeleteRec),
+  AddCol(DuplicateRec)
 ]
 
 const colTablePermission = [
@@ -108,7 +138,7 @@ const colmailinglist = [
   AddCol({ name: 'name', label_trans: 'reg.name' }),
   AddCol({ name: 'surname', label_trans: 'reg.surname' }),
   AddCol({ name: 'email', label_trans: 'reg.email' }),
-  AddCol({ name: 'lastid_newstosent', label_trans: 'reg.lastid_newstosent', fieldtype: tools.FieldType.string } ),
+  AddCol({ name: 'lastid_newstosent', label_trans: 'reg.lastid_newstosent', fieldtype: tools.FieldType.string }),
   AddCol(DeleteRec)
 ]
 
@@ -128,7 +158,9 @@ const colTableOperator = [
   AddCol({ name: 'webpage', label_trans: 'op.webpage' }),
   AddCol({ name: 'days_working', label_trans: 'op.days_working' }),
   AddCol({ name: 'facebook', label_trans: 'op.facebook' }),
-  AddCol(DeleteRec)]
+  AddCol(DeleteRec),
+  AddCol(DuplicateRec)
+]
 
 const colTableEvents = [
   AddCol({ name: '_id', label_trans: 'event._id' }),
@@ -169,20 +201,23 @@ const colTableEvents = [
   AddCol({ name: 'dupId', label_trans: 'event.dupId' }),
   AddCol({ name: 'modified', label_trans: 'event.modified', fieldtype: tools.FieldType.boolean }),
   AddCol(DeleteRec),
-  AddCol({
-    name: 'copyrec',
-    label_trans: 'event.duplicate',
-    align: 'right',
-    field: tools.NOFIELD,
-    sortable: false,
-    icon: 'fas fa-copy',
-    action: lists.MenuAction.DUPLICATE_RECTABLE,
-    askaction: 'db.duplicatedrecord',
-    visuonlyEditVal: true,
-    required: true,
-    visible: true
-  })
+  AddCol(DuplicateRec)
 ]
+
+export const fields = {
+  colSettings: [
+    AddCol({ name: 'key', label_trans: 'col.label' }),
+    AddCol({ name: 'type', label_trans: 'col.type', fieldtype: tools.FieldType.select, jointable: 'fieldstype' }),
+    AddCol({ name: 'value_str', label_trans: 'col.value', fieldtype: tools.FieldType.string }),
+    AddCol({ name: 'value_date', label_trans: 'cal.data', fieldtype: tools.FieldType.date }),
+    AddCol({ name: 'value_num', label_trans: 'cal.num', fieldtype: tools.FieldType.number }),
+    AddCol({ name: 'value_bool', label_trans: 'cal.bool', fieldtype: tools.FieldType.boolean }),
+    AddCol({ name: 'serv', label_trans: 'cal.serv', fieldtype: tools.FieldType.boolean }),
+    AddCol(DeleteRec),
+    AddCol(DuplicateRec)
+  ]
+
+}
 
 export const fieldsTable = {
   getArrStrByValueBinary(mythis, col: IColGridTable, val) {
@@ -299,6 +334,20 @@ export const fieldsTable = {
     else
       return ''
   },
+
+  // IColGridTable
+  colTableUsers: [
+    AddCol({ name: 'username', label_trans: 'reg.username' }),
+    AddCol({ name: 'name', label_trans: 'reg.name' }),
+    AddCol({ name: 'surname', label_trans: 'reg.surname' }),
+    AddCol({ name: 'email', label_trans: 'reg.email' }),
+    AddCol({ name: 'cell', label_trans: 'reg.cell' }),
+    AddCol({ name: 'profile.img', field: 'profile', subfield: 'img', label_trans: 'reg.img', sortable: false }),
+    AddCol({ name: 'date_reg', label_trans: 'reg.date_reg', fieldtype: tools.FieldType.date }),
+    AddCol({ name: 'perm', label_trans: 'reg.perm', fieldtype: tools.FieldType.binary, jointable: 'permissions' }),
+    AddCol(DeleteRec)
+  ],
+
   tablesList: [
     {
       value: 'operators',
@@ -335,12 +384,28 @@ export const fieldsTable = {
       colkey: 'typol_code',
       collabel: 'label'
     },
+
     {
       value: 'newstosent',
       label: 'Newsletter da Inviare',
       columns: colnewstosent,
       colkey: '_id',
       collabel: 'label'
+    },
+    {
+      value: 'templemail',
+      label: 'Template Email',
+      columns: coltemplemail,
+      colkey: '_id',
+      collabel: 'subject'
+    },
+    {
+      value: 'opzemail',
+      label: 'Opzioni Email',
+      columns: colopzemail,
+      colkey: 'key',
+      collabel: (rec) => rec.label_it,
+      onlyAdmin: true
     },
     {
       value: 'mailinglist',
@@ -366,34 +431,15 @@ export const fieldsTable = {
     {
       value: 'settings',
       label: 'Impostazioni',
-      columns: colsettings,
+      columns: fields.colSettings,
       colkey: 'key',
       collabel: 'key'
     }
-  ],
-
-  // IColGridTable
-  colTableUsers: [
-    AddCol({ name: 'username', label_trans: 'reg.username' }),
-    AddCol({ name: 'name', label_trans: 'reg.name' }),
-    AddCol({ name: 'surname', label_trans: 'reg.surname' }),
-    AddCol({ name: 'email', label_trans: 'reg.email' }),
-    AddCol({ name: 'cell', label_trans: 'reg.cell' }),
-    AddCol({ name: 'profile.img', field: 'profile', subfield: 'img', label_trans: 'reg.img', sortable: false }),
-    AddCol({ name: 'date_reg', label_trans: 'reg.date_reg', fieldtype: tools.FieldType.date }),
-    AddCol({ name: 'perm', label_trans: 'reg.perm', fieldtype: tools.FieldType.binary, jointable: 'permissions' }),
-    AddCol(DeleteRec),
-    AddCol({
-      name: 'copyrec',
-      label_trans: 'event.duplicate',
-      align: 'right',
-      field: tools.NOFIELD,
-      sortable: false,
-      icon: 'fas fa-copy',
-      action: lists.MenuAction.DUPLICATE_RECTABLE,
-      askaction: 'db.duplicatedrecord',
-      visuonlyEditVal: true,
-      visible: true
-    })
   ]
+}
+
+export const func = {
+  gettablesList() {
+    return fieldsTable.tablesList.filter((rec) => (rec.onlyAdmin === UserStore.state.isAdmin) || (!rec.onlyAdmin))
+  }
 }

@@ -1,5 +1,6 @@
 <template>
     <div>
+        <CTitleBanner :title="title"></CTitleBanner>
         <form
                 autocorrect="off"
                 autocapitalize="off"
@@ -19,9 +20,11 @@
                     toolbar-toggle-color="yellow-8"
                     toolbar-bg="primary"
                     :toolbar="toolbarcomp"
+                    debounce="500"
                     :fonts="myfonts"
                     @input="changeval"
                     @paste.native="evt => pasteCapture(evt)"
+                    @keyup.enter.stop
                     v-model="myvalue">
             </q-editor>
         </form>
