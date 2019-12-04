@@ -53,6 +53,15 @@ function AddCol(params: IColGridTable) {
   }
 }
 
+export const colmailinglist = [
+  AddCol({ name: 'name', label_trans: 'reg.name' }),
+  AddCol({ name: 'surname', label_trans: 'reg.surname' }),
+  AddCol({ name: 'email', label_trans: 'reg.email' }),
+  AddCol({ name: 'statesub', label_trans: 'newsletter.statesub', fieldtype: tools.FieldType.boolean }),
+  AddCol({ name: 'lastid_newstosent', label_trans: 'reg.lastid_newstosent', fieldtype: tools.FieldType.string }),
+  AddCol(DeleteRec)
+]
+
 export const colopzemail = [
   AddCol({ name: 'key', label_trans: 'col.key' }),
   AddCol({ name: 'label_it', label_trans: 'col.label' }),
@@ -76,19 +85,20 @@ export const coltemplemail = [
   AddCol(DeleteRec),
   AddCol(DuplicateRec)
 ]
-
+// SHOW_LAST_N_EV
 export const colnewstosent = [
   AddCol({ name: 'label', label_trans: 'event.title' }),
-  AddCol({ name: 'datetoSent', label_trans: 'news.datetoSent', fieldtype: tools.FieldType.date }),
-  AddCol({ name: 'activate', label_trans: 'news.activate', fieldtype: tools.FieldType.boolean }),
-  AddCol({ name: 'numemail_tot', label_trans: 'news.numemail_tot', fieldtype: tools.FieldType.number }),
-  AddCol({ name: 'numemail_sent', label_trans: 'news.numemail_sent', fieldtype: tools.FieldType.number }),
-  AddCol({ name: 'datestartJob', label_trans: 'news.datestartJob', fieldtype: tools.FieldType.date }),
-  AddCol({ name: 'datefinishJob', label_trans: 'news.datefinishJob', fieldtype: tools.FieldType.date }),
-  AddCol({ name: 'lastemailsent_Job', label_trans: 'news.lastemailsent_Job', fieldtype: tools.FieldType.date }),
-  AddCol({ name: 'starting_job', label_trans: 'news.starting_job', fieldtype: tools.FieldType.boolean }),
-  AddCol({ name: 'finish_job', label_trans: 'news.finish_job', fieldtype: tools.FieldType.boolean }),
-  AddCol({ name: 'error_job', label_trans: 'news.error_job', fieldtype: tools.FieldType.string }),
+  AddCol({ name: 'templemail_str', label_trans: 'newsletter.templemail' }),
+  AddCol({ name: 'datetoSent', label_trans: 'newsletter.datetoSent', fieldtype: tools.FieldType.date }),
+  AddCol({ name: 'activate', label_trans: 'newsletter.activate', fieldtype: tools.FieldType.boolean }),
+  AddCol({ name: 'numemail_tot', label_trans: 'newsletter.numemail_tot', fieldtype: tools.FieldType.number }),
+  AddCol({ name: 'numemail_sent', label_trans: 'newsletter.numemail_sent', fieldtype: tools.FieldType.number }),
+  AddCol({ name: 'datestartJob', label_trans: 'newsletter.datestartJob', fieldtype: tools.FieldType.date }),
+  AddCol({ name: 'datefinishJob', label_trans: 'newsletter.datefinishJob', fieldtype: tools.FieldType.date }),
+  AddCol({ name: 'lastemailsent_Job', label_trans: 'newsletter.lastemailsent_Job', fieldtype: tools.FieldType.date }),
+  AddCol({ name: 'starting_job', label_trans: 'newsletter.starting_job', fieldtype: tools.FieldType.boolean }),
+  AddCol({ name: 'finish_job', label_trans: 'newsletter.finish_job', fieldtype: tools.FieldType.boolean }),
+  AddCol({ name: 'error_job', label_trans: 'newsletter.error_job', fieldtype: tools.FieldType.string }),
   AddCol(DeleteRec),
   AddCol(DuplicateRec)
 ]
@@ -134,13 +144,6 @@ const colTablePermission = [
   AddCol(DeleteRec)
 ]
 
-const colmailinglist = [
-  AddCol({ name: 'name', label_trans: 'reg.name' }),
-  AddCol({ name: 'surname', label_trans: 'reg.surname' }),
-  AddCol({ name: 'email', label_trans: 'reg.email' }),
-  AddCol({ name: 'lastid_newstosent', label_trans: 'reg.lastid_newstosent', fieldtype: tools.FieldType.string }),
-  AddCol(DeleteRec)
-]
 
 const colTableOperator = [
   AddCol({ name: 'username', label_trans: 'reg.username' }),

@@ -8,7 +8,7 @@
 
 
                     <CFacebookFrame myclass="text-center" :fbimage="getValDb('FBPAGE_IMG', false)"
-                                    :urlfbpage="getValDb('FBPAGE_FRAME')" :title="getValDb('FBPAGE_TITLE', false)">
+                                    :urlfbpage="getValDb('FBPAGE_FRAME', false)" :title="getValDb('FBPAGE_TITLE', false)">
 
                     </CFacebookFrame>
 
@@ -65,7 +65,7 @@
                             <div class="mycontacts_text">
                                 <i v-if="getValDb('MAIN_EMAIL', false)" aria-hidden="true"
                                    class="q-icon fas fa-envelope q-mx-sm"></i>
-                                <a :href="`mailto:` + getValDb('MAIN_EMAIL', false)" class="links">{{ getValDb('MAIN_EMAIL')
+                                <a :href="`mailto:` + getValDb('MAIN_EMAIL', false)" class="links">{{ getValDb('MAIN_EMAIL', false)
                                     }}</a><br>
                                 <div style="margin-bottom: 20px;"></div>
                                 <div v-for="rec in getarrValDb('CONTACTS_EMAIL_CELL', false)"

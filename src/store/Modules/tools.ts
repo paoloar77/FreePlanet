@@ -2669,12 +2669,15 @@ export const tools = {
 
       return mywidth
     } else {
-      let myw = mywidth + ((this.getwidth(mythis) - mywidth) * 0.4)
+      console.log('this.getwidth(mythis) = ', this.getwidth(mythis))
+      let myw = mywidth + ((this.getwidth(mythis) - mywidth) * 0.6)
+      console.log('myw1 = ', myw)
       if (myw > maxwidth)
         myw = maxwidth
       if (myw > this.getwidth(mythis) - 20)
         myw = this.getwidth(mythis) - 20
 
+      console.log('myw = ', myw)
       return myw
     }
   },
@@ -2682,18 +2685,6 @@ export const tools = {
   getheightbywidth(mythis, mywidth, myheight, maxwidth) {
     const myw = this.getwidthscale(mythis, mywidth, maxwidth)
     return myw * (myheight / mywidth)
-  },
-
-  getheightscale(mythis, myheight, maxheight) {
-    if (this.isMobile()) {
-      return myheight
-    } else {
-      let myh = myheight + ((this.getheight(mythis) - myheight) * 0.3)
-      if (myh > maxheight)
-        myh = maxheight
-
-      return myh
-    }
   },
 
   isIsoDate(str) {
@@ -2829,6 +2820,9 @@ export const tools = {
   isObject(anything) {
     //Object.create(null) instanceof Object → false
     return Object(anything) === anything
+  },
+  isDebug() {
+    return process.env.DEV
   }
 
 // getLocale() {

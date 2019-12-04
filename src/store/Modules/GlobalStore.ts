@@ -221,6 +221,11 @@ namespace Getters {
 
   }, 'getValueSettingsByKey')
 
+  const gettemplemailbyId = b.read((mystate: IGlobalState) => (templid): string => {
+    const myrec = mystate.templemail.find((rec) => rec._id === templid)
+    return (!!myrec) ? myrec.subject : ''
+  }, 'gettemplemailbyId')
+
   export const getters = {
     get testpao1_getter_contatore() {
       return testpao1_getter_contatore()
@@ -266,6 +271,10 @@ namespace Getters {
 
     get getrecSettingsByKey() {
       return getrecSettingsByKey()
+    },
+
+    get gettemplemailbyId() {
+      return gettemplemailbyId()
     },
 
     get t() {

@@ -27,6 +27,7 @@ export interface ICfgData {
 }
 
 export interface ITemplEmail {
+  _id?: string
   subject?: string
   content?: string
   options?: ISettings[]
@@ -52,6 +53,7 @@ export interface INewsToSent {
   _id: string
   idapp?: string
   label?: string
+  templemail_str?: string
   numemail_tot?: number
   numemail_sent?: number
   datetoSent?: Date

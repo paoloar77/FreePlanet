@@ -709,7 +709,8 @@ namespace Actions {
       await Projects.actions.dbLoad({ checkPending: true, onlyiffirsttime: true })
 
     GlobalStore.state.finishLoading = true
-    console.log('finishLoading', GlobalStore.state.finishLoading)
+    if (tools.isDebug())
+      console.log('finishLoading', GlobalStore.state.finishLoading)
 
     // document.dispatchEvent(new Event('custom-post-render-event'))
 
