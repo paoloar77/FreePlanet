@@ -10,12 +10,17 @@ const msgglobal = {
       tableslist: 'Tabelle',
     },
     otherpages: {
+      error404: 'error404',
+      error404def: 'error404def',
       admin : {
         menu: 'Amministrazione',
         eventlist: 'Le tue Prenotazioni',
         usereventlist: 'Prenotazioni Utenti',
         userlist: 'Lista Utenti',
         tableslist: 'Lista Tabelle',
+        newsletter: 'Newsletter',
+        pages: 'Pagine',
+        media: 'Media',
       },
       manage: {
         menu: 'Gestione',
@@ -30,6 +35,7 @@ const msgglobal = {
       write: 'scrive'
     },
     dialog: {
+      close: 'Chiudi',
       ok: 'Ok',
       yes: 'Si',
       no: 'No',
@@ -73,7 +79,9 @@ const msgglobal = {
           verify_email: 'Verifica la tua email',
           go_login: 'Torna al Login',
           incorrect_input: 'Inserimento incorretto.',
-          link_sent: 'Ora leggi la tua email e conferma la registrazione'
+          link_sent: 'Ora leggi la tua email e conferma la registrazione',
+          title_unsubscribe: 'Disiscrizione alla newsletter',
+          title_unsubscribe_done: 'Disiscrizione completata correttamente',
         }
       }
     },
@@ -85,6 +93,15 @@ const msgglobal = {
     user: {
       notregistered: 'Devi registrarti al servizio prima di porter memorizzare i dati',
       loggati: 'Utente non loggato'
+    },
+    templemail: {
+      subject: 'Oggetto Email',
+      testoheadermail: 'Intestazione Email',
+      content: 'Contenuto',
+      img: 'Immagine 1',
+      img2: 'Immagine 2',
+      content2: 'Contenuto 2',
+      options: 'Opzioni',
     },
     reg: {
       page_title: 'Registrazione',
@@ -130,6 +147,7 @@ const msgglobal = {
     },
     op: {
       qualification: 'Qualifica',
+      usertelegram: 'Username Telegram',
       disciplines: 'Discipline',
       certifications: 'Certificazioni',
       intro: 'Introduzione',
@@ -163,6 +181,7 @@ const msgglobal = {
         undefined: 'non definito'
       }
     },
+    showbigmap: 'Mostra la mappa più grande',
     todo: {
       titleprioritymenu: 'Priorità:',
       inserttop: 'Inserisci il Task in cima',
@@ -214,7 +233,13 @@ const msgglobal = {
       code: 'Id',
       whereicon: 'Icona',
     },
+    col: {
+      label: 'Etichetta',
+      value: 'Valore',
+      type: 'Tipo'
+    },
     cal: {
+      num: 'Numero',
       booked: 'Prenotato',
       booked_error: 'Prenotazione non avvenuta. Riprovare più tardi',
       sendmsg_error: 'Messaggio non inviato. Riprovare più tardi',
@@ -230,6 +255,8 @@ const msgglobal = {
       cancelederrorevent: 'Cancellazione Evento non effettuata, Riprovare',
       event: 'Evento',
       starttime: 'Dalle',
+      nextevent: 'Prossimo Evento',
+      readall: 'Leggi tutto',
       enddate: 'al',
       endtime: 'alle',
       duration: 'Durata',
@@ -246,12 +273,13 @@ const msgglobal = {
       selnumpeople: 'Partecipanti',
       selnumpeople_short: 'Num',
       msgbooking: 'Messaggio da inviare',
-      showinfo: 'Vedi Info',
-      bookingtextdefault: 'Mi prenoto all\'evento',
+      showpdf: 'Vedi PDF',
+      bookingtextdefault: 'Prenoto per',
       bookingtextdefault_of: 'di',
       data: 'Data',
       teachertitle: 'Insegnante',
       peoplebooked: 'Prenotaz.',
+      showlastschedule: 'Vedi tutto il Calendario',
     },
     msgs: {
       message: 'Messaggio',
@@ -264,6 +292,7 @@ const msgglobal = {
       short_tit: 'Titolo Breve',
       title: 'Titolo',
       details: 'Dettagli',
+      bodytext: 'Testo Evento',
       dateTimeStart: 'Data Inizio',
       dateTimeEnd: 'Data Fine',
       bgcolor: 'Colore Sfondo',
@@ -275,6 +304,7 @@ const msgglobal = {
       contribtype: 'Tipo Contributo',
       price: 'Contributo',
       askinfo: 'Chiedi Info',
+      showpage: 'Vedi Pagina',
       infoafterprice: 'Note dopo la Quota',
       teacher: 'Insegnante',  // teacherid
       teacher2: 'Insegnante2', // teacherid2
@@ -288,7 +318,14 @@ const msgglobal = {
       deleted: 'Eliminato',
       duplicate: 'Duplica',
       notempty: 'Il campo non può essere vuoto',
-      modified: 'Modificato'
+      modified: 'Modificato',
+      showinhome: 'Mostra nella Home',
+      showinnewsletter: 'Mostra nella Newsletter',
+      color: 'Colore del titolo',
+    },
+    disc: {
+      typol_code: 'Codice Tipologia',
+      order: 'Ordinamento',
     },
     newsletter: {
       title: 'Desideri ricevere la nostra Newsletter?',
@@ -303,6 +340,27 @@ const msgglobal = {
       acceptlicense: 'Accetto la licenza e i termini',
       license: 'Devi prima accettare la licenza e i termini',
       submitted: 'Iscritto',
+      menu: 'Newsletter1',
+      template: 'Modelli Email',
+      sendemail: 'Invia',
+      check: 'Controlla',
+      sent: 'Già Inviate',
+      mailinglist: 'Lista Contatti',
+      settings: 'Impostazioni',
+      serversettings: 'Server',
+      others: 'Altro',
+      templemail: 'Modello Email',
+      datetoSent: 'DataOra Invio',
+      activate: 'Attivato',
+      numemail_tot: 'Email Totali',
+      numemail_sent: 'Email Inviate',
+      datestartJob: 'Inizio Invio',
+      datefinishJob: 'Fine Invio',
+      lastemailsent_Job: 'Ultima Inviata',
+      starting_job: 'Invio Iniziato',
+      finish_job: 'Invio Terminato',
+      error_job: 'Info Errori',
+      statesub: 'Sottoscritto',
     },
     privacy_policy:'Privacy Policy',
     cookies: 'Usiamo i Cookie per una migliore prestazione web.'
@@ -322,6 +380,9 @@ const msgglobal = {
         usereventlist: 'Reserva Usuarios',
         userlist: 'Lista de usuarios',
         tableslist: 'Listado de tablas',
+        newsletter: 'Newsletter',
+        pages: 'Páginas',
+        media: 'Medios',
       },
       manage: {
         menu: 'Gestionar',
@@ -336,6 +397,7 @@ const msgglobal = {
       write: 'escribe'
     },
     dialog: {
+      close: 'Cerrar',
       ok: 'Vale',
       yes: 'Sí',
       no: 'No',
@@ -379,7 +441,9 @@ const msgglobal = {
           verify_email: 'Revisa tu email',
           go_login: 'Vuelve al Login',
           incorrect_input: 'Entrada correcta.',
-          link_sent: 'Ahora lea su correo electrónico y confirme el registro'
+          link_sent: 'Ahora lea su correo electrónico y confirme el registro',
+          title_unsubscribe: 'Anular suscripción al boletín',
+          title_unsubscribe_done: 'Suscripción completada con éxito',
         }
       }
     },
@@ -391,6 +455,15 @@ const msgglobal = {
     user: {
       notregistered: 'Debe registrarse en el servicio antes de poder almacenar los datos',
       loggati: 'Usuario no ha iniciado sesión'
+    },
+    templemail: {
+      subject: 'Objecto Email',
+      testoheadermail: 'Encabezamiento Email',
+      content: 'Contenido',
+      img: 'Imagen 1',
+      img2: 'Imagen 2',
+      content2: 'Contenuto 2',
+      options: 'Opciones',
     },
     reg: {
       page_title: 'Registro',
@@ -429,6 +502,7 @@ const msgglobal = {
     },
     op: {
       qualification: 'Calificación',
+      usertelegram: 'Username Telegram',
       disciplines: 'Disciplinas',
       certifications: 'Certificaciones',
       intro: 'Introducción',
@@ -462,6 +536,7 @@ const msgglobal = {
         undefined: 'no definido'
       }
     },
+    showbigmap: 'Mostrar el mapa más grande',
     todo: {
       titleprioritymenu: 'Prioridad:',
       inserttop: 'Ingrese una nueva Tarea arriba',
@@ -514,7 +589,13 @@ const msgglobal = {
       code: 'Id',
       whereicon: 'Icono',
     },
+    col: {
+      label: 'Etichetta',
+      value: 'Valore',
+      type: 'Tipo'
+    },
     cal: {
+      num: 'Número',
       booked: 'Reservado',
       booked_error: 'Reserva fallida. Intenta nuevamente más tarde',
       sendmsg_error: 'Mensaje no enviado Intenta nuevamente más tarde',
@@ -527,6 +608,8 @@ const msgglobal = {
       cancelederrorbooking: 'Cancelación no realizada, intente nuevamente más tarde',
       event: 'Evento',
       starttime: 'Inicio',
+      nextevent: 'Próximo evento',
+      readall: 'Lee todo',
       enddate: 'a',
       endtime: 'fin',
       duration: 'Duración',
@@ -543,12 +626,13 @@ const msgglobal = {
       selnumpeople: 'Partecipantes',
       selnumpeople_short: 'Num',
       msgbooking: 'Mensaje para enviar',
-      showinfo: 'Ver Info',
-      bookingtextdefault: 'Reservo el evento',
+      showpdf: 'Ver PDF',
+      bookingtextdefault: 'Reservo para',
       bookingtextdefault_of: 'de',
       data: 'Fecha',
       teachertitle: 'Maestro',
       peoplebooked: 'Reserv.',
+      showlastschedule: 'Ver todo el calendario',
     },
     msgs: {
       message: 'Mensaje',
@@ -561,6 +645,7 @@ const msgglobal = {
       short_tit: 'Título Corto',
       title: 'Título',
       details: 'Detalles',
+      bodytext: 'Texto del evento',
       dateTimeStart: 'Fecha de Inicio',
       dateTimeEnd: 'Fecha Final',
       bgcolor: 'Color de fondo',
@@ -572,6 +657,7 @@ const msgglobal = {
       contribtype: 'Tipo de Contribución',
       price: 'Precio',
       askinfo: 'Solicitar información',
+      showpage: 'Ver página',
       infoafterprice: 'notas después del precio',
       teacher: 'Profesor',  // teacherid
       teacher2: 'Profesor2', // teacherid2
@@ -585,7 +671,14 @@ const msgglobal = {
       deleted: 'Eliminado',
       duplicate: 'Duplica',
       notempty: 'El campo no puede estar vacío.',
-      modified: 'Modificado'
+      modified: 'Modificado',
+      showinhome: 'Mostrar en la Home',
+      showinnewsletter: 'Mostrar en el boletín',
+      color: 'Titulo Color',
+    },
+    disc: {
+      typol_code: 'Código Tipologìa',
+      order: 'Clasificación',
     },
     newsletter: {
       title: '¿Desea recibir nuestro boletín informativo?',
@@ -599,7 +692,28 @@ const msgglobal = {
       typesomething: 'Llenar el campo',
       acceptlicense: 'Acepto la licencia y los términos',
       license: 'Necesitas aceptar la licencia y los términos primero',
-      submitted: 'Subscrito'
+      submitted: 'Subscrito',
+      menu: 'Newsletter1',
+      template: 'Plantillas de Email',
+      sendemail: 'Enviar',
+      check: 'Verificar',
+      sent: 'Ya eniado',
+      mailinglist: 'Lista de contactos',
+      settings: 'Configuración',
+      serversettings: 'Servidor',
+      others: 'Otro',
+      templemail: 'Plantilla de Email',
+      datetoSent: 'Fecha y Ora de Envio',
+      activate: 'Activado',
+      numemail_tot: 'Email Total',
+      numemail_sent: 'Email Enviados',
+      datestartJob: 'Inicio Envio',
+      datefinishJob: 'Fin Envio',
+      lastemailsent_Job: 'Ùltimo enviado',
+      starting_job: 'Comenzó a enviar',
+      finish_job: 'Envio terminado',
+      error_job: 'Info Error',
+      statesub: 'Subscribir',
     },
     privacy_policy:'Política de privacidad',
     cookies: 'Utilizamos cookies para un mejor rendimiento web.'
@@ -619,6 +733,9 @@ const msgglobal = {
         usereventlist: 'Réservation Utilisateur',
         userlist: 'Liste d\'utilisateurs',
         tableslist: 'Liste des tables',
+        newsletter: 'Newsletter',
+        pages: 'Pages',
+        media: 'Médias',
       },
       manage: {
         menu: 'Gérer',
@@ -633,6 +750,7 @@ const msgglobal = {
       write: 'écrit'
     },
     dialog: {
+      close: 'Fermer',
       ok: 'Bien',
       yes: 'Oui',
       no: 'Non',
@@ -676,7 +794,9 @@ const msgglobal = {
           verify_email: 'Vérifiez votre email',
           go_login: 'Retour à la connexion',
           incorrect_input: 'Entrée correcte.',
-          link_sent: 'Maintenant, lisez votre email et confirmez votre inscription'
+          link_sent: 'Maintenant, lisez votre email et confirmez votre inscription',
+          title_unsubscribe: 'Se désabonner de la newsletter',
+          title_unsubscribe_done: 'Abonnement terminé avec succès',
         }
       }
     },
@@ -688,6 +808,15 @@ const msgglobal = {
     user: {
       notregistered: 'Vous devez vous inscrire auprès du service avant de pouvoir stocker les données.',
       loggati: 'L\'utilisateur n\'est pas connecté'
+    },
+    templemail: {
+      subject: 'Objet Email',
+      testoheadermail: 'en-tête de courrier électronique',
+      content: 'Contenu',
+      img: 'Image 1',
+      img2: 'Image 2',
+      content2: 'Contenu 2',
+      options: 'Options',
     },
     reg: {
       incorso: 'Inscription en cours...',
@@ -725,6 +854,7 @@ const msgglobal = {
     },
     op: {
       qualification: 'Qualification',
+      usertelegram: 'Username Telegram',
       disciplines: 'Disciplines',
       certifications: 'Certifications',
       intro: 'Introduction',
@@ -758,6 +888,7 @@ const msgglobal = {
         undefined: 'non défini'
       }
     },
+    showbigmap: 'Montrer la plus grande carte',
     todo: {
       titleprioritymenu: 'Prioridad:',
       inserttop: 'Ingrese una nueva Tarea arriba',
@@ -810,7 +941,13 @@ const msgglobal = {
       code: 'Id',
       whereicon: 'icône',
     },
+    col: {
+      label: 'Etichetta',
+      value: 'Valore',
+      type: 'Tipo'
+    },
     cal: {
+      num: 'Nombre',
       booked: 'Réservé',
       booked_error: 'La réservation a échoué. Réessayez plus tard',
       sendmsg_error: 'Message non envoyé. Réessayez plus tard',
@@ -823,6 +960,8 @@ const msgglobal = {
       cancelederrorbooking: 'Annulation non effectuée, réessayez plus tard',
       event: 'événement',
       starttime: 'Accueil',
+      nextevent: 'Prochain événement',
+      readall: 'Tout lire',
       enddate: 'au',
       endtime: 'fin',
       duration: 'Durée',
@@ -839,12 +978,13 @@ const msgglobal = {
       selnumpeople: 'Participants',
       selnumpeople_short: 'Num',
       msgbooking: 'Message à envoyer',
-      showinfo: 'Voir Info',
-      bookingtextdefault: 'Je réserve l\'événement',
+      showpdf: 'Voir PDF',
+      bookingtextdefault: 'Je réserve',
       bookingtextdefault_of: 'du',
       data: 'Date',
       teachertitle: 'Professeur',
       peoplebooked: 'Réserv.',
+      showlastschedule: 'Voir tout le calendrier',
     },
     msgs: {
       message: 'Message',
@@ -857,6 +997,7 @@ const msgglobal = {
       short_tit: 'Titre abrégé\'',
       title: 'Titre',
       details: 'Détails',
+      bodytext: 'texte de l\'événement',
       dateTimeStart: 'Data Initiale',
       dateTimeEnd: 'Date de fin',
       bgcolor: 'Couleur de fond',
@@ -868,6 +1009,7 @@ const msgglobal = {
       contribtype: 'Type de contribution',
       price: 'Prix',
       askinfo: 'Demander des infos',
+      showpage: 'Voir la page',
       infoafterprice: 'Notes après le prix',
       teacher: 'Enseignant',  // teacherid
       teacher2: 'Enseignant2', // teacherid2
@@ -881,7 +1023,14 @@ const msgglobal = {
       deleted: 'Supprimé',
       duplicate: 'Duplique',
       notempty: 'Le champ ne peut pas être vide',
-      modified: 'modifié'
+      modified: 'modifié',
+      showinhome: 'Montrer à la Home',
+      showinnewsletter: 'Afficher dans la Newsletter',
+      color: 'Couleur du titre',
+    },
+    disc: {
+      typol_code: 'Type de code',
+      order: 'Ordre',
     },
     newsletter: {
       title: 'Souhaitez-vous recevoir notre newsletter?',
@@ -895,7 +1044,28 @@ const msgglobal = {
       typesomething: 'Remplir le champ',
       acceptlicense: 'J\'accepte la licence et les termes',
       license: 'Vous devez d\'abord accepter la licence et les termes',
-      submitted: 'Abonné'
+      submitted: 'Abonné',
+      menu: 'Newsletter1',
+      template: 'Modeles Email',
+      sendemail: 'Envoyer',
+      check: 'Chèque',
+      sent: 'Dèjà envoyé',
+      mailinglist: 'Leste de contacts',
+      settings: 'Paramèters',
+      serversettings: 'Serveur',
+      others: 'Autres',
+      templemail: 'Model Email',
+      datetoSent: 'Date et heure d\'envoi',
+      activate: 'Activé',
+      numemail_tot: 'Total Email',
+      numemail_sent: 'Emails envoyés',
+      datestartJob: 'Inizio Invio',
+      datefinishJob: 'Fin envoi',
+      lastemailsent_Job: 'Dernier envoyé',
+      starting_job: 'Envoyé',
+      finish_job: 'Envoy Terminé',
+      error_job: 'info d\'erreur',
+      statesub: 'Abonné',
     },
     privacy_policy:'Politique de confidentialité',
     cookies: 'Nous utilisons des cookies pour améliorer les performances Web.'
@@ -915,6 +1085,9 @@ const msgglobal = {
         usereventlist: 'Users Booking',
         userlist: 'Users List',
         tableslist: 'List of tables',
+        newsletter: 'Newsletter',
+        pages: 'Pages',
+        media: 'Medias',
       },
       manage: {
         menu: 'Manage',
@@ -929,6 +1102,7 @@ const msgglobal = {
       write: 'write'
     },
     dialog: {
+      close: 'Close',
       ok: 'Ok',
       yes: 'Yes',
       no: 'No',
@@ -972,7 +1146,9 @@ const msgglobal = {
           verify_email: 'Verify your email',
           go_login: 'Back to Login',
           incorrect_input: 'Incorrect input.',
-          link_sent: 'Now read your email and confirm registration'
+          link_sent: 'Now read your email and confirm registration',
+          title_unsubscribe: 'Unsubscribe to the newsletter',
+          title_unsubscribe_done: 'Subscription completed successfully',
         }
       }
     },
@@ -984,6 +1160,15 @@ const msgglobal = {
     user: {
       notregistered: 'You need first to SignUp before storing data',
       loggati: 'User not logged in'
+    },
+    templemail: {
+      subject: 'Subject Email',
+      testoheadermail: 'Header Email',
+      content: 'Content',
+      img: 'Image 1',
+      img2: 'Image 2',
+      content2: 'Content 2',
+      options: 'Options',
     },
     reg: {
       incorso: 'Registration please wait...',
@@ -1021,6 +1206,7 @@ const msgglobal = {
     },
     op: {
       qualification: 'Qualification',
+      usertelegram: 'Username Telegram',
       disciplines: 'Disciplines',
       certifications: 'Certifications',
       intro: 'Introduction',
@@ -1053,6 +1239,7 @@ const msgglobal = {
         undefined: 'undefined'
       }
     },
+    showbigmap: 'Show the largest map',
     todo: {
       titleprioritymenu: 'Priority:',
       inserttop: 'Insert Task at the top',
@@ -1105,7 +1292,13 @@ const msgglobal = {
       code: 'Id',
       whereicon: 'Icon',
     },
+    col: {
+      label: 'Etichetta',
+      value: 'Valore',
+      type: 'Tipo'
+    },
     cal: {
+      num: 'Number',
       booked: 'Booked',
       booked_error: 'Reservation failed. Try again later',
       sendmsg_error: 'Message not sent. Try again later',
@@ -1118,6 +1311,8 @@ const msgglobal = {
       cancelederrorbooking: 'Cancellation unsuccessfully, try again later',
       event: 'Event',
       starttime: 'From',
+      nextevent: 'Next Event',
+      readall: 'Read All',
       enddate: 'to',
       endtime: 'to',
       duration: 'Duration',
@@ -1134,12 +1329,13 @@ const msgglobal = {
       selnumpeople: 'Participants',
       selnumpeople_short: 'Num',
       msgbooking: 'Message to send',
-      showinfo: 'Show Info',
-      bookingtextdefault: 'I book the event',
+      showpdf: 'Show PDF',
+      bookingtextdefault: 'I book for',
       bookingtextdefault_of: 'of',
       data: 'Date',
       teachertitle: 'Teacher',
       peoplebooked: 'Booked',
+      showlastschedule: 'See Full Schedule',
     },
     msgs: {
       message: 'Messaggio',
@@ -1152,6 +1348,7 @@ const msgglobal = {
       short_tit: 'Short Title',
       title: 'Title',
       details: 'Details',
+      bodytext: 'Event Text',
       dateTimeStart: 'Date Start',
       dateTimeEnd: 'Date End',
       bgcolor: 'Background color',
@@ -1163,6 +1360,7 @@ const msgglobal = {
       contribtype: 'Contribute Type',
       price: 'Price',
       askinfo: 'Ask for Info',
+      showpage: 'Show Page',
       infoafterprice: 'Info after Price',
       teacher: 'Teacher',  // teacherid
       teacher2: 'Teacher2', // teacherid2
@@ -1176,7 +1374,14 @@ const msgglobal = {
       deleted: 'Deleted',
       duplicate: 'Duplicate',
       notempty: 'Field cannot be empty',
-      modified: 'Modified'
+      modified: 'Modified',
+      showinhome: 'Show in Home',
+      showinnewsletter: 'Show in the Newsletter',
+      color: 'Title Color',
+    },
+    disc: {
+      typol_code: 'Tipology Code',
+      order: 'Order',
     },
     newsletter: {
       title: 'Would you like to receive our Newsletter?',
@@ -1190,7 +1395,28 @@ const msgglobal = {
       typesomething: 'Please type something',
       acceptlicense: 'I accept the license and terms',
       license: 'You need to accept the license and terms first',
-      submitted: 'Subscribed'
+      submitted: 'Subscribed',
+      menu: 'Newsletter1',
+      template: 'Template Email',
+      sendemail: 'Send',
+      check: 'Check',
+      sent: 'Already Sent',
+      mailinglist: 'Mailing List',
+      settings: 'Settings',
+      serversettings: 'Server',
+      others: 'Others',
+      templemail: 'Templates Email',
+      datetoSent: 'DateTime Send',
+      activate: 'Activate',
+      numemail_tot: 'Email Total',
+      numemail_sent: 'Email Sent',
+      datestartJob: 'Start Job',
+      datefinishJob: 'End Job',
+      lastemailsent_Job: 'Last Sent',
+      starting_job: 'Job started',
+      finish_job: 'Sent terminated',
+      error_job: 'Info Error',
+      statesub: 'Subscribed',
     },
     privacy_policy:'Privacy Policy',
     cookies: 'We use cookies for better web performance.'
@@ -1210,6 +1436,9 @@ const msgglobal = {
         usereventlist: 'Users Booking',
         userlist: 'Users List',
         tableslist: 'List of tables',
+        newsletter: 'Newsletter',
+        pages: 'Pages',
+        media: 'Medias',
       },
       manage: {
         menu: 'Manage',
@@ -1224,6 +1453,7 @@ const msgglobal = {
       write: 'write'
     },
     dialog: {
+      close: 'Close',
       ok: 'Ok',
       yes: 'Yes',
       no: 'No',
@@ -1267,7 +1497,9 @@ const msgglobal = {
           verify_email: 'Verify your email',
           go_login: 'Back to Login',
           incorrect_input: 'Incorrect input.',
-          link_sent: 'Now read your email and confirm registration'
+          link_sent: 'Now read your email and confirm registration',
+          title_unsubscribe: 'Disiscrizione alla newsletter',
+          title_unsubscribe_done: 'Disiscrizione completata correttamente',
         }
       }
     },
@@ -1279,6 +1511,15 @@ const msgglobal = {
     user: {
       notregistered: 'You need first to SignUp before storing data',
       loggati: 'User not logged in'
+    },
+    templemail: {
+      subject: 'Subject Email',
+      testoheadermail: 'Header Email',
+      content: 'Content',
+      img: 'Image 1',
+      img2: 'Image 2',
+      content2: 'Content 2',
+      options: 'Options',
     },
     reg: {
       page_title: 'Registration',
@@ -1317,6 +1558,7 @@ const msgglobal = {
     },
     op: {
       qualification: 'Qualification',
+      usertelegram: 'Username Telegram',
       disciplines: 'Disciplines',
       certifications: 'Certifications',
       intro: 'Introduction',
@@ -1350,6 +1592,7 @@ const msgglobal = {
         undefined: 'undefined'
       }
     },
+    showbigmap: 'Show the largest map',
     todo: {
       titleprioritymenu: 'Priority:',
       inserttop: 'Insert Task at the top',
@@ -1402,7 +1645,13 @@ const msgglobal = {
       code: 'Id',
       whereicon: 'Icon',
     },
+    col: {
+      label: 'Etichetta',
+      value: 'Valore',
+      type: 'Tipo'
+    },
     cal: {
+      num: 'Number',
       booked: 'Booked',
       booked_error: 'Reservation failed. Try again later',
       sendmsg_error: 'Message not sent. Try again later',
@@ -1415,6 +1664,8 @@ const msgglobal = {
       cancelederrorbooking: 'Cancellation unsuccessfully, try again later',
       event: 'Event',
       starttime: 'From',
+      nextevent: 'Next Event',
+      readall: 'Read All',
       enddate: 'to',
       endtime: 'to',
       duration: 'Duration',
@@ -1431,12 +1682,13 @@ const msgglobal = {
       selnumpeople: 'Participants',
       selnumpeople_short: 'Num',
       msgbooking: 'Message to send',
-      showinfo: 'Show Info',
-      bookingtextdefault: 'I book the event',
+      showpdf: 'Show PDF',
+      bookingtextdefault: 'I book for',
       bookingtextdefault_of: 'of',
       data: 'Date',
       teachertitle: 'Teacher',
       peoplebooked: 'Booked',
+      showlastschedule: 'See Full Schedule',
     },
     msgs: {
       message: 'Messaggio',
@@ -1449,6 +1701,7 @@ const msgglobal = {
       short_tit: 'Short Title',
       title: 'Title',
       details: 'Details',
+      bodytext: 'Event Text',
       dateTimeStart: 'Date Start',
       dateTimeEnd: 'Date End',
       bgcolor: 'Background color',
@@ -1460,6 +1713,7 @@ const msgglobal = {
       contribtype: 'Contribute Type',
       price: 'Price',
       askinfo: 'Ask for Info',
+      showpage: 'Show Page',
       infoafterprice: 'Info after Price',
       teacher: 'Teacher',  // teacherid
       teacher2: 'Teacher2', // teacherid2
@@ -1473,7 +1727,14 @@ const msgglobal = {
       deleted: 'Deleted',
       duplicate: 'Duplicate',
       notempty: 'Field cannot be empty',
-      modified: 'Modified'
+      modified: 'Modified',
+      showinhome: 'Show in Home',
+      showinnewsletter: 'Show in the Newsletter',
+      color: 'Title Color',
+    },
+    disc: {
+      typol_code: 'Tipology Code',
+      order: 'Order',
     },
     newsletter: {
       title: 'Would you like to receive our Newsletter?',
@@ -1487,7 +1748,28 @@ const msgglobal = {
       typesomething: 'Please type something',
       acceptlicense: 'I accept the license and terms',
       license: 'You need to accept the license and terms first',
-      submitted: 'Subscribed'
+      submitted: 'Subscribed',
+      menu: 'Newsletter1',
+      template: 'Template Email',
+      sendemail: 'Send',
+      check: 'Check',
+      sent: 'Already Sent',
+      mailinglist: 'Mailing List',
+      settings: 'Settings',
+      serversettings: 'Server',
+      others: 'Others',
+      templemail: 'Templates Email',
+      datetoSent: 'DateTime Send',
+      activate: 'Activate',
+      numemail_tot: 'Email Total',
+      numemail_sent: 'Email Sent',
+      datestartJob: 'Start Job',
+      datefinishJob: 'End Job',
+      lastemailsent_Job: 'Last Sent',
+      starting_job: 'Job started',
+      finish_job: 'Sent terminated',
+      error_job: 'Info Error',
+      statesub: 'Subscribed',
     },
     privacy_policy:'Privacy Policy',
     cookies: 'Wir verwenden Cookies für eine bessere Webleistung.'

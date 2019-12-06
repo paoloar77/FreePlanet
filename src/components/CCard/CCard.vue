@@ -9,7 +9,7 @@
 
         <q-tabs v-model="tab" class="text-teal">
             <q-tab label="Info" name="one"></q-tab>
-            <q-tab label="Storia" name="two"></q-tab>
+            <q-tab label="Biografia" name="two"></q-tab>
         </q-tabs>
 
         <q-separator></q-separator>
@@ -20,18 +20,29 @@
                 <div v-if="myop.certifications" class="text-subtitle-certificato">{{myop.certifications}}</div>
                 <div class="op__cell">
                     <q-icon class="flex-icon" name="mobile_friendly"></q-icon>
-                    <span class="q-mx-sm">{{myop.cell}}</span>
+                    <span class="q-ma-sm">{{myop.cell}}</span>
 
-                    <q-btn fab-mini icon="fab fa-whatsapp"
-                           color="green" type="a"
-                           size="xs"
+                    <div class="row justify-center margin_buttons q-gutter-lg">
+                        <q-btn v-if="myop.email" fab-mini icon="fas fa-envelope"
+                               color="blue-grey-6" type="a"
+                               size="sm"
+                               :href="tools.getemailto(myop.email)" target="__blank">
+                        </q-btn>
+                        <q-btn v-if="tools.getHttpForWhatsapp(myop.cell)" fab-mini icon="fab fa-whatsapp"
+                               color="green" type="a"
+                               size="sm"
+                               :href="tools.getHttpForWhatsapp(myop.cell)" target="__blank">
+                        </q-btn>
 
-                           :href="tools.getHttpForWhatsapp(myop.cell)" target="__blank">
-
-                    </q-btn>
+                        <q-btn v-if="tools.getHttpForTelegram(myop.usertelegram)" fab-mini icon="fab fa-telegram"
+                               color="blue" type="a"
+                               size="sm"
+                               :href="tools.getHttpForTelegram(myop.usertelegram)" target="__blank">
+                        </q-btn>
+                    </div>
                 </div>
                 <div class="op__email">
-                    <q-icon class="flex-icon" name="contact_mail"> </q-icon>&nbsp;
+                    <q-icon class="flex-icon" name="contact_mail"></q-icon>&nbsp;
                     <a :href="tools.getemailto(myop.email)" target="_blank">{{myop.email}}
                     </a>
                 </div>

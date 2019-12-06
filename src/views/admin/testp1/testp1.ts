@@ -23,11 +23,12 @@ export default class Testp1 extends Vue {
   public testpao1_array: (state: IGlobalState, miorec: ICfgServer) => ICfgServer[]
 
   @Watch('GlobalStore.state.testp1.mioarray', { immediate: true, deep: true })
-  array_changed() {
+  public array_changed() {
     console.log('*** array_changed *** ', GlobalStore.state.testp1.mioarray[GlobalStore.state.testp1.mioarray.length - 1])
   }
 
-  @Watch('$route.params.category') changecat() {
+  @Watch('$route.params.category')
+  public changecat() {
     // this.mytypetransgroup = ''
     console.log('PRIMA this.paramcategory', this.paramcategory)
     this.paramcategory = this.$route.params.category

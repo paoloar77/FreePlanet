@@ -14,11 +14,12 @@ import Quasar from 'quasar'
 import { FormNewsletter } from '../FormNewsletter'
 import { IUserState } from '../../model'
 import MixinBase from '../../mixins/mixin-base'
+import { CFacebookFrame } from '../CFacebookFrame'
 
 @Component({
   mixins: [MixinBase],
   name: 'Footer',
-  components: { Logo, FormNewsletter }
+  components: { Logo, FormNewsletter, CFacebookFrame }
 })
 
 export default class Footer extends Vue {
@@ -30,26 +31,34 @@ export default class Footer extends Vue {
     return tools
   }
 
-  get mythis() {
+  get mythisfoot() {
     return this
   }
 
   get TelegramSupport() {
-    return GlobalStore.getters.getValueSettingsByKey('TELEGRAM_SUPPORT')
+    return GlobalStore.getters.getValueSettingsByKey('TELEGRAM_SUPPORT', false)
   }
 
   get Whatsapp_Cell() {
-    return GlobalStore.getters.getValueSettingsByKey('WHATSAPP_CELL')
+    return GlobalStore.getters.getValueSettingsByKey('WHATSAPP_CELL', false)
+  }
+
+  get Telegram_UsernameHttp() {
+
+    return tools.getHttpForTelegram(GlobalStore.getters.getValueSettingsByKey('TELEGRAM_USERNAME', false))
   }
 
   get FBPage() {
-    const fb = GlobalStore.getters.getValueSettingsByKey('URL_FACEBOOK')
+    const fb = GlobalStore.getters.getValueSettingsByKey('URL_FACEBOOK', false)
     return fb
   }
 
   get InstagramPage() {
-    const insta = GlobalStore.getters.getValueSettingsByKey('URL_INSTAGRAM')
-    return insta
+    return GlobalStore.getters.getValueSettingsByKey('URL_INSTAGRAM', false)
+  }
+
+  get TwitterPage() {
+    return GlobalStore.getters.getValueSettingsByKey('URL_TWITTER', false)
   }
 
   get static_data() {

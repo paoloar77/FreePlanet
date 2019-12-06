@@ -39,21 +39,22 @@
                 <q-icon v-if="canEdit" name="event" class="cursor-pointer">
                     <q-popup-proxy v-model="showDateTimeScroller" @before-show="Opening" @before-hide="Closing">
 
-                        <q-date-time-scroller
+                        <q-scroller
                                 v-model="myvalue"
+                                view="date-time"
                                 :locale="toolsext.getLocale()"
-                                :hour24-format="true"
                                 :rounded-borders="true"
                                 border-color="#2196f3"
                                 bar-color="#2196f3"
-                                color="white"
-                                background-color="primary"
-                                inner-color="primary"
-                                inner-background-color="white"
+                                text-color="white"
+                                color="primary"
+                                minute-interval="5"
+                                inner-text-color="primary"
+                                inner-color="white"
                                 :style="scrollerPopupStyle280"
                                 @input="changeval"
                                 @close="() => { savetoclose();  }"
-                        />
+                        ></q-scroller>
 
                     </q-popup-proxy>
                 </q-icon>

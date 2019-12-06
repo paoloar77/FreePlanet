@@ -1,10 +1,10 @@
 <template>
     <div>
-        <q-img v-if="imgbackground" :src="getsrc"
+        <q-img v-if="imgbackground" :src="getsrc" :alt="getaltimg"
                :style="tools.styles_imgtitle(sizes)">
 
-            <div class="absolute-bottom text-body1 text-center">
-                <h2 class="titletext">{{headtitle}}</h2>
+            <div class="absolute-bottom text-body1 text-center" :style="styleadd">
+                <h1 class="titletext">{{headtitle}}</h1>
             </div>
         </q-img>
 

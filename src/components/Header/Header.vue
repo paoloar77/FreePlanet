@@ -35,11 +35,11 @@
                        class="btnNewVersShow" @click="RefreshApp" :label="$t('notification.newVersionAvailable')"/>
 
 
-                <q-toolbar-title>
+                <q-toolbar-title class="row items-center">
                     <q-avatar>
-                        <img :src="imglogo" height="27">
+                        <img :src="imglogo" height="27" alt="Immagine Logo">
                     </q-avatar>
-                    {{tools.getappname()}}
+                    <div class="q-mx-sm">{{getappname}}</div>
                     <div slot="subtitle">{{$t('msg.myDescriz')}} {{ getAppVersion() }}</div>
                 </q-toolbar-title>
 
@@ -83,7 +83,7 @@
                                 v-for="langrec in static_data.lang_available" :key="langrec.value"
                                 @click="lang = langrec.value">
                             <q-item-section avatar>
-                                <img :src="langrec.image" class="flagimg">
+                                <img :src="langrec.image" class="flagimg" alt="flag">
                             </q-item-section>
                             <q-item-section>
                                 {{langrec.label}}
@@ -128,12 +128,11 @@
 
         </q-drawer>
 
-
         <!-- USER BAR -->
         <q-drawer v-if="static_data.functionality.SHOW_USER_MENU" v-model="rightDrawerOpen" side="right" elevated>
             <div id="profile">
                 <q-img class="absolute-top" src="../../statics/images/landing_first_section.png"
-                       style="height: 150px">
+                       style="height: 150px" alt="section page">
                 </q-img>
                 <div class="absolute-top bg-transparent text-black center_img" style="margin-top: 10px;">
 

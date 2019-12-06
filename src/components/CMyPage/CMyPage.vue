@@ -1,13 +1,15 @@
 <template>
     <div>
         <CTitle v-if="imgbackground" :imgbackground="imgbackground"
-                :headtitle="title" :sizes="sizes"></CTitle>
+                :headtitle="title" :sizes="sizes" :styleadd="styleadd"></CTitle>
         <div v-if="!imgbackground">
             <CImgTitle v-if="img" :src="img" :title="title">
             </CImgTitle>
         </div>
         <slot></slot>
-        <Footer></Footer>
+        <div v-if="!nofooter">
+            <Footer></Footer>
+        </div>
     </div>
 </template>
 

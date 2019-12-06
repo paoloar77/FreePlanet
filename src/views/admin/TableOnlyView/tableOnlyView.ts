@@ -3,7 +3,6 @@ import { Component } from 'vue-property-decorator'
 
 import { GlobalStore, UserStore } from '@store'
 
-
 @Component({})
 export default class TableOnlyView extends Vue {
   public loading: boolean = false
@@ -28,8 +27,7 @@ export default class TableOnlyView extends Vue {
   public filter: string = ''
   public selected: any[] = []
 
-
-  request(props) {
+  public request(props) {
     this.loading = true
     setTimeout(() => {
       this.serverPagination = props.pagination
@@ -53,7 +51,7 @@ export default class TableOnlyView extends Vue {
     }, 1500)
   }
 
-  mounted() {
+  public mounted() {
     this.request({
       pagination: this.serverPagination,
       filter: this.filter

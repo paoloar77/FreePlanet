@@ -19,7 +19,7 @@
 
                         <q-item-section avatar>
                             <q-avatar>
-                                <img :src="getImgByMsg(msg)">
+                                <img :src="getImgByMsg(msg)" :alt="getUsernameChatByMsg(msg)">
                             </q-avatar>
                         </q-item-section>
 

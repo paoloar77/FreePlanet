@@ -19,8 +19,16 @@
 .tothebottomfixed {
   position: fixed;
   left: 0;
-  right: 0;
+  right: 60px;
   bottom: 0;
   height: -100%;
   z-index: 1000;
+}
+
+.margin_buttons_cook {
+  margin: -8px -8px;
+}
+
+.margin_buttons_cook > * {
+  margin: 8px 8px !important;
 }

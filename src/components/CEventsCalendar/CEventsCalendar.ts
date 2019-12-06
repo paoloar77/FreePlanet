@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { Component, Prop, Watch } from 'vue-property-decorator'
+import { Component, Mixins, Prop, Watch } from 'vue-property-decorator'
 import { CalendarStore, UserStore } from '@store'
 
 import { Logo } from '../../components/logo/index'
@@ -17,8 +17,6 @@ import { CMySelect } from '../../components/CMySelect/index'
 import { CMyEditor } from '../../components/CMyEditor/index'
 import { stop, prevent, stopAndPrevent } from 'quasar/src/utils/event'
 
-import QDateScroller from '@quasar/quasar-app-extension-qscroller/src/component/QDateScroller'
-import QDateTimeScroller from '@quasar/quasar-app-extension-qscroller/src/component/QDateTimeScroller'
 import { CTodo } from '@src/components/todos/CTodo'
 import { SingleProject } from '@src/components/projects/SingleProject'
 import { IEvents } from '@src/model'
@@ -31,23 +29,40 @@ import { lists } from '../../store/Modules/lists'
 import { GlobalStore, MessageStore } from '../../store/Modules'
 import { IMessagePage, IMessage, IIdentity, MsgDefault } from '../../model'
 import MixinUsers from '../../mixins/mixin-users'
-import { CDateTime } from '../CDateTime'
 import MixinOperator from '../../mixins/mixin-operator'
+import MixinEvents from '../../mixins/mixin-events'
+import { CDateTime } from '../CDateTime'
 import { CMyAvatar } from '../CMyAvatar'
+import { CMySingleEvent } from '../CMySingleEvent'
+import { CMyTeacher } from '../CMyTeacher'
 
 @Component({
-  mixins: [MixinOperator, MixinUsers],
+  mixins: [MixinOperator, MixinUsers, MixinEvents],
   name: 'CEventsCalendar',
-  components: { Logo, Footer, CTitle, CImgText, QDateTimeScroller, QDateScroller, CMySelect, CMyEditor, CDateTime, CMyAvatar }
+  components: {
+    Logo,
+    Footer,
+    CTitle,
+    CImgText,
+    CMySelect,
+    CMyEditor,
+    CDateTime,
+    CMyAvatar,
+    CMySingleEvent, CMyTeacher
+  }
 })
-export default class CEventsCalendar extends Vue {
+export default class CEventsCalendar extends MixinEvents {
+  @Prop({ required: false, default: null }) public mysingleevent: IEvents
+  @Prop({ required: false, default: 0 }) public showfirstN: number
   public $q
   public $t: any
   public calendarView = 'month'
   public selectedDate = '2019-04-01'
+  public tabeditor: string = 'details'
   public formDefault: IEvents = {
     title: '',
     details: '',
+    bodytext: '',
     dateTimeStart: tools.getstrYYMMDDDateTime(tools.getDateNow()),
     dateTimeEnd: tools.getstrYYMMDDDateTime(tools.getDateNow()),
     icon: '',
@@ -189,6 +204,10 @@ export default class CEventsCalendar extends Vue {
   //     }
   //   ]
 
+  get visuAllCal() {
+    return this.mysingleevent === null
+  }
+
   get title_cal() {
     if (this.titleFormatter && this.locale) {
       const mydate = new Date(this.selectedDate)
@@ -254,7 +273,9 @@ export default class CEventsCalendar extends Vue {
   }
 
   get dayHeight() {
-    if (Screen.height < 500)
+    if (Screen.height < 400)
+      return 80
+    else if (Screen.height < 500)
       return 100
     if (Screen.height < 700)
       return 110
@@ -282,10 +303,6 @@ export default class CEventsCalendar extends Vue {
 
   get intervalCount() {
     return (CalendarStore.state.intervalRange.max - CalendarStore.state.intervalRange.min) * (1 / CalendarStore.state.intervalRangeStep)
-  }
-
-  get editable() {
-    return CalendarStore.state.editable
   }
 
   get containerStyle() {
@@ -492,6 +509,13 @@ export default class CEventsCalendar extends Vue {
     return (this.isAlreadyBooked(event) ? 'text-left bg-light-green-1' : 'text-left')
   }
 
+  public checkFieldUndef() {
+    if (this.eventForm.bodytext === undefined)
+      this.eventForm.bodytext = ''
+    if (this.eventForm.details === undefined)
+      this.eventForm.details = ''
+  }
+
   public editEvent(eventparam) {
     console.log('editEvent - INIZIO')
     this.resetForm()
@@ -499,6 +523,8 @@ export default class CEventsCalendar extends Vue {
     this.contextDay = { ...eventparam }
 
     this.eventForm = { ...eventparam }
+
+    this.checkFieldUndef()
 
     this.eventForm.dateTimeStart = tools.getstrYYMMDDDateTime(eventparam.dateTimeStart)
     this.eventForm.dateTimeEnd = tools.getstrYYMMDDDateTime(eventparam.dateTimeEnd)
@@ -510,14 +536,15 @@ export default class CEventsCalendar extends Vue {
     tools.CancelEvent(this, eventparam)
   }
 
-  public duplicateEvent(eventparam, numgg, numev: number = 1 ) {
+  public duplicateEvent(eventparam, numgg, numev: number = 1) {
     for (let i = 0; i < numev; ++i) {
       GlobalStore.actions.DuplicateRec({ table: tools.TABEVENTS, id: eventparam._id }).then((rec) => {
-        rec.dateTimeStart = tools.addDays(new Date(rec.dateTimeStart), numgg * (i + 1))
-        rec.dateTimeEnd = tools.addDays(new Date(rec.dateTimeEnd), numgg * (i + 1))
-        CalendarStore.state.eventlist.push(rec)
-        this.editEvent(rec)
-
+        if (rec) {
+          rec.dateTimeStart = tools.addDays(new Date(rec.dateTimeStart), numgg * (i + 1))
+          rec.dateTimeEnd = tools.addDays(new Date(rec.dateTimeEnd), numgg * (i + 1))
+          CalendarStore.state.eventlist.push(rec)
+          this.editEvent(rec)
+        }
       })
     }
     // tools.ActionRecTable(this, lists.MenuAction.DUPLICATE_RECTABLE, tools.TABEVENTS, eventparam._id, eventparam, 'db.duplicatedrecord')
@@ -851,17 +878,6 @@ export default class CEventsCalendar extends Vue {
     return await CalendarStore.actions.BookEvent(eventparam)
   }
 
-  public isAlreadyBooked(eventparam: IEvents) {
-    return CalendarStore.getters.findEventBooked(eventparam, true)
-  }
-
-  public getImgEvent(event: IEvents) {
-    if (!!event.img)
-      return '../../statics/' + event.img
-    else
-      return '../../statics/images/noimg.png'
-  }
-
   get getContribTypeArr() {
     return CalendarStore.state.contribtype
   }
@@ -874,13 +890,8 @@ export default class CEventsCalendar extends Vue {
     return CalendarStore.state.wheres
   }
 
-  public isShowPrice(event: IEvents) {
-    const rec = CalendarStore.getters.getContribtypeRec(event.contribtype)
-    return (rec) ? rec.showprice : true
-  }
-
-  public getContribtypeById(id) {
-    return CalendarStore.getters.getContribtypeById(id)
+  get getDisciplines() {
+    return GlobalStore.state.disciplines
   }
 
   public createContribType(value) {
@@ -897,26 +908,6 @@ export default class CEventsCalendar extends Vue {
     return this.dateFormatter.format(mydate)
   }
 
-  public getPrice(event: IEvents) {
-    let myprice = (event.price > 0) ? event.price + ' €' : ''
-    myprice = (event.price === -1) ? this.$t('event.askinfo') : myprice
-
-    if (event.infoafterprice)
-      myprice += ' ' + event.infoafterprice
-
-    return myprice
-  }
-
-  public getWhereIcon(where) {
-    const whererec = CalendarStore.getters.getWhereRec(where)
-    return (whererec) ? whererec.whereicon : ''
-  }
-
-  public getWhereName(where) {
-    const whererec = CalendarStore.getters.getWhereRec(where)
-    return (whererec) ? whererec.placename : ''
-  }
-
   public badgeClasses(eventparam, type) {
     const cssColor = tools.isCssColor(eventparam.bgcolor)
     const isHeader = type === 'header'
@@ -929,7 +920,7 @@ export default class CEventsCalendar extends Vue {
   }
 
   public badgeStyles(eventparam, type, timeStartPos, timeDurationHeight) {
-    const s = { color: '', top: '', height: '' }
+    const s = { color: '', top: '', height: '', opacity: 1 }
 
     if (tools.isCssColor(eventparam.bgcolor)) {
       s['background-color'] = eventparam.bgcolor
@@ -941,6 +932,11 @@ export default class CEventsCalendar extends Vue {
     if (timeDurationHeight) {
       s.height = timeDurationHeight(this.func_tools.getMinutesDuration(eventparam.dateTimeStart, eventparam.dateTimeEnd)) + 'px'
     }
+
+    if (!this.isEventEnabled(eventparam)) {
+      s.opacity = 0.5
+    }
+
     s['align-items'] = 'flex-start'
     return s
   }
@@ -973,21 +969,11 @@ export default class CEventsCalendar extends Vue {
   }
 
   public getEventList() {
-    const eventsloc = []
-
-    const datenow = tools.addDays(tools.getDateNow(), -1)
-
-    for (let i = 0; i < CalendarStore.state.eventlist.length; ++i) {
-      // console.log('  ciclo i = ', i, CalendarStore.state.eventlist[i])
-      // const dateEvent = new Date(CalendarStore.state.eventlist[i].date + ' 00:00:00')
-      const dateEvent = new Date(CalendarStore.state.eventlist[i].dateTimeEnd)
-
-      if (dateEvent >= datenow) {
-        eventsloc.push(CalendarStore.state.eventlist[i])
-      }
-    }
-
-    return eventsloc
+    const mylist = CalendarStore.state.eventlist.filter((rec) => (new Date(rec.dateTimeEnd) >= tools.getDateNowEvent()))
+    if (this.showfirstN > 0)
+      return mylist.slice(0, this.showfirstN)
+    else
+      return mylist
   }
 
   public getEvents(dt) {
@@ -1039,10 +1025,8 @@ export default class CEventsCalendar extends Vue {
   public getTitleEv(event: IEvents) {
     return (!!event.short_tit) ? event.short_tit : event.title
   }
-
-  public getStyleByEvent(event: IEvents) {
-    if (event === this.myevent) {
-      return 'border: inset; border-color: darkblue; border-width: 3px; padding: 5px !important; '
-    }
+  public getLongTitleEv(event: IEvents) {
+    return event.title
   }
+
 }

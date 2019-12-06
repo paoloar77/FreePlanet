@@ -26,12 +26,82 @@ export interface ICfgData {
   userId?: string
 }
 
+export interface ITemplEmail {
+  _id?: string
+  subject?: string
+  content?: string
+  options?: ISettings[]
+}
+
 export interface ISettings {
+  _id?: string
+  idapp?: string
   key?: string
   type?: number
   value_str?: string
   value_date?: Date,
   value_num?: number
+  value_bool?: boolean
+  serv?: boolean
+}
+
+export interface ITeachUname {
+  username?: string
+}
+
+export interface IMyPage {
+  _id?: string
+  author_username?: string
+  title?: string
+  icon?: string
+  path?: string
+  keywords?: string
+  description?: string
+  content?: string
+  active?: boolean
+  inmenu?: boolean
+  submenu?: boolean
+  l_par?: number,
+  l_child?: number,
+  infooter?: boolean
+}
+
+export interface INewsToSent {
+  _id: string
+  idapp?: string
+  label?: string
+  templemail_str?: string
+  numemail_tot?: number
+  numemail_sent?: number
+  datetoSent?: Date
+  datestartJob?: Date
+  datefinishJob?: Date
+  lastemailsent_Job?: Date
+  starting_job?: boolean
+  finish_job?: boolean
+  error_job?: string
+}
+
+export interface IMailinglist {
+  name?: string
+  surname?: string
+  email: string
+  lastid_newstosent?: string
+}
+
+export interface IDiscipline {
+  typol_code?: string
+  order?: number
+  label?: string
+  description?: string
+  linkpage?: string
+  color?: string
+  icon?: string
+  img_small?: string
+  showinhome?: boolean
+  showinnewsletter?: boolean
+  img?: string
+  teachers?: ITeachUname[]
 }
 
 export interface ITestp1 {
@@ -45,6 +115,12 @@ export interface IConfig {
   _id: string,
   key?: string,
   value: string
+}
+
+export interface IMetaTags {
+  title?: string
+  keywords?: string
+  description?: string
 }
 
 export interface IGlobalState {
@@ -69,7 +145,15 @@ export interface IGlobalState {
   listatodo: IMenuList[]
   arrConfig: IConfig[]
   lastaction: IAction
+  serv_settings: ISettings[],
   settings: ISettings[],
+  disciplines: IDiscipline[],
+  newstosent: INewsToSent[],
+  mypage: IMyPage[],
+  templemail: ITemplEmail[],
+  opzemail: ISettings[],
+  mailinglist: IMailinglist[],
+  autoplaydisc: number
 }
 
 export interface IMenuList {
@@ -96,6 +180,7 @@ export interface IListRoutes {
   submenu?: boolean
   onlyAdmin?: boolean
   onlyManager?: boolean
+  extraclass?: string
   meta?: any
   idelem?: string
   urlroute?: string
@@ -118,6 +203,7 @@ export interface IOperators {
   certifications?: string
   img?: string
   cell?: string
+  usertelegram?: string
   paginaweb?: string
   paginafb?: string
   intro?: string
@@ -128,6 +214,7 @@ export interface IOperators {
 
 export interface IPreloadImages {
   imgname: string
+  alt: string
   mobile: boolean
 }
 
@@ -254,10 +341,30 @@ export interface ITableRec {
   colkey: string
   collabel: string
   colicon?: string
+  onlyAdmin?: boolean
+  noshow: boolean
 }
 
 export interface IDataPass {
   id: string
   table: string
   fieldsvalue: object
+}
+
+export interface INewsState {
+  lastnewstosent: INewsToSent
+  nextnewstosent: INewsToSent
+  totemail: number
+  totsubscribed: number
+  totunsubscribed: number
+  totsentlastid: number
+}
+
+export const DefaultNewsState: INewsState = {
+  lastnewstosent: null,
+  nextnewstosent: null,
+  totemail: 0,
+  totsubscribed: 0,
+  totunsubscribed: 0,
+  totsentlastid: 0,
 }

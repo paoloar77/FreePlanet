@@ -6,6 +6,7 @@ export interface IEvents {
   short_tit?: string
   title?: string
   details?: string
+  bodytext?: string
   dateTimeStart?: Date
   dateTimeEnd?: Date
   side?: string

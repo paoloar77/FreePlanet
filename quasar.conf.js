@@ -5,6 +5,8 @@ const helpers = require('./helpers');
 const webpack = require('webpack')
 const envparser = require('./config/envparser')
 
+const PrerenderSPAPlugin = require('prerender-spa-plugin')
+const Renderer = PrerenderSPAPlugin.PuppeteerRenderer
 
 const extendTypescriptToWebpack = (config) => {
   config.resolve
@@ -51,6 +53,30 @@ const extendHTMLToWebpack = (config) => {
     .test(/\.html?$/)
     .use('html')
     .loader('vue-html-loader')
+};
+
+const extendPrerender = (config) => {
+  config
+    .plugin('prerender-spa-plugin')
+    .use(PrerenderSPAPlugin, [{
+      // Required - The path to the webpack-outputted app to prerender.
+      staticDir: path.join(__dirname, 'dist/spa'),
+      // Required - Routes to render.
+      routes: ['/'],
+
+      renderer: new Renderer({
+        injectProperty: '__PRERENDER_INJECTED',
+        inject: {
+          foo: 'bar'
+        },
+        // renderAfterDocumentEvent: 'custom-post-render-event',
+        renderAfterTime: 5000,
+        // maxConcurrentRoutes: 4,
+        // renderAfterElementExists: '#content',
+        headless: true,
+      })
+    }])
+
 };
 
 module.exports = function (ctx) {
@@ -109,6 +135,8 @@ module.exports = function (ctx) {
           .rule('template-engine')
           .test(/\.(gql|graphql)$/)
           .loader('graphql-tag/loader') */
+
+        // extendPrerender(config);
       }
     },
     dev: {

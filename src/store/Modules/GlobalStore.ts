@@ -1,4 +1,4 @@
-import { ICfgServer, IConfig, IGlobalState, IListRoutes, IMenuList, StateConnection } from 'model'
+import { ICfgServer, IConfig, IGlobalState, IListRoutes, IMenuList, ISettings, StateConnection } from 'model'
 import { storeBuilder } from './Store/Store'
 
 import Vue from 'vue'
@@ -24,6 +24,7 @@ import { serv_constants } from '@src/store/Modules/serv_constants'
 import { IUserState } from '@src/model'
 import { Calendar } from 'element-ui'
 import { fieldsTable } from '@src/store/Modules/fieldsTable'
+import router from '@router'
 // import { static_data } from '@src/db/static_data'
 
 let stateConnDefault = 'online'
@@ -68,7 +69,15 @@ const state: IGlobalState = {
     type: 0,
     _id: 0
   },
-  settings: []
+  serv_settings: [],
+  templemail: [],
+  opzemail: [],
+  settings: [],
+  disciplines: [],
+  autoplaydisc: 8000,
+  newstosent: [],
+  mailinglist: [],
+  mypage: []
 }
 
 async function getConfig(id) {
@@ -124,6 +133,12 @@ namespace Getters {
 
   }, 'showtype')
 
+  const getPage = b.read((mystate: IGlobalState) => (path) => {
+    // const config = state.arrConfig.find(item => item._id === cat + costanti.CONFIG_ID_SHOW_TYPE_TODOS)
+    return mystate.mypage.find((page) => (`/` + page.path) === path)
+
+  }, 'getPage')
+
   const getmenu = b.read((state) => {
     // console.log('getmenu', cfgrouter.getmenu())
 
@@ -163,6 +178,18 @@ namespace Getters {
       return CalendarStore.state.wheres
     else if (table === 'contribtype')
       return CalendarStore.state.contribtype
+    else if (table === 'disciplines')
+      return GlobalStore.state.disciplines
+    else if (table === tools.TABNEWSLETTER)
+      return GlobalStore.state.newstosent
+    else if (table === tools.TABTEMPLEMAIL)
+      return GlobalStore.state.templemail
+    else if (table === tools.TABOPZEMAIL)
+      return GlobalStore.state.opzemail
+    else if (table === tools.TABMAILINGLIST)
+      return GlobalStore.state.mailinglist
+    else if (table === tools.TABMYPAGE)
+      return GlobalStore.state.mypage
     else if (table === 'bookings')
       return CalendarStore.state.bookedevent
     else if (table === 'users')
@@ -178,13 +205,24 @@ namespace Getters {
 
   }, 'getListByTable')
 
-  const getValueSettingsByKey = b.read((mystate: IGlobalState) => (key): any => {
-    const myrec = mystate.settings.find((rec) => rec.key === key)
+  const getrecSettingsByKey = b.read((mystate: IGlobalState) => (key, serv): ISettings => {
+    if (serv)
+      return mystate.serv_settings.find((rec) => rec.key === key)
+    else
+      return mystate.settings.find((rec) => rec.key === key)
+  }, 'getrecSettingsByKey')
+
+  const getValueSettingsByKey = b.read((mystate: IGlobalState) => (key, serv): any => {
+
+    const myrec = getters.getrecSettingsByKey(key, serv)
+
     if (!!myrec) {
       if (myrec.type === tools.FieldType.date)
         return myrec.value_date
-      if (myrec.type === tools.FieldType.number)
+      else if (myrec.type === tools.FieldType.number)
         return myrec.value_num
+      else if (myrec.type === tools.FieldType.boolean)
+        return myrec.value_bool
       else
         return myrec.value_str
     } else {
@@ -192,6 +230,11 @@ namespace Getters {
     }
 
   }, 'getValueSettingsByKey')
+
+  const gettemplemailbyId = b.read((mystate: IGlobalState) => (templid): string => {
+    const myrec = mystate.templemail.find((rec) => rec._id === templid)
+    return (!!myrec) ? myrec.subject : ''
+  }, 'gettemplemailbyId')
 
   export const getters = {
     get testpao1_getter_contatore() {
@@ -234,6 +277,18 @@ namespace Getters {
 
     get getValueSettingsByKey() {
       return getValueSettingsByKey()
+    },
+
+    get getrecSettingsByKey() {
+      return getrecSettingsByKey()
+    },
+
+    get gettemplemailbyId() {
+      return gettemplemailbyId()
+    },
+
+    get getPage() {
+      return getPage()
     },
 
     get t() {
@@ -343,6 +398,31 @@ namespace Mutations {
     }
   }
 
+  function setValueSettingsByKey(mystate: IGlobalState, { key, value, serv }) {
+    // Update the Server
+
+    // Update in Memory
+    let myrec = null
+    if (serv)
+      myrec = mystate.serv_settings.find((rec) => rec.key === key)
+    else
+      myrec = mystate.settings.find((rec) => rec.key === key)
+
+    if (!!myrec) {
+      if (myrec.type === tools.FieldType.date)
+        myrec.value_date = value
+      else if (myrec.type === tools.FieldType.number)
+        myrec.value_num = value
+      else if (myrec.type === tools.FieldType.boolean)
+        myrec.value_bool = value
+      else
+        myrec.value_str = value
+
+      console.log('setValueSettingsByKey value', value, 'myrec', myrec)
+    }
+
+  }
+
   export const mutations = {
     setConta: b.commit(setConta),
     setleftDrawerOpen: b.commit(setleftDrawerOpen),
@@ -354,7 +434,8 @@ namespace Mutations {
     setPaoArray_Delete: b.commit(setPaoArray_Delete),
     NewArray: b.commit(NewArray),
     setShowType: b.commit(setShowType),
-    UpdateValuesInMemory: b.commit(UpdateValuesInMemory)
+    UpdateValuesInMemory: b.commit(UpdateValuesInMemory),
+    setValueSettingsByKey: b.commit(setValueSettingsByKey)
   }
 
 }
@@ -365,7 +446,6 @@ namespace Actions {
   }
 
   function createPushSubscription(context) {
-    console.log('createPushSubscription')
 
     // If Already subscribed, don't send to the Server DB
     // if (state.wasAlreadySubOnDb) {
@@ -384,7 +464,7 @@ namespace Actions {
       return
     }
 
-    // console.log('createPushSubscription')
+    console.log('createPushSubscription')
 
     let reg
     const mykey = process.env.PUBLICKEY_PUSH
@@ -676,11 +756,11 @@ namespace Actions {
   async function loadSite(context) {
     // console.log('CalendarStore: loadAfterLogin')
     // Load local data
-    CalendarStore.state.editable = UserStore.state.isAdmin || UserStore.state.isManager
-
     const showall = UserStore.state.isAdmin || UserStore.state.isManager ? '1' : '0'
 
     const myuserid = (UserStore.state.my._id) ? UserStore.state.my._id : '0'
+
+    CalendarStore.state.editable = false
 
     return await Api.SendReq('/loadsite/' + myuserid + '/' + process.env.APP_ID + '/' + showall, 'GET', null)
       .then((res) => {
@@ -690,6 +770,15 @@ namespace Actions {
         CalendarStore.state.wheres = (res.data.wheres) ? res.data.wheres : []
         CalendarStore.state.contribtype = (res.data.contribtype) ? res.data.contribtype : []
         GlobalStore.state.settings = (res.data.settings) ? [...res.data.settings] : []
+        GlobalStore.state.disciplines = (res.data.disciplines) ? [...res.data.disciplines] : []
+
+        if (showall) {
+          GlobalStore.state.newstosent = (res.data.newstosent) ? [...res.data.newstosent] : []
+          GlobalStore.state.mailinglist = (res.data.mailinglist) ? [...res.data.mailinglist] : []
+          GlobalStore.state.mypage = (res.data.mypage) ? [...res.data.mypage] : []
+        }
+
+        CalendarStore.state.editable = UserStore.state.isAdmin || UserStore.state.isManager
 
       })
       .catch((error) => {
@@ -698,6 +787,60 @@ namespace Actions {
         return new Types.AxiosError(serv_constants.RIS_CODE_ERR, null, tools.ERR_GENERICO, error)
       })
 
+  }
+
+  async function sendEmailTest(context, { previewonly }) {
+    const usertosend = {
+      locale: tools.getLocale(),
+      previewonly
+    }
+    console.log(usertosend)
+
+    return await Api.SendReq('/news/testemail', 'POST', usertosend)
+      .then((res) => {
+        return res
+      })
+  }
+
+  async function addDynamicPages(context) {
+
+    const arrpagesroute: IListRoutes[] = []
+    for (const page of state.mypage) {
+      arrpagesroute.push({
+        path: '/' + page.path,
+        name: undefined,
+        text: page.title,
+        materialIcon: page.icon,
+        component: () => import('@/root/mypage/mypage.vue'),
+        inmenu: page.inmenu,
+        infooter: page.infooter,
+        level_child: page.l_child,
+        level_parent: page.l_par,
+      })
+    }
+
+    const last = {
+      path: '*',
+      materialIcon: 'fas fa-calendar-plus',
+      name: 'otherpages.error404def',
+      component: () => import('@/root/My404page/My404page.vue'),
+      inmenu: false,
+      infooter: false
+    }
+
+    static_data.routes = [...static_data.routes, ...arrpagesroute, last]
+
+    router.addRoutes([...arrpagesroute, last])
+  }
+
+  async function sendFile(context, formdata) {
+    try {
+      const { data } = await Api.postFormData('/upload', formdata)
+      console.log(data)
+
+    } catch (e) {
+      console.log('Error sendFile: ', e)
+    }
   }
 
   export const actions = {
@@ -714,7 +857,9 @@ namespace Actions {
     loadTable: b.dispatch(loadTable),
     saveTable: b.dispatch(saveTable),
     DeleteRec: b.dispatch(DeleteRec),
-    DuplicateRec: b.dispatch(DuplicateRec)
+    sendEmailTest: b.dispatch(sendEmailTest),
+    DuplicateRec: b.dispatch(DuplicateRec),
+    addDynamicPages: b.dispatch(addDynamicPages)
   }
 
 }

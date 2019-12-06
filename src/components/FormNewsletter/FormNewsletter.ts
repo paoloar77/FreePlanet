@@ -8,12 +8,13 @@ import Quasar, { Screen } from 'quasar'
 import { Prop } from 'vue-property-decorator'
 import { Api } from '../../store'
 import { serv_constants } from '../../store/Modules/serv_constants'
+import MixinBase from '../../mixins/mixin-base'
 
 @Component({
   name: 'FormNewsletter'
 })
 
-export default class FormNewsletter extends Vue {
+export default class FormNewsletter extends MixinBase {
   public $t
   public $q
   public name: string = null
@@ -23,10 +24,6 @@ export default class FormNewsletter extends Vue {
 
   @Prop() public idwebsite: string
   @Prop() public locale: string
-
-  get tools() {
-    return tools
-  }
 
   public async onSubmit() {
 
@@ -44,14 +41,16 @@ export default class FormNewsletter extends Vue {
         firstName: this.name,
         lastName: this.surname,
         idwebsite: this.idwebsite,
-        locale: this.locale
+        locale: this.locale,
+        settomailchimp: this.getValDb('MAILCHIMP_ON', true, false)
       }
       console.log(usertosend)
 
-      return await Api.SendReq('/signup_news', 'POST', usertosend, false)
+      return await Api.SendReq('/news/signup', 'POST', usertosend, false)
         .then((res) => {
 
-          if (res.data.result === serv_constants.RIS_SUBSCRIBED_OK) {
+          console.log('res', res)
+          if (res.data.code === serv_constants.RIS_SUBSCRIBED_OK) {
             this.$q.notify({
               color: 'green-4',
               textColor: 'white',
@@ -59,7 +58,7 @@ export default class FormNewsletter extends Vue {
               // message: this.$t('newsletter.submitted')
               message: res.data.msg
             })
-          } else if (res.data.result === serv_constants.RIS_SUBSCRIBED_ALREADYEXIST) {
+          } else if (res.data.code === serv_constants.RIS_SUBSCRIBED_ALREADYEXIST) {
             this.$q.notify({
               color: 'orange-4',
               textColor: 'white',

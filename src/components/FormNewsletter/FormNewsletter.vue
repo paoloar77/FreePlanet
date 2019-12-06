@@ -10,6 +10,7 @@
                 <q-input
                         filled
                         name="firstName"
+                        dense
                         dark standout
                         v-model="name"
                         :label="$t('newsletter.name') + `*`"
@@ -21,6 +22,7 @@
 
                 <q-input
                         filled
+                        dense
                         dark standout
                         v-model="surname"
                         name="lastName"
@@ -33,6 +35,7 @@
 
                 <q-input
                         filled
+                        dense
                         dark standout
                         v-model="email"
                         :label="$t('newsletter.email') + `*`"

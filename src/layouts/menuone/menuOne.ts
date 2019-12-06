@@ -20,6 +20,10 @@ export default class MenuOne extends Vue {
   //   return this.$route.path
   // }
 
+  get isfinishLoading() {
+    return GlobalStore.state.finishLoading
+  }
+
   get tools() {
     return tools
   }
@@ -30,11 +34,6 @@ export default class MenuOne extends Vue {
 
   get getmenu() {
     return GlobalStore.getters.getmenu
-  }
-
-  public visumenu(elem) {  // : IListRoutes
-    return (elem.onlyAdmin && UserStore.state.isAdmin) || (elem.onlyManager && UserStore.state.isManager)
-      || ((!elem.onlyAdmin) && (!elem.onlyManager))
   }
 
   public setParentVisibilityBasedOnRoute(parent) {
@@ -73,6 +72,9 @@ export default class MenuOne extends Vue {
       menu += ' isAdmin'
     if (elem.onlyManager)
       menu += ' isManager'
+
+    if (elem.extraclass)
+      menu += ' ' + elem.extraclass
 
     return menu
   }

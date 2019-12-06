@@ -1,6 +1,6 @@
 <template>
     <q-card class="my-card text-center">
-        <q-img :src="myop.img" class="myimg">
+        <q-img :src="myop.img" class="myimg" :alt="`${myop.name} ${myop.surname}`">
             <div class="absolute-bottom text-spacetrans text-shadow">
                 <div class="text-h6 text-trans">{{myop.name}}</div>
                 <div class="text-subtitle-carica text-trans">{{myop.qualification}}</div>
@@ -9,7 +9,7 @@
 
         <q-tabs v-model="tab" class="text-teal">
             <q-tab label="Info" name="one"></q-tab>
-            <q-tab label="Storia" name="two"></q-tab>
+            <q-tab label="Biografia" name="two"></q-tab>
         </q-tabs>
 
         <q-separator></q-separator>

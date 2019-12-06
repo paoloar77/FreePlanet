@@ -28,4 +28,6 @@ export default class CImgText extends Vue {
   @Prop({ required: false, default: '' }) public src2: string
   @Prop({ required: false, default: 'myclimg' }) public class1: string
   @Prop({ required: false, default: '' }) public style1: string
+  @Prop({ required: false, default: 'image' }) public alt1: string
+  @Prop({ required: false, default: 'image' }) public alt2: string
 }

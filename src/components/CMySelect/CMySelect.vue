@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="text-center">
         <div v-if="useinput">
             <q-select
                     rounded
@@ -33,6 +33,7 @@
                     :label="label"
                     emit-value
                     map-options
+                    input-class="text-center"
                     style="min-width: 170px; max-width: 400px;"
             >
 

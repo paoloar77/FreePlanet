@@ -5,6 +5,7 @@ import { toolsext } from './toolsext'
 import { translation } from './translation'
 import Quasar, { colors, date, Screen } from 'quasar'
 import { scroll } from 'quasar'
+
 const { getScrollTarget, setScrollPosition } = scroll
 
 import {
@@ -64,6 +65,11 @@ export const tools = {
   ],
 
   TABEVENTS: 'myevents',
+  TABNEWSLETTER: 'newstosent',
+  TABMAILINGLIST: 'mailinglist',
+  TABMYPAGE: 'mypage',
+  TABTEMPLEMAIL: 'templemail',
+  TABOPZEMAIL: 'opzemail',
 
   MAX_CHARACTERS: 60,
   projects: 'projects',
@@ -131,6 +137,8 @@ export const tools = {
     select: 32,
     number: 64,
     typeinrec: 128,
+    multiselect: 256,
+    password: 512,
   },
 
   FieldTypeArr: [
@@ -1371,6 +1379,11 @@ export const tools = {
     return result
   },
 
+  visumenu(elem) {  // : IListRoutes
+    return (elem.onlyAdmin && UserStore.state.isAdmin) || (elem.onlyManager && UserStore.state.isManager)
+      || ((!elem.onlyAdmin) && (!elem.onlyManager))
+  },
+
   executefunc(myself: any, table, func: number, par: IParamDialog) {
     if (func === lists.MenuAction.DELETE) {
       console.log('param1', par.param1)
@@ -1724,6 +1737,62 @@ export const tools = {
       return ''
   },
 
+  getstrShortDate(mydate) {
+    const DateFormatter = new Intl.DateTimeFormat(func_tools.getLocale() || void 0, {
+      weekday: 'long',
+      day: 'numeric',
+      month: 'short',
+      year: 'numeric'
+      // timeZone: 'UTC'
+    })
+    try {
+      if (DateFormatter) {
+        const date1 = new Date(mydate)
+        return DateFormatter.format(date1)
+      }
+      return mydate
+    } catch (e) {
+      return ''
+    }
+
+  },
+  getstrVeryShortDate(mydate) {
+    const DateFormatter = new Intl.DateTimeFormat(func_tools.getLocale() || void 0, {
+      weekday: 'short',
+      day: 'numeric',
+      month: 'short',
+      // timeZone: 'UTC'
+    })
+    try {
+      if (DateFormatter) {
+        const date1 = new Date(mydate)
+        return DateFormatter.format(date1)
+      }
+      return mydate
+    } catch (e) {
+      return ''
+    }
+
+  },
+
+  getstrVeryVeryShortDate(mydate) {
+    const DateFormatter = new Intl.DateTimeFormat(func_tools.getLocale() || void 0, {
+      weekday: 'long',
+      day: 'numeric',
+      // timeZone: 'UTC'
+    })
+    try {
+      if (DateFormatter) {
+        const date1 = new Date(mydate)
+        return DateFormatter.format(date1)
+      }
+      return mydate
+    } catch (e) {
+      return ''
+    }
+
+  },
+
   getstrDateTimeEvent(mythis, myevent, withhtml) {
     let mystr = ''
     // is same day?
@@ -1741,7 +1810,7 @@ export const tools = {
       mystr = `<span class="cal__where-content">${tools.getstrDate(myevent.dateTimeStart)}</span>
                  <span class="cal__hours-content">${mythis.$t('cal.starttime')} ${ tools.getstrTime(myevent.dateTimeStart) } </span>
                   ${ mythis.$t('cal.enddate')} ${tools.getstrDate(myevent.dateTimeEnd)}
-                  <span class="cal__hours-content">${ mythis.$t('cal.endtime')}: ${ tools.getstrTime(myevent.dateTimeEnd) } </span>`
+                  <span class="cal__hours-content">${ mythis.$t('cal.endtime')} ${ tools.getstrTime(myevent.dateTimeEnd) } </span>`
     }
 
     if (myevent.infoextra) {
@@ -1754,10 +1823,54 @@ export const tools = {
     return mystr
   },
 
+  getstrDateTimeEventSimple(mythis, myevent) {
+    let mystr = ''
+    // is same day?
+    if (tools.getstrShortDate(myevent.dateTimeStart) === tools.getstrShortDate(myevent.dateTimeEnd)) {
+      mystr = `${tools.getstrShortDate(myevent.dateTimeStart)}
+                 - ${ tools.getstrTime(myevent.dateTimeStart) }`
+    } else {
+      mystr = `${tools.getstrVeryVeryShortDate(myevent.dateTimeStart)} - ${ tools.getstrShortDate(myevent.dateTimeEnd) }`
+
+    }
+
+    return mystr
+  },
+
+  getstrDateTimeEventShort(mythis, myevent) {
+    let mystr = ''
+    // is same day?
+    if (tools.getstrShortDate(myevent.dateTimeStart) === tools.getstrShortDate(myevent.dateTimeEnd)) {
+      mystr = `${tools.getstrVeryShortDate(myevent.dateTimeStart)}
+                 h. ${ tools.getstrTime(myevent.dateTimeStart) }`
+    } else {
+      mystr = `${tools.getstrVeryShortDate(myevent.dateTimeStart)} - ${ tools.getstrVeryShortDate(myevent.dateTimeEnd) }`
+
+    }
+
+    return mystr
+  },
+
   getstrDateTime(mytimestamp) {
     // console.log('getstrDate', mytimestamp)
     if (!!mytimestamp)
       return date.formatDate(mytimestamp, 'DD/MM/YYYY HH:mm')
+    else
+      return ''
+  },
+
+  getstrDateTimeAll(mytimestamp) {
+    // console.log('getstrDate', mytimestamp)
+    if (!!mytimestamp)
+      return date.formatDate(mytimestamp, 'DD/MM/YYYY HH:mm:ss')
+    else
+      return ''
+  },
+
+  getstrTimeAll(mytimestamp) {
+    // console.log('getstrDate', mytimestamp)
+    if (!!mytimestamp)
+      return date.formatDate(mytimestamp, 'HH:mm:ss')
     else
       return ''
   },
@@ -1812,7 +1925,7 @@ export const tools = {
     } else {
       return null
     }
-    console.log('mystrdate', mystrdate, strdate, mydate)
+    // console.log('mystrdate', mystrdate, strdate, mydate)
     return mydate
   }
   ,
@@ -1844,8 +1957,10 @@ export const tools = {
   getDateNow() {
     const mydate = new Date()
     return mydate
-  }
-  ,
+  },
+  getDateNowEvent() {
+    return tools.addDays(tools.getDateNow(), -1)
+  },
   getDateNull() {
     return new Date(0)
   }
@@ -2078,8 +2193,7 @@ export const tools = {
     } else {
       return '500'
     }
-  }
-  ,
+  },
 
   styles_imgtitle(sized ?: string) {
     if (!!sized) {
@@ -2277,6 +2391,15 @@ export const tools = {
 
   },
 
+  getimgev(ev) {
+    if (!!ev.img_small)
+      return `statics/` + ev.img_small
+    else if (!!ev.img)
+      return `statics/` + ev.img
+    else
+      return ''
+  },
+
   getimgbysize(dir: string, file: string) {
     const myimage = dir + file
     // console.log('includes = ', static_data.preLoadImages.map((a) => a.imgname).includes(myimage), myimage)
@@ -2290,6 +2413,15 @@ export const tools = {
     // console.log('getimgbysize', ris)
 
     return ris
+  },
+
+  getaltimg(dir: string, file: string, alt?: string) {
+    const myimage = dir + file
+    const myrec = static_data.preLoadImages.find((rec) => rec.imgname === myimage)
+    if (myrec)
+      return (myrec) ? myrec.alt : 'my image'
+    else
+      return alt
   },
 
   getimgFullpathbysize(fileimg: string) {
@@ -2502,7 +2634,7 @@ export const tools = {
 
     const mydata = {
       table,
-      data
+      data,
     }
 
     return await
@@ -2522,7 +2654,38 @@ export const tools = {
   },
   getwidth(mythis) {
     // return height()
-    return mythis.$q.screen.width
+    let myw = mythis.$q.screen.width
+    if (GlobalStore.state.leftDrawerOpen)
+      myw -= 300
+    // if (GlobalStore.state.RightDrawerOpen)
+    //   myw -= 300
+    return myw
+
+  },
+
+  getwidthscale(mythis, mywidth, maxwidth) {
+    if (this.isMobile()) {
+      if (mywidth > this.getwidth(mythis) - 20)
+        mywidth = this.getwidth(mythis) - 20
+
+      return mywidth
+    } else {
+      // console.log('this.getwidth(mythis) = ', this.getwidth(mythis))
+      let myw = mywidth + ((this.getwidth(mythis) - mywidth) * 0.6)
+      // console.log('myw1 = ', myw)
+      if (myw > maxwidth)
+        myw = maxwidth
+      if (myw > this.getwidth(mythis) - 20)
+        myw = this.getwidth(mythis) - 20
+
+      // console.log('myw = ', myw)
+      return myw
+    }
+  },
+
+  getheightbywidth(mythis, mywidth, myheight, maxwidth) {
+    const myw = this.getwidthscale(mythis, mywidth, maxwidth)
+    return myw * (myheight / mywidth)
   },
 
   isIsoDate(str) {
@@ -2566,13 +2729,13 @@ export const tools = {
     else
       return 'primary'
   },
-  getCookie(mytok, oldval?) {
+  getCookie(mytok, def?) {
     const ris = Cookies.get(mytok)
     console.log('getCookie', ris)
     if (!!ris) {
       return ris
     } else {
-      return oldval
+      return def
     }
   },
 
@@ -2610,8 +2773,10 @@ export const tools = {
     setScrollPosition(target, offset, duration)
   },
   getCellForWhatsapp(numbercell) {
+    if (!numbercell)
+      return ''
     let mynum = numbercell.replace(/\-/g, '')
-    const intcode = GlobalStore.getters.getValueSettingsByKey('INT_CODE')
+    const intcode = GlobalStore.getters.getValueSettingsByKey('INT_CODE', false)
     if (numbercell.substring(0, 1) !== '+')
       mynum = intcode + mynum
     else
@@ -2621,12 +2786,46 @@ export const tools = {
   },
 
   getHttpForWhatsapp(numbercell) {
+    if (!numbercell)
+      return ''
     const mynum = this.getCellForWhatsapp(numbercell)
     if (mynum)
       return 'https://wa.me/' + mynum
     else
       return ''
-  }
+  },
+
+  getHttpForTelegram(usertelegram) {
+    if (usertelegram)
+      return 'https://t.me/' + usertelegram
+    else
+      return ''
+  },
+  metafunc(mythis) {
+    return {
+      title: mythis.$t('msg.myAppName'),
+      titleTemplate: (title) => `${mythis.mymeta.title} - ${mythis.$t('msg.myAppName')}`,
+      meta: {
+        keywords: {
+          name: 'keywords',
+          content: mythis.mymeta.keywords
+        },
+        description: {
+          name: 'description',
+          content: mythis.mymeta.description
+        },
+        equiv: { 'http-equiv': 'Content-Type', 'content': 'text/html; charset=UTF-8' }
+      }
+    }
+  },
+  isObject(anything) {
+    //Object.create(null) instanceof Object → false
+    return Object(anything) === anything
+  },
+  isDebug() {
+    return process.env.DEV
+  },
+
 
 // getLocale() {
   //   if (navigator.languages && navigator.languages.length > 0) {

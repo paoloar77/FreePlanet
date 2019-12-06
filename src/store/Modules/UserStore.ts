@@ -419,6 +419,57 @@ namespace Actions {
       })
   }
 
+  async function unsubscribe(context, paramquery) {
+
+    return await Api.SendReq('/news/unsubscribe', 'POST', paramquery)
+      .then((res) => {
+        // console.log("RITORNO 2 ");
+        // mutations.setServerCode(myres);
+        if (res.data.code === serv_constants.RIS_UNSUBSCRIBED_OK) {
+          console.log('DESOTTOSCRITTO ALLA NEWSLETTER !!')
+        } else {
+          console.log('Risultato di unsubscribe: ', res.data.code)
+        }
+        return { code: res.data.code, msg: res.data.msg }
+      }).catch((error) => {
+        return UserStore.getters.getServerCode
+      })
+  }
+
+  async function importemail(context, paramquery) {
+
+    return await Api.SendReq('/news/import', 'POST', paramquery)
+      .then((res) => {
+        // console.log("RITORNO 2 ");
+        // mutations.setServerCode(myres);
+        return res
+      }).catch((error) => {
+        return { numtot: 0, numadded: 0, numalreadyexisted: 0}
+      })
+  }
+
+  async function newsletterload(context, paramquery) {
+
+    return await Api.SendReq('/news/load', 'POST', paramquery)
+      .then((res) => {
+        console.log('res', res)
+        return res.data
+      }).catch((error) => {
+        return null
+      })
+  }
+
+  async function newsletter_setactivate(context, paramquery) {
+
+    return await Api.SendReq('/news/setactivate', 'POST', paramquery)
+      .then((res) => {
+        console.log('res', res)
+        return res.data
+      }).catch((error) => {
+        return null
+      })
+  }
+
   async function signup(context, authData: ISignupOptions) {
     console.log('SIGNUP')
 
@@ -637,27 +688,41 @@ namespace Actions {
 
   async function setGlobal(isLogged: boolean) {
     console.log('setGlobal')
-    // state.isLogged = true
-    if (isLogged) {
-      // console.log('state.isLogged', state.isLogged)
+    try {
+      // state.isLogged = true
+      if (isLogged) {
+        // console.log('state.isLogged', state.isLogged)
 
-      GlobalStore.mutations.setleftDrawerOpen(localStorage.getItem(tools.localStorage.leftDrawerOpen) === 'true')
-      GlobalStore.mutations.setCategorySel(localStorage.getItem(tools.localStorage.categorySel))
+        GlobalStore.mutations.setleftDrawerOpen(localStorage.getItem(tools.localStorage.leftDrawerOpen) === 'true')
+        GlobalStore.mutations.setCategorySel(localStorage.getItem(tools.localStorage.categorySel))
 
-      GlobalStore.actions.checkUpdates()
+        GlobalStore.actions.checkUpdates()
+      }
+
+      const p3 = await GlobalStore.actions.loadAfterLogin()
+
+      state.isLogged = isLogged
+
+      if (static_data.functionality.ENABLE_TODOS_LOADING)
+        await Todos.actions.dbLoad({ checkPending: true })
+
+      if (static_data.functionality.ENABLE_PROJECTS_LOADING)
+        await Projects.actions.dbLoad({ checkPending: true, onlyiffirsttime: true })
+
+      console.log('add routes')
+
+      GlobalStore.actions.addDynamicPages()
+
+      GlobalStore.state.finishLoading = true
+      if (tools.isDebug())
+        console.log('finishLoading', GlobalStore.state.finishLoading)
+
+      // document.dispatchEvent(new Event('custom-post-render-event'))
+
+    } catch (e) {
+      console.error('Error', e)
+      GlobalStore.state.finishLoading = true
     }
-
-    const p3 = await GlobalStore.actions.loadAfterLogin()
-
-    state.isLogged = isLogged
-
-    if (static_data.functionality.ENABLE_TODOS_LOADING)
-      await Todos.actions.dbLoad({ checkPending: true })
-
-    if (static_data.functionality.ENABLE_PROJECTS_LOADING)
-      await Projects.actions.dbLoad({ checkPending: true, onlyiffirsttime: true })
-
-    GlobalStore.state.finishLoading = true
 
     return true
     // console.log('setGlobal: END')
@@ -740,7 +805,11 @@ namespace Actions {
     resetpwd: b.dispatch(resetpwd),
     signin: b.dispatch(signin),
     signup: b.dispatch(signup),
-    vreg: b.dispatch(vreg)
+    vreg: b.dispatch(vreg),
+    unsubscribe: b.dispatch(unsubscribe),
+    importemail: b.dispatch(importemail),
+    newsletterload: b.dispatch(newsletterload),
+    newsletter_setactivate: b.dispatch(newsletter_setactivate),
   }
 
 }

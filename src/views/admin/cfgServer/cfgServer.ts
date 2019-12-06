@@ -52,7 +52,7 @@ export default class CfgServer extends Vue {
   }
 
   public SaveValue(newVal, valinitial) {
-    console.log('SaveValue', newVal, 'selected', this.selected)
+    // console.log('SaveValue', newVal, 'selected', this.selected)
 
     const mydata = {
       chiave: this.keysel,

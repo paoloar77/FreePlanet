@@ -12,6 +12,7 @@ export default class CMyChipList extends Vue {
   public $t
   @Prop({ required: true }) public options: []
   @Prop({ required: true }) public value
+  @Prop({ required: true }) public type
   @Prop({ required: true, default: '' }) public optlab
   @Prop({ required: true, default: '' }) public optval
   @Prop({ required: false, default: '' }) public myclass
@@ -35,21 +36,49 @@ export default class CMyChipList extends Vue {
 
     // console.table(this.options)
     this.options.forEach((rec, index) => {
-      if (tools.isBitActive(this.value, rec[this.optval])) {
-        const mydata = {
-          label: this.$t(rec[this.optlab]),
-          value: rec[this.optval],
-          valbool: tools.isBitActive(this.value, rec[this.optval]),
-          icon: '',
-          color: tools.getColorByIndexBest(index)
+      if (this.type === tools.FieldType.multiselect) {
+        if (this.value.includes(rec[this.optval])) {
+          const mydata = {
+            label: null,
+            value: rec[this.optval],
+            // myris = mylist.filter((myrec) => arrval.includes(myrec[key]))
+            valbool: true,
+            icon: '',
+            color: tools.getColorByIndexBest(index)
+          }
+
+          if (tools.isObject(this.optlab)) {
+            mydata.label = this.options.filter((myrec) => myrec[this.optval] === mydata.value).map(this.optlab)
+            if (mydata.label)
+              mydata.label = mydata.label[0]
+          } else {
+            mydata.label = rec[this.optlab]
+          }
+
+          if (this.opticon)
+            mydata.icon = rec[this.opticon]
+          if (this.optcolor)
+            mydata.color = rec[this.optcolor]
+
+          this.myarrvalues.push(mydata)
         }
+      } else {
+        if (tools.isBitActive(this.value, rec[this.optval])) {
+          const mydata = {
+            label: this.$t(rec[this.optlab]),
+            value: rec[this.optval],
+            valbool: tools.isBitActive(this.value, rec[this.optval]),
+            icon: '',
+            color: tools.getColorByIndexBest(index)
+          }
 
-        if (this.opticon)
-          mydata.icon = rec[this.opticon]
-        if (this.optcolor)
-          mydata.color = rec[this.optcolor]
+          if (this.opticon)
+            mydata.icon = rec[this.opticon]
+          if (this.optcolor)
+            mydata.color = rec[this.optcolor]
 
-        this.myarrvalues.push(mydata)
+          this.myarrvalues.push(mydata)
+        }
       }
     })
 

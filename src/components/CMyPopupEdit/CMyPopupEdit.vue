@@ -15,6 +15,7 @@
         <div v-else>
             <div v-if="col.fieldtype === tools.FieldType.binary">
                 <CMyChipList
+                        :type="tools.FieldType.binary"
                         :value="myvalue"
                         :options="db_fieldsTable.getTableJoinByName(col.jointable)"
                         :optval="db_fieldsTable.getKeyByTable(col.jointable)"
@@ -22,6 +23,24 @@
                         :opticon="db_fieldsTable.getIconByTable(col.jointable)"></CMyChipList>
             </div>
             <!-- Show Value -->
+            <div v-else-if="col.fieldtype === tools.FieldType.multiselect">
+                <CMyChipList
+                        :type="tools.FieldType.multiselect"
+                        :value="myvalue"
+                        :options="db_fieldsTable.getTableJoinByName(col.jointable)"
+                        :optval="db_fieldsTable.getKeyByTable(col.jointable)"
+                        :optlab="db_fieldsTable.getLabelByTable(col.jointable)"
+                        :opticon="db_fieldsTable.getIconByTable(col.jointable)"></CMyChipList>
+            </div>
+            <div v-else-if="col.fieldtype === tools.FieldType.boolean">
+                <q-toggle dark color="green" v-model="myvalue" :label="col.title"
+                          @input="Savedb"></q-toggle>
+            </div>
+            <div v-else-if="col.fieldtype === tools.FieldType.html">
+                <div v-html="visuValByType(myvalue, col, row)">
+
+                </div>
+            </div>
             <div v-else>
                 {{ visuValByType(myvalue, col, row) }}
             </div>
@@ -55,6 +74,15 @@
                 <div v-else-if="col.fieldtype === tools.FieldType.string">
                     <q-input v-model="myvalue"
                              autogrow
+                             @keyup.enter.stop
+                             autofocus>
+
+                    </q-input>
+                </div>
+                <div v-else-if="col.fieldtype === tools.FieldType.password">
+                    <q-input v-model="myvalue"
+                             type="password"
+                             @keyup.enter.stop
                              autofocus>
 
                     </q-input>
@@ -74,10 +102,13 @@
                     </CMyToggleList>
                 </div>
                 <div v-else-if="col.fieldtype === tools.FieldType.html">
-                    <q-input v-model="myvalue"
-                             autofocus
-                             @keyup.enter.stop
-                             type="textarea"></q-input>
+                    <CMyEditor :value.sync="myvalue" :title="col.title" @keyup.enter.stop>
+
+                    </CMyEditor>
+                    <!--<q-input v-model="myvalue"-->
+                             <!--autofocus-->
+                             <!--@keyup.enter.stop-->
+                             <!--type="textarea"></q-input>-->
                 </div>
                 <div v-else-if="col.fieldtype === tools.FieldType.select">
                     <CMySelect :label="col.title"
@@ -87,6 +118,25 @@
                                :options="db_fieldsTable.getTableJoinByName(col.jointable)"
                                :useinput="false">
                     </CMySelect>
+                </div>
+                <div v-else-if="col.fieldtype === tools.FieldType.multiselect">
+                    <q-select
+                            v-model="myvalue"
+                            rounded
+                            outlined
+                            multiple
+                            dense
+                            options-dense
+                            :display-value="db_fieldsTable.getTitleByTable(col.jointable)"
+                            emit-value
+                            map-options
+                            :options="db_fieldsTable.getTableJoinByName(col.jointable)"
+                            :option-label="db_fieldsTable.getLabelByTable(col.jointable)"
+                            :option-value="db_fieldsTable.getKeyByTable(col.jointable)"
+                            style="min-width: 150px"
+                            @input="changeCol">
+
+                    </q-select>
                 </div>
 
             </q-popup-edit>

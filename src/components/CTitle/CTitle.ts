@@ -10,10 +10,11 @@ import { Screen } from 'quasar'
   name: 'CTitle'
 })
 export default class CTitle extends Vue {
+  @Prop({ required: true }) public headtitle: string
   @Prop({ required: false, default: '' }) public imgbackground: string
   @Prop({ required: false, default: '' }) public imghead: string
   @Prop({ required: false, default: '' }) public sizes: string
-  @Prop({ required: true }) public headtitle: string
+  @Prop({ required: false, default: '' }) public styleadd: string
 
   get tools() {
     return tools
@@ -24,6 +25,11 @@ export default class CTitle extends Vue {
     const filefull = tools.getimgFullpathbysize(this.imgbackground)
 
     return tools.getimgbysize(filefull.path, filefull.file)
+  }
+
+  get getaltimg() {
+    const filefull = tools.getimgFullpathbysize(this.imgbackground)
+    return tools.getaltimg(filefull.path, filefull.file, this.headtitle)
   }
 
 }

@@ -9,10 +9,11 @@ import { CMyChipList } from '../CMyChipList'
 import { CDateTime } from '../CDateTime'
 import { CMyToggleList } from '../CMyToggleList'
 import { CMySelect } from '../CMySelect'
+import { CMyEditor } from '../CMyEditor'
 
 @Component({
   name: 'CMyPopupEdit',
-  components: {CMyChipList, CDateTime, CMyToggleList, CMySelect}
+  components: {CMyChipList, CDateTime, CMyToggleList, CMySelect, CMyEditor}
 })
 
 export default class CMyPopupEdit extends Vue {
@@ -21,6 +22,7 @@ export default class CMyPopupEdit extends Vue {
   @Prop({ required: false, default: false }) public canEdit
   @Prop({ required: false, default: '' }) public field
   @Prop({ required: false, default: '' }) public subfield
+  @Prop({ required: false, default: false }) public showall
 
   public myvalue = ''
 
@@ -52,13 +54,13 @@ export default class CMyPopupEdit extends Vue {
   }
 
   public OpenEdit() {
-    console.log('OpenEdit')
+    // console.log('OpenEdit')
     this.$emit('show')
   }
 
   public SaveValueInt(newVal, valinitial) {
 
-    console.log('SaveValueInt', newVal)
+    // console.log('SaveValueInt', newVal)
 
     // Update value in table memory
     if (this.subfield !== '') {
@@ -73,6 +75,13 @@ export default class CMyPopupEdit extends Vue {
     }
 
     this.$emit('save', newVal, valinitial)
+  }
+
+  public Savedb(newVal, valinitial) {
+
+    // console.log('Savedb', newVal)
+
+    this.$emit('showandsave', this.row, this.col, newVal, valinitial)
   }
 
   public visuValByType(val, col: IColGridTable, row) {
@@ -107,13 +116,23 @@ export default class CMyPopupEdit extends Vue {
         return '[---]'
       else
         return fieldsTable.getValueByTable(col, val)
+    } else if (col.fieldtype === tools.FieldType.multiselect) {
+      if (val === undefined)
+        return '[---]'
+      else
+        return fieldsTable.getMultiValueByTable(col, val)
     } else {
       if (val === undefined)
         return '[]'
       else if (val === '') {
         return '[]'
       } else {
-        let mystr = tools.firstchars(val, tools.MAX_CHARACTERS)
+        let mystr = ''
+        if (this.showall) {
+          return val
+        } else {
+          mystr = tools.firstchars(val, tools.MAX_CHARACTERS)
+        }
         if (val) {
           if (val.length > tools.MAX_CHARACTERS)
             mystr += '...'
@@ -127,12 +146,16 @@ export default class CMyPopupEdit extends Vue {
 
   public getclassCol(col) {
     if (col) {
-      let mycl = (col.disable || !this.canEdit) ? '' : 'colmodif'
+      let mycl = (col.disable) ? '' : 'colmodif'
       mycl += (col.fieldtype === tools.FieldType.date) ? ' coldate flex flex-container' : ''
 
       return mycl
     } else {
       return ''
     }
+  }
+
+  public changeCol() {
+
   }
 }
