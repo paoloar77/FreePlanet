@@ -688,31 +688,41 @@ namespace Actions {
 
   async function setGlobal(isLogged: boolean) {
     console.log('setGlobal')
-    // state.isLogged = true
-    if (isLogged) {
-      // console.log('state.isLogged', state.isLogged)
+    try {
+      // state.isLogged = true
+      if (isLogged) {
+        // console.log('state.isLogged', state.isLogged)
 
-      GlobalStore.mutations.setleftDrawerOpen(localStorage.getItem(tools.localStorage.leftDrawerOpen) === 'true')
-      GlobalStore.mutations.setCategorySel(localStorage.getItem(tools.localStorage.categorySel))
+        GlobalStore.mutations.setleftDrawerOpen(localStorage.getItem(tools.localStorage.leftDrawerOpen) === 'true')
+        GlobalStore.mutations.setCategorySel(localStorage.getItem(tools.localStorage.categorySel))
 
-      GlobalStore.actions.checkUpdates()
+        GlobalStore.actions.checkUpdates()
+      }
+
+      const p3 = await GlobalStore.actions.loadAfterLogin()
+
+      state.isLogged = isLogged
+
+      if (static_data.functionality.ENABLE_TODOS_LOADING)
+        await Todos.actions.dbLoad({ checkPending: true })
+
+      if (static_data.functionality.ENABLE_PROJECTS_LOADING)
+        await Projects.actions.dbLoad({ checkPending: true, onlyiffirsttime: true })
+
+      console.log('add routes')
+
+      GlobalStore.actions.addDynamicPages()
+
+      GlobalStore.state.finishLoading = true
+      if (tools.isDebug())
+        console.log('finishLoading', GlobalStore.state.finishLoading)
+
+      // document.dispatchEvent(new Event('custom-post-render-event'))
+
+    } catch (e) {
+      console.error('Error', e)
+      GlobalStore.state.finishLoading = true
     }
-
-    const p3 = await GlobalStore.actions.loadAfterLogin()
-
-    state.isLogged = isLogged
-
-    if (static_data.functionality.ENABLE_TODOS_LOADING)
-      await Todos.actions.dbLoad({ checkPending: true })
-
-    if (static_data.functionality.ENABLE_PROJECTS_LOADING)
-      await Projects.actions.dbLoad({ checkPending: true, onlyiffirsttime: true })
-
-    GlobalStore.state.finishLoading = true
-    if (tools.isDebug())
-      console.log('finishLoading', GlobalStore.state.finishLoading)
-
-    // document.dispatchEvent(new Event('custom-post-render-event'))
 
     return true
     // console.log('setGlobal: END')

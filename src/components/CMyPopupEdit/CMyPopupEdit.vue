@@ -36,6 +36,11 @@
                 <q-toggle dark color="green" v-model="myvalue" :label="col.title"
                           @input="Savedb"></q-toggle>
             </div>
+            <div v-else-if="col.fieldtype === tools.FieldType.html">
+                <div v-html="visuValByType(myvalue, col, row)">
+
+                </div>
+            </div>
             <div v-else>
                 {{ visuValByType(myvalue, col, row) }}
             </div>

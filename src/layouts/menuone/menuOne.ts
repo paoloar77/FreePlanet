@@ -20,6 +20,10 @@ export default class MenuOne extends Vue {
   //   return this.$route.path
   // }
 
+  get isfinishLoading() {
+    return GlobalStore.state.finishLoading
+  }
+
   get tools() {
     return tools
   }

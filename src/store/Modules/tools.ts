@@ -67,6 +67,7 @@ export const tools = {
   TABEVENTS: 'myevents',
   TABNEWSLETTER: 'newstosent',
   TABMAILINGLIST: 'mailinglist',
+  TABMYPAGE: 'mypage',
   TABTEMPLEMAIL: 'templemail',
   TABOPZEMAIL: 'opzemail',
 
@@ -2669,15 +2670,15 @@ export const tools = {
 
       return mywidth
     } else {
-      console.log('this.getwidth(mythis) = ', this.getwidth(mythis))
+      // console.log('this.getwidth(mythis) = ', this.getwidth(mythis))
       let myw = mywidth + ((this.getwidth(mythis) - mywidth) * 0.6)
-      console.log('myw1 = ', myw)
+      // console.log('myw1 = ', myw)
       if (myw > maxwidth)
         myw = maxwidth
       if (myw > this.getwidth(mythis) - 20)
         myw = this.getwidth(mythis) - 20
 
-      console.log('myw = ', myw)
+      // console.log('myw = ', myw)
       return myw
     }
   },
@@ -2823,7 +2824,8 @@ export const tools = {
   },
   isDebug() {
     return process.env.DEV
-  }
+  },
+
 
 // getLocale() {
   //   if (navigator.languages && navigator.languages.length > 0) {

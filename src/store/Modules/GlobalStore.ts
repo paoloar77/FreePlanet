@@ -24,6 +24,7 @@ import { serv_constants } from '@src/store/Modules/serv_constants'
 import { IUserState } from '@src/model'
 import { Calendar } from 'element-ui'
 import { fieldsTable } from '@src/store/Modules/fieldsTable'
+import router from '@router'
 // import { static_data } from '@src/db/static_data'
 
 let stateConnDefault = 'online'
@@ -75,7 +76,8 @@ const state: IGlobalState = {
   disciplines: [],
   autoplaydisc: 8000,
   newstosent: [],
-  mailinglist: []
+  mailinglist: [],
+  mypage: []
 }
 
 async function getConfig(id) {
@@ -131,6 +133,12 @@ namespace Getters {
 
   }, 'showtype')
 
+  const getPage = b.read((mystate: IGlobalState) => (path) => {
+    // const config = state.arrConfig.find(item => item._id === cat + costanti.CONFIG_ID_SHOW_TYPE_TODOS)
+    return mystate.mypage.find((page) => (`/` + page.path) === path)
+
+  }, 'getPage')
+
   const getmenu = b.read((state) => {
     // console.log('getmenu', cfgrouter.getmenu())
 
@@ -180,6 +188,8 @@ namespace Getters {
       return GlobalStore.state.opzemail
     else if (table === tools.TABMAILINGLIST)
       return GlobalStore.state.mailinglist
+    else if (table === tools.TABMYPAGE)
+      return GlobalStore.state.mypage
     else if (table === 'bookings')
       return CalendarStore.state.bookedevent
     else if (table === 'users')
@@ -275,6 +285,10 @@ namespace Getters {
 
     get gettemplemailbyId() {
       return gettemplemailbyId()
+    },
+
+    get getPage() {
+      return getPage()
     },
 
     get t() {
@@ -761,6 +775,7 @@ namespace Actions {
         if (showall) {
           GlobalStore.state.newstosent = (res.data.newstosent) ? [...res.data.newstosent] : []
           GlobalStore.state.mailinglist = (res.data.mailinglist) ? [...res.data.mailinglist] : []
+          GlobalStore.state.mypage = (res.data.mypage) ? [...res.data.mypage] : []
         }
 
         CalendarStore.state.editable = UserStore.state.isAdmin || UserStore.state.isManager
@@ -787,6 +802,47 @@ namespace Actions {
       })
   }
 
+  async function addDynamicPages(context) {
+
+    const arrpagesroute: IListRoutes[] = []
+    for (const page of state.mypage) {
+      arrpagesroute.push({
+        path: '/' + page.path,
+        name: undefined,
+        text: page.title,
+        materialIcon: page.icon,
+        component: () => import('@/root/mypage/mypage.vue'),
+        inmenu: page.inmenu,
+        infooter: page.infooter,
+        level_child: page.l_child,
+        level_parent: page.l_par,
+      })
+    }
+
+    const last = {
+      path: '*',
+      materialIcon: 'fas fa-calendar-plus',
+      name: 'otherpages.error404def',
+      component: () => import('@/root/My404page/My404page.vue'),
+      inmenu: false,
+      infooter: false
+    }
+
+    static_data.routes = [...static_data.routes, ...arrpagesroute, last]
+
+    router.addRoutes([...arrpagesroute, last])
+  }
+
+  async function sendFile(context, formdata) {
+    try {
+      const { data } = await Api.postFormData('/upload', formdata)
+      console.log(data)
+
+    } catch (e) {
+      console.log('Error sendFile: ', e)
+    }
+  }
+
   export const actions = {
     setConta: b.dispatch(setConta),
     createPushSubscription: b.dispatch(createPushSubscription),
@@ -802,7 +858,8 @@ namespace Actions {
     saveTable: b.dispatch(saveTable),
     DeleteRec: b.dispatch(DeleteRec),
     sendEmailTest: b.dispatch(sendEmailTest),
-    DuplicateRec: b.dispatch(DuplicateRec)
+    DuplicateRec: b.dispatch(DuplicateRec),
+    addDynamicPages: b.dispatch(addDynamicPages)
   }
 
 }

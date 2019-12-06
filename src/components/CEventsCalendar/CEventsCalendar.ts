@@ -17,8 +17,6 @@ import { CMySelect } from '../../components/CMySelect/index'
 import { CMyEditor } from '../../components/CMyEditor/index'
 import { stop, prevent, stopAndPrevent } from 'quasar/src/utils/event'
 
-import QDateScroller from '@quasar/quasar-app-extension-qscroller/src/component/QDateScroller'
-import QDateTimeScroller from '@quasar/quasar-app-extension-qscroller/src/component/QDateTimeScroller'
 import { CTodo } from '@src/components/todos/CTodo'
 import { SingleProject } from '@src/components/projects/SingleProject'
 import { IEvents } from '@src/model'
@@ -46,8 +44,6 @@ import { CMyTeacher } from '../CMyTeacher'
     Footer,
     CTitle,
     CImgText,
-    QDateTimeScroller,
-    QDateScroller,
     CMySelect,
     CMyEditor,
     CDateTime,
@@ -277,7 +273,9 @@ export default class CEventsCalendar extends MixinEvents {
   }
 
   get dayHeight() {
-    if (Screen.height < 500)
+    if (Screen.height < 400)
+      return 80
+    else if (Screen.height < 500)
       return 100
     if (Screen.height < 700)
       return 110
@@ -1026,6 +1024,9 @@ export default class CEventsCalendar extends MixinEvents {
 
   public getTitleEv(event: IEvents) {
     return (!!event.short_tit) ? event.short_tit : event.title
+  }
+  public getLongTitleEv(event: IEvents) {
+    return event.title
   }
 
 }

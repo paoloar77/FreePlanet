@@ -10,6 +10,17 @@ $graytext: #555;
   font-size: 12px;
 }
 
+.my-event-rel {
+  width: 100%;
+  font-size: 0.75rem;
+  line-height: 1.25rem;
+  text-align: center;
+  vertical-align: center;
+  margin-bottom: 5px;
+  cursor: pointer;
+  padding: 4px 2px 4px 2px !important;
+}
+
 .flex-container {
   background-color: #ccc;
   padding: 10px;

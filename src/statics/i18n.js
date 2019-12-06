@@ -19,6 +19,8 @@ const msgglobal = {
         userlist: 'Lista Utenti',
         tableslist: 'Lista Tabelle',
         newsletter: 'Newsletter',
+        pages: 'Pagine',
+        media: 'Media',
       },
       manage: {
         menu: 'Gestione',
@@ -379,6 +381,8 @@ const msgglobal = {
         userlist: 'Lista de usuarios',
         tableslist: 'Listado de tablas',
         newsletter: 'Newsletter',
+        pages: 'Páginas',
+        media: 'Medios',
       },
       manage: {
         menu: 'Gestionar',
@@ -730,6 +734,8 @@ const msgglobal = {
         userlist: 'Liste d\'utilisateurs',
         tableslist: 'Liste des tables',
         newsletter: 'Newsletter',
+        pages: 'Pages',
+        media: 'Médias',
       },
       manage: {
         menu: 'Gérer',
@@ -1080,6 +1086,8 @@ const msgglobal = {
         userlist: 'Users List',
         tableslist: 'List of tables',
         newsletter: 'Newsletter',
+        pages: 'Pages',
+        media: 'Medias',
       },
       manage: {
         menu: 'Manage',
@@ -1429,6 +1437,8 @@ const msgglobal = {
         userlist: 'Users List',
         tableslist: 'List of tables',
         newsletter: 'Newsletter',
+        pages: 'Pages',
+        media: 'Medias',
       },
       manage: {
         menu: 'Manage',

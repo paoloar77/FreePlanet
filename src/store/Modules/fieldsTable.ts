@@ -62,6 +62,25 @@ export const colmailinglist = [
   AddCol(DeleteRec)
 ]
 
+export const colmypage = [
+  AddCol({ name: 'title', label_trans: 'pages.title' }),
+  AddCol({ name: 'path', label_trans: 'pages.path' }),
+  AddCol({ name: 'icon', label_trans: 'pages.icon' }),
+  AddCol({ name: 'keywords', label_trans: 'pages.keywords' }),
+  AddCol({ name: 'description', label_trans: 'pages.description' }),
+  AddCol({ name: 'heightimg', label_trans: 'pages.heightimg', fieldtype: tools.FieldType.number }),
+  AddCol({ name: 'imgback', label_trans: 'pages.imgback', fieldtype: tools.FieldType.string }),
+  AddCol({ name: 'content', label_trans: 'pages.content', fieldtype: tools.FieldType.html }),
+  AddCol({ name: 'active', label_trans: 'pages.active', fieldtype: tools.FieldType.boolean }),
+  AddCol({ name: 'inmenu', label_trans: 'pages.inmenu', fieldtype: tools.FieldType.boolean }),
+  AddCol({ name: 'submenu', label_trans: 'pages.submenu', fieldtype: tools.FieldType.boolean }),
+  AddCol({ name: 'l_par', label_trans: 'pages.l_par', fieldtype: tools.FieldType.number }),
+  AddCol({ name: 'l_child', label_trans: 'pages.l_child', fieldtype: tools.FieldType.number }),
+  AddCol({ name: 'infooter', label_trans: 'pages.infooter', fieldtype: tools.FieldType.boolean }),
+  AddCol(DeleteRec),
+  AddCol(DuplicateRec)
+]
+
 export const colopzemail = [
   AddCol({ name: 'key', label_trans: 'col.key' }),
   AddCol({ name: 'label_it', label_trans: 'col.label' }),
@@ -338,6 +357,9 @@ export const fieldsTable = {
       return ''
   },
 
+
+
+
   // IColGridTable
   colTableUsers: [
     AddCol({ name: 'username', label_trans: 'reg.username' }),
@@ -393,14 +415,16 @@ export const fieldsTable = {
       label: 'Newsletter da Inviare',
       columns: colnewstosent,
       colkey: '_id',
-      collabel: 'label'
+      collabel: 'label',
+      onlyAdmin: true
     },
     {
       value: 'templemail',
       label: 'Template Email',
       columns: coltemplemail,
       colkey: '_id',
-      collabel: 'subject'
+      collabel: 'subject',
+      onlyAdmin: true
     },
     {
       value: 'opzemail',
@@ -423,13 +447,15 @@ export const fieldsTable = {
       columns: colTablePermission,
       colkey: 'value',
       collabel: 'label',
-      colicon: 'icon'
+      colicon: 'icon',
+      noshow: true,
     },
     {
       value: 'fieldstype',
       label: 'Tipi di Campi',
       colkey: 'value',
-      collabel: 'label'
+      collabel: 'label',
+      noshow: true,
     },
     {
       value: 'settings',
@@ -443,6 +469,6 @@ export const fieldsTable = {
 
 export const func = {
   gettablesList() {
-    return fieldsTable.tablesList.filter((rec) => (rec.onlyAdmin === UserStore.state.isAdmin) || (!rec.onlyAdmin))
+    return fieldsTable.tablesList.filter((rec) => (rec.onlyAdmin === UserStore.state.isAdmin) || (!rec.onlyAdmin) && (!rec.noshow))
   }
 }

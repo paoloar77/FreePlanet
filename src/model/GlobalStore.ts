@@ -49,6 +49,23 @@ export interface ITeachUname {
   username?: string
 }
 
+export interface IMyPage {
+  _id?: string
+  author_username?: string
+  title?: string
+  icon?: string
+  path?: string
+  keywords?: string
+  description?: string
+  content?: string
+  active?: boolean
+  inmenu?: boolean
+  submenu?: boolean
+  l_par?: number,
+  l_child?: number,
+  infooter?: boolean
+}
+
 export interface INewsToSent {
   _id: string
   idapp?: string
@@ -132,6 +149,7 @@ export interface IGlobalState {
   settings: ISettings[],
   disciplines: IDiscipline[],
   newstosent: INewsToSent[],
+  mypage: IMyPage[],
   templemail: ITemplEmail[],
   opzemail: ISettings[],
   mailinglist: IMailinglist[],
@@ -324,6 +342,7 @@ export interface ITableRec {
   collabel: string
   colicon?: string
   onlyAdmin?: boolean
+  noshow: boolean
 }
 
 export interface IDataPass {

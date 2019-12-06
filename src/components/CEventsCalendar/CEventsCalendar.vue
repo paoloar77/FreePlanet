@@ -403,17 +403,19 @@
         <!--v-touch-swipe.mouse.left.right="handleSwipe" -->
 
         <!-- the calendar -->
-        <q-page v-if="visuAllCal && showfirstN === 0" class="column" style="min-height: 500px !important;">
+        <q-page v-if="visuAllCal && showfirstN === 0" class="column" style="min-height: 200px !important;">
 
             <div>
                 <q-toolbar class="mytoolbar">
                     <q-btn color="primary" round icon="keyboard_arrow_left" @click="calendarPrev"/>
                     <q-btn color="primary" round icon="keyboard_arrow_right" @click="calendarNext"/>
                     <q-separator vertical/>
-                    <q-btn color="primary" :label="$t('dialog.today')" class="q-mx-md" @click="SetToday"></q-btn>
+                    <!--<q-btn color="primary" :label="$t('dialog.today')" class="q-mx-md" @click="SetToday"></q-btn>-->
                     <q-separator vertical/>
-                    <q-btn label="GG" color="primary" @click="calendarView = 'day'"/>
-                    <q-btn label="Set" color="primary" @click="calendarView = 'week'"/>
+                    <!--<q-btn label="GG" color="primary" @click="calendarView = 'day'"/>
+                    <q-btn label="Set" color="primary" @click="calendarView = 'week'"/>-->
+                    <q-btn label="5 GG" color="primary" @click="calendarView = '5day-agenda'"/>
+                    <q-btn label="Sett" color="primary" @click="calendarView = 'week-agenda'"/>
                     <q-btn label="Mese" color="primary" @click="calendarView = 'month'"/>
                     <q-space/>
                 </q-toolbar>
@@ -497,23 +499,6 @@
                     <template #day-header="{ date }">
                         <div class="row justify-center">
                             <template v-for="(event, index) in eventsMap[date]">
-                                <!--<q-badge-->
-                                <!--v-if="event.allday"-->
-                                <!--:key="index"-->
-                                <!--style="width: 100%; cursor: pointer;"-->
-                                <!--class="ellipsis"-->
-                                <!--:class="badgeClasses(event, 'header')"-->
-                                <!--:style="badgeStyles(event, 'header')"-->
-                                <!--@click.stop.prevent="showEvent(event)"-->
-                                <!--:draggable="true"-->
-                                <!--@dragstart.native="(e) => onDragStart(e, event)"-->
-                                <!--@dragend.native="(e) => onDragEnd(e, event)"-->
-                                <!--@dragenter.native="(e) => onDragEnter(e, event)"-->
-                                <!--@touchmove.native="(e) => {}"-->
-                                <!--&gt;-->
-                                <!--<q-icon v-if="event.icon" :name="event.icon" class="q-mr-xs"></q-icon>-->
-                                <!--<span class="ellipsis">{{ event.title }}</span>-->
-                                <!--</q-badge>-->
                                 <q-badge
                                         :key="index"
                                         class="q-ma-xs"
@@ -526,6 +511,42 @@
                     </template>
                     <template #day-body="{ date, timeStartPos, timeDurationHeight }">
                         <template v-for="(event, index) in getEvents(date)">
+                            <div
+                                    :key="index"
+                                    :label="tools.getstrTime(event.dateTimeStart)"
+                                    class="justify-start q-ma-sm shadow-5 bg-blue-grey-6"
+                            >
+                                <div v-if="getImgEvent(event)" class="row justify-center"
+                                     style="margin-top: 30px; width: 100%;">
+                                    <q-avatar
+                                            style="margin-top: -25px; margin-bottom: 10px; font-size: 60px; max-height: 50px;">
+                                        <img :src="getImgEvent(event)" style="border: #a4edf6 solid 5px;">
+                                    </q-avatar>
+                                </div>
+                                <div class="col-12 q-px-xs text-white">
+                                    <strong>{{ tools.getstrTime(event.dateTimeStart) }}</strong>
+                                </div>
+                                <div v-if="getTitleEv(event)" class="col-12 q-px-xs text-white"
+                                     style="font-size: 0.75rem;">
+                                    <q-badge
+                                            :key="index"
+                                            multi-line
+                                            class="my-event-rel justify-center rounded-borders"
+                                            :class="badgeClasses(event, 'body')"
+                                            :style="badgeStyles(event, 'body', timeStartPos, timeDurationHeight)"
+                                            @click.stop.prevent="showEvent(event)"
+                                            :draggable="tools.isManager()"
+                                            @dragstart.native="(e) => onDragStart(e, event)"
+                                            @dragend.native="(e) => onDragEnd(e, event)"
+                                            @dragenter.native="(e) => onDragEnter(e, event)"
+                                            @touchmove.native="(e) => {}"
+                                    >
+                                        <span class="">{{ getTitleEv(event) }}</span> <br>
+
+                                    </q-badge>
+                                </div>
+                            </div>
+                            <!--
                             <q-badge
                                     :key="index"
                                     class="my-event justify-center"
@@ -539,8 +560,14 @@
                                     @touchmove.native="(e) => {}"
                             >
                                 <q-icon v-if="event.icon" :name="event.icon" class="q-mr-xs"></q-icon>
-                                <span class="">{{ getTitleEv(event) }}</span>
-                            </q-badge>
+                                <p class="">{{ getTitleEv(event) }}</p> <br>
+                                <div class="text-center"><img :src="getImgEvent(event)"
+                                                              class="text-center listaev__tdimg_small"
+                                                              :alt="event.title">
+                                </div>
+
+
+                            </q-badge> -->
                         </template>
                     </template>
                 </q-calendar>
@@ -651,7 +678,8 @@
 
                                         <q-chip>
                                             <q-avatar v-if="getWhereIcon(event.wherecode)">
-                                                <img :src="`../../statics/images/avatar/` + getWhereIcon(event.wherecode)" :alt="event.wherecode">
+                                                <img :src="`../../statics/images/avatar/` + getWhereIcon(event.wherecode)"
+                                                     :alt="event.wherecode">
                                             </q-avatar>
                                             <q-avatar color="blue" font-size="20px" text-color="white" icon="home">
                                             </q-avatar>
