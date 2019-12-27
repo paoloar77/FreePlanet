@@ -149,6 +149,7 @@ export interface IGlobalState {
   settings: ISettings[],
   disciplines: IDiscipline[],
   newstosent: INewsToSent[],
+  gallery: IGallery[],
   mypage: IMyPage[],
   templemail: ITemplEmail[],
   opzemail: ISettings[],
@@ -258,14 +259,20 @@ export interface ITimeLineMain {
   body: ITimeLineEntry[]
 }
 
+export interface IImgGallery {
+  _id?:string
+  imagefile: string
+  order?: number
+  alt?: string
+  description?: string
+}
+
 export interface IGallery {
+  _id?: string
+  author_username: string
   title: string
-  subtitle?: IAllLang
-  img: string
-  width?: number
-  height?: number
-  ingallery?: boolean
-  inexibitions?: boolean
+  directory: string
+  list: IImgGallery[]
 }
 
 export interface IColl {
@@ -293,6 +300,7 @@ export interface IParamDialog {
 
 export interface IFunctionality {
   PWA?: boolean
+  ENABLE_REGISTRATION?: boolean
   SHOW_USER_MENU?: boolean
   SHOW_IF_IS_SERVER_CONNECTION?: boolean
   ENABLE_TODOS_LOADING?: boolean

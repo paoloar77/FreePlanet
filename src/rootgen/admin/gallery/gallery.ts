@@ -2,16 +2,15 @@ import Vue from 'vue'
 import { Component, Prop } from 'vue-property-decorator'
 import { GlobalStore, UserStore } from '@store'
 
-import { tools } from '../../../../../associazioneShen/src/store/Modules/tools'
-import { static_data } from '../../../../../associazioneShen/src/db/static_data'
+import { static_data } from '../../../db/static_data'
 import { Screen } from 'quasar'
 
-import { colgallery } from 'store/Modules/fieldsTable'
+import { colgallery } from '@src/store/Modules/fieldsTable'
 
-import { CImgText } from '../../../../../associazioneShen/src/components/CImgText/index'
+import { CImgText } from '../../../components/CImgText/index'
 import { CCard, CGridTableRec, CMyPage, CTitleBanner } from '@components'
 import MixinMetaTags from '../../../../../associazioneShen/src/mixins/mixin-metatags'
-import MixinBase from 'mixins/mixin-base'
+import MixinBase from '../../../mixins/mixin-base'
 
 @Component({
   mixins: [MixinBase],

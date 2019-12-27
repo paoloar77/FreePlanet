@@ -14,7 +14,7 @@
         </div>
     </CMyPage>
 </template>
-<script lang="ts" src="gallery.ts">
+<script lang="ts" src="./gallery.ts">
 
 </script>
 <style lang="scss" scoped>

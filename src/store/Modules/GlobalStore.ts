@@ -76,6 +76,7 @@ const state: IGlobalState = {
   disciplines: [],
   autoplaydisc: 8000,
   newstosent: [],
+  gallery: [],
   mailinglist: [],
   mypage: []
 }
@@ -182,6 +183,8 @@ namespace Getters {
       return GlobalStore.state.disciplines
     else if (table === tools.TABNEWSLETTER)
       return GlobalStore.state.newstosent
+    else if (table === tools.TABGALLERY)
+      return GlobalStore.state.gallery
     else if (table === tools.TABTEMPLEMAIL)
       return GlobalStore.state.templemail
     else if (table === tools.TABOPZEMAIL)
@@ -771,6 +774,7 @@ namespace Actions {
         CalendarStore.state.contribtype = (res.data.contribtype) ? res.data.contribtype : []
         GlobalStore.state.settings = (res.data.settings) ? [...res.data.settings] : []
         GlobalStore.state.disciplines = (res.data.disciplines) ? [...res.data.disciplines] : []
+        GlobalStore.state.gallery = (res.data.gallery) ? [...res.data.gallery] : []
 
         if (showall) {
           GlobalStore.state.newstosent = (res.data.newstosent) ? [...res.data.newstosent] : []

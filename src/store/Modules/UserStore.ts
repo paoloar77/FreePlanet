@@ -709,7 +709,7 @@ namespace Actions {
       if (static_data.functionality.ENABLE_PROJECTS_LOADING)
         await Projects.actions.dbLoad({ checkPending: true, onlyiffirsttime: true })
 
-      console.log('add routes')
+      // console.log('add routes')
 
       GlobalStore.actions.addDynamicPages()
 

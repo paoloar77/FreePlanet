@@ -7,7 +7,14 @@
   font-weight: 350;
 }
 
+.q-toolbar__title{
+  padding: 0 12px;
+}
+
 @media screen and (max-width: 600px) {
+  .q-toolbar__title{
+    padding: 0;
+  }
   .layout-padding {
     padding: 1.5em .5em;
   }

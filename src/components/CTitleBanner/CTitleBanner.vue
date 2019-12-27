@@ -1,11 +1,27 @@
 <template>
     <div>
         <q-banner
-                class="q-my-md"
-                rounded dense :class="bgcolor+` text-white`"
-                :color="color+` q-title`" style="text-align: center;">
-            <span class="mybanner">{{title}}</span>
+                inline-actions
+                rounded dense
+                :class="bgcolor+` q-my-md `+clcolor+ ` ` + myclass"
+                style="text-align: center; "
+                @click="myvisible = !myvisible"
+        >
+            <template v-slot:avatar>
+                <q-icon :name="icon" color="white" />
+            </template>
+            <template v-slot:action>
+                <q-icon :name="iconopen" color="white" />
+            </template>
+            <span :class="`mybanner `+ myclasstext" :style="mystyle">{{title}}</span>
         </q-banner>
+
+        <q-slide-transition>
+            <div v-show="myvisible">
+                <slot></slot>
+            </div>
+        </q-slide-transition>
+
     </div>
 </template>
 

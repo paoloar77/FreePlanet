@@ -14,9 +14,9 @@
     </div>
     <div v-else>
         <div class="q-my-md">
-            <p class="text-subtitle2 text-center">
+            <p v-if="urlmap" class="text-subtitle2 text-center">
                 <span v-html="title"></span>
-                - <a href="urlmap" target="_blank" class="text-black">Apri Mappa</a>
+                - <a :href="urlmap" target="_blank" class="text-black">Apri Mappa</a>
             </p>
             <a :href="urlmap" target="_blank">
                 <q-img :src="`statics/` + imgmap" class="imgautosize" alt="my map">

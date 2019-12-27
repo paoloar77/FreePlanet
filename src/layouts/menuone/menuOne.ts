@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import { Watch } from 'vue-property-decorator'
 import { GlobalStore } from '../../store/Modules'
-import Component from 'vue-class-component'
 import { static_data } from '../../db/static_data'
 import { tools } from '../../store/Modules/tools'
 import { IListRoutes } from '@src/model'

@@ -44,7 +44,7 @@
                         </div>
                     </div>
 
-                    <div class="text-center">
+                    <div v-if="getValDb('URLMAP', false)" class="text-center">
                         <span v-html="getValDb('MAP_TITLE', false)"></span>
                         <br>
                         <a :href="getValDb('URLMAP', false)" target="_blank" class="footer_link">Apri Mappa</a>
@@ -60,7 +60,6 @@
 
                         <div class="q-mt-xs mycontacts">
                             <p class="mycontacts_title">{{$t('homepage.titlecontatti')}}</p>
-
 
                             <div class="mycontacts_text">
                                 <i v-if="getValDb('MAIN_EMAIL', false)" aria-hidden="true"

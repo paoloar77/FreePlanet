@@ -17,6 +17,7 @@ import router from '@router'
 
 import globalroutines from '../../globalroutines/index'
 import { ICategory } from '../../model'
+import { static_data } from '../../db/static_data'
 
 // import {Loading, QSpinnerFacebook, QSpinnerGears} from 'quasar'
 
@@ -37,6 +38,10 @@ export default class CSignIn extends Vue {
   public signin: ISigninOptions = {
     username: process.env.TEST_USERNAME || '',
     password: process.env.TEST_PASSWORD || ''
+  }
+
+  get static_data() {
+    return static_data
   }
 
   public created() {

@@ -49,7 +49,6 @@
                         <q-toggle dark color="green" v-model="myvalue" :label="col.title"
                                   @input="savefield"></q-toggle>
                     </div>
-
                     <div v-else>
                         {{ myvalprinted }}
                     </div>

@@ -7,10 +7,11 @@ import { toolsext } from '@src/store/Modules/toolsext'
 import { GlobalStore } from '../store/Modules'
 import { fieldsTable } from '@src/store/Modules/fieldsTable'
 import { CalendarStore } from '@store'
+import MixinMetaTags from '@src/mixins/mixin-metatags'
 
 // You can declare a mixin as the same style as components.
 @Component
-export default class MixinBase extends Vue {
+export default class MixinBase extends MixinMetaTags {
   public mythis() {
     return this
   }
@@ -103,8 +104,8 @@ export default class MixinBase extends Vue {
     try {
       if (myval) {
         const myrec = JSON.parse(myval)
-        // console.log('*************** getarrValDb')
-        // console.table(myrec)
+        console.log('*************** getarrValDb')
+        console.table(myrec)
         return myrec
       } else {
         return []

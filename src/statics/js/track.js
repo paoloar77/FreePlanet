@@ -1,14 +1,10 @@
 function geturl() {
   const miaurl = document.location.href
 
-  if (miaurl.includes('test.')) {
-    return 'https://test.associazioneshen.it/'
+  if (miaurl.includes('localhost')) {
+    return 'http://localhost:8084/'
   } else {
-    if (miaurl.includes('localhost')) {
-      return 'http://localhost:8080/'
-    } else {
-      return 'https://associazioneshen.it/'
-    }
+    return 'https://mandalasolidale.freeplanet.app/'
   }
 }
 

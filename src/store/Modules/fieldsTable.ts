@@ -58,8 +58,21 @@ export const colmailinglist = [
   AddCol({ name: 'surname', label_trans: 'reg.surname' }),
   AddCol({ name: 'email', label_trans: 'reg.email' }),
   AddCol({ name: 'statesub', label_trans: 'newsletter.statesub', fieldtype: tools.FieldType.boolean }),
+  AddCol({ name: 'wrongerr', label_trans: 'newsletter.wrongerr', fieldtype: tools.FieldType.boolean }),
   AddCol({ name: 'lastid_newstosent', label_trans: 'reg.lastid_newstosent', fieldtype: tools.FieldType.string }),
   AddCol(DeleteRec)
+]
+
+export const colgallery = [
+  AddCol({ name: 'author_username', label_trans: 'gallery.author_username' }),
+  AddCol({ name: 'title', label_trans: 'gallery.title' }),
+  AddCol({ name: 'directory', label_trans: 'gallery.directory' }),
+  AddCol({
+    name: 'list',
+    label_trans: 'gallery.list',
+    fieldtype: tools.FieldType.listimages,
+    jointable: ''
+  }),
 ]
 
 export const colmypage = [
@@ -117,6 +130,7 @@ export const colnewstosent = [
   AddCol({ name: 'lastemailsent_Job', label_trans: 'newsletter.lastemailsent_Job', fieldtype: tools.FieldType.date }),
   AddCol({ name: 'starting_job', label_trans: 'newsletter.starting_job', fieldtype: tools.FieldType.boolean }),
   AddCol({ name: 'finish_job', label_trans: 'newsletter.finish_job', fieldtype: tools.FieldType.boolean }),
+  AddCol({ name: 'processing_job', label_trans: 'newsletter.processing_job', fieldtype: tools.FieldType.boolean }),
   AddCol({ name: 'error_job', label_trans: 'newsletter.error_job', fieldtype: tools.FieldType.string }),
   AddCol(DeleteRec),
   AddCol(DuplicateRec)
@@ -417,6 +431,13 @@ export const fieldsTable = {
       colkey: '_id',
       collabel: 'label',
       onlyAdmin: true
+    },
+    {
+      value: 'gallery',
+      label: 'Gallerie',
+      columns: colgallery,
+      colkey: '_id',
+      collabel: 'title',
     },
     {
       value: 'templemail',

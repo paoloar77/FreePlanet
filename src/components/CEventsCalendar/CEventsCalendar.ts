@@ -273,7 +273,7 @@ export default class CEventsCalendar extends MixinEvents {
   }
 
   get dayHeight() {
-    if (Screen.height < 400)
+    if (Screen.height < 410)
       return 80
     else if (Screen.height < 500)
       return 100

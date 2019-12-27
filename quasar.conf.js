@@ -136,7 +136,7 @@ module.exports = function (ctx) {
           .test(/\.(gql|graphql)$/)
           .loader('graphql-tag/loader') */
 
-        // extendPrerender(config);
+        extendPrerender(config);
       }
     },
     dev: {

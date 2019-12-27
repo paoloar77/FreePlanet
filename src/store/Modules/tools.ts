@@ -24,7 +24,7 @@ import translate from '@src/globalroutines/util'
 import { RouteNames } from '@src/router/route-names'
 
 import { lists } from './lists'
-import { static_data } from '@src/db/static_data'
+import { preloadedimages, static_data } from '@src/db/static_data'
 import { IColl, ITimeLineEntry, ITimeLineMain } from '@src/model/GlobalStore'
 import { func_tools } from '@src/store/Modules/toolsext'
 import { serv_constants } from '@src/store/Modules/serv_constants'
@@ -66,6 +66,7 @@ export const tools = {
 
   TABEVENTS: 'myevents',
   TABNEWSLETTER: 'newstosent',
+  TABGALLERY: 'gallery',
   TABMAILINGLIST: 'mailinglist',
   TABMYPAGE: 'mypage',
   TABTEMPLEMAIL: 'templemail',
@@ -139,6 +140,7 @@ export const tools = {
     typeinrec: 128,
     multiselect: 256,
     password: 512,
+    listimages: 1024,
   },
 
   FieldTypeArr: [
@@ -2120,29 +2122,25 @@ export const tools = {
   }
   ,
 
-  heightgallery() {
-    return tools.heightGallVal().toString() + 'px'
+  heightgallery(coeff) {
+    return tools.heightGallVal(coeff).toString() + 'px'
   }
   ,
 
-  heightGallVal() {
+  heightGallVal(coeff = 1.33) {
     let maxh2 = 0
 
-    if (Screen.width < 400) {
-      maxh2 = 350
-    } else if (Screen.width < 600) {
-      maxh2 = 400
-    } else if (Screen.width < 700) {
-      maxh2 = 450
-    } else if (Screen.width < 800) {
-      maxh2 = 550
-    } else if (Screen.width < 1000) {
-      maxh2 = 650
-    } else if (Screen.width < 1200) {
-      maxh2 = 700
-    } else {
+    let myw = Screen.width
+    if (!this.isMobile())
+      if (GlobalStore.state.leftDrawerOpen)
+        myw -= 300
+    if (!this.isMobile())
+      if (GlobalStore.state.RightDrawerOpen)
+        myw -= 300
+
+    maxh2 = (myw / coeff) + 20
+    if (maxh2 > 750)
       maxh2 = 750
-    }
 
     return maxh2
   }
@@ -2186,7 +2184,7 @@ export const tools = {
   ,
 
   myheight_dialog() {
-    if (Screen.width < 400) {
+    if (Screen.width < 410) {
       return '337'
     } else if (Screen.width < 600) {
       return '400'
@@ -2199,7 +2197,7 @@ export const tools = {
     if (!!sized) {
       return sized
     } else {
-      if (Screen.width < 400) {
+      if (Screen.width < 410) {
         return 'max-height: 250px'
       } else {
         return 'max-height: 350px'
@@ -2236,7 +2234,7 @@ export const tools = {
   ,
 
   maxwidth_imgtitle() {
-    if (Screen.width < 400) {
+    if (Screen.width < 410) {
       return 'max-width: 250px'
     } else {
       return 'max-width: 350px'
@@ -2245,12 +2243,12 @@ export const tools = {
   ,
 
   isMobile() {
-    return (Screen.width < 400)
+    return (Screen.width < 450)
   }
   ,
 
   mywidth_imgtitle() {
-    if (Screen.width < 400) {
+    if (Screen.width < 450) {
       return '250'
     } else if (Screen.width < 600) {
       return '350'
@@ -2266,7 +2264,7 @@ export const tools = {
   ,
 
   showthumbnails() {
-    if (Screen.width < 400) {
+    if (Screen.width < 410) {
       return false
     } else if (Screen.width < 600) {
       return true
@@ -2404,7 +2402,7 @@ export const tools = {
     const myimage = dir + file
     // console.log('includes = ', static_data.preLoadImages.map((a) => a.imgname).includes(myimage), myimage)
     let ris = ''
-    if (this.isMobile() && (static_data.preLoadImages.map((a) => a.imgname).includes(myimage))) {
+    if (this.isMobile() && (preloadedimages().map((a) => a.imgname).includes(myimage))) {
       ris = dir + 'mobile/' + file
     } else {
       ris = myimage
@@ -2451,14 +2449,21 @@ export const tools = {
     return '"' + myevent.title + '" (' + tools.getstrDateEmailTime(mythis, myevent.dateTimeStart) + ')'
   },
 
+  getlangforQuasar(mylang) {
+    if (mylang === 'enUs')
+      return 'en-us'
+    else
+      return mylang
+  },
+
   setLangAtt(mylang) {
     console.log('setLangAtt =', mylang)
     // console.log('PRIMA this.$q.lang.isoName', this.$q.lang.isoName)
 
     // dynamic import, so loading on demand only
-    import(`quasar/lang/${mylang}`).then((lang) => {
+    import(`quasar/lang/${this.getlangforQuasar(mylang)}`).then((lang) => {
       console.log('   Import dinamically lang =', lang)
-      Quasar.lang.set(lang.default)
+      Quasar.lang.set(this.getlangforQuasar(lang.default))
       import(`../../statics/i18n`).then(() => {
         console.log('   *** MY LANG DOPO=', Quasar.lang.isoName)
       })
@@ -2468,12 +2473,12 @@ export const tools = {
 
   }
   ,
-  getappname(mythis) {
+  getappname(mythis, short) {
     if (mythis === undefined)
       return ''
     if (mythis.$t === undefined)
       return ''
-    if (Screen.width < 400) {
+    if (short) {
       return mythis.$t('msg.myAppNameShort')
     } else {
       return mythis.$t('msg.myAppName')
@@ -2652,31 +2657,36 @@ export const tools = {
     // return height()
     return mythis.$q.screen.height
   },
-  getwidth(mythis) {
+  getwidth(mythis, withright = false, withleft = true) {
     // return height()
     let myw = mythis.$q.screen.width
-    if (GlobalStore.state.leftDrawerOpen)
-      myw -= 300
-    // if (GlobalStore.state.RightDrawerOpen)
-    //   myw -= 300
+    if (withleft) {
+      if (GlobalStore.state.leftDrawerOpen)
+        myw -= 300
+    }
+
+    if (withright)
+      if (GlobalStore.state.RightDrawerOpen)
+        myw -= 300
     return myw
 
   },
 
   getwidthscale(mythis, mywidth, maxwidth) {
     if (this.isMobile()) {
-      if (mywidth > this.getwidth(mythis) - 20)
-        mywidth = this.getwidth(mythis) - 20
+      // if (mywidth > this.getwidth(mythis) - 20)
+      mywidth = this.getwidth(mythis, false, false) - 32
 
+      // console.log('mywidth', mywidth)
       return mywidth
     } else {
       // console.log('this.getwidth(mythis) = ', this.getwidth(mythis))
-      let myw = mywidth + ((this.getwidth(mythis) - mywidth) * 0.6)
+      let myw = mywidth + ((this.getwidth(mythis, true) - mywidth) * 0.6)
       // console.log('myw1 = ', myw)
       if (myw > maxwidth)
         myw = maxwidth
-      if (myw > this.getwidth(mythis) - 20)
-        myw = this.getwidth(mythis) - 20
+      if (myw > this.getwidth(mythis) - 24)
+        myw = this.getwidth(mythis) - 24
 
       // console.log('myw = ', myw)
       return myw
@@ -2826,6 +2836,24 @@ export const tools = {
     return process.env.DEV
   },
 
+  geturlupload() {
+    return process.env.MONGODB_HOST + '/upload'
+  },
+  getheaders() {
+    return [{ name: 'x-auth', value: UserStore.state.x_auth_token }]
+  },
+
+  getelembylang(arr) {
+    const mylang = toolsext.getLocale()
+    for (const elem in arr) {
+      if (arr[elem][mylang])
+        return arr[elem][mylang]
+    }
+  },
+  isChristmasHoliday() {
+    const now = new Date()
+    return ((now.getMonth() === 11 && now.getDate() > 20) || (now.getMonth() === 0 && now.getDate() < 8))
+  }
 
 // getLocale() {
   //   if (navigator.languages && navigator.languages.length > 0) {

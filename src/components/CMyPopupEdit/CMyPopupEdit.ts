@@ -10,10 +10,11 @@ import { CDateTime } from '../CDateTime'
 import { CMyToggleList } from '../CMyToggleList'
 import { CMySelect } from '../CMySelect'
 import { CMyEditor } from '../CMyEditor'
+import { CGallery } from '../CGallery'
 
 @Component({
   name: 'CMyPopupEdit',
-  components: {CMyChipList, CDateTime, CMyToggleList, CMySelect, CMyEditor}
+  components: {CMyChipList, CDateTime, CMyToggleList, CMySelect, CMyEditor, CGallery }
 })
 
 export default class CMyPopupEdit extends Vue {
@@ -23,11 +24,17 @@ export default class CMyPopupEdit extends Vue {
   @Prop({ required: false, default: '' }) public field
   @Prop({ required: false, default: '' }) public subfield
   @Prop({ required: false, default: false }) public showall
+  @Prop({ required: false, default: 'row' }) public view
+  @Prop({ required: false, default: '5' }) public minuteinterval
 
   public myvalue = ''
 
   get tools() {
     return tools
+  }
+
+  get isviewfield() {
+    return this.view === 'field'
   }
 
   get db_fieldsTable() {
@@ -60,7 +67,7 @@ export default class CMyPopupEdit extends Vue {
 
   public SaveValueInt(newVal, valinitial) {
 
-    // console.log('SaveValueInt', newVal)
+    console.log('SaveValueInt', newVal)
 
     // Update value in table memory
     if (this.subfield !== '') {
@@ -146,7 +153,7 @@ export default class CMyPopupEdit extends Vue {
 
   public getclassCol(col) {
     if (col) {
-      let mycl = (col.disable) ? '' : 'colmodif'
+      let mycl = (col.disable || this.isviewfield) ? '' : 'colmodif'
       mycl += (col.fieldtype === tools.FieldType.date) ? ' coldate flex flex-container' : ''
 
       return mycl

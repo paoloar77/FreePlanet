@@ -1,5 +1,5 @@
 <template>
-    <div class="q-pa-sm">
+    <div class="q-pa-xs">
 
         <q-table
                 :data="serverData"
@@ -100,6 +100,7 @@
                                       :row.sync="props.row"
                                       :field="col.field"
                                       :subfield="col.subfield"
+                                      minuteinterval="1"
                                       @save="SaveValue"
                                       @show="selItem(props.row, col)"
                                       @showandsave="showandsel">
@@ -142,6 +143,7 @@
                     <div class="q-ma-sm q-pa-sm colmodif col-grow rounded-borders " style="border: 1px solid #bbb"
                          @click="colclicksel = mycol">
                         <CMyPopupEdit :canEdit="true"
+                                      view="field"
                                       :col="mycol"
                                       :showall="true"
                                       :row="rowclicksel"

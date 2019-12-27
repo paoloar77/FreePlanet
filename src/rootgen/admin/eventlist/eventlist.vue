@@ -107,7 +107,7 @@
         </div>
     </CMyPage>
 </template>
-<script lang="ts" src="eventlist.ts">
+<script lang="ts" src="./eventlist.ts">
 </script>
 <style lang="scss" scoped>
     @import './eventlist.scss';

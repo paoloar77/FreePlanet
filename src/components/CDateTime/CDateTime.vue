@@ -48,7 +48,7 @@
                                 bar-color="#2196f3"
                                 text-color="white"
                                 color="primary"
-                                minute-interval="5"
+                                :minute-interval="minuteinterval"
                                 inner-text-color="primary"
                                 inner-color="white"
                                 :style="scrollerPopupStyle280"

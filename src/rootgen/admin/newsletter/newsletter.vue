@@ -536,7 +536,7 @@
     </CMyPage>
 
 </template>
-<script lang="ts" src="newsletter.ts">
+<script lang="ts" src="./newsletter.ts">
 </script>
 <style lang="scss" scoped>
     @import './newsletter.scss';

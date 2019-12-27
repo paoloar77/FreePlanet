@@ -23,6 +23,7 @@ export default class CDateTime extends Vue {
   @Prop({ required: false, default: false }) public disable!: boolean
   @Prop({ required: false, default: '' }) public bgcolor!: string
   @Prop({ required: false, default: false }) public dense: boolean
+  @Prop({ required: false, default: '5' }) public minuteinterval: boolean
 
   public mystyleicon: string = 'font-size: 1.5rem;'
   public showDateTimeScroller: boolean = false
@@ -61,6 +62,7 @@ export default class CDateTime extends Vue {
   public changevalueDate() {
     if (this.valueDate)
       this.myvalue = tools.getstrYYMMDDDateTime(this.valueDate)
+
     // console.log('changevalueDate myvalue', this.myvalue)
   }
   @Watch('value')
@@ -70,9 +72,10 @@ export default class CDateTime extends Vue {
   }
 
   public savetoclose() {
+    // console.log('Close')
     this.saveit = true
     this.showDateTimeScroller = false
-    // this.$emit('savetoclose', this.myvalue, this.valueprec)
+    this.$emit('savetoclose', this.myvalue, this.valueprec)
   }
 
   get scrollerPopupStyle280() {
@@ -100,7 +103,7 @@ export default class CDateTime extends Vue {
     else
       this.myvalue = tools.getstrYYMMDDDateTime(this.valueDate)
 
-    console.log('created myvalue', this.myvalue)
+    // console.log('created myvalue', this.myvalue)
   }
 
   public changeval(newval) {

@@ -308,7 +308,7 @@ export default class Header extends Vue {
   }
 
   get getappname() {
-    return tools.getappname(this)
+    return tools.getappname(this, tools.isMobile())
   }
 
   public toggleanimation() {
