@@ -1,0 +1,47 @@
+$heightBtn: 100%;
+$grayshadow: #555;
+
+.text-subtitle-gallery {
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.75rem;
+  letter-spacing: .00937em;
+  text-shadow: .1rem .1rem .1rem $grayshadow;
+}
+
+@media (max-width: 718px) {
+  // PER VERSIONE MOBILE
+  .text-subtitle-gallery {
+    font-size: 1rem;
+  }
+}
+
+.myimg {
+  border-radius: 10px !important;
+  height: 200px;
+}
+
+.myimg-view {
+  border-radius: 5px !important;
+  height: 80px;
+}
+
+.q-img {
+  &__image {
+    border-radius: 10px !important;
+  }
+}
+
+.my-card-gallery {
+  width: 100%;
+  max-width: 300px;
+  min-width: 200px;
+  padding: 1rem 1rem;
+  height: 350px;
+}
+
+.my-card-gallery-view {
+  width: 100px;
+  height: 100px;
+  padding: 0.5rem 0.5rem;
+}
