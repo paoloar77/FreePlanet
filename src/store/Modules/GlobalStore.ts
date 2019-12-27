@@ -738,6 +738,24 @@ namespace Actions {
       })
   }
 
+  async function DeleteFile(context, { filename }) {
+    console.log('DeleteFile', filename)
+
+    return await Api.SendReq('/delfile', 'DELETE', {filename})
+      .then((res) => {
+        if (res.status === 200) {
+          if (res.data.code === serv_constants.RIS_CODE_OK) {
+            return true
+          }
+        }
+        return false
+      })
+      .catch((error) => {
+        console.error(error)
+        return false
+      })
+  }
+
   async function DuplicateRec(context, { table, id }) {
     console.log('DuplicateRec', id)
 
@@ -861,6 +879,7 @@ namespace Actions {
     loadTable: b.dispatch(loadTable),
     saveTable: b.dispatch(saveTable),
     DeleteRec: b.dispatch(DeleteRec),
+    DeleteFile: b.dispatch(DeleteFile),
     sendEmailTest: b.dispatch(sendEmailTest),
     DuplicateRec: b.dispatch(DuplicateRec),
     addDynamicPages: b.dispatch(addDynamicPages)

@@ -398,6 +398,7 @@ export default class CGridTableRec extends Vue {
     this.onRequest({
       pagination: this.pagination
     })
+    this.rowclicksel = null
   }
 
   public clickFunz(item, col: IColGridTable) {
