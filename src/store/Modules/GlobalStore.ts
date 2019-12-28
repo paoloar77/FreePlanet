@@ -828,17 +828,19 @@ namespace Actions {
 
     const arrpagesroute: IListRoutes[] = []
     for (const page of state.mypage) {
-      arrpagesroute.push({
-        path: '/' + page.path,
-        name: undefined,
-        text: page.title,
-        materialIcon: page.icon,
-        component: () => import('@/root/mypage/mypage.vue'),
-        inmenu: page.inmenu,
-        infooter: page.infooter,
-        level_child: page.l_child,
-        level_parent: page.l_par,
-      })
+      if (page.active) {
+        arrpagesroute.push({
+          path: '/' + page.path,
+          name: undefined,
+          text: page.title,
+          materialIcon: page.icon,
+          component: () => import('@/root/mypage/mypage.vue'),
+          inmenu: page.inmenu,
+          infooter: page.infooter,
+          level_child: page.l_child,
+          level_parent: page.l_par,
+        })
+      }
     }
 
     const last = {

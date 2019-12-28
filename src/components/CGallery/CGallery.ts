@@ -7,6 +7,7 @@ import { IGallery, IImgGallery } from '../../model/GlobalStore'
 import { CMyPage } from '../CMyPage'
 import GlobalModule from '../../store/Modules/GlobalStore'
 import { GlobalStore } from '../../store/Modules'
+import { copyToClipboard } from 'quasar'
 
 @Component({
   name: 'CGallery',
@@ -60,8 +61,15 @@ export default class CGallery extends Vue {
     }
 
     const draggedId = e.dataTransfer.getData('text')
+    let dragout = ''
+    try {
+      dragout = e.target.parentNode.parentNode.id
+    } catch (e) {
+      dragout = ''
+    }
     const draggedEl = document.getElementById(draggedId)
     console.log('draggedId', draggedId, 'draggedEl', draggedEl)
+    console.log('dragout', dragout)
 
     // check if original parent node
     if (draggedEl.parentNode === e.target) {
@@ -70,20 +78,41 @@ export default class CGallery extends Vue {
     }
 
     const myindex = this.listimages.findIndex((rec) => rec._id === draggedId)
-    const myrec = this.listimages[myindex]
-    let myrecprec = null
-    if (myindex > 0)
-      myrecprec = this.listimages[myindex - 1]
+    const myrec: IImgGallery = this.listimages[myindex]
 
-    console.log('myrec', myrec, 'myrecprec', myrecprec, 'ord1', myrec.order, 'ordprec', myrecprec.order)
+    let myrecprec: IImgGallery = null
+    let myrecout: IImgGallery = null
+    const myindexout = this.listimages.findIndex((rec) => rec._id === dragout)
+    myrecout = this.listimages[myindexout]
+    let myindexprec = myindexout - 1
 
-    if (myrecprec) {
-      let diff = (myrec.order - myrecprec.order) / 2
+    if (myindexprec < 0)
+      myindexprec = 0
+
+    if (myindex === myindexout)
+      return
+
+    myrecprec = this.listimages[myindexprec]
+
+    console.log('myrec', myrec, 'myrecprec', myrecout)
+
+    if (myrec && myrecout)
+      console.log('myrec', myrec, 'myrecprec', myrecout, 'ord1', myrec.order, 'myrecout', myrecout.order)
+
+    if (myrecout) {
+      let diff = 0
+      const ord2 = myrecprec.order
+      const ord1 = myrecout.order
+      diff = Math.round((ord1 - ord2) / 2)
       if (diff <= 0)
         diff++
-      myrec.order = myrecprec.order + diff
+      console.log('diff', diff)
+      let mynum = 0
+      mynum = myrecprec.order + diff
+      console.log('mynum', mynum)
+      myrec.order = mynum
     } else {
-      myrec.order = (myrec.order - 1)
+      myrec.order = Math.round(myrec.order) - 1
     }
 
     console.log('myrec.order', myrec.order)
@@ -99,6 +128,7 @@ export default class CGallery extends Vue {
   get getclass() {
     return (this.edit) ? 'my-card-gallery' : 'my-card-gallery-view' + ' text-center'
   }
+
   get getclimg() {
     return (this.edit) ? 'myimg' : 'myimg-view'
   }
@@ -116,7 +146,7 @@ export default class CGallery extends Vue {
   public uploaded(info) {
     console.log(info)
     for (const file of info.files) {
-      this.listimages.push({ imagefile: file.name, order: this.getlastord  })
+      this.listimages.push({ imagefile: file.name, order: this.getlastord })
     }
 
     this.save()
@@ -141,11 +171,18 @@ export default class CGallery extends Vue {
     return 'statics/upload/' + this.gall.directory + `/` + rec.imagefile
   }
 
+  public copytoclipboard(rec) {
+    const filename = this.getfullname(rec)
+    copyToClipboard(filename).then(() => {
+      tools.showNotif(this.$q, this.$t('dialog.copyclipboard') + ' \'' + filename + '\'')
+    })
+  }
+
   public async deleteFile(rec) {
     const filename = this.getfullname(rec)
 
     // Delete File on server:
-    const ris = await GlobalStore.actions.DeleteFile({filename})
+    const ris = await GlobalStore.actions.DeleteFile({ filename })
     if (ris)
       this.deleted(rec)
 
@@ -153,6 +190,14 @@ export default class CGallery extends Vue {
 
   public save() {
     this.$emit('showandsave', this.listimages)
+  }
+
+  public getsrcimg(mygallery) {
+
+    if (tools.getextfile(mygallery.imagefile) === 'pdf')
+      return 'statics/images/images/pdf.jpg'
+    else
+      return 'statics/upload/' + this.gall.directory + `/` + mygallery.imagefile
   }
 
 }

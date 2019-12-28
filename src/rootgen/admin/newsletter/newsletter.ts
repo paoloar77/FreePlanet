@@ -43,7 +43,8 @@ export default class Newsletter extends MixinBase {
 
   public async mounted() {
     await this.load()
-    this.tab = tools.getCookie('formnews', 'check')
+    // this.tab = tools.getCookie('formnews', 'check')
+    this.tab = this.$route.params.idparam
     this.emailtextheader = this.getValDb('EMAIL_TEXT', true)
 
   }

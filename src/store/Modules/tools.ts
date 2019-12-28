@@ -2843,6 +2843,10 @@ export const tools = {
     return [{ name: 'x-auth', value: UserStore.state.x_auth_token }]
   },
 
+  getextfile(filename) {
+    return filename.split('.').pop().toLowerCase()
+  },
+
   getelembylang(arr) {
     const mylang = toolsext.getLocale()
     for (const elem in arr) {

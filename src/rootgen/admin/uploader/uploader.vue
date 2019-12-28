@@ -6,7 +6,7 @@
                     accept=".jpg, image/*"
                     :url="tools.geturlupload()+`/gallery_home`"
                     :headers="tools.getheaders()"
-                    max-file-size=2000000
+                    :max-file-size="2000000"
                     multiple
                     style="max-width: 300px"
             ></q-uploader>
@@ -16,7 +16,7 @@
                     accept=".jpg, image/*"
                     :url="tools.geturlupload()+`/img`"
                     :headers="tools.getheaders()"
-                    max-file-size=1000000
+                    :max-file-size="1000000"
                     multiple
                     style="max-width: 300px"
             ></q-uploader>
