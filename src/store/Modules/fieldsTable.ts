@@ -371,11 +371,9 @@ export const fieldsTable = {
       return ''
   },
 
-
-
-
   // IColGridTable
   colTableUsers: [
+    // AddCol({ name: '_id', label_trans: 'reg.id' }),
     AddCol({ name: 'username', label_trans: 'reg.username' }),
     AddCol({ name: 'name', label_trans: 'reg.name' }),
     AddCol({ name: 'surname', label_trans: 'reg.surname' }),
@@ -383,8 +381,10 @@ export const fieldsTable = {
     AddCol({ name: 'cell', label_trans: 'reg.cell' }),
     AddCol({ name: 'profile.img', field: 'profile', subfield: 'img', label_trans: 'reg.img', sortable: false }),
     AddCol({ name: 'date_reg', label_trans: 'reg.date_reg', fieldtype: tools.FieldType.date }),
+    // AddCol({ name: 'idapp', label_trans: 'reg.idapp', fieldtype: tools.FieldType.string }),
     AddCol({ name: 'perm', label_trans: 'reg.perm', fieldtype: tools.FieldType.binary, jointable: 'permissions' }),
-    AddCol(DeleteRec)
+    AddCol(DeleteRec),
+    AddCol(DuplicateRec)
   ],
 
   tablesList: [

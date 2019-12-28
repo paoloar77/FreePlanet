@@ -170,6 +170,7 @@ export interface IMenuList {
 }
 
 export interface IListRoutes {
+  active?: boolean
   path: string
   name: string
   materialIcon?: string

@@ -79,7 +79,7 @@ export default class CGridTableRec extends Vue {
   }
 
   public selItem(item, col: IColGridTable) {
-    console.log('selItem', item)
+    // console.log('selItem', item)
     this.rowsel = item
     this.idsel = item._id
     this.colsel = col

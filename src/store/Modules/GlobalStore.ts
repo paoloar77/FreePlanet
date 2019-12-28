@@ -705,7 +705,7 @@ namespace Actions {
   }
 
   async function saveFieldValue(context, mydata: IDataPass) {
-    console.log('saveFieldValue', mydata)
+    // console.log('saveFieldValue', mydata)
 
     return await Api.SendReq(`/chval`, 'PATCH', { data: mydata })
       .then((res) => {
@@ -830,6 +830,7 @@ namespace Actions {
     for (const page of state.mypage) {
       if (page.active) {
         arrpagesroute.push({
+          active: true,
           path: '/' + page.path,
           name: undefined,
           text: page.title,
@@ -844,6 +845,7 @@ namespace Actions {
     }
 
     const last = {
+      active: true,
       path: '*',
       materialIcon: 'fas fa-calendar-plus',
       name: 'otherpages.error404def',

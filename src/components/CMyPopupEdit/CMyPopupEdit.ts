@@ -67,7 +67,7 @@ export default class CMyPopupEdit extends Vue {
 
   public SaveValueInt(newVal, valinitial) {
 
-    console.log('SaveValueInt', newVal)
+    // console.log('SaveValueInt', newVal)
 
     // Update value in table memory
     if (this.subfield !== '') {

@@ -3,7 +3,7 @@
         <q-list class="rounded-borders text-primary">
             <template v-for="(parent, index) in getmenu">
                 <!--<div class="q-list-header">{{replaceUnderlineToSpace(index)}}</div>-->
-                <div v-for="myitemmenu in static_data.routes">
+                <div v-for="myitemmenu in static_data.routes" v-if="myitemmenu.active">
                     <div v-if="!!myitemmenu.routes2 && myitemmenu.inmenu && tools.visumenu(myitemmenu)">
                         <q-expansion-item
                                 :header-inset-level="myitemmenu.level_parent"
