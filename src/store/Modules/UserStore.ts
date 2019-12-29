@@ -34,8 +34,10 @@ const DefaultUser: IUserFields = {
   }
 }
 
-const DefaultProfile: IUserProfile = {
+export const DefaultProfile: IUserProfile = {
   img: '',
+  nationality: '',
+  intcode_cell: '',
   cell: '',
   dateofbirth: new Date(),
   sex: 0,
@@ -516,6 +518,7 @@ namespace Actions {
 
     return bcrypt.hash(authData.password, bcrypt.genSaltSync(12))
       .then((hashedPassword: string) => {
+/*
         const usertosend = {
           lang: mylang,
           email: authData.email,
@@ -524,12 +527,15 @@ namespace Actions {
           name: authData.name,
           surname: authData.surname
         }
-
         console.log(usertosend)
+
+*/
+        authData.lang = mylang
+        authData.password = String(hashedPassword)
 
         Mutations.mutations.setServerCode(tools.CALLING)
 
-        return Api.SendReq('/users', 'POST', usertosend)
+        return Api.SendReq('/users', 'POST', authData)
           .then((res) => {
 
             const newuser = res.data
@@ -569,6 +575,7 @@ namespace Actions {
             }
           })
           .catch((error) => {
+            console.log('Err', error)
             UserStore.mutations.setErrorCatch(error)
             return UserStore.getters.getServerCode
           })

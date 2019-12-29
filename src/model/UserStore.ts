@@ -8,6 +8,9 @@ const enum ESexType {
 
 export interface IUserProfile {
   img?: string
+  nationality?: string
+  intcode_cell?: string
+  iso2_cell?: string
   cell?: string
   dateofbirth?: Date
   sex?: ESexType

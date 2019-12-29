@@ -2,7 +2,7 @@
   <div>
     <div class="text-center">
       <p>
-        <logo></logo>
+        <logo></logo><CTitleBanner :title="$t('pages.SignUp')"></CTitleBanner>
       </p>
     </div>
 
@@ -11,10 +11,11 @@
     <div class="q-gutter-xs">
 
       <q-input
+        class="clAportador"
         :readonly="true"
         v-model="signup.aportador_solidario"
         rounded outlined dense
-        bottom-slots
+
         :label="$t('reg.aportador_solidario')">
 
         <template v-slot:prepend>
@@ -29,7 +30,7 @@
         @blur="$v.signup.email.$touch"
         :error="$v.signup.email.$error"
         :error-message="errorMsg('email', $v.signup.email)"
-        bottom-slots
+
         debounce="1000"
         :label="$t('reg.email')">
 
@@ -44,7 +45,7 @@
         rounded outlined
         @blur="$v.signup.username.$touch"
         :error="$v.signup.username.$error"
-        bottom-slots
+
         debounce="1000"
         :error-message="errorMsg('username', $v.signup.username)"
         :label="$t('reg.username')">
@@ -60,7 +61,7 @@
         rounded outlined
         @blur="$v.signup.name.$touch"
         :error="$v.signup.name.$error"
-        bottom-slots
+
         debounce="1000"
         :error-message="errorMsg('name', $v.signup.name)"
         :label="$t('reg.name')">
@@ -76,7 +77,7 @@
         rounded outlined
         @blur="$v.signup.surname.$touch"
         :error="$v.signup.surname.$error"
-        bottom-slots
+
         debounce="1000"
         :error-message="errorMsg('surname', $v.signup.surname)"
         :label="$t('reg.surname')">
@@ -94,7 +95,7 @@
         @blur="$v.signup.password.$touch"
         :error="$v.signup.password.$error"
         :error-message="`${errorMsg('password', $v.signup.password)}`"
-        bottom-slots
+
         :label="$t('reg.password')">
 
         <template v-slot:prepend>
@@ -110,7 +111,7 @@
         @blur="$v.signup.repeatPassword.$touch"
         :error="$v.signup.repeatPassword.$error"
         :error-message="`${errorMsg('repeatpassword', $v.signup.repeatPassword)}`"
-        bottom-slots
+
         :label="$t('reg.repeatPassword')">
 
         <template v-slot:prepend>
@@ -120,6 +121,39 @@
       </q-input>
 
       <!--:hint="$t('reg.tips.repeatpassword')"-->
+
+      <q-input
+        v-model="countryname"
+        :readonly="true"
+        rounded outlined
+
+        debounce="1000"
+        :label="$t('reg.nationality')">
+
+        <template v-slot:prepend>
+          <vue-country-code
+            @onSelect="selectcountry"
+            :preferredCountries="tools.getprefCountries"
+            :dropdownOptions="{ disabledDialCode: true }"
+          >
+
+          </vue-country-code>
+        </template>
+
+      </q-input>
+
+      <br>
+
+      <vue-tel-input
+        v-if="showcell"
+        @country-changed="intcode_change"
+        v-model="signup.profile.cell"
+        :placeholder="$t('reg.cell')"
+        :enabledCountryCode="true"
+        inputClasses="clCell"
+        wrapperClasses="clCellCode">
+      </vue-tel-input>
+
 
       <q-checkbox
         v-model="signup.terms"
@@ -132,12 +166,9 @@
       </q-checkbox>
 
       <q-checkbox
-        v-if="adult"
-        v-model="signup.onlyadult"
+        v-if="showadultcheck"
+        v-model="iamadult"
         color="secondary"
-        @blur="$v.signup.onlyadult.$touch"
-        :error="$v.signup.onlyadult.$error"
-        :error-message="`${errorMsg('onlyadult', $v.signup.onlyadult)}`"
         :label="$t('reg.onlyadult')">
       </q-checkbox>
 

@@ -29,7 +29,7 @@ export default class CGridTableRec extends Vue {
   public mytable: string
   public mytitle: string
   public mycolumns: any[]
-  public colkey: string
+  public colkey: string = ''
   public search: string = ''
 
   public tablesel: string = ''
@@ -66,7 +66,7 @@ export default class CGridTableRec extends Vue {
   public rowclicksel: any = null
   public colclicksel: any = null
 
-  public selected: any = []
+  public selected = []
 
   get lists() {
     return lists
@@ -517,8 +517,11 @@ export default class CGridTableRec extends Vue {
 
   public clickrowcol(row, col) {
     if (!this.canEdit) {
-      if (this.rowclicksel) {
+      if (!this.selected[0]) {
+        const uguali = this.rowclicksel._id === row._id
+        console.log('id', this.rowclicksel._id, 'id2', row._id)
         this.rowclicksel = null
+        this.colclicksel = null
       } else {
         this.rowclicksel = row
         this.colclicksel = col
@@ -531,5 +534,20 @@ export default class CGridTableRec extends Vue {
       return 'colsel'
     else
       return ''
+  }
+  public getSelectedString() {
+    return this.selected.length === 0 ? '' : `${this.selected.length} record${this.selected.length > 1 ? 's' : ''} selected of ${this.serverData.length}`
+  }
+  public selectionclick(details) {
+    console.log('selectionclick this.selected', this.selected, 'details', details)
+    if (details.added) {
+      this.rowclicksel = details.rows[0]
+      this.colclicksel = details.keys[0]
+    } else {
+      this.rowclicksel = null
+      this.colclicksel = null
+    }
+
+    console.log('this.rowclicksel', this.rowclicksel)
   }
 }

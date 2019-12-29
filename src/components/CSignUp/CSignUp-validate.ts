@@ -13,11 +13,13 @@ export const validations = {
         },
         password: {
           complexity,
-          required
+          required,
+          minLength: minLength(8)
         },
         username: {
           registereduser,
-          required
+          required,
+          minLength: minLength(6)
         },
         name: {
           required

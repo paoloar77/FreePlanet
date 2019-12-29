@@ -32,6 +32,7 @@ export default class CTitleBanner extends Vue {
   @Prop({ required: false, default: '' }) public myclasstext: string
   @Prop({ required: false, default: '' }) public icon: string
   @Prop({ required: false, default: true }) public visible: boolean
+  @Prop({ required: false, default: false }) public canopen: boolean
 
   public myvisible: boolean = true
 

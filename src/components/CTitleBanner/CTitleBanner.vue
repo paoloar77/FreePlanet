@@ -8,10 +8,10 @@
                 @click="myvisible = !myvisible"
         >
             <template v-slot:avatar>
-                <q-icon :name="icon" color="white" />
+                <q-icon v-if="canopen" :name="icon" color="white" />
             </template>
             <template v-slot:action>
-                <q-icon :name="iconopen" color="white" />
+                <q-icon v-if="canopen" :name="iconopen" color="white" />
             </template>
             <span :class="`mybanner `+ myclasstext" :style="mystyle">{{title}}</span>
         </q-banner>

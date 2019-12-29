@@ -31,6 +31,33 @@
                                 :opticon="db_fieldsTable.getIconByTable(col.jointable)"></CMyChipList>
                     </div>
                     <!-- Show Value -->
+                    <div v-else-if="col.fieldtype === tools.FieldType.nationality">
+                      <q-input
+                        input-class="cursor-pointer"
+                        :readonly="true"
+                        v-model="countryname"
+                        rounded outlined
+                        debounce="1000"
+                        :label="$t('reg.nationality')">
+
+                        <div class="hidden">
+                          <vue-country-code
+                            :defaultCountry="myvalue"
+                            :disabledFetchingCountry="true"
+                            @onSelect="selectcountry"
+                            :preferredCountries="tools.getprefCountries"
+                            :dropdownOptions="{ disabledDialCode: true }">
+
+                          </vue-country-code>
+                        </div>
+
+                      </q-input>
+                    </div>
+                    <div v-else-if="col.fieldtype === tools.FieldType.intcode">
+
+                      {{ myvalue }}
+
+                    </div>
                     <div v-else-if="type === tools.FieldType.multiselect">
                         <CMyChipList
                                 :type="tools.FieldType.multiselect"
@@ -110,6 +137,52 @@
                                        :options="db_fieldsTable.getTableJoinByName(col.jointable)"
                                        :useinput="false">
                             </CMySelect>
+                        </div>
+                        <div v-else-if="col.fieldtype === tools.FieldType.nationality">
+                          <div class="justify-center q-gutter-sm clgutter q-mt-sm">
+                            <q-input
+                              v-model="countryname"
+                              :readonly="true"
+                              rounded outlined
+                              debounce="1000"
+                              :label="$t('reg.nationality')">
+
+                              <template v-slot:prepend>
+                                <div style="font-size: 1rem;">
+                                <vue-country-code
+                                  :defaultCountry="myvalue"
+                                  :disabledFetchingCountry="true"
+                                  @onSelect="selectcountry"
+                                  :preferredCountries="tools.getprefCountries"
+                                  :dropdownOptions="{ disabledDialCode: true }">
+
+                                </vue-country-code>
+                                </div>
+                              </template>
+                            </q-input>
+                            <div style="height: 180px;">
+
+                            </div>
+                          </div>
+                        </div>
+                        <div v-else-if="col.fieldtype === tools.FieldType.intcode">
+
+                          <div class="justify-center q-gutter-sm clgutter q-mt-sm">
+                            <vue-tel-input
+                              @country-changed="intcode_change"
+                              v-model="myvalue"
+                              :disabledFetchingCountry="true"
+                              :preferredCountries="tools.getprefCountries"
+                              :placeholder="$t('reg.cell')"
+                              :enabledCountryCode="true"
+                              inputClasses="clCell"
+                              wrapperClasses="clCellCode">
+                            </vue-tel-input>
+                            <div style="height: 180px;">
+
+                            </div>
+                          </div>
+
                         </div>
                         <div v-else-if="type === tools.FieldType.multiselect">
                             <q-select

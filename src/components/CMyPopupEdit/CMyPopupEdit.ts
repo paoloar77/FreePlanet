@@ -28,6 +28,7 @@ export default class CMyPopupEdit extends Vue {
   @Prop({ required: false, default: '5' }) public minuteinterval
 
   public myvalue = ''
+  public countryname = ''
 
   get tools() {
     return tools
@@ -42,6 +43,10 @@ export default class CMyPopupEdit extends Vue {
   }
   public changeval(newval) {
     this.$emit('update:row', newval)
+  }
+
+  public updatedata() {
+    this.mounted()
   }
 
   public mounted() {
@@ -165,4 +170,15 @@ export default class CMyPopupEdit extends Vue {
   public changeCol() {
 
   }
+
+  public selectcountry({name, iso2, dialCode}) {
+    // console.log(name, iso2, dialCode)
+    this.myvalue = iso2
+    this.countryname = name
+  }
+
+  public intcode_change(coderec) {
+    this.myvalue = '+' + coderec.dialCode
+  }
+
 }

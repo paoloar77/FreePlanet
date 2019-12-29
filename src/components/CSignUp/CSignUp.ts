@@ -10,21 +10,32 @@ import { validations, TSignup } from './CSignUp-validate'
 import { validationMixin } from 'vuelidate'
 
 import { Logo } from '../../components/logo'
+import { DefaultProfile } from '../../store/Modules/UserStore'
 
+import 'vue-country-code/dist/vue-country-code.css'
+import { serv_constants } from '@src/store/Modules/serv_constants'
+
+import VueCountryCode from 'vue-country-code'
+import { CTitleBanner } from '../CTitleBanner'
+
+Vue.use(VueCountryCode)
 // import {Loading, QSpinnerFacebook, QSpinnerGears} from 'quasar'
 
 @Component({
   name: 'CSignUp',
   mixins: [validationMixin],
   validations,
-  components: { Logo }
+  components: { Logo, CTitleBanner }
 })
 
 export default class CSignUp extends Vue {
-  @Prop({ required: false, default: false }) public adult: boolean
+  @Prop({ required: false, default: false }) public showadultcheck: boolean
+  @Prop({ required: false, default: false }) public showcell: boolean
   public $v
   public $q
   public $t: any
+  public countryname: string = ''
+  public iamadult: boolean = false
 
   public duplicate_email: boolean = false
   public duplicate_username: boolean = false
@@ -37,6 +48,7 @@ export default class CSignUp extends Vue {
     password: process.env.TEST_PASSWORD || '',
     repeatPassword: process.env.TEST_PASSWORD || '',
     terms: !process.env.PROD,
+    profile: DefaultProfile
   }
 
   public created() {
@@ -57,7 +69,11 @@ export default class CSignUp extends Vue {
 
   get allowSubmit() {
 
-    const error = this.$v.$error || this.$v.$invalid
+    let error = this.$v.$error || this.$v.$invalid || this.signup.profile.cell.length <= 6
+
+    if (this.showadultcheck)
+      error = error || !this.iamadult
+
     return !error
   }
 
@@ -104,6 +120,7 @@ export default class CSignUp extends Vue {
   public errorMsg(cosa: string, item: any) {
     try {
       if (!item.$error) { return '' }
+      console.log('errorMsg', cosa, item)
       if (item.$params.email && !item.email) { return this.$t('reg.err.email') }
 
       if (cosa === 'repeatpassword') {
@@ -111,6 +128,10 @@ export default class CSignUp extends Vue {
           return this.$t('reg.err.sameaspassword')
         }
       }
+
+      if (!item.minLength) { return this.$t('reg.err.atleast') + ` ${item.$params.minLength.min} ` + this.$t('reg.err.char') }
+      if (!item.complexity) { return this.$t('reg.err.complexity') }
+// if (!item.maxLength) { return this.$t('reg.err.notmore') + ` ${item.$params.maxLength.max} ` + this.$t('reg.err.char') }
 
       if (!item.required) { return this.$t('reg.err.required') }
       if (cosa === 'email') {
@@ -122,12 +143,9 @@ export default class CSignUp extends Vue {
         if (!item.isUnique) { return this.$t('reg.err.duplicate_username') }
       } else if ((cosa === 'name') || (cosa === 'surname')) {
         // console.log(item);
-
       }
 
-      if (!item.complexity) { return this.$t('reg.err.complexity') }
-      if (!item.minLength) { return this.$t('reg.err.atleast') + ` ${item.$params.minLength.min} ` + this.$t('reg.err.char') }
-      if (!item.maxLength) { return this.$t('reg.err.notmore') + ` ${item.$params.maxLength.max} ` + this.$t('reg.err.char') }
+
       return ''
     } catch (error) {
       // console.log("ERR : " + error);
@@ -136,9 +154,9 @@ export default class CSignUp extends Vue {
 
   public SignUpcheckErrors(riscode: number) {
     console.log('SignUpcheckErrors', riscode)
-    if (riscode === tools.DUPLICATE_EMAIL_ID) {
+    if (riscode === serv_constants.RIS_CODE_EMAIL_ALREADY_EXIST) {
       tools.showNotif(this.$q, this.$t('reg.err.duplicate_email'))
-    } else if (riscode === tools.DUPLICATE_USERNAME_ID) {
+    } else if (riscode === serv_constants.RIS_CODE_USERNAME_ALREADY_EXIST) {
       tools.showNotif(this.$q, this.$t('reg.err.duplicate_username'))
     } else if (riscode === tools.ERR_SERVERFETCH) {
       tools.showNotif(this.$q, this.$t('fetch.errore_server'))
@@ -182,6 +200,18 @@ export default class CSignUp extends Vue {
       this.$q.loading.hide()
     })
 
+  }
+
+  public intcode_change(coderec) {
+    // console.log('intcode', coderec)
+    this.signup.profile.intcode_cell = '+' + coderec.dialCode
+    this.signup.profile.iso2_cell = coderec.iso2
+  }
+
+  public selectcountry({name, iso2, dialCode}) {
+    // console.log(name, iso2, dialCode)
+    this.signup.profile.nationality = iso2
+    this.countryname = name
   }
 
 }

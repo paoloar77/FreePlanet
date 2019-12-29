@@ -12,6 +12,16 @@
 
             </CGallery>
         </div>
+        <div v-else-if="col.fieldtype === tools.FieldType.nationality">
+          <div>
+            {{myvalue}}
+          </div>
+        </div>
+        <div v-else-if="col.fieldtype === tools.FieldType.intcode">
+          <div>
+            {{myvalue}}
+          </div>
+        </div>
         <div v-else>
             <!-- Edit Value -->
             <span v-if="col.fieldtype === tools.FieldType.date">
@@ -123,6 +133,45 @@
                                    :options="db_fieldsTable.getTableJoinByName(col.jointable)"
                                    :useinput="false">
                         </CMySelect>
+                    </div>
+                    <div v-else-if="col.fieldtype === tools.FieldType.nationality">
+                      <div class="justify-center q-gutter-sm clgutter q-mt-sm">
+                        <q-input
+                          v-model="countryname"
+                          :readonly="true"
+                          rounded outlined
+                          debounce="1000"
+                          :label="$t('reg.nationality')">
+
+                          <template v-slot:prepend>
+                            <div style="font-size: 1rem;">
+                              <vue-country-code
+                                :defaultCountry="myvalue"
+                                :disabledFetchingCountry="true"
+                                @onSelect="selectcountry"
+                                :preferredCountries="tools.getprefCountries"
+                                :dropdownOptions="{ disabledDialCode: true }">
+
+                              </vue-country-code>
+                            </div>
+                          </template>
+                        </q-input>
+                        <div style="height: 180px;">
+
+                        </div>
+                      </div>
+                    </div>
+                    <div v-else-if="col.fieldtype === tools.FieldType.intcode">
+
+                      <vue-tel-input
+                        @country-changed="intcode_change"
+                        v-model="myvalue"
+                        :placeholder="$t('reg.cell')"
+                        :enabledCountryCode="true"
+                        inputClasses="clCell"
+                        wrapperClasses="clCellCode">
+                      </vue-tel-input>
+
                     </div>
                     <div v-else-if="col.fieldtype === tools.FieldType.multiselect">
                         <q-select

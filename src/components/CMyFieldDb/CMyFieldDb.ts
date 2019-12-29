@@ -30,12 +30,14 @@ export default class CMyFieldDb extends MixinBase {
   public myvalue = ''
   public col: IColGridTable = { name: 'test' }
   public canEdit: boolean = true
+  public countryname = ''
 
   public created() {
     this.myvalue = this.getValDb(this.mykey, this.serv, '', this.table, this.mysubkey)
     this.col.jointable = this.jointable
     this.col.fieldtype = this.type
     this.col.label = this.title
+
     // console.log('created', this.myvalue)
   }
 
@@ -99,6 +101,16 @@ export default class CMyFieldDb extends MixinBase {
   public savefield(value, initialval) {
     this.myvalue = value
     this.setValDb(this.mykey, this.myvalue, this.type, this.serv, this.table, this.mysubkey)
+  }
+
+  public selectcountry({name, iso2, dialCode}) {
+    // console.log(name, iso2, dialCode)
+    this.myvalue = iso2
+    this.countryname = name
+  }
+
+  public intcode_change(coderec) {
+    this.myvalue = '+' + coderec.dialCode
   }
 
 }

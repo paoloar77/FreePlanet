@@ -47,6 +47,8 @@ export interface INotify {
 export const tools = {
   CAN_EDIT: 'q-ce',
 
+  getprefCountries: ['it', 'us', 'es', 'uk', 'fr', 'de', 'ch'],
+
   APORTADOR_SOLIDARIO: 'apsol',
 
   listBestColor: [
@@ -83,8 +85,6 @@ export const tools = {
   ERR_GENERICO: -1,
   ERR_SERVERFETCH: -2,
   ERR_AUTHENTICATION: -5,
-  DUPLICATE_EMAIL_ID: 11000,
-  DUPLICATE_USERNAME_ID: 11100,
 
   NOFIELD: 'nofield',
 
@@ -144,6 +144,8 @@ export const tools = {
     password: 512,
     listimages: 1024,
     image: 2048,
+    nationality: 4096,
+    intcode: 5000,
   },
 
   FieldTypeArr: [
@@ -2572,9 +2574,9 @@ export const tools = {
 
   SignUpcheckErrors(mythis, riscode: number) {
     console.log('SignUpcheckErrors', riscode)
-    if (riscode === tools.DUPLICATE_EMAIL_ID) {
+    if (riscode === serv_constants.RIS_CODE_EMAIL_ALREADY_EXIST) {
       tools.showNotif(mythis.$q, mythis.$t('reg.err.duplicate_email'))
-    } else if (riscode === tools.DUPLICATE_USERNAME_ID) {
+    } else if (riscode === serv_constants.RIS_CODE_USERNAME_ALREADY_EXIST) {
       tools.showNotif(mythis.$q, mythis.$t('reg.err.duplicate_username'))
     } else if (riscode === tools.ERR_SERVERFETCH) {
       tools.showNotif(mythis.$q, mythis.$t('fetch.errore_server'))
@@ -2746,7 +2748,7 @@ export const tools = {
   },
   getCookie(mytok, def?) {
     const ris = Cookies.get(mytok)
-    console.log('getCookie', ris)
+    // console.log('getCookie', ris)
     if (!!ris) {
       return ris
     } else {
