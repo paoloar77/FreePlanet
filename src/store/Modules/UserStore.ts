@@ -1,5 +1,5 @@
 import Api from '@api'
-import { ISignupOptions, ISigninOptions, IUserState, IUserFields } from 'model'
+import { ISignupOptions, ISigninOptions, IUserState, IUserFields, IUserProfile } from 'model'
 import { ILinkReg, IResult, IIdToken, IToken } from 'model/other'
 import { storeBuilder } from './Store/Store'
 import router from '@router'
@@ -32,6 +32,15 @@ const DefaultUser: IUserFields = {
   profile: {
     img: ''
   }
+}
+
+const DefaultProfile: IUserProfile = {
+  img: '',
+  cell: '',
+  dateofbirth: new Date(),
+  sex: 0,
+  email_paypal: '',
+  username_telegram: ''
 }
 
 // State
@@ -203,6 +212,9 @@ namespace Getters {
 namespace Mutations {
   function authUser(mystate: IUserState, data: IUserFields) {
     mystate.my = { ...data }
+    if (!mystate.my.profile) {
+      mystate.my.profile = DefaultProfile
+    }
 
     mystate.isAdmin = tools.isBitActive(mystate.my.perm, shared_consts.Permissions.Admin.value)
     mystate.isManager = tools.isBitActive(mystate.my.perm, shared_consts.Permissions.Manager.value)
@@ -230,6 +242,29 @@ namespace Mutations {
   function setpassword(mystate: IUserState, newstr: string) {
     mystate.my.password = newstr
   }
+
+  function updateLocalStorage(mystate: IUserState, myuser: IUserFields) {
+    const now = tools.getDateNow()
+    // const expirationDate = new Date(now.getTime() + myres.data.expiresIn * 1000);
+    const expirationDate = new Date(now.getTime() * 1000)
+    localStorage.setItem(tools.localStorage.lang, state.lang)
+    localStorage.setItem(tools.localStorage.userId, myuser._id)
+    localStorage.setItem(tools.localStorage.username, myuser.username)
+    localStorage.setItem(tools.localStorage.name, myuser.name)
+    localStorage.setItem(tools.localStorage.surname, myuser.surname)
+    localStorage.setItem(tools.localStorage.perm, String(myuser.perm) || '')
+    if (myuser.profile !== undefined)
+      localStorage.setItem(tools.localStorage.img, (!!myuser.profile.img) ? String(myuser.profile.img) || '' : '')
+    else
+      localStorage.setItem(tools.localStorage.img, '')
+    localStorage.setItem(tools.localStorage.token, state.x_auth_token)
+    localStorage.setItem(tools.localStorage.expirationDate, expirationDate.toString())
+    localStorage.setItem(tools.localStorage.isLogged, String(true))
+    localStorage.setItem(tools.localStorage.verified_email, String(myuser.verified_email))
+    localStorage.setItem(tools.localStorage.wasAlreadySubOnDb, String(GlobalStore.state.wasAlreadySubOnDb))
+
+  }
+
 
   function setusersList(mystate: IUserState, usersList: IUserFields[]) {
     // console.log('setusersList', usersList)
@@ -325,6 +360,7 @@ namespace Mutations {
   }
 
   export const mutations = {
+    updateLocalStorage: b.commit(updateLocalStorage),
     authUser: b.commit(authUser),
     setpassword: b.commit(setpassword),
     setemail: b.commit(setemail),
@@ -609,24 +645,7 @@ namespace Actions {
 
             Mutations.mutations.authUser(myuser)
 
-            const now = tools.getDateNow()
-            // const expirationDate = new Date(now.getTime() + myres.data.expiresIn * 1000);
-            const expirationDate = new Date(now.getTime() * 1000)
-            localStorage.setItem(tools.localStorage.lang, state.lang)
-            localStorage.setItem(tools.localStorage.userId, myuser._id)
-            localStorage.setItem(tools.localStorage.username, myuser.username)
-            localStorage.setItem(tools.localStorage.name, myuser.name)
-            localStorage.setItem(tools.localStorage.surname, myuser.surname)
-            localStorage.setItem(tools.localStorage.perm, String(myuser.perm) || '')
-            if (myuser.profile !== undefined)
-              localStorage.setItem(tools.localStorage.img, (!!myuser.profile.img) ? String(myuser.profile.img) || '' : '')
-            else
-              localStorage.setItem(tools.localStorage.img, '')
-            localStorage.setItem(tools.localStorage.token, state.x_auth_token)
-            localStorage.setItem(tools.localStorage.expirationDate, expirationDate.toString())
-            localStorage.setItem(tools.localStorage.isLogged, String(true))
-            localStorage.setItem(tools.localStorage.verified_email, String(myuser.verified_email))
-            localStorage.setItem(tools.localStorage.wasAlreadySubOnDb, String(GlobalStore.state.wasAlreadySubOnDb))
+            Mutations.mutations.updateLocalStorage(myuser)
 
           }
         }
@@ -739,6 +758,7 @@ namespace Actions {
 
       const token = localStorage.getItem(tools.localStorage.token)
       if (token) {
+
         const expirationDateStr = localStorage.getItem(tools.localStorage.expirationDate)
         const expirationDate = new Date(String(expirationDateStr))
         const now = tools.getDateNow()
@@ -753,7 +773,7 @@ namespace Actions {
 
           GlobalStore.state.wasAlreadySubOnDb = localStorage.getItem(tools.localStorage.wasAlreadySubOnDb) === 'true'
 
-          console.log('*************  autologin _id', _id)
+          // console.log('*************  autologin _id', _id)
 
           UserStore.mutations.setAuth(token)
 

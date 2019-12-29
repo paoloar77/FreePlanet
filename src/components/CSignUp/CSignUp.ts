@@ -21,6 +21,7 @@ import { Logo } from '../../components/logo'
 })
 
 export default class CSignUp extends Vue {
+  @Prop({ required: false, default: false }) public adult: boolean
   public $v
   public $q
   public $t: any
@@ -35,14 +36,23 @@ export default class CSignUp extends Vue {
     surname: process.env.TEST_SURNAME || '',
     password: process.env.TEST_PASSWORD || '',
     repeatPassword: process.env.TEST_PASSWORD || '',
-    terms: !process.env.PROD
+    terms: !process.env.PROD,
   }
 
   public created() {
     this.$v.$reset()
+
+    this.signup.aportador_solidario = tools.getCookie(tools.APORTADOR_SOLIDARIO, this.$route.params.invited || process.env.TEST_APORTADOR)
+  }
+
+  @Watch('$route.params.invited')
+  public changeaportador() {
+    if (!this.signup.aportador_solidario)
+      this.signup.aportador_solidario = this.$route.params.invited
   }
 
   public mounted() {
+
   }
 
   get allowSubmit() {

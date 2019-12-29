@@ -1,6 +1,6 @@
 <template>
     <div>
-        <q-header reveal elevated class="bg-primary">
+        <q-header reveal elevated :class="getClassColorHeader">
             <q-toolbar
                     color="primary"
                     :glossy="$q.theme === 'mat'"
@@ -155,8 +155,8 @@
                     <!--<span class="text-white background-red" v-else> {{$t('reg.non_verificato')}} </span>-->
 
                     <div v-if="isLogged" id="user-actions" class="text-center">
-                        <q-btn round color="primary" icon="person"></q-btn>
-                        <q-btn round color="warning" icon="lock"></q-btn>
+                        <q-btn round color="primary" icon="person" to="/profile"></q-btn>
+                        <!--<q-btn round color="warning" icon="lock"></q-btn>-->
                         <q-btn round color="secondary" icon="exit_to_app" @click='logoutHandler'></q-btn>
                     </div>
 

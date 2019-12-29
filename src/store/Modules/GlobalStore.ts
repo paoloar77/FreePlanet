@@ -800,6 +800,12 @@ namespace Actions {
           GlobalStore.state.mypage = (res.data.mypage) ? [...res.data.mypage] : []
         }
 
+        if (res.data.myuser) {
+          UserStore.mutations.authUser(res.data.myuser)
+
+          UserStore.mutations.updateLocalStorage(res.data.myuser)
+        }
+
         CalendarStore.state.editable = UserStore.state.isAdmin || UserStore.state.isManager
 
       })

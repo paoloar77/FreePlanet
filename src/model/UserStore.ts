@@ -11,6 +11,8 @@ export interface IUserProfile {
   cell?: string
   dateofbirth?: Date
   sex?: ESexType
+  email_paypal?: string
+  username_telegram?: string
 }
 
 export interface IUserFields {

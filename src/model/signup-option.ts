@@ -8,4 +8,5 @@ export interface ISignupOptions {
   lang?: string
   repeatPassword?: string
   terms?: boolean
+  aportador_solidario?: string
 }

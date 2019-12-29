@@ -2,7 +2,7 @@
   <!--<div class="q-pa-md items-start " style="display: inline-flex; width: 800px;"> -->
   <div>
     <div v-if="!edit">
-      <div v-for="(mygallery, index) in listimages" :key="index" v-if="index === 0">
+      <div v-for="(mygallery, index) in getlistimages" :key="index" v-if="index === 0">
         <div class="q-pa-md q-gutter-md">
           <q-card :class="getclass">
             <q-img :src="getsrcimg(mygallery)" :class="getclimg"

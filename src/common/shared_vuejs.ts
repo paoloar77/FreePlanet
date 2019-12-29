@@ -27,7 +27,7 @@ export const shared_consts = {
   },
 
   fieldsUserToChange() {
-    return ['_id', 'username', 'email', 'cell', 'name', 'surname', 'perm', 'date_reg', 'verified_email', 'img', 'ipaddr', 'lasttimeonline', 'profile', 'news_on']
+    return ['_id', 'username', 'email', 'name', 'surname', 'perm', 'date_reg', 'verified_email', 'img', 'ipaddr', 'lasttimeonline', 'profile', 'news_on']
   }
 
 }

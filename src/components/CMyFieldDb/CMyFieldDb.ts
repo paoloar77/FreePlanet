@@ -9,6 +9,7 @@ import MixinBase from '../../mixins/mixin-base'
 import { fieldsTable } from '../../store/Modules/fieldsTable'
 import { IColGridTable } from '../../model'
 import { CMySelect } from '../CMySelect'
+import { GlobalStore, UserStore } from '../../store/Modules'
 
 @Component({
   name: 'CMyFieldDb',
@@ -18,10 +19,12 @@ import { CMySelect } from '../CMySelect'
 export default class CMyFieldDb extends MixinBase {
   @Prop({ required: true }) public title
   @Prop({ required: true }) public mykey: string
+  @Prop({ required: false, default: '' }) public mysubkey: string
   @Prop({ required: true }) public type: number
   @Prop({ required: false, default: false }) public serv: boolean
   @Prop({ required: false, default: false }) public disable: boolean
   @Prop({ required: false, default: '' }) public jointable: string
+  @Prop({ required: false, default: '' }) public table: string
 
   public $t
   public myvalue = ''
@@ -29,7 +32,7 @@ export default class CMyFieldDb extends MixinBase {
   public canEdit: boolean = true
 
   public created() {
-    this.myvalue = this.getValDb(this.mykey, this.serv)
+    this.myvalue = this.getValDb(this.mykey, this.serv, '', this.table, this.mysubkey)
     this.col.jointable = this.jointable
     this.col.fieldtype = this.type
     this.col.label = this.title
@@ -95,7 +98,7 @@ export default class CMyFieldDb extends MixinBase {
 
   public savefield(value, initialval) {
     this.myvalue = value
-    this.setValDb(this.mykey, this.myvalue, this.type, this.serv)
+    this.setValDb(this.mykey, this.myvalue, this.type, this.serv, this.table, this.mysubkey)
   }
 
 }

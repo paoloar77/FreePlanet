@@ -308,7 +308,7 @@ export default class Header extends Vue {
   }
 
   get getappname() {
-    return tools.getappname(this, tools.isMobile())
+    return tools.getsuffisso() + tools.getappname(this, tools.isMobile())
   }
 
   public toggleanimation() {
@@ -367,5 +367,14 @@ export default class Header extends Vue {
   public clickregister() {
     this.rightDrawerOpen = false
     this.$router.replace('/signup')
+  }
+
+  get getClassColorHeader() {
+    if (tools.isTest())
+      return 'bg-warning'
+    else if (tools.isDebug())
+      return 'bg-info'
+    else
+      return 'bg-primary'
   }
 }

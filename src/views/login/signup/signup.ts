@@ -11,5 +11,17 @@ import { CSignUp } from '../../../components/CSignUp'
 
 export default class Signup extends Vue {
   public $t: any
+  public adult: boolean = false
+
+  @Watch('$route.params.invited')
+  public changeadult() {
+    console.log('$route.params.invited')
+    this.adult = !!this.$route.params.invited
+  }
+
+  public created() {
+    if (!tools.getCookie(tools.APORTADOR_SOLIDARIO, ''))
+      tools.setCookie(tools.APORTADOR_SOLIDARIO, this.$route.params.invited)
+  }
 
 }

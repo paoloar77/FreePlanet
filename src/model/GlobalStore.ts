@@ -302,6 +302,7 @@ export interface IParamDialog {
 export interface IFunctionality {
   PWA?: boolean
   ENABLE_REGISTRATION?: boolean
+  SHOW_PROFILE?: boolean
   SHOW_USER_MENU?: boolean
   SHOW_IF_IS_SERVER_CONNECTION?: boolean
   ENABLE_TODOS_LOADING?: boolean

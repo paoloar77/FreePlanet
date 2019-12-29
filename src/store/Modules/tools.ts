@@ -47,6 +47,8 @@ export interface INotify {
 export const tools = {
   CAN_EDIT: 'q-ce',
 
+  APORTADOR_SOLIDARIO: 'apsol',
+
   listBestColor: [
     'blue',
     'green',
@@ -141,6 +143,7 @@ export const tools = {
     multiselect: 256,
     password: 512,
     listimages: 1024,
+    image: 2048,
   },
 
   FieldTypeArr: [
@@ -2123,6 +2126,7 @@ export const tools = {
   ,
 
   heightgallery(coeff) {
+    // console.log('heightgallery')
     return tools.heightGallVal(coeff).toString() + 'px'
   }
   ,
@@ -2694,6 +2698,7 @@ export const tools = {
   },
 
   getheightbywidth(mythis, mywidth, myheight, maxwidth) {
+    console.log('getheightbywidth')
     const myw = this.getwidthscale(mythis, mywidth, maxwidth)
     return myw * (myheight / mywidth)
   },
@@ -2811,10 +2816,16 @@ export const tools = {
     else
       return ''
   },
+  getsuffisso() {
+    if (tools.isTest())
+      return 'TEST: '
+    else
+      return ''
+  },
   metafunc(mythis) {
     return {
       title: mythis.$t('msg.myAppName'),
-      titleTemplate: (title) => `${mythis.mymeta.title} - ${mythis.$t('msg.myAppName')}`,
+      titleTemplate: (title) => `${tools.getsuffisso()} ${mythis.mymeta.title} - ${mythis.$t('msg.myAppName')}`,
       meta: {
         keywords: {
           name: 'keywords',
@@ -2834,6 +2845,10 @@ export const tools = {
   },
   isDebug() {
     return process.env.DEV
+  },
+
+  isTest() {
+    return process.env.ISTEST === '1'
   },
 
   geturlupload() {

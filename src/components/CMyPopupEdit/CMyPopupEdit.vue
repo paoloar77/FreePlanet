@@ -6,6 +6,12 @@
 
             </CGallery>
         </div>
+        <div v-else-if="col.fieldtype === tools.FieldType.image">
+            <CGallery :gall="row" :listimages="myvalue" :edit="isviewfield"
+                      @showandsave="Savedb">
+
+            </CGallery>
+        </div>
         <div v-else>
             <!-- Edit Value -->
             <span v-if="col.fieldtype === tools.FieldType.date">

@@ -4,7 +4,7 @@ import Component from 'vue-class-component'
 import { func_tools } from '../store/Modules/toolsext'
 import { tools } from '../store/Modules/tools'
 import { toolsext } from '@src/store/Modules/toolsext'
-import { GlobalStore } from '../store/Modules'
+import { GlobalStore, UserStore } from '../store/Modules'
 import { fieldsTable } from '@src/store/Modules/fieldsTable'
 import { CalendarStore } from '@store'
 import MixinMetaTags from '@src/mixins/mixin-metatags'
@@ -14,6 +14,10 @@ import MixinMetaTags from '@src/mixins/mixin-metatags'
 export default class MixinBase extends MixinMetaTags {
   public mythis() {
     return this
+  }
+
+  public showNotif(msg) {
+    tools.showNotif(this.$q, this.$t(msg))
   }
 
   get toolsext() {
@@ -32,57 +36,95 @@ export default class MixinBase extends MixinMetaTags {
     return tools
   }
 
-  public getValDb(keystr, serv, def?) {
-    const ris = GlobalStore.getters.getValueSettingsByKey(keystr, serv)
-    if (ris === '')
-      if (def !== undefined)
-        return def
+  public getValDb(keystr, serv, def?, table?, subkey?) {
+    if (table === 'users') {
+      if (keystr === 'profile') {
+        return UserStore.state.my.profile[subkey]
+      } else {
+        return UserStore.state.my[keystr]
+      }
+    }else {
+      const ris = GlobalStore.getters.getValueSettingsByKey(keystr, serv)
+      if (ris === '')
+        if (def !== undefined)
+          return def
+        else
+          return ''
       else
-        return ''
-    else
-      return ris
+        return ris
+    }
+
   }
 
-  public async setValDb(key, value, type, serv: boolean) {
+  public async setValDb(key, value, type, serv: boolean, table?, subkey?) {
 
-    console.log('setValDb', key, value, serv)
-    GlobalStore.mutations.setValueSettingsByKey({ key, value, serv })
+    console.log('setValDb', key, value, serv, table, subkey)
+    let mydatatosave = null
+    if (table === 'users') {
+      const myid = UserStore.state.my._id
 
-    let myrec = GlobalStore.getters.getrecSettingsByKey(key, serv)
-    if (myrec === undefined) {
-      myrec = {
-        idapp: process.env.APP_ID,
-        key,
-        type
+      let myfield = {}
+
+      if (key === 'profile') {
+        UserStore.state.my.profile[subkey] = value
+      } else {
+        UserStore.state.my[key] = value
       }
-      myrec.serv = serv
-      if (myrec.type === tools.FieldType.date)
-        myrec.value_date = value
-      else if (myrec.type === tools.FieldType.number)
-        myrec.value_num = value
-      else if (myrec.type === tools.FieldType.boolean)
-        myrec.value_bool = value
-      else
-        myrec.value_str = value
 
-      myrec = await tools.createNewRecord(this, 'settings', myrec).then((myrecris) => {
-        // console.log('myrec')
-        let recsett = null
-        if (serv)
-          recsett = GlobalStore.state.serv_settings
+      // Save to the DB:
+      if (subkey) {
+        myfield[key + '.' + subkey] = value
+      } else {
+        myfield[key] = value
+      }
+
+      console.log('myfield', myfield)
+
+      mydatatosave = {
+        id: myid,
+        table,
+        fieldsvalue: myfield
+      }
+
+    } else {
+      GlobalStore.mutations.setValueSettingsByKey({ key, value, serv })
+
+      let myrec = GlobalStore.getters.getrecSettingsByKey(key, serv)
+      if (myrec === undefined) {
+        myrec = {
+          idapp: process.env.APP_ID,
+          key,
+          type
+        }
+        myrec.serv = serv
+        if (myrec.type === tools.FieldType.date)
+          myrec.value_date = value
+        else if (myrec.type === tools.FieldType.number)
+          myrec.value_num = value
+        else if (myrec.type === tools.FieldType.boolean)
+          myrec.value_bool = value
         else
-          recsett = GlobalStore.state.settings
+          myrec.value_str = value
 
-        recsett.push(myrecris)
-        return recsett.find((rec) => rec.key === key)
-      })
-    }
-    console.log('myrec', myrec)
+        myrec = await tools.createNewRecord(this, 'settings', myrec).then((myrecris) => {
+          // console.log('myrec')
+          let recsett = null
+          if (serv)
+            recsett = GlobalStore.state.serv_settings
+          else
+            recsett = GlobalStore.state.settings
 
-    const mydatatosave = {
-      id: myrec._id,
-      table: 'settings',
-      fieldsvalue: myrec
+          recsett.push(myrecris)
+          return recsett.find((rec) => rec.key === key)
+        })
+      }
+      console.log('myrec', myrec)
+
+      mydatatosave = {
+        id: myrec._id,
+        table: 'settings',
+        fieldsvalue: myrec
+      }
     }
 
     console.log('mydatatosave', mydatatosave)

@@ -87,7 +87,7 @@ export default class CGridTableRec extends Vue {
 
   public undoVal() {
     console.log('undoVal', 'colsel', this.colsel, 'valprec', this.valPrec, 'this.colkey', this.colkey, 'this.selected', this.rowsel)
-    console.table(this.serverData)
+    // console.table(this.serverData)
     if (this.colsel) {
       if (this.colsel.subfield !== '') {
         if (this.rowsel[this.colsel.field] === undefined)
@@ -186,7 +186,7 @@ export default class CGridTableRec extends Vue {
   }
 
   public onRequest(props) {
-    console.log('onRequest', 'myfilter = ', this.myfilter)
+    // console.log('onRequest', 'myfilter = ', this.myfilter)
     const { page, rowsPerPage, rowsNumber, sortBy, descending } = props.pagination
     const myfilter = this.myfilter
 
@@ -225,7 +225,7 @@ export default class CGridTableRec extends Vue {
         this.serverData = [...this.returnedData]
       }
 
-      console.log('this.serverData', this.serverData)
+      // console.log('this.serverData', this.serverData)
 
       // don't forget to update local pagination object
       this.pagination.page = page
@@ -456,7 +456,7 @@ export default class CGridTableRec extends Vue {
       }
     }
 
-    console.log('this.tablesel', this.tablesel, 'mytab', mytab)
+    // console.log('this.tablesel', this.tablesel, 'mytab', mytab)
 
     if (mytab) {
       this.mytitle = mytab.label
