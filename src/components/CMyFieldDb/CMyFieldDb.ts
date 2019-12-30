@@ -41,6 +41,17 @@ export default class CMyFieldDb extends MixinBase {
     // console.log('created', this.myvalue)
   }
 
+  public getclassCol(col) {
+    if (col) {
+      let mycl = (this.disable || col.disable) ? '' : 'colmodif '
+      mycl += (col.fieldtype === tools.FieldType.date) ? ' coldate flex flex-container ' : ''
+
+      return mycl
+    } else {
+      return ''
+    }
+  }
+
   public visuValByType(val) {
     if (this.col.fieldtype === tools.FieldType.date) {
       if (val === undefined) {

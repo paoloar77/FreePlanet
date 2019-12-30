@@ -14,6 +14,7 @@ export interface IUserProfile {
   cell?: string
   dateofbirth?: Date
   sex?: ESexType
+  country_pay?: string
   email_paypal?: string
   username_telegram?: string
 }
@@ -28,9 +29,11 @@ export interface IUserFields {
   ipaddr?: string
   perm?: number
   verified_email?: boolean
+  made_gift?: boolean
   tokens?: IToken[]
   lasttimeonline?: Date
   profile?: IUserProfile
+  downline?: IUserFields[]
 }
 
 /*

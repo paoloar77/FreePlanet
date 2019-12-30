@@ -2,13 +2,13 @@
     <div class="text-center">
         <div class="row items-center justify-center q-gutter-md q-ma-xs">
             <div class="q-ma-xs">
-                <q-field rounded outlined bg-color="orange-3" dense>
+                <q-field rounded outlined bg-color="orange-3" dense style="min-width:110px;">
                     <template v-slot:control>
-                        <div class="self-center full-width no-outline" tabindex="0">{{title}}</div>
+                        <div class="self-center full-width no-outline text-center" tabindex="0">{{title}}</div>
                     </template>
                 </q-field>
             </div>
-            <div class="q-ma-sm q-pa-sm colmodif col-grow rounded-borders " style="border: 1px solid #bbb">
+            <div :class="getclassCol(col) + ` q-ma-sm q-pa-sm col-grow rounded-borders`" style="border: 1px solid #bbb">
                 <div v-if="type === tools.FieldType.date">
                     <CDateTime
                             :label="col.label"
@@ -33,12 +33,13 @@
                     <!-- Show Value -->
                     <div v-else-if="col.fieldtype === tools.FieldType.nationality">
                       <q-input
-                        input-class="cursor-pointer"
+                        input-class="cursor-pointer text-center"
                         :readonly="true"
                         v-model="countryname"
-                        rounded outlined
+                        rounded
+                        dense
                         debounce="1000"
-                        :label="$t('reg.nationality')">
+                        >
 
                         <div class="hidden">
                           <vue-country-code
@@ -81,7 +82,7 @@
                     </div>
 
                     <q-popup-edit
-                            v-if="canEdit && type !== tools.FieldType.boolean"
+                            v-if="(canEdit && type !== tools.FieldType.boolean) && !disable"
                             v-model="myvalue"
                             :disable="col.disable"
                             :title="col.title"
@@ -96,6 +97,7 @@
                         </div>
                         <div v-else-if="type === tools.FieldType.string">
                             <q-input v-model="myvalue"
+
                                      autogrow
                                      @keyup.enter.stop
                                      autofocus>
@@ -143,9 +145,9 @@
                             <q-input
                               v-model="countryname"
                               :readonly="true"
-                              rounded outlined
+                              rounded dense
                               debounce="1000"
-                              :label="$t('reg.nationality')">
+                              :label="title">
 
                               <template v-slot:prepend>
                                 <div style="font-size: 1rem;">

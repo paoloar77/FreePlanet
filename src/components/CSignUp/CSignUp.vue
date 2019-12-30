@@ -8,13 +8,18 @@
 
     <!--Prova URL :  {{env('PROVA_PAOLO')}}-->
 
-    <div class="q-gutter-xs">
+    <div class="q-gutter-sm">
 
       <q-input
-        class="clAportador"
+        bg-color="lightblue"
         :readonly="true"
         v-model="signup.aportador_solidario"
-        rounded outlined dense
+        rounded outlined
+        @blur="$v.signup.aportador_solidario.$touch"
+        :error="$v.signup.aportador_solidario.$error"
+        :error-message="errorMsg('aportador_solidario', $v.signup.aportador_solidario)"
+
+        debounce="1000"
 
         :label="$t('reg.aportador_solidario')">
 
@@ -45,6 +50,7 @@
         rounded outlined
         @blur="$v.signup.username.$touch"
         :error="$v.signup.username.$error"
+        @keydown.space="(event) => event.preventDefault()"
 
         debounce="1000"
         :error-message="errorMsg('username', $v.signup.username)"
@@ -142,7 +148,7 @@
 
       </q-input>
 
-      <br>
+      <div v-if="!tools.isMobile()"><br></div>
 
       <vue-tel-input
         v-if="showcell"

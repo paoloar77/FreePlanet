@@ -20,7 +20,7 @@ import { shared_consts } from '../../common/shared_vuejs'
 
 const bcrypt = require('bcryptjs')
 
-const DefaultUser: IUserFields = {
+export const DefaultUser: IUserFields = {
   _id: '',
   email: '',
   username: '',
@@ -29,9 +29,11 @@ const DefaultUser: IUserFields = {
   password: '',
   tokens: [],
   verified_email: false,
+  made_gift: false,
   profile: {
     img: ''
-  }
+  },
+  downline: []
 }
 
 export const DefaultProfile: IUserProfile = {
@@ -41,6 +43,7 @@ export const DefaultProfile: IUserProfile = {
   cell: '',
   dateofbirth: new Date(),
   sex: 0,
+  country_pay: '',
   email_paypal: '',
   username_telegram: ''
 }
@@ -166,6 +169,12 @@ namespace Getters {
       return ''
     }
   }, 'getImgByUsername')
+  const getRefLink = b.read((mystate: IUserState) => (): string => {
+    // console.log('myrec', myrec)
+
+    return tools.getUrlSite() + '/signup/' + mystate.my.username
+
+  }, 'getRefLink')
 
   export const getters = {
     get isUserInvalid() {
@@ -206,6 +215,9 @@ namespace Getters {
     },
     get getUsersList() {
       return getUsersList()
+    },
+    get getRefLink() {
+      return getRefLink()
     },
   }
 
@@ -263,6 +275,7 @@ namespace Mutations {
     localStorage.setItem(tools.localStorage.expirationDate, expirationDate.toString())
     localStorage.setItem(tools.localStorage.isLogged, String(true))
     localStorage.setItem(tools.localStorage.verified_email, String(myuser.verified_email))
+    localStorage.setItem(tools.localStorage.made_gift, String(myuser.made_gift))
     localStorage.setItem(tools.localStorage.wasAlreadySubOnDb, String(GlobalStore.state.wasAlreadySubOnDb))
 
   }
@@ -323,6 +336,7 @@ namespace Mutations {
     mystate.my.surname = ''
     resetArrToken(mystate.my.tokens)
     mystate.my.verified_email = false
+    mystate.my.made_gift = false
     mystate.categorySel = 'personal'
 
     mystate.servercode = 0
@@ -482,7 +496,7 @@ namespace Actions {
         // mutations.setServerCode(myres);
         return res
       }).catch((error) => {
-        return { numtot: 0, numadded: 0, numalreadyexisted: 0}
+        return { numtot: 0, numadded: 0, numalreadyexisted: 0 }
       })
   }
 
@@ -518,18 +532,18 @@ namespace Actions {
 
     return bcrypt.hash(authData.password, bcrypt.genSaltSync(12))
       .then((hashedPassword: string) => {
-/*
-        const usertosend = {
-          lang: mylang,
-          email: authData.email,
-          password: String(hashedPassword),
-          username: authData.username,
-          name: authData.name,
-          surname: authData.surname
-        }
-        console.log(usertosend)
+        /*
+                const usertosend = {
+                  lang: mylang,
+                  email: authData.email,
+                  password: String(hashedPassword),
+                  username: authData.username,
+                  name: authData.name,
+                  surname: authData.surname
+                }
+                console.log(usertosend)
 
-*/
+        */
         authData.lang = mylang
         authData.password = String(hashedPassword)
 
@@ -689,6 +703,7 @@ namespace Actions {
     localStorage.removeItem(tools.localStorage.isLogged)
     // localStorage.removeItem(rescodes.localStorage.leftDrawerOpen)
     localStorage.removeItem(tools.localStorage.verified_email)
+    localStorage.removeItem(tools.localStorage.made_gift)
     localStorage.removeItem(tools.localStorage.categorySel)
     localStorage.removeItem(tools.localStorage.wasAlreadySubOnDb)
 
@@ -775,6 +790,7 @@ namespace Actions {
           const name = String(localStorage.getItem(tools.localStorage.name))
           const surname = String(localStorage.getItem(tools.localStorage.surname))
           const verified_email = localStorage.getItem(tools.localStorage.verified_email) === 'true'
+          const made_gift = localStorage.getItem(tools.localStorage.made_gift) === 'true'
           const perm = parseInt(localStorage.getItem(tools.localStorage.perm), 10)
           const img = String(localStorage.getItem(tools.localStorage.img))
 
@@ -790,6 +806,7 @@ namespace Actions {
             name,
             surname,
             verified_email,
+            made_gift,
             perm,
             profile: { img }
           })
@@ -808,6 +825,22 @@ namespace Actions {
       return false
     }
   }
+
+  async function getDashboard(context, paramquery) {
+
+    return await Api.SendReq('/dashboard', 'POST', paramquery)
+      .then((res) => {
+        if (res.status === 200) {
+          return res.data.dashboard
+        }
+      }).catch((error) => {
+        return {
+          aportador: {},
+          downline: []
+        }
+      })
+  }
+
 
   /*
     async function refreshUserInfos(){
@@ -837,6 +870,7 @@ namespace Actions {
     importemail: b.dispatch(importemail),
     newsletterload: b.dispatch(newsletterload),
     newsletter_setactivate: b.dispatch(newsletter_setactivate),
+    getDashboard: b.dispatch(getDashboard),
   }
 
 }

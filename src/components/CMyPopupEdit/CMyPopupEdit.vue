@@ -139,9 +139,9 @@
                         <q-input
                           v-model="countryname"
                           :readonly="true"
-                          rounded outlined
+                          rounded dense
                           debounce="1000"
-                          :label="$t('reg.nationality')">
+                          >
 
                           <template v-slot:prepend>
                             <div style="font-size: 1rem;">

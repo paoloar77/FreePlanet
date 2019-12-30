@@ -54,6 +54,7 @@ export interface IMyPage {
   author_username?: string
   title?: string
   icon?: string
+  order?: number
   path?: string
   keywords?: string
   description?: string
@@ -171,11 +172,13 @@ export interface IMenuList {
 
 export interface IListRoutes {
   active?: boolean
+  order: number
   path: string
   name: string
   materialIcon?: string
   component?: Component
   reqauth?: boolean
+  isseparator?: boolean
   inmenu?: boolean
   solotitle?: boolean
   infooter?: boolean

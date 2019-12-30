@@ -78,6 +78,10 @@ export default class MixinUsers extends Vue {
     return UserStore.state.my.verified_email
   }
 
+  get MadeGift() {
+    return UserStore.state.my.made_gift
+  }
+
   get Email() {
     return UserStore.state.my.email
   }

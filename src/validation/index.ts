@@ -1,4 +1,5 @@
 export { duplicate } from './duplicate'
 export { registereduser } from './registereduser'
+export { aportadorexist } from './aportadorexist'
 export { registeredemail } from './registeredemail'
 export { complexity } from './complexity'

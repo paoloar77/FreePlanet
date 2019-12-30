@@ -20,8 +20,8 @@ export default class Signup extends Vue {
   }
 
   public created() {
-    if (!tools.getCookie(tools.APORTADOR_SOLIDARIO, ''))
-      tools.setCookie(tools.APORTADOR_SOLIDARIO, this.$route.params.invited)
+    // if (!tools.getCookie(tools.APORTADOR_SOLIDARIO, ''))
+    //   tools.setCookie(tools.APORTADOR_SOLIDARIO, this.$route.params.invited)
   }
 
 }

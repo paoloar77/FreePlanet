@@ -104,6 +104,7 @@ export const tools = {
 
   localStorage: {
     verified_email: 'vf',
+    made_gift: 'mg',
     wasAlreadySubOnDb: 'sb',
     categorySel: 'cs',
     isLogged: 'ilog',
@@ -1387,8 +1388,13 @@ export const tools = {
   },
 
   visumenu(elem) {  // : IListRoutes
-    return (elem.onlyAdmin && UserStore.state.isAdmin) || (elem.onlyManager && UserStore.state.isManager)
-      || ((!elem.onlyAdmin) && (!elem.onlyManager))
+    let visu = ((elem.onlyAdmin && UserStore.state.isAdmin) || (elem.onlyManager && UserStore.state.isManager)
+      || ((!elem.onlyAdmin) && (!elem.onlyManager))) && elem.active
+
+    if (elem.meta && elem.meta.requiresAuth) {
+      visu = visu && tools.isLoggedToSystem()
+    }
+    return visu
   },
 
   executefunc(myself: any, table, func: number, par: IParamDialog) {
@@ -2522,6 +2528,12 @@ export const tools = {
   }
   ,
 
+  getUrlSite() {
+    const url = window.location.href
+    const arr = url.split('/')
+    return arr[0] + '//' + arr[2]
+  },
+
   SignIncheckErrors(mythis, riscode, ispageLogin ?: boolean) {
     // console.log('SignIncheckErrors: ', riscode)
     try {
@@ -2874,6 +2886,17 @@ export const tools = {
   isChristmasHoliday() {
     const now = new Date()
     return ((now.getMonth() === 11 && now.getDate() > 20) || (now.getMonth() === 0 && now.getDate() < 8))
+  },
+
+  CapitalizeAllWords(str) {
+    const splitStr = str.toLowerCase().split(' ')
+    for (var i = 0; i < splitStr.length; i++) {
+      // You do not need to check if i is larger than splitStr length, as your for does that for you
+      // Assign it back to the array
+      splitStr[i] = splitStr[i].charAt(0).toUpperCase() + splitStr[i].substring(1)
+    }
+    // Directly return the joined string
+    return splitStr.join(' ')
   }
 
 // getLocale() {

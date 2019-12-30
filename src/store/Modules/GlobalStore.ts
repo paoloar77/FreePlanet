@@ -837,6 +837,7 @@ namespace Actions {
       if (page.active) {
         arrpagesroute.push({
           active: true,
+          order: page.order,
           path: '/' + page.path,
           name: undefined,
           text: page.title,
@@ -852,6 +853,7 @@ namespace Actions {
 
     const last = {
       active: true,
+      order: 10000,
       path: '*',
       materialIcon: 'fas fa-calendar-plus',
       name: 'otherpages.error404def',
@@ -860,7 +862,10 @@ namespace Actions {
       infooter: false
     }
 
-    static_data.routes = [...static_data.routes, ...arrpagesroute, last]
+    static_data.routes = [...static_data.baseroutes, ...arrpagesroute, last]
+
+    // Sort array
+    static_data.routes = static_data.routes.sort((a, b) => a.order - b.order)
 
     router.addRoutes([...arrpagesroute, last])
   }

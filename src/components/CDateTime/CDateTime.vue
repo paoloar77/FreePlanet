@@ -8,7 +8,7 @@
                  borderless
                  :label="label"
                  :bg-color="bgcolor"
-                 :disable="disable"
+                 :readonly="true"
                  :dense="dense"
                  mask="####-##-## ##:##"
                  debounce="500"

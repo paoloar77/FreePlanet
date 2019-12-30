@@ -17,6 +17,8 @@ import { serv_constants } from '@src/store/Modules/serv_constants'
 
 import VueCountryCode from 'vue-country-code'
 import { CTitleBanner } from '../CTitleBanner'
+import { registereduser } from '../../validation'
+import MixinBase from '../../mixins/mixin-base'
 
 Vue.use(VueCountryCode)
 // import {Loading, QSpinnerFacebook, QSpinnerGears} from 'quasar'
@@ -28,7 +30,7 @@ Vue.use(VueCountryCode)
   components: { Logo, CTitleBanner }
 })
 
-export default class CSignUp extends Vue {
+export default class CSignUp extends MixinBase {
   @Prop({ required: false, default: false }) public showadultcheck: boolean
   @Prop({ required: false, default: false }) public showcell: boolean
   public $v
@@ -48,17 +50,21 @@ export default class CSignUp extends Vue {
     password: process.env.TEST_PASSWORD || '',
     repeatPassword: process.env.TEST_PASSWORD || '',
     terms: !process.env.PROD,
-    profile: DefaultProfile
+    profile: DefaultProfile,
+    aportador_solidario: ''
   }
 
   public created() {
     this.$v.$reset()
 
-    this.signup.aportador_solidario = tools.getCookie(tools.APORTADOR_SOLIDARIO, this.$route.params.invited || process.env.TEST_APORTADOR)
+    this.signup.aportador_solidario = this.$route.params.invited || process.env.TEST_APORTADOR
+
+    this.$v.signup.aportador_solidario.$touch()
   }
 
   @Watch('$route.params.invited')
   public changeaportador() {
+    console.log('changeaportador', this.$route.params.invited)
     if (!this.signup.aportador_solidario)
       this.signup.aportador_solidario = this.$route.params.invited
   }
@@ -129,11 +135,27 @@ export default class CSignUp extends Vue {
         }
       }
 
-      if (!item.minLength) { return this.$t('reg.err.atleast') + ` ${item.$params.minLength.min} ` + this.$t('reg.err.char') }
-      if (!item.complexity) { return this.$t('reg.err.complexity') }
+      console.log('item', item)
+
+      if (item.minLength !== undefined) {
+        if (!item.minLength) {
+          return this.$t('reg.err.atleast') + ` ${item.$params.minLength.min} ` + this.$t('reg.err.char')
+        }
+      }
+      if (item.complexity !== undefined) {
+        if (!item.complexity) {
+          return this.$t('reg.err.complexity')
+        }
+      }
 // if (!item.maxLength) { return this.$t('reg.err.notmore') + ` ${item.$params.maxLength.max} ` + this.$t('reg.err.char') }
 
-      if (!item.required) { return this.$t('reg.err.required') }
+      if (item.required !== undefined) {
+        if (!item.required) {
+          return this.$t('reg.err.required')
+        }
+      }
+
+      console.log('    ....avanti')
       if (cosa === 'email') {
         // console.log("EMAIL " + item.isUnique);
         // console.log(item);
@@ -141,10 +163,15 @@ export default class CSignUp extends Vue {
       } else if (cosa === 'username') {
         // console.log(item);
         if (!item.isUnique) { return this.$t('reg.err.duplicate_username') }
+      } else if (cosa === 'aportador_solidario') {
+        // console.log(item);
+        if (!item.aportadorexist) {
+          console.log('!item.aportadorexist !')
+          return this.$t('reg.err.aportador_not_exist')
+        }
       } else if ((cosa === 'name') || (cosa === 'surname')) {
         // console.log(item);
       }
-
 
       return ''
     } catch (error) {
@@ -188,6 +215,9 @@ export default class CSignUp extends Vue {
       return
     }
 
+    this.signup.name = tools.CapitalizeAllWords(this.signup.name)
+    this.signup.surname = tools.CapitalizeAllWords(this.signup.surname)
+
     this.$q.loading.show({ message: this.$t('reg.incorso') })
 
     console.log(this.signup)
@@ -212,6 +242,10 @@ export default class CSignUp extends Vue {
     // console.log(name, iso2, dialCode)
     this.signup.profile.nationality = iso2
     this.countryname = name
+  }
+
+  public inputUsername(value){
+    this.signup.username = value.trim()
   }
 
 }
