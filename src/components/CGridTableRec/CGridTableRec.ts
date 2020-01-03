@@ -206,7 +206,7 @@ export default class CGridTableRec extends Vue {
     const startRow = (page - 1) * rowsPerPage
     const endRow = startRow + fetchCount
 
-    console.log('startRow', startRow)
+    // console.log('startRow', startRow)
 
     this.serverData = []
 
@@ -382,7 +382,7 @@ export default class CGridTableRec extends Vue {
   public refresh() {
     this.serverData = []
 
-    console.log('refresh')
+    // console.log('refresh')
     // console.log('this.search', this.search)
     if (!!this.search && this.search !== '')
       this.myfilter = this.search

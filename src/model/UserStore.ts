@@ -20,6 +20,7 @@ export interface IUserProfile {
   teleg_id?: number
   teleg_checkcode?: number
   paymenttypes?: IPaymentType[]
+  manage_telegram?: boolean
 }
 
 export interface IPaymentType {

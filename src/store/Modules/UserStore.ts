@@ -48,6 +48,7 @@ export const DefaultProfile: IUserProfile = {
   username_telegram: '',
   teleg_id: 0,
   teleg_checkcode: 0,
+  manage_telegram: false,
   paymenttypes: []
 }
 
@@ -185,6 +186,12 @@ namespace Getters {
 
   }, 'getRefLink')
 
+  const isVerificato = b.read((mystate: IUserState) => {
+    const teleg_ok = mystate.my.profile.teleg_id > 0
+
+    return teleg_ok
+  }, 'isVerificato')
+
   export const getters = {
     get isUserInvalid() {
       return isUserInvalid()
@@ -230,6 +237,9 @@ namespace Getters {
     },
     get getPaymenttypeById() {
       return getPaymenttypeById()
+    },
+    get isVerificato() {
+      return isVerificato()
     },
   }
 
@@ -679,6 +689,8 @@ namespace Actions {
             Mutations.mutations.authUser(myuser)
 
             Mutations.mutations.updateLocalStorage(myuser)
+
+            GlobalStore.actions.loadSite()
 
           }
         }

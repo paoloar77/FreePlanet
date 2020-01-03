@@ -788,29 +788,38 @@ namespace Actions {
 
     return await Api.SendReq('/loadsite/' + myuserid + '/' + process.env.APP_ID + '/' + showall, 'GET', null)
       .then((res) => {
-        CalendarStore.state.bookedevent = (res.data.bookedevent) ? res.data.bookedevent : []
-        CalendarStore.state.eventlist = (res.data.eventlist) ? res.data.eventlist : []
-        CalendarStore.state.operators = (res.data.operators) ? res.data.operators : []
-        CalendarStore.state.wheres = (res.data.wheres) ? res.data.wheres : []
-        CalendarStore.state.contribtype = (res.data.contribtype) ? res.data.contribtype : []
-        GlobalStore.state.settings = (res.data.settings) ? [...res.data.settings] : []
-        GlobalStore.state.disciplines = (res.data.disciplines) ? [...res.data.disciplines] : []
-        GlobalStore.state.paymenttypes = (res.data.paymenttypes) ? [...res.data.paymenttypes] : []
-        GlobalStore.state.gallery = (res.data.gallery) ? [...res.data.gallery] : []
+        console.log('____________________________  res', res)
+        if (res.status === 200) {
+          CalendarStore.state.bookedevent = (res.data.bookedevent) ? res.data.bookedevent : []
+          CalendarStore.state.eventlist = (res.data.eventlist) ? res.data.eventlist : []
+          CalendarStore.state.operators = (res.data.operators) ? res.data.operators : []
+          CalendarStore.state.wheres = (res.data.wheres) ? res.data.wheres : []
+          CalendarStore.state.contribtype = (res.data.contribtype) ? res.data.contribtype : []
+          GlobalStore.state.settings = (res.data.settings) ? [...res.data.settings] : []
+          GlobalStore.state.disciplines = (res.data.disciplines) ? [...res.data.disciplines] : []
+          GlobalStore.state.paymenttypes = (res.data.paymenttypes) ? [...res.data.paymenttypes] : []
+          GlobalStore.state.gallery = (res.data.gallery) ? [...res.data.gallery] : []
 
-        if (showall) {
-          GlobalStore.state.newstosent = (res.data.newstosent) ? [...res.data.newstosent] : []
-          GlobalStore.state.mailinglist = (res.data.mailinglist) ? [...res.data.mailinglist] : []
-          GlobalStore.state.mypage = (res.data.mypage) ? [...res.data.mypage] : []
+          if (showall) {
+            GlobalStore.state.newstosent = (res.data.newstosent) ? [...res.data.newstosent] : []
+            GlobalStore.state.mailinglist = (res.data.mailinglist) ? [...res.data.mailinglist] : []
+            GlobalStore.state.mypage = (res.data.mypage) ? [...res.data.mypage] : []
+          }
+
+          if (res.data.myuser) {
+            UserStore.mutations.authUser(res.data.myuser)
+
+            UserStore.mutations.updateLocalStorage(res.data.myuser)
+          }
+
+          CalendarStore.state.editable = UserStore.state.isAdmin || UserStore.state.isManager
+
+          if (res.data.myuser === null && UserStore.state.isLogged) {
+            // Fai Logout
+            UserStore.actions.logout()
+            GlobalStore.state.RightDrawerOpen = true
+          }
         }
-
-        if (res.data.myuser) {
-          UserStore.mutations.authUser(res.data.myuser)
-
-          UserStore.mutations.updateLocalStorage(res.data.myuser)
-        }
-
-        CalendarStore.state.editable = UserStore.state.isAdmin || UserStore.state.isManager
 
       })
       .catch((error) => {

@@ -147,7 +147,7 @@
                         {{ $t('user.loggati') }}
                     </div>
 
-                    <div v-if="isLogged && !isVerified" class="text-verified">{{
+                    <div v-if="isLogged && !isEmailVerified" class="text-verified">{{
                         $t('components.authentication.email_verification.verify_email') }}
                     </div>
 

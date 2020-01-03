@@ -340,7 +340,7 @@ export default class Header extends Vue {
     return UserStore.state.isLogged
   }
 
-  get isVerified() {
+  get isEmailVerified() {
     return UserStore.state.my.verified_email
   }
 
