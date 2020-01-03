@@ -45,6 +45,7 @@ export default class CDateTime extends Vue {
       this.valueDate = new Date()
       this.myvalue = tools.getstrYYMMDDDateTime(this.valueDate)
     }
+    // console.log('Opening', this.valueDate, this.myvalue)
     this.$emit('show')
   }
 

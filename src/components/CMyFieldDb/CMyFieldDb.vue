@@ -31,7 +31,7 @@
                                 :opticon="db_fieldsTable.getIconByTable(col.jointable)"></CMyChipList>
                     </div>
                     <!-- Show Value -->
-                    <div v-else-if="col.fieldtype === tools.FieldType.nationality">
+                    <div v-else-if="type === tools.FieldType.nationality">
                       <q-input
                         input-class="cursor-pointer text-center"
                         :readonly="true"
@@ -54,14 +54,24 @@
 
                       </q-input>
                     </div>
-                    <div v-else-if="col.fieldtype === tools.FieldType.intcode">
+                    <div v-else-if="type === tools.FieldType.intcode">
 
-                      {{ myvalue }}
+                      {{ myvalprinted }}
 
                     </div>
                     <div v-else-if="type === tools.FieldType.multiselect">
                         <CMyChipList
                                 :type="tools.FieldType.multiselect"
+                                :value="myvalue"
+                                :options="db_fieldsTable.getTableJoinByName(col.jointable)"
+                                :optval="db_fieldsTable.getKeyByTable(col.jointable)"
+                                :optlab="db_fieldsTable.getLabelByTable(col.jointable)"
+                                :opticon="db_fieldsTable.getIconByTable(col.jointable)"></CMyChipList>
+                    </div>
+                    <div v-else-if="type === tools.FieldType.select">
+                        <CMyChipList
+                                myclass="text-center"
+                                :type="tools.FieldType.select"
                                 :value="myvalue"
                                 :options="db_fieldsTable.getTableJoinByName(col.jointable)"
                                 :optval="db_fieldsTable.getKeyByTable(col.jointable)"
@@ -186,7 +196,7 @@
                           </div>
 
                         </div>
-                        <div v-else-if="type === tools.FieldType.multiselect">
+                        <div v-else-if="col.fieldtype === tools.FieldType.multiselect">
                             <q-select
                                     v-model="myvalue"
                                     rounded

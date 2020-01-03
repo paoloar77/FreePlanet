@@ -58,6 +58,16 @@
                                 :optlab="db_fieldsTable.getLabelByTable(col.jointable)"
                                 :opticon="db_fieldsTable.getIconByTable(col.jointable)"></CMyChipList>
                     </div>
+                    <div v-else-if="col.fieldtype === tools.FieldType.select">
+                        <CMyChipList
+                                myclass="text-center"
+                                :type="tools.FieldType.select"
+                                :value="myvalue"
+                                :options="db_fieldsTable.getTableJoinByName(col.jointable)"
+                                :optval="db_fieldsTable.getKeyByTable(col.jointable)"
+                                :optlab="db_fieldsTable.getLabelByTable(col.jointable)"
+                                :opticon="db_fieldsTable.getIconByTable(col.jointable)"></CMyChipList>
+                    </div>
                     <div v-else-if="col.fieldtype === tools.FieldType.boolean">
                         <q-toggle dark color="green" v-model="myvalue" :label="col.title"
                                   @input="Savedb"></q-toggle>
@@ -174,6 +184,8 @@
 
                     </div>
                     <div v-else-if="col.fieldtype === tools.FieldType.multiselect">
+                      <div>join: {{col.jointable}}</div>
+
                         <q-select
                                 v-model="myvalue"
                                 rounded

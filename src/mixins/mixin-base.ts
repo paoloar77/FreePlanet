@@ -58,7 +58,7 @@ export default class MixinBase extends MixinMetaTags {
 
   public async setValDb(key, value, type, serv: boolean, table?, subkey?) {
 
-    console.log('setValDb', key, value, serv, table, subkey)
+    // console.log('setValDb', key, value, serv, table, subkey)
     let mydatatosave = null
     if (table === 'users') {
       const myid = UserStore.state.my._id
@@ -78,7 +78,7 @@ export default class MixinBase extends MixinMetaTags {
         myfield[key] = value
       }
 
-      console.log('myfield', myfield)
+      // console.log('myfield', myfield)
 
       mydatatosave = {
         id: myid,
@@ -118,7 +118,7 @@ export default class MixinBase extends MixinMetaTags {
           return recsett.find((rec) => rec.key === key)
         })
       }
-      console.log('myrec', myrec)
+      // console.log('myrec', myrec)
 
       mydatatosave = {
         id: myrec._id,
@@ -127,7 +127,7 @@ export default class MixinBase extends MixinMetaTags {
       }
     }
 
-    console.log('mydatatosave', mydatatosave)
+    // console.log('mydatatosave', mydatatosave)
 
     GlobalStore.actions.saveFieldValue(mydatatosave).then((esito) => {
       if (esito) {

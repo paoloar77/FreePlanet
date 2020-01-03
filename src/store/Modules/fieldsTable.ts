@@ -151,6 +151,12 @@ const colcontribtype = [
   AddCol(DeleteRec)
 ]
 
+const colpaymenttype = [
+  AddCol({ name: 'key', label_trans: 'reg.key' }),
+  AddCol({ name: 'label', label_trans: 'proj.longdescr' }),
+  AddCol(DeleteRec)
+]
+
 const coldisciplines = [
   AddCol({ name: 'typol_code', label_trans: 'disc.typol_code' }),
   AddCol({ name: 'order', label_trans: 'disc.order', fieldtype: tools.FieldType.number }),
@@ -289,15 +295,22 @@ export const fieldsTable = {
       const collab = this.getLabelByTable(col.jointable)
 
       // console.table(mylist)
-      // console.log('key=', key, 'collab', collab, 'val', val)
+      let risultato = ''
 
-      const myris = mylist.find((myrec) => myrec[key] === val)
-      // console.log('myris', myris)
-      if (myris) {
-        return myris[collab]
+      if (tools.isObject(collab)) {
+        risultato = mylist.filter((myrec) => myrec.username === val).map(collab)
       } else {
-        return ''
+        const myris = mylist.find((myrec) => myrec[key] === val)
+        risultato = myris[collab]
       }
+
+
+      if (key === 'username') {
+        console.log('key=', key, 'collab', collab, 'val', val)
+        console.log('myris', risultato)
+      }
+
+      return risultato
 
     } else {
       return ''
@@ -305,13 +318,14 @@ export const fieldsTable = {
   },
 
   getMultiValueByTable(col: IColGridTable, arrval) {
+    // console.log('getMultiValueByTable')
     if (col.jointable) {
       const mylist = this.getTableJoinByName(col.jointable)
       const key = this.getKeyByTable(col.jointable)
       const collab = this.getLabelByTable(col.jointable)
 
       // console.table(mylist)
-      // console.log('key=', key, 'collab', collab, 'val', val)
+      // console.log('key=', key, 'collab', collab, 'val', collab)
 
       const myris = mylist.filter((myrec) => arrval.includes(myrec[key]))
       // console.log('myris', myris)
@@ -363,7 +377,10 @@ export const fieldsTable = {
   },
   getTitleByTable(mytable): string {
     const myrec = this.getrecTableList(mytable)
-    return myrec.label
+    if (!!myrec)
+      return myrec.label
+    else
+      return ''
   },
   getIconByTable(mytable): string {
     const myrec = this.getrecTableList(mytable)
@@ -387,7 +404,9 @@ export const fieldsTable = {
     AddCol({ name: 'profile.cell', field: 'profile', subfield: 'cell', label_trans: 'reg.cell', fieldtype: tools.FieldType.intcode }),
     AddCol({ name: 'profile.email_paypal', field: 'profile', subfield: 'email_paypal', label_trans: 'reg.email_paypal' }),
     AddCol({ name: 'profile.country_pay', field: 'profile', subfield: 'country_pay', label_trans: 'reg.country_pay', fieldtype: tools.FieldType.nationality }),
-    AddCol({ name: 'profile.username_telegram', field: 'profile', subfield: 'username_telegram', label_trans: 'reg.username_telegram' }),
+    AddCol({ name: 'profile.teleg_id', field: 'profile', subfield: 'teleg_id', label_trans: 'reg.teleg_id' }),
+    AddCol({ name: 'profile.teleg_checkcode', field: 'profile', subfield: 'teleg_checkcode', label_trans: 'reg.teleg_checkcode' }),
+    AddCol({ name: 'profile.paymenttypes', field: 'profile', subfield: 'paymenttypes', label_trans: 'reg.paymenttype', fieldtype: tools.FieldType.multiselect, jointable: 'paymenttypes' }),
     AddCol({ name: 'profile.img', field: 'profile', subfield: 'img', label_trans: 'reg.img', sortable: false }),
     AddCol({ name: 'date_reg', label_trans: 'reg.date_reg', fieldtype: tools.FieldType.date }),
     // AddCol({ name: 'idapp', label_trans: 'reg.idapp', fieldtype: tools.FieldType.string }),
@@ -422,6 +441,13 @@ export const fieldsTable = {
       value: 'contribtype',
       label: 'Tipi di Contributi',
       columns: colcontribtype,
+      colkey: '_id',
+      collabel: 'label'
+    },
+    {
+      value: 'paymenttypes',
+      label: 'Tipi di Pagamenti',
+      columns: colpaymenttype,
       colkey: '_id',
       collabel: 'label'
     },

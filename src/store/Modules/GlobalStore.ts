@@ -74,6 +74,7 @@ const state: IGlobalState = {
   opzemail: [],
   settings: [],
   disciplines: [],
+  paymenttypes: [],
   autoplaydisc: 8000,
   newstosent: [],
   gallery: [],
@@ -193,6 +194,8 @@ namespace Getters {
       return GlobalStore.state.mailinglist
     else if (table === tools.TABMYPAGE)
       return GlobalStore.state.mypage
+    else if (table === 'paymenttypes')
+      return GlobalStore.state.paymenttypes
     else if (table === 'bookings')
       return CalendarStore.state.bookedevent
     else if (table === 'users')
@@ -391,7 +394,7 @@ namespace Mutations {
         // console.log('myrec', myrec)
         if (myrec) {
           for (const [key, value] of Object.entries(mydata.fieldsvalue)) {
-            console.log('key', value, myrec[key])
+            // console.log('key', value, myrec[key])
             myrec[key] = value
           }
         }
@@ -792,6 +795,7 @@ namespace Actions {
         CalendarStore.state.contribtype = (res.data.contribtype) ? res.data.contribtype : []
         GlobalStore.state.settings = (res.data.settings) ? [...res.data.settings] : []
         GlobalStore.state.disciplines = (res.data.disciplines) ? [...res.data.disciplines] : []
+        GlobalStore.state.paymenttypes = (res.data.paymenttypes) ? [...res.data.paymenttypes] : []
         GlobalStore.state.gallery = (res.data.gallery) ? [...res.data.gallery] : []
 
         if (showall) {

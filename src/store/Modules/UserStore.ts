@@ -33,7 +33,7 @@ export const DefaultUser: IUserFields = {
   profile: {
     img: ''
   },
-  downline: []
+  downline: [],
 }
 
 export const DefaultProfile: IUserProfile = {
@@ -45,7 +45,10 @@ export const DefaultProfile: IUserProfile = {
   sex: 0,
   country_pay: '',
   email_paypal: '',
-  username_telegram: ''
+  username_telegram: '',
+  teleg_id: 0,
+  teleg_checkcode: 0,
+  paymenttypes: []
 }
 
 // State
@@ -157,6 +160,12 @@ namespace Getters {
     return mystate.usersList.find((item) => item.username === username)
   }, 'getUserByUsername')
 
+  const getPaymenttypeById = b.read((mystate: IUserState) => (id) => {
+    const ctrec = mystate.my.profile.paymenttypes.find((mycontr) => mycontr.key === id)
+    return (ctrec) ? ctrec.label : ''
+
+  }, 'getPaymenttypeById')
+
   const getImgByUsername = b.read((mystate: IUserState) => (username): string => {
     if (username === '')
       return ''
@@ -218,6 +227,9 @@ namespace Getters {
     },
     get getRefLink() {
       return getRefLink()
+    },
+    get getPaymenttypeById() {
+      return getPaymenttypeById()
     },
   }
 
@@ -554,7 +566,7 @@ namespace Actions {
 
             const newuser = res.data
 
-            console.log('newuser', newuser)
+            // console.log('newuser', newuser)
 
             Mutations.mutations.setServerCode(res.status)
 

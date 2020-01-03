@@ -17,6 +17,14 @@ export interface IUserProfile {
   country_pay?: string
   email_paypal?: string
   username_telegram?: string
+  teleg_id?: number
+  teleg_checkcode?: number
+  paymenttypes?: IPaymentType[]
+}
+
+export interface IPaymentType {
+  key: string
+  label: string
 }
 
 export interface IUserFields {

@@ -18,7 +18,7 @@
         @blur="$v.signup.aportador_solidario.$touch"
         :error="$v.signup.aportador_solidario.$error"
         :error-message="errorMsg('aportador_solidario', $v.signup.aportador_solidario)"
-
+        maxlength="20"
         debounce="1000"
 
         :label="$t('reg.aportador_solidario')">
@@ -35,7 +35,7 @@
         @blur="$v.signup.email.$touch"
         :error="$v.signup.email.$error"
         :error-message="errorMsg('email', $v.signup.email)"
-
+        maxlength="50"
         debounce="1000"
         :label="$t('reg.email')">
 
@@ -51,7 +51,7 @@
         @blur="$v.signup.username.$touch"
         :error="$v.signup.username.$error"
         @keydown.space="(event) => event.preventDefault()"
-
+        maxlength="20"
         debounce="1000"
         :error-message="errorMsg('username', $v.signup.username)"
         :label="$t('reg.username')">
@@ -67,7 +67,7 @@
         rounded outlined
         @blur="$v.signup.name.$touch"
         :error="$v.signup.name.$error"
-
+        maxlength="30"
         debounce="1000"
         :error-message="errorMsg('name', $v.signup.name)"
         :label="$t('reg.name')">
@@ -83,7 +83,7 @@
         rounded outlined
         @blur="$v.signup.surname.$touch"
         :error="$v.signup.surname.$error"
-
+        maxlength="30"
         debounce="1000"
         :error-message="errorMsg('surname', $v.signup.surname)"
         :label="$t('reg.surname')">
@@ -101,7 +101,7 @@
         @blur="$v.signup.password.$touch"
         :error="$v.signup.password.$error"
         :error-message="`${errorMsg('password', $v.signup.password)}`"
-
+        maxlength="30"
         :label="$t('reg.password')">
 
         <template v-slot:prepend>
@@ -113,6 +113,7 @@
       <q-input
         v-model="signup.repeatPassword"
         type="password"
+        maxlength="30"
         rounded outlined
         @blur="$v.signup.repeatPassword.$touch"
         :error="$v.signup.repeatPassword.$error"
@@ -155,6 +156,7 @@
         @country-changed="intcode_change"
         v-model="signup.profile.cell"
         :placeholder="$t('reg.cell')"
+        maxlength="20"
         :enabledCountryCode="true"
         inputClasses="clCell"
         wrapperClasses="clCellCode">

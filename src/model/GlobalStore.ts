@@ -1,6 +1,7 @@
 import { IAction } from '@src/model/Projects'
 import { Component } from 'vue-router/types/router'
 import { lists } from '@src/store/Modules/lists'
+import { IPaymentType } from '@src/model/UserStore'
 
 export interface IPost {
   title: string
@@ -149,6 +150,7 @@ export interface IGlobalState {
   serv_settings: ISettings[],
   settings: ISettings[],
   disciplines: IDiscipline[],
+  paymenttypes: IPaymentType[],
   newstosent: INewsToSent[],
   gallery: IGallery[],
   mypage: IMyPage[],

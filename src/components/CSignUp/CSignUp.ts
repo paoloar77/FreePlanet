@@ -126,7 +126,7 @@ export default class CSignUp extends MixinBase {
   public errorMsg(cosa: string, item: any) {
     try {
       if (!item.$error) { return '' }
-      console.log('errorMsg', cosa, item)
+      // console.log('errorMsg', cosa, item)
       if (item.$params.email && !item.email) { return this.$t('reg.err.email') }
 
       if (cosa === 'repeatpassword') {
@@ -135,7 +135,7 @@ export default class CSignUp extends MixinBase {
         }
       }
 
-      console.log('item', item)
+      // console.log('item', item)
 
       if (item.minLength !== undefined) {
         if (!item.minLength) {
@@ -155,7 +155,7 @@ export default class CSignUp extends MixinBase {
         }
       }
 
-      console.log('    ....avanti')
+      // console.log('    ....avanti')
       if (cosa === 'email') {
         // console.log("EMAIL " + item.isUnique);
         // console.log(item);
@@ -166,7 +166,7 @@ export default class CSignUp extends MixinBase {
       } else if (cosa === 'aportador_solidario') {
         // console.log(item);
         if (!item.aportadorexist) {
-          console.log('!item.aportadorexist !')
+          // console.log('!item.aportadorexist !')
           return this.$t('reg.err.aportador_not_exist')
         }
       } else if ((cosa === 'name') || (cosa === 'surname')) {

@@ -142,9 +142,9 @@ export default class CGridTableRec extends Vue {
 
     if (this.colsel.subfield !== '') {
       if (mydata.fieldsvalue[this.colsel.field] === undefined) {
-        mydata.fieldsvalue[this.colsel.field] = {}
+        mydata.fieldsvalue[this.colsel.field + '.' + this.colsel.subfield] = newVal
       }
-      mydata.fieldsvalue[this.colsel.field][this.colsel.subfield] = newVal
+      // mydata.fieldsvalue[this.colsel.field][this.colsel.subfield] = newVal
     } else {
       mydata.fieldsvalue[this.colsel.field] = newVal
     }
