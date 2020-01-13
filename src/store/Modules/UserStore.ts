@@ -40,7 +40,7 @@ export const DefaultProfile: IUserProfile = {
   img: '',
   nationality: '',
   intcode_cell: '',
-  cell: '',
+  cell: process.env.TEST_CELL || '',
   dateofbirth: new Date(),
   sex: 0,
   country_pay: '',
@@ -522,6 +522,16 @@ namespace Actions {
       })
   }
 
+  async function importExtraList(context, paramquery) {
+
+    return await Api.SendReq('/users/import_extralist', 'POST', paramquery)
+      .then((res) => {
+        return res
+      }).catch((error) => {
+        return { numtot: 0, numadded: 0, numalreadyexisted: 0 }
+      })
+  }
+
   async function newsletterload(context, paramquery) {
 
     return await Api.SendReq('/news/load', 'POST', paramquery)
@@ -892,6 +902,7 @@ namespace Actions {
     vreg: b.dispatch(vreg),
     unsubscribe: b.dispatch(unsubscribe),
     importemail: b.dispatch(importemail),
+    importExtraList: b.dispatch(importExtraList),
     newsletterload: b.dispatch(newsletterload),
     newsletter_setactivate: b.dispatch(newsletter_setactivate),
     getDashboard: b.dispatch(getDashboard),

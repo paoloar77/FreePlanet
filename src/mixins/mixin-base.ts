@@ -37,23 +37,7 @@ export default class MixinBase extends MixinMetaTags {
   }
 
   public getValDb(keystr, serv, def?, table?, subkey?) {
-    if (table === 'users') {
-      if (keystr === 'profile') {
-        return UserStore.state.my.profile[subkey]
-      } else {
-        return UserStore.state.my[keystr]
-      }
-    }else {
-      const ris = GlobalStore.getters.getValueSettingsByKey(keystr, serv)
-      if (ris === '')
-        if (def !== undefined)
-          return def
-        else
-          return ''
-      else
-        return ris
-    }
-
+    return tools.getValDb(keystr, serv, def, table, subkey)
   }
 
   public async setValDb(key, value, type, serv: boolean, table?, subkey?) {

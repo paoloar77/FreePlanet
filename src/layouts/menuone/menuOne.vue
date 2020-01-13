@@ -32,8 +32,22 @@
                           :icon="child2.materialIcon"
                           active-class="my-menu-active"
                           expand-icon-class="my-menu-icon-none"
-                          class="item item-link drawer-closer cursor-pointer my-menu"
+                          :class="`item item-link drawer-closer cursor-pointer ` + clBaseint"
                           :label="tools.getLabelByItem(child2, mythis)">
+
+                            <template v-slot:header>
+                                 <q-item-section avatar>
+
+                                   <q-avatar v-if="child2.img" :icon="`img:`+child2.img" class="imgicon" font-size="2rem"></q-avatar>
+                                   <q-avatar v-else :icon="child2.materialIcon" color="primary" class="clicon" text-color="white"></q-avatar>
+                                  </q-item-section>
+
+                                  <q-item-section>
+                                    {{ tools.getLabelByItem(child2, mythis) }}
+                                  </q-item-section>
+
+                              </template>
+
                             <q-expansion-item v-if="!!child2.routes2 && child3.active"
                                               v-for="(child3, index) in child2.routes2"
                                               :key="index"
@@ -44,8 +58,9 @@
                                               :expand-icon="child3.icon"
                                               expand-icon-class="my-menu-separat"
                                               active-class="my-menu-active"
-                                              class="item item-link drawer-closer cursor-pointer my-menu"
+                                              :class="`item item-link drawer-closer cursor-pointer ` + clBaseint"
                                               :label="tools.getLabelByItem(child3, mythis)">
+
                             </q-expansion-item>
                         </q-expansion-item>
                         <q-expansion-item
@@ -65,7 +80,7 @@
                                   :icon="child3.materialIcon"
                                   active-class="my-menu-active"
                                   expand-icon-class="my-menu-icon-none"
-                                  class="item item-link drawer-closer cursor-pointer my-menu"
+                                  :class="`item item-link drawer-closer cursor-pointer ` + clBaseint"
                                   :label="tools.getLabelByItem(child3, mythis)">
                                     <q-expansion-item v-if="!!child3.routes2 && child3.active"
                                                       v-for="(child4, index) in child3.routes2"
@@ -77,9 +92,9 @@
                                                       :expand-icon="child4.icon"
                                                       expand-icon-class="my-menu-separat"
                                                       active-class="my-menu-active"
-                                                      class="item item-link drawer-closer cursor-pointer my-menu"
+                                                      :class="`item item-link drawer-closer cursor-pointer ` + clBaseint"
                                                       :label="tools.getLabelByItem(child4, mythis)">
-                                    </q-expansion-item>
+                                  </q-expansion-item>
                                 </q-expansion-item>
                             </div>
                         </q-expansion-item>
@@ -103,7 +118,7 @@
                       :label="tools.getLabelByItem(myitemmenu, mythis)"
                       :icon="myitemmenu.materialIcon"
                       expand-icon="none"
-                      header-class="my-menu"
+                      :header-class="clBaseint"
                       active-class="my-menu-active">
                     </q-expansion-item>
                   </span>

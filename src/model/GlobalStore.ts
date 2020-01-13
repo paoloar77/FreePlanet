@@ -191,6 +191,7 @@ export interface IListRoutes {
   meta?: any
   idelem?: string
   urlroute?: string
+  img?: string
   // ------------------------
   faIcon?: string
   text?: string

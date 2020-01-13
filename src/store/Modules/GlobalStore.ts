@@ -788,7 +788,7 @@ namespace Actions {
 
     return await Api.SendReq('/loadsite/' + myuserid + '/' + process.env.APP_ID + '/' + showall, 'GET', null)
       .then((res) => {
-        console.log('____________________________  res', res)
+        // console.log('____________________________  res', res)
         if (res.status === 200) {
           CalendarStore.state.bookedevent = (res.data.bookedevent) ? res.data.bookedevent : []
           CalendarStore.state.eventlist = (res.data.eventlist) ? res.data.eventlist : []

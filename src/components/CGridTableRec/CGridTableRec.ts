@@ -206,7 +206,7 @@ export default class CGridTableRec extends Vue {
     const startRow = (page - 1) * rowsPerPage
     const endRow = startRow + fetchCount
 
-    // console.log('startRow', startRow)
+    console.log('startRow', startRow, 'endRow', endRow)
 
     this.serverData = []
 
@@ -232,6 +232,8 @@ export default class CGridTableRec extends Vue {
       this.pagination.rowsPerPage = rowsPerPage
       this.pagination.sortBy = sortBy
       this.pagination.descending = descending
+
+      console.log('this.pagination', this.pagination)
 
       // ...and turn of loading indicator
       this.loading = false

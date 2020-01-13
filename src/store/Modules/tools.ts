@@ -49,6 +49,8 @@ export const tools = {
 
   getprefCountries: ['it', 'us', 'es', 'uk', 'fr', 'de', 'ch'],
 
+  APORTADOR_NONE: '------',
+
   APORTADOR_SOLIDARIO: 'apsol',
 
   listBestColor: [
@@ -2136,8 +2138,7 @@ export const tools = {
   heightgallery(coeff) {
     // console.log('heightgallery')
     return tools.heightGallVal(coeff).toString() + 'px'
-  }
-  ,
+  },
 
   heightGallVal(coeff = 1.33) {
     let maxh2 = 0
@@ -2151,8 +2152,8 @@ export const tools = {
         myw -= 300
 
     maxh2 = (myw / coeff) + 20
-    if (maxh2 > 750)
-      maxh2 = 750
+    if (maxh2 > 500)
+      maxh2 = 500
 
     return maxh2
   }
@@ -2435,6 +2436,8 @@ export const tools = {
   },
 
   getimgFullpathbysize(fileimg: string) {
+    if (!fileimg)
+      return { path: '', file: fileimg }
     const ind = fileimg.lastIndexOf('/')
     if (ind > 0) {
       return { path: fileimg.substring(0, ind + 1), file: fileimg.substring(ind + 1) }
@@ -2551,7 +2554,7 @@ export const tools = {
           }, 3000)
         }).then(() => {
           setTimeout(() => {
-            console.log('HIDE...')
+            // console.log('HIDE...')
             mythis.$q.loading.hide()
           }, 500)
           tools.showNotif(mythis.$q, mythis.$t('login.errato'), { color: 'negative', icon: 'notifications' })
@@ -2586,8 +2589,14 @@ export const tools = {
 
   SignUpcheckErrors(mythis, riscode: number) {
     console.log('SignUpcheckErrors', riscode)
+    let endload = true
+
     if (riscode === serv_constants.RIS_CODE_EMAIL_ALREADY_EXIST) {
       tools.showNotif(mythis.$q, mythis.$t('reg.err.duplicate_email'))
+    } else if (riscode === serv_constants.RIS_CODE_USER_EXTRALIST_NOTFOUND) {
+
+      tools.showNegativeNotif(mythis.$q, mythis.$t('reg.err.user_extralist_not_found'))
+
     } else if (riscode === serv_constants.RIS_CODE_USERNAME_ALREADY_EXIST) {
       tools.showNotif(mythis.$q, mythis.$t('reg.err.duplicate_username'))
     } else if (riscode === tools.ERR_SERVERFETCH) {
@@ -2605,6 +2614,7 @@ export const tools = {
       tools.showNotif(mythis.$q, 'Errore num ' + riscode)
     }
 
+    return endload
   }
   ,
   isCssColor(color) {
@@ -2897,7 +2907,121 @@ export const tools = {
     }
     // Directly return the joined string
     return splitStr.join(' ')
-  }
+  },
+
+  getValDb(keystr, serv, def?, table?, subkey?) {
+    if (table === 'users') {
+      if (keystr === 'profile') {
+        return UserStore.state.my.profile[subkey]
+      } else {
+        return UserStore.state.my[keystr]
+      }
+    } else {
+      const ris = GlobalStore.getters.getValueSettingsByKey(keystr, serv)
+      if (ris === '')
+        if (def !== undefined)
+          return def
+        else
+          return ''
+      else
+        return ris
+    }
+
+  },
+
+  getkey(youtube, title, isnum) {
+    let mykey = 'MP4'
+    if (youtube)
+      mykey = 'YT'
+
+    if (isnum) {
+      mykey += '_NUM'
+    } else {
+      if (title)
+        mykey += '_TITLE_'
+      else
+        mykey += '_VIDEO_'
+    }
+
+    return mykey
+  },
+
+  heightgallvideo() {
+    const h = this.heightgallery(this.getValDb('YT_W', false) / this.getValDb('YT_H', false))
+    return h
+  },
+
+  getvideourl(index, youtube) {
+    const myvideo = this.getValDb(this.getkey(youtube, false, false) + index, false)
+    if (myvideo)
+      if (youtube)
+        return myvideo
+      else
+        return this.getpath(myvideo)
+    else
+      return ''
+  },
+
+  getvideonum(youtube) {
+    return this.getValDb(this.getkey(youtube, false, true), false)
+  },
+
+  getvideomp4yt(index) {
+    return [{ src: 'https://www.youtube.com/embed/' + this.getvideourl(index, true), type: 'video/mp4' }
+    ]
+  },
+  getvideomp4src(index) {
+    return [{ src: this.getvideourl(index, false), type: 'video/mp4' }
+    ]
+  },
+
+  getvideoyt(index) {
+    return 'https://www.youtube.com/embed/' + this.getvideourl(index, true)
+  },
+
+  getpath(myvideo) {
+    return 'statics/video/' + func_tools.getLocale() + '/' + myvideo
+  },
+  mygetarrValDb(keystr, serv) {
+    const myval = GlobalStore.getters.getValueSettingsByKey(keystr, serv)
+    // console.log('AA: myval', myval)
+    try {
+      if (myval) {
+        // console.log('   Entro')
+        const myrec = JSON.parse(myval)
+        // console.log('*************** getarrValDb')
+        // console.table(myrec)
+        return myrec
+      } else {
+        // console.log('NO MYVAL')
+        return []
+      }
+    } catch (e) {
+      console.log('Errore: ', e)
+      return []
+    }
+  },
+
+  getvideotitle(index, youtube) {
+
+    const mykey = this.getkey(youtube, true, false) + index
+    const ris = this.mygetarrValDb(mykey, false)
+
+    return this.getelembylang(ris)
+  },
+
+  getvideoposter(index) {
+    return ''
+  },
+  clone(obj) {
+    if (null == obj || 'object' != typeof obj) return obj
+    const copy = obj.constructor()
+    for (const attr in obj) {
+      if (obj.hasOwnProperty(attr)) copy[attr] = obj[attr]
+    }
+    return copy
+  },
+
 
 // getLocale() {
   //   if (navigator.languages && navigator.languages.length > 0) {

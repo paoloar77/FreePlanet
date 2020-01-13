@@ -11,25 +11,6 @@
     <div class="q-gutter-sm">
 
       <q-input
-        bg-color="lightblue"
-        :readonly="true"
-        v-model="signup.aportador_solidario"
-        rounded outlined
-        @blur="$v.signup.aportador_solidario.$touch"
-        :error="$v.signup.aportador_solidario.$error"
-        :error-message="errorMsg('aportador_solidario', $v.signup.aportador_solidario)"
-        maxlength="20"
-        debounce="1000"
-
-        :label="$t('reg.aportador_solidario')">
-
-        <template v-slot:prepend>
-          <q-icon name="person"/>
-        </template>
-
-      </q-input>
-
-      <q-input
         v-model="signup.email"
         rounded outlined
         @blur="$v.signup.email.$touch"
@@ -130,6 +111,7 @@
       <!--:hint="$t('reg.tips.repeatpassword')"-->
 
       <q-input
+        v-if="shownationality"
         v-model="countryname"
         :readonly="true"
         rounded outlined
@@ -180,7 +162,9 @@
         :label="$t('reg.onlyadult')">
       </q-checkbox>
 
-      <br>
+      <div v-if="showadultcheck">
+        <br>
+      </div>
 
       <div class="wrapper">
         <q-btn rounded size="lg" color="positive" @click="submitOk" :disabled='!allowSubmit'>

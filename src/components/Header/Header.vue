@@ -124,7 +124,7 @@
                   :content-class="['bg-grey-1', 'q-pa-sm']"
                   :content-style="{padding: '0px'}"
         >
-            <drawer></drawer>
+            <drawer :clBase="clBase"></drawer>
 
         </q-drawer>
 

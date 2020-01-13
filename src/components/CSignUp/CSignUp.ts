@@ -33,6 +33,7 @@ Vue.use(VueCountryCode)
 export default class CSignUp extends MixinBase {
   @Prop({ required: false, default: false }) public showadultcheck: boolean
   @Prop({ required: false, default: false }) public showcell: boolean
+  @Prop({ required: false, default: false }) public shownationality: boolean
   public $v
   public $q
   public $t: any
@@ -51,34 +52,23 @@ export default class CSignUp extends MixinBase {
     repeatPassword: process.env.TEST_PASSWORD || '',
     terms: !process.env.PROD,
     profile: DefaultProfile,
-    aportador_solidario: ''
+    aportador_solidario: '',
+    already_registered: false
   }
 
   public created() {
     this.$v.$reset()
-
-    this.signup.aportador_solidario = this.$route.params.invited || process.env.TEST_APORTADOR
-
-    this.$v.signup.aportador_solidario.$touch()
-  }
-
-  @Watch('$route.params.invited')
-  public changeaportador() {
-    console.log('changeaportador', this.$route.params.invited)
-    if (!this.signup.aportador_solidario)
-      this.signup.aportador_solidario = this.$route.params.invited
-  }
-
-  public mounted() {
-
   }
 
   get allowSubmit() {
 
-    let error = this.$v.$error || this.$v.$invalid || this.signup.profile.cell.length <= 6
+    let error = this.$v.$error || this.$v.$invalid
 
     if (this.showadultcheck)
       error = error || !this.iamadult
+
+    if (this.showcell)
+      error = error || this.signup.profile.cell.length <= 6
 
     return !error
   }
@@ -125,9 +115,13 @@ export default class CSignUp extends MixinBase {
 
   public errorMsg(cosa: string, item: any) {
     try {
-      if (!item.$error) { return '' }
+      if (!item.$error) {
+        return ''
+      }
       // console.log('errorMsg', cosa, item)
-      if (item.$params.email && !item.email) { return this.$t('reg.err.email') }
+      if (item.$params.email && !item.email) {
+        return this.$t('reg.err.email')
+      }
 
       if (cosa === 'repeatpassword') {
         if (!item.sameAsPassword) {
@@ -159,10 +153,14 @@ export default class CSignUp extends MixinBase {
       if (cosa === 'email') {
         // console.log("EMAIL " + item.isUnique);
         // console.log(item);
-        if (!item.isUnique) { return this.$t('reg.err.duplicate_email') }
+        if (!item.isUnique) {
+          return this.$t('reg.err.duplicate_email')
+        }
       } else if (cosa === 'username') {
         // console.log(item);
-        if (!item.isUnique) { return this.$t('reg.err.duplicate_username') }
+        if (!item.isUnique) {
+          return this.$t('reg.err.duplicate_username')
+        }
       } else if (cosa === 'aportador_solidario') {
         // console.log(item);
         if (!item.aportadorexist) {
@@ -177,26 +175,6 @@ export default class CSignUp extends MixinBase {
     } catch (error) {
       // console.log("ERR : " + error);
     }
-  }
-
-  public SignUpcheckErrors(riscode: number) {
-    console.log('SignUpcheckErrors', riscode)
-    if (riscode === serv_constants.RIS_CODE_EMAIL_ALREADY_EXIST) {
-      tools.showNotif(this.$q, this.$t('reg.err.duplicate_email'))
-    } else if (riscode === serv_constants.RIS_CODE_USERNAME_ALREADY_EXIST) {
-      tools.showNotif(this.$q, this.$t('reg.err.duplicate_username'))
-    } else if (riscode === tools.ERR_SERVERFETCH) {
-      tools.showNotif(this.$q, this.$t('fetch.errore_server'))
-    } else if (riscode === tools.ERR_GENERICO) {
-      const msg = this.$t('fetch.errore_generico') + UserStore.mutations.getMsgError(riscode)
-      tools.showNotif(this.$q, msg)
-    } else if (riscode === tools.OK) {
-      this.$router.push('/signin')
-      tools.showNotif(this.$q, this.$t('components.authentication.email_verification.link_sent'), {color: 'warning', textColor: 'black'})
-    } else {
-      tools.showNotif(this.$q, 'Errore num ' + riscode)
-    }
-
   }
 
   public submitOk() {
@@ -221,14 +199,14 @@ export default class CSignUp extends MixinBase {
     this.$q.loading.show({ message: this.$t('reg.incorso') })
 
     console.log(this.signup)
-    UserStore.actions.signup(this.signup)
+    return UserStore.actions.signup(tools.clone(this.signup))
       .then((riscode) => {
-        tools.SignUpcheckErrors(this, riscode)
-        this.$q.loading.hide()
+        if (tools.SignUpcheckErrors(this, riscode))
+          this.$q.loading.hide()
       }).catch((error) => {
-      console.log('ERROR = ' + error)
-      this.$q.loading.hide()
-    })
+        console.log('ERROR = ' + error)
+        this.$q.loading.hide()
+      })
 
   }
 
@@ -238,13 +216,13 @@ export default class CSignUp extends MixinBase {
     this.signup.profile.iso2_cell = coderec.iso2
   }
 
-  public selectcountry({name, iso2, dialCode}) {
+  public selectcountry({ name, iso2, dialCode }) {
     // console.log(name, iso2, dialCode)
     this.signup.profile.nationality = iso2
     this.countryname = name
   }
 
-  public inputUsername(value){
+  public inputUsername(value) {
     this.signup.username = value.trim()
   }
 

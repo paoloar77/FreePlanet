@@ -34,10 +34,6 @@ export const validations = {
     },
     terms: {
       required
-    },
-    aportador_solidario: {
-      aportadorexist,
-      required
     }
   }
 }

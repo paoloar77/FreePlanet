@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { Watch } from 'vue-property-decorator'
+import { Prop, Watch } from 'vue-property-decorator'
 import { GlobalStore } from '../../store/Modules'
 import { static_data } from '../../db/static_data'
 import { tools } from '../../store/Modules/tools'
@@ -7,12 +7,17 @@ import { IListRoutes } from '@src/model'
 import { UserStore } from '@modules'
 
 export default class MenuOne extends Vue {
+  @Prop({ required: false, default: 'my-menu' }) public clBase: any
 
   @Watch('$route.path')
   private modifroute() {
     Object.keys(this.getmenu).forEach((parentName) => {
       this.setParentVisibilityBasedOnRoute(this.getmenu[parentName])
     })
+  }
+
+  get clBaseint(){
+    return this.clBase
   }
 
   // get currentRoutePath() {
@@ -65,7 +70,7 @@ export default class MenuOne extends Vue {
   }
 
   public getmymenuclass(elem: IListRoutes) {
-    let menu = 'my-menu'
+    let menu = this.clBaseint
 
     if (elem.onlyAdmin)
       menu += ' isAdmin'

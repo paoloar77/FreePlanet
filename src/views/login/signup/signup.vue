@@ -1,6 +1,6 @@
 <template>
     <q-page padding class="signup">
-        <CSignUp :showadultcheck="false">
+        <CSignUp>
 
         </CSignUp>
     </q-page>

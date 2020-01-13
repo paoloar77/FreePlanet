@@ -1,6 +1,6 @@
 <template>
     <div>
-        <menu-one></menu-one>
+        <menu-one :clBase="clBase"></menu-one>
     </div>
 </template>
 

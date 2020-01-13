@@ -29,6 +29,7 @@ import { CMyAvatar } from '../CMyAvatar'
 
 export default class Header extends Vue {
   @Prop({ required: false, default: '' }) public extraContent: string
+  @Prop({ required: false, default: '' }) public clBase: string
   public $t
   public $v
   public $q

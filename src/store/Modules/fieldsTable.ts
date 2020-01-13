@@ -187,7 +187,7 @@ const colTablePermission = [
 
 
 const colTableOperator = [
-  AddCol({ name: 'username', label_trans: 'reg.username' }),
+  AddCol({ name: 'username', label_trans: 'reg.username_short' }),
   AddCol({ name: 'name', label_trans: 'reg.name' }),
   AddCol({ name: 'surname', label_trans: 'reg.surname' }),
   AddCol({ name: 'email', label_trans: 'reg.email' }),
@@ -393,11 +393,15 @@ export const fieldsTable = {
   // IColGridTable
   colTableUsers: [
     // AddCol({ name: '_id', label_trans: 'reg.id' }),
-    AddCol({ name: 'username', label_trans: 'reg.username' }),
+    AddCol({ name: 'username', label_trans: 'reg.username_short' }),
     AddCol({ name: 'name', label_trans: 'reg.name' }),
     AddCol({ name: 'surname', label_trans: 'reg.surname' }),
     AddCol({ name: 'email', label_trans: 'reg.email' }),
     AddCol({ name: 'made_gift', label_trans: 'reg.made_gift', fieldtype: tools.FieldType.boolean }),
+    AddCol({ name: 'aportador_solidario_ind_order', label_trans: 'reg.aportador_solidario_ind_order' }),
+    AddCol({ name: 'aportador_solidario_nome_completo', label_trans: 'reg.aportador_solidario_nome_completo' }),
+    AddCol({ name: 'aportador_solidario', label_trans: 'reg.aportador_solidario' }),
+    AddCol({ name: 'verified_email', label_trans: 'reg.verified_email', fieldtype: tools.FieldType.boolean }),
     AddCol({ name: 'profile.nationality', field: 'profile', subfield: 'nationality', label_trans: 'reg.nationality', fieldtype: tools.FieldType.nationality }),
     AddCol({ name: 'profile.intcode_cell', field: 'profile', subfield: 'intcode_cell', label_trans: 'reg.intcode_cell', fieldtype: tools.FieldType.intcode }),
     AddCol({ name: 'profile.iso2_cell', field: 'profile', subfield: 'iso2_cell', label_trans: 'reg.iso2_cell' }),
@@ -412,6 +416,30 @@ export const fieldsTable = {
     AddCol({ name: 'date_reg', label_trans: 'reg.date_reg', fieldtype: tools.FieldType.date }),
     // AddCol({ name: 'idapp', label_trans: 'reg.idapp', fieldtype: tools.FieldType.string }),
     AddCol({ name: 'perm', label_trans: 'reg.perm', fieldtype: tools.FieldType.binary, jointable: 'permissions' }),
+    AddCol(DeleteRec),
+    AddCol(DuplicateRec)
+  ],
+
+  colTableExtraList: [
+    // AddCol({ name: '_id', label_trans: 'reg.id' }),
+    AddCol({ name: 'username', label_trans: 'reg.username_short' }),
+    AddCol({ name: 'registered', label_trans: 'reg.registered', fieldtype: tools.FieldType.boolean }),
+    AddCol({ name: 'ind_order', label_trans: 'reg.ind_order' }),
+    AddCol({ name: 'date_reg', label_trans: 'reg.date_reg', fieldtype: tools.FieldType.date }),
+    AddCol({ name: 'name_complete', label_trans: 'reg.name_complete' }),
+    AddCol({ name: 'name', label_trans: 'reg.name' }),
+    AddCol({ name: 'surname', label_trans: 'reg.surname' }),
+    AddCol({ name: 'num_invitati', label_trans: 'reg.num_invitati', fieldtype: tools.FieldType.number }),
+    AddCol({ name: 'is_in_whatsapp', label_trans: 'reg.is_in_whatsapp', fieldtype: tools.FieldType.boolean }),
+    AddCol({ name: 'is_in_telegram', label_trans: 'reg.is_in_telegram', fieldtype: tools.FieldType.boolean }),
+    AddCol({ name: 'cell_complete', label_trans: 'reg.cell_complete' }),
+    AddCol({ name: 'nationality', label_trans: 'reg.nationality', fieldtype: tools.FieldType.nationality }),
+    AddCol({ name: 'aportador_solidario_name_surname', label_trans: 'reg.aportador_solidario_nome_completo' }),
+    AddCol({ name: 'aportador_solidario_ind_order', label_trans: 'reg.aportador_solidario_ind_order' }),
+    AddCol({ name: 'aportador_solidario_originale_name_surname', label_trans: 'reg.aportador_solidario_nome_completo' }),
+    AddCol({ name: 'note', label_trans: 'reg.note' }),
+    AddCol({ name: 'col_b', label_trans: 'reg.col_b', fieldtype: tools.FieldType.number }),
+    AddCol({ name: 'col_h', label_trans: 'reg.col_h', fieldtype: tools.FieldType.number }),
     AddCol(DeleteRec),
     AddCol(DuplicateRec)
   ],

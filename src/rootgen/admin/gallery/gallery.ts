@@ -9,7 +9,6 @@ import { colgallery } from '@src/store/Modules/fieldsTable'
 
 import { CImgText } from '../../../components/CImgText/index'
 import { CCard, CGridTableRec, CMyPage, CTitleBanner } from '@components'
-import MixinMetaTags from '../../../../../associazioneShen/src/mixins/mixin-metatags'
 import MixinBase from '../../../mixins/mixin-base'
 
 @Component({

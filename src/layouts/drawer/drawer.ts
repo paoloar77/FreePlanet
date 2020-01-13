@@ -14,6 +14,8 @@ const namespace: string = 'Drawer'
 })
 
 export default class Drawer extends Vue {
+  @Prop({ required: false, default: 'my-menu' }) public clBase: string
+
   public $q
   public $t: any
   public user = null

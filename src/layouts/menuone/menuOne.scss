@@ -57,6 +57,12 @@
   font-size: 1rem;
 }
 
+.my-menu-small, .my-menu-small > i{
+  min-height: 40px;
+  min-width: 26px;
+  font-size: 0.75rem;
+}
+
 .isAdmin {
   color: red;
 }
@@ -70,7 +76,7 @@
 }
 
 .my-menu-icon{
-  min-width: 26px;
+  min-width: 2px;
   font-size: 1rem;
 }
 
@@ -94,4 +100,26 @@
 
 .my-menu-icon-none > i{
   display: none;
+}
+
+.clicon img, .clicon {
+  font-size: 16px;
+}
+
+.q-item__section--avatar{
+  min-width: 30px;
+}
+
+.q-item__section--side{
+  padding-right: 8px;
+}
+
+
+.q-item {
+  min-height: 20px;
+}
+
+.imgicon img {
+  font-size: 2.5rem !important;
+  border-radius: 8px;
 }
