@@ -19,13 +19,20 @@ export interface IUserProfile {
   username_telegram?: string
   teleg_id?: number
   teleg_checkcode?: number
+  my_dream?: string
   paymenttypes?: IPaymentType[]
   manage_telegram?: boolean
+  saw_zoom_presentation?: boolean
 }
 
 export interface IPaymentType {
   key: string
   label: string
+}
+
+export interface ICalcStat {
+  numinvitati?: number
+  numinvitati_attivi?: number
 }
 
 export interface IUserFields {
@@ -38,11 +45,13 @@ export interface IUserFields {
   ipaddr?: string
   perm?: number
   verified_email?: boolean
+  date_temp_reg?: Date
   made_gift?: boolean
   tokens?: IToken[]
   lasttimeonline?: Date
   profile?: IUserProfile
   downline?: IUserFields[]
+  calcstat?: ICalcStat
 }
 
 /*

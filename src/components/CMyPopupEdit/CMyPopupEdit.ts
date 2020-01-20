@@ -14,7 +14,7 @@ import { CGallery } from '../CGallery'
 
 @Component({
   name: 'CMyPopupEdit',
-  components: {CMyChipList, CDateTime, CMyToggleList, CMySelect, CMyEditor, CGallery }
+  components: { CMyChipList, CDateTime, CMyToggleList, CMySelect, CMyEditor, CGallery }
 })
 
 export default class CMyPopupEdit extends Vue {
@@ -28,6 +28,7 @@ export default class CMyPopupEdit extends Vue {
   @Prop({ required: false, default: '5' }) public minuteinterval
 
   public myvalue = ''
+  public myvalueprec = 'false'
   public countryname = ''
 
   get tools() {
@@ -41,6 +42,7 @@ export default class CMyPopupEdit extends Vue {
   get db_fieldsTable() {
     return fieldsTable
   }
+
   public changeval(newval) {
     this.$emit('update:row', newval)
   }
@@ -50,6 +52,7 @@ export default class CMyPopupEdit extends Vue {
   }
 
   public mounted() {
+    // console.log('mounted')
     if ((this.subfield !== '') && (this.subfield !== '')) {
       if (this.row[this.field] === undefined) {
         this.row[this.field] = {}
@@ -63,6 +66,10 @@ export default class CMyPopupEdit extends Vue {
       else
         this.myvalue = this.row
     }
+
+    this.myvalueprec = this.myvalue
+
+    // console.log('this.myvalueprec', this.myvalueprec)
   }
 
   public OpenEdit() {
@@ -70,9 +77,29 @@ export default class CMyPopupEdit extends Vue {
     this.$emit('show')
   }
 
+  public getval() {
+    let myval = 'false'
+
+    if ((this.subfield !== '') && (this.subfield !== '')) {
+      if (this.row[this.field] === undefined) {
+        this.row[this.field] = {}
+        myval = ''
+      } else {
+        myval = this.row[this.field][this.subfield]
+      }
+    } else {
+      if (this.field !== '')
+        myval = this.row[this.field]
+      else
+        myval = this.row
+    }
+
+    return myval
+  }
+
   public SaveValueInt(newVal, valinitial) {
 
-    console.log('SaveValueInt', newVal, valinitial)
+    // console.log('SaveValueInt', newVal, valinitial)
 
     // Update value in table memory
     if (this.subfield !== '') {
@@ -90,6 +117,16 @@ export default class CMyPopupEdit extends Vue {
   }
 
   public Savedb(newVal, valinitial) {
+
+    if (this.col.fieldtype === tools.FieldType.boolean) {
+      // console.log('this.myvalue', this.myvalue, newVal, this.myvalueprec)
+      if (this.myvalueprec === undefined) {
+        newVal = true
+        this.myvalueprec = this.myvalue
+        this.myvalue = newVal
+      }
+      // console.log('DOPO this.myvalue', this.myvalue, newVal, this.myvalueprec)
+    }
 
     // console.log('Savedb', newVal)
 
@@ -171,13 +208,15 @@ export default class CMyPopupEdit extends Vue {
 
   }
 
-  public selectcountry({name, iso2, dialCode}) {
+  public selectcountry({ name, iso2, dialCode }) {
     // console.log(name, iso2, dialCode)
+    this.myvalueprec = this.myvalue
     this.myvalue = iso2
     this.countryname = name
   }
 
   public intcode_change(coderec) {
+    this.myvalueprec = this.myvalue
     this.myvalue = '+' + coderec.dialCode
   }
 

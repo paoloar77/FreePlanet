@@ -110,7 +110,7 @@ export default class Newsletter extends MixinBase {
     if (this.newsstate.nextnewstosent)
       this.eseguipolling = this.eseguipolling || true
 
-    console.log('this.eseguipolling', this.eseguipolling)
+    // console.log('this.eseguipolling', this.eseguipolling)
     this.myloadingload = false
 
     this.checkifpolling()

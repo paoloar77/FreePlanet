@@ -62,6 +62,7 @@ export interface IMyPage {
   content?: string
   active?: boolean
   inmenu?: boolean
+  onlyif_logged?: boolean
   submenu?: boolean
   l_par?: number,
   l_child?: number,
@@ -186,6 +187,7 @@ export interface IListRoutes {
   infooter?: boolean
   submenu?: boolean
   onlyAdmin?: boolean
+  onlyif_logged?: boolean
   onlyManager?: boolean
   extraclass?: string
   meta?: any

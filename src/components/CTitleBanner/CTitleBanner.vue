@@ -8,7 +8,7 @@
       @click="myvisible = !myvisible"
     >
       <template v-slot:avatar>
-        <q-icon v-if="canopen" :name="icon" color="white"/>
+        <q-icon v-if="canopen && icon" :name="icon" color="white"/>
       </template>
       <template v-slot:action>
         <div class="cursor-pointer">

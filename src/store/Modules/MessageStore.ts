@@ -96,7 +96,7 @@ namespace Actions {
 
     return await Api.SendReq(`/sendmsg/${username}/${lastdataread}/${process.env.APP_ID}`, 'GET', null)
       .then((res) => {
-        console.log('res', res)
+        // console.log('res', res)
         if (res.status === 200) {
           setMsg(res.data.arrmsg, username)
           return true
@@ -130,7 +130,7 @@ namespace Actions {
 
     return await Api.SendReq('/sendmsg', 'POST', data)
       .then((res) => {
-        console.log('res', res)
+        // console.log('res', res)
         if (res.status === 200) {
           if (res.data.code === serv_constants.RIS_CODE_OK) {
             data._id = res.data.id

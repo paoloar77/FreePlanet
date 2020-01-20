@@ -1,5 +1,5 @@
 import Api from '@api'
-import { ISignupOptions, ISigninOptions, IUserState, IUserFields, IUserProfile } from 'model'
+import { ISignupOptions, ISigninOptions, IUserState, IUserFields, IUserProfile, ICalcStat } from 'model'
 import { ILinkReg, IResult, IIdToken, IToken } from 'model/other'
 import { storeBuilder } from './Store/Store'
 import router from '@router'
@@ -20,6 +20,11 @@ import { shared_consts } from '../../common/shared_vuejs'
 
 const bcrypt = require('bcryptjs')
 
+export const DefaultCalc: ICalcStat = {
+  numinvitati: 0,
+  numinvitati_attivi: 0,
+}
+
 export const DefaultUser: IUserFields = {
   _id: '',
   email: '',
@@ -34,6 +39,7 @@ export const DefaultUser: IUserFields = {
     img: ''
   },
   downline: [],
+  calcstat: DefaultCalc
 }
 
 export const DefaultProfile: IUserProfile = {
@@ -48,7 +54,9 @@ export const DefaultProfile: IUserProfile = {
   username_telegram: '',
   teleg_id: 0,
   teleg_checkcode: 0,
+  my_dream: '',
   manage_telegram: false,
+  saw_zoom_presentation: false,
   paymenttypes: []
 }
 
@@ -187,7 +195,7 @@ namespace Getters {
   }, 'getRefLink')
 
   const isVerificato = b.read((mystate: IUserState) => {
-    const teleg_ok = mystate.my.profile.teleg_id > 0
+    const teleg_ok = mystate.my.profile.teleg_id > 0 && mystate.my.verified_email
 
     return teleg_ok
   }, 'isVerificato')
@@ -352,19 +360,17 @@ namespace Mutations {
   }
 
   function clearAuthData(mystate: IUserState) {
-    mystate.my._id = ''
-    mystate.my.username = ''
-    mystate.my.name = ''
-    mystate.my.surname = ''
-    resetArrToken(mystate.my.tokens)
-    mystate.my.verified_email = false
-    mystate.my.made_gift = false
+    mystate.my = DefaultUser
+    // resetArrToken(mystate.my.tokens)
+
     mystate.categorySel = 'personal'
 
     mystate.servercode = 0
     mystate.resStatus = 0
     mystate.isLogged = false
     mystate.x_auth_token = ''
+
+    return true
   }
 
   function setErrorCatch(mystate: IUserState, axerr: Types.AxiosError) {
@@ -449,10 +455,10 @@ namespace Actions {
 
   }
 
-  async function requestpwd(context, paramquery: IUserState) {
+  async function requestpwd(context, paramquery) {
 
     const usertosend = {
-      email: paramquery.my.email
+      email: paramquery.email
     }
     console.log(usertosend)
 
@@ -536,7 +542,7 @@ namespace Actions {
 
     return await Api.SendReq('/news/load', 'POST', paramquery)
       .then((res) => {
-        console.log('res', res)
+        // console.log('res', res)
         return res.data
       }).catch((error) => {
         return null
@@ -547,7 +553,7 @@ namespace Actions {
 
     return await Api.SendReq('/news/setactivate', 'POST', paramquery)
       .then((res) => {
-        console.log('res', res)
+        // console.log('res', res)
         return res.data
       }).catch((error) => {
         return null
@@ -750,7 +756,7 @@ namespace Actions {
       .then((res) => {
         console.log(res)
       }).then(() => {
-        Mutations.mutations.clearAuthData()
+        return Mutations.mutations.clearAuthData()
       }).catch((error) => {
         UserStore.mutations.setErrorCatch(error)
         return UserStore.getters.getServerCode
@@ -762,7 +768,7 @@ namespace Actions {
   }
 
   async function setGlobal(isLogged: boolean) {
-    console.log('setGlobal')
+    console.log('setGlobal', isLogged)
     try {
       // state.isLogged = true
       if (isLogged) {
@@ -774,9 +780,9 @@ namespace Actions {
         GlobalStore.actions.checkUpdates()
       }
 
-      const p3 = await GlobalStore.actions.loadAfterLogin()
+      const isok = await GlobalStore.actions.loadAfterLogin()
 
-      state.isLogged = isLogged
+      state.isLogged = isok && isLogged
 
       if (static_data.functionality.ENABLE_TODOS_LOADING)
         await Todos.actions.dbLoad({ checkPending: true })
@@ -830,7 +836,7 @@ namespace Actions {
 
           GlobalStore.state.wasAlreadySubOnDb = localStorage.getItem(tools.localStorage.wasAlreadySubOnDb) === 'true'
 
-          // console.log('*************  autologin _id', _id)
+          console.log('*************  autologin _id', _id)
 
           UserStore.mutations.setAuth(token)
 

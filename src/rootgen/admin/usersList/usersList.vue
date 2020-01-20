@@ -3,7 +3,7 @@
         <CGridTableRec prop_mytable="users"
                        prop_mytitle="Lista Utenti"
                        :prop_mycolumns="db_fieldsTable.colTableUsers"
-                       prop_colkey="userId"
+                       prop_colkey="_id"
                        nodataLabel="Nessun Utente"
                        noresultLabel="Il filtro selezionato non ha trovato nessun risultato">
 
@@ -16,3 +16,5 @@
 <style lang="scss" scoped>
     @import './usersList.scss';
 </style>
+
+

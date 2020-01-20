@@ -77,6 +77,11 @@ export default class CMyFieldDb extends MixinBase {
         return '[---]'
       else
         return fieldsTable.getMultiValueByTable(this.col, val)
+    } else if (this.col.fieldtype === tools.FieldType.multioption) {
+      if (val === undefined)
+        return '[---]'
+      else
+        return fieldsTable.getMultiValueByTable(this.col, val)
     } else if (this.col.fieldtype === tools.FieldType.password) {
       if (val === undefined)
         return '[---]'
@@ -112,6 +117,15 @@ export default class CMyFieldDb extends MixinBase {
 
   public savefield(value, initialval) {
     this.myvalue = value
+    this.setValDb(this.mykey, this.myvalue, this.type, this.serv, this.table, this.mysubkey)
+  }
+
+  public savefieldboolean(value) {
+    if (this.myvalue === undefined)
+      this.myvalue = 'true'
+    else
+      this.myvalue = value
+
     this.setValDb(this.mykey, this.myvalue, this.type, this.serv, this.table, this.mysubkey)
   }
 

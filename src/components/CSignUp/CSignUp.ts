@@ -53,7 +53,6 @@ export default class CSignUp extends MixinBase {
     terms: !process.env.PROD,
     profile: DefaultProfile,
     aportador_solidario: '',
-    already_registered: false
   }
 
   public created() {

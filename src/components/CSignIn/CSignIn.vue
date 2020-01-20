@@ -38,7 +38,7 @@
 
         </q-input>
         <div class="text-center" style="margin-bottom: 10px;">
-          <a :href="getlinkforgetpwd" style="color:gray;">{{$t('reg.forgetpassword')}}</a>
+          <a :href="getlinkforgetpwd()" style="color:gray;">{{$t('reg.forgetpassword')}}</a>
         </div>
 
 

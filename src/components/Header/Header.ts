@@ -346,7 +346,7 @@ export default class Header extends Vue {
   }
 
   public loginOk() {
-    tools.loginOk(this, false)
+    tools.loginOk(this, true)
   }
 
   public loginInCorso() {

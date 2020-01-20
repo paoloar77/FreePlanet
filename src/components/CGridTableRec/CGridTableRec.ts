@@ -206,7 +206,7 @@ export default class CGridTableRec extends Vue {
     const startRow = (page - 1) * rowsPerPage
     const endRow = startRow + fetchCount
 
-    console.log('startRow', startRow, 'endRow', endRow)
+    // console.log('startRow', startRow, 'endRow', endRow)
 
     this.serverData = []
 
@@ -233,7 +233,7 @@ export default class CGridTableRec extends Vue {
       this.pagination.sortBy = sortBy
       this.pagination.descending = descending
 
-      console.log('this.pagination', this.pagination)
+      // console.log('this.pagination', this.pagination)
 
       // ...and turn of loading indicator
       this.loading = false
@@ -350,7 +350,7 @@ export default class CGridTableRec extends Vue {
   }
 
   public saveFieldValue(mydata) {
-    console.log('saveFieldValue', mydata)
+    // console.log('saveFieldValue', mydata)
 
     // Save on Server
     GlobalStore.actions.saveFieldValue(mydata).then((esito) => {
@@ -541,7 +541,7 @@ export default class CGridTableRec extends Vue {
     return this.selected.length === 0 ? '' : `${this.selected.length} record${this.selected.length > 1 ? 's' : ''} selected of ${this.serverData.length}`
   }
   public selectionclick(details) {
-    console.log('selectionclick this.selected', this.selected, 'details', details)
+    // console.log('selectionclick this.selected', this.selected, 'details', details)
     if (details.added) {
       this.rowclicksel = details.rows[0]
       this.colclicksel = details.keys[0]

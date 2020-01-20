@@ -49,7 +49,7 @@ export default class FormNewsletter extends MixinBase {
       return await Api.SendReq('/news/signup', 'POST', usertosend, false)
         .then((res) => {
 
-          console.log('res', res)
+          // console.log('res', res)
           if (res.data.code === serv_constants.RIS_SUBSCRIBED_OK) {
             this.$q.notify({
               color: 'green-4',

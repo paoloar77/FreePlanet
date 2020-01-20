@@ -70,7 +70,6 @@
 
   import { serv_constants } from '../../store/Modules/serv_constants'
 
-
   import Vue from 'vue'
   import { required } from "vuelidate/lib/validators"
   import { UserStore } from "../../store/Modules";

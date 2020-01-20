@@ -149,6 +149,7 @@ export const tools = {
     image: 2048,
     nationality: 4096,
     intcode: 5000,
+    multioption: 6000,
   },
 
   FieldTypeArr: [
@@ -1393,6 +1394,11 @@ export const tools = {
     let visu = ((elem.onlyAdmin && UserStore.state.isAdmin) || (elem.onlyManager && UserStore.state.isManager)
       || ((!elem.onlyAdmin) && (!elem.onlyManager))) && elem.active
 
+    if (!tools.isLoggedToSystem()) {
+      if (elem.onlyif_logged)
+        visu = false
+    }
+
     if (elem.meta && elem.meta.requiresAuth) {
       visu = visu && tools.isLoggedToSystem()
     }
@@ -1455,11 +1461,11 @@ export const tools = {
       cancel: true,
       persistent: false
     }).onOk(() => {
-      console.log('OK')
+      // console.log('OK')
       tools.executefunc(myself, table, funcok, par)
       return true
     }).onCancel(() => {
-      console.log('CANCEL')
+      // console.log('CANCEL')
       tools.executefunc(myself, table, funccancel, par)
       return false
     })
@@ -1962,6 +1968,21 @@ export const tools = {
       let mycar = value.substring(0, numchars)
       if (value.length > numchars)
         mycar += '...'
+      return mycar
+    } catch (e) {
+      return value
+    }
+  }
+  ,
+
+  firstchars_onedot(value, numchars = 200) {
+    if (!value) {
+      return ''
+    }
+    try {
+      let mycar = value.substring(0, numchars)
+      if (value.length > numchars)
+        mycar += '.'
       return mycar
     } catch (e) {
       return value
@@ -2524,9 +2545,9 @@ export const tools = {
     // console.log('loginInCorso')
 
     let msg = mythis.$t('login.incorso')
-    if (process.env.DEBUG) {
-      msg += ' ' + process.env.MONGODB_HOST
-    }
+    // if (process.env.DEBUG) {
+    //   msg += ' ' + process.env.MONGODB_HOST
+    // }
     mythis.$q.loading.show({ message: msg })
   }
   ,
@@ -2596,6 +2617,9 @@ export const tools = {
     } else if (riscode === serv_constants.RIS_CODE_USER_EXTRALIST_NOTFOUND) {
 
       tools.showNegativeNotif(mythis.$q, mythis.$t('reg.err.user_extralist_not_found'))
+    } else if (riscode === serv_constants.RIS_CODE_USER_NOT_THIS_APORTADOR) {
+
+      tools.showNegativeNotif(mythis.$q, mythis.$t('reg.err.user_not_this_aportador'))
 
     } else if (riscode === serv_constants.RIS_CODE_USERNAME_ALREADY_EXIST) {
       tools.showNotif(mythis.$q, mythis.$t('reg.err.duplicate_username'))
@@ -2607,7 +2631,7 @@ export const tools = {
     } else if (riscode === tools.OK) {
       mythis.$router.push('/signin')
       tools.showNotif(mythis.$q, mythis.$t('components.authentication.email_verification.link_sent'), {
-        color: 'info',
+        color: 'green',
         textColor: 'black'
       })
     } else {
@@ -2655,7 +2679,7 @@ export const tools = {
   }
   ,
   ActionRecTable(mythis, action, table, id, item, askaction) {
-    console.log('ActionRecTable', id)
+    // console.log('ActionRecTable', id)
     return tools.askConfirm(mythis.$q, 'Action', translate(askaction) + '?', translate('dialog.yes'), translate('dialog.no'), mythis, table, action, 0, {
       param1: id,
       param2: item
@@ -2722,7 +2746,7 @@ export const tools = {
   },
 
   getheightbywidth(mythis, mywidth, myheight, maxwidth) {
-    console.log('getheightbywidth')
+    // console.log('getheightbywidth')
     const myw = this.getwidthscale(mythis, mywidth, maxwidth)
     return myw * (myheight / mywidth)
   },

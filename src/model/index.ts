@@ -1,4 +1,5 @@
 export * from './UserStore'
+export * from './NotevoleStore'
 export * from './MessageStore'
 export * from './GlobalStore'
 export * from './signin-option'

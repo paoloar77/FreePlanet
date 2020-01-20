@@ -3,6 +3,9 @@
 
 
     <q-table
+      flat
+      bordered
+      class="my-sticky-header-table"
       :data="serverData"
       :columns="mycolumns"
       :filter="myfilter"
@@ -176,6 +179,6 @@
 <script lang="ts" src="./CGridTableRec.ts">
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss" >
   @import './CGridTableRec.scss';
 </style>

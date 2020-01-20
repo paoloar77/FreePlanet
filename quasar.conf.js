@@ -165,6 +165,7 @@ module.exports = function (ctx) {
         'QColor',
         'QIcon',
         'QList',
+        'QKnob',
         'QItemLabel',
         'QItem',
         'QCard',

@@ -11,5 +11,5 @@ export interface ISignupOptions {
   terms?: boolean
   aportador_solidario?: string
   profile?: IUserProfile
-  already_registered: boolean
+  // already_registered: boolean
 }

@@ -613,12 +613,20 @@ namespace Actions {
   }
 
   async function loadAfterLogin(context) {
-    // console.log('loadAfterLogin')
+    console.log('loadAfterLogin')
     actions.clearDataAfterLoginOnlyIfActiveConnection()
 
-    await Actions.actions.loadSite()
+    let isok = false
+
+    if (!await Actions.actions.loadSite()) {
+      this.$router.push('/signin')
+    } else {
+      isok = true
+    }
 
     state.arrConfig = await globalroutines(null, 'readall', 'config', null)
+
+    return isok
   }
 
   async function saveCfgServerKey(context, dataval: ICfgServer) {
@@ -806,20 +814,33 @@ namespace Actions {
             GlobalStore.state.mypage = (res.data.mypage) ? [...res.data.mypage] : []
           }
 
+          console.log('res.data.myuser', res.data.myuser)
           if (res.data.myuser) {
             UserStore.mutations.authUser(res.data.myuser)
 
             UserStore.mutations.updateLocalStorage(res.data.myuser)
+          } else {
+            // User not exist !!
+
           }
+
+          const islogged = localStorage.getItem(tools.localStorage.username)
+          console.log('islogged', islogged)
 
           CalendarStore.state.editable = UserStore.state.isAdmin || UserStore.state.isManager
-
-          if (res.data.myuser === null && UserStore.state.isLogged) {
-            // Fai Logout
-            UserStore.actions.logout()
-            GlobalStore.state.RightDrawerOpen = true
+          if (res.data.myuser === null) {
+            if (islogged) {
+              // Fai Logout
+              console.log('Fai Logout', 'islogged', islogged)
+              UserStore.actions.logout()
+              GlobalStore.state.RightDrawerOpen = true
+              return false
+            }
           }
+
         }
+
+        return true
 
       })
       .catch((error) => {
@@ -858,6 +879,7 @@ namespace Actions {
           component: () => import('@/root/mypage/mypage.vue'),
           inmenu: page.inmenu,
           infooter: page.infooter,
+          onlyif_logged: page.onlyif_logged,
           level_child: page.l_child,
           level_parent: page.l_par,
         })
