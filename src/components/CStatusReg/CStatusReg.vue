@@ -19,7 +19,7 @@
               <q-item v-for="(user, index) in lastsreg" :key="user.username" class="q-mb-xs animated" v-ripple>
 
                 <q-item-section avatar>
-                  <q-avatar v-if="geticon(user)" :class="geticon(user)">
+                  <q-avatar v-if="tools.geticon(user.profile.nationality)" :class="tools.geticon(user.profile.nationality)">
 
                   </q-avatar>
                   <q-avatar v-else color="primary" text-color="white" class="text-center">

@@ -85,6 +85,16 @@ export interface INewsToSent {
   error_job?: string
 }
 
+export interface ICalZoom {
+  lang?: string
+  title?: string
+  typeconf?: string
+  date_start?: string
+  date_end?: Date
+  id_conf_zoom?: number
+  note?: string
+}
+
 export interface IMailinglist {
   name?: string
   surname?: string
@@ -158,6 +168,7 @@ export interface IGlobalState {
   templemail: ITemplEmail[],
   opzemail: ISettings[],
   mailinglist: IMailinglist[],
+  calzoom: ICalZoom[],
   autoplaydisc: number
 }
 

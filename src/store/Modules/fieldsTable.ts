@@ -391,7 +391,20 @@ export const fieldsTable = {
       return ''
   },
 
-  // IColGridTable
+  colTableCalZoom: [
+    // AddCol({ name: '_id', label_trans: 'reg.id' }),
+    AddCol({ name: 'title', label_trans: 'event.title' }),
+    AddCol({ name: 'lang', label_trans: 'pages.lang' }),
+    AddCol({ name: 'typeconf', label_trans: 'zoom.typeconf' }),
+    AddCol({ name: 'date_start', label_trans: 'event.dateTimeStart', fieldtype: tools.FieldType.date }),
+    AddCol({ name: 'date_end', label_trans: 'event.dateTimeEnd' , fieldtype: tools.FieldType.date }),
+    AddCol({ name: 'id_conf_zoom', label_trans: 'zoom.id_conf_zooom' }),
+    AddCol({ name: 'note', label_trans: 'zoom.note' }),
+    AddCol(DeleteRec),
+    AddCol(DuplicateRec),
+  ],
+
+    // IColGridTable
   colTableUsers: [
     // AddCol({ name: '_id', label_trans: 'reg.id' }),
     AddCol({ name: 'username', label_trans: 'reg.username_short' }),

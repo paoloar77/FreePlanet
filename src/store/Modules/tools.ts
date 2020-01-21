@@ -75,6 +75,7 @@ export const tools = {
   TABGALLERY: 'gallery',
   TABMAILINGLIST: 'mailinglist',
   TABMYPAGE: 'mypage',
+  TABCALZOOM: 'calzoom',
   TABTEMPLEMAIL: 'templemail',
   TABOPZEMAIL: 'opzemail',
 
@@ -1896,10 +1897,19 @@ export const tools = {
       return ''
   },
 
+
   getstrDateTimeShort(mytimestamp) {
     // console.log('getstrDate', mytimestamp)
     if (!!mytimestamp)
-      return date.formatDate(mytimestamp, 'DD/MM HH:mm')
+      return date.formatDate(mytimestamp, 'DD/MM HH:mm');
+    else
+      return ''
+  },
+
+  getstrDateMonthTimeShort(mytimestamp) {
+    // console.log('getstrDate', mytimestamp)
+    if (!!mytimestamp)
+      return date.formatDate(mytimestamp, 'DD MMM HH:mm')
     else
       return ''
   },
@@ -3044,6 +3054,22 @@ export const tools = {
       if (obj.hasOwnProperty(attr)) copy[attr] = obj[attr]
     }
     return copy
+  },
+
+  geticon(langin) {
+    let lang = langin.toUpperCase()
+    if (lang === 'IT')
+      return 'fa-flag-it'
+    else if (lang === 'ES')
+      return 'fa-flag-es'
+    else if (lang === 'US')
+      return 'fa-flag-us'
+    else if ((lang === 'GB') || (lang === 'UK'))
+      return 'fa-flag-gb'
+    else if (lang === 'DE')
+      return 'fa-flag-de'
+
+    return ''
   },
 
 

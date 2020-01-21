@@ -124,20 +124,6 @@ export default class CStatusReg extends MixinBase {
       return 0
   }
 
-  public geticon(reg) {
-    if (reg.profile.nationality === 'IT')
-      return 'fa-flag-it'
-    else if (reg.profile.nationality === 'ES')
-      return 'fa-flag-es'
-    else if (reg.profile.nationality === 'US')
-      return 'fa-flag-us'
-    else if ((reg.profile.nationality === 'GB') || (reg.profile.nationality === 'UK'))
-      return 'fa-flag-gb'
-    else if (reg.profile.nationality === 'DE')
-      return 'fa-flag-de'
-
-    return ''
-  }
 
   get visustat() {
     return this.datastat.num_reg > 0 || this.datastat.num_reg_lista > 0

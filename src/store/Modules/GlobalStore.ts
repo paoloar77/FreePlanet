@@ -79,7 +79,8 @@ const state: IGlobalState = {
   newstosent: [],
   gallery: [],
   mailinglist: [],
-  mypage: []
+  mypage: [],
+  calzoom: [],
 }
 
 async function getConfig(id) {
@@ -194,6 +195,8 @@ namespace Getters {
       return GlobalStore.state.mailinglist
     else if (table === tools.TABMYPAGE)
       return GlobalStore.state.mypage
+    else if (table === tools.TABCALZOOM)
+      return GlobalStore.state.calzoom
     else if (table === 'paymenttypes')
       return GlobalStore.state.paymenttypes
     else if (table === 'bookings')
@@ -807,6 +810,7 @@ namespace Actions {
           GlobalStore.state.disciplines = (res.data.disciplines) ? [...res.data.disciplines] : []
           GlobalStore.state.paymenttypes = (res.data.paymenttypes) ? [...res.data.paymenttypes] : []
           GlobalStore.state.gallery = (res.data.gallery) ? [...res.data.gallery] : []
+          GlobalStore.state.calzoom = (res.data.calzoom) ? [...res.data.calzoom] : []
 
           if (showall) {
             GlobalStore.state.newstosent = (res.data.newstosent) ? [...res.data.newstosent] : []
