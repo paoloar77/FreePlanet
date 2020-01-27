@@ -6,6 +6,8 @@ import { translation } from './translation'
 import Quasar, { colors, date, Screen } from 'quasar'
 import { scroll } from 'quasar'
 
+import { copyToClipboard } from 'quasar'
+
 const { getScrollTarget, setScrollPosition } = scroll
 
 import {
@@ -47,7 +49,7 @@ export interface INotify {
 export const tools = {
   CAN_EDIT: 'q-ce',
 
-  getprefCountries: ['it', 'us', 'es', 'uk', 'fr', 'de', 'ch'],
+  getprefCountries: ['it', 'si', 'us', 'es', 'uk', 'fr', 'de', 'ch'],
 
   APORTADOR_NONE: '------',
 
@@ -106,6 +108,7 @@ export const tools = {
   SERVKEY_VERS: 'vers',
 
   localStorage: {
+    teleg_id: 'ti',
     verified_email: 'vf',
     made_gift: 'mg',
     wasAlreadySubOnDb: 'sb',
@@ -1901,7 +1904,7 @@ export const tools = {
   getstrDateTimeShort(mytimestamp) {
     // console.log('getstrDate', mytimestamp)
     if (!!mytimestamp)
-      return date.formatDate(mytimestamp, 'DD/MM HH:mm');
+      return date.formatDate(mytimestamp, 'DD/MM HH:mm')
     else
       return ''
   },
@@ -2639,7 +2642,7 @@ export const tools = {
       const msg = mythis.$t('fetch.errore_generico') + UserStore.mutations.getMsgError(riscode)
       tools.showNotif(mythis.$q, msg)
     } else if (riscode === tools.OK) {
-      mythis.$router.push('/signin')
+      mythis.$router.push('/regok')
       tools.showNotif(mythis.$q, mythis.$t('components.authentication.email_verification.link_sent'), {
         color: 'green',
         textColor: 'black'
@@ -3068,8 +3071,63 @@ export const tools = {
       return 'fa-flag-gb'
     else if (lang === 'DE')
       return 'fa-flag-de'
+    else if (lang === 'SI')
+      return 'fa-flag-si'
+    else if (lang === 'CH')
+      return 'fa-flag-ch'
+    else if (lang === 'PE')
+      return 'fa-flag-pe'
+    else if (lang === 'HR')
+      return 'fa-flag-hr'
 
     return ''
+  },
+
+  removespaces(mystr) {
+    return mystr.replace(/\s+/g, '')
+  },
+
+  copyStringToClipboard(mythis, mystr) {
+    copyToClipboard(mystr).then(() => {
+      tools.showNotif(mythis.$q, mythis.$t('dialog.copyclipboard') + ' \'' + mystr + '\'')
+    })
+
+  },
+
+  getNationsByNationality(nat) {
+    if (nat === 'IT') {
+      return 'Italy'
+    } else if (nat === 'SI') {
+      return 'Slovenia'
+    } else if (nat === 'ES') {
+      return 'Spain'
+    } else if (nat === 'DE') {
+      return 'Germany'
+    } else if (nat === 'US') {
+      return 'United States'
+    } else if (nat === 'CA') {
+      return 'Canada'
+    } else if (nat === 'MA') {
+      return 'Morocco'
+    } else if (nat === 'LT') {
+      return 'Lithuania'
+    } else if (nat === 'HR') {
+      return 'Croatia'
+    } else if (nat === 'HU') {
+      return 'Hungary'
+    } else if (nat === 'CH') {
+      return 'Switzerland'
+    } else if (nat === 'PE') {
+      return 'Peru'
+    } else if (nat === 'PL') {
+      return 'Poland'
+    } else if (nat === 'PT') {
+      return 'Portugal'
+    } else if (nat === 'UK') {
+      return 'United Kingdom'
+    } else if (nat === 'UA') {
+      return 'Ukraine'
+    }
   },
 
 

@@ -12,9 +12,6 @@
                               appear
                               enter-active-class="animazione fadeIn"
                               leave-active-class="animazione fadeOut">
-              <div>
-                Mancano: {{ nextconf }}
-              </div>
               <q-item v-for="(confer, index) in listacalzoom" :key="confer._id" class="q-mb-xs animated" v-ripple>
 
                 <q-item-section avatar>
@@ -25,10 +22,17 @@
                   </q-avatar>
                 </q-item-section>
 
-                <q-item-section>
-                  <q-item-label class="title">{{ confer.title }} </q-item-label>
-                  <q-item-label class="id_conf">ID: {{ confer.id_conf_zoom }} </q-item-label>
-                  <q-item-label class="note">ID: {{ confer.note }} </q-item-label>
+                <q-item-section class="text-center">
+                  <q-item-label class="title">{{ confer.title }}</q-item-label>
+                  <q-item-label class="id_conf">ID: {{ confer.id_conf_zoom }}</q-item-label>
+                  <q-item-label class="note">
+                    <q-chip
+                      style="background-color: lightblue !important;"
+                      text-color="black"
+
+                    >{{ confer.note }}
+                    </q-chip>
+                  </q-item-label>
                 </q-item-section>
 
                 <q-item-section side>

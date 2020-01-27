@@ -16,9 +16,10 @@ import 'vue-country-code/dist/vue-country-code.css'
 import { serv_constants } from '@src/store/Modules/serv_constants'
 
 import VueCountryCode from 'vue-country-code'
-import { CTitleBanner } from '../CTitleBanner'
 import { registereduser } from '../../validation'
 import MixinBase from '../../mixins/mixin-base'
+import { CTitleBanner } from '../CTitleBanner'
+import { PagePolicy } from '../PagePolicy'
 
 Vue.use(VueCountryCode)
 // import {Loading, QSpinnerFacebook, QSpinnerGears} from 'quasar'
@@ -27,7 +28,7 @@ Vue.use(VueCountryCode)
   name: 'CSignUp',
   mixins: [validationMixin],
   validations,
-  components: { Logo, CTitleBanner }
+  components: { Logo, CTitleBanner, PagePolicy }
 })
 
 export default class CSignUpNotevole extends MixinBase {
@@ -35,6 +36,7 @@ export default class CSignUpNotevole extends MixinBase {
   @Prop({ required: false, default: false }) public showcell: boolean
   @Prop({ required: false, default: false }) public showaportador: boolean
   @Prop({ required: false, default: false }) public shownationality: boolean
+
   public $v
   public $q
   public $t: any
@@ -43,6 +45,7 @@ export default class CSignUpNotevole extends MixinBase {
 
   public duplicate_email: boolean = false
   public duplicate_username: boolean = false
+  public showdisclaimer: boolean = false
 
   public options = [
     { label: 'Sono già registrato sulla Chat di Ayni', value: true, color: 'green' },
@@ -211,6 +214,8 @@ export default class CSignUpNotevole extends MixinBase {
   public submitOk() {
     this.$v.signup.$touch()
 
+    this.signup.username = tools.removespaces(this.signup.username)
+
     this.duplicate_email = false
     this.duplicate_username = false
 
@@ -224,8 +229,10 @@ export default class CSignUpNotevole extends MixinBase {
       return
     }
 
-    this.signup.name = tools.CapitalizeAllWords(this.signup.name)
-    this.signup.surname = tools.CapitalizeAllWords(this.signup.surname)
+    this.signup.name = tools.CapitalizeAllWords(this.signup.name).trim()
+    this.signup.surname = tools.CapitalizeAllWords(this.signup.surname).trim()
+    this.signup.profile.cell = tools.removespaces(this.signup.profile.cell).trim()
+    this.signup.profile.intcode_cell = this.signup.profile.intcode_cell.trim()
 
     this.$q.loading.show({ message: this.$t('reg.incorso') })
 
@@ -257,12 +264,26 @@ export default class CSignUpNotevole extends MixinBase {
     this.signup.username = value.trim()
   }
 
+  get nuovareg() {
+    return (this.signup.aportador_solidario !== tools.APORTADOR_NONE)
+  }
+
   get getplaceholdercell() {
-    return this.$t('reg.cellreg')
+    if (this.signup.aportador_solidario !== tools.APORTADOR_NONE)
+      return this.$t('reg.cell')
+    else
+      return this.$t('reg.cellreg')
   }
 
   get regvisibile() {
     return true
     // return this.signup.already_registered || (!this.signup.already_registered && this.signup.aportador_solidario)
+  }
+
+  get gettitlereg() {
+    if (!this.nuovareg)
+      return this.$t('pages.SignUp_alreadylista')
+    else
+      return this.$t('pages.SignUp')
   }
 }

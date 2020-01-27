@@ -4,6 +4,7 @@
                   mystyle="" myclass="myshad" :canopen="true">
 
       <div class="q-pa-xs">
+
         <q-stepper
           v-model="step"
           vertical
@@ -21,15 +22,9 @@
             :error="!isEmailVerified"
             :error-icon="geterricon(true)"
           >
-            <q-chip v-if="isEmailVerified" color="positive" text-color="white" icon="mail">
-              {{ `Email ` + $t('pages.statusreg.verified') }}
-            </q-chip>
-            <q-chip v-else color="negative" text-color="white" icon="">
-              {{ `Email ` + $t('pages.statusreg.nonverified') }}
-            </q-chip>
-            <div v-if="!isEmailVerified" v-html="$t('components.authentication.email_verification.link_sent')">
+            <CVerifyEmail>
 
-            </div>
+            </CVerifyEmail>
 
             <q-stepper-navigation v-if="isEmailVerified">
               <q-btn @click="step = 2" color="primary" :label="$t('dialog.avanti')"></q-btn>
@@ -47,28 +42,14 @@
             <q-chip v-if="TelegVerificato" color="positive" text-color="white" icon="fab fa-telegram">
               {{ telegramtext }}
             </q-chip>
-            <q-chip v-else color="negative" text-color="white" icon="">
+            <q-chip v-else color="negative" text-color="white" icon="email">
               {{ telegramtext }}
             </q-chip>
 
-            <div v-if="TelegCode" class="text-h4 text-center">
-              {{ $t('reg.teleg_auth') }} Telegram: {{TelegCode}}
-            </div>
+            <CVerifyTelegram v-if="TelegCode || !TelegVerificato">
 
-            <div v-if="!TelegVerificato" class="q-pa-sm q-gutter-sm">
-              <strong>{{ $t('components.authentication.telegram.open')}}</strong>
-              <div class="q-ma-sm">
-                <q-btn color="primary" icon="fab fa-telegram" :label="$t('components.authentication.telegram.openbot')"
-                       type="a"
-                       :href="getLinkBotTelegram" target="_blank"></q-btn>
-                <br>
-              </div>
-              <strong>{{ $t('components.authentication.telegram.ifclose')}}</strong>
-              <div class="q-my-sm">
-                <q-img src="statics/images/ayni_bot.jpg" class="" alt="AYNI BOT" style="height: 100px; width: 250px;">
-                </q-img>
-              </div>
-            </div>
+            </CVerifyTelegram>
+
 
             <q-stepper-navigation>
               <q-btn v-if="TelegVerificato" @click="step = 3" color="primary" :label="$t('dialog.avanti')"></q-btn>
@@ -80,7 +61,8 @@
             :key="mystep.title"
             :name="NUMSTEP_START + index"
             :title="gettextstep(mystep)"
-            icon="check-circle"
+            :icon="geticonstep(mystep.title)"
+            :done-color="geticoncolor(mystep.title)"
             :done="mystep.funccheck(index)"
             :error="getiferror(mystep.funccheck_error(index), mystep.funccheck(index))"
             :error-icon="geterricon(mystep.funccheck(index))"
@@ -89,13 +71,25 @@
               <div v-if="mystep.descr">
                 <div v-html="$t(mystep.descr)"></div>
               </div>
-              <CMyFieldDb :title="$t('reg.paymenttype')"
-                          table="users"
-                          mykey="profile"
-                          mysubkey="paymenttypes"
-                          :type="tools.FieldType.multiselect"
-                          jointable="paymenttypes">
-              </CMyFieldDb>
+              <div>
+
+                <CMyFieldDb :title="$t('reg.paymenttype')"
+                            table="users"
+                            mykey="profile"
+                            mysubkey="paymenttypes"
+                            :type="tools.FieldType.multiselect"
+                            jointable="paymenttypes">
+                </CMyFieldDb>
+
+                <CMyFieldDb v-if="isselectPaypal" :title="$t('reg.email_paypal')"
+                            table="users"
+                            mykey="profile"
+                            mysubkey="email_paypal"
+                            :type="tools.FieldType.string">
+                </CMyFieldDb>
+
+
+              </div>
             </div>
             <div v-else-if="mystep.title === 'steps.dream'">
               <div v-if="mystep.descr">
@@ -108,6 +102,18 @@
                           :type="tools.FieldType.string"
               >
               </CMyFieldDb>
+            </div>
+            <div v-else-if="mystep.title === 'steps.chat_biblio'" >
+              <div v-if="mystep.descr">
+                <div v-html="$t(mystep.descr)"></div>
+              </div>
+              <br><strong>Entra in Chat BiblioBacheca, cliccando qui:</strong>
+
+              <div class="landing__footer-icons row flex-center margin_buttons">
+                <a v-if="!!TelegramBiblio" :href="TelegramBiblio" target="_blank">
+                  <i aria-hidden="true" class="q-icon fab fa-telegram icon_contact links"></i></a>
+              </div>
+
             </div>
             <div v-else-if="mystep.title === 'steps.zoom'">
               <div v-if="mystep.descr">
@@ -145,19 +151,6 @@
                   </ul>
 
                 </div>
-              </CTitleBanner>
-
-              <CTitleBanner class="q-pa-xs" title="Prossimi Incontri" bgcolor="bg-primary"
-                            clcolor="text-white"
-                            myclass="myshad" canopen="true" :visible="false">
-                <div v-if="mystep.page">
-                  <CMyInnerPage :path=mystep.page>
-                    <div v-if="mystep.descr">
-                      <div v-html="$t(mystep.descr)"></div>
-                    </div>
-                  </CMyInnerPage>
-                </div>
-
               </CTitleBanner>
 
 

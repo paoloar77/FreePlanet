@@ -16,9 +16,9 @@ import 'vue-country-code/dist/vue-country-code.css'
 import { serv_constants } from '@src/store/Modules/serv_constants'
 
 import VueCountryCode from 'vue-country-code'
-import { CTitleBanner } from '../CTitleBanner'
 import { registereduser } from '../../validation'
 import MixinBase from '../../mixins/mixin-base'
+import { CTitleBanner } from '../CTitleBanner'
 
 Vue.use(VueCountryCode)
 // import {Loading, QSpinnerFacebook, QSpinnerGears} from 'quasar'
@@ -178,6 +178,8 @@ export default class CSignUp extends MixinBase {
 
   public submitOk() {
     this.$v.signup.$touch()
+
+    this.signup.username = tools.removespaces(this.signup.username)
 
     this.duplicate_email = false
     this.duplicate_username = false

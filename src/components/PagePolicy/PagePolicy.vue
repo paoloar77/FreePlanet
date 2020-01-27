@@ -264,7 +264,6 @@ y solicite su transmisión a otro propietario, si es técnicamente posible. </p>
         </div>
 
 
-        <Footer></Footer>
     </q-page>
 
 </template>

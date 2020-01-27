@@ -8,11 +8,12 @@ import MixinBase from '../../mixins/mixin-base'
 import { CTitleBanner, CMyFieldDb } from '@components'
 import { CMyInnerPage } from '../CMyInnerPage'
 import { tools } from '../../store/Modules/tools'
+import { CVerifyTelegram } from '../CVerifyEmail'
+import { CVerifyEmail } from '../CVerifyTelegram'
 
-import { copyToClipboard } from 'quasar'
 
 @Component({
-  components: { CTitleBanner, CMyFieldDb, CMyInnerPage  }
+  components: { CTitleBanner, CMyFieldDb, CMyInnerPage, CVerifyTelegram, CVerifyEmail }
 })
 
 export default class CStatus extends MixinBase {
@@ -21,7 +22,26 @@ export default class CStatus extends MixinBase {
   public step = 1
   public NUMSTEP_START = 3
 
+  get numpayment() {
+    if (UserStore.state.my.profile)
+      if (UserStore.state.my.profile.paymenttypes)
+        return UserStore.state.my.profile.paymenttypes.length
+
+    return 0
+  }
+
   public arrsteps = [
+    {
+      title: 'steps.chat_biblio',
+      descr: 'steps.chat_biblio_long',
+      page: '',
+      funccheck(index) {
+        return true
+      },
+      funccheck_error(index) {
+        return false
+      }
+    },
     {
       title: 'steps.zoom',
       descr: 'steps.zoom_long',
@@ -39,7 +59,7 @@ export default class CStatus extends MixinBase {
       page: '/mydream',
       funccheck(index) {
         if (UserStore.state.my.profile.my_dream)
-          if (UserStore.state.my.profile.my_dream.length > 10)
+          if (UserStore.state.my.profile.my_dream.length > 20)
             return true
 
         return false
@@ -65,7 +85,18 @@ export default class CStatus extends MixinBase {
       descr: 'steps.paymenttype_long',
       page: '',
       funccheck(index) {
-        return this.numpayment >= 2
+        let ispaypal = false
+        if (UserStore.state.my.profile.paymenttypes) {
+          if (UserStore.state.my.profile.paymenttypes.includes('paypal')) {
+            if (UserStore.state.my.profile.email_paypal)
+              ispaypal = true
+          }
+          if (UserStore.state.my.profile)
+            if (UserStore.state.my.profile.paymenttypes)
+              return (UserStore.state.my.profile.paymenttypes.length >= 2) && ispaypal
+
+        }
+        return false
       },
       funccheck_error(index) {
         return true
@@ -127,20 +158,20 @@ export default class CStatus extends MixinBase {
       },
     },
 
-/*
-      sharemovement: 'Condivido il movimento',
-      sharemovement_long: 'Condivido il movimento con almeno 2 amici e li guido alla registrazione e agli zoom',
-      enter_prog: 'entro in Programmazione',
-      enter_prog_long: 'entro in programmazione, e vengo aggiunto al Mandala, ed entro così nella chat corrispondente.',
-      collaborate: 'Collaborazione',
-      collaborate_long: 'Continuo a collaborare con il miei compagni, per arrivare al giorno della programmazione dove si attiverà il mio Mandala',
-      dono: 'Dono',
-      dono_long: 'Faccio il mio dono al proprietario della Bigliettera',
-      support: 'Sostengo il movimento',
-      support_long: 'Continuo a sostenere il movimento partecipando attivamente! Organizzando zoom e partecipando, sostenendo, informando, aiutando e diffondendo',
-      ricevo_dono: 'Ricevo il mio dono e CELEBRO',
-      ricevo_dono_long: 'Ricevo il mio dono e CELEBRO',
-*/
+    /*
+          sharemovement: 'Condivido il movimento',
+          sharemovement_long: 'Condivido il movimento con almeno 2 amici e li guido alla registrazione e agli zoom',
+          enter_prog: 'entro in Programmazione',
+          enter_prog_long: 'entro in programmazione, e vengo aggiunto al Mandala, ed entro così nella chat corrispondente.',
+          collaborate: 'Collaborazione',
+          collaborate_long: 'Continuo a collaborare con il miei compagni, per arrivare al giorno della programmazione dove si attiverà il mio Mandala',
+          dono: 'Dono',
+          dono_long: 'Faccio il mio dono al proprietario della Bigliettera',
+          support: 'Sostengo il movimento',
+          support_long: 'Continuo a sostenere il movimento partecipando attivamente! Organizzando zoom e partecipando, sostenendo, informando, aiutando e diffondendo',
+          ricevo_dono: 'Ricevo il mio dono e CELEBRO',
+          ricevo_dono_long: 'Ricevo il mio dono e CELEBRO',
+    */
 
   ]
 
@@ -149,7 +180,7 @@ export default class CStatus extends MixinBase {
       this.step = 2
       if (this.TelegVerificato) {
         this.step = 3
-        for (let indstep = 0; indstep < this.arrsteps.length; indstep++){
+        for (let indstep = 0; indstep < this.arrsteps.length; indstep++) {
           if (this.arrsteps[indstep].funccheck(indstep)) {
             this.step++
           }
@@ -159,16 +190,13 @@ export default class CStatus extends MixinBase {
         // }
       }
     }
-    console.log('step', this.step)
+    // console.log('step', this.step)
   }
 
   public mounted() {
     this.setstep()
   }
 
-  get TelegCode() {
-    return UserStore.state.my.profile.teleg_checkcode
-  }
   get TelegVerificato() {
     return UserStore.state.my.profile.teleg_id > 0
   }
@@ -195,20 +223,6 @@ export default class CStatus extends MixinBase {
     return ' (' + this.numpayment + ' ' + this.$t('reg.selected') + ')'
   }
 
-  get numpayment() {
-    if (UserStore.state.my.profile)
-      if (UserStore.state.my.profile.paymenttypes)
-        return UserStore.state.my.profile.paymenttypes.length
-
-    return 0
-  }
-
-  get getLinkBotTelegram() {
-    const link = this.getValDb('TELEG_BOT_LINK', false)
-    // console.log('link', link)
-    return link
-  }
-
   get getlaststep() {
     return this.arrsteps.length + this.NUMSTEP_START - 1
   }
@@ -220,6 +234,7 @@ export default class CStatus extends MixinBase {
 
     return 0
   }
+
   public getnuminvitati_attivi() {
     if (UserStore.state.my)
       if (UserStore.state.my.calcstat)
@@ -245,10 +260,7 @@ export default class CStatus extends MixinBase {
   }
 
   public copylink() {
-    copyToClipboard(this.getRefLink).then(() => {
-      tools.showNotif(this.$q, this.$t('dialog.copyclipboard') + ' \'' + this.getRefLink + '\'')
-    })
-
+    tools.copyStringToClipboard(this, this.getRefLink)
   }
 
   public getiferror(checkerror, value) {
@@ -261,6 +273,48 @@ export default class CStatus extends MixinBase {
 
   public geterricon(value) {
     return 'fas fa-exclamation-triangle'
+  }
+
+  get listasel() {
+    return UserStore.state.my.profile.paymenttypes
+  }
+
+  get isselectPaypal() {
+    if (UserStore.state.my.profile) {
+      // console.log('pay', UserStore.state.my.profile.paymenttypes)
+      if (UserStore.state.my.profile.paymenttypes) {
+        if (UserStore.state.my.profile.paymenttypes.includes('paypal')) {
+          return true
+        }
+      }
+
+      return false
+    }
+
+  }
+
+  get TelegramBiblio() {
+    return 'https://t.me/joinchat/AL2qKExZKvenLgpVhOyefQ'
+  }
+
+  public geticonstep(title) {
+    if (title === 'steps.chat_biblio') {
+      return 'settings'
+    } else {
+      return 'check-circle'
+    }
+  }
+
+  public geticoncolor(title) {
+    if (title === 'steps.chat_biblio') {
+      return 'blue'
+    } else {
+      return 'green'
+    }
+  }
+
+  get TelegCode() {
+    return UserStore.state.my.profile.teleg_checkcode
   }
 
 }

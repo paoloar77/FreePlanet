@@ -8,10 +8,14 @@ import { validations } from '../CSignUpNotevole/CSignUp-validate'
 import { CTitleBanner } from '@components'
 import { CCardState } from '../CCardState'
 import { UserStore } from '../../store/Modules'
+import { CCardStat } from '../CCardStat'
+import { CLineChart } from '../CLineChart'
+import { CGeoChart } from '../CGeoChart'
+import { CListNationality } from '../CListNationality'
 
 @Component({
   name: 'CStatusReg',
-  components: { CTitleBanner, CCardState }
+  components: { CTitleBanner, CCardState, CCardStat, CLineChart, CGeoChart, CListNationality }
 })
 
 export default class CStatusReg extends MixinBase {
@@ -26,6 +30,9 @@ export default class CStatusReg extends MixinBase {
     num_tot_lista: 0,
     num_reg_lista: 0,
     num_reg: 0,
+    num_teleg_attivo: 0,
+    email_non_verif: 0,
+    num_teleg_pending: 0,
     lastsreg: [],
     checkuser: { verified_email: false }
   }
@@ -124,9 +131,14 @@ export default class CStatusReg extends MixinBase {
       return 0
   }
 
-
   get visustat() {
     return this.datastat.num_reg > 0 || this.datastat.num_reg_lista > 0
   }
 
+  get telegnonattivi() {
+    return this.datastat.num_reg - this.datastat.num_teleg_attivo
+  }
+  get emailnonverif() {
+    return this.datastat.email_non_verif
+  }
 }

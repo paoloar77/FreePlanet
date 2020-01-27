@@ -818,7 +818,7 @@ namespace Actions {
             GlobalStore.state.mypage = (res.data.mypage) ? [...res.data.mypage] : []
           }
 
-          console.log('res.data.myuser', res.data.myuser)
+          // console.log('res.data.myuser', res.data.myuser)
           if (res.data.myuser) {
             UserStore.mutations.authUser(res.data.myuser)
 

@@ -107,6 +107,8 @@ export default class CSignIn extends Vue {
   public submit() {
     // console.log('submit LOGIN')
 
+    this.signin.username = tools.removespaces(this.signin.username)
+
     this.$v.signin.$touch()
 
     if (this.$v.signin.$error) {

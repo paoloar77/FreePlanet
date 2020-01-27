@@ -153,6 +153,7 @@ const colcontribtype = [
 ]
 
 const colpaymenttype = [
+  AddCol({ name: '_id', label_trans: 'others.value' }),
   AddCol({ name: 'key', label_trans: 'reg.key' }),
   AddCol({ name: 'label', label_trans: 'proj.longdescr' }),
   AddCol(DeleteRec)
@@ -407,6 +408,8 @@ export const fieldsTable = {
     // IColGridTable
   colTableUsers: [
     // AddCol({ name: '_id', label_trans: 'reg.id' }),
+    AddCol({ name: 'ind_order', label_trans: 'reg.ind_order' }),
+    AddCol({ name: 'date_reg', label_trans: 'reg.date_reg', fieldtype: tools.FieldType.date }),
     AddCol({ name: 'username', label_trans: 'reg.username_short' }),
     AddCol({ name: 'name', label_trans: 'reg.name' }),
     AddCol({ name: 'surname', label_trans: 'reg.surname' }),
@@ -429,9 +432,9 @@ export const fieldsTable = {
     AddCol({ name: 'profile.manage_telegram', field: 'profile', subfield: 'manage_telegram', label_trans: 'reg.manage_telegram', fieldtype: tools.FieldType.boolean  }),
     AddCol({ name: 'profile.paymenttypes', field: 'profile', subfield: 'paymenttypes', label_trans: 'reg.paymenttype', fieldtype: tools.FieldType.multiselect, jointable: 'paymenttypes' }),
     AddCol({ name: 'profile.img', field: 'profile', subfield: 'img', label_trans: 'reg.img', sortable: false }),
-    AddCol({ name: 'date_reg', label_trans: 'reg.date_reg', fieldtype: tools.FieldType.date }),
     // AddCol({ name: 'idapp', label_trans: 'reg.idapp', fieldtype: tools.FieldType.string }),
     AddCol({ name: 'perm', label_trans: 'reg.perm', fieldtype: tools.FieldType.binary, jointable: 'permissions' }),
+    AddCol({ name: 'ipaddr', label_trans: 'reg.ipaddr' }),
     AddCol(DeleteRec),
     AddCol(DuplicateRec)
   ],
@@ -494,7 +497,7 @@ export const fieldsTable = {
       value: 'paymenttypes',
       label: 'Tipi di Pagamenti',
       columns: colpaymenttype,
-      colkey: '_id',
+      colkey: 'key',
       collabel: 'label'
     },
     {

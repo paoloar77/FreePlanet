@@ -36,7 +36,8 @@ export const DefaultUser: IUserFields = {
   verified_email: false,
   made_gift: false,
   profile: {
-    img: ''
+    img: '',
+    teleg_id: 0
   },
   downline: [],
   calcstat: DefaultCalc
@@ -305,6 +306,7 @@ namespace Mutations {
     localStorage.setItem(tools.localStorage.expirationDate, expirationDate.toString())
     localStorage.setItem(tools.localStorage.isLogged, String(true))
     localStorage.setItem(tools.localStorage.verified_email, String(myuser.verified_email))
+    localStorage.setItem(tools.localStorage.teleg_id, String(myuser.profile.teleg_id))
     localStorage.setItem(tools.localStorage.made_gift, String(myuser.made_gift))
     localStorage.setItem(tools.localStorage.wasAlreadySubOnDb, String(GlobalStore.state.wasAlreadySubOnDb))
 
@@ -743,6 +745,7 @@ namespace Actions {
     localStorage.removeItem(tools.localStorage.isLogged)
     // localStorage.removeItem(rescodes.localStorage.leftDrawerOpen)
     localStorage.removeItem(tools.localStorage.verified_email)
+    localStorage.removeItem(tools.localStorage.teleg_id)
     localStorage.removeItem(tools.localStorage.made_gift)
     localStorage.removeItem(tools.localStorage.categorySel)
     localStorage.removeItem(tools.localStorage.wasAlreadySubOnDb)
@@ -833,6 +836,7 @@ namespace Actions {
           const made_gift = localStorage.getItem(tools.localStorage.made_gift) === 'true'
           const perm = parseInt(localStorage.getItem(tools.localStorage.perm), 10)
           const img = String(localStorage.getItem(tools.localStorage.img))
+          const teleg_id = parseInt(localStorage.getItem(tools.localStorage.teleg_id), 10)
 
           GlobalStore.state.wasAlreadySubOnDb = localStorage.getItem(tools.localStorage.wasAlreadySubOnDb) === 'true'
 
@@ -848,7 +852,7 @@ namespace Actions {
             verified_email,
             made_gift,
             perm,
-            profile: { img }
+            profile: { img, teleg_id }
           })
 
           isLogged = true

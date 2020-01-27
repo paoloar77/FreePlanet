@@ -7,14 +7,14 @@ import { IGallery, IImgGallery } from '../../model/GlobalStore'
 import { CMyPage } from '../CMyPage'
 import GlobalModule from '../../store/Modules/GlobalStore'
 import { GlobalStore } from '../../store/Modules'
-import { copyToClipboard } from 'quasar'
+import MixinBase from '../../mixins/mixin-base'
 
 @Component({
   name: 'CGallery',
   components: { CMyPage }
 })
 
-export default class CGallery extends Vue {
+export default class CGallery extends MixinBase {
   @Prop({ required: true }) public edit: boolean
   @Prop({ required: true }) public gall: IGallery
   @Prop({ required: true }) public listimages: IImgGallery[]
@@ -173,9 +173,7 @@ export default class CGallery extends Vue {
 
   public copytoclipboard(rec) {
     const filename = this.getfullname(rec)
-    copyToClipboard(filename).then(() => {
-      tools.showNotif(this.$q, this.$t('dialog.copyclipboard') + ' \'' + filename + '\'')
-    })
+    tools.copyStringToClipboard(this, filename)
   }
 
   public async deleteFile(rec) {
