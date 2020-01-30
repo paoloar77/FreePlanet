@@ -18,7 +18,7 @@
             </q-item-section>
 
             <q-item-section>
-              <q-item-label>{{ tools.getNationsByNationality(nat._id) }}</q-item-label>
+              <q-item-label>{{ tools.getNationsByNationality(nat._id, false) }}</q-item-label>
             </q-item-section>
 
             <q-item-section side>

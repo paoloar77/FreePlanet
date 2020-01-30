@@ -143,6 +143,13 @@
     </q-table>
 
     <div v-if="rowclicksel">
+
+      <div v-if="(prop_mytable === 'users') && tools.appid() === '7'">
+        <CMyDashboard :username="getusernamesel">
+
+        </CMyDashboard>
+      </div>
+
       <CTitleBanner title="Record:"></CTitleBanner>
 
       <div class="q-ma-xs q-pa-xs text-center rounded-borders q-list--bordered"
@@ -179,6 +186,6 @@
 <script lang="ts" src="./CGridTableRec.ts">
 </script>
 
-<style lang="scss" >
+<style lang="scss">
   @import './CGridTableRec.scss';
 </style>

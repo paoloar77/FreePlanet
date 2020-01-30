@@ -10,10 +10,13 @@ import { CMyInnerPage } from '../CMyInnerPage'
 import { tools } from '../../store/Modules/tools'
 import { CVerifyTelegram } from '../CVerifyEmail'
 import { CVerifyEmail } from '../CVerifyTelegram'
+import { CCopyBtn } from '../CCopyBtn'
+import { CVideo } from '../CVideo'
+import { CRequisiti } from '../CRequisiti'
 
 
 @Component({
-  components: { CTitleBanner, CMyFieldDb, CMyInnerPage, CVerifyTelegram, CVerifyEmail }
+  components: { CTitleBanner, CMyFieldDb, CMyInnerPage, CVerifyTelegram, CVerifyEmail, CCopyBtn, CVideo, CRequisiti }
 })
 
 export default class CStatus extends MixinBase {
@@ -47,7 +50,7 @@ export default class CStatus extends MixinBase {
       descr: 'steps.zoom_long',
       page: '/zoom',
       funccheck(index) {
-        return UserStore.state.my.profile.saw_zoom_presentation
+        return UserStore.getters.VistoZoom
       },
       funccheck_error(index) {
         return true
@@ -63,18 +66,6 @@ export default class CStatus extends MixinBase {
             return true
 
         return false
-      },
-      funccheck_error(index) {
-        return true
-      },
-    },
-    {
-      title: 'steps.sharemovement',
-      descr: 'steps.sharemovement_long',
-      page: '/sharemovement',
-      funccheck(index) {
-        if (UserStore.state.my.calcstat)
-          return UserStore.state.my.calcstat.numinvitati_attivi >= 2
       },
       funccheck_error(index) {
         return true
@@ -97,6 +88,18 @@ export default class CStatus extends MixinBase {
 
         }
         return false
+      },
+      funccheck_error(index) {
+        return true
+      },
+    },
+    {
+      title: 'steps.sharemovement',
+      descr: 'steps.sharemovement_long',
+      page: '/sharemovement',
+      funccheck(index) {
+        if (UserStore.state.my.calcstat)
+          return UserStore.state.my.calcstat.numinvitati_attivi >= 2
       },
       funccheck_error(index) {
         return true
@@ -238,6 +241,7 @@ export default class CStatus extends MixinBase {
   public getnuminvitati_attivi() {
     if (UserStore.state.my)
       if (UserStore.state.my.calcstat)
+        console.log('numinvitati', UserStore.state.my.calcstat)
         return UserStore.state.my.calcstat.numinvitati_attivi
 
     return 0
@@ -256,7 +260,7 @@ export default class CStatus extends MixinBase {
   }
 
   get getRefLink() {
-    return UserStore.getters.getRefLink()
+    return UserStore.getters.getRefLink('')
   }
 
   public copylink() {
@@ -316,5 +320,36 @@ export default class CStatus extends MixinBase {
   get TelegCode() {
     return UserStore.state.my.profile.teleg_checkcode
   }
+
+  get VistoZoom() {
+    return UserStore.getters.VistoZoom
+  }
+
+  get getLinkBotTelegram() {
+    const link = this.getValDb('TELEG_BOT_LINK', false)
+    // console.log('link', link)
+    return link
+  }
+
+  get CompletatoRequisiti() {
+    return this.VistoZoom && this.getnuminvitati_attivi() >= 2 && this.RequisitoPayment
+  }
+
+  get RequisitoPayment() {
+    let ispaypal = false
+    if (UserStore.state.my.profile.paymenttypes) {
+      if (UserStore.state.my.profile.paymenttypes.includes('paypal')) {
+        if (UserStore.state.my.profile.email_paypal)
+          ispaypal = true
+      }
+      if (UserStore.state.my.profile)
+        if (UserStore.state.my.profile.paymenttypes)
+          return (UserStore.state.my.profile.paymenttypes.length >= 2) && ispaypal
+
+    }
+    return false
+  }
+
+
 
 }

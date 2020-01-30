@@ -40,6 +40,19 @@ export class AxiosError {
 
     return this.msgerr
   }
+  public getMsg() {
+    try {
+      if (this.code === 0) {
+        if (this.data.code) {
+          return this.data.msg
+        }
+      }
+    }catch (e) {
+      return ''
+    }
+
+    return ''
+  }
   public getCode() {
     if (this.code === 0) {
       if (this.data.code) {

@@ -21,6 +21,10 @@ export default class CLineChart extends Vue {
     return tools
   }
 
+  get mythis() {
+    return this
+  }
+
   public mounted() {
     this.mydatafixed = {}
 

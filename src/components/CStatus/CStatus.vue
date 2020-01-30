@@ -49,6 +49,13 @@
             <CVerifyTelegram v-if="TelegCode || !TelegVerificato">
 
             </CVerifyTelegram>
+            <div v-else>
+              <br>
+              <q-btn color="primary" icon="fab fa-telegram" :label="$t('components.authentication.telegram.openbot')"
+                     type="a"
+                     :href="getLinkBotTelegram" target="_blank"></q-btn>
+              <br>
+            </div>
 
 
             <q-stepper-navigation>
@@ -71,6 +78,33 @@
               <div v-if="mystep.descr">
                 <div v-html="$t(mystep.descr)"></div>
               </div>
+
+              <CTitleBanner class="q-pa-xs" :title="$t('steps.paymenttype_paypal')" bgcolor="bg-primary"
+                            clcolor="text-white"
+                            myclass="myshad" canopen="true" :visible="false">
+
+                <CVideo myvideokey="RqsWDlpnN3k">
+
+                </CVideo>
+
+                <q-btn class="q-ma-md" size="md" type="a" href="https://www.paypal.com/"
+                       target="_blank" rounded color="primary" icon="info" :label="$t('steps.paymenttype_paypal_link')">
+                </q-btn>
+              </CTitleBanner>
+              <CTitleBanner class="q-pa-xs" :title="$t('steps.paymenttype_revolut')" bgcolor="bg-primary"
+                            clcolor="text-white"
+                            myclass="myshad" canopen="true" :visible="false">
+
+                <CVideo myvideokey="">
+
+                </CVideo>
+
+                <q-btn class="q-ma-md" size="md" type="a" href="https://www.revolut.com/"
+                       target="_blank" rounded color="primary" icon="info"
+                       :label="$t('steps.paymenttype_revolut_link')">
+                </q-btn>
+
+              </CTitleBanner>
               <div>
 
                 <CMyFieldDb :title="$t('reg.paymenttype')"
@@ -103,7 +137,7 @@
               >
               </CMyFieldDb>
             </div>
-            <div v-else-if="mystep.title === 'steps.chat_biblio'" >
+            <div v-else-if="mystep.title === 'steps.chat_biblio'">
               <div v-if="mystep.descr">
                 <div v-html="$t(mystep.descr)"></div>
               </div>
@@ -116,10 +150,15 @@
 
             </div>
             <div v-else-if="mystep.title === 'steps.zoom'">
+
+              <CRequisiti :statebool="VistoZoom" :msgTrue="$t('steps.zoom_si_partecipato')"
+                          :msgFalse="$t('steps.zoom_no_partecipato')">
+              </CRequisiti>
+
               <div v-if="mystep.descr">
                 <div v-html="$t(mystep.descr)"></div>
               </div>
-              <CTitleBanner class="q-pa-xs" title="Che cos'è Zoom e come funziona?" bgcolor="bg-primary"
+              <CTitleBanner class="q-pa-xs" :title="$t('steps.zoom_what')" bgcolor="bg-primary"
                             clcolor="text-white"
                             myclass="myshad" canopen="true" :visible="false">
                 <div>
@@ -156,10 +195,42 @@
 
             </div>
             <div v-else-if="mystep.title === 'steps.sharemovement'">
+
+              <CRequisiti :statebool="getnuminvitati() >= 2" :msgTrue="$t('steps.sharemovement_hai_invitato')"
+                          :msgFalse="$t('steps.sharemovement_devi_invitare_almeno_2')">
+              </CRequisiti>
+              <CRequisiti v-if="getnuminvitati() > 0" :statebool="getnuminvitati_attivi() >= 2"
+                          :msgTrue="$t('steps.sharemovement_invitati_attivi_si')"
+                          :msgFalse="$t('steps.sharemovement_invitati_attivi_no')">
+              </CRequisiti>
+
+
               <div v-if="mystep.descr">
                 <div v-html="$t(mystep.descr)"></div>
               </div>
-              {{ $t('reg.reflink') + ' ' + getRefLink }}
+
+              <CCopyBtn :title="$t('reg.reflink')" :texttocopy="getRefLink">
+
+              </CCopyBtn>
+
+              <q-btn class="q-mb-md" rounded size="md" color="primary" to="/dashboard"
+                     :label="$t('pages.dashboard')"></q-btn>
+
+            </div>
+            <div v-else-if="mystep.title === 'steps.enter_prog'">
+
+              <div v-if="mystep.descr">
+                <div v-html="$t(mystep.descr)"></div>
+              </div>
+
+              <CRequisiti :statebool="CompletatoRequisiti" :msgTrue="$t('steps.enter_prog_requisiti_ok')"
+                          :msgFalse="$t('steps.enter_prog_completa_requisiti')">
+              </CRequisiti>
+
+              <CRequisiti :statebool="CompletatoRequisiti" :msgTrue="$t('steps.enter_prog_status')"
+                          :msgFalse="$t('steps.enter_prog_status')">
+              </CRequisiti>
+
             </div>
             <div v-else>
               <div v-if="mystep.page">
@@ -194,7 +265,6 @@
       </div>
 
     </CTitleBanner>
-
 
   </div>
 </template>

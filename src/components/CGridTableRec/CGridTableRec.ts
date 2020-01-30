@@ -13,9 +13,10 @@ import { IParamsQuery } from '../../model/GlobalStore'
 import { fieldsTable } from '../../store/Modules/fieldsTable'
 import { CMyPopupEdit } from '../CMyPopupEdit'
 import { CTitleBanner } from '../CTitleBanner'
+import { CMyDashboard } from '../CMyDashboard'
 
 @Component({
-  components: { CMyPopupEdit, CTitleBanner }
+  components: { CMyPopupEdit, CTitleBanner, CMyDashboard }
 })
 export default class CGridTableRec extends Vue {
   @Prop({ required: true }) public prop_mytitle: string
@@ -384,6 +385,8 @@ export default class CGridTableRec extends Vue {
   public refresh() {
     this.serverData = []
 
+    this.search = this.search.trim()
+
     // console.log('refresh')
     // console.log('this.search', this.search)
     if (!!this.search && this.search !== '')
@@ -551,5 +554,15 @@ export default class CGridTableRec extends Vue {
     }
 
     console.log('this.rowclicksel', this.rowclicksel)
+  }
+
+  get getusernamesel() {
+    try {
+      if (this.rowclicksel) {
+        return this.rowclicksel.username
+      }
+    } catch (e) {
+      return ''
+    }
   }
 }

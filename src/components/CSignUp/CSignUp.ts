@@ -201,8 +201,8 @@ export default class CSignUp extends MixinBase {
 
     console.log(this.signup)
     return UserStore.actions.signup(tools.clone(this.signup))
-      .then((riscode) => {
-        if (tools.SignUpcheckErrors(this, riscode))
+      .then((ris) => {
+        if (tools.SignUpcheckErrors(this, ris.code, ris.msg))
           this.$q.loading.hide()
       }).catch((error) => {
         console.log('ERROR = ' + error)

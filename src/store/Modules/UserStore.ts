@@ -37,7 +37,8 @@ export const DefaultUser: IUserFields = {
   made_gift: false,
   profile: {
     img: '',
-    teleg_id: 0
+    teleg_id: 0,
+    saw_zoom_presentation: false,
   },
   downline: [],
   calcstat: DefaultCalc
@@ -114,6 +115,13 @@ namespace Getters {
   //   }
   // }, 'tok')
 
+  const VistoZoom = b.read((mystate) => {
+    if (state.my && state.my.profile) {
+      return (state.my.profile.saw_zoom_presentation)
+    }
+    return false
+  }, 'VistoZoom')
+
   const isServerError = b.read((mystate) => {
     return (state.servercode === tools.ERR_SERVERFETCH)
   }, 'isServerError')
@@ -121,6 +129,10 @@ namespace Getters {
   const getServerCode = b.read((mystate) => {
     return state.servercode
   }, 'getServerCode')
+
+  const getMsg = b.read((mystate) => {
+    return state.msg
+  }, 'getMsg')
 
   const getNameSurnameByUserId = b.read((mystate: IUserState) => (userId: string) => {
     const user = UserStore.getters.getUserByUserId(userId)
@@ -188,10 +200,12 @@ namespace Getters {
       return ''
     }
   }, 'getImgByUsername')
-  const getRefLink = b.read((mystate: IUserState) => (): string => {
+  const getRefLink = b.read((mystate: IUserState) => (username: string): string => {
     // console.log('myrec', myrec)
 
-    return tools.getUrlSite() + '/signup/' + mystate.my.username
+    if (username === '')
+      username = mystate.my.username
+    return tools.getUrlSite() + '/signup/' + username
 
   }, 'getRefLink')
 
@@ -214,8 +228,14 @@ namespace Getters {
     get isServerError() {
       return isServerError()
     },
+    get VistoZoom() {
+      return VistoZoom()
+    },
     get getServerCode() {
       return getServerCode()
+    },
+    get getMsg() {
+      return getMsg()
     },
     get IsMyFriend() {
       return IsMyFriend()
@@ -380,6 +400,7 @@ namespace Mutations {
       if (mystate.servercode !== tools.ERR_SERVERFETCH) {
         mystate.servercode = axerr.getCode()
       }
+      mystate.msg = axerr.getMsg()
       console.log('Err catch: (servercode:', axerr.getCode(), axerr.getMsgError(), ')')
     } catch (e) {
       console.log('Err catch:', axerr)
@@ -435,24 +456,23 @@ namespace Actions {
     }
   }
 
-  async function resetpwd(context, paramquery: IUserState) {
+  async function resetpwd(context, paramquery) {
 
-    const usertosend = {
-      email: paramquery.my.email,
-      password: paramquery.my.password,
-      tokenforgot: paramquery.tokenforgot
-    }
-    console.log(usertosend)
+    const mydata = { ...paramquery }
 
-    Mutations.mutations.setServerCode(tools.CALLING)
+    return bcrypt.hash(mydata.password, bcrypt.genSaltSync(12))
+      .then((hashedPassword: string) => {
+        mydata.repeatPassword = ''
+        mydata.password = String(hashedPassword)
 
-    return await Api.SendReq('/updatepwd', 'POST', usertosend, true)
-      .then((res) => {
-        return { code: res.data.code, msg: res.data.msg }
-      })
-      .catch((error: Types.AxiosError) => {
-        UserStore.mutations.setErrorCatch(error)
-        return { code: UserStore.getters.getServerCode, msg: error.getMsgError() }
+        return Api.SendReq('/updatepwd', 'POST', mydata, true)
+          .then((res) => {
+            return { code: res.data.code, msg: res.data.msg }
+          })
+          .catch((error: Types.AxiosError) => {
+            UserStore.mutations.setErrorCatch(error)
+            return { code: UserStore.getters.getServerCode, msg: error.getMsgError() }
+          })
       })
 
   }
@@ -540,6 +560,16 @@ namespace Actions {
       })
   }
 
+  async function execDbOp(context, paramquery) {
+
+    return await Api.SendReq('/users/dbop', 'POST', paramquery)
+      .then((res) => {
+        return res
+      }).catch((error) => {
+        return false
+      })
+  }
+
   async function newsletterload(context, paramquery) {
 
     return await Api.SendReq('/news/load', 'POST', paramquery)
@@ -623,15 +653,15 @@ namespace Actions {
               // dispatch('storeUser', authData);
               // dispatch('setLogoutTimer', myres.data.expiresIn);
 
-              return tools.OK
+              return { code: tools.OK, msg: '' }
             } else {
-              return tools.ERR_GENERICO
+              return { code: tools.ERR_GENERICO, msg: '' }
             }
           })
           .catch((error) => {
             console.log('Err', error)
             UserStore.mutations.setErrorCatch(error)
-            return UserStore.getters.getServerCode
+            return { code: UserStore.getters.getServerCode, msg: UserStore.getters.getMsg }
           })
       })
   }
@@ -885,7 +915,6 @@ namespace Actions {
       })
   }
 
-
   /*
     async function refreshUserInfos(){
       let {token, refresh_token} = JWT.fetch();
@@ -913,6 +942,7 @@ namespace Actions {
     unsubscribe: b.dispatch(unsubscribe),
     importemail: b.dispatch(importemail),
     importExtraList: b.dispatch(importExtraList),
+    execDbOp: b.dispatch(execDbOp),
     newsletterload: b.dispatch(newsletterload),
     newsletter_setactivate: b.dispatch(newsletter_setactivate),
     getDashboard: b.dispatch(getDashboard),

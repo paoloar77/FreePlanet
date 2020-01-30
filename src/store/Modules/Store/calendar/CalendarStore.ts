@@ -230,12 +230,6 @@ namespace Actions {
     CancelEvent: b.dispatch(CancelEvent)
   }
 
-  // async function resetpwd(context, paramquery: ICalendarState) {
-  // }
-  //
-  // export const actions = {
-  //   autologin_FromLocalStorage: b.dispatch(autologin_FromLocalStorage)
-  // }
 }
 
 // Module

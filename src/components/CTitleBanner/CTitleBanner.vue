@@ -19,7 +19,7 @@
     </q-banner>
 
     <q-slide-transition>
-      <div v-show="myvisible">
+      <div v-show="myvisible" class="rounded-borders">
         <slot></slot>
       </div>
     </q-slide-transition>

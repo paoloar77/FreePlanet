@@ -1480,15 +1480,14 @@ export const tools = {
   },
 
   showNegativeNotif(q: any, msg) {
-    tools.showNotif(q, msg, { color: 'negative', icon: 'notifications' })
+    tools.showNotif(q, msg, { color: 'negative', icon: 'notifications' }, 8000)
   },
 
   showNeutralNotif(q: any, msg) {
     tools.showNotif(q, msg, { color: 'info', icon: 'notifications' })
   },
 
-  showNotif(q: any, msg, data ?: INotify | null
-  ) {
+  showNotif(q: any, msg, data ?: INotify | null, time?) {
     let myicon = data ? data.icon : 'ion-add'
     if (!myicon) {
       myicon = 'ion-add'
@@ -1502,7 +1501,7 @@ export const tools = {
       icon: myicon,
       classes: 'my-notif-class',
       color: mycolor,
-      timeout: 3000
+      timeout: time || 4000
     })
   }
   ,
@@ -2621,18 +2620,20 @@ export const tools = {
   }
   ,
 
-  SignUpcheckErrors(mythis, riscode: number) {
+  SignUpcheckErrors(mythis, riscode: number, msg: string) {
     console.log('SignUpcheckErrors', riscode)
     let endload = true
 
     if (riscode === serv_constants.RIS_CODE_EMAIL_ALREADY_EXIST) {
       tools.showNotif(mythis.$q, mythis.$t('reg.err.duplicate_email'))
+    } else if (riscode === serv_constants.RIS_CODE_USER_ALREADY_EXIST) {
+      tools.showNegativeNotif(mythis.$q, mythis.$t('reg.err.user_already_exist'))
     } else if (riscode === serv_constants.RIS_CODE_USER_EXTRALIST_NOTFOUND) {
 
-      tools.showNegativeNotif(mythis.$q, mythis.$t('reg.err.user_extralist_not_found'))
+      tools.showNegativeNotif(mythis.$q, mythis.$t('reg.err.user_extralist_not_found') + ' ' + msg)
     } else if (riscode === serv_constants.RIS_CODE_USER_NOT_THIS_APORTADOR) {
 
-      tools.showNegativeNotif(mythis.$q, mythis.$t('reg.err.user_not_this_aportador'))
+      tools.showNegativeNotif(mythis.$q, mythis.$t('reg.err.user_not_this_aportador') + ' ' + msg)
 
     } else if (riscode === serv_constants.RIS_CODE_USERNAME_ALREADY_EXIST) {
       tools.showNotif(mythis.$q, mythis.$t('reg.err.duplicate_username'))
@@ -3016,6 +3017,10 @@ export const tools = {
     return 'https://www.youtube.com/embed/' + this.getvideourl(index, true)
   },
 
+  getvideobyidyoutube(key) {
+    return 'https://www.youtube.com/embed/' + key
+  },
+
   getpath(myvideo) {
     return 'statics/video/' + func_tools.getLocale() + '/' + myvideo
   },
@@ -3060,27 +3065,41 @@ export const tools = {
   },
 
   geticon(langin) {
-    let lang = langin.toUpperCase()
-    if (lang === 'IT')
-      return 'fa-flag-it'
-    else if (lang === 'ES')
-      return 'fa-flag-es'
-    else if (lang === 'US')
-      return 'fa-flag-us'
-    else if ((lang === 'GB') || (lang === 'UK'))
-      return 'fa-flag-gb'
-    else if (lang === 'DE')
-      return 'fa-flag-de'
-    else if (lang === 'SI')
-      return 'fa-flag-si'
-    else if (lang === 'CH')
-      return 'fa-flag-ch'
-    else if (lang === 'PE')
-      return 'fa-flag-pe'
-    else if (lang === 'HR')
-      return 'fa-flag-hr'
+    if (langin === '')
+      return ''
+    try {
+      let lang = langin.toUpperCase()
+      if (lang === 'IT')
+        return 'fa-flag-it'
+      else if (lang === 'ES')
+        return 'fa-flag-es'
+      else if (lang === 'US')
+        return 'fa-flag-us'
+      else if ((lang === 'GB') || (lang === 'UK'))
+        return 'fa-flag-gb'
+      else if (lang === 'DE')
+        return 'fa-flag-de'
+      else if (lang === 'FR')
+        return 'fa-flag-fr'
+      else if (lang === 'SI')
+        return 'fa-flag-si'
+      else if (lang === 'CH')
+        return 'fa-flag-ch'
+      else if (lang === 'CM')
+        return 'fa-flag-cm'
+      else if (lang === 'CO')
+        return 'fa-flag-co'
+      else if (lang === 'PE')
+        return 'fa-flag-pe'
+      else if (lang === 'SM')
+        return 'fa-flag-sm'
+      else if (lang === 'HR')
+        return 'fa-flag-hr'
 
-    return ''
+      return ''
+    }catch (e) {
+      return ''
+    }
   },
 
   removespaces(mystr) {
@@ -3094,7 +3113,7 @@ export const tools = {
 
   },
 
-  getNationsByNationality(nat) {
+  getNationsByNationality(nat, code) {
     if (nat === 'IT') {
       return 'Italy'
     } else if (nat === 'SI') {
@@ -3103,6 +3122,8 @@ export const tools = {
       return 'Spain'
     } else if (nat === 'DE') {
       return 'Germany'
+    } else if (nat === 'FR') {
+      return 'France'
     } else if (nat === 'US') {
       return 'United States'
     } else if (nat === 'CA') {
@@ -3117,10 +3138,16 @@ export const tools = {
       return 'Hungary'
     } else if (nat === 'CH') {
       return 'Switzerland'
+    } else if (nat === 'CM') {
+      return 'Cameroon'
+    } else if (nat === 'CO') {
+      return 'Colombia'
     } else if (nat === 'PE') {
       return 'Peru'
     } else if (nat === 'PL') {
       return 'Poland'
+    } else if (nat === 'SM') {
+      return 'San Marino'
     } else if (nat === 'PT') {
       return 'Portugal'
     } else if (nat === 'UK') {
