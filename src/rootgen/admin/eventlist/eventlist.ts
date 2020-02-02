@@ -127,6 +127,10 @@ export default class Eventlist extends Vue {
     return this
   }
 
+  set mythis(my) {
+    //
+  }
+
   get mostra() {
     return this.$route.name
   }

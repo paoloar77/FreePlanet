@@ -6,8 +6,8 @@
         <div class="subtitle_small text-blue" v-html="getvideotit"></div>
         <div class="">
           <iframe
-            :width="tools.getwidthscale(mythis(), getValDb('YT_W', false), 800)"
-            :height="tools.getheightbywidth(mythis(), getValDb('YT_W', false), getValDb('YT_H', false), 800)"
+            :width="tools.getwidthscale(mythis, getValDb('YT_W', false), 800)"
+            :height="tools.getheightbywidth(mythis, getValDb('YT_W', false), getValDb('YT_H', false), 800)"
             :src="tools.getvideobyidyoutube(myvideokey)"
             frameborder="0"
             allowfullscreen

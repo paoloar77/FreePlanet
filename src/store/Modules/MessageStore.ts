@@ -125,8 +125,8 @@ namespace Actions {
     data.options = tools.SetBit(data.options, shared_consts.MessageOptions.Notify_ByEmail)
     data.options = tools.SetBit(data.options, shared_consts.MessageOptions.Notify_ByPushNotification)
 
-    console.log('DOPO:')
-    console.table(data)
+    // console.log('DOPO:')
+    // console.table(data)
 
     return await Api.SendReq('/sendmsg', 'POST', data)
       .then((res) => {

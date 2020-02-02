@@ -11,6 +11,13 @@ import translate from '@src/globalroutines/util'
 // You can declare a mixin as the same style as components.
 @Component
 export default class MixinEvents extends Vue {
+  get tools() {
+    return tools
+  }
+
+  get mythis() {
+    return this
+  }
 
   public getImgEvent(event: IEvents) {
     if (!!event.img)
@@ -18,7 +25,6 @@ export default class MixinEvents extends Vue {
     else
       return 'statics/images/noimg.png'
   }
-
 
   public getStyleByEvent(event: IEvents, visu: boolean) {
     let myst = 'border: inset; border-color: darkblue; border-width: 3px; padding: 5px !important; '

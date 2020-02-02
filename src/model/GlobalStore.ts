@@ -289,10 +289,10 @@ export interface IImgGallery {
 
 export interface IGallery {
   _id?: string
-  author_username: string
-  title: string
-  directory: string
-  list: IImgGallery[]
+  author_username?: string
+  title?: string
+  directory?: string
+  list?: IImgGallery[]
 }
 
 export interface IColl {
@@ -337,6 +337,7 @@ export interface IParamsQuery {
   startRow: number
   endRow: number
   filter: string
+  filterand: string
   sortBy: any
   descending: number
 }
@@ -372,6 +373,11 @@ export interface ITableRec {
   colicon?: string
   onlyAdmin?: boolean
   noshow: boolean
+}
+
+export interface IFilter {
+  label: string
+  value: string
 }
 
 export interface IDataPass {

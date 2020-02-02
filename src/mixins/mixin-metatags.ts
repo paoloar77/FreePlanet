@@ -8,6 +8,14 @@ import { tools } from '@src/store/Modules/tools'
 export default class MixinMetaTags extends Vue {
   public mymeta: IMetaTags = {title: '', description: '', keywords: ''}
 
+  get mythis() {
+    return this
+  }
+
+  set mythis(aa) {
+
+  }
+
   public setmeta(mymeta: IMetaTags) {
     this.mymeta = mymeta
   }

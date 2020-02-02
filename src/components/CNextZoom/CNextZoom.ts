@@ -9,10 +9,13 @@ import { CTitleBanner } from '@components'
 import { CCardState } from '../CCardState'
 import { UserStore } from '../../store/Modules'
 import { GlobalStore } from '../../store'
+import { CCopyBtn } from '../CCopyBtn'
+
+import { date } from 'quasar'
 
 @Component({
   name: 'CStatusReg',
-  components: { CTitleBanner, CCardState }
+  components: { CTitleBanner, CCardState, CCopyBtn }
 })
 
 export default class CNextZoom extends MixinBase {
@@ -26,5 +29,19 @@ export default class CNextZoom extends MixinBase {
     if (!!this.listacalzoom) {
       return tools.getstrTime(this.listacalzoom[0].date_start)
     }
+  }
+
+  get showzoom() {
+    if (GlobalStore.state.calzoom.length > 0) {
+      const mydate = GlobalStore.state.calzoom.slice(-1)[0].date_start
+      const mydate_end = GlobalStore.state.calzoom.slice(-1)[0].date_end
+      const datenow = tools.getDateNow()
+      console.log('date.getDateDiff(datenow, mydate, \'minutes\')', date.getDateDiff(datenow, mydate, 'minutes'))
+      // if begin is in the past, take the day now
+      if ((date.getDateDiff(datenow, mydate, 'minutes') > -10) && (date.getDateDiff(datenow, mydate_end, 'minutes') < 0)) {
+        return true
+      }
+    }
+    return false
   }
 }

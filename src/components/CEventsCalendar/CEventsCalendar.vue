@@ -80,7 +80,7 @@
                         </div>
                         <div v-if="myevent.dateTimeStart" class="cal__when">
                                 <span class="cal__where-title">{{$t('cal.when')}}:
-                                    <span v-html="tools.getstrDateTimeEvent(mythis(), myevent, true)"></span>
+                                    <span v-html="tools.getstrDateTimeEvent(mythis, myevent, true)"></span>
                                 </span>
                         </div>
                         <p v-if="myevent.linkpdf" style="margin-top: 10px; text-align: center">
@@ -295,7 +295,7 @@
                         </q-chip>
                         <div v-if="myevent.dateTimeStart" class="cal__when">
                                 <span class="cal__where-title">{{$t('cal.when')}}:
-                                    <span v-html="tools.getstrDateTimeEvent(mythis(), myevent, true)"></span>
+                                    <span v-html="tools.getstrDateTimeEvent(mythis, myevent, true)"></span>
                                 </span>
                         </div>
                         <div class="q-pa-xs">
@@ -339,7 +339,7 @@
                 <q-card-actions align="right">
                     <q-btn v-if="bookEventpage.state === EState.Modifying" flat :label="$t('cal.cancelbooking')"
                            color="negative"
-                           @click="tools.CancelBookingEvent(mythis(), myevent, bookEventForm._id, true)"></q-btn>
+                           @click="tools.CancelBookingEvent(mythis, myevent, bookEventForm._id, true)"></q-btn>
                     <q-btn v-if="checkseinviaMsg" flat :label="$t('dialog.sendonlymsg')" color="primary"
                            @click="sendMsg(myevent)"></q-btn>
                     <q-btn v-else flat :label="getTitleBtnBooking" color="primary" @click="saveBookEvent(myevent)"
@@ -376,7 +376,7 @@
                         </q-chip>
                         <div v-if="myevent.dateTimeStart" class="cal__when">
                                 <span class="cal__where-title">{{$t('cal.when')}}:
-                                    <span v-html="tools.getstrDateTimeEvent(mythis(), myevent, true)"></span>
+                                    <span v-html="tools.getstrDateTimeEvent(mythis, myevent, true)"></span>
                                 </span>
                         </div>
                         <div class="q-pa-xs">
@@ -631,7 +631,7 @@
                             </div>
 
                             <div class="listaev__date listaev__align_center_mobile">
-                                <span v-html="tools.getstrDateTimeEvent(mythis(), event, true)"></span>
+                                <span v-html="tools.getstrDateTimeEvent(mythis, event, true)"></span>
                             </div>
 
                             <div class="listaev__align_center_mobile">

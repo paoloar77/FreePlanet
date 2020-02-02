@@ -213,6 +213,10 @@
 
               </CCopyBtn>
 
+              <CCopyBtn :title="$t('reg.linkzoom')" :texttocopy="tools.getLinkZoom()">
+
+              </CCopyBtn>
+
               <q-btn class="q-mb-md" rounded size="md" color="primary" to="/dashboard"
                      :label="$t('pages.dashboard')"></q-btn>
 

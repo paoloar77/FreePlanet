@@ -1,11 +1,11 @@
 import Vue from 'vue'
-import { Component, Prop } from 'vue-property-decorator'
+import { Component, Prop, Watch } from 'vue-property-decorator'
 
 import { GlobalStore, UserStore } from '../../store/Modules/index'
 import { tools } from '../../store/Modules/tools'
 
 import { shared_consts } from '../../common/shared_vuejs'
-import { ICategory, IColGridTable, ITableRec } from '../../model'
+import { ICategory, IColGridTable, IFilter, ITableRec } from '../../model'
 import { CTodo } from '../todos/CTodo'
 import { SingleProject } from '../projects/SingleProject'
 import { lists } from '../../store/Modules/lists'
@@ -26,6 +26,7 @@ export default class CGridTableRec extends Vue {
   @Prop({ required: false, default: '' }) public nodataLabel: string
   @Prop({ required: false, default: '' }) public noresultLabel: string
   @Prop({ required: false, default: null }) public tablesList: ITableRec[]
+  @Prop({ required: false, default: null }) public arrfilters: IFilter[]
 
   public mytable: string
   public mytitle: string
@@ -55,6 +56,7 @@ export default class CGridTableRec extends Vue {
 
   public separator: 'horizontal'
   public myfilter = undefined
+  public myfilterand = []
   public rowsel: any
   public dark: boolean = true
   public canEdit: boolean = false
@@ -190,6 +192,7 @@ export default class CGridTableRec extends Vue {
     // console.log('onRequest', 'myfilter = ', this.myfilter)
     const { page, rowsPerPage, rowsNumber, sortBy, descending } = props.pagination
     const myfilter = this.myfilter
+    const myfilterand = this.myfilterand
 
     if (!this.mytable)
       return
@@ -212,7 +215,7 @@ export default class CGridTableRec extends Vue {
     this.serverData = []
 
     // fetch data from "server"
-    this.fetchFromServer(startRow, endRow, myfilter, sortBy, descending).then((ris) => {
+    this.fetchFromServer(startRow, endRow, myfilter, myfilterand, sortBy, descending).then((ris) => {
 
       this.pagination.rowsNumber = this.getRowsNumberCount(myfilter)
 
@@ -244,7 +247,7 @@ export default class CGridTableRec extends Vue {
 
   // emulate ajax call
   // SELECT * FROM ... WHERE...LIMIT...
-  public async fetchFromServer(startRow, endRow, myfilter, sortBy, descending) {
+  public async fetchFromServer(startRow, endRow, myfilter, myfilterand, sortBy, descending) {
 
     let myobj = null
     if (sortBy) {
@@ -260,6 +263,7 @@ export default class CGridTableRec extends Vue {
       startRow,
       endRow,
       filter: myfilter,
+      filterand: myfilterand,
       sortBy: myobj,
       descending
     }
@@ -564,5 +568,10 @@ export default class CGridTableRec extends Vue {
     } catch (e) {
       return ''
     }
+  }
+
+  @Watch('myfilterand')
+  public changemyfilterand() {
+    this.refresh()
   }
 }

@@ -5,7 +5,8 @@
                        :prop_mycolumns="db_fieldsTable.colTableUsers"
                        prop_colkey="_id"
                        nodataLabel="Nessun Utente"
-                       noresultLabel="Il filtro selezionato non ha trovato nessun risultato">
+                       noresultLabel="Il filtro selezionato non ha trovato nessun risultato"
+                       :arrfilters="arrfilterand">
 
         </CGridTableRec>
     </CMyPage>

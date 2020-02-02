@@ -361,7 +361,7 @@ export default class Header extends Vue {
     tools.showNotif(this.$q, this.$t(msgcode))
   }
 
-  public mythis() {
+  get mythis() {
     return this
   }
 

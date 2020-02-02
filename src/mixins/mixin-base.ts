@@ -12,7 +12,7 @@ import MixinMetaTags from '@src/mixins/mixin-metatags'
 // You can declare a mixin as the same style as components.
 @Component
 export default class MixinBase extends MixinMetaTags {
-  public mythis() {
+  get mythis() {
     return this
   }
 
@@ -130,8 +130,8 @@ export default class MixinBase extends MixinMetaTags {
     try {
       if (myval) {
         const myrec = JSON.parse(myval)
-        console.log('*************** getarrValDb')
-        console.table(myrec)
+        // console.log('*************** getarrValDb')
+        // console.table(myrec)
         return myrec
       } else {
         return []

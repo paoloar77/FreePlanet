@@ -19,6 +19,10 @@ export default class MixinOperator extends MixinMetaTags {
     return this
   }
 
+  set mythis(my) {
+    //
+  }
+
   get tools() {
     return tools
   }

@@ -129,6 +129,14 @@ export default class CEventsCalendar extends MixinEvents {
   public draggedEvent = null
   public ignoreNextSwipe = false
 
+  get mythis() {
+    return this
+  }
+
+  set mythis(aa) {
+
+  }
+
   public resources = [
     {
       label: 'John'

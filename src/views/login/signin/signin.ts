@@ -32,7 +32,7 @@ export default class Signin extends Vue {
     tools.showNotif(this.$q, this.$t(msgcode))
   }
 
-  public mythis() {
+  get mythis() {
     return this
   }
 

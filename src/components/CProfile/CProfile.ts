@@ -15,7 +15,6 @@ import MixinBase from '../../mixins/mixin-base'
 })
 
 export default class CProfile extends MixinBase {
-  @Prop({ required: true }) public mythis: any
   public $v
   public $t: any
 

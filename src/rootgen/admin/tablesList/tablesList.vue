@@ -3,7 +3,8 @@
         <CGridTableRec :prop_mytitle="$t('otherpages.admin.tableslist')"
                        nodataLabel="Nessun Dato"
                        noresultLabel="Il filtro selezionato non ha trovato nessun risultato"
-                       :tablesList="gettablesList">
+                       :tablesList="gettablesList"
+        >
 
         </CGridTableRec>
     </CMyPage>

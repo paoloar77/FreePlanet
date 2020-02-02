@@ -50,7 +50,7 @@
                 </div>
 
                 <div class="listaev__date listaev__align_center_mobile">
-                    <span v-html="tools.getstrDateTimeEvent(mythis(), myevent, true)"></span>
+                    <span v-html="tools.getstrDateTimeEvent(mythis, myevent, true)"></span>
                 </div>
 
                 <div class="listaev__align_center_mobile">

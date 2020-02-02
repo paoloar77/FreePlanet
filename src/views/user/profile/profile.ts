@@ -11,7 +11,7 @@ export default class Profile extends MixinBase {
   public $v
   public $q
 
-  public mythis() {
+  get mythis() {
     return this
   }
 

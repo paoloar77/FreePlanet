@@ -34,6 +34,7 @@ export const DefaultUser: IUserFields = {
   password: '',
   tokens: [],
   verified_email: false,
+  aportador_solidario: '',
   made_gift: false,
   profile: {
     img: '',
@@ -41,7 +42,8 @@ export const DefaultUser: IUserFields = {
     saw_zoom_presentation: false,
   },
   downline: [],
-  calcstat: DefaultCalc
+  calcstat: DefaultCalc,
+  dashboard: null
 }
 
 export const DefaultProfile: IUserProfile = {
@@ -75,7 +77,8 @@ const state: IUserState = {
   isManager: false,
   usersList: [],
   permissionsList: [],
-  countusers: 0
+  countusers: 0,
+  lastparamquery: {}
 }
 
 const b = storeBuilder.module<IUserState>('UserModule', state)
@@ -732,7 +735,7 @@ namespace Actions {
 
           const myuser: IUserFields = res.data.usertosend
           if (myuser) {
-            console.table(myuser)
+            // console.table(myuser)
 
             Mutations.mutations.authUser(myuser)
 
@@ -902,10 +905,20 @@ namespace Actions {
 
   async function getDashboard(context, paramquery) {
 
+    if (paramquery === null)
+      paramquery = state.lastparamquery
+    else
+      state.lastparamquery = paramquery
+
     return await Api.SendReq('/dashboard', 'POST', paramquery)
       .then((res) => {
         if (res.status === 200) {
-          return res.data.dashboard
+          state.my.dashboard = res.data.dashboard
+          state.my.dashboard.myself = (res.data.dashboard.myself === undefined) ? DefaultUser : res.data.dashboard.myself
+          state.my.dashboard.aportador = (res.data.dashboard.aportador === undefined) ? DefaultUser : res.data.dashboard.aportador
+          state.my.dashboard.numpeople_aportador = (res.data.dashboard.numpeople_aportador === undefined) ? 0 : res.data.dashboard.numpeople_aportador
+
+          return state.my.dashboard
         }
       }).catch((error) => {
         return {

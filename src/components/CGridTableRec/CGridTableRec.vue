@@ -24,6 +24,7 @@
     >
 
       <template v-slot:header="props">
+
         <q-tr :props="props">
           <q-th>
 
@@ -98,6 +99,11 @@
         <q-inner-loading :showing="spinner_visible">
           <q-spinner-tail size="2em" color="primary"/>
         </q-inner-loading>
+
+        <div class="row">
+          <q-toggle v-for="(filter, index) of arrfilters" :key="index" v-model="myfilterand" :val="filter.value" :label="filter.label"></q-toggle>
+        </div>
+
 
       </template>
 

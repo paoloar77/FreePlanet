@@ -14,7 +14,6 @@ import { CCopyBtn } from '../CCopyBtn'
 import { CVideo } from '../CVideo'
 import { CRequisiti } from '../CRequisiti'
 
-
 @Component({
   components: { CTitleBanner, CMyFieldDb, CMyInnerPage, CVerifyTelegram, CVerifyEmail, CCopyBtn, CVideo, CRequisiti }
 })
@@ -241,7 +240,7 @@ export default class CStatus extends MixinBase {
   public getnuminvitati_attivi() {
     if (UserStore.state.my)
       if (UserStore.state.my.calcstat)
-        console.log('numinvitati', UserStore.state.my.calcstat)
+        // console.log('numinvitati', UserStore.state.my.calcstat)
         return UserStore.state.my.calcstat.numinvitati_attivi
 
     return 0

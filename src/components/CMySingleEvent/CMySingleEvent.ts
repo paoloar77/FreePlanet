@@ -30,6 +30,14 @@ export default class CMySingleEvent extends MixinEvents {
   public $t
   public selected: boolean = false
 
+  get mythis() {
+    return this
+  }
+
+  set mythis(aa) {
+
+  }
+
   public selectEvent(eventparam: IEvents) {
     this.selected = !this.selected
   }

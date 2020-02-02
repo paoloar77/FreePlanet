@@ -30,6 +30,15 @@ export interface IPaymentType {
   label: string
 }
 
+export interface IDashboard {
+  myself?: IUserFields
+  aportador?: IUserFields,
+  numpeople_aportador?: number
+  downline: any[],
+  downnotreg: any[],
+  downbyuser: any[]
+}
+
 export interface ICalcStat {
   numinvitati?: number
   numinvitati_attivi?: number
@@ -45,6 +54,7 @@ export interface IUserFields {
   ipaddr?: string
   perm?: number
   verified_email?: boolean
+  aportador_solidario?: string
   date_temp_reg?: Date
   made_gift?: boolean
   tokens?: IToken[]
@@ -52,6 +62,7 @@ export interface IUserFields {
   profile?: IUserProfile
   downline?: IUserFields[]
   calcstat?: ICalcStat
+  dashboard?: IDashboard
 }
 
 /*
@@ -84,4 +95,5 @@ export interface IUserState {
   usersList?: IUserFields[]
   permissionsList?: IPerm[]
   countusers?: number
+  lastparamquery?: any
 }

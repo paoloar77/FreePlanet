@@ -36,6 +36,10 @@ export default class MenuOne extends Vue {
     return this
   }
 
+  set mythis(my) {
+    //
+  }
+
   get getmenu() {
     return GlobalStore.getters.getmenu
   }

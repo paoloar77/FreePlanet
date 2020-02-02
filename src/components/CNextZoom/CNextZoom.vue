@@ -7,12 +7,16 @@
 
         <div class="flex flex-center">
 
-          <div class="column animazione">
+          <div class="row animazione justify-center q-gutter-md">
+            <q-btn v-if="showzoom" size="md" type="a" :href="tools.getLinkZoom()"
+                   target="_blank" rounded color="white" text-color="primary" icon="fas fa-video" :label="$t('steps.entra_zoom')">
+            </q-btn>
+
             <transition-group name="fade" mode="out-in"
                               appear
                               enter-active-class="animazione fadeIn"
                               leave-active-class="animazione fadeOut">
-              <q-item v-for="(confer, index) in listacalzoom" :key="confer._id" class="q-mb-xs animated" v-ripple>
+              <q-item v-for="(confer, index) in listacalzoom" :key="confer._id" class="q-mb-xs animated clBorderZoom q-pa-sm" v-ripple>
 
                 <q-item-section avatar>
                   <q-avatar v-if="tools.geticon(confer.lang)" :class="tools.geticon(confer.lang)" size="xs">

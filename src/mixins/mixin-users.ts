@@ -9,7 +9,7 @@ import { IMessage } from '@src/model'
 // You can declare a mixin as the same style as components.
 @Component
 export default class MixinUsers extends Vue {
-  public mythis() {
+  get mythis() {
     return this
   }
 

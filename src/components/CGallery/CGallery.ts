@@ -18,14 +18,31 @@ export default class CGallery extends MixinBase {
   @Prop({ required: true }) public edit: boolean
   @Prop({ required: true }) public gall: IGallery
   @Prop({ required: true }) public listimages: IImgGallery[]
+  public mygall: IGallery = {}
+  public mylistimages: IImgGallery[] = []
+
+  @Watch('gall')
+  public gallchanged() {
+    this.mygall = this.gall
+  }
+
+  @Watch('listimages')
+  public listimageschanged() {
+    this.mylistimages = this.listimages
+  }
+
+  public created() {
+    this.mygall = this.gall
+    this.mylistimages = this.listimages
+  }
 
   get tools() {
     return tools
   }
 
   get getlistimages() {
-    if (this.listimages)
-      return this.listimages.sort((a, b) => a.order - b.order)
+    if (this.mylistimages)
+      return this.mylistimages.slice().sort((a, b) => a.order - b.order)
     else
       return null
   }
@@ -77,13 +94,13 @@ export default class CGallery extends MixinBase {
       return
     }
 
-    const myindex = this.listimages.findIndex((rec) => rec._id === draggedId)
-    const myrec: IImgGallery = this.listimages[myindex]
+    const myindex = this.mylistimages.findIndex((rec) => rec._id === draggedId)
+    const myrec: IImgGallery = this.mylistimages[myindex]
 
     let myrecprec: IImgGallery = null
     let myrecout: IImgGallery = null
-    const myindexout = this.listimages.findIndex((rec) => rec._id === dragout)
-    myrecout = this.listimages[myindexout]
+    const myindexout = this.mylistimages.findIndex((rec) => rec._id === dragout)
+    myrecout = this.mylistimages[myindexout]
     let myindexprec = myindexout - 1
 
     if (myindexprec < 0)
@@ -135,7 +152,7 @@ export default class CGallery extends MixinBase {
 
   get getlastord() {
     let myord = 0
-    for (const file of this.listimages) {
+    for (const file of this.mylistimages) {
       if (file.order > myord)
         myord = file.order
     }
@@ -146,29 +163,29 @@ export default class CGallery extends MixinBase {
   public uploaded(info) {
     console.log(info)
     for (const file of info.files) {
-      this.listimages.push({ imagefile: file.name, order: this.getlastord })
+      this.mylistimages.push({ imagefile: file.name, order: this.getlastord })
     }
 
     this.save()
   }
 
   public deleted(rec) {
-    console.table(this.listimages)
+    // console.table(this.mylistimages)
 
-    const index = this.listimages.findIndex((elem) => elem.imagefile === rec.imagefile)
+    const index = this.mylistimages.findIndex((elem) => elem.imagefile === rec.imagefile)
     if (index > -1) {
-      this.listimages.splice(index, 1)
+      this.mylistimages.splice(index, 1)
     }
 
-    // this.listimages = this.listimages.pop((elem) => elem.imagefile !== rec.imagefile)
+    // this.mylistimages = this.mylistimages.pop((elem) => elem.imagefile !== rec.imagefile)
 
-    console.table(this.listimages)
+    // console.table(this.mylistimages)
 
     this.save()
   }
 
   public getfullname(rec) {
-    return 'statics/upload/' + this.gall.directory + `/` + rec.imagefile
+    return 'statics/upload/' + this.mygall.directory + `/` + rec.imagefile
   }
 
   public copytoclipboard(rec) {
@@ -187,7 +204,7 @@ export default class CGallery extends MixinBase {
   }
 
   public save() {
-    this.$emit('showandsave', this.listimages)
+    this.$emit('showandsave', this.mylistimages)
   }
 
   public getsrcimg(mygallery) {
@@ -195,7 +212,7 @@ export default class CGallery extends MixinBase {
     if (tools.getextfile(mygallery.imagefile) === 'pdf')
       return 'statics/images/images/pdf.jpg'
     else
-      return 'statics/upload/' + this.gall.directory + `/` + mygallery.imagefile
+      return 'statics/upload/' + this.mygall.directory + `/` + mygallery.imagefile
   }
 
 }

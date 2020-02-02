@@ -34,6 +34,8 @@ import { shared_consts } from '@src/common/shared_vuejs'
 
 import { dom } from 'quasar'
 
+const printf = require('util').format;
+
 const { height, width } = dom
 
 import Cookies from 'js-cookie'
@@ -72,7 +74,9 @@ export const tools = {
     'yellow'
   ],
 
+  TABUSER: 'users',
   TABEVENTS: 'myevents',
+  TABEXTRALIST: 'extralist',
   TABNEWSLETTER: 'newstosent',
   TABGALLERY: 'gallery',
   TABMAILINGLIST: 'mailinglist',
@@ -153,7 +157,7 @@ export const tools = {
     image: 2048,
     nationality: 4096,
     intcode: 5000,
-    multioption: 6000,
+    multioption: 6000
   },
 
   FieldTypeArr: [
@@ -1433,6 +1437,35 @@ export const tools = {
         } else
           tools.showNegativeNotif(myself.$q, myself.$t('cal.cancelederrorevent'))
       })
+    } else if (func === lists.MenuAction.DELETE_EXTRALIST) {
+      // console.log('param1', par.param1, 'id', par.param1._id)
+      GlobalStore.actions.DeleteRec({ table: tools.TABEXTRALIST, id: par.param1._id }).then((ris) => {
+        if (ris) {
+          myself.update_username()
+          tools.showPositiveNotif(myself.$q, myself.$t('reg.cancella_invitato') + ' "' + par.param1.name + ' ' + par.param1.surname + '"')
+        } else
+          tools.showNegativeNotif(myself.$q, myself.$t('db.recfailed'))
+      })
+    } else if (func === lists.MenuAction.REGALA_INVITATO) {
+      // console.log('param1', par.param1, 'id', par.param1._id)
+      const mydatatosave = {
+        id: par.param1._id,
+        table: tools.TABUSER,
+        fieldsvalue: { aportador_solidario: par.param2 },
+        notifBot: {}
+      }
+
+      if (par.param3) {
+        mydatatosave.notifBot = { un: par.param2, txt: par.param3 }
+      }
+
+      GlobalStore.actions.saveFieldValue(mydatatosave).then((ris) => {
+        if (ris) {
+          myself.update_username()
+          tools.showPositiveNotif(myself.$q, myself.$t('reg.invitato_regalato') + ' "' + par.param1.name + ' ' + par.param1.surname + '"')
+        } else
+          tools.showNegativeNotif(myself.$q, myself.$t('db.recfailed'))
+      })
     } else if (func === lists.MenuAction.DELETE_RECTABLE) {
       console.log('param1', par.param1)
       GlobalStore.actions.DeleteRec({ table, id: par.param1 }).then((ris) => {
@@ -1898,7 +1931,6 @@ export const tools = {
     else
       return ''
   },
-
 
   getstrDateTimeShort(mytimestamp) {
     // console.log('getstrDate', mytimestamp)
@@ -2705,7 +2737,7 @@ export const tools = {
 
     const mydata = {
       table,
-      data,
+      data
     }
 
     return await
@@ -2902,7 +2934,7 @@ export const tools = {
     }
   },
   isObject(anything) {
-    //Object.create(null) instanceof Object → false
+    // Object.create(null) instanceof Object → false
     return Object(anything) === anything
   },
   isDebug() {
@@ -3056,7 +3088,7 @@ export const tools = {
     return ''
   },
   clone(obj) {
-    if (null == obj || 'object' != typeof obj) return obj
+    if (null === obj || 'object' !== typeof obj) return obj
     const copy = obj.constructor()
     for (const attr in obj) {
       if (obj.hasOwnProperty(attr)) copy[attr] = obj[attr]
@@ -3095,9 +3127,13 @@ export const tools = {
         return 'fa-flag-sm'
       else if (lang === 'HR')
         return 'fa-flag-hr'
+      else if (lang === 'RO')
+        return 'fa-flag-ro'
+      else if (lang === 'CL')
+        return 'fa-flag-cl'
 
       return ''
-    }catch (e) {
+    } catch (e) {
       return ''
     }
   },
@@ -3154,9 +3190,26 @@ export const tools = {
       return 'United Kingdom'
     } else if (nat === 'UA') {
       return 'Ukraine'
+    } else if (nat === 'RO') {
+      return 'Romania'
+    } else if (nat === 'CL') {
+      return 'Chile'
     }
   },
 
+  getLinkZoom() {
+    let id = ''
+    if (GlobalStore.state.calzoom.length > 0) {
+      id = GlobalStore.state.calzoom.slice(-1)[0].id_conf_zoom.toString()
+    } else {
+      id = '6668882000'
+    }
+    return 'https://zoom.us/j/' + id
+  },
+
+  myprintf( ) {
+
+  }
 
 // getLocale() {
   //   if (navigator.languages && navigator.languages.length > 0) {
