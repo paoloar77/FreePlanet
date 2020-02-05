@@ -170,7 +170,7 @@
                   </div>
                 </CTitleBanner>
 
-                <CTitleBanner v-if="seluser.numinvitati <= 0" class="shadow-2 rounded-borders text-center"
+                <CTitleBanner v-if="ismydownline(seluser) && (seluser.numinvitati <= 0)" class="shadow-2 rounded-borders text-center"
                               :title="$t('reg.cancella_invitato')"
                               bgcolor="bg-negative"
                               clcolor="text-white"
