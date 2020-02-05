@@ -49,6 +49,9 @@ export default class CMyDashboard extends MixinUsers {
     {
       icon: 'email',
       textlang: 'reg.verified_email',
+      textadd(user) {
+        return ''
+      },
       isok(user) {
         if (user)
           return user.verified_email
@@ -60,6 +63,9 @@ export default class CMyDashboard extends MixinUsers {
     {
       icon: 'fab fa-telegram',
       textlang: 'reg.telegram',
+      textadd(user) {
+        return ''
+      },
       isok(user) {
         if (user)
           if (user.profile)
@@ -72,6 +78,9 @@ export default class CMyDashboard extends MixinUsers {
     {
       icon: 'fas fa-video',
       textlang: 'steps.zoom_partecipa',
+      textadd(user) {
+        return ''
+      },
       isok(user) {
         if (user)
           if (user.profile)
@@ -83,6 +92,9 @@ export default class CMyDashboard extends MixinUsers {
     {
       icon: 'fas fa-heart',
       textlang: 'steps.dream',
+      textadd(user) {
+        return ''
+      },
       isok(user) {
         if (user)
           if (user.profile.my_dream)
@@ -95,12 +107,40 @@ export default class CMyDashboard extends MixinUsers {
     {
       icon: 'far fa-credit-card',
       textlang: 'steps.paymenttype',
+      textadd(user) {
+        return ''
+      },
       isok(user) {
-        if (user)
-          if (user.profile.paymenttypes)
-            return user.profile.paymenttypes.length > 20
-          else
-            return false
+        let ispaypal = false
+        if (user) {
+          if (!!user.profile.paymenttypes) {
+            if (user.profile.paymenttypes.includes('paypal')) {
+              if (user.profile.email_paypal) {
+                ispaypal = true
+              }
+            }
+            if (!!user.profile)
+              if (!!user.profile.paymenttypes) {
+                const ris = (user.profile.paymenttypes.length >= 2) && ispaypal
+                return ris
+              }
+
+          }
+        }
+        return false
+      },
+      info: '',
+    },
+    {
+      icon: 'fas fa-users',
+      textlang: 'dashboard.numinvitati',
+      textadd(user) {
+        return ' (' + user.numinvitatiattivi + ' / ' + user.numinvitati + ')'
+      },
+      isok(user) {
+        if (user) {
+          return user.numinvitatiattivi >= 2
+        }
       },
       info: '',
     },
@@ -169,6 +209,14 @@ export default class CMyDashboard extends MixinUsers {
   public async deleteUserFromExtraList(user) {
 
     await tools.askConfirm(this.$q, translate('reg.cancella_invitato'), translate('reg.cancella_invitato') + ' ' + user.name + ' ' + user.surname + '?', translate('dialog.yes'), translate('dialog.no'), this, '', lists.MenuAction.DELETE_EXTRALIST, 0, {
+      param1: user,
+      param2: true
+    })
+  }
+
+  public async deleteUserFromUsersList(user) {
+
+    await tools.askConfirm(this.$q, translate('reg.cancella_invitato'), translate('reg.cancella_invitato') + ' ' + user.name + ' ' + user.surname + '?', translate('dialog.yes'), translate('dialog.no'), this, '', lists.MenuAction.DELETE_USERLIST, 0, {
       param1: user,
       param2: true
     })

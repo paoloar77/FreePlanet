@@ -16,7 +16,7 @@
     <div v-if="!TelegVerificato" class="q-pa-sm q-gutter-sm">
       <div v-if="!TelegCode"><strong>{{ $t('components.authentication.telegram.open')}}</strong></div>
       <div class="q-ma-md">
-        <q-btn color="primary" icon="fab fa-telegram" :label="$t('components.authentication.telegram.openbot')"
+        <q-btn rounded color="primary" icon="fab fa-telegram" :label="$t('components.authentication.telegram.openbot')"
                type="a"
                :href="getLinkBotTelegram" target="_blank"></q-btn>
         <br>

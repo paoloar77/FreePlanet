@@ -170,15 +170,10 @@
                                              target="_blank">store</a> o <a href="https://zoom.us/support/download"
                                                                             target="_blank">da PC</a>)
                     </li>
-                    <li>1B. Fai il test per vedere se funziona: <a href="https://zoom.us/test" target="_blank">Esegui
-                      TEST</a></li>
-                    <li>2. Clicca "Join meeting"</li>
-                    <li>3. Inserisci il codice ID</li>
-                    <li>4. Sotto inserisci il tuo nominativo per essere riconosciuto</li>
-                    <li>5. Clicca "join meeting"</li>
-                    <li>6. Clicca "call in device" altrimenti non potrai sentire 🔊</li>
-                    <li>7. SILENZIARE I MICROFONI clicca sullo schermo e si aprirà una banda in basso</li>
-                    <li>8. Clicca 🔇 per SILENZIARE</li>
+                    <li>2. Inserisci il tuo Nome e Cognome per essere riconosciuto</li>
+                    <li>3. Clicca "join meeting"</li>
+                    <li>4. Clicca "call in device" altrimenti non potrai sentire 🔊</li>
+                    <li>5. Clicca il microfono per Attivarlo o Silenziarlo.</li>
                   </ul>
 
                   <div class="text-h6"><strong>In più avrai:</strong></div>

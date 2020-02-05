@@ -129,7 +129,7 @@
 
               <div v-if="!isextralist(seluser)">
                 <div v-for="req of arrrequisiti">
-                  <CRequisito :icon="req.icon" :text="$t(req.textlang)" :isok="req.isok(seluser)"
+                  <CRequisito :icon="req.icon" :text="$t(req.textlang) + req.textadd(seluser)" :isok="req.isok(seluser)"
                               :info="req.info"></CRequisito>
                 </div>
 
@@ -163,22 +163,43 @@
 
                     <q-toggle v-model="notifBot" :label="$t('dashboard.sendnotification')"/>
 
-                    <q-btn class="q-ma-sm" rounded color="positive" text-color="white" icon="fas fa-gift" :label="$t('reg.regala_invitato')"
+                    <q-btn class="q-ma-sm" rounded color="positive" text-color="white" icon="fas fa-gift"
+                           :label="$t('reg.regala_invitato')"
                            :disabled='!allowSubmit'
                            @click="RegalaInvitato(seluser, aportador_solidario, getnotifBotTxt)"></q-btn>
                   </div>
                 </CTitleBanner>
+
+                <CTitleBanner v-if="seluser.numinvitati <= 0" class="shadow-2 rounded-borders text-center"
+                              :title="$t('reg.cancella_invitato')"
+                              bgcolor="bg-negative"
+                              clcolor="text-white"
+                              :visible="false"
+                              mystyle=" " myclass="myshad" :canopen="true">
+
+                  <q-btn rounded text-color="red" icon="delete"
+                         :label="$t('reg.cancella_invitato')"
+                         @click="deleteUserFromUsersList(seluser)"></q-btn>
+                </CTitleBanner>
+
               </div>
 
             </div>
             <div v-else>
               <div class="column justify-center q-gutter-sm q-pa-sm">
 
-                <CRequisito icon="fas fa-user" text="dashboard.notreg" :isok="false"
+                <CRequisito icon="fas fa-user" :text="$t('dashboard.notreg')" :isok="false"
                             info=""></CRequisito>
 
-                <q-btn rounded text-color="red" icon="delete" :label="$t('reg.cancella_invitato')"
-                       @click="deleteUserFromExtraList(seluser)"></q-btn>
+                <CTitleBanner class="shadow-2 rounded-borders text-center"
+                              :title="$t('reg.cancella_invitato')"
+                              bgcolor="bg-negative"
+                              clcolor="text-white"
+                              :visible="false"
+                              mystyle=" " myclass="myshad" :canopen="true">
+                  <q-btn rounded text-color="red" icon="delete" :label="$t('reg.cancella_invitato')"
+                         @click="deleteUserFromExtraList(seluser)"></q-btn>
+                </CTitleBanner>
 
               </div>
             </div>

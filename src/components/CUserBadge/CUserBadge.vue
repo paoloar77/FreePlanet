@@ -15,7 +15,7 @@
       <q-item-section>
         <q-item-label>{{ user.name }} {{ user.surname }} {{ getindorder(user) }}<br>
           <span class="text-grey">({{ getusername(user) }})</span>
-          <br><span v-if="isextralist(user)" class="notreg">{{$t('dashboard.notreg')}}</span>
+          <br><span v-if="isextralist(user)" class="notreg">{{ $t('dashboard.notreg') }}</span>
         </q-item-label>
         <!--<q-item-label caption lines="1">{{ user.email }}</q-item-label>-->
       </q-item-section>

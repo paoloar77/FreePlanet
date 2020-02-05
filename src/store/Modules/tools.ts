@@ -1446,6 +1446,15 @@ export const tools = {
         } else
           tools.showNegativeNotif(myself.$q, myself.$t('db.recfailed'))
       })
+    } else if (func === lists.MenuAction.DELETE_USERLIST) {
+      // console.log('param1', par.param1, 'id', par.param1._id)
+      GlobalStore.actions.DeleteRec({ table: tools.TABUSER, id: par.param1._id }).then((ris) => {
+        if (ris) {
+          myself.update_username()
+          tools.showPositiveNotif(myself.$q, myself.$t('reg.cancella_invitato') + ' "' + par.param1.name + ' ' + par.param1.surname + '"')
+        } else
+          tools.showNegativeNotif(myself.$q, myself.$t('db.recfailed'))
+      })
     } else if (func === lists.MenuAction.REGALA_INVITATO) {
       // console.log('param1', par.param1, 'id', par.param1._id)
       const mydatatosave = {

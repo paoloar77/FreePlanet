@@ -460,7 +460,7 @@ export const fieldsTable = {
     AddCol({ name: 'nationality', label_trans: 'reg.nationality', fieldtype: tools.FieldType.nationality }),
     AddCol({ name: 'aportador_solidario_name_surname', label_trans: 'reg.aportador_solidario_nome_completo' }),
     AddCol({ name: 'aportador_solidario_ind_order', label_trans: 'reg.aportador_solidario_ind_order' }),
-    AddCol({ name: 'aportador_solidario_originale_name_surname', label_trans: 'reg.aportador_solidario_nome_completo' }),
+    AddCol({ name: 'aportador_solidario_originale_name_surname', label_trans: 'reg.aportador_solidario_nome_completo_orig' }),
     AddCol({ name: 'col_b', label_trans: 'reg.col_b', fieldtype: tools.FieldType.number }),
     AddCol({ name: 'col_h', label_trans: 'reg.col_h', fieldtype: tools.FieldType.number }),
     AddCol(DeleteRec),
