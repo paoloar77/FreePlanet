@@ -40,6 +40,7 @@ export const DefaultUser: IUserFields = {
     img: '',
     teleg_id: 0,
     saw_zoom_presentation: false,
+    saw_and_accepted: false,
   },
   downline: [],
   calcstat: DefaultCalc,
@@ -61,6 +62,7 @@ export const DefaultProfile: IUserProfile = {
   my_dream: '',
   manage_telegram: false,
   saw_zoom_presentation: false,
+  saw_and_accepted: false,
   paymenttypes: []
 }
 
@@ -76,7 +78,6 @@ const state: IUserState = {
   isAdmin: false,
   isManager: false,
   usersList: [],
-  permissionsList: [],
   countusers: 0,
   lastparamquery: {}
 }

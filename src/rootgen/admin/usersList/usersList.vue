@@ -2,7 +2,7 @@
     <CMyPage img="" :title="$t('otherpages.admin.userlist')" keywords="" description="Lista Utenti">
         <CGridTableRec prop_mytable="users"
                        prop_mytitle="Lista Utenti"
-                       :prop_mycolumns="db_fieldsTable.colTableUsers"
+                       :prop_mycolumns="userlist"
                        prop_colkey="_id"
                        nodataLabel="Nessun Utente"
                        noresultLabel="Il filtro selezionato non ha trovato nessun risultato"

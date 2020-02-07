@@ -57,6 +57,17 @@
         </div>
       </CTitleBanner>
 
+      <div class="row justify-center q-ma-sm">
+        <q-btn push
+               rounded
+               color="primary"
+               size="md"
+               :label="$t('pages.invita')"
+               icon="fas fa-user-plus"
+               to="/invite">
+        </q-btn>
+      </div>
+
       <CTitleBanner v-if="invitatinotreg" class="shadow-2 rounded-borders" :title="$t('dashboard.downnotreg')"
                     bgcolor="bg-grey"
                     clcolor="text-white"
@@ -170,7 +181,8 @@
                   </div>
                 </CTitleBanner>
 
-                <CTitleBanner v-if="ismydownline(seluser) && (seluser.numinvitati <= 0)" class="shadow-2 rounded-borders text-center"
+                <CTitleBanner v-if="ismydownline(seluser) && (seluser.numinvitati <= 0)"
+                              class="shadow-2 rounded-borders text-center"
                               :title="$t('reg.cancella_invitato')"
                               bgcolor="bg-negative"
                               clcolor="text-white"

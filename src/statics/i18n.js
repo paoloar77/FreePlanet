@@ -2,6 +2,9 @@ import msg_website from '../db/i18n_website'
 
 const msgglobal = {
   it: {
+    home: {
+      guida_passopasso: 'Guida Passo Passo'
+    },
     grid: {
       editvalues: 'Modifica Valori',
       addrecord: 'Aggiungi Riga',
@@ -45,22 +48,39 @@ const msgglobal = {
     sendmsg: {
       write: 'scrive'
     },
+    stat: {
+      zoom: 'Partecipato in Zoom',
+      accepted: 'Accettato Linee Guida + Video',
+      dream: 'Hanno scritto il Sogno',
+      email_not_verif: 'Email non Verificate',
+      telegram_non_attivi: 'Telegram Non Attivi',
+      telegram_pendenti: 'Telegram Pendenti',
+    },
     steps: {
+      video_intro_1: '1. Benvenuti in AYNI',
+      video_intro_2: '2. Nascita di AYNI',
+      video_intro_3: '3. Differenze tra Billettera Classica e AYNI',
+      video_intro_4: '4. Come faccio a far parte di AYNI',
+      read_guidelines: 'Ho letto ed Accetto queste condizioni scritte qui sopra',
+      saw_video_intro: 'Dichiaro di aver visto almeno il Video \'4. Come faccio a far parte di AYNI\'',
       chat_biblio: 'Entra nella Chat AYNI BiblioBacheca',
       chat_biblio_long: 'Occorre entrare in questa Chat per ricevere le ultime notizie e rimanere in contatto con noi',
       paymenttype: 'Modalità di Pagamento',
-      paymenttype_long: 'Scegli <strong>almeno 2 Modalità di Pagamento</strong>, per scambiarsi i doni.<br><br>I <strong>metodi di Pagamento Super-Consigliati</strong> sono: <ul><li><strong>Paypal</strong> è indispensabile in quanto quasi tutti lo utilizzano ed è un\'ottima soluzione perchè potrai collegargli le tue carte di credito/debito.</li><li><strong>Revolut</strong>: La Carta Revolut è un conto Inglese (fuori dalla UE), pertanto è più libera e semplice da utilizzare anche tramite il cellulare</strong></li>',
+      paymenttype_long: 'Scegli <strong>almeno 2 Modalità di Pagamento</strong>, per scambiarsi i doni.<br><br>I <strong>metodi di Pagamento sono: <ul><li><strong>Paypal</strong> (in AYNI è <strong>obbligatoria</strong>) perchè è un sistema molto diffuso in tutta Europa (il trasferimento e gratuito) e si possono collegare le carte prepagate, le carte di credito e il conto corrente <strong>SENZA COMMISSIONI</strong>. In questo modo non dovrai condividere i numeri delle tue carte o del c/c ma solo la mail che avrai usato in fase di iscrizione su Paypal. Disponibile l\'app per il cellulare.</li><li><strong>Revolut</strong>:  la Carta Prepagata Revolut con IBAN Inglese (fuori UE) completamente gratuita, più libera e semplice da utilizzare. Disponibile l\'app per il cellulare.</li>',
       paymenttype_paypal: 'Come Aprire un conto Paypal (in 2 minuti)',
+      paymenttype_paypal_carta_conto: 'Come associare una carta di Credito/Debito o un Conto Bancario su PayPal',
       paymenttype_paypal_link: 'Apri il Conto con Paypal',
       paymenttype_revolut: 'Come Aprire il conto con Revolut (in 2 minuti)',
       paymenttype_revolut_link: 'Apri il Conto con Revolut',
       entra_zoom: 'Entra in Zoom',
+      linee_guida: 'Accetto le Linee Guida',
+      video_intro: 'Vedo il Video di AYNI',
       zoom: 'Partecipo agli Zoom (Video Conferenza)',
       zoom_si_partecipato: 'Hai partecipato ad almeno 1 Zoom',
       zoom_partecipa: 'Partecipato ad almeno 1 Zoom',
       zoom_no_partecipato: 'Attualmente non hai ancora partecipato ad uno Zoom (è un requisito per poter entrare)',
       zoom_long: 'Si richiede di partecipare ad almeno 1 Zoom, ma è consigliato prendere parte al movimento in maniera più attiva.<br><br><strong>Partecipando agli Zoom lo Staff di AYNI registrerà le presenze e verrai così abilitato.</strong>',
-      zoom_what:'Che cos\'è Zoom e come funziona?',
+      zoom_what:'Tutorial come installare Zoom',
       sharemovement_devi_invitare_almeno_2: 'Ancora non hai invitato 2 persone',
       sharemovement_hai_invitato: 'Hai invitato almeno 2 persone',
       sharemovement_invitati_attivi_si: 'Hai almeno 2 persone invitate Attive',
@@ -74,7 +94,7 @@ const msgglobal = {
       enter_prog_long: 'Sottisfatti i requisiti richiesti entrerai in Programmazione, verrai aggiunto alla Bigliettera e nella chat di gruppo corrispondente.<br>',
       collaborate: 'Collaborazione',
       collaborate_long: 'Continuo a collaborare con i miei compagni per arrivare al giorno della programmazione dove si attiverà la mia Bigliettera.',
-      dream: 'Scrivi il tuo Sogno',
+      dream: 'Scrivo il mio Sogno',
       dream_long: 'Scrivi qui il Sogno per il quale sei entrato in Ayni e che desideri realizzare.<br>Sarà condiviso a quello di tutti gli altri per sognare insieme !',
       dono: 'Dono',
       dono_long: 'Faccio il mio dono nella data di partenza della mia Bigliettera',
@@ -163,7 +183,7 @@ const msgglobal = {
       options: 'Opzioni',
     },
     dashboard: {
-      downline: 'Persone che hai Invitato',
+      downline: 'Invitati',
       downnotreg: 'Invitati non Registrati',
       notreg: 'Non Registrato',
       numinvitati: 'Numero di Invitati',
@@ -188,6 +208,10 @@ const msgglobal = {
       you: 'Tu',
       cancella_invitato: 'Elimina Invitato',
       regala_invitato: 'Regala Invitato',
+      messaggio_invito: 'Messaggio di Invito',
+      messaggio_invito_msg: 'Invia questo messaggio a tutti coloro a cui vuoi condividere questo Movimento !',
+      msginvito: 'Ciao,<br>Vorrei invitarti a conoscere questo Movimento di Economia Solidale<br>Questo è il video Introduttivo:<br>{videointro}<br><br>Qui trovi la pagina sul sito di spiegazione {paginaspiegazione}<br><br>Ogni 3-4 giorni alla settimana vengono organizzati delle Conferenze, tramite Zoom:<br>{linkzoom}<br> e così potrai conoscere lo Staff e fare eventuali domande.',
+      videointro: 'Video Introduttivo',
       invitato_regalato: 'Invitato Regalato',
       legenda: 'Legenda',
       aportador_solidario: 'Chi ti ha Invitato',
@@ -211,13 +235,15 @@ const msgglobal = {
       email_paypal: 'Email Paypal',
       country_pay: 'Paese di Destinazione Pagamenti',
       username_telegram: 'Username Telegram',
-      telegram: 'Telegram BOT',
+      telegram: 'Chat Telegram \'AYNI BOT\'',
       teleg_id: 'Telegram ID',
       teleg_auth:'Codice Autorizzazione',
       click_per_copiare:'Cliccaci sopra per copiarlo sugli appunti',
+      copia_messaggio:'Copia Messaggio',
       teleg_torna_sul_bot:'1) Copia il codice cliccando sul bottone qui sopra<br>2) torna su Ayni BOT cliccando qui sotto 👇 ed incolla (o scrivi) il codice',
       teleg_checkcode: 'Codice Telegram',
       my_dream: 'Il mio Sogno',
+      saw_and_accepted: 'Condizioni',
       saw_zoom_presentation: 'Ha visto Zoom',
       manage_telegram: 'Gestori Telegram',
       paymenttype: 'Modalità di Pagamenti Disponbili',
@@ -491,6 +517,9 @@ const msgglobal = {
     cookies: 'Usiamo i Cookie per una migliore prestazione web.'
   },
   es: {
+    home: {
+      guida_passopasso: 'Guía paso a paso'
+    },
     grid: {
       editvalues: 'Cambiar valores',
       addrecord: 'Agregar fila',
@@ -576,6 +605,7 @@ const msgglobal = {
           go_login: 'Vuelve al Login',
           incorrect_input: 'Entrada correcta.',
           link_sent: 'Ahora lea su correo electrónico y confirme el registro',
+          se_non_ricevo: 'Si no recibes el correo electrónico, intenta comprobar el spam o ponte en contacto con nosotros.',
           title_unsubscribe: 'Anular suscripción al boletín',
           title_unsubscribe_done: 'Suscripción completada con éxito',
         }
@@ -600,12 +630,18 @@ const msgglobal = {
       options: 'Opciones',
     },
     dashboard: {
-      downline: 'Personas que has invitado',
+      downline: 'Invitados',
     },
     reg: {
+      verified_email: 'Correo electrónico verificado',
+      reg_lista_prec: 'Por favor, introduzca el nombre, apellido y número de teléfono móvil que dejó en el pasado cuando se registró en el Chat! <br>De esta manera el sistema le reconocerá y mantendrá la posición de la lista.',
+      nuove_registrazioni: 'Si se trata de un NUEVO registro, debe ponerse en contacto con la persona que le ha INVITADO, que le dejará el LINK CORRECTO para hacer el registro bajo él/ella',
       you: 'Tu',
       cancella_invitato: 'Eliminar Invitado',
       regala_invitato: 'Dar Invitado',
+      messaggio_invito: 'Mensaje de invitación',
+      messaggio_invito_msg: 'Copie el mensaje que aparece a continuación y compártalo con todos aquellos con los que desee compartir este Movimiento !',
+      msginvito: 'Hola,<br>Me gustaría invitarlos a conocer este Movimiento de Economía Solidaria<br>Este es el video introductorio {videointro} <br>Aquí pueden encontrar la página en el sitio web con los otros videos {paginavideo} <br>Cada 3-4 días de la semana se organizan conferencias, a través de Zoom, {linkzoom} y así pueden conocer al Staff y hacer cualquier pregunta.',
       aportador_solidario: 'Aportador Solidario',
       aportador_solidario_nome_completo:'A.S. Nombre',
       aportador_solidario_ind_order:'A.S.Ind',
@@ -647,6 +683,7 @@ const msgglobal = {
       onlyadult: "Confirmo que soy mayor de edad",
       submit: "Registrarse",
       title_verif_reg: "Verifica registro",
+      reg_ok: "Registro exitoso",
       verificato: "Verificado",
       non_verificato: "No Verificado",
       forgetpassword: "¿Olvidaste tu contraseña?",
@@ -889,6 +926,9 @@ const msgglobal = {
     cookies: 'Utilizamos cookies para un mejor rendimiento web.'
   },
   fr: {
+    home: {
+      guida_passopasso: 'Étape Guida'
+    },
     grid: {
       editvalues: 'Changer les valeurs',
       addrecord: 'Ajouter une ligne',
@@ -974,6 +1014,7 @@ const msgglobal = {
           go_login: 'Retour à la connexion',
           incorrect_input: 'Entrée correcte.',
           link_sent: 'Maintenant, lisez votre email et confirmez votre inscription',
+          se_non_ricevo: 'Si vous ne recevez pas le courriel, essayez de vérifier dans le spam, ou contactez nous',
           title_unsubscribe: 'Se désabonner de la newsletter',
           title_unsubscribe_done: 'Abonnement terminé avec succès',
         }
@@ -998,12 +1039,14 @@ const msgglobal = {
       options: 'Options',
     },
     dashboard: {
-      downline: 'Les personnes que vous avez invitées',
+      downline: 'invités',
     },
     reg: {
       you: 'Tu',
       cancella_invitato: 'Supprimer invité',
       regala_invitato: 'Donner invité',
+      messaggio_invito: 'Message d\'invitation',
+      messaggio_invito_msg: 'Copia il messaggio qui sotto e condividilo a tutti coloro a cui vuoi condividere questo Movimento !',
       aportador_solidario: 'Contributeur de solidarité',
       aportador_solidario_nome_completo:'A.S. Nom',
       aportador_solidario_ind_order:'A.S.Ind',
@@ -1044,6 +1087,7 @@ const msgglobal = {
       onlyadult: "Je confirme que je suis majeur",
       submit: "S'inscrire",
       title_verif_reg: "Vérifier l'inscription",
+      reg_ok: "Enregistrement réussi",
       verificato: "Vérifié",
       non_verificato: "Non vérifié",
       forgetpassword: "Vous avez oublié votre mot de passe?",
@@ -1286,6 +1330,9 @@ const msgglobal = {
     cookies: 'Nous utilisons des cookies pour améliorer les performances Web.'
   },
   enUs: {
+    home: {
+      guida_passopasso: 'Step By Step Guide'
+    },
     grid: {
       editvalues: 'Edit Values',
       addrecord: 'Add Row',
@@ -1371,6 +1418,7 @@ const msgglobal = {
           go_login: 'Back to Login',
           incorrect_input: 'Incorrect input.',
           link_sent: 'Now read your email and confirm registration',
+          se_non_ricevo: 'If you do not receive the email, try checking in the spam, or contact us',
           title_unsubscribe: 'Unsubscribe to the newsletter',
           title_unsubscribe_done: 'Subscription completed successfully',
         }
@@ -1395,12 +1443,17 @@ const msgglobal = {
       options: 'Options',
     },
     dashboard: {
-      downline: 'People you\'ve invited',
+      downline: 'Guests',
     },
     reg: {
+      verified_email: 'Email Verified',
+      reg_lista_prec: 'Please enter the First Name, Last Name and mobile phone number you left in the past when you signed up for the Chat! <br>This way the system will recognize you and keep the position of the list',
+      nuove_registrazioni: 'If this is a NEW registration, you must contact the person who INVITED you, who will leave you the CORRECT LINK to do the Registration under him/her',
       you: 'You',
       cancella_invitato: 'Delete Invited',
       regala_invitato: 'Give invited',
+      messaggio_invito: 'Invitation Message',
+      messaggio_invito_msg: 'Copia il messaggio qui sotto e condividilo a tutti coloro a cui vuoi condividere questo Movimento !',
       aportador_solidario: 'Solidarity Contributor',
       aportador_solidario_nome_completo:'A.S. Name',
       aportador_solidario_ind_order:'A.S.Ind',
@@ -1441,6 +1494,7 @@ const msgglobal = {
       onlyadult: "I confirm that I'm at least 18 years old",
       submit: "Submit",
       title_verif_reg: "Verify Registration",
+      reg_ok: "Successful Registration",
       verificato: "Verified",
       non_verificato: "Not Verified",
       forgetpassword: "Forget Password?",
@@ -1682,6 +1736,9 @@ const msgglobal = {
     cookies: 'We use cookies for better web performance.'
   },
   de: {
+    home: {
+      guida_passopasso: 'Step By Step Guide'
+    },
     grid: {
       editvalues: 'Edit Values',
       addrecord: 'Add Row',
@@ -1767,6 +1824,7 @@ const msgglobal = {
           go_login: 'Back to Login',
           incorrect_input: 'Incorrect input.',
           link_sent: 'Now read your email and confirm registration',
+          se_non_ricevo: 'If you do not receive the email, try checking in the spam, or contact us',
           title_unsubscribe: 'Disiscrizione alla newsletter',
           title_unsubscribe_done: 'Disiscrizione completata correttamente',
         }
@@ -1794,9 +1852,14 @@ const msgglobal = {
       downline: 'People you\'ve invited',
     },
     reg: {
+      verified_email: 'Email Verified',
+      reg_lista_prec: 'Please enter the First Name, Last Name and mobile phone number you left in the past when you signed up for the Chat! <br>This way the system will recognize you and keep the position of the list',
+      nuove_registrazioni: 'If this is a NEW registration, you must contact the person who INVITED you, who will leave you the CORRECT LINK to do the Registration under him/her',
       you: 'You',
       cancella_invitato: 'Delete Invited',
       regala_invitato: 'Give invited',
+      messaggio_invito: 'Invitation Message',
+      messaggio_invito_msg: 'Copia il messaggio qui sotto e condividilo a tutti coloro a cui vuoi condividere questo Movimento !',
       aportador_solidario: 'Solidarity Contributor',
       aportador_solidario_nome_completo:'A.S. Name',
       aportador_solidario_ind_order:'A.S.Ind',
@@ -1838,6 +1901,7 @@ const msgglobal = {
       onlyadult: "I confirm that I'm at least 18 years old",
       submit: "Submit",
       title_verif_reg: "Verify Registration",
+      reg_ok: "Successful Registration",
       verificato: "Verified",
       non_verificato: "Not Verified",
       forgetpassword: "Forget Password?",

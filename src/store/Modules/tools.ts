@@ -34,11 +34,12 @@ import { shared_consts } from '@src/common/shared_vuejs'
 
 import { dom } from 'quasar'
 
-const printf = require('util').format;
+const printf = require('util').format
 
 const { height, width } = dom
 
 import Cookies from 'js-cookie'
+import { forEachComment } from 'tslint'
 
 const TokenKey = 'Admin-Token'
 
@@ -1461,7 +1462,7 @@ export const tools = {
         id: par.param1._id,
         table: tools.TABUSER,
         fieldsvalue: { aportador_solidario: par.param2 },
-        notifBot: {}
+        notifBot: null
       }
 
       if (par.param3) {
@@ -1494,6 +1495,25 @@ export const tools = {
           tools.showNegativeNotif(myself.$q, myself.$t('db.recdupfailed'))
       })
     }
+  },
+
+  async saveFieldToServer(myself: any, table, id, mydata) {
+    const mydatatosave = {
+      id,
+      table,
+      fieldsvalue: mydata,
+      notifBot: null
+    }
+
+
+    GlobalStore.actions.saveFieldValue(mydatatosave).then((ris) => {
+      if (ris) {
+        tools.showPositiveNotif(myself.$q, myself.$t('db.recupdated'))
+      } else {
+        tools.showNegativeNotif(myself.$q, myself.$t('db.recfailed'))
+      }
+    })
+
   },
 
   async askConfirm($q: any, mytitle, mytext, ok, cancel, myself: any, table, funcok: number, funccancel: number, par: IParamDialog) {
@@ -2824,7 +2844,11 @@ export const tools = {
   },
 
   SetBit(myval, bit) {
-    myval = myval | bit
+    myval |= bit
+    return myval
+  },
+  UnSetBit(myval, bit) {
+    myval &= ~bit
     return myval
   },
   getUnique(arr, comp) {
@@ -3151,11 +3175,19 @@ export const tools = {
     return mystr.replace(/\s+/g, '')
   },
 
-  copyStringToClipboard(mythis, mystr) {
+  copyStringToClipboard(mythis, mystr, show) {
     copyToClipboard(mystr).then(() => {
-      tools.showNotif(mythis.$q, mythis.$t('dialog.copyclipboard') + ' \'' + mystr + '\'')
+      let msg = mythis.$t('dialog.copyclipboard')
+      if (show)
+        msg += ' \'' + mystr + '\''
+
+      tools.showNotif(mythis.$q, msg)
     })
 
+  },
+
+  getlinkhref(mylink, text) {
+    return '<a href="' + mylink + '" target="_blank">' + text + '</a>'
   },
 
   getNationsByNationality(nat, code) {
@@ -3216,8 +3248,12 @@ export const tools = {
     return 'https://zoom.us/j/' + id
   },
 
-  myprintf( ) {
+  myprintf(val, params: any[]) {
 
+    params.forEach((par) => {
+      val = val.replace('{' + par.strin + '}', par.strout)
+    })
+    return val
   }
 
 // getLocale() {

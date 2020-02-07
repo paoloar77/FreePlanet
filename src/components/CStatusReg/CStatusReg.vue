@@ -11,13 +11,14 @@
           <CCardState :mytext="$t('pages.statusreg.giainlista')" :isperc="true" :myval="datastat.num_reg_lista"
                       :myperc="perc_reg" :textadd="` / ` + datastat.num_tot_lista"></CCardState>
           <div class="q-pa-xs ">
-            <CCardStat mytext="Partecipato in Zoom" :myval="datastat.num_part_zoom"></CCardStat>
-            <CCardStat mytext="Hanno scritto il Sogno" :myval="datastat.num_users_dream"></CCardStat>
-            <CCardStat v-if="emailnonverif" mytext="Email non Verificate" :myval="emailnonverif"
+            <CCardStat :mytext="$t('stat.accepted')" :myval="datastat.num_part_accepted"></CCardStat>
+            <CCardStat :mytext="$t('stat.zoom')" :myval="datastat.num_part_zoom"></CCardStat>
+            <CCardStat :mytext="$t('stat.dream')" :myval="datastat.num_users_dream"></CCardStat>
+            <CCardStat v-if="emailnonverif" :mytext="$t('stat.email_not_verif')" :myval="emailnonverif"
                        mycol="negative"></CCardStat>
-            <CCardStat v-if="telegnonattivi" mytext="Telegram Non Attivi" :myval="telegnonattivi"
+            <CCardStat v-if="telegnonattivi" :mytext="$t('stat.telegram_non_attivi')" :myval="telegnonattivi"
                        mycol="negative"></CCardStat>
-            <CCardStat v-if="datastat.num_teleg_pending > 0" mytext="Telegram Pendenti"
+            <CCardStat v-if="datastat.num_teleg_pending > 0" :mytext="$t('stat.telegram_pendenti')"
                        :myval="datastat.num_teleg_pending" mycol="negative"></CCardStat>
           </div>
 

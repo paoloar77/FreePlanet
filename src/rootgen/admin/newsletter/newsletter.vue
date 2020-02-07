@@ -197,10 +197,10 @@
                                             jointable="templemail">
                                 </CMyFieldDb>
 
-                                <q-btn :loading="myloading2" rounded outline @click="createNewsletter(1, myloading2)"
+                                <q-btn :loading="myloading2" rounded outline @click="createNewsletter(3, myloading2)"
                                        color="primary"
                                        icon="fas fa-file-alt">
-                                    <span class="q-px-sm">Crea Nuovo Invio Newsletter Schedulato tra 1 minuto</span>
+                                    <span class="q-px-sm">Crea Nuovo Invio Newsletter Schedulato tra 3 minuti</span>
                                     <template v-slot:loading>
                                         <q-spinner-hourglass class="on-left"/>
                                         Creazione Newsletter...

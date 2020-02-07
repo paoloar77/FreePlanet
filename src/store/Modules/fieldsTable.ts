@@ -346,14 +346,11 @@ export const fieldsTable = {
     }
   },
 
-  getColByTable(table) {
-    if (table === 'permissions') {
-      return ['value', 'label']
-    }
-  },
   getTableJoinByName(table) {
     if (table === 'permissions')
       return [shared_consts.Permissions.Admin, shared_consts.Permissions.Manager, shared_consts.Permissions.Teacher]
+    else if (table === 'accepted')
+      return [shared_consts.Accepted.CHECK_READ_GUIDELINES, shared_consts.Accepted.CHECK_SEE_VIDEO_PRINCIPI]
     else if (table === 'fieldstype')
       return tools.FieldTypeArr
     else
@@ -405,6 +402,21 @@ export const fieldsTable = {
     AddCol(DuplicateRec),
   ],
 
+  colTableUsersBase: [
+    AddCol({ name: 'ind_order', label_trans: 'reg.ind_order' }),
+    AddCol({ name: 'date_reg', label_trans: 'reg.date_reg', fieldtype: tools.FieldType.date }),
+    AddCol({ name: 'username', label_trans: 'reg.username_short' }),
+    AddCol({ name: 'name', label_trans: 'reg.name' }),
+    AddCol({ name: 'surname', label_trans: 'reg.surname' }),
+    AddCol({ name: 'email', label_trans: 'reg.email' }),
+    AddCol({ name: 'verified_email', label_trans: 'reg.verified_email', fieldtype: tools.FieldType.boolean }),
+    AddCol({ name: 'profile.nationality', field: 'profile', subfield: 'nationality', label_trans: 'reg.nationality' }),
+    AddCol({ name: 'profile.cell', field: 'profile', subfield: 'cell', label_trans: 'reg.cell' }),
+    AddCol({ name: 'perm', label_trans: 'reg.perm', fieldtype: tools.FieldType.binary, jointable: 'permissions' }),
+    AddCol(DeleteRec),
+    AddCol(DuplicateRec),
+  ],
+
     // IColGridTable
   colTableUsers: [
     // AddCol({ name: '_id', label_trans: 'reg.id' }),
@@ -422,6 +434,7 @@ export const fieldsTable = {
     AddCol({ name: 'aportador_solidario', label_trans: 'reg.aportador_solidario' }),
     AddCol({ name: 'verified_email', label_trans: 'reg.verified_email', fieldtype: tools.FieldType.boolean }),
     AddCol({ name: 'profile.saw_zoom_presentation', field: 'profile', subfield: 'saw_zoom_presentation', label_trans: 'reg.saw_zoom_presentation', fieldtype: tools.FieldType.boolean  }),
+    AddCol({ name: 'profile.saw_and_accepted', field: 'profile', subfield: 'saw_and_accepted', label_trans: 'reg.saw_and_accepted', fieldtype: tools.FieldType.binary, jointable: 'accepted'  }),
     AddCol({ name: 'profile.my_dream', field: 'profile', subfield: 'my_dream', label_trans: 'reg.my_dream' }),
     AddCol({ name: 'profile.nationality', field: 'profile', subfield: 'nationality', label_trans: 'reg.nationality' }),
     AddCol({ name: 'profile.intcode_cell', field: 'profile', subfield: 'intcode_cell', label_trans: 'reg.intcode_cell' }),
@@ -552,6 +565,15 @@ export const fieldsTable = {
     {
       value: 'permissions',
       label: 'Permessi',
+      columns: colTablePermission,
+      colkey: 'value',
+      collabel: 'label',
+      colicon: 'icon',
+      noshow: true,
+    },
+    {
+      value: 'accepted',
+      label: 'Condizioni',
       columns: colTablePermission,
       colkey: 'value',
       collabel: 'label',

@@ -207,8 +207,6 @@ namespace Getters {
       return MessageStore.state.last_msgs
     else if (table === 'settings')
       return UserStore.state.settings
-    else if (table === 'permissions')
-      return UserStore.state.permissionsList
     else
       return null
 
@@ -663,10 +661,6 @@ namespace Actions {
         // console.log('res.data.userslist', res.data.usersList)
         if (res.data.usersList) {
           UserStore.mutations.setusersList(res.data.usersList)
-        }
-
-        if (res.data.permissionsList) {
-          UserStore.state.permissionsList = res.data.permissionsList
         }
 
         if (res.data.last_msgs) {

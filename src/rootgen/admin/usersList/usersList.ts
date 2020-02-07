@@ -6,6 +6,7 @@ import { CMyPage } from '../../../components/CMyPage/index'
 import { fieldsTable } from '@src/store/Modules/fieldsTable'
 import { shared_consts } from '@src/common/shared_vuejs'
 import { tools } from '../../../store/Modules/tools'
+import { static_data } from '../../../db/static_data'
 
 @Component({
   components: { CGridTableRec, CMyPage }
@@ -47,5 +48,14 @@ export default class UsersList extends Vue {
 
   get db_fieldsTable() {
     return fieldsTable
+  }
+
+  get userlist() {
+
+    if (static_data.functionality.ENABLE_REG_AYNI) {
+      return this.db_fieldsTable.colTableUsers
+    } else {
+      return this.db_fieldsTable.colTableUsersBase
+    }
   }
 }

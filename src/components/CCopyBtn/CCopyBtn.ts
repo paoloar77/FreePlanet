@@ -19,7 +19,7 @@ export default class CCopyBtn extends Vue {
   }
 
   public copytoclip() {
-    tools.copyStringToClipboard(this, this.texttocopy)
+    tools.copyStringToClipboard(this, this.texttocopy, true)
   }
 
 }

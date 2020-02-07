@@ -56,7 +56,7 @@
           </q-btn>
         </div>
         <div v-if="static_data.functionality.ENABLE_REGISTRATION" align="center" style="margin-top:10px;">
-          <q-btn flat rounded size="md" color="primary" to="/signup">{{$t('reg.submit')}}
+          <q-btn flat rounded size="md" color="primary" to="/signup" :label="$t('reg.submit')">
           </q-btn>
         </div>
 

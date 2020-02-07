@@ -202,8 +202,7 @@
 
         <br>
         <div class="text-center">
-          <q-btn rounded size="sm" color="positive" @click="showdisclaimer = true">
-            {{$t('privacy_policy')}}
+          <q-btn rounded size="sm" color="positive" @click="showdisclaimer = true" :label="$t('privacy_policy')">
           </q-btn>
         </div>
 
@@ -229,8 +228,7 @@
         </div>
 
         <div class="wrapper">
-          <q-btn rounded size="lg" color="positive" @click="submitOk" :disabled='!allowSubmit'>
-            {{$t('reg.submit')}}
+          <q-btn rounded size="lg" color="positive" @click="submitOk" :disabled='!allowSubmit' :label="$t('reg.submit')">
           </q-btn>
         </div>
       </div>

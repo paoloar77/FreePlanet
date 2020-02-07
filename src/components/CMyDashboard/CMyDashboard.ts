@@ -18,6 +18,7 @@ import { tools } from '../../store/Modules/tools'
 import { lists } from '../../store/Modules/lists'
 import { validations } from './CMyDashboard-validate'
 import { validationMixin } from 'vuelidate'
+import { shared_consts } from '../../common/shared_vuejs'
 
 @Component({
   mixins: [validationMixin],
@@ -76,15 +77,29 @@ export default class CMyDashboard extends MixinUsers {
       info: '',
     },
     {
-      icon: 'fas fa-video',
-      textlang: 'steps.zoom_partecipa',
+      icon: 'fas fa-file-signature',
+      textlang: 'steps.linee_guida',
       textadd(user) {
         return ''
       },
       isok(user) {
         if (user)
           if (user.profile)
-            return user.profile.saw_zoom_presentation
+            return tools.isBitActive(user.profile.saw_and_accepted, shared_consts.Accepted.CHECK_READ_GUIDELINES)
+        return false
+      },
+      info: '',
+    },
+    {
+      icon: 'fas fa-tv',
+      textlang: 'steps.video_intro',
+      textadd(user) {
+        return ''
+      },
+      isok(user) {
+        if (user)
+          if (user.profile)
+            return tools.isBitActive(user.profile.saw_and_accepted, shared_consts.Accepted.CHECK_SEE_VIDEO_PRINCIPI)
         return false
       },
       info: '',

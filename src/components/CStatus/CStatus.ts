@@ -13,16 +13,21 @@ import { CVerifyEmail } from '../CVerifyTelegram'
 import { CCopyBtn } from '../CCopyBtn'
 import { CVideo } from '../CVideo'
 import { CRequisiti } from '../CRequisiti'
+import { shared_consts } from '../../common/shared_vuejs'
+import { CGuidelines } from '../CGuidelines'
+import { CVideoPromo } from '../CVideoPromo'
 
 @Component({
-  components: { CTitleBanner, CMyFieldDb, CMyInnerPage, CVerifyTelegram, CVerifyEmail, CCopyBtn, CVideo, CRequisiti }
+  components: { CTitleBanner, CMyFieldDb, CMyInnerPage, CVerifyTelegram, CVerifyEmail, CCopyBtn, CVideo, CRequisiti, CGuidelines, CVideoPromo }
 })
 
 export default class CStatus extends MixinBase {
+  @Prop({ required: false, default: false }) public dense: boolean
   public $v
   public $t: any
-  public step = 1
-  public NUMSTEP_START = 3
+  public step = 0
+  public steptodo = 0
+  public NUMSTEP_OBBLIGATORI = 9
 
   get numpayment() {
     if (UserStore.state.my.profile)
@@ -33,15 +38,86 @@ export default class CStatus extends MixinBase {
   }
 
   public arrsteps = [
+    // {
+    //   title: 'steps.chat_biblio',
+    //   descr: 'steps.chat_biblio_long',
+    //   page: '',
+    //   funccheck(index) {
+    //     return true
+    //   },
+    //   funccheck_error(index) {
+    //     return false
+    //   }
+    // },
+
     {
-      title: 'steps.chat_biblio',
-      descr: 'steps.chat_biblio_long',
+      title: 'reg.email',
+      descr: '',
       page: '',
+      icon: 'mail',
       funccheck(index) {
-        return true
+        return UserStore.state.my.verified_email
       },
       funccheck_error(index) {
-        return false
+        return true
+      },
+      funcok() {
+        return 'pages.statusreg.verified'
+      },
+      funcko() {
+        return 'pages.statusreg.nonverified'
+      }
+    },
+    {
+      title: 'reg.telegram',
+      descr: '',
+      page: '',
+      icon: 'fab fa-telegram',
+      funccheck(index) {
+        return UserStore.state.my.profile.teleg_id > 0
+      },
+      funccheck_error(index) {
+        return true
+      },
+      funcok() {
+        return 'pages.statusreg.verified'
+      },
+      funcko() {
+        return 'pages.statusreg.nonverified'
+      },
+    },
+    {
+      title: 'steps.linee_guida',
+      descr: '',
+      page: '',
+      funccheck(index) {
+        return tools.isBitActive(UserStore.state.my.profile.saw_and_accepted, shared_consts.Accepted.CHECK_READ_GUIDELINES)
+      },
+      funccheck_error(index) {
+        return true
+      },
+      funcok() {
+        return ''
+      },
+      funcko() {
+        return ''
+      }
+    },
+    {
+      title: 'steps.video_intro',
+      descr: '',
+      page: '',
+      funccheck(index) {
+        return tools.isBitActive(UserStore.state.my.profile.saw_and_accepted, shared_consts.Accepted.CHECK_SEE_VIDEO_PRINCIPI)
+      },
+      funccheck_error(index) {
+        return true
+      },
+      funcok() {
+        return ''
+      },
+      funcko() {
+        return ''
       }
     },
     {
@@ -53,7 +129,13 @@ export default class CStatus extends MixinBase {
       },
       funccheck_error(index) {
         return true
-      }
+      },
+      funcok() {
+        return ''
+      },
+      funcko() {
+        return ''
+      },
     },
     {
       title: 'steps.dream',
@@ -68,6 +150,12 @@ export default class CStatus extends MixinBase {
       },
       funccheck_error(index) {
         return true
+      },
+      funcok() {
+        return ''
+      },
+      funcko() {
+        return ''
       },
     },
     {
@@ -91,6 +179,12 @@ export default class CStatus extends MixinBase {
       funccheck_error(index) {
         return true
       },
+      funcok() {
+        return ''
+      },
+      funcko() {
+        return ''
+      },
     },
     {
       title: 'steps.sharemovement',
@@ -103,6 +197,12 @@ export default class CStatus extends MixinBase {
       funccheck_error(index) {
         return true
       },
+      funcok() {
+        return ''
+      },
+      funcko() {
+        return ''
+      },
     },
     {
       title: 'steps.enter_prog',
@@ -113,6 +213,12 @@ export default class CStatus extends MixinBase {
       },
       funccheck_error(index) {
         return false
+      },
+      funcok() {
+        return ''
+      },
+      funcko() {
+        return ''
       },
     },
     {
@@ -125,6 +231,12 @@ export default class CStatus extends MixinBase {
       funccheck_error(index) {
         return false
       },
+      funcok() {
+        return ''
+      },
+      funcko() {
+        return ''
+      },
     },
     {
       title: 'steps.dono',
@@ -135,6 +247,12 @@ export default class CStatus extends MixinBase {
       },
       funccheck_error(index) {
         return false
+      },
+      funcok() {
+        return ''
+      },
+      funcko() {
+        return ''
       },
     },
     {
@@ -147,6 +265,12 @@ export default class CStatus extends MixinBase {
       funccheck_error(index) {
         return false
       },
+      funcok() {
+        return ''
+      },
+      funcko() {
+        return ''
+      },
     },
     {
       title: 'steps.ricevo_dono',
@@ -158,45 +282,40 @@ export default class CStatus extends MixinBase {
       funccheck_error(index) {
         return false
       },
+      funcok() {
+        return ''
+      },
+      funcko() {
+        return ''
+      },
     },
-
-    /*
-          sharemovement: 'Condivido il movimento',
-          sharemovement_long: 'Condivido il movimento con almeno 2 amici e li guido alla registrazione e agli zoom',
-          enter_prog: 'entro in Programmazione',
-          enter_prog_long: 'entro in programmazione, e vengo aggiunto al Mandala, ed entro così nella chat corrispondente.',
-          collaborate: 'Collaborazione',
-          collaborate_long: 'Continuo a collaborare con il miei compagni, per arrivare al giorno della programmazione dove si attiverà il mio Mandala',
-          dono: 'Dono',
-          dono_long: 'Faccio il mio dono al proprietario della Bigliettera',
-          support: 'Sostengo il movimento',
-          support_long: 'Continuo a sostenere il movimento partecipando attivamente! Organizzando zoom e partecipando, sostenendo, informando, aiutando e diffondendo',
-          ricevo_dono: 'Ricevo il mio dono e CELEBRO',
-          ricevo_dono_long: 'Ricevo il mio dono e CELEBRO',
-    */
-
   ]
 
   public setstep() {
-    if (this.isEmailVerified) {
-      this.step = 2
-      if (this.TelegVerificato) {
-        this.step = 3
-        for (let indstep = 0; indstep < this.arrsteps.length; indstep++) {
-          if (this.arrsteps[indstep].funccheck(indstep)) {
-            this.step++
-          }
-        }
-        // if (this.numpayment > 0) {
-        //   this.step = 4
-        // }
+    this.step = 0
+    for (let indstep = 0; indstep < this.arrsteps.length; indstep++) {
+      if (this.arrsteps[indstep].funccheck(indstep)) {
+        this.step++
+      } else {
+        return
       }
     }
-    // console.log('step', this.step)
   }
 
-  public mounted() {
+  public setsteptodo() {
+    this.steptodo = 0
+    for (let indstep = 0; indstep < this.arrsteps.length; indstep++) {
+      if (this.arrsteps[indstep].funccheck(indstep)) {
+        this.steptodo++
+      } else {
+        return
+      }
+    }
+  }
+
+  public created() {
     this.setstep()
+    this.setsteptodo()
   }
 
   get TelegVerificato() {
@@ -207,18 +326,11 @@ export default class CStatus extends MixinBase {
     return UserStore.state.my.verified_email
   }
 
-  get emailtext() {
-    if (this.isEmailVerified)
-      return `Email ` + this.$t('pages.statusreg.verified')
-    else
-      return `Email ` + this.$t('pages.statusreg.nonverified')
-  }
-
   get telegramtext() {
     if (this.TelegVerificato)
-      return `Telegram ` + this.$t('pages.statusreg.verified')
+      return this.$t('reg.telegram') + ' ' + this.$t('pages.statusreg.verified')
     else
-      return `Telegram ` + this.$t('pages.statusreg.nonverified')
+      return this.$t('reg.telegram') + ' ' + this.$t('pages.statusreg.nonverified')
   }
 
   get paymenttext() {
@@ -226,7 +338,7 @@ export default class CStatus extends MixinBase {
   }
 
   get getlaststep() {
-    return this.arrsteps.length + this.NUMSTEP_START - 1
+    return this.arrsteps.length - 1
   }
 
   public getnuminvitati() {
@@ -240,7 +352,7 @@ export default class CStatus extends MixinBase {
   public getnuminvitati_attivi() {
     if (UserStore.state.my)
       if (UserStore.state.my.calcstat)
-        // console.log('numinvitati', UserStore.state.my.calcstat)
+      // console.log('numinvitati', UserStore.state.my.calcstat)
         return UserStore.state.my.calcstat.numinvitati_attivi
 
     return 0
@@ -248,6 +360,9 @@ export default class CStatus extends MixinBase {
 
   public gettextstep(step) {
     let tit = this.$t(step.title)
+
+    if (step.funcok())
+      tit += ' ' + this.$t(step.funcok())
 
     if (step.title === 'steps.sharemovement') {
       tit += ' (' + this.getnuminvitati_attivi() + ' / ' + this.getnuminvitati() + ' invitati Attivi)'
@@ -263,7 +378,7 @@ export default class CStatus extends MixinBase {
   }
 
   public copylink() {
-    tools.copyStringToClipboard(this, this.getRefLink)
+    tools.copyStringToClipboard(this, this.getRefLink, true)
   }
 
   public getiferror(checkerror, value) {
@@ -300,12 +415,12 @@ export default class CStatus extends MixinBase {
     return 'https://t.me/joinchat/AL2qKExZKvenLgpVhOyefQ'
   }
 
-  public geticonstep(title) {
-    if (title === 'steps.chat_biblio') {
-      return 'settings'
-    } else {
+  public geticonstep(mystep) {
+    if (!!mystep.icon)
+      return mystep.icon
+    else
       return 'check-circle'
-    }
+
   }
 
   public geticoncolor(title) {
@@ -349,6 +464,48 @@ export default class CStatus extends MixinBase {
     return false
   }
 
+  get percstep() {
+    return (this.getstep / this.NUMSTEP_OBBLIGATORI)
+  }
 
+  get getstep() {
+    let mystep = 0
+    for (let indstep = 0; indstep < this.arrsteps.length; indstep++) {
+      if (this.arrsteps[indstep].funccheck(indstep)) {
+        mystep++
+      }
+    }
+    return mystep
+  }
 
+  get progressstep() {
+    return this.$t(this.arrsteps[this.steptodo].title)
+  }
+
+  get strpercstep() {
+    return 'Completati ' + (this.getstep + 1) + ' passi su ' + this.NUMSTEP_OBBLIGATORI
+  }
+
+  get stepcompleti() {
+    return this.getstep + 1 === this.NUMSTEP_OBBLIGATORI
+  }
+
+  public scrolltostep(mystep) {
+    this.step = mystep
+    if (mystep > 0 )
+      mystep -= 1
+    const element = document.getElementById('step' + mystep)
+    tools.scrollToElement(element)
+
+  }
+
+  public nextstep(index) {
+    this.step = index + 1
+    this.setsteptodo()
+
+    setTimeout(() => {
+      this.scrolltostep(this.step)
+    }, 500)
+
+  }
 }

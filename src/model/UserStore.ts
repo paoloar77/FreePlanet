@@ -23,6 +23,7 @@ export interface IUserProfile {
   paymenttypes?: IPaymentType[]
   manage_telegram?: boolean
   saw_zoom_presentation?: boolean
+  saw_and_accepted?: boolean
 }
 
 export interface IPaymentType {
@@ -93,7 +94,6 @@ export interface IUserState {
   isManager?: boolean
   isTeacher?: boolean
   usersList?: IUserFields[]
-  permissionsList?: IPerm[]
   countusers?: number
   lastparamquery?: any
 }

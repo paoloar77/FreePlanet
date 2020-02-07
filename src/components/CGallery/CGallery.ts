@@ -190,7 +190,7 @@ export default class CGallery extends MixinBase {
 
   public copytoclipboard(rec) {
     const filename = this.getfullname(rec)
-    tools.copyStringToClipboard(this, filename)
+    tools.copyStringToClipboard(this, filename, true)
   }
 
   public async deleteFile(rec) {

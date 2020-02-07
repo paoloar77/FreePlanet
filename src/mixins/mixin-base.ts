@@ -37,7 +37,15 @@ export default class MixinBase extends MixinMetaTags {
   }
 
   public getValDb(keystr, serv, def?, table?, subkey?) {
+
     return tools.getValDb(keystr, serv, def, table, subkey)
+  }
+
+  public getValDbLang(keystr, serv, def?, table?, subkey?) {
+    let ris = tools.getValDb(keystr + '_' + tools.getLocale(), serv, def, table, subkey)
+    if (ris === def)
+      ris = tools.getValDb(keystr + '_it', serv, def, table, subkey)
+    return ris
   }
 
   public async setValDb(key, value, type, serv: boolean, table?, subkey?) {
