@@ -1542,7 +1542,7 @@ export const tools = {
   },
 
   showNegativeNotif(q: any, msg) {
-    tools.showNotif(q, msg, { color: 'negative', icon: 'notifications' }, 8000)
+    tools.showNotif(q, msg, { color: 'negative', icon: 'notifications' }, 10000)
   },
 
   showNeutralNotif(q: any, msg) {
@@ -3164,6 +3164,10 @@ export const tools = {
         return 'fa-flag-ro'
       else if (lang === 'CL')
         return 'fa-flag-cl'
+      else if (lang === 'PL')
+        return 'fa-flag-pl'
+      else if (lang === 'EG')
+        return 'fa-flag-eg'
 
       return ''
     } catch (e) {
@@ -3235,6 +3239,10 @@ export const tools = {
       return 'Romania'
     } else if (nat === 'CL') {
       return 'Chile'
+    } else if (nat === 'PL') {
+      return 'Poland'
+    } else if (nat === 'EG') {
+      return 'Egypt'
     }
   },
 

@@ -28,6 +28,7 @@ export default class CStatus extends MixinBase {
   public step = 0
   public steptodo = 0
   public NUMSTEP_OBBLIGATORI = 9
+  public my_dream: string = ''
 
   get numpayment() {
     if (UserStore.state.my.profile)
@@ -143,7 +144,7 @@ export default class CStatus extends MixinBase {
       page: '/mydream',
       funccheck(index) {
         if (UserStore.state.my.profile.my_dream)
-          if (UserStore.state.my.profile.my_dream.length > 20)
+          if (UserStore.state.my.profile.my_dream.length > 10)
             return true
 
         return false
@@ -171,7 +172,7 @@ export default class CStatus extends MixinBase {
           }
           if (UserStore.state.my.profile)
             if (UserStore.state.my.profile.paymenttypes)
-              return (UserStore.state.my.profile.paymenttypes.length >= 2) && ispaypal
+              return (UserStore.state.my.profile.paymenttypes.length >= 1) && ispaypal
 
         }
         return false
@@ -190,6 +191,24 @@ export default class CStatus extends MixinBase {
       title: 'steps.sharemovement',
       descr: 'steps.sharemovement_long',
       page: '/sharemovement',
+      funccheck(index) {
+        if (UserStore.state.my.calcstat)
+          return UserStore.state.my.calcstat.numinvitati >= 2
+      },
+      funccheck_error(index) {
+        return true
+      },
+      funcok() {
+        return ''
+      },
+      funcko() {
+        return ''
+      },
+    },
+    {
+      title: 'dashboard.inv_attivi',
+      descr: 'steps.inv_attivi_long',
+      page: '',
       funccheck(index) {
         if (UserStore.state.my.calcstat)
           return UserStore.state.my.calcstat.numinvitati_attivi >= 2
@@ -316,6 +335,19 @@ export default class CStatus extends MixinBase {
   public created() {
     this.setstep()
     this.setsteptodo()
+
+    this.my_dream = UserStore.state.my.profile.my_dream
+  }
+
+  public change_mydream() {
+    if (UserStore.state.my.profile.my_dream !== this.my_dream) {
+      UserStore.state.my.profile.my_dream = this.my_dream
+
+      const mydata = {
+        'profile.my_dream': UserStore.state.my.profile.my_dream
+      }
+      tools.saveFieldToServer(this, 'users', UserStore.state.my._id, mydata)
+    }
   }
 
   get TelegVerificato() {
@@ -358,14 +390,14 @@ export default class CStatus extends MixinBase {
     return 0
   }
 
-  public gettextstep(step) {
-    let tit = this.$t(step.title)
+  public gettextstep(step, index) {
+    let tit = (index + 1) + '. ' + this.$t(step.title)
 
     if (step.funcok())
       tit += ' ' + this.$t(step.funcok())
 
     if (step.title === 'steps.sharemovement') {
-      tit += ' (' + this.getnuminvitati_attivi() + ' / ' + this.getnuminvitati() + ' invitati Attivi)'
+      tit += ' (' + this.getnuminvitati() + ' ' + this.$t('dashboard.downline') + ')'
     } else if (step.title === 'steps.paymenttype') {
       tit += this.paymenttext
     }
@@ -458,7 +490,7 @@ export default class CStatus extends MixinBase {
       }
       if (UserStore.state.my.profile)
         if (UserStore.state.my.profile.paymenttypes)
-          return (UserStore.state.my.profile.paymenttypes.length >= 2) && ispaypal
+          return (UserStore.state.my.profile.paymenttypes.length >= 1) && ispaypal
 
     }
     return false
@@ -483,11 +515,11 @@ export default class CStatus extends MixinBase {
   }
 
   get strpercstep() {
-    return 'Completati ' + (this.getstep + 1) + ' passi su ' + this.NUMSTEP_OBBLIGATORI
+    return 'Completati ' + (this.getstep) + ' passi su ' + this.NUMSTEP_OBBLIGATORI
   }
 
   get stepcompleti() {
-    return this.getstep + 1 === this.NUMSTEP_OBBLIGATORI
+    return this.getstep === this.NUMSTEP_OBBLIGATORI
   }
 
   public scrolltostep(mystep) {

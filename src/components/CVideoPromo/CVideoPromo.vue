@@ -8,7 +8,7 @@
                     clcolor="text-white"
                     myclass="myshad" canopen="true" :visible="true">
 
-        <CVideo myvideokey="dbscY8jWDMM">
+        <CVideo myvideokey="85zU-2A-Rxs">
 
         </CVideo>
       </CTitleBanner>
@@ -42,6 +42,7 @@
         <q-checkbox
           class="bg-grey-4"
           v-model="accetta_saw_video"
+          @input="changeval"
           color="primary"
           :label="$t('steps.saw_video_intro')">
 

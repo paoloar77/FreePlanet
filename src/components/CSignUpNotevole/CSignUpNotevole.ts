@@ -69,14 +69,17 @@ export default class CSignUpNotevole extends MixinBase {
 
     this.signup.aportador_solidario = this.$route.params.invited
 
+    console.log('1) aportador_solidario', this.signup.aportador_solidario)
+
     if (!this.signup.aportador_solidario)
       this.signup.aportador_solidario = tools.getCookie(tools.APORTADOR_SOLIDARIO, this.signup.aportador_solidario)
 
-    if (!this.signup.aportador_solidario) {
+    if (!this.signup.aportador_solidario || this.signup.aportador_solidario === 'undefined') {
       this.signup.aportador_solidario = tools.APORTADOR_NONE
     }
     this.$v.signup.aportador_solidario.$touch()
 
+    console.log('this.signup.aportador_solidario', this.signup.aportador_solidario)
   }
 
   // @Watch('signup.already_registered')

@@ -154,10 +154,10 @@
                     <!--<span class="text-white" v-if="Verificato"> {{$t('reg.verificato')}} </span>-->
                     <!--<span class="text-white background-red" v-else> {{$t('reg.non_verificato')}} </span>-->
 
-                    <div v-if="isLogged" id="user-actions" class="text-center">
-                        <q-btn round color="primary" icon="person" to="/profile"></q-btn>
+                    <div v-if="isLogged" id="user-actions" class="column justify-center q-gutter-sm q-ma-sm center-150" >
+                        <q-btn rounded color="primary" icon="person" to="/profile">{{$t('pages.profile')}}</q-btn>
                         <!--<q-btn round color="warning" icon="lock"></q-btn>-->
-                        <q-btn round color="secondary" icon="exit_to_app" @click='logoutHandler'></q-btn>
+                        <q-btn rounded color="negative" icon="exit_to_app" @click='logoutHandler'>{{$t('login.exit')}}</q-btn>
                     </div>
 
                 </div>

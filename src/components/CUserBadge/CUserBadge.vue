@@ -20,6 +20,7 @@
         <!--<q-item-label caption lines="1">{{ user.email }}</q-item-label>-->
       </q-item-section>
 
+
       <q-item-section side>
         <div class="row q-gutter-xs justify-center items-center">
           <q-btn v-if="isextralist(user)" fab-mini

@@ -22,7 +22,7 @@ export default class CNextZoom extends MixinBase {
   public $t
 
   get listacalzoom() {
-    return GlobalStore.state.calzoom
+    return GlobalStore.state.calzoom.slice(-3)
   }
 
   get nextconf() {

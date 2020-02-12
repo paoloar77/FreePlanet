@@ -28,6 +28,7 @@
           v-model="signin.password"
           type="password"
           rounded outlined dense
+          v-on:keyup.enter="submit()"
           @blur="$v.signin.password.$touch"
           :error="$v.signin.password.$error"
           :error-message="`${errorMsg('password', $v.signin.password)}`"
@@ -37,9 +38,6 @@
           </template>
 
         </q-input>
-        <div class="text-center" style="margin-bottom: 10px;">
-          <a :href="getlinkforgetpwd()" style="color:gray;">{{$t('reg.forgetpassword')}}</a>
-        </div>
 
 
         <!--<q-card class="flex flex-center">-->
@@ -55,9 +53,14 @@
                  :disable="$v.$error || iswaitingforRes">{{$t('login.enter')}}
           </q-btn>
         </div>
-        <div v-if="static_data.functionality.ENABLE_REGISTRATION" align="center" style="margin-top:10px;">
+        <div v-if="static_data.functionality.ENABLE_REGISTRATION && showregbutt" align="center" style="margin-top:10px;">
           <q-btn flat rounded size="md" color="primary" to="/signup" :label="$t('reg.submit')">
           </q-btn>
+        </div>
+        <br>
+
+        <div class="text-center" style="margin-bottom: 10px;">
+          <a :href="getlinkforgetpwd()" style="color:gray;">{{$t('reg.forgetpassword')}}</a>
         </div>
 
       </div>

@@ -703,8 +703,8 @@ namespace Actions {
     }
 
     const usertosend = {
-      username: authData.username,
-      password: authData.password,
+      username: authData.username.trim(),
+      password: authData.password.trim(),
       lang: state.lang,
       subs: sub,
       options

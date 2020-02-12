@@ -3,6 +3,13 @@
     <CTitleBanner class="q-pa-xs" :title="$t('pages.dashboard')" bgcolor="bg-info" clcolor="text-white"
                   mystyle=" " myclass="myshad">
 
+      <div v-if="!!dashboard.myself.name">
+
+
+        <CMyRequirement :myseluser="dashboard.myself" :mydashboard="dashboard">
+
+        </CMyRequirement>
+      </div>
 
       <CTitleBanner class="shadow-2" :title="$t('reg.aportador_solidario')" bgcolor="bg-accent"
                     clcolor="text-white"
@@ -111,6 +118,7 @@
                   bgcolor="bg-primary"
                   clcolor="text-white"
                   mystyle=" " myclass="myshad" :canopen="true">
+      <p class="q-ml-sm">Clicca sul nome dell'invitato per vedere lo stato dei suoi Requisiti.</p>
       <q-list bordered class="rounded-borders row justify-between">
         <CLegenda icon="fab fa-telegram" :text="`Telegram ` + $t('pages.statusreg.verified')"></CLegenda>
         <CLegenda icon="fas fa-video" :text="$t('pages.statusreg.seezoom')"></CLegenda>
@@ -122,102 +130,17 @@
     <br>
 
     <q-dialog v-model="showuserinfo">
-      <q-card v-if="seluser" :style="`min-width: `+ tools.myheight_dialog() + `px;`">
-        <q-toolbar class="bg-primary text-white">
+      <q-card v-if="seluser" :style="`min-width: `+ tools.myheight_dialog() + `px;` ">
+        <q-toolbar class="bg-primary text-white" style="min-height: 30px;">
           <q-toolbar-title>
-            Info:
+            {{$t('reg.requirement')}}
           </q-toolbar-title>
           <q-btn flat round color="white" icon="close" v-close-popup></q-btn>
         </q-toolbar>
-        <q-card-section class="inset-shadow">
-          <CTitleBanner class="shadow-2 rounded-borders" :title="seluser.name + ` ` + seluser.surname"
-                        bgcolor="bg-primary"
-                        clcolor="text-white"
-                        mystyle=" " myclass="myshad" :canopen="true">
+        <q-card-section class="inset-shadow" style="padding: 4px !important;">
+          <CMyRequirement :myseluser="seluser" :mydashboard="dashboard" :notitle="false">
 
-
-            <div v-if="!ismyinvited_notreg(seluser)" class="text-center">
-
-              <div v-if="!isextralist(seluser)">
-                <div v-for="req of arrrequisiti">
-                  <CRequisito :icon="req.icon" :text="$t(req.textlang) + req.textadd(seluser)" :isok="req.isok(seluser)"
-                              :info="req.info"></CRequisito>
-                </div>
-
-              </div>
-
-              <div v-if="ismydownline(seluser)">
-                <CTitleBanner class="shadow-2 rounded-borders" :title="$t('reg.regala_invitato')"
-                              bgcolor="bg-positive"
-                              clcolor="text-white"
-                              :visible="false"
-                              mystyle=" " myclass="myshad" :canopen="true">
-
-                  <div class="column q-gutter-sm justify-center text-center">
-                    <q-input
-                      bg-color="lightblue"
-                      v-model="aportador_solidario"
-                      rounded outlined
-                      @blur="$v.aportador_solidario.$touch"
-                      :error="$v.aportador_solidario.$error"
-                      :error-message="errorMsg('aportador_solidario', $v.aportador_solidario)"
-                      maxlength="20"
-                      debounce="1000"
-
-                      :label="$t('reg.username_regala_invitato')">
-
-                      <template v-slot:prepend>
-                        <q-icon name="person"/>
-                      </template>
-
-                    </q-input>
-
-                    <q-toggle v-model="notifBot" :label="$t('dashboard.sendnotification')"/>
-
-                    <q-btn class="q-ma-sm" rounded color="positive" text-color="white" icon="fas fa-gift"
-                           :label="$t('reg.regala_invitato')"
-                           :disabled='!allowSubmit'
-                           @click="RegalaInvitato(seluser, aportador_solidario, getnotifBotTxt)"></q-btn>
-                  </div>
-                </CTitleBanner>
-
-                <CTitleBanner v-if="ismydownline(seluser) && (seluser.numinvitati <= 0)"
-                              class="shadow-2 rounded-borders text-center"
-                              :title="$t('reg.cancella_invitato')"
-                              bgcolor="bg-negative"
-                              clcolor="text-white"
-                              :visible="false"
-                              mystyle=" " myclass="myshad" :canopen="true">
-
-                  <q-btn rounded text-color="red" icon="delete"
-                         :label="$t('reg.cancella_invitato')"
-                         @click="deleteUserFromUsersList(seluser)"></q-btn>
-                </CTitleBanner>
-
-              </div>
-
-            </div>
-            <div v-else>
-              <div class="column justify-center q-gutter-sm q-pa-sm">
-
-                <CRequisito icon="fas fa-user" :text="$t('dashboard.notreg')" :isok="false"
-                            info=""></CRequisito>
-
-                <CTitleBanner class="shadow-2 rounded-borders text-center"
-                              :title="$t('reg.cancella_invitato')"
-                              bgcolor="bg-negative"
-                              clcolor="text-white"
-                              :visible="false"
-                              mystyle=" " myclass="myshad" :canopen="true">
-                  <q-btn rounded text-color="red" icon="delete" :label="$t('reg.cancella_invitato')"
-                         @click="deleteUserFromExtraList(seluser)"></q-btn>
-                </CTitleBanner>
-
-              </div>
-            </div>
-
-
-          </CTitleBanner>
+          </CMyRequirement>
         </q-card-section>
       </q-card>
     </q-dialog>

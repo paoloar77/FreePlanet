@@ -49,7 +49,7 @@
           :id="`step`+(index)"
           :key="mystep.title"
           :name="index"
-          :title="gettextstep(mystep)"
+          :title="gettextstep(mystep, index)"
           :icon="geticonstep(mystep)"
           :done-color="geticoncolor(mystep.title)"
           :done="mystep.funccheck(index)"
@@ -160,6 +160,15 @@
             <div v-if="mystep.descr">
               <div v-html="$t(mystep.descr)"></div>
             </div>
+            <q-input v-model="my_dream" :label="$t('steps.dream')+' (min. 10 caratteri):'"
+                     type="textarea" debounce="1000"
+                     input-class="myinput-area-big"
+                     autogrow
+                     @input="change_mydream"
+
+            ></q-input>
+
+<!--
             <CMyFieldDb :title="$t('reg.my_dream')"
                         table="users"
                         mykey="profile"
@@ -167,6 +176,7 @@
                         :type="tools.FieldType.string"
             >
             </CMyFieldDb>
+-->
           </div>
           <div v-else-if="mystep.title === 'steps.chat_biblio'">
             <div v-if="mystep.descr">
@@ -227,11 +237,9 @@
             <CRequisiti :statebool="getnuminvitati() >= 2" :msgTrue="$t('steps.sharemovement_hai_invitato')"
                         :msgFalse="$t('steps.sharemovement_devi_invitare_almeno_2')">
             </CRequisiti>
-            <CRequisiti v-if="getnuminvitati() > 0" :statebool="getnuminvitati_attivi() >= 2"
-                        :msgTrue="$t('steps.sharemovement_invitati_attivi_si')"
-                        :msgFalse="$t('steps.sharemovement_invitati_attivi_no')">
-            </CRequisiti>
 
+            <q-btn class="q-mb-md" rounded size="md" color="primary" to="/dashboard"
+                   :label="$t('pages.dashboard')"></q-btn>
 
             <div v-if="mystep.descr">
               <div v-html="$t(mystep.descr)"></div>
@@ -257,8 +265,22 @@
 
             </CCopyBtn>
 
+
+          </div>
+          <div v-else-if="mystep.title === 'dashboard.inv_attivi'">
+
+            <CRequisiti v-if="getnuminvitati() > 0" :statebool="getnuminvitati_attivi() >= 2"
+                        :msgTrue="$t('steps.sharemovement_invitati_attivi_si')"
+                        :msgFalse="$t('steps.sharemovement_invitati_attivi_no')">
+            </CRequisiti>
+
             <q-btn class="q-mb-md" rounded size="md" color="primary" to="/dashboard"
                    :label="$t('pages.dashboard')"></q-btn>
+
+
+            <div v-if="mystep.descr">
+              <div v-html="$t(mystep.descr)"></div>
+            </div>
 
           </div>
           <div v-else-if="mystep.title === 'steps.enter_prog'">
@@ -311,19 +333,19 @@
     <q-page-sticky expand position="top" v-if="!stepcompleti">
       <q-toolbar class="bg-yellow-7 glossy text-white">
         <q-toolbar-title @click="scrolltostep(steptodo)">
-          <div class="flex flex-center">
-            <q-linear-progress size="20px" :value="percstep" color="green" class="q-pa-xs q-mb-xs bg-red">
-              <div class="absolute-center flex flex-center">
-                <q-badge color="white" text-color="grey-8" style="opacity: 0.9; font-size: 0.85rem;" :label="strpercstep"></q-badge>
-              </div>
+          <div class="flex flex-center q-mt-xs">
+            <div class="flex flex-center">
+              <q-badge color="white" text-color="grey-8" style="opacity: 0.9; font-size: 0.85rem;" :label="strpercstep"></q-badge>
+            </div>
+            <q-linear-progress size="lg" :value="percstep" color="green" class="q-pa-xs q-mb-xs bg-red">
             </q-linear-progress>
           </div>
-          <div class="flex flex-center">
-            <q-badge color="white" text-color="green" :label="progressstep" class="wrap"
+          <div class="flex flex-center q-mb-xs">
+            <q-badge color="white" text-color="blue" :label="progressstep" class="wrap"
                      style="font-size: 0.85rem; height:20px; font-weight: bold;"></q-badge>
           </div>
         </q-toolbar-title>
-        <q-btn round dense icon="arrow_forward" @click="scrolltostep(steptodo)"></q-btn>
+        <q-btn round dense icon="arrow_forward" color="blue" @click="scrolltostep(steptodo)"></q-btn>
       </q-toolbar>
     </q-page-sticky>
 

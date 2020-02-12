@@ -21,16 +21,21 @@ export default class CVideoPromo extends MixinBase {
   public $t: any
   public $q
   public msg: string = ''
+  public accetta_saw_video: boolean = false
 
   get static_data() {
     return static_data
   }
 
-  get accetta_saw_video() {
-    return tools.isBitActive(UserStore.state.my.profile.saw_and_accepted, shared_consts.Accepted.CHECK_SEE_VIDEO_PRINCIPI)
+  public created() {
+    this.aggiorna()
   }
 
-  set accetta_saw_video(value) {
+  public aggiorna() {
+    this.accetta_saw_video = tools.isBitActive(UserStore.state.my.profile.saw_and_accepted, shared_consts.Accepted.CHECK_SEE_VIDEO_PRINCIPI)
+  }
+
+  public changeval(value) {
     if (value)
       UserStore.state.my.profile.saw_and_accepted = tools.SetBit(UserStore.state.my.profile.saw_and_accepted, shared_consts.Accepted.CHECK_SEE_VIDEO_PRINCIPI)
     else

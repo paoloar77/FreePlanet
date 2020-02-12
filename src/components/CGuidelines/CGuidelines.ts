@@ -20,16 +20,22 @@ export default class CGuidelines extends MixinBase {
   public $t: any
   public $q
   public msg: string = ''
+  public myguideline: boolean = false
 
   get static_data() {
     return static_data
   }
 
-  get accetta_guideline() {
-    return tools.isBitActive(UserStore.state.my.profile.saw_and_accepted, shared_consts.Accepted.CHECK_READ_GUIDELINES)
+  public created() {
+     this.aggiorna_guideline()
   }
 
-  set accetta_guideline(value) {
+  public aggiorna_guideline() {
+    this.myguideline = tools.isBitActive(UserStore.state.my.profile.saw_and_accepted, shared_consts.Accepted.CHECK_READ_GUIDELINES)
+  }
+
+  public changeval(value) {
+    console.log('PRIMA saw_and_accepted', UserStore.state.my.profile.saw_and_accepted)
     if (value)
       UserStore.state.my.profile.saw_and_accepted = tools.SetBit(UserStore.state.my.profile.saw_and_accepted, shared_consts.Accepted.CHECK_READ_GUIDELINES)
     else
@@ -38,6 +44,9 @@ export default class CGuidelines extends MixinBase {
     const mydata = {
       'profile.saw_and_accepted': UserStore.state.my.profile.saw_and_accepted
     }
+    this.aggiorna_guideline()
+
+    console.log('DOPO saw_and_accepted', UserStore.state.my.profile.saw_and_accepted)
 
     tools.saveFieldToServer(this, 'users', UserStore.state.my._id, mydata)
   }

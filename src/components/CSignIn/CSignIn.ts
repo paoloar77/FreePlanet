@@ -25,6 +25,8 @@ import { static_data } from '../../db/static_data'
 })
 
 export default class CSignIn extends Vue {
+  @Prop({required: true}) public showregbutt: boolean
+
   public $v
   public loading: boolean
   public $t: any

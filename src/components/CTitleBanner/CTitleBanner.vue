@@ -22,6 +22,9 @@
       <div v-if="myvisible" class="rounded-borders">
         <slot></slot>
       </div>
+      <div v-if="imgpreview" class="text-center cursor-pointer clBorderSteps" style="opacity: 0.5;" @click="myvisible = !myvisible">
+        <q-img :src="imgpreview" class="img"></q-img>
+      </div>
     </q-slide-transition>
 
   </div>
