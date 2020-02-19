@@ -8,12 +8,21 @@
         <div class="flex flex-center">
 
           <CCardState :mytext="$t('pages.statusreg.reg')" :myval="datastat.num_reg" :myperc="100"></CCardState>
-          <CCardState :mytext="$t('pages.statusreg.giainlista')" :isperc="true" :myval="datastat.num_reg_lista"
-                      :myperc="perc_reg" :textadd="` / ` + datastat.num_tot_lista"></CCardState>
+          <CCardState :mytext="$t('stat.requisiti')" :isperc="true" :myval="datastat.num_requisiti"
+                      :myperc="calcperc(datastat.num_requisiti, datastat.num_reg) "
+                      color="blue"
+                      :textadd="` / ` + datastat.num_reg"></CCardState>
+
+          <!--<CCardState :mytext="$t('pages.statusreg.giainlista')" :isperc="true" :myval="datastat.num_reg_lista"-->
+          <!--:myperc="perc_reg" :textadd="` / ` + datastat.num_tot_lista"></CCardState>-->
+
           <div class="q-pa-xs ">
             <CCardStat :mytext="$t('stat.accepted')" :myval="datastat.num_part_accepted"></CCardStat>
             <CCardStat :mytext="$t('stat.zoom')" :myval="datastat.num_part_zoom"></CCardStat>
             <CCardStat :mytext="$t('stat.dream')" :myval="datastat.num_users_dream"></CCardStat>
+            <CCardStat :mytext="$t('stat.modalita_pagamento')" :myval="datastat.num_modalita_pagamento"></CCardStat>
+            <CCardStat :mytext="$t('stat.requisiti')" :myval="datastat.num_requisiti"></CCardStat>
+            <CCardStat :mytext="$t('stat.qualificati')" :myval="datastat.num_qualificati"></CCardStat>
             <CCardStat v-if="emailnonverif" :mytext="$t('stat.email_not_verif')" :myval="emailnonverif"
                        mycol="negative"></CCardStat>
             <CCardStat v-if="telegnonattivi" :mytext="$t('stat.telegram_non_attivi')" :myval="telegnonattivi"
@@ -60,10 +69,10 @@
             <CListNationality :mydata="datastat.arr_nations">
 
             </CListNationality>
-            <CLineChart :mydata="datastat.reg_daily" title="Registrazioni Giornaliere">
+            <CLineChart :mydata="datastat.reg_daily" :title="$t('stat.reg_daily')">
 
             </CLineChart>
-            <CLineChart :mydata="datastat.reg_daily" title="Registrazioni Totali" :sum="true"
+            <CLineChart :mydata="datastat.reg_daily" :title="$t('stat.reg_total')" :sum="true"
                         :mycolors="['#0b0', '#666']">
 
             </CLineChart>

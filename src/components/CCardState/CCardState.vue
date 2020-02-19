@@ -6,7 +6,7 @@
       :value="myperc"
       :size="getsize"
       :thickness="0.25"
-      color="green"
+      :color="color"
       track-color="grey-3"
       class="q-ma-sm animated"
     >

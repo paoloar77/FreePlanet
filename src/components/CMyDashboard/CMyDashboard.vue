@@ -21,7 +21,7 @@
 
         </CUserBadge>
         <div v-else class="q-pa-sm text-center">
-          Nessun Invitante
+          {{ $t('dashboard.nessun_invitante')}}
         </div>
       </CTitleBanner>
 
@@ -60,7 +60,7 @@
           </div>
         </q-list>
         <div v-else class="q-pa-sm text-center">
-          Nessun Invitato
+          {{ $t('dashboard.nessun_invitato')}}
         </div>
       </CTitleBanner>
 
@@ -118,10 +118,10 @@
                   bgcolor="bg-primary"
                   clcolor="text-white"
                   mystyle=" " myclass="myshad" :canopen="true">
-      <p class="q-ml-sm">Clicca sul nome dell'invitato per vedere lo stato dei suoi Requisiti.</p>
+      <p class="q-ml-sm">{{ $t('dashboard.legenda_title')}}</p>
       <q-list bordered class="rounded-borders row justify-between">
         <CLegenda icon="fab fa-telegram" :text="`Telegram ` + $t('pages.statusreg.verified')"></CLegenda>
-        <CLegenda icon="fas fa-video" :text="$t('pages.statusreg.seezoom')"></CLegenda>
+        <CLegenda icon="fas fa-video" :text="$t('stat.zoom')"></CLegenda>
         <CLegenda icon="fas fa-user-friends" :text="$t('dashboard.numinvitati')"></CLegenda>
         <CLegenda icon="fab fa-whatsapp" :text="$t('dashboard.telefono_wa')"></CLegenda>
 

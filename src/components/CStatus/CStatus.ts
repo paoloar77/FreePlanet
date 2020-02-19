@@ -144,7 +144,7 @@ export default class CStatus extends MixinBase {
       page: '/mydream',
       funccheck(index) {
         if (UserStore.state.my.profile.my_dream)
-          if (UserStore.state.my.profile.my_dream.length > 10)
+          if (UserStore.state.my.profile.my_dream.length >= 10)
             return true
 
         return false
@@ -391,7 +391,7 @@ export default class CStatus extends MixinBase {
   }
 
   public gettextstep(step, index) {
-    let tit = (index + 1) + '. ' + this.$t(step.title)
+    let tit = (index + 1) + ' - ' + this.$t(step.title)
 
     if (step.funcok())
       tit += ' ' + this.$t(step.funcok())
@@ -515,7 +515,7 @@ export default class CStatus extends MixinBase {
   }
 
   get strpercstep() {
-    return 'Completati ' + (this.getstep) + ' passi su ' + this.NUMSTEP_OBBLIGATORI
+    return this.$t('steps.completed') + ' ' + (this.getstep) + ' ' + this.$t('steps.passi_su') + ' ' + this.NUMSTEP_OBBLIGATORI
   }
 
   get stepcompleti() {

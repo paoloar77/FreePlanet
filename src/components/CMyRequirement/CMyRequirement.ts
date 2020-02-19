@@ -138,7 +138,7 @@ export default class CMyRequirement extends MixinUsers {
       isok(user) {
         if (user)
           if (user.profile.my_dream)
-            return user.profile.my_dream.length > 20
+            return user.profile.my_dream.length > 10
           else
             return false
       },
@@ -185,7 +185,7 @@ export default class CMyRequirement extends MixinUsers {
       info: '',
     },
     {
-      icon: 'fas fa-users',
+      icon: 'fas fa-check',
       textlang: 'dashboard.inv_attivi',
       textadd(user) {
         return ' (' + user.numinvitatiattivi + ')'
@@ -239,6 +239,7 @@ export default class CMyRequirement extends MixinUsers {
 
   public async RegalaInvitato(user, aportador_solidario, notifBottxt) {
     let notiftxt = ''
+    aportador_solidario = aportador_solidario.trim()
     if (this.notifBot)
       notiftxt = notifBottxt
 
@@ -288,6 +289,13 @@ export default class CMyRequirement extends MixinUsers {
       invitato: this.seluser.name + ' ' + this.seluser.surname,
       mittente: this.dashboard.myself.username
     })
+  }
+
+  get myclassreq() {
+    let mycl = 'text-center'
+    mycl += (this.ismydownline) ? ' ' + 'background-color: green;' : ''
+
+    return mycl
   }
 
 }

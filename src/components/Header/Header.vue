@@ -157,7 +157,7 @@
                     <div v-if="isLogged" id="user-actions" class="column justify-center q-gutter-sm q-ma-sm center-150" >
                         <q-btn rounded color="primary" icon="person" to="/profile">{{$t('pages.profile')}}</q-btn>
                         <!--<q-btn round color="warning" icon="lock"></q-btn>-->
-                        <q-btn rounded color="negative" icon="exit_to_app" @click='logoutHandler'>{{$t('login.exit')}}</q-btn>
+                        <q-btn rounded color="negative" icon="exit_to_app" @click='logoutHandler'>{{$t('login.esci')}}</q-btn>
                     </div>
 
                 </div>
@@ -165,6 +165,7 @@
                 <div v-show="!isLogged">
                     <div class="q-ma-md" style="">
                         <CSignIn :mythis="mythis"
+                                 :showregbutt="static_data.functionality.SHOW_REG_BUTTON"
                                  @loginOk="loginOk"
                                  @loginInCorso="loginInCorso"
                                  @checkErrors="checkErrors"

@@ -16,6 +16,7 @@ export default class CCardState extends MixinBase {
   @Prop({ required: false, default: '' }) public imgsrc
   @Prop({ required: false, default: false }) public isperc
   @Prop({ required: false, default: '' }) public textadd
+  @Prop({ required: false, default: 'green' }) public color
 
   get getsize() {
     if (tools.isMobile())

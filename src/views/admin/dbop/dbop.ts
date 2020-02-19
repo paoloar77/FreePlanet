@@ -10,16 +10,35 @@ import { CTitleBanner } from '../../../components/CTitleBanner'
   components: { CTitleBanner }
 })
 export default class Dbop extends Vue {
-  public ris: string = ''
+  public $t
+  public ris: any
+  public riga: number = 0
+  public col: number = 0
+  public placca: string = ''
 
-  public async changeCellInt() {
+  public async EseguiFunz(miafunz) {
+    this.$q.dialog({
+      message: 'Continuare ' + miafunz + ' ?',
+      cancel: {
+        label: this.$t('dialog.cancel')
+      },
+      ok: {
+        label: this.$t('dialog.yes'),
+        push: true
+      },
+      title: 'Funzione:'
+    }).onOk(async () => {
+      const mydata = {
+        dbop: miafunz,
+        riga: this.riga,
+        col: this.col
+      }
+      this.ris = await UserStore.actions.execDbOp({ mydata })
 
-    const mydata = {
-      dbop: 'changeCellInt'
-    }
+      if (miafunz === 'visuPlacca') {
+        this.placca = this.ris.placca
+      }
 
-    this.ris = await UserStore.actions.execDbOp({ mydata })
-
+    })
   }
-
 }

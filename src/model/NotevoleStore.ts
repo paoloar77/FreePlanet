@@ -15,6 +15,9 @@ export interface INotData {
   num_teleg_pending?: number
   num_part_zoom?: number
   num_part_accepted?: number
+  num_qualificati?: number
+  num_requisiti?: number
+  num_modalita_pagamento?: number
   num_users_dream?: number
   arr_nations?: string
   lastsreg?: IUserFields[]

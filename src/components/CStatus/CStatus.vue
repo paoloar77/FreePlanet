@@ -160,7 +160,7 @@
             <div v-if="mystep.descr">
               <div v-html="$t(mystep.descr)"></div>
             </div>
-            <q-input v-model="my_dream" :label="$t('steps.dream')+' (min. 10 caratteri):'"
+            <q-input v-model="my_dream" :label="$t('steps.dream')+' (min. 10):'"
                      type="textarea" debounce="1000"
                      input-class="myinput-area-big"
                      autogrow
@@ -168,15 +168,15 @@
 
             ></q-input>
 
-<!--
-            <CMyFieldDb :title="$t('reg.my_dream')"
-                        table="users"
-                        mykey="profile"
-                        mysubkey="my_dream"
-                        :type="tools.FieldType.string"
-            >
-            </CMyFieldDb>
--->
+            <!--
+                        <CMyFieldDb :title="$t('reg.my_dream')"
+                                    table="users"
+                                    mykey="profile"
+                                    mysubkey="my_dream"
+                                    :type="tools.FieldType.string"
+                        >
+                        </CMyFieldDb>
+            -->
           </div>
           <div v-else-if="mystep.title === 'steps.chat_biblio'">
             <div v-if="mystep.descr">
@@ -207,26 +207,51 @@
 
                 </CVideo>
 
-                <h3>ISTRUZIONI ZOOM</h3>
+                <div v-if="toolsext.isLang('it')">
+                  <h3>ISTRUZIONI ZOOM</h3>
 
-                <ul style="text-align: left; font-size:0.75rem;">
-                  <li>1. Scarica l'app (<a href="https://play.google.com/store/apps/details?id=us.zoom.videomeetings"
-                                           target="_blank">store</a> o <a href="https://zoom.us/support/download"
-                                                                          target="_blank">da PC</a>)
-                  </li>
-                  <li>2. Inserisci il tuo Nome e Cognome per essere riconosciuto</li>
-                  <li>3. Clicca "join meeting"</li>
-                  <li>4. Clicca "call in device" altrimenti non potrai sentire 🔊</li>
-                  <li>5. Clicca il microfono per Attivarlo o Silenziarlo.</li>
-                </ul>
+                  <ul style="text-align: left; font-size:0.75rem;">
+                    <li>1. Scarica l'app (<a href="https://play.google.com/store/apps/details?id=us.zoom.videomeetings"
+                                             target="_blank">store</a> o <a href="https://zoom.us/support/download"
+                                                                            target="_blank">da PC</a>)
+                    </li>
+                    <li>2. Inserisci il tuo Nome e Cognome per essere riconosciuto</li>
+                    <li>3. Clicca "join meeting"</li>
+                    <li>4. Clicca "call in device" altrimenti non potrai sentire 🔊</li>
+                    <li>5. Clicca il microfono per Attivarlo o Silenziarlo.</li>
+                  </ul>
 
-                <div class="text-h6"><strong>In più avrai:</strong></div>
-                <ul style="text-align: left; font-size:0.75rem;">
-                  <li>Tasto per togliere il video (📹) ❌</li>
-                  <li>Tasto 'Share': per condividere contenuti condivisi</li>
-                  <li>Tasto 'Partecipants' in cui sulla sinistra, in basso, troverai la CHAT.</li>
-                  <li>Tasto 'More': troverai Raise Hands per fare le domande.</li>
-                </ul>
+                  <div class="text-h6"><strong>In più avrai:</strong></div>
+                  <ul style="text-align: left; font-size:0.75rem;">
+                    <li>Tasto per togliere il video (📹) ❌</li>
+                    <li>Tasto 'Share': per condividere contenuti condivisi</li>
+                    <li>Tasto 'Partecipants' in cui sulla sinistra, in basso, troverai la CHAT.</li>
+                    <li>Tasto 'More': troverai Raise Hands per fare le domande.</li>
+                  </ul>
+                </div>
+                <div v-else>
+                  <h3>ZOOM INSTRUCTIONS</h3>
+
+                  <ul style="text-align: left; font-size:0.75rem;">
+                    <li>1. Download the app (<a
+                      href="https://play.google.com/store/apps/details?id=us.zoom.videomeetings"
+                      target="_blank">store</a> or <a href="https://zoom.us/support/download"
+                                                      target="_blank">by PC</a>)
+                    </li>
+                    <li>2. Enter your first and last name to be recognized</li>
+                    <li>3. Click "join meeting"</li>
+                    <li>4. Click "call in device" otherwise you won't be able to hear 🔊</li>
+                    <li>5. Click the microphone to turn it on or mute it</li>
+                  </ul>
+
+                  <div class="text-h6"><strong>More you will have:</strong></div>
+                  <ul style="text-align: left; font-size:0.75rem;">
+                    <li>Cancel button to remove the video (📹) ❌</li>
+                    <li>Share' button: to share shared content</li>
+                    <li>Participants' button where on the left, at the bottom, you will find the CHAT.</li>
+                    <li>Button 'More': you'll find Raise Hands to ask questions.</li>
+                  </ul>
+                </div>
 
               </div>
             </CTitleBanner>
@@ -335,7 +360,8 @@
         <q-toolbar-title @click="scrolltostep(steptodo)">
           <div class="flex flex-center q-mt-xs">
             <div class="flex flex-center">
-              <q-badge color="white" text-color="grey-8" style="opacity: 0.9; font-size: 0.85rem;" :label="strpercstep"></q-badge>
+              <q-badge color="white" text-color="grey-8" style="opacity: 0.9; font-size: 0.85rem;"
+                       :label="strpercstep"></q-badge>
             </div>
             <q-linear-progress size="lg" :value="percstep" color="green" class="q-pa-xs q-mb-xs bg-red">
             </q-linear-progress>

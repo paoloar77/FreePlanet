@@ -41,6 +41,10 @@ export default class UsersList extends Vue {
         {
           label: 'Non hanno compilato il sogno',
           value: shared_consts.FILTER_USER_NO_DREAM
+        },
+        {
+          label: 'Telegram BOT Rimosso',
+          value: shared_consts.FILTER_USER_TELEGRAM_BLOCKED
         }
       ]
 

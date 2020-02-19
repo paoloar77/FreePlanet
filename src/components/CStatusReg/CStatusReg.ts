@@ -66,7 +66,7 @@ export default class CStatusReg extends MixinBase {
 
   public created() {
     if (tools.isManager()) {
-      this.MAXNUM_POLLING = 1000
+      this.MAXNUM_POLLING = 100
     }
     this.load()
   }
@@ -127,6 +127,13 @@ export default class CStatusReg extends MixinBase {
   get perc_reg() {
     if (this.datastat.num_tot_lista > 0)
       return (this.datastat.num_reg_lista / this.datastat.num_tot_lista * 100)
+    else
+      return 0
+  }
+
+  public calcperc(val1, valmax ) {
+    if (valmax > 0)
+      return (val1 / valmax * 100)
     else
       return 0
   }

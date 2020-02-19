@@ -6,7 +6,7 @@
                   mystyle=" " myclass="myshad" :canopen="true">
 
 
-      <div v-if="!ismyinvited_notreg(seluser)" class="text-center">
+      <div v-if="!ismyinvited_notreg(seluser)" :class="myclassreq">
 
         <div v-if="!isextralist(seluser)">
           <div v-for="(req, index) of arrrequisiti">
@@ -30,6 +30,7 @@
                 rounded outlined
                 @blur="$v.aportador_solidario.$touch"
                 :error="$v.aportador_solidario.$error"
+                @keydown.space="(event) => event.preventDefault()"
                 :error-message="errorMsg('aportador_solidario', $v.aportador_solidario)"
                 maxlength="20"
                 debounce="1000"

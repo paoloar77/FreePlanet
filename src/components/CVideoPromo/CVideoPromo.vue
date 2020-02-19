@@ -33,7 +33,7 @@
                     clcolor="text-white"
                     myclass="myshad" canopen="true" :visible="false">
 
-        <CVideo myvideokey="oueTgIH3xYg">
+        <CVideo myvideokey="OVlriFnOxG4">
 
         </CVideo>
       </CTitleBanner>

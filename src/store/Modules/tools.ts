@@ -52,7 +52,7 @@ export interface INotify {
 export const tools = {
   CAN_EDIT: 'q-ce',
 
-  getprefCountries: ['it', 'si', 'us', 'es', 'uk', 'fr', 'de', 'ch'],
+  getprefCountries: ['it', 'si', 'us', 'es', 'pt', 'uk', 'fr', 'de', 'ch'],
 
   APORTADOR_NONE: '------',
 
@@ -1602,6 +1602,9 @@ export const tools = {
       if ((mylang.toLowerCase() === 'es') || (mylang.toLowerCase() === 'es-es') || (mylang.toLowerCase() === 'eses')) {
         mylang = 'es'
       }
+      if ((mylang.toLowerCase() === 'pt') || (mylang.toLowerCase() === 'pt-pt') || (mylang.toLowerCase() === 'ptpt')) {
+        mylang = 'pt'
+      }
       if ((mylang.toLowerCase() === 'fr') || (mylang.toLowerCase() === 'fr-fr') || (mylang.toLowerCase() === 'frfr')) {
         mylang = 'fr'
       }
@@ -1977,6 +1980,14 @@ export const tools = {
       return ''
   },
 
+  getstrDateMonthWeekTimeShort(mytimestamp) {
+    // console.log('getstrDate', mytimestamp)
+    if (!!mytimestamp)
+      return this.getDayOfWeek(mytimestamp) + ' ' + date.formatDate(mytimestamp, 'DD MMM - HH:mm')
+    else
+      return ''
+  },
+
   getstrDateEmailTime(mythis, mytimestamp) {
     // console.log('getstrDate', mytimestamp)
     if (!!mytimestamp)
@@ -2067,6 +2078,25 @@ export const tools = {
     const mydate = new Date()
     return mydate
   },
+
+  getDayOfWeek(date) {
+    const dayOfWeek = new Date(date).getDay()
+
+    let lang = this.getLocale()
+
+    const myday = {
+      it: ['Domenica', 'Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato'],
+      enUs: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+      fr: ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'],
+      es: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'iernes', 'Sábado'],
+      pt: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
+      de: ['Sonntag', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag'],
+      si: ['nedelja', 'Ponedeljek', 'torek', 'sreda', 'četrtek', 'petek', 'sobota'],
+    }
+
+    return isNaN(dayOfWeek) ? '' : myday[lang][dayOfWeek].substring(0, 3)
+  },
+
   getDateNowEvent() {
     return tools.addDays(tools.getDateNow(), -1)
   },
@@ -3138,6 +3168,8 @@ export const tools = {
         return 'fa-flag-it'
       else if (lang === 'ES')
         return 'fa-flag-es'
+      else if (lang === 'PT')
+        return 'fa-flag-pt'
       else if (lang === 'US')
         return 'fa-flag-us'
       else if ((lang === 'GB') || (lang === 'UK'))
@@ -3231,7 +3263,7 @@ export const tools = {
       return 'San Marino'
     } else if (nat === 'PT') {
       return 'Portugal'
-    } else if (nat === 'UK') {
+    } else if ((nat === 'UK') || (nat === 'GB')) {
       return 'United Kingdom'
     } else if (nat === 'UA') {
       return 'Ukraine'
