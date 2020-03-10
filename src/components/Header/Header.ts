@@ -13,17 +13,17 @@ import { toolsext } from '@src/store/Modules/toolsext'
 
 import Quasar, { Screen } from 'quasar'
 import { static_data } from '../../db/static_data'
-import globalroutines from '../../globalroutines'
 
 import MixinUsers from '../../mixins/mixin-users'
 import { CMyAvatar } from '../CMyAvatar'
+import { CSigninNoreg } from '../CSigninNoreg'
 
 @Component({
   name: 'Header',
   mixins: [MixinUsers],
   components: {
     drawer,
-    messagePopover, CSignIn, CMyAvatar
+    messagePopover, CSigninNoreg, CMyAvatar
   }
 })
 
@@ -343,22 +343,6 @@ export default class Header extends Vue {
 
   get isEmailVerified() {
     return UserStore.state.my.verified_email
-  }
-
-  public loginOk() {
-    tools.loginOk(this, true)
-  }
-
-  public loginInCorso() {
-    tools.loginInCorso(this)
-  }
-
-  public checkErrors(riscode) {
-    tools.SignIncheckErrors(this, riscode)
-  }
-
-  public showNotif(msgcode) {
-    tools.showNotif(this.$q, this.$t(msgcode))
   }
 
   get mythis() {

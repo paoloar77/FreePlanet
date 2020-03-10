@@ -1,5 +1,5 @@
 <template>
-  <div class="q-ma-md">
+  <div class="q-ma-sm">
     <div :class="getcl">
       <div v-if="statebool" v-html="msgTrue"></div>
       <div v-else v-html="msgFalse"></div>

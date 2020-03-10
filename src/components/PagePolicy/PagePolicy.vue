@@ -111,7 +111,7 @@
 
       <p>Ultimo aggiornamento: {{lastdataupdate}}</p>
     </div>
-    <div v-if="toolsext.isLang('fr')">
+    <div v-else-if="toolsext.isLang('fr')">
       <p class="text-subtitle1">Politique de confidentialité de {{url}}</p>
       <p class="text-subtitle1">Information sur le traitement des données personnelles conformément à l'article 13 du
         Code civil italien Règlement (UE) n° 2016/679.</p>

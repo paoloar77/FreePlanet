@@ -92,6 +92,13 @@
       </CMyFieldDb>
 
     </CTitleBanner>
+
+    <br><br>
+    <div class="text-center">
+      <q-btn rounded size="md" color="negative" @click="eliminaAccount" :label="$t('reg.cancella_account')">
+      </q-btn>
+    </div>
+
   </div>
 </template>
 

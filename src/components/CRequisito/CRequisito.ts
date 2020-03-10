@@ -11,12 +11,17 @@ import MixinBase from '@src/mixins/mixin-base'
 
 export default class CRequisito extends MixinBase {
   @Prop({ required: true }) public icon: string
+  @Prop({ required: false, default: 'fas fa-exclamation-triangle' }) public icon_error: string
   @Prop({ required: true }) public text: string
   @Prop({ required: true }) public isok: boolean
+  @Prop({ required: false, default: false }) public no_check: boolean
   @Prop({ required: true }) public info: string
 
   get checkifok() {
-    return this.isok ? 'green' : 'red'
+    if (this.no_check)
+      return 'blue'
+    else
+      return this.isok ? 'green' : 'red'
   }
 
   get getris() {
@@ -24,6 +29,6 @@ export default class CRequisito extends MixinBase {
   }
 
   get iconris() {
-    return (this.isok) ? 'fas fa-check' : 'fas fa-exclamation-triangle'
+    return (this.isok) ? 'fas fa-check' : this.icon_error
   }
 }

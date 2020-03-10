@@ -1,6 +1,6 @@
 <template>
   <div>
-    <line-chart :width="tools.getwidthscale(mythis, 350, 400)+`px`" :title="title" :data="getmydata" :round="0" :colors="mycolors"></line-chart>
+    <line-chart :width="tools.getwidthscale(mythis, 350, 400)+`px`" :title="title" :data="getmydata" :offset="getoffset" :round="0" :colors="mycolors"></line-chart>
   </div>
 </template>
 

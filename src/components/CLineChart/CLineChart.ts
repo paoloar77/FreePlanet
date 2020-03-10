@@ -16,6 +16,7 @@ export default class CLineChart extends Vue {
   @Prop({ required: false, default: false }) public sum: boolean
   @Prop({ required: false, default: '' }) public title: string
   @Prop({ required: false, default: null }) public mycolors
+  @Prop({ required: false, default: 0 }) public offset
 
   get tools() {
     return tools
@@ -33,6 +34,8 @@ export default class CLineChart extends Vue {
     this.mydatafixed = {}
 
     let somma = 0
+    if (this.sum)
+      somma = this.offset
 
     for (const rec of this.mydata) {
       if (this.sum) {
@@ -46,6 +49,10 @@ export default class CLineChart extends Vue {
 
   get getmydata() {
     return this.mydatafixed
+  }
+
+  get getoffset() {
+    return this.offset
   }
 
 }

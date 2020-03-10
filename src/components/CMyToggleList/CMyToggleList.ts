@@ -16,6 +16,7 @@ export default class CMyToggleList extends Vue {
   @Prop({ required: false, default: '' }) public myclass
   @Prop({ required: true, default: '' }) public optlab
   @Prop({ required: true, default: '' }) public optval
+  @Prop({ required: false, default: false }) public isarray
 
   public myvalue = ''
   public myarrvalues = []
@@ -26,7 +27,13 @@ export default class CMyToggleList extends Vue {
 
   public changeval(newval) {
     // Update value
-    const totale = this.myarrvalues.filter((rec) => rec.valbool).reduce((sum, rec) => sum + rec.value, 0)
+    let totale = null
+    if (this.isarray) {
+      totale = this.myarrvalues.filter((rec) => rec.valbool).map((a) => a.value)
+    } else {
+      totale = this.myarrvalues.filter((rec) => rec.valbool).reduce((sum, rec) => sum + rec.value, 0)
+    }
+    console.log('totale', totale)
     this.myvalue = totale
 
     // Refresh value
@@ -36,15 +43,33 @@ export default class CMyToggleList extends Vue {
   public mounted() {
     this.myarrvalues = []
 
-    // console.table(this.options)
-    this.options.forEach((rec) => {
-      const mydata = {
-        label: this.$t(rec[this.optlab]),
-        value: rec[this.optval],
-        valbool: tools.isBitActive(this.value, rec[this.optval])
-      }
-      this.myarrvalues.push(mydata)
-    })
+    // console.log('value', this.value)
+    // console.log('optval', this.optval)
+    // console.log('optlab', this.optlab)
 
+    if (this.isarray) {
+      // console.table(this.options)
+      this.options.forEach((rec) => {
+        console.log('rec: ', rec)
+        const mydata = {
+          label: this.$t(rec[this.optlab]),
+          value: rec[this.optval],
+          valbool: this.value.includes(rec[this.optval])
+        }
+        console.log('mydata ', mydata)
+        this.myarrvalues.push(mydata)
+      })
+
+    } else {
+      // console.table(this.options)
+      this.options.forEach((rec) => {
+        const mydata = {
+          label: this.$t(rec[this.optlab]),
+          value: rec[this.optval],
+          valbool: tools.isBitActive(this.value, rec[this.optval])
+        }
+        this.myarrvalues.push(mydata)
+      })
+    }
   }
 }

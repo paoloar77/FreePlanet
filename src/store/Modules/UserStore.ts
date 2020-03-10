@@ -568,7 +568,7 @@ namespace Actions {
 
     return await Api.SendReq('/users/dbop', 'POST', paramquery)
       .then((res) => {
-        return res
+        return res.data
       }).catch((error) => {
         return false
       })

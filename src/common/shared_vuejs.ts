@@ -1,7 +1,18 @@
 export const shared_consts = {
+
   Accepted: {
-    CHECK_READ_GUIDELINES: 1,
-    CHECK_SEE_VIDEO_PRINCIPI: 2,
+    CHECK_READ_GUIDELINES: {
+      value: 1,
+      label: 'steps.linee_guida',
+      icon: 'fas fa-user-shield',
+      color: 'red'
+    },
+    CHECK_SEE_VIDEO_PRINCIPI: {
+      value: 2,
+      label: 'steps.video_intro',
+      icon: 'fas fa-tools',
+      color: 'green'
+    },
   },
 
   ALL_SAW_AND_ACCEPTED: 3,

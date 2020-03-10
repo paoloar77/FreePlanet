@@ -18,9 +18,12 @@ import { tools } from '../../store/Modules/tools'
 import { lists } from '../../store/Modules/lists'
 import { shared_consts } from '../../common/shared_vuejs'
 import { CMyRequirement } from '../CMyRequirement'
+import { CRequisiti } from '../CRequisiti'
+import { CCardState } from '../CCardState'
+import { CMyNave } from '../CMyNave'
 
 @Component({
-  components: { CProfile, CTitleBanner, CMyFieldDb, CCopyBtn, CUserBadge, CLegenda, CRequisito, CMyRequirement }
+  components: { CProfile, CTitleBanner, CMyFieldDb, CCopyBtn, CUserBadge, CLegenda, CRequisito, CMyRequirement, CRequisiti, CCardState, CMyNave }
 })
 
 export default class CMyDashboard extends MixinUsers {
@@ -37,7 +40,8 @@ export default class CMyDashboard extends MixinUsers {
     numpeople_aportador: 0,
     downline: [],
     downnotreg: [],
-    downbyuser: []
+    downbyuser: [],
+    arrnavi: []
   }
 
   @Prop({ required: true }) public username
@@ -70,7 +74,7 @@ export default class CMyDashboard extends MixinUsers {
       this.myusername = this.username
 
     await UserStore.actions.getDashboard({ username: this.myusername }).then((ris) => {
-      this.dashboard = UserStore.state.my.dashboard
+      this.dashboard = ris
     })
   }
 
@@ -89,5 +93,20 @@ export default class CMyDashboard extends MixinUsers {
     this.showuserinfo = true
     this.seluser = user
   }
+
+  get Completato7Req() {
+    // return tools.Is7ReqOk(this.dashboard.myself)
+    return this.dashboard.myself.qualified
+  }
+  get Completato9Req() {
+    // return tools.Is9ReqOk(this.dashboard.myself)
+    return this.dashboard.myself.qualified && (this.dashboard.myself.numinvitatiattivi >= 2)
+  }
+
+  public HasNave() {
+    return this.dashboard.arrnavi.length > 0
+  }
+
+
 
 }

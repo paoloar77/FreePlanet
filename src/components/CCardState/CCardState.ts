@@ -16,12 +16,17 @@ export default class CCardState extends MixinBase {
   @Prop({ required: false, default: '' }) public imgsrc
   @Prop({ required: false, default: false }) public isperc
   @Prop({ required: false, default: '' }) public textadd
-  @Prop({ required: false, default: 'green' }) public color
+  @Prop({ required: false, default: 'green' }) public mycolor
+  @Prop({ required: false, default: '150px' }) public size
+  @Prop({ required: false, default: '130px' }) public size_mob
+  @Prop({ required: false, default: '1rem' }) public fontsize
+  @Prop({ required: false, default: '' }) public mystyle
+  @Prop({ required: false, default: 'my-card-stat' }) public myclass
 
   get getsize() {
     if (tools.isMobile())
-      return '130px'
+      return this.size_mob
     else
-      return '150px'
+      return this.size
   }
 }

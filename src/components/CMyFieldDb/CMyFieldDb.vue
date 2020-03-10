@@ -197,6 +197,15 @@
 
             </div>
             <div v-else-if="col.fieldtype === tools.FieldType.multiselect">
+              <CMyToggleList :label="col.title"
+                             :options="db_fieldsTable.getTableJoinByName(col.jointable)"
+                             :value.sync="myvalue"
+                             :optval="db_fieldsTable.getKeyByTable(col.jointable)"
+                             :optlab="db_fieldsTable.getLabelByTable(col.jointable)"
+                             :isarray="true">
+              </CMyToggleList>
+
+<!--
               <q-select
                 v-model="myvalue"
                 rounded
@@ -214,6 +223,7 @@
               >
 
               </q-select>
+              -->
             </div>
             <div v-else-if="col.fieldtype === tools.FieldType.multioption">
             </div>

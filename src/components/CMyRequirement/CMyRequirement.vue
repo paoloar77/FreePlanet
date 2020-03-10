@@ -1,16 +1,20 @@
 <template>
   <div>
-    <CTitleBanner class="shadow-2 rounded-borders" :title="$t('reg.requirement') + ` - ` + seluser.name + ` ` + seluser.surname + ``"
+    <CTitleBanner class="shadow-2 rounded-borders"
+                  :title="$t('reg.requirement') + ` - ` + seluser.name + ` ` + seluser.surname + ``"
                   bgcolor="bg-primary"
                   clcolor="text-white"
                   mystyle=" " myclass="myshad" :canopen="true">
 
 
-      <div v-if="!ismyinvited_notreg(seluser)" :class="myclassreq">
+      <div :class="myclassreq">
 
         <div v-if="!isextralist(seluser)">
           <div v-for="(req, index) of arrrequisiti">
-            <CRequisito :icon="req.icon" :text="(index + 1) + `. ` + $t(req.textlang) + req.textadd(seluser)" :isok="req.isok(seluser)"
+            <CRequisito :icon="req.icon" :text="(index + 1) + `. ` + $t(req.textlang) + req.textadd(seluser)"
+                        :icon_error="geticonerror(true)"
+                        :no_check="false"
+                        :isok="req.isok(seluser)"
                         :info="req.info"></CRequisito>
           </div>
 
@@ -68,7 +72,28 @@
         </div>
 
       </div>
-      <div v-else>
+      <CTitleBanner class="shadow-2 rounded-borders"
+                    :title="$t('steps.sharemovement') + ` - ` + seluser.name + ` ` + seluser.surname + ``"
+                    bgcolor="bg-secondary"
+                    clcolor="text-white"
+                    mystyle=" " myclass="myshad" :canopen="true">
+
+        <div :class="myclassreq">
+
+          <div v-if="!isextralist(seluser)">
+            <div v-for="(req, index) of arrrequisiti_liberi">
+              <CRequisito :icon="req.icon" :text="$t(req.textlang) + req.textadd(seluser)"
+                          :icon_error="geticonerror(false)"
+                          :no_check="true"
+                          :isok="req.isok(seluser)"
+                          :info="req.info"></CRequisito>
+            </div>
+
+          </div>
+
+        </div>
+      </CTitleBanner>
+      <!--<div v-else>
         <div class="column justify-center q-gutter-sm q-pa-sm">
 
           <CRequisito icon="fas fa-user" :text="$t('dashboard.notreg')" :isok="false"
@@ -85,7 +110,7 @@
           </CTitleBanner>
 
         </div>
-      </div>
+      </div>-->
 
 
     </CTitleBanner>

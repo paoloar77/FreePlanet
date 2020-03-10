@@ -54,7 +54,8 @@
           :done-color="geticoncolor(mystep.title)"
           :done="mystep.funccheck(index)"
           :error="getiferror(mystep.funccheck_error(index), mystep.funccheck(index))"
-          :error-icon="geterricon(mystep.funccheck(index))"
+          :error-icon="geterricon(mystep.funccheck(index), mystep)"
+          :error-color="geterrcolor(mystep)"
         >
           <div v-if="mystep.title === 'reg.email'">
             <CVerifyEmail>
@@ -137,6 +138,10 @@
             </CTitleBanner>
 
             <div>
+
+              <CRequisiti :statebool="RequisitoPayment" :msgTrue="$t('steps.paymenttype_long2')"
+                          :msgFalse="$t('steps.paymenttype_long2')">
+              </CRequisiti>
 
               <CMyFieldDb :title="$t('reg.paymenttype')"
                           table="users"
@@ -259,9 +264,9 @@
           </div>
           <div v-else-if="mystep.title === 'steps.sharemovement'">
 
-            <CRequisiti :statebool="getnuminvitati() >= 2" :msgTrue="$t('steps.sharemovement_hai_invitato')"
+            <!--<CRequisiti :statebool="getnuminvitati() >= 2" :msgTrue="$t('steps.sharemovement_hai_invitato')"
                         :msgFalse="$t('steps.sharemovement_devi_invitare_almeno_2')">
-            </CRequisiti>
+            </CRequisiti>-->
 
             <q-btn class="q-mb-md" rounded size="md" color="primary" to="/dashboard"
                    :label="$t('pages.dashboard')"></q-btn>
@@ -318,8 +323,9 @@
                         :msgFalse="$t('steps.enter_prog_completa_requisiti')">
             </CRequisiti>
 
-            <CRequisiti :statebool="CompletatoRequisiti" :msgTrue="$t('steps.enter_prog_status')"
-                        :msgFalse="$t('steps.enter_prog_status')">
+
+            <CRequisiti v-if="Completato9Req" :statebool="Completato9Req" :msgTrue="$t('steps.enter_nave_9req_ok')"
+                        :msgFalse="$t('steps.enter_nave_9req_ko')">
             </CRequisiti>
 
           </div>

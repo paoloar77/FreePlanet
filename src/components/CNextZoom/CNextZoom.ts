@@ -36,7 +36,7 @@ export default class CNextZoom extends MixinBase {
       const mydate = GlobalStore.state.calzoom.slice(-1)[0].date_start
       const mydate_end = GlobalStore.state.calzoom.slice(-1)[0].date_end
       const datenow = tools.getDateNow()
-      console.log('date.getDateDiff(datenow, mydate, \'minutes\')', date.getDateDiff(datenow, mydate, 'minutes'))
+      // console.log('date.getDateDiff(datenow, mydate, \'minutes\')', date.getDateDiff(datenow, mydate, 'minutes'))
       // if begin is in the past, take the day now
       if ((date.getDateDiff(datenow, mydate, 'minutes') > -10) && (date.getDateDiff(datenow, mydate_end, 'minutes') < 0)) {
         return true

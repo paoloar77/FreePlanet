@@ -9,11 +9,16 @@ export default class CRequisiti extends Vue {
   @Prop({ required: true }) public statebool: boolean
   @Prop({ required: true }) public msgTrue: string
   @Prop({ required: true }) public msgFalse: string
+  @Prop({ required: false, default: false }) public color_ko: boolean
 
   get getcl() {
     if (this.statebool)
       return 'requisiti_on'
-    else
-      return 'requisiti_off'
+    else {
+      if (this.color_ko)
+        return 'requisiti_off_ko'
+      else
+        return 'requisiti_off'
+    }
   }
 }

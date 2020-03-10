@@ -11,10 +11,11 @@ import { IColGridTable } from '../../model'
 import { CMySelect } from '../CMySelect'
 import { GlobalStore, UserStore } from '../../store/Modules'
 import { CMyChipList } from '../CMyChipList'
+import { CMyToggleList } from '../CMyToggleList'
 
 @Component({
   name: 'CMyFieldDb',
-  components: { CMyEditor, CMySelect, CMyChipList }
+  components: { CMyEditor, CMySelect, CMyChipList, CMyToggleList }
 })
 
 export default class CMyFieldDb extends MixinBase {

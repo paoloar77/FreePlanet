@@ -64,16 +64,9 @@
               Union</strong>, Xoom o TransferWise nei casi di
             regali extraeuropei.
           </li>
-          <li>Invitare, invitare, invitare. Accompagnare le persone ad un Zoom di Benvenuto e assisterli nella
-            registrazione al sito. Il movimento è un organismo vivente di cui ora anche tu fai parte. Per ciò ti viene
-            richiesto di coinvolgere attivamente almeno 2 persone, <strong>ne consigliamo 3 in su</strong>, non penso
-            solo a me, ma anche agli altri che ne fanno parte, garantendo e <strong>sostenendo così la
-              solidarietà</strong>
-            dello stesso.
-          </li>
         </ol>
 
-        <p class="cltexth3 text-blue q-ma-lg">Fase 3: Programmazione e Attivazione della Billettera</p>
+        <p class="cltexth3 text-blue q-ma-lg">Fase 3: Lista d'imbarco e partenza della Nave</p>
 
         <p>In AYNI La sequenza dei passaggi è programmata in anticipo, in modo da:</p>
         <ul class="lista">
@@ -81,17 +74,16 @@
           <li>realizzare e concludere il processo in maniera semplice, godibile e semi-automatizzata.</li>
         </ul>
 
-        <p>La tua Billetera verrà programmata e tu entrerai in una chat coi tuoi compagni di viaggio. Allo stesso tempo,
-          ti verrà comunicata la data in cui la billetera sarà attivata e in cui potrai donare i 33€ e il nominativo e i
+        <p>La tua Nave verrà programmata e tu entrerai in una chat coi tuoi compagni di viaggio. Allo stesso tempo,
+          ti verrà comunicata la data in cui la tua Nave salperà, cioè quando potrai donare i 33€ e il nominativo e i
           dati del Sognatore a cui fare il tuo dono.
-          Conoscerai, inoltre, le date di ciascuno dei 3 passi.
         </p>
 
         <p class="clBorderImportant" style="border-color: deepskyblue">
           Le date di programmazione e dei passi sono intese come ‘<em>previsioni di attivazione e di completamento</em>’.
           Nel caso il flusso di persone e di invitati non consentisse di mantenere e realizzare quanto programmato nei
-          tempi e
-          forma previsti, le date verranno riprogrammate per permettere il completamento di tutti e non lasciare che il
+          tempi e forma previsti, le date verranno riprogrammate per permettere il completamento di tutti e non lasciare
+          che il
           viaggio possa interrompersi.
         </p>
 
@@ -104,7 +96,7 @@
 
         <CTitleBanner title="Visualizza in Anteprima I 3 Passi (clicca qui)" bgcolor="bg-green-5" canopen="true"
                       :visible="false" imgpreview="statics/images/passo_1.jpg">
-          <p>Dal momento in cui conosco il giorno della partenza della mia bigliettera, i passi da compiere
+          <p>Dal momento in cui conosco il giorno della partenza della mia Nave, i passi da compiere
             saranno questi:</p>
           <div class="text-center">
             <q-img src="statics/images/passo_1.jpg" class="img"></q-img>
@@ -215,16 +207,9 @@
               Union</strong>, Xoom o TransferWise en casos de
             regalos extra-europeos.
           </li>
-          <li>
-            Invitar, invitar, invitar. Acompañar a la gente a un Zoom de Bienvenida y ayudarlos en el
-            registro del sitio. El movimiento es un organismo vivo del que ahora formas parte. Es por eso que usted es
-            se requiere involucrar activamente al menos a 2 personas, <strong> recomendamos 3 up</strong>, no lo creo.
-            sólo a mí, sino también a los otros que forman parte de ella, garantizando y apoyando así la
-            <strong>solidaridad</strong> de lo mismo.
-          </li>
         </ol>
 
-        <p class="cltexth3 text-blue q-ma-lg">Paso 3: Programación y activación de la Billettera</p>.
+        <p class="cltexth3 text-blue q-ma-lg">Paso 3: Programación y activación de la Nave</p>.
 
         <p>En AYNI La secuencia de pasos está programada de antemano, de modo que:</p>
         <ul class="lista">
@@ -232,11 +217,9 @@
           <li>hacer y terminar el proceso de una manera simple, agradable y semi-automática.</li>
         </ul>
 
-        <p>Tu Billetera será programada y entrarás en un chat con tus compañeros de viaje. Al mismo tiempo,
-          se le informará de la fecha en la que se activará la billetera y en la que podrá donar los 33 € y el
-          nombre y el
+        <p>Su nave será programada y entrará en un chat con sus compañeros de viaje. Al mismo tiempo,
+          se le informará de la fecha en la que su barco zarpará, es decir, cuando podrá donar los 33€ y el nombre y el
           los datos del Soñador para darle su regalo.
-          También sabrás las fechas de cada uno de los 3 pasos.
         </p>
 
         <p class="clBorderImportant" style="border-color: deepskyblue">
@@ -370,16 +353,8 @@
               Union</strong>, Xoom ou TransferWise em casos de
             presentes extra-europeus.
           </li>
-          <li>Convidar, convidar, convidar. Acompanhe as pessoas a um Zoom de Boas-vindas e ajude-as no
-            registo no site. O movimento é um organismo vivo do qual você agora faz parte. É por isso que você é
-            necessário para envolver ativamente pelo menos 2 pessoas, <strong> recomendamos 3 a mais</strong>, eu não
-            acho.
-            apenas para mim, mas também para os outros que fazem parte dela, garantindo e <strong>sustentando o
-              solidariedade</strong>
-            do mesmo.
-          </li>
         </ol>
-        <p class="cltexth3 text-blue q-ma-lg">Passo 3: Programação e ativação do Billettera</p>.
+        <p class="cltexth3 text-blue q-ma-lg">Passo 3: Programação e ativação do Navio</p>.
 
         <p>Em AYNI A sequência de passos é programada com antecedência, de modo que:</p>
         <ul class="lista">
@@ -387,10 +362,9 @@
           <li>Fazer e terminar o processo de uma forma simples, agradável e semi-automática.</li>
         </ul>
 
-        <p>Sua Billetera será programada e você entrará em uma conversa com seus companheiros de viagem. Ao mesmo tempo,
-          você será informado da data em que o boleto será ativado e em que você pode doar os 33 € e o nome e a
+        <p>Sua nave será programada e você entrará em uma conversa com seus colegas passageiros. Ao mesmo tempo,
+          você será informado da data em que seu navio navegará, ou seja, quando você poderá doar os 33 euros e o nome e
           dados do Sonhador para dar o seu presente.
-          Você também saberá as datas de cada um dos 3 passos.
         </p>
 
         <p class="clBorderImportant" style="border-color: deepskyblue">
@@ -520,17 +494,8 @@
               Union</strong>, Xoom ou TransferWise en cas de
             les cadeaux extra-européens.
           </li>
-          <li>Invitez, invitez, invitez. Accompagner les personnes à un Zoom de bienvenue et les aider à
-            l'enregistrement du site. Le mouvement est un organisme vivant dont vous faites maintenant partie. C'est
-            pourquoi vous êtes
-            Il faut qu'au moins 2 personnes participent activement, <strong> nous recommandons 3 personnes </strong>, je
-            ne pense pas.
-            seulement à moi, mais aussi aux autres qui en font partie, garantissant et <strong>soutenant ainsi la
-              solidarité</strong>
-            de la même manière.
-          </li>
         </ol>
-        <p class="cltexth3 text-blue q-ma-lg">Etape 3: Programmation et activation de la Billettera</p>.
+        <p class="cltexth3 text-blue q-ma-lg">Etape 3: Programmation et activation de la Navire</p>.
 
         <p>En AYNI La séquence des étapes est programmée à l'avance, de sorte que:</p>
         <ul class="lista">
@@ -538,11 +503,11 @@
           <li>faire et terminer le processus de manière simple, agréable et semi-automatique.</li>
         </ul>
 
-        <p>Votre Billetera sera programmée et vous entrerez en conversation avec vos compagnons de voyage. Dans le même
-          temps, vous serez informé de la date à laquelle la billetera sera activée et à laquelle vous pourrez faire don
-          des
-          33€ et du nom et de la les données du rêveur à qui vous pouvez faire un cadeau.
-          Vous connaîtrez également les dates de chacune des 3 étapes.
+        <p>Votre navire sera programmé et vous entrerez en conversation avec vos compagnons de voyage. Dans le même
+          temps,
+          vous serez informé de la date à laquelle votre navire naviguera, c'est-à-dire de la date à laquelle vous
+          pourrez faire don des 33€ et du nom et de la
+          les données du rêveur à qui vous pouvez faire un cadeau.
         </p>
 
         <p class="clBorderImportant" style="border-color: deepskyblue">
@@ -673,16 +638,9 @@
               Union</strong>, Xoom or TransferWise in cases of
             extra-European gifts.
           </li>
-          <li>Invite, invite, invite. Accompany people to a Welcome Zoom and assist them in the
-            site registration. The movement is a living organism of which you are now part. That is why you are
-            required to actively involve at least 2 people, <strong> we recommend 3 up</strong>, I don't think so.
-            only to me, but also to the others who are part of it, guaranteeing and <strong>supporting
-              solidarity</strong>.
-            of the same.
-          </li>
         </ol>
 
-        <p class="cltexth3 text-blue q-ma-lg">Step 3: Programming and Activation of the Billettera</p>
+        <p class="cltexth3 text-blue q-ma-lg">Step 3: Programming and Activation of the Ship</p>
 
         <p>In AYNI The sequence of steps is programmed in advance, so that:</p>
         <ul class="lista">
@@ -690,12 +648,10 @@
           <li>make and finish the process in a simple, enjoyable and semi-automated way.</li>
         </ul>
 
-        <p>Your Billetera will be programmed and you'll enter a chat with your fellow travellers. At the same time,
-          you will be informed of the date on which the billetera will be activated and on which you can donate the
-          33€
+        <p>Your Ship will be programmed and you will enter a chat with your fellow passengers. At the same time,
+          you will be informed of the date on which your ship will sail, i.e. when you will be able to donate the 33€
           and the name and the
           data of the Dreamer to give your gift to.
-          You will also know the dates of each of the 3 steps.
         </p>
 
         <p class="clBorderImportant" style="border-color: deepskyblue">
@@ -758,29 +714,31 @@
       </CImgText>
     </div>
 
-    <div v-if="showconditions">
+    <div>
       <p>&nbsp;</p>
       <div v-if="toolsext.isLang('it')">
         <CTitleBanner title="Condizioni da Accettare:" bgcolor="bg-red-5"></CTitleBanner>
         <ul class="lista-small">
           <li>dichiaro di aver letto e ben compreso le linee guida del movimento AYNI</li>
 
-          <li>dichiaro di aver ben compreso gli impegni che prendo iscrivendomi a AYNI (portare 2 persone, regalo 33
-            €) e di aver compreso che senza non verrò inserito in programmazione.
+          <li>dichiaro di aver ben compreso l'impegno che prendo iscrivendomi a AYNI (facendo un regalo di 33 €)
+            e di aver compreso che senza non potrò proseguire il mio viaggio.
           </li>
 
-          <li>dichiaro di aver ben compreso che <strong>non è un fondo di investimento e che il mio regalo è a fondo
-            perduto</strong>
+          <li>Potrò avvalermi del diritto di recesso, entro 14 giorni dall'invio del dono, qualora non volessi più
+            continuare il mio viaggio.
+          </li>
+
+          <li>dichiaro di aver ben compreso che <strong>non è un fondo di investimento e che il mio regalo, scaduti i 14
+            giorni del diritto di recesso, è a fondo perduto</strong>
           </li>
 
           <li>dichiaro di aver ben compreso che devo <strong>partecipare almeno ad uno ZOOM</strong>
-            (Video-Conferenza
-            On Line)
+            (Video-Conferenza On Line)
           </li>
 
           <li>dichiaro di aver ben compreso che per la mia sicurezza devo aprire un <strong>conto Paypal</strong>
-            per
-            consegnare il regalo.
+            per consegnare il regalo.
           </li>
         </ul>
       </div>
@@ -804,6 +762,11 @@
           <li>Declaro haber entendido bien que por mi seguridad tengo que abrir una <strong>cuenta de
             Paypal</strong> para entregar el regalo.
           </li>
+
+          <li>
+            Puedo ejercer mi derecho de retirada dentro de los 14 días siguientes al envío del regalo si no deseo
+            continuar mi viaje.
+          </li>
         </ul>
 
       </div>
@@ -825,6 +788,11 @@
 
           <li>Eu declaro que compreendi bem que para minha segurança tenho que abrir uma <strong>conta Paypal</strong>.
             para entregar o presente.
+          </li>
+
+          <li>
+            Posso exercer o meu direito de retirada no prazo de 14 dias após o envio do presente se não quiser mais
+            continuar a minha viagem.
           </li>
         </ul>
       </div>
@@ -848,6 +816,11 @@
           <li>Je déclare avoir bien compris que pour ma sécurité, je dois ouvrir un compte <strong>paypal</strong>.
             pour livrer le cadeau.
           </li>
+
+          <li>
+            Je peux exercer mon droit de rétractation dans les 14 jours suivant l'envoi du cadeau si je ne souhaite plus
+            poursuivre mon voyage.
+          </li>
         </ul>
 
       </div>
@@ -861,8 +834,8 @@
             33 €) and to have understood that without it I will not be included in the programming.
           </li>
 
-          <li>I declare that I have well understood that <strong>is not an investment fund and that my gift is deep
-            lost</strong>
+          <li>I declare that I have well understood that <strong>is not an investment fund and that my gift is
+            non-refundable</strong>
           </li>
 
           <li>I declare that I have well understood that I must <strong>participate at least in one ZOOM</strong>
@@ -870,20 +843,26 @@
           </li>
 
           <li>I declare to have well understood that for my safety I have to open a <strong>paypal</strong> account
-            for
-            deliver the gift.
+            for deliver the gift.
+          </li>
+
+          <li>
+            I can exercise my right of withdrawal within 14 days of sending the gift if I no longer wish to continue my
+            trip.
           </li>
         </ul>
       </div>
 
-      <q-checkbox
-        class="bg-grey-4"
-        v-model="myguideline"
-        color="primary"
-        @input="changeval"
-        :label="$t('steps.read_guidelines')">
+      <div v-if="showconditions">
+        <q-checkbox
+          class="bg-grey-4"
+          v-model="myguideline"
+          color="primary"
+          @input="changeval"
+          :label="$t('steps.read_guidelines')">
 
-      </q-checkbox>
+        </q-checkbox>
+      </div>
 
     </div>
   </div>

@@ -18,7 +18,18 @@ import { CGuidelines } from '../CGuidelines'
 import { CVideoPromo } from '../CVideoPromo'
 
 @Component({
-  components: { CTitleBanner, CMyFieldDb, CMyInnerPage, CVerifyTelegram, CVerifyEmail, CCopyBtn, CVideo, CRequisiti, CGuidelines, CVideoPromo }
+  components: {
+    CTitleBanner,
+    CMyFieldDb,
+    CMyInnerPage,
+    CVerifyTelegram,
+    CVerifyEmail,
+    CCopyBtn,
+    CVideo,
+    CRequisiti,
+    CGuidelines,
+    CVideoPromo
+  }
 })
 
 export default class CStatus extends MixinBase {
@@ -27,7 +38,7 @@ export default class CStatus extends MixinBase {
   public $t: any
   public step = 0
   public steptodo = 0
-  public NUMSTEP_OBBLIGATORI = 9
+  public NUMSTEP_OBBLIGATORI = 7
   public my_dream: string = ''
 
   get numpayment() {
@@ -92,7 +103,7 @@ export default class CStatus extends MixinBase {
       descr: '',
       page: '',
       funccheck(index) {
-        return tools.isBitActive(UserStore.state.my.profile.saw_and_accepted, shared_consts.Accepted.CHECK_READ_GUIDELINES)
+        return tools.isBitActive(UserStore.state.my.profile.saw_and_accepted, shared_consts.Accepted.CHECK_READ_GUIDELINES.value)
       },
       funccheck_error(index) {
         return true
@@ -109,7 +120,7 @@ export default class CStatus extends MixinBase {
       descr: '',
       page: '',
       funccheck(index) {
-        return tools.isBitActive(UserStore.state.my.profile.saw_and_accepted, shared_consts.Accepted.CHECK_SEE_VIDEO_PRINCIPI)
+        return tools.isBitActive(UserStore.state.my.profile.saw_and_accepted, shared_consts.Accepted.CHECK_SEE_VIDEO_PRINCIPI.value)
       },
       funccheck_error(index) {
         return true
@@ -228,10 +239,10 @@ export default class CStatus extends MixinBase {
       descr: 'steps.enter_prog_long',
       page: '/enter_prog',
       funccheck(index) {
-        return false
+        return true
       },
       funccheck_error(index) {
-        return false
+        return true
       },
       funcok() {
         return ''
@@ -421,8 +432,20 @@ export default class CStatus extends MixinBase {
     }
   }
 
-  public geterricon(value) {
-    return 'fas fa-exclamation-triangle'
+  public geterrcolor(mystep) {
+    if ((mystep.title === 'steps.sharemovement') || (mystep.title === 'dashboard.inv_attivi')) {
+      return 'blue'
+    } else {
+      return 'red'
+    }
+  }
+
+  public geterricon(value, mystep) {
+    if ((mystep.title === 'steps.sharemovement') || (mystep.title === 'dashboard.inv_attivi')) {
+      return 'fas fa-user'
+    } else {
+      return 'fas fa-exclamation-triangle'
+    }
   }
 
   get listasel() {
@@ -456,6 +479,10 @@ export default class CStatus extends MixinBase {
   }
 
   public geticoncolor(title) {
+    if (title === 'steps.enter_prog') {
+      return this.CompletatoRequisiti ? 'blue' : (this.Completato9Req ? 'green' : 'blue')
+    }
+
     if (title === 'steps.chat_biblio') {
       return 'blue'
     } else {
@@ -478,7 +505,21 @@ export default class CStatus extends MixinBase {
   }
 
   get CompletatoRequisiti() {
-    return this.VistoZoom && this.getnuminvitati_attivi() >= 2 && this.RequisitoPayment
+    try {
+      return this.VistoZoom && this.RequisitoPayment &&
+        this.TelegVerificato &&
+        (UserStore.state.my.profile.my_dream.length >= 10) &&
+        tools.isBitActive(UserStore.state.my.profile.saw_and_accepted, shared_consts.Accepted.CHECK_SEE_VIDEO_PRINCIPI.value) &&
+        tools.isBitActive(UserStore.state.my.profile.saw_and_accepted, shared_consts.Accepted.CHECK_READ_GUIDELINES.value)
+    }catch (e) {
+      return false
+    }
+
+  }
+
+  get Completato9Req() {
+    // return tools.Is9ReqOk(this.dashboard.myself)
+    return this.CompletatoRequisiti && (this.getnuminvitati_attivi() >= 2)
   }
 
   get RequisitoPayment() {
@@ -519,12 +560,12 @@ export default class CStatus extends MixinBase {
   }
 
   get stepcompleti() {
-    return this.getstep === this.NUMSTEP_OBBLIGATORI
+    return this.getstep >= this.NUMSTEP_OBBLIGATORI
   }
 
   public scrolltostep(mystep) {
     this.step = mystep
-    if (mystep > 0 )
+    if (mystep > 0)
       mystep -= 1
     const element = document.getElementById('step' + mystep)
     tools.scrollToElement(element)

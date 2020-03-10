@@ -38,6 +38,7 @@ export interface IDashboard {
   downline: any[],
   downnotreg: any[],
   downbyuser: any[]
+  arrnavi?: any[]
 }
 
 export interface ICalcStat {
@@ -64,6 +65,9 @@ export interface IUserFields {
   downline?: IUserFields[]
   calcstat?: ICalcStat
   dashboard?: IDashboard
+  qualified?: boolean
+  numinvitati?: number
+  numinvitatiattivi?: number
 }
 
 /*

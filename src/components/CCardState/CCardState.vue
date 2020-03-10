@@ -1,14 +1,14 @@
 <template>
-  <q-card class="my-card-stat text-center">
+  <q-card :class="myclass +` text-center`" :style="mystyle">
     <q-circular-progress
       show-value
-      font-size="1rem"
+      :font-size="fontsize"
       :value="myperc"
       :size="getsize"
       :thickness="0.25"
-      :color="color"
+      :color="mycolor"
       track-color="grey-3"
-      class="q-ma-sm animated"
+      class="animated"
     >
 
       <q-avatar v-if="imgsrc" size="60px">
@@ -18,7 +18,7 @@
         <div>
           {{ mytext }}
         </div>
-        <div class="mlvalue text-h5 text-blue boldhigh"> {{ myval }} {{ textadd }}
+        <div class="mlvalue text-h5 text-blue boldhigh text-h5-short"> {{ myval }} {{ textadd }}
         </div>
         <div v-if="isperc" class="cltexth4">
           ({{ myperc.toFixed(1) }} %)

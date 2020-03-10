@@ -22,6 +22,7 @@ export interface INotData {
   arr_nations?: string
   lastsreg?: IUserFields[]
   checkuser?: ICheckUser | any
+  numreg_untilday?: number
   reg_daily?: string
 }
 

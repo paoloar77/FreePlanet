@@ -557,7 +557,7 @@ export default class CGridTableRec extends Vue {
       this.colclicksel = null
     }
 
-    console.log('this.rowclicksel', this.rowclicksel)
+    // console.log('this.rowclicksel', this.rowclicksel)
   }
 
   get getusernamesel() {

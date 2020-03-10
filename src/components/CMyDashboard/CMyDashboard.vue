@@ -1,5 +1,39 @@
 <template>
-  <div class="q-ma-xs q-gutter-xs q-pa-xs" v-if="myusername !== ''">
+  <div class="q-my-xs q-gutter-xs q-py-xs" v-if="myusername !== ''">
+    <CTitleBanner class="q-pa-xs text-center" :title="$t('pages.statoattuale')" bgcolor="bg-red" clcolor="text-white"
+                  mystyle=" " myclass="myshad">
+      <div v-if="!!dashboard.myself.name">
+
+        <div v-if="!Completato9Req">
+          <CTitleBanner icon="person" :canopen="true" class="q-pa-xs text-center"
+                        :title="$t('pages.posizione_in_programmazione')" bgcolor="bg-blue"
+                        clcolor="text-white" mystyle=" " myclass="myshad">
+            <CRequisiti :statebool="Completato7Req" :msgTrue="$t('steps.enter_prog_requisiti_ok')"
+                        :msgFalse="$t('steps.enter_prog_completa_requisiti')">
+            </CRequisiti>
+          </CTitleBanner>
+        </div>
+
+        <CTitleBanner icon="fas fa-gift" :canopen="true" class="q-pa-xs text-center"
+                      :title="$t('pages.posizione_in_nave')" bgcolor="bg-green"
+                      clcolor="text-white" mystyle=" " myclass="myshad">
+
+          <div v-if="!HasNave">
+            <CRequisiti :statebool="Completato9Req" :msgTrue="$t('steps.enter_nave_9req_ok')"
+                        :color_ko="true"
+                        :msgFalse="$t('steps.enter_nave_9req_ko')">
+            </CRequisiti>
+          </div>
+
+          <CMyNave v-for="(mianave, index) in dashboard.arrnavi" :naveprop="mianave" :key="index"
+                   :navi_partenzaprop="dashboard.navi_partenza">
+
+          </CMyNave>
+        </CTitleBanner>
+
+      </div>
+
+    </CTitleBanner>
     <CTitleBanner class="q-pa-xs" :title="$t('pages.dashboard')" bgcolor="bg-info" clcolor="text-white"
                   mystyle=" " myclass="myshad">
 
@@ -75,7 +109,7 @@
         </q-btn>
       </div>
 
-      <CTitleBanner v-if="invitatinotreg" class="shadow-2 rounded-borders" :title="$t('dashboard.downnotreg')"
+      <!--<CTitleBanner v-if="invitatinotreg" class="shadow-2 rounded-borders" :title="$t('dashboard.downnotreg')"
                     bgcolor="bg-grey"
                     clcolor="text-white"
                     mystyle=" " myclass="myshad" :canopen="true">
@@ -88,7 +122,7 @@
             </CUserBadge>
           </div>
         </q-list>
-      </CTitleBanner>
+      </CTitleBanner>-->
 
     </CTitleBanner>
 
@@ -119,12 +153,35 @@
                   clcolor="text-white"
                   mystyle=" " myclass="myshad" :canopen="true">
       <p class="q-ml-sm">{{ $t('dashboard.legenda_title')}}</p>
-      <q-list bordered class="rounded-borders row justify-between">
-        <CLegenda icon="fab fa-telegram" :text="`Telegram ` + $t('pages.statusreg.verified')"></CLegenda>
+      <q-list bordered class="rounded-borders justify-center q-pa-sm">
+        <div class="row items-center q-pa-xs">
+          <CCardState :mytext="$t('pages.statusreg.req')" :myval="7" :myperc="(7 / 9) * 100" size="50px" size_mob="40px"
+                      fontsize="0.75rem" myclass="my-card-small-stat" mycolor="orange">
+          </CCardState>
+          <div class="bg-blue text-white clBorderxs q-ml-sm">{{$t('pages.statusreg.req7')}}</div>
+        </div>
+        <div class="row items-center q-pa-xs">
+          <CCardState :mytext="$t('pages.statusreg.req')" :myval="9" :myperc="100" size="50px" size_mob="40px"
+                      fontsize="0.75rem" myclass="my-card-small-stat" mycolor="green"></CCardState>
+          <div class="bg-blue text-white clBorderxs q-ml-sm">{{$t('pages.statusreg.req9')}}</div>
+        </div>
+        <div class="row items-center q-pa-xs">
+          <CCardState :mytext="$t('pages.statusreg.people')" :myval="2" :myperc="100" size="50px" size_mob="40px"
+                      fontsize="0.75rem" myclass="my-card-small-stat" mycolor="green"></CCardState>
+          <div class="bg-blue text-white clBorderxs q-ml-sm">{{$t('pages.statusreg.peoplelegend')}}</div>
+        </div>
+        <!--<CLegenda icon="fab fa-telegram" :text="`Telegram ` + $t('pages.statusreg.verified')"></CLegenda>
         <CLegenda icon="fas fa-video" :text="$t('stat.zoom')"></CLegenda>
-        <CLegenda icon="fas fa-user-friends" :text="$t('dashboard.numinvitati')"></CLegenda>
-        <CLegenda icon="fab fa-whatsapp" :text="$t('dashboard.telefono_wa')"></CLegenda>
-
+        <CLegenda icon="fas fa-user-friends" :text="$t('dashboard.numinvitati')"></CLegenda>-->
+        <div class="row items-center q-pa-xs q-ml-sm">
+          <q-btn
+            fab-mini
+            icon="fab fa-whatsapp"
+            color="white" text-color="green"
+            size="sm">
+          </q-btn>
+          <div class="bg-blue text-white clBorderxs q-ml-sm">{{$t('dashboard.telefono_wa')}}</div>
+        </div>
       </q-list>
     </CTitleBanner>
     <br>

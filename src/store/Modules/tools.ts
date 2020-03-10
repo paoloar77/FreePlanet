@@ -52,11 +52,15 @@ export interface INotify {
 export const tools = {
   CAN_EDIT: 'q-ce',
 
-  getprefCountries: ['it', 'si', 'us', 'es', 'pt', 'uk', 'fr', 'de', 'ch'],
+  getprefCountries: ['it', 'si', 'us', 'es', 'pt', 'uk', 'fr', 'de', 'ch', 'br', 'sk'],
 
   APORTADOR_NONE: '------',
 
   APORTADOR_SOLIDARIO: 'apsol',
+
+  TipoMsg: {
+    SEND_LINK_CHAT_DONATORI: 1,
+  },
 
   listBestColor: [
     'blue',
@@ -1416,7 +1420,7 @@ export const tools = {
 
   executefunc(myself: any, table, func: number, par: IParamDialog) {
     if (func === lists.MenuAction.DELETE) {
-      console.log('param1', par.param1)
+      // console.log('param1', par.param1)
       CalendarStore.actions.CancelBookingEvent({
         ideventbook: par.param1,
         notify: par.param2 === true ? '1' : '0'
@@ -1429,7 +1433,7 @@ export const tools = {
           tools.showNegativeNotif(myself.$q, myself.$t('cal.cancelederrorbooking'))
       })
     } else if (func === lists.MenuAction.DELETE_EVENT) {
-      console.log('param1', par.param1, 'id', par.param1._id)
+      // console.log('param1', par.param1, 'id', par.param1._id)
       CalendarStore.actions.CancelEvent({ id: par.param1._id }).then((ris) => {
         if (ris) {
           // Remove this record from my list
@@ -1477,7 +1481,7 @@ export const tools = {
           tools.showNegativeNotif(myself.$q, myself.$t('db.recfailed'))
       })
     } else if (func === lists.MenuAction.DELETE_RECTABLE) {
-      console.log('param1', par.param1)
+      // console.log('param1', par.param1)
       GlobalStore.actions.DeleteRec({ table, id: par.param1 }).then((ris) => {
         if (ris) {
           myself.ActionAfterYes(func, par.param2, null)
@@ -1486,13 +1490,22 @@ export const tools = {
           tools.showNegativeNotif(myself.$q, myself.$t('db.recdelfailed'))
       })
     } else if (func === lists.MenuAction.DUPLICATE_RECTABLE) {
-      console.log('param1', par.param1)
+      // console.log('param1', par.param1)
       GlobalStore.actions.DuplicateRec({ table, id: par.param1 }).then((ris) => {
         if (ris) {
           myself.ActionAfterYes(func, par.param2, ris.data)
           tools.showPositiveNotif(myself.$q, myself.$t('db.duplicatedrecord'))
         } else
           tools.showNegativeNotif(myself.$q, myself.$t('db.recdupfailed'))
+      })
+    } else if (func === lists.MenuAction.INVIA_MSG_A_DONATORI) {
+      // console.log('param1', par.param1)
+      GlobalStore.actions.InviaMsgADonatori({ msgobj: par.param1, navemediatore: par.param2 }).then((ris) => {
+        if (ris) {
+          tools.showPositiveNotif(myself.$q, myself.$t('dashboard.msg_donatori_ok'))
+          tools.askConfirm(myself.$q, '', ris.strout, translate('dialog.yes'), translate('dialog.no'), this, '', 0, 0, {})
+        } else
+          tools.showNegativeNotif(myself.$q, myself.$t('db.recfailed'))
       })
     }
   },
@@ -1504,7 +1517,6 @@ export const tools = {
       fieldsvalue: mydata,
       notifBot: null
     }
-
 
     GlobalStore.actions.saveFieldValue(mydatatosave).then((ris) => {
       if (ris) {
@@ -1613,7 +1625,7 @@ export const tools = {
       }
 
       if (!(static_data.arrLangUsed.includes(mylang))) {
-        console.log('non incluso ', mylang)
+        // console.log('non incluso ', mylang)
         mylang = static_data.arrLangUsed[0]
 
         // Metti come default
@@ -1814,6 +1826,14 @@ export const tools = {
     // console.log('getstrDate', mytimestamp)
     if (!!mytimestamp)
       return date.formatDate(mytimestamp, 'DD/MM/YYYY')
+    else
+      return ''
+  },
+
+  getstrshortDate(mytimestamp) {
+    // console.log('getstrDate', mytimestamp)
+    if (!!mytimestamp)
+      return date.formatDate(mytimestamp, 'DD/MM')
     else
       return ''
   },
@@ -3051,6 +3071,7 @@ export const tools = {
       }
     } else {
       const ris = GlobalStore.getters.getValueSettingsByKey(keystr, serv)
+
       if (ris === '')
         if (def !== undefined)
           return def
@@ -3170,6 +3191,8 @@ export const tools = {
         return 'fa-flag-es'
       else if (lang === 'PT')
         return 'fa-flag-pt'
+      else if (lang === 'BR')
+        return 'fa-flag-br'
       else if (lang === 'US')
         return 'fa-flag-us'
       else if ((lang === 'GB') || (lang === 'UK'))
@@ -3180,6 +3203,8 @@ export const tools = {
         return 'fa-flag-fr'
       else if (lang === 'SI')
         return 'fa-flag-si'
+      else if (lang === 'SK')
+        return 'fa-flag-sk'
       else if (lang === 'CH')
         return 'fa-flag-ch'
       else if (lang === 'CM')
@@ -3231,6 +3256,8 @@ export const tools = {
       return 'Italy'
     } else if (nat === 'SI') {
       return 'Slovenia'
+    } else if (nat === 'SK') {
+      return 'Slovakia'
     } else if (nat === 'ES') {
       return 'Spain'
     } else if (nat === 'DE') {
@@ -3275,6 +3302,8 @@ export const tools = {
       return 'Poland'
     } else if (nat === 'EG') {
       return 'Egypt'
+    } else if (nat === 'BR') {
+      return 'Brazil'
     }
   },
 
@@ -3294,7 +3323,38 @@ export const tools = {
       val = val.replace('{' + par.strin + '}', par.strout)
     })
     return val
-  }
+  },
+
+  isPayPalSel(user) {
+    let ispaypal = false
+    if (user.profile.paymenttypes) {
+      if (user.profile.paymenttypes.includes('paypal')) {
+        if (user.email_paypal !== '')
+          ispaypal = true
+      }
+    }
+    return ispaypal
+
+  },
+  getnumrequisiti(user) {
+    let req = 0
+
+    req += user.verified_email ? 1 : 0
+    req += user.profile.teleg_id > 0 ? 1 : 0
+    req += this.isBitActive(user.profile.saw_and_accepted, shared_consts.Accepted.CHECK_READ_GUIDELINES.value) ? 1 : 0
+    req += this.isBitActive(user.profile.saw_and_accepted, shared_consts.Accepted.CHECK_SEE_VIDEO_PRINCIPI.value) ? 1 : 0
+    req += user.profile.saw_zoom_presentation ? 1 : 0
+    if (!!user.profile.my_dream)
+      req += user.profile.my_dream.length >= 10 ? 1 : 0
+    req += this.isPayPalSel(user) ? 1 : 0
+
+    return req
+  },
+
+  Is7ReqOk(user) {
+    return this.getnumrequisiti(user) === 7
+  },
+
 
 // getLocale() {
   //   if (navigator.languages && navigator.languages.length > 0) {

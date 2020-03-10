@@ -96,7 +96,7 @@ export default class CMyRequirement extends MixinUsers {
       isok(user) {
         if (user)
           if (user.profile)
-            return tools.isBitActive(user.profile.saw_and_accepted, shared_consts.Accepted.CHECK_READ_GUIDELINES)
+            return tools.isBitActive(user.profile.saw_and_accepted, shared_consts.Accepted.CHECK_READ_GUIDELINES.value)
         return false
       },
       info: '',
@@ -110,7 +110,7 @@ export default class CMyRequirement extends MixinUsers {
       isok(user) {
         if (user)
           if (user.profile)
-            return tools.isBitActive(user.profile.saw_and_accepted, shared_consts.Accepted.CHECK_SEE_VIDEO_PRINCIPI)
+            return tools.isBitActive(user.profile.saw_and_accepted, shared_consts.Accepted.CHECK_SEE_VIDEO_PRINCIPI.value)
         return false
       },
       info: '',
@@ -171,6 +171,9 @@ export default class CMyRequirement extends MixinUsers {
       },
       info: '',
     },
+  ]
+
+  public arrrequisiti_liberi = [
     {
       icon: 'fas fa-users',
       textlang: 'steps.sharemovement',
@@ -296,6 +299,13 @@ export default class CMyRequirement extends MixinUsers {
     mycl += (this.ismydownline) ? ' ' + 'background-color: green;' : ''
 
     return mycl
+  }
+
+  public geticonerror(mybool) {
+    if (mybool)
+      return 'fas fa-exclamation-triangle'
+    else
+      return ''
   }
 
 }

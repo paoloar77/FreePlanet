@@ -31,15 +31,15 @@ export default class CGuidelines extends MixinBase {
   }
 
   public aggiorna_guideline() {
-    this.myguideline = tools.isBitActive(UserStore.state.my.profile.saw_and_accepted, shared_consts.Accepted.CHECK_READ_GUIDELINES)
+    this.myguideline = tools.isBitActive(UserStore.state.my.profile.saw_and_accepted, shared_consts.Accepted.CHECK_READ_GUIDELINES.value)
   }
 
   public changeval(value) {
     console.log('PRIMA saw_and_accepted', UserStore.state.my.profile.saw_and_accepted)
     if (value)
-      UserStore.state.my.profile.saw_and_accepted = tools.SetBit(UserStore.state.my.profile.saw_and_accepted, shared_consts.Accepted.CHECK_READ_GUIDELINES)
+      UserStore.state.my.profile.saw_and_accepted = tools.SetBit(UserStore.state.my.profile.saw_and_accepted, shared_consts.Accepted.CHECK_READ_GUIDELINES.value)
     else
-      UserStore.state.my.profile.saw_and_accepted = tools.UnSetBit(UserStore.state.my.profile.saw_and_accepted, shared_consts.Accepted.CHECK_READ_GUIDELINES)
+      UserStore.state.my.profile.saw_and_accepted = tools.UnSetBit(UserStore.state.my.profile.saw_and_accepted, shared_consts.Accepted.CHECK_READ_GUIDELINES.value)
 
     const mydata = {
       'profile.saw_and_accepted': UserStore.state.my.profile.saw_and_accepted

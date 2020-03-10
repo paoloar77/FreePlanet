@@ -31,30 +31,30 @@
                         <div class="row">
                             <CMyFieldDb title="Altezza Logo"
                                         mykey="HEIGHT_LOGO"
-                                        serv="true"
+                                        :serv="true"
                                         :type="tools.FieldType.number">
                             </CMyFieldDb>
                             <CMyFieldDb title="Titolo Discipline"
                                         mykey="DISC_TITLE"
-                                        serv="true"
+                                        :serv="true"
                                         :type="tools.FieldType.string">
                             </CMyFieldDb>
                         </div>
                         <CMyFieldDb title="Testo Promozione"
                                     mykey="TEXT_PROMO"
-                                    serv="true"
+                                    :serv="true"
                                     :type="tools.FieldType.html">
                         </CMyFieldDb>
 
                         <div class="row">
                             <CMyFieldDb title="Numero di Eventi da mostrare"
                                         mykey="SHOW_LAST_N_EV"
-                                        serv="true"
+                                        :serv="true"
                                         :type="tools.FieldType.number">
                             </CMyFieldDb>
                             <CMyFieldDb title="Testo dopo gli Eventi"
                                         mykey="TEXT_AFTER_EV"
-                                        serv="true"
+                                        :serv="true"
                                         :type="tools.FieldType.html">
                             </CMyFieldDb>
                         </div>
@@ -78,17 +78,17 @@
                         </div>
                         <CMyFieldDb title="Firma"
                                     mykey="TEXT_SIGN"
-                                    serv="true"
+                                    :serv="true"
                                     :type="tools.FieldType.html">
                         </CMyFieldDb>
                         <CMyFieldDb title="Testo Disclaimer"
                                     mykey="TEXT_DISCLAIMER"
-                                    serv="true"
+                                    :serv="true"
                                     :type="tools.FieldType.html">
                         </CMyFieldDb>
                         <CMyFieldDb title="Testo a piè pagina"
                                     mykey="TEXT_DISC_BOTTOM"
-                                    serv="true"
+                                    :serv="true"
                                     :type="tools.FieldType.html">
                         </CMyFieldDb>
 
@@ -101,32 +101,32 @@
 
                         <CMyFieldDb title="Email da cui Inviare la Newsletter"
                                     mykey="EMAIL_FROM"
-                                    serv="true"
+                                    :serv="true"
                                     :type="tools.FieldType.string">
                         </CMyFieldDb>
                         <CMyFieldDb title="Email di Reply"
                                     mykey="EMAIL_REPLY"
-                                    serv="true"
+                                    :serv="true"
                                     :type="tools.FieldType.string">
                         </CMyFieldDb>
                         <CMyFieldDb title="Password email"
                                     mykey="PWD_FROM"
-                                    serv="true"
+                                    :serv="true"
                                     :type="tools.FieldType.password">
                         </CMyFieldDb>
                         <CMyFieldDb title="Servizio SMTP Email ('gmail' per inviare email da Gmail)"
                                     mykey="EMAIL_SERVICE_SEND"
-                                    serv="true"
+                                    :serv="true"
                                     :type="tools.FieldType.string">
                         </CMyFieldDb>
                         <CMyFieldDb title="Porta SMTP"
                                     mykey="EMAIL_PORT"
-                                    serv="true"
+                                    :serv="true"
                                     :type="tools.FieldType.number">
                         </CMyFieldDb>
                         <CMyFieldDb title="Millisecondi di pausa tra una email e l'altra"
                                     mykey="MSEC_PAUSE_SEND"
-                                    serv="true"
+                                    :serv="true"
                                     :type="tools.FieldType.number">
                         </CMyFieldDb>
                     </div>
@@ -136,7 +136,7 @@
 
                     <CMyFieldDb title="Messaggio dopo che l'utente ha Prenotato un Evento"
                                 mykey="MSG_REPLY_AFTER_BOOKING"
-                                serv="true"
+                                :serv="true"
                                 :type="tools.FieldType.string">
                     </CMyFieldDb>
 
@@ -172,7 +172,7 @@
                             <div class="text-center">
                                 <CMyFieldDb title="Email di Test"
                                             mykey="EMAIL_TEST"
-                                            serv="true"
+                                            :serv="true"
                                             :type="tools.FieldType.string">
                                 </CMyFieldDb>
                                 <q-btn :loading="myloading" rounded outline @click="sendNewsletterTest(false)"
@@ -192,7 +192,7 @@
                             <div class="q-pa-xs q-ma-md q-gutter-md">
                                 <CMyFieldDb title="Template Email da Inviare"
                                             mykey="TEMPLEMAIL_ID"
-                                            serv="true"
+                                            :serv="true"
                                             :type="tools.FieldType.select"
                                             jointable="templemail">
                                 </CMyFieldDb>

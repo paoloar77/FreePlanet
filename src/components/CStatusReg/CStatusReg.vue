@@ -10,7 +10,7 @@
           <CCardState :mytext="$t('pages.statusreg.reg')" :myval="datastat.num_reg" :myperc="100"></CCardState>
           <CCardState :mytext="$t('stat.requisiti')" :isperc="true" :myval="datastat.num_requisiti"
                       :myperc="calcperc(datastat.num_requisiti, datastat.num_reg) "
-                      color="blue"
+                      mycolor="blue"
                       :textadd="` / ` + datastat.num_reg"></CCardState>
 
           <!--<CCardState :mytext="$t('pages.statusreg.giainlista')" :isperc="true" :myval="datastat.num_reg_lista"-->
@@ -22,7 +22,7 @@
             <CCardStat :mytext="$t('stat.dream')" :myval="datastat.num_users_dream"></CCardStat>
             <CCardStat :mytext="$t('stat.modalita_pagamento')" :myval="datastat.num_modalita_pagamento"></CCardStat>
             <CCardStat :mytext="$t('stat.requisiti')" :myval="datastat.num_requisiti"></CCardStat>
-            <CCardStat :mytext="$t('stat.qualificati')" :myval="datastat.num_qualificati"></CCardStat>
+            <!--<CCardStat :mytext="$t('stat.qualificati')" :myval="datastat.num_qualificati"></CCardStat>-->
             <CCardStat v-if="emailnonverif" :mytext="$t('stat.email_not_verif')" :myval="emailnonverif"
                        mycol="negative"></CCardStat>
             <CCardStat v-if="telegnonattivi" :mytext="$t('stat.telegram_non_attivi')" :myval="telegnonattivi"
@@ -37,6 +37,7 @@
                               appear
                               enter-active-class="animazione fadeIn"
                               leave-active-class="animazione fadeOut">
+
               <q-item v-for="(user, index) in lastsreg" :key="user.username" class="q-mb-xs animated" v-ripple>
 
                 <q-item-section avatar>
@@ -72,7 +73,7 @@
             <CLineChart :mydata="datastat.reg_daily" :title="$t('stat.reg_daily')">
 
             </CLineChart>
-            <CLineChart :mydata="datastat.reg_daily" :title="$t('stat.reg_total')" :sum="true"
+            <CLineChart :mydata="datastat.reg_daily" :title="$t('stat.reg_total')" :offset="datastat.numreg_untilday" :sum="true"
                         :mycolors="['#0b0', '#666']">
 
             </CLineChart>

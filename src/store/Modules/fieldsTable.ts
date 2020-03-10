@@ -159,6 +159,37 @@ const colpaymenttype = [
   AddCol(DeleteRec)
 ]
 
+const colnavi = [
+  AddCol({ name: '_id', label_trans: 'others.value' }),
+  AddCol({ name: 'riga', label_trans: 'reg.riga' }),
+  AddCol({ name: 'col', label_trans: 'reg.col' }),
+  AddCol({ name: 'indprimario', label_trans: 'indprimario' }),
+  AddCol({ name: 'ind_order', label_trans: 'ind_order' }),
+  AddCol({ name: 'parent_id', label_trans: 'parent_id' }),
+  AddCol({ name: 'date_start', label_trans: 'date_start', fieldtype: tools.FieldType.date }),
+  AddCol({ name: 'link_chat', label_trans: 'reg.link_chat' }),
+  AddCol({ name: 'sent_msg_howto_make_gift', label_trans: 'sent_msg_howto_make_gift', fieldtype: tools.FieldType.boolean }),
+  AddCol({ name: 'made_gift', label_trans: 'made_gift', fieldtype: tools.FieldType.boolean }),
+  AddCol({ name: 'date_made_gift', label_trans: 'date_made_gift', fieldtype: tools.FieldType.date }),
+  AddCol({ name: 'received_gift', label_trans: 'received_gift', fieldtype: tools.FieldType.boolean }),
+  AddCol({ name: 'date_received_gift', label_trans: 'date_received_gift', fieldtype: tools.FieldType.date }),
+  AddCol({ name: 'num_tess', label_trans: 'num_tess', fieldtype: tools.FieldType.number }),
+  AddCol(DeleteRec),
+  AddCol(DuplicateRec)
+]
+
+const collistaingresso = [
+  AddCol({ name: '_id', label_trans: 'others.value' }),
+  AddCol({ name: 'indprimario', label_trans: 'indprimario' }),
+  AddCol({ name: 'ind_order', label_trans: 'ind_order' }),
+  AddCol({ name: 'date_added', label_trans: 'date_added', fieldtype: tools.FieldType.date }),
+  AddCol({ name: 'added', label_trans: 'added', fieldtype: tools.FieldType.boolean }),
+  AddCol({ name: 'num_tess', label_trans: 'num_tess', fieldtype: tools.FieldType.number }),
+  AddCol({ name: 'deleted', label_trans: 'deleted', fieldtype: tools.FieldType.boolean }),
+  AddCol(DuplicateRec),
+  AddCol(DeleteRec)
+]
+
 const coldisciplines = [
   AddCol({ name: 'typol_code', label_trans: 'disc.typol_code' }),
   AddCol({ name: 'order', label_trans: 'disc.order', fieldtype: tools.FieldType.number }),
@@ -435,6 +466,7 @@ export const fieldsTable = {
     AddCol({ name: 'verified_email', label_trans: 'reg.verified_email', fieldtype: tools.FieldType.boolean }),
     AddCol({ name: 'profile.saw_zoom_presentation', field: 'profile', subfield: 'saw_zoom_presentation', label_trans: 'reg.saw_zoom_presentation', fieldtype: tools.FieldType.boolean  }),
     AddCol({ name: 'profile.special_req', field: 'profile', subfield: 'special_req', label_trans: 'reg.special_req', fieldtype: tools.FieldType.boolean  }),
+    AddCol({ name: 'profile.vuole_ritessersi', field: 'profile', subfield: 'vuole_ritessersi', label_trans: 'reg.vuole_ritessersi', fieldtype: tools.FieldType.boolean  }),
     AddCol({ name: 'profile.saw_and_accepted', field: 'profile', subfield: 'saw_and_accepted', label_trans: 'reg.saw_and_accepted', fieldtype: tools.FieldType.binary, jointable: 'accepted'  }),
     AddCol({ name: 'profile.my_dream', field: 'profile', subfield: 'my_dream', label_trans: 'reg.my_dream' }),
     AddCol({ name: 'profile.nationality', field: 'profile', subfield: 'nationality', label_trans: 'reg.nationality' }),
@@ -520,13 +552,26 @@ export const fieldsTable = {
       collabel: 'label'
     },
     {
+      value: 'navi',
+      label: 'Navi',
+      columns: colnavi,
+      colkey: '_id',
+      collabel: (rec) => rec.riga + '.' + rec.col
+    },
+    {
+      value: 'listaingressos',
+      label: 'Lista Ingresso',
+      columns: collistaingresso,
+      colkey: '_id',
+      collabel: 'indprimario',
+    },
+    {
       value: 'disciplines',
       label: 'Discipline',
       columns: coldisciplines,
       colkey: 'typol_code',
       collabel: 'label'
     },
-
     {
       value: 'newstosent',
       label: 'Newsletter da Inviare',
@@ -577,10 +622,8 @@ export const fieldsTable = {
     {
       value: 'accepted',
       label: 'Condizioni',
-      columns: colTablePermission,
       colkey: 'value',
       collabel: 'label',
-      colicon: 'icon',
       noshow: true,
     },
     {

@@ -8,10 +8,13 @@ import { validationMixin } from 'vuelidate'
 
 import MixinBase from '../../mixins/mixin-base'
 import { IUserFields } from '../../model'
+import { shared_consts } from '../../common/shared_vuejs'
+import { tools } from '../../store/Modules/tools'
+import { CCardState } from '../CCardState'
 
 @Component({
   name: 'CUserBadge',
-  components: {  }
+  components: { CCardState }
 })
 
 export default class CUserBadge extends MixinBase {
@@ -69,15 +72,15 @@ export default class CUserBadge extends MixinBase {
     if (this.isextralist(user))
       return 'grey'
     else
-      return (this.getnumpeople() >= 2) ? 'green' : 'grey'
+      return (this.getnumpeople(user) >= 2) ? 'green' : 'grey'
   }
 
   public isextralist(user) {
     return !!user.cell_complete
   }
 
-  public getnumpeople() {
-    return this.numpeople
+  public getnumpeople(user) {
+    return user.numinvitati
   }
 
   public getusername(user) {
@@ -90,6 +93,54 @@ export default class CUserBadge extends MixinBase {
 
   public execclick(user) {
     this.$emit('myclick', user)
+  }
+
+  public getnumreq(user) {
+    let val = tools.getnumrequisiti(user)
+
+    if (val === 7) {
+      val += user.numinvitati >= 2 ? 1 : 0
+      val += user.numinvitatiattivi >= 2 ? 1 : 0
+    }
+
+    return val
+  }
+
+  public getnumperc(user) {
+    let perc = (this.getnumreq(user) / 9) * 100
+
+    // console.log('numperc', perc)
+    return perc
+  }
+
+  public getnumpercpeople(user) {
+    if (user.numinvitati > 2)
+      return 100
+    else
+      return (user.numinvitati / 2) * 100
+  }
+
+  public getcolorpeople(user){
+    if (user.numinvitati === 1)
+      return 'blue'
+    else if (user.numinvitati === 2)
+      return 'green'
+    else if (user.numinvitati > 2)
+      return 'green'
+
+  }
+
+  public getcolor(user) {
+    let mycol = this.getnumreq(user) === 7 ? 'orange' : 'red'
+
+    if (user.numinvitati >= 2) {
+      mycol = 'blue'
+    }
+    if (user.numinvitatiattivi >= 2) {
+      mycol = 'green'
+    }
+
+    return mycol
   }
 
 }

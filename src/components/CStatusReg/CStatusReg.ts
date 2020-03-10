@@ -100,7 +100,7 @@ export default class CStatusReg extends MixinBase {
           UserStore.state.my.verified_email = true
           this.riaggiorna()
         }
-        if (UserStore.state.my.profile) {
+        if (UserStore.state.my.profile && this.datastat.checkuser.profile) {
           if ((UserStore.state.my.profile.teleg_id <= 0 && this.datastat.checkuser.profile.teleg_id > 0) ||
             (UserStore.state.my.profile.teleg_id !== this.datastat.checkuser.profile.teleg_id > 0)) {
             UserStore.state.my.profile.teleg_id = this.datastat.checkuser.profile.teleg_id

@@ -7,8 +7,12 @@ import { serv_constants } from '../../../store/Modules/serv_constants'
 
 import './vreg.scss'
 import { ILinkReg } from '../../../model/other'
+import { CSigninNoreg } from '../../../components/CSigninNoreg'
+import { GlobalStore } from '../../../store'
 
-@Component({})
+@Component({
+  components: { CSigninNoreg }
+})
 export default class Vreg extends Vue {
   public risultato: string = '---'
   public riscode: number = 0
@@ -56,5 +60,9 @@ export default class Vreg extends Vue {
       }).catch((err) => {
         console.log('ERR = ' + err)
     })
+  }
+
+  public openrighttoolbar() {
+    GlobalStore.state.RightDrawerOpen = true
   }
 }

@@ -782,6 +782,33 @@ namespace Actions {
       })
   }
 
+  async function InviaMsgADonatori(context, { msgobj, navemediatore }) {
+    console.log('InviaMsgADonatori', msgobj)
+
+    const mydata = {
+      idapp: process.env.APP_ID,
+      tipomsg: tools.TipoMsg.SEND_LINK_CHAT_DONATORI,
+      msgextra: msgobj.msgextra,
+      msgpar1: msgobj.msgpar1,
+      inviareale: msgobj.inviareale,
+      navemediatore
+    }
+
+    return await Api.SendReq('/dashboard/msgnave', 'POST', mydata)
+      .then((res) => {
+        if (res.status === 200) {
+          if (res.data.code === serv_constants.RIS_CODE_OK) {
+            return res.data.ris
+          }
+        }
+        return null
+      })
+      .catch((error) => {
+        console.error(error)
+        return null
+      })
+  }
+
   async function loadSite(context) {
     // console.log('CalendarStore: loadAfterLogin')
     // Load local data
@@ -930,6 +957,7 @@ namespace Actions {
     DeleteFile: b.dispatch(DeleteFile),
     sendEmailTest: b.dispatch(sendEmailTest),
     DuplicateRec: b.dispatch(DuplicateRec),
+    InviaMsgADonatori: b.dispatch(InviaMsgADonatori),
     addDynamicPages: b.dispatch(addDynamicPages)
   }
 
