@@ -808,6 +808,27 @@ namespace Actions {
         return null
       })
   }
+  async function GetArrNavi(context) {
+    console.log('GetArrNavi')
+
+    const mydata = {
+      idapp: process.env.APP_ID
+    }
+
+    return await Api.SendReq('/dashboard/getnavi', 'POST', mydata)
+      .then((res) => {
+        if (res.status === 200) {
+          if (res.data.code === serv_constants.RIS_CODE_OK) {
+            return res.data.ris
+          }
+        }
+        return null
+      })
+      .catch((error) => {
+        console.error(error)
+        return null
+      })
+  }
 
   async function loadSite(context) {
     // console.log('CalendarStore: loadAfterLogin')
@@ -958,6 +979,7 @@ namespace Actions {
     sendEmailTest: b.dispatch(sendEmailTest),
     DuplicateRec: b.dispatch(DuplicateRec),
     InviaMsgADonatori: b.dispatch(InviaMsgADonatori),
+    GetArrNavi: b.dispatch(GetArrNavi),
     addDynamicPages: b.dispatch(addDynamicPages)
   }
 

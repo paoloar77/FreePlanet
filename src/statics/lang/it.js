@@ -30,6 +30,7 @@ const msg_it = {
         extralist: 'Lista Extra',
         dbop: 'Db Operations',
         tableslist: 'Lista Tabelle',
+        navi: 'Navi',
         newsletter: 'Newsletter',
         pages: 'Pagine',
         media: 'Media',
@@ -207,10 +208,10 @@ const msg_it = {
       nave_in_partenza: 'in Partenza il',
       sonomediatore: 'Quando diventi Meditore vieni contattato da un <strong>TUTOR</strong>, con lui devi:<br><ol class="lista">' +
       '<li>Aprire la tua <strong>Gift Chat</strong> (tu come proprietario e il Tutor ' +
-      'come amministratore) con questo nome: <strong>gg/mm - NAVE numero.numero 🎁AYNI</strong><br>(Esempio: <strong>10/03 - NAVE 2.1 🎁 AYNI</strong>)</li>' +
+      'come amministratore) con questo nome: <strong>{nomenave}</strong></li>' +
       '<li>Clicca sul nome della chat in alto -> Modifica -> Amministratori -> "Aggiungi Amministratore", seleziona il Tutor nell’elenco.</li>' +
       '<li>Devi configurare la chat in modo che chi entra vede anche i post precedenti (clicca sul nome della chat in alto, clicca su modifica, ' +
-      'cambia la "cronologia per i nuovi membri" da nascosta a visibile</li>' +
+      'cambia la "cronologia per i nuovi membri" da nascosta a visibile.</li>' +
       '<li>Per trovare il <strong>link della Chat appena creata</strong>: clicca sul nome della chat in alto, clicca sulla Matita -> "Tipo di Gruppo" -> "invita nel gruppo tramite link", clicca su "copia link" e incollalo qui sotto, sulla casella <strong>"Link Gift Chat"</strong></li>' +
       '<li>Invia il Link della Gift Chat a tutti i Donatori, cliccando sul bottone qui sotto.</li></ol>',
       sonosognatore: '<ol class="lista"><li>Quando sei in questa posizione, verrai invitato ad entrare in una <strong>Gift Chat</strong> (Telegram) e qui troverai anche gli altri 7 Donatori, il Mediatore, il Sognatore e un rappresentante dello Staff.</li>' +
@@ -229,6 +230,7 @@ const msg_it = {
       invia_link_chat: 'Invia il Link della Gift Chat ai Donatori',
       inviare_msg_donatori: '5) Inviare messaggio ai Donatori',
       msg_donatori_ok: 'Inviato messaggio ai Donatori',
+      posizione: 'Posizione',
     },
     reg: {
       registered: 'Registrato',

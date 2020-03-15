@@ -23,11 +23,16 @@
         <q-btn label="Inizializza ListaIngresso" color="negative" @click="EseguiFunz('initListaIngresso')"></q-btn><br>
         <q-btn label="Crea ListaIngresso" color="negative" @click="EseguiFunz('creaLista')"></q-btn>
       </div>
+<!--
       <div class="row">
         <q-btn label="Elimina Navi" color="negative" @click="EseguiFunz('delNavi')"></q-btn><br>
       </div>
+-->
       <div class="row">
         <q-btn label="Elimina Navi non Partite" color="negative" @click="EseguiFunz('delNaviNoStarted')"></q-btn><br>
+      </div>
+      <div class="row">
+        <q-btn label="Controlla Utenti inesistenti in Navi" color="primary" @click="EseguiFunz('checkUtentiInesistentiInNavi')"></q-btn><br>
       </div>
       <div>
         <CDateTime
@@ -72,10 +77,16 @@
       </div>
 
       <div class="row">
+        <q-btn label="Pulisci chi non è presente in Nave" color="primary" @click="EseguiFunz('pulisciNonPresenzeInNave')"></q-btn><br>
+      </div>
+      <div class="row">
         <q-btn label="Visualizza Lista Nave" color="primary" @click="EseguiFunz('visuListaNave')"></q-btn><br>
       </div>
       <div class="row">
         <q-btn label="Visualizza ListaIngresso" color="primary" @click="EseguiFunz('visuListaIngresso')"></q-btn><br>
+      </div>
+      <div class="row">
+        <q-btn label="Visualizza ListaIngresso NUOVI" color="primary" @click="EseguiFunz('visuListaIngressoNew')"></q-btn><br>
       </div>
       <div class="row">
         <q-btn label="CHECK SE INSERIRE UTENTI IN Nave" color="primary" @click="EseguiFunz('checkInserimentiUtentiInNave')"></q-btn><br>

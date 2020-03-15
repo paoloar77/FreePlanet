@@ -1502,7 +1502,8 @@ export const tools = {
       // console.log('param1', par.param1)
       GlobalStore.actions.InviaMsgADonatori({ msgobj: par.param1, navemediatore: par.param2 }).then((ris) => {
         if (ris) {
-          tools.showPositiveNotif(myself.$q, myself.$t('dashboard.msg_donatori_ok'))
+          if (par.param1.inviareale)
+            tools.showPositiveNotif(myself.$q, myself.$t('dashboard.msg_donatori_ok'))
           tools.askConfirm(myself.$q, '', ris.strout, translate('dialog.yes'), translate('dialog.no'), this, '', 0, 0, {})
         } else
           tools.showNegativeNotif(myself.$q, myself.$t('db.recfailed'))
@@ -2091,12 +2092,19 @@ export const tools = {
     } catch (e) {
       return value
     }
-  }
-  ,
+  },
 
   getDateNow() {
     const mydate = new Date()
     return mydate
+  },
+
+  isDateArrived(mydate) {
+    const datenow = tools.getDateNow()
+    if (date.getDateDiff(mydate, datenow) >= 0) {
+      return true
+    }
+    return false
   },
 
   getDayOfWeek(date) {
