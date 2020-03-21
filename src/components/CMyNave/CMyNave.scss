@@ -1,27 +1,36 @@
-.donatore, .mediatore, .sognatore {
-  padding: 4px;
-  margin: 4px;
+.donatore, .mediatore, .sognatore, .title-nave, .intermedio2, .intermedio3 {
+  padding: 2px 4px;
+  margin: 2px 4px;
   color: white;
-  font-size: 1.25rem;
+  font-size: 1rem;
   border-radius: 16px;
 }
 
 .donatore {
-  background-color: #2ba0fd;
-}
-
-.mediatore {
   background-color: red;
 }
 
-.sognatore {
+.mediatore {
   background-color: green;
+}
+
+.sognatore {
+  background-color: purple;
+}
+
+.intermedio2{
+  background-color: orange;
+}
+
+.intermedio3{
+  background-color: yellow;
+  color: black;
 }
 
 .cont_donatore, .cont_sognatore, .cont_mediatore, .cont_tragitto, .cont_pos, .cont_intestaz, .cont_pos_intest, .cont_intestaz_small {
   border: solid 2px #4198ef;
-  padding: 4px;
-  margin: 4px;
+  padding: 2px 8px;
+  margin: 2px 4px;
   font-size: 1rem;
   border-radius: 16px;
 }
@@ -70,4 +79,30 @@
   margin: 0;
   margin-top: 4px;
   margin-bottom: 4px;
+}
+
+.title-nave {
+  color: blue;
+}
+
+.dati {
+  color: blue;
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+
+.mancanti {
+  color: red;
+
+}
+.inviati {
+  color: blue;
+}
+
+.pan_sognatore {
+  padding: 0px 0px;
+}
+
+.ricevuti{
+  color: green;
 }

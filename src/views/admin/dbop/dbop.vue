@@ -23,11 +23,16 @@
         <q-btn label="Inizializza ListaIngresso" color="negative" @click="EseguiFunz('initListaIngresso')"></q-btn><br>
         <q-btn label="Crea ListaIngresso" color="negative" @click="EseguiFunz('creaLista')"></q-btn>
       </div>
+<!--
       <div class="row">
         <q-btn label="Elimina Navi" color="negative" @click="EseguiFunz('delNavi')"></q-btn><br>
       </div>
+-->
       <div class="row">
         <q-btn label="Elimina Navi non Partite" color="negative" @click="EseguiFunz('delNaviNoStarted')"></q-btn><br>
+      </div>
+      <div class="row">
+        <q-btn label="Elimina Navi Provvisorie" color="negative" @click="EseguiFunz('delNaviProvvisorie')"></q-btn><br>
       </div>
       <div>
         <CDateTime
@@ -36,7 +41,8 @@
           :readonly="false">
         </CDateTime>
         <q-input v-model="numpersone" type="number" autofocus label="Num Persone to Add" style="width: 50px;"></q-input>
-        <q-btn label="Crea Nave" color="negative" @click="EseguiFunz('creaNave')"></q-btn>
+            <q-btn label="Crea Navi Provvisorie" color="negative" @click="EseguiFunz('creaNaviProvvisorie')"></q-btn>
+          <q-btn label="Crea Navi Definitive" color="negative" @click="EseguiFunz('creaNaviDefinitive')"></q-btn>
       </div>
       <div v-if="!incaricamento" class="row">
         <CMyFieldDb title="Riga"
@@ -72,6 +78,9 @@
       </div>
 
       <div class="row">
+        <q-btn label="Pulisci chi non è presente in Nave" color="primary" @click="EseguiFunz('pulisciNonPresenzeInNave')"></q-btn><br>
+      </div>
+      <div class="row">
         <q-btn label="Visualizza Lista Nave" color="primary" @click="EseguiFunz('visuListaNave')"></q-btn><br>
       </div>
       <div class="row">
@@ -87,7 +96,7 @@
         <q-btn label="Visualizza Nave da 8" color="primary" @click="EseguiFunz('visuPlacca')"></q-btn><br>
         <q-btn label="Visualizza Nave" color="primary" @click="EseguiFunz('visuNave')"></q-btn><br>
       </div>
-      <div class="row">
+      <div class="row">listadonatoridelsognatore
         <q-input v-model="placca" type="textarea" autofocus label="Placca" autogrow style="width: 500px; height: 400px;"></q-input>
         <br>
       </div>

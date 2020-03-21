@@ -80,6 +80,7 @@ export const tools = {
   ],
 
   TABUSER: 'users',
+  TABNAVI: 'navi',
   TABEVENTS: 'myevents',
   TABEXTRALIST: 'extralist',
   TABNEWSLETTER: 'newstosent',
@@ -1502,8 +1503,47 @@ export const tools = {
       // console.log('param1', par.param1)
       GlobalStore.actions.InviaMsgADonatori({ msgobj: par.param1, navemediatore: par.param2 }).then((ris) => {
         if (ris) {
-          tools.showPositiveNotif(myself.$q, myself.$t('dashboard.msg_donatori_ok'))
+          if (par.param1.inviareale)
+            tools.showPositiveNotif(myself.$q, myself.$t('dashboard.msg_donatori_ok'))
           tools.askConfirm(myself.$q, '', ris.strout, translate('dialog.yes'), translate('dialog.no'), this, '', 0, 0, {})
+        } else
+          tools.showNegativeNotif(myself.$q, myself.$t('db.recfailed'))
+      })
+    } else if (func === lists.MenuAction.DONO_INVIATO) {
+      const mydatatosave = {
+        id: par.param1._id,
+        table: tools.TABNAVI,
+        fieldsvalue: { date_made_gift: par.param1.date_made_gift },
+        notifBot: null
+      }
+
+      if (par.param3) {
+        mydatatosave.notifBot = { un: par.param2, txt: par.param3 }
+      }
+
+      GlobalStore.actions.saveFieldValue(mydatatosave).then((ris) => {
+        if (ris) {
+          myself.ActionAfterYes(func, par.param1, par.param2)
+          tools.showPositiveNotif(myself.$q, myself.$t('dashboard.fatto_dono'))
+        } else
+          tools.showNegativeNotif(myself.$q, myself.$t('db.recfailed'))
+      })
+    } else if (func === lists.MenuAction.DONO_RICEVUTO) {
+      const mydatatosave = {
+        id: par.param1._id,
+        table: tools.TABNAVI,
+        fieldsvalue: { made_gift: par.param1.made_gift },
+        notifBot: null
+      }
+
+      if (par.param3) {
+        mydatatosave.notifBot = { un: par.param2, txt: par.param3 }
+      }
+
+      GlobalStore.actions.saveFieldValue(mydatatosave).then((ris) => {
+        if (ris) {
+          myself.ActionAfterYes(func, par.param1, par.param2)
+          tools.showPositiveNotif(myself.$q, myself.$t('dashboard.ricevuto_dono_ok'))
         } else
           tools.showNegativeNotif(myself.$q, myself.$t('db.recfailed'))
       })
@@ -1838,6 +1878,14 @@ export const tools = {
       return ''
   },
 
+  getstrshortDateTime(mytimestamp) {
+    // console.log('getstrDate', mytimestamp)
+    if (!!mytimestamp)
+      return date.formatDate(mytimestamp, 'DD/MM HH:mm')
+    else
+      return ''
+  },
+
   getstrTime(mytimestamp) {
     // console.log('getstrDate', mytimestamp)
     if (!!mytimestamp)
@@ -2091,12 +2139,21 @@ export const tools = {
     } catch (e) {
       return value
     }
-  }
-  ,
+  },
 
   getDateNow() {
     const mydate = new Date()
     return mydate
+  },
+
+  isDateArrived(mydate) {
+    const datenow = tools.getDateNow()
+    const diff = date.getDateDiff(datenow, mydate)
+    // console.log('diff = ' + diff)
+    if (diff >= 0) {
+      return true
+    }
+    return false
   },
 
   getDayOfWeek(date) {

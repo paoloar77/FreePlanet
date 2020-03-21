@@ -4,7 +4,7 @@
                   mystyle=" " myclass="myshad">
       <div v-if="!!dashboard.myself.name">
 
-        <div v-if="!Completato9Req">
+        <div v-if="!Completato9Req && !HasNave">
           <CTitleBanner icon="person" :canopen="true" class="q-pa-xs text-center"
                         :title="$t('pages.posizione_in_programmazione')" bgcolor="bg-blue"
                         clcolor="text-white" mystyle=" " myclass="myshad">
