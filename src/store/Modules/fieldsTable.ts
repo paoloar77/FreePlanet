@@ -166,18 +166,33 @@ const colnavi = [
   AddCol({ name: 'indprimario', label_trans: 'indprimario' }),
   AddCol({ name: 'ind_order', label_trans: 'ind_order' }),
   AddCol({ name: 'parent_id', label_trans: 'parent_id' }),
-  AddCol({ name: 'date_start', label_trans: 'date_start', fieldtype: tools.FieldType.date }),
-  AddCol({ name: 'date_gift_chat_open', label_trans: 'date_gift_chat_open', fieldtype: tools.FieldType.date }),
-  AddCol({ name: 'link_chat', label_trans: 'reg.link_chat' }),
+  // AddCol({ name: 'date_start', label_trans: 'date_start', fieldtype: tools.FieldType.date }),
+  // AddCol({ name: 'date_gift_chat_open', label_trans: 'date_gift_chat_open', fieldtype: tools.FieldType.date }),
+  // AddCol({ name: 'link_chat', label_trans: 'reg.link_chat' }),
   AddCol({ name: 'sent_msg_howto_make_gift', label_trans: 'sent_msg_howto_make_gift', fieldtype: tools.FieldType.boolean }),
   AddCol({ name: 'made_gift', label_trans: 'reg.made_gift', fieldtype: tools.FieldType.boolean }),
-  AddCol({ name: 'provvisoria', label_trans: 'reg.provvisoria', fieldtype: tools.FieldType.boolean }),
+  // AddCol({ name: 'provvisoria', label_trans: 'reg.provvisoria', fieldtype: tools.FieldType.boolean }),
   AddCol({ name: 'date_made_gift', label_trans: 'date_made_gift', fieldtype: tools.FieldType.date }),
   AddCol({ name: 'received_gift', label_trans: 'received_gift', fieldtype: tools.FieldType.boolean }),
   AddCol({ name: 'date_received_gift', label_trans: 'date_received_gift', fieldtype: tools.FieldType.date }),
   AddCol({ name: 'num_tess', label_trans: 'num_tess', fieldtype: tools.FieldType.number }),
-  AddCol({ name: 'note', label_trans: 'note', fieldtype: tools.FieldType.string }),
+  // AddCol({ name: 'note_bot', label_trans: 'note_bot', fieldtype: tools.FieldType.string }),
+  // AddCol({ name: 'note_interne', label_trans: 'note_interne', fieldtype: tools.FieldType.string }),
+  // AddCol({ name: 'tutor', label_trans: 'tutor', fieldtype: tools.FieldType.string }),
+  AddCol(DeleteRec),
+  AddCol(DuplicateRec)
+]
+const colnavepersistente = [
+  AddCol({ name: '_id', label_trans: 'others.value' }),
+  AddCol({ name: 'riga', label_trans: 'reg.riga' }),
+  AddCol({ name: 'col', label_trans: 'reg.col' }),
+  AddCol({ name: 'date_start', label_trans: 'date_start', fieldtype: tools.FieldType.date }),
+  AddCol({ name: 'date_gift_chat_open', label_trans: 'date_gift_chat_open', fieldtype: tools.FieldType.date }),
+  AddCol({ name: 'link_chat', label_trans: 'reg.link_chat' }),
+  AddCol({ name: 'provvisoria', label_trans: 'reg.provvisoria', fieldtype: tools.FieldType.boolean }),
+  AddCol({ name: 'note_bot', label_trans: 'note_bot', fieldtype: tools.FieldType.string }),
   AddCol({ name: 'note_interne', label_trans: 'note_interne', fieldtype: tools.FieldType.string }),
+  AddCol({ name: 'tutor', label_trans: 'tutor', fieldtype: tools.FieldType.string }),
   AddCol(DeleteRec),
   AddCol(DuplicateRec)
 ]
@@ -559,6 +574,13 @@ export const fieldsTable = {
       value: 'navi',
       label: 'Navi',
       columns: colnavi,
+      colkey: '_id',
+      collabel: (rec) => rec.riga + '.' + rec.col
+    },
+    {
+      value: 'navepersistente',
+      label: 'Navi Persistenti',
+      columns: colnavepersistente,
       colkey: '_id',
       collabel: (rec) => rec.riga + '.' + rec.col
     },

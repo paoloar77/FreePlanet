@@ -7,32 +7,3 @@
   min-width: 200px;
 }
 
-.my-sticky-header-table {
-  /* max height is important */
-  /* this is when the loading indicator appears */
-
-}
-.my-sticky-header-table .q-table__middle {
-  max-height: 650px !important;
-  @media (max-width: 718px) {
-    // PER VERSIONE MOBILE
-    max-height: 400px !important;
-  }
-}
-.my-sticky-header-table .q-table__top,
-.my-sticky-header-table .q-table__bottom,
-.my-sticky-header-table thead tr:first-child th {
-  /* bg color is important for th; just specify one */
-  background-color: #f0ffff;
-}
-.my-sticky-header-table thead tr th {
-  position: sticky;
-  z-index: 1;
-}
-.my-sticky-header-table thead tr:first-child th {
-  top: 0;
-}
-.my-sticky-header-table.q-table--loading thead tr:last-child th {
-  /* height of all previous header rows */
-  top: 48px;
-}

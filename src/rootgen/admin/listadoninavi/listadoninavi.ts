@@ -67,13 +67,14 @@ export default class Listadoninavi extends MixinBase {
       sortable: true
     },
     { name: 'date_start', align: 'center', label: '⏰ Partenza', field: 'date_start', sortable: true },
+    { name: 'tutor', align: 'left', label: 'Tutor', field: 'tutor', sortable: true },
     { name: 'mediatore', align: 'center', label: '🌀 Mediatore', field: '', sortable: true },
     { name: 'sognatore', align: 'center', label: 'Sognatore', field: '', sortable: true },
     { name: 'donatori', align: 'center', label: 'Donatori', field: '', sortable: true },
     { name: 'DoniAttesaDiConferma', align: 'center', label: '🎁 Wait', field: 'DoniAttesaDiConferma', sortable: true },
     { name: 'DoniMancanti', align: 'center', label: '🎁 Mancano', field: 'DoniMancanti', sortable: true },
     { name: 'DoniConfermati', align: 'center', label: '🎁 OK', field: 'DoniConfermati', sortable: true },
-    { name: 'note', align: 'left', label: 'Note', field: 'note', sortable: true },
+    { name: 'note_bot', align: 'left', label: 'Note Placca', field: 'note_bot', sortable: true },
     { name: 'note_interne', align: 'left', label: 'Note Interne', field: 'note_interne', sortable: true },
   ]
 
@@ -94,17 +95,21 @@ export default class Listadoninavi extends MixinBase {
   ]
 
   public async mounted() {
+
+    this.Ricalcola(false)
+  }
+
+  public async Ricalcola(ricalcola) {
     this.loading = true
     // this.$q.loading.show({ message: this.$t('otherpages.update') })
 
-    const ris = await GlobalStore.actions.GetArrDoniNavi()
+    const ris = await GlobalStore.actions.GetArrDoniNavi({ ricalcola })
     console.log('ris', ris)
     this.arrdoninavi = ris.arrnavi
 
     // this.$q.loading.hide()
 
     this.loading = false
-
   }
 
   public deveDonare(rec) {
@@ -208,12 +213,12 @@ export default class Listadoninavi extends MixinBase {
     this.InviaMsgAUserConfirm(msgobj, naveuser)
   }
 
-  public SaveField(rec, myfield) {
+  public SaveField(rec, table, myfield) {
     if (!!rec) {
       const mydata = {}
       mydata[myfield] = rec[myfield]
-      console.log('mydata', mydata, 'id', rec.id)
-      tools.saveFieldToServer(this, 'navi', rec.id, mydata)
+      console.log('mydata', mydata, 'id', rec._id)
+      tools.saveFieldToServer(this, table, rec._id, mydata)
     }
   }
 

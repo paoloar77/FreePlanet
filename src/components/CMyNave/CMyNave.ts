@@ -32,6 +32,8 @@ export default class CMyNave extends MixinNave {
   public coldoni: number = 1
   public mediatore: any = {}
   public donatore: any = {}
+  public donatore_navepers: any = {}
+  public mediatore_navepers: any = {}
   public iodonatore: any = {}
   public iosognatore: any = {}
   public donoinviato: boolean = false
@@ -115,15 +117,21 @@ export default class CMyNave extends MixinNave {
 
     this.mediatore = this.getmediatore()
     this.donatore = this.getdonatore()
+    if (!!this.nave.rec.donatore)
+      this.donatore_navepers = this.nave.rec.donatore.navepersistente
+    if (!!this.nave.rec.mediatore)
+      this.mediatore_navepers = this.nave.rec.mediatore.navepersistente
+
     this.iodonatore = this.getIoDonatore()
     this.iosognatore = this.getIoSognatore()
     this.donoinviato = this.getDonoInviato
 
+
     // console.log('this.mediatore', this.mediatore)
     // console.log('this.donatore', this.donatore)
 
-    if (!!this.mediatore) {
-      this.link_chat = this.mediatore.link_chat
+    if (!!this.mediatore_navepers) {
+      this.link_chat = this.mediatore_navepers.link_chat
     }
 
     this.arrdonatori = this.creaarrDonatori()
@@ -194,11 +202,8 @@ export default class CMyNave extends MixinNave {
 
   public partenza_primo_donatore() {
     if (!!this.nave) {
-      if (!!this.nave.rec.mediatore) {
-        for (const rec of this.nave.rec.mediatore.arrdonatori) {
-          if (!!rec)
-            return rec.date_start
-        }
+      if (!!this.mediatore_navepers) {
+        return this.mediatore_navepers.date_start
       }
     }
     return ''
@@ -206,13 +211,13 @@ export default class CMyNave extends MixinNave {
 
   public getGiornoDelDono() {
     if (!!this.nave) {
-      return tools.getstrDate(this.nave.date_start)
+      return tools.getstrDate(this.donatore_navepers.date_start)
     }
   }
 
   get GiornoDelDonoArrivato() {
     if (!!this.nave) {
-      return tools.isDateArrived(this.nave.date_start)
+      return tools.isDateArrived(this.donatore_navepers.date_start)
     }
     return false
   }
@@ -379,21 +384,21 @@ export default class CMyNave extends MixinNave {
   }
 
   public change_link_chat() {
-    const recmed = this.getmediatore()
-    if (!!recmed) {
-      if (recmed.link_chat !== this.link_chat) {
-        recmed.link_chat = this.link_chat
+    const recmedpers = this.mediatore_navepers
+    if (!!recmedpers) {
+      if (recmedpers.link_chat !== this.link_chat) {
+        recmedpers.link_chat = this.link_chat
 
         const mydata = {
-          link_chat: recmed.link_chat
+          link_chat: recmedpers.link_chat
         }
-        tools.saveFieldToServer(this, 'navi', recmed._id, mydata)
+        tools.saveFieldToServer(this, 'navepersistente', recmedpers._id, mydata)
       }
     }
   }
 
   get linkchatopen() {
-    return this.donatore.link_chat
+    return this.donatore_navepers.link_chat
   }
 
   public getclassSelect(rec) {
@@ -453,7 +458,7 @@ export default class CMyNave extends MixinNave {
 
   public async InviaMsgANave(msgobj, navemediatore) {
 
-    let msgtitle = translate('dashboard.controlla_donatori')
+    let msgtitle = translate('dashboard.invia_link_chat')
     let msginvia = msgtitle
     if (msgobj.inviareale) {
       msgtitle = translate('dashboard.invia_link_chat')
@@ -505,7 +510,7 @@ export default class CMyNave extends MixinNave {
   }
 
   public gettitledonatore() {
-    return this.getdatastr(this.donatore.date_start) + ' ' + 'NAVE' + ' ' + this.donatore.riga + '.' + this.donatore.col + ' ' + '🎁' + 'AYNI'
+    return this.getdatastr(this.donatore_navepers.date_start) + ' ' + 'NAVE' + ' ' + this.donatore_navepers.riga + '.' + this.donatore_navepers.col + ' ' + '🎁' + 'AYNI'
   }
 
   public gettesto() {
@@ -513,8 +518,8 @@ export default class CMyNave extends MixinNave {
   }
 
   public getisProvvisoriaStr() {
-    if (!!this.iodonatore) {
-      if (this.iodonatore.provvisoria) {
+    if (!!this.donatore_navepers) {
+      if (this.donatore_navepers.provvisoria) {
         return ' Temporanea '
       }
     }

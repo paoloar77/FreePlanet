@@ -228,7 +228,6 @@ const msg_it = {
       pos5: 'Interm. 5',
       pos6: 'Interm. 6',
       entra_in_gift_chat: 'Entra in Gift Chat',
-      controlla_donatori: 'Controlla Donatori',
       invia_link_chat: 'Invia il Link della Gift Chat ai Donatori',
       inviare_msg_donatori: '5) Inviare messaggio ai Donatori',
       msg_donatori_ok: 'Inviato messaggio ai Donatori',

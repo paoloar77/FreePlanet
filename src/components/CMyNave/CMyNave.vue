@@ -1,7 +1,7 @@
 <template>
     <div>
         <CTitleBanner v-if="nave" class="q-pa-xs"
-                      :title="$t('pages.nave') + ` ` + getisProvvisoriaStr() + getRiganave(nave.riga) + `.`+getColnave(nave.col) + ` ` + $t('dashboard.nave_in_partenza') + ` ` + tools.getstrDate(nave.date_start)"
+                      :title="$t('pages.nave') + ` ` + getisProvvisoriaStr() + getRiganave(nave.riga) + `.`+getColnave(nave.col) + ` ` + $t('dashboard.nave_in_partenza') + ` ` + tools.getstrDate(nave.rec.donatore.navepersistente.date_start)"
                       bgcolor="bg-primary"
                       clcolor="text-white"
                       mystyle="" myclass="myshad" canopen="true">
@@ -133,9 +133,9 @@
                             </q-input>
 
                             <div class="row justify-center centermydiv q-gutter-sm" style="max-width: 420px;">
-                                <q-btn rounded text-color="secondary" icon="fab fa-telegram"
+                                <!--<q-btn rounded text-color="secondary" icon="fab fa-telegram"
                                        :label="$t('dashboard.controlla_donatori')"
-                                       @click="InviaLinkChatADonatori(false)"></q-btn>
+                                       @click="InviaLinkChatADonatori(false)"></q-btn>-->
 
                                 <q-btn rounded text-color="primary" icon="fab fa-telegram"
                                        :disable="!linkchatesiste"
