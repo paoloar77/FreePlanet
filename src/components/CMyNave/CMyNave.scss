@@ -35,6 +35,10 @@
   border-radius: 16px;
 }
 
+.cont_donatore {
+  justify-content: space-between;
+}
+
 .you {
   background-color: yellow;
 }
@@ -56,7 +60,7 @@
 }
 
 .extra{
-  opacity: 0.6;
+  opacity: 1;
 }
 
 .passo{
@@ -105,4 +109,8 @@
 
 .ricevuti{
   color: green;
+}
+
+.title-nave {
+  color: blue;
 }

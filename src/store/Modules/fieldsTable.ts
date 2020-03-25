@@ -167,6 +167,7 @@ const colnavi = [
   AddCol({ name: 'ind_order', label_trans: 'ind_order' }),
   AddCol({ name: 'parent_id', label_trans: 'parent_id' }),
   AddCol({ name: 'date_start', label_trans: 'date_start', fieldtype: tools.FieldType.date }),
+  AddCol({ name: 'date_gift_chat_open', label_trans: 'date_gift_chat_open', fieldtype: tools.FieldType.date }),
   AddCol({ name: 'link_chat', label_trans: 'reg.link_chat' }),
   AddCol({ name: 'sent_msg_howto_make_gift', label_trans: 'sent_msg_howto_make_gift', fieldtype: tools.FieldType.boolean }),
   AddCol({ name: 'made_gift', label_trans: 'reg.made_gift', fieldtype: tools.FieldType.boolean }),
@@ -175,6 +176,8 @@ const colnavi = [
   AddCol({ name: 'received_gift', label_trans: 'received_gift', fieldtype: tools.FieldType.boolean }),
   AddCol({ name: 'date_received_gift', label_trans: 'date_received_gift', fieldtype: tools.FieldType.date }),
   AddCol({ name: 'num_tess', label_trans: 'num_tess', fieldtype: tools.FieldType.number }),
+  AddCol({ name: 'note', label_trans: 'note', fieldtype: tools.FieldType.string }),
+  AddCol({ name: 'note_interne', label_trans: 'note_interne', fieldtype: tools.FieldType.string }),
   AddCol(DeleteRec),
   AddCol(DuplicateRec)
 ]

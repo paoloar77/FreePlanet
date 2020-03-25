@@ -782,14 +782,15 @@ namespace Actions {
       })
   }
 
-  async function InviaMsgADonatori(context, { msgobj, navemediatore }) {
+  async function InviaMsgADonatori(context, { msgobj, navemediatore, tipomsg }) {
     console.log('InviaMsgADonatori', msgobj)
 
     const mydata = {
       idapp: process.env.APP_ID,
-      tipomsg: tools.TipoMsg.SEND_LINK_CHAT_DONATORI,
       msgextra: msgobj.msgextra,
       msgpar1: msgobj.msgpar1,
+      username: msgobj.username,
+      tipomsg,
       inviareale: msgobj.inviareale,
       navemediatore
     }

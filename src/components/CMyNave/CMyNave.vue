@@ -111,13 +111,13 @@
                                 </div>
                                 <div class="donatore">DONATORI:</div>
                                 <div v-for="(donatore, index) in nave.rec.mediatore.arrdonatori" :key="index">
-                                    <div v-if="donatore" :class="`cont_donatore ` + getclassSelect(donatore)">
-                                        D{{index + 1}} - {{ donatore.name }} {{ donatore.surname }} ({{
-                                        donatore.username }}) - {{
-                                        donatore.riga}}.{{donatore.col}}<br>
+                                    <div v-if="donatore" :class="`cont_donatore row ` + getclassSelect(donatore)">
+                                        {{ getindex(donatore, index + 1) }} - {{ donatore.name }} {{ donatore.surname }}
+                                        ({{
+                                        donatore.username }}) - {{ donatore.riga}}.{{donatore.col}}
+                                        <q-icon v-if="donatore.made_gift" color="green" inverted size="sm"
+                                                name="fas fa-gift" class="gift"></q-icon>
                                     </div>
-                                    <q-icon v-if="donatore.made_gift" color="green" inverted size="sm"
-                                            :name="geticon(rec)" class="gift"></q-icon>
                                 </div>
                             </div>
                         </div>
@@ -205,10 +205,18 @@
                                     </div>
                                     <div class="donatore">DONATORI:</div>
                                     <div v-for="(donatore, index) in nave.rec.donatore.arrdonatori" :key="index">
-                                        <div v-if="donatore" :class="`cont_donatore ` + getclassSelect(donatore)">
-                                            D{{index + 1}} - {{ donatore.name }} {{ donatore.surname }} ({{
-                                            donatore.username }}) - {{
-                                            donatore.riga}}.{{donatore.col}}<br>
+                                        <div v-if="donatore" :class="`cont_donatore row ` + getclassSelect(donatore)">
+                                            <div>
+                                                {{ getindex(donatore, index + 1) }} - {{ donatore.name }} {{
+                                                donatore.surname }} ({{
+                                                donatore.username }}) - {{
+                                                donatore.riga}}.{{donatore.col}}<br>
+
+                                            </div>
+                                            <div>
+                                                <q-icon v-if="donatore.made_gift" color="green" inverted size="sm"
+                                                        name="fas fa-gift" class="gift"></q-icon>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -228,82 +236,88 @@
                         </div>
 
                         <div v-if="sonoDonatore()">
-                            <div v-html="$t('dashboard.sonosognatore')">
+                            <div v-if="sonoSecondaTessituraDonatore()"
+                                 v-html="$t('dashboard.sonodonatore_seconda_tessitura')">
                             </div>
-
-                            <div v-if="!FattoDono" class="text-evidente bordo_stondato">
-
-                                <div>Quando effettuare il Regalo: <strong>{{ getGiornoDelDono() }}</strong><br></div>
-                                <div>
-                                    Metodi Disponibili:
-
-                                    <CMyChipList
-                                            :type="tools.FieldType.multiselect"
-                                            :value="getMetodoPagamentoSognatore()"
-                                            :options="db_fieldsTable.getTableJoinByName('paymenttypes')"
-                                            :optval="db_fieldsTable.getKeyByTable('paymenttypes')"
-                                            :optlab="db_fieldsTable.getLabelByTable('paymenttypes')"
-                                            :opticon="db_fieldsTable.getIconByTable('paymenttypes')"></CMyChipList>
-
+                            <div v-else>
+                                <div v-if="!FattoDono" v-html="$t('dashboard.sonodonatore')">
                                 </div>
-                                <div>
-                                    Importo: <strong>33€</strong>
-                                </div>
-                                <br>
-                            </div>
-                            <div class="text-evidente bordo_stondato_blu">
-                                <div v-if="GiornoDelDonoArrivato">
 
-                                    <div v-if="!FattoDono">
+                                <div v-if="!FattoDono" class="text-evidente bordo_stondato">
 
-                                        E' arrivato il momento di Effettuare il proprio Dono!<br>
-                                        Inviare tramite PayPal a: <strong>{{ getemailPagamentoSognatore()
-                                        }}</strong><br>
-                                        (Scegliere l'opzione "Invia ad Amici")<br>
-
-                                        <CTitleBanner class="q-pa-xs"
-                                                      :title="$t('dashboard.come_inviare_regalo_con_paypal')"
-                                                      bgcolor="bg-primary"
-                                                      clcolor="text-white"
-                                                      myclass="myshad" canopen="true" :visible="false">
-
-                                            <CVideo myvideokey="5rp_XEV6Mzg">
-
-                                            </CVideo>
-                                        </CTitleBanner>
-
-                                        <div v-if="!donoinviato">
-                                            {{$t('dashboard.clicca_conferma_dono')}}:<br>
-
-                                            <div class="row justify-center q-ma-sm">
-                                                <q-btn push
-                                                       rounded
-                                                       color="positive"
-                                                       size="md"
-                                                       :label="$t('dashboard.ho_effettuato_il_dono')"
-                                                       icon="fas fa-gift"
-                                                       @click="HoEffettuatoIlDono">
-                                                </q-btn>
-                                            </div>
-                                        </div>
-                                        <div v-else>
-                                            <div class="row justify-center q-ma-sm">
-                                                <q-chip class="glossy"
-                                                        text-color="white"
-                                                        color="positive"
-                                                        icon="fas fa-gift">
-                                                    {{ $t('dashboard.ho_effettuato_il_dono') }}
-                                                </q-chip>
-                                            </div>
-                                        </div>
+                                    <div>Quando effettuare il Regalo: <strong>{{ getGiornoDelDono() }}</strong><br>
                                     </div>
-                                    <div v-if="FattoDono">
-                                        <q-chip class="glossy"
-                                                color="positive"
-                                                text-color="white"
-                                                icon="fas fa-gift">
-                                            {{ $t('dashboard.dono_ricevuto') }}
-                                        </q-chip>
+                                    <div>
+                                        Metodi Disponibili:
+
+                                        <CMyChipList
+                                                :type="tools.FieldType.multiselect"
+                                                :value="getMetodoPagamentoSognatore()"
+                                                :options="db_fieldsTable.getTableJoinByName('paymenttypes')"
+                                                :optval="db_fieldsTable.getKeyByTable('paymenttypes')"
+                                                :optlab="db_fieldsTable.getLabelByTable('paymenttypes')"
+                                                :opticon="db_fieldsTable.getIconByTable('paymenttypes')"></CMyChipList>
+
+                                    </div>
+                                    <div>
+                                        Importo: <strong>33€</strong>
+                                    </div>
+                                    <br>
+                                </div>
+                                <div class="text-evidente bordo_stondato_blu">
+                                    <div v-if="GiornoDelDonoArrivato">
+
+                                        <div v-if="!FattoDono">
+
+                                            E' arrivato il momento di Effettuare il proprio Dono!<br>
+                                            Inviare tramite PayPal a: <strong>{{ getemailPagamentoSognatore()
+                                            }}</strong><br>
+                                            (Scegliere l'opzione "Invia ad Amici")<br>
+
+                                            <CTitleBanner class="q-pa-xs"
+                                                          :title="$t('dashboard.come_inviare_regalo_con_paypal')"
+                                                          bgcolor="bg-primary"
+                                                          clcolor="text-white"
+                                                          myclass="myshad" canopen="true" :visible="false">
+
+                                                <CVideo myvideokey="5rp_XEV6Mzg">
+
+                                                </CVideo>
+                                            </CTitleBanner>
+
+                                            <div v-if="!donoinviato">
+                                                {{$t('dashboard.clicca_conferma_dono')}}:<br>
+
+                                                <div class="row justify-center q-ma-sm">
+                                                    <q-btn push
+                                                           rounded
+                                                           color="positive"
+                                                           size="md"
+                                                           :label="$t('dashboard.ho_effettuato_il_dono')"
+                                                           icon="fas fa-gift"
+                                                           @click="HoEffettuatoIlDono">
+                                                    </q-btn>
+                                                </div>
+                                            </div>
+                                            <div v-else>
+                                                <div class="row justify-center q-ma-sm">
+                                                    <q-chip class="glossy"
+                                                            text-color="white"
+                                                            color="positive"
+                                                            icon="fas fa-gift">
+                                                        {{ $t('dashboard.ho_effettuato_il_dono') }}
+                                                    </q-chip>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div v-if="FattoDono">
+                                            <q-chip class="glossy"
+                                                    color="positive"
+                                                    text-color="white"
+                                                    icon="fas fa-gift">
+                                                {{ $t('dashboard.dono_ricevuto') }}
+                                            </q-chip>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

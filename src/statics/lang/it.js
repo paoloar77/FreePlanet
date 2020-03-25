@@ -215,8 +215,9 @@ const msg_it = {
       'cambia la "cronologia per i nuovi membri" da nascosta a visibile.</li>' +
       '<li>Per trovare il <strong>link della Chat appena creata</strong>: clicca sul nome della chat in alto, clicca sulla Matita -> "Tipo di Gruppo" -> "invita nel gruppo tramite link", clicca su "copia link" e incollalo qui sotto, sulla casella <strong>"Link Gift Chat"</strong></li>' +
       '<li>Invia il Link della Gift Chat a tutti i Donatori, cliccando sul bottone qui sotto.</li></ol>',
-      sonosognatore: '<ol class="lista"><li>Quando sei in questa posizione, verrai invitato ad entrare in una <strong>Gift Chat</strong> (Telegram) e qui troverai anche gli altri 7 Donatori, il Mediatore, il Sognatore e un rappresentante dello Staff.</li>' +
+      sonodonatore: '<ol class="lista"><li>Quando sei in questa posizione, verrai invitato ad entrare in una <strong>Gift Chat</strong> (Telegram) e qui troverai anche gli altri 7 Donatori, il Mediatore, il Sognatore e un rappresentante dello Staff.</li>' +
       '<li>Effettuerai il tuo dono <strong>ESATTAMENTE il giorno indicato</strong> e nella modalità di pagamento che troverai scritto qui.<br></ol>',
+      sonodonatore_seconda_tessitura: '<ol class="lista"><li>Qui tu sei Mediatore e anche Donatore, ma essendo la seconda Tessitura, non avrai bisogno di effettuare nuovamente il tuo dono<br></ol>',
       link_chat: 'Link della Gift Chat Telegram',
       donatori:'Donatori',
       donatore:'Donatore',
@@ -244,6 +245,7 @@ const msg_it = {
       confermi_dono_ricevuto_msg: '{sognatore} conferma di aver ricevuto il Dono di 33€ da parte di {donatore}',
       msg_bot_conferma: '{donatore} ha confermato di aver inviato il suo Dono di 33€ a {sognatore}',
       ricevuto_dono_ok: 'Hai confermato che il dono è stato Ricevuto',
+      entra_in_lavagna: 'Entra sulla Tua Lavagna per vedere le Navi in Partenza',
     },
     reg: {
       registered: 'Registrato',

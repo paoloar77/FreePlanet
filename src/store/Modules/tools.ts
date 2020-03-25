@@ -60,6 +60,8 @@ export const tools = {
 
   TipoMsg: {
     SEND_LINK_CHAT_DONATORI: 1,
+    SEND_MSG: 2,
+    SEND_MSG_SINGOLO: 3
   },
 
   listBestColor: [
@@ -1501,7 +1503,11 @@ export const tools = {
       })
     } else if (func === lists.MenuAction.INVIA_MSG_A_DONATORI) {
       // console.log('param1', par.param1)
-      GlobalStore.actions.InviaMsgADonatori({ msgobj: par.param1, navemediatore: par.param2 }).then((ris) => {
+      GlobalStore.actions.InviaMsgADonatori({
+        msgobj: par.param1,
+        navemediatore: par.param2,
+        tipomsg: par.param1.tipomsg
+      }).then((ris) => {
         if (ris) {
           if (par.param1.inviareale)
             tools.showPositiveNotif(myself.$q, myself.$t('dashboard.msg_donatori_ok'))
@@ -1509,6 +1515,19 @@ export const tools = {
         } else
           tools.showNegativeNotif(myself.$q, myself.$t('db.recfailed'))
       })
+    } else if (func === lists.MenuAction.INVIA_MSG_A_SINGOLO) {
+      // console.log('param1', par.param1)
+      GlobalStore.actions.InviaMsgADonatori({
+        msgobj: par.param1,
+        navemediatore: par.param2,
+        tipomsg: par.param1.tipomsg
+      })
+        .then((ris) => {
+          if (ris) {
+            tools.showPositiveNotif(myself.$q, myself.$t('cal.sendmsg_sent'))
+          } else
+            tools.showNegativeNotif(myself.$q, myself.$t('db.recfailed'))
+        })
     } else if (func === lists.MenuAction.DONO_INVIATO) {
       const mydatatosave = {
         id: par.param1._id,
@@ -2402,8 +2421,10 @@ export const tools = {
       return '337'
     } else if (Screen.width < 600) {
       return '400'
-    } else {
+    } else if (Screen.width < 900) {
       return '500'
+    } else {
+      return '600'
     }
   },
 

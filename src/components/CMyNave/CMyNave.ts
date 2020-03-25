@@ -150,7 +150,7 @@ export default class CMyNave extends MixinNave {
         for (const rec of this.nave.listadonatoridelsognatore) {
 
           index++
-          arr.push({ index, ...rec})
+          arr.push({ index, ...rec })
         }
       }
     }
@@ -348,6 +348,20 @@ export default class CMyNave extends MixinNave {
     return !!this.iodonatore
   }
 
+  public sonoSecondaTessituraDonatore() {
+    const mediatore = this.getmediatore()
+    for (const rec of this.nave.rec.donatore.arrdonatori) {
+      if (!!rec) {
+        if (mediatore) {
+          if ((mediatore.ind_order === rec.ind_order) && (rec.num_tess === 2))
+            return true
+        }
+      }
+    }
+
+    return false
+  }
+
   public sonoSognatore() {
     return !!this.iosognatore
   }
@@ -426,6 +440,10 @@ export default class CMyNave extends MixinNave {
   }
 
   public geticon(rec) {
+    if (!rec)
+      return ''
+
+    // console.log('this.rigadoni', this.rigadoni, 'ind', rec.ind)
     if (!rec.ind)
       return ''
     if (this.rigadoni >= this.getrigaNaveByInd(rec.ind)) {
@@ -444,7 +462,8 @@ export default class CMyNave extends MixinNave {
 
     tools.askConfirm(this.$q, msgtitle, msginvia + ' ' + '?', translate('dialog.yes'), translate('dialog.no'), this, '', lists.MenuAction.INVIA_MSG_A_DONATORI, 0, {
       param1: msgobj,
-      param2: navemediatore
+      param2: navemediatore,
+      param3: tools.TipoMsg.SEND_LINK_CHAT_DONATORI
     })
 
   }
@@ -500,6 +519,13 @@ export default class CMyNave extends MixinNave {
       }
     }
     return ''
+  }
+
+  public getindex(recdonatore, index) {
+    if (recdonatore.ind_order === this.nave.rec.donatore.recmediatore.ind_order && (recdonatore.num_tess === 2))
+      return 'TESS'
+
+    return 'D' + (index)
   }
 
   public getposizione() {

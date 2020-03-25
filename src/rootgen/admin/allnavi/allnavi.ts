@@ -28,5 +28,4 @@ export default class Allnavi extends MixinBase {
   public async mounted() {
     this.ris = await GlobalStore.actions.GetArrNavi()
   }
-
 }
