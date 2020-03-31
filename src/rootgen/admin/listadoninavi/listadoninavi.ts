@@ -33,6 +33,8 @@ export default class Listadoninavi extends MixinBase {
   public seldonatore = null
   public msg_tosend: string = ''
   public msg_tosend_user: string = ''
+  public showtesto: boolean = false
+  public seltesto: string = ''
   public pagination = {
     sortBy: 'desc',
     descending: false,
@@ -67,12 +69,13 @@ export default class Listadoninavi extends MixinBase {
       sortable: true
     },
     { name: 'date_start', align: 'center', label: '⏰ Partenza', field: 'date_start', sortable: true },
+    { name: 'provvisoria', align: 'center', label: 'Temp.', field: 'provvisoria', sortable: true },
     { name: 'tutor', align: 'left', label: 'Tutor', field: 'tutor', sortable: true },
     { name: 'mediatore', align: 'center', label: '🌀 Mediatore', field: '', sortable: true },
     { name: 'sognatore', align: 'center', label: 'Sognatore', field: '', sortable: true },
     { name: 'donatori', align: 'center', label: 'Donatori', field: '', sortable: true },
     { name: 'DoniAttesaDiConferma', align: 'center', label: '🎁 Wait', field: 'DoniAttesaDiConferma', sortable: true },
-    { name: 'DoniMancanti', align: 'center', label: '🎁 Mancano', field: 'DoniMancanti', sortable: true },
+    { name: 'DoniMancanti', align: 'center', label: '🎁 Miss', field: 'DoniMancanti', sortable: true },
     { name: 'DoniConfermati', align: 'center', label: '🎁 OK', field: 'DoniConfermati', sortable: true },
     { name: 'note_bot', align: 'left', label: 'Note Placca', field: 'note_bot', sortable: true },
     { name: 'note_interne', align: 'left', label: 'Note Interne', field: 'note_interne', sortable: true },
@@ -121,6 +124,10 @@ export default class Listadoninavi extends MixinBase {
     this.showdonatori = true
   }
 
+  public EsistonoDonatori(rec) {
+    return !!rec.donatore.arrdonatori ? !!rec.donatore.arrdonatori[0].name : false
+  }
+
   public clickseluser(rec) {
     this.seluser = rec
     this.showmsguser = true
@@ -147,6 +154,7 @@ export default class Listadoninavi extends MixinBase {
   public Chiudi() {
     this.showdonatori = false
     this.seldonatore = null
+    this.showtesto = false
   }
 
   public ActionAfterYes(action, item, data) {
@@ -217,9 +225,18 @@ export default class Listadoninavi extends MixinBase {
     if (!!rec) {
       const mydata = {}
       mydata[myfield] = rec[myfield]
-      console.log('mydata', mydata, 'id', rec._id)
+      // console.log('mydata', mydata, 'id', rec._id)
       tools.saveFieldToServer(this, table, rec._id, mydata)
     }
+  }
+
+  public async Mostraplacca(riga, col) {
+    const data = {
+      riga,
+      col
+    }
+    this.showtesto = true
+    this.seltesto = await GlobalStore.actions.GetData({ data })
   }
 
 }

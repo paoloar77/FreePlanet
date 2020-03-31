@@ -61,7 +61,7 @@ export default class Dbop extends Vue {
 
       if (miafunz === 'visuPlacca') {
         this.placca = ris.placca
-      } else if (miafunz === 'visuListaIngresso' || miafunz === 'visuListaNave' || miafunz === 'visuNave' || miafunz === 'creaNaviProvvisorie' || miafunz === 'creaNaviDefinitive') {
+      } else if (miafunz === 'visuListaIngresso' || miafunz === 'visuListaIngressoNuovi' || miafunz === 'visuListaNave' || miafunz === 'visuNave' || miafunz === 'creaNavi') {
         this.placca = ris.mystr
       } else {
         this.ris = ris

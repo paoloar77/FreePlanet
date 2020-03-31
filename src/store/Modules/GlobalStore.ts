@@ -831,6 +831,29 @@ namespace Actions {
       })
   }
 
+  async function GetData(context, { data }) {
+    console.log('GetData')
+
+    const mydata = {
+      idapp: process.env.APP_ID,
+      data
+    }
+
+    return await Api.SendReq('/dashboard/getdata', 'POST', mydata)
+      .then((res) => {
+        if (res.status === 200) {
+          if (res.data.code === serv_constants.RIS_CODE_OK) {
+            return res.data.ris
+          }
+        }
+        return null
+      })
+      .catch((error) => {
+        console.error(error)
+        return null
+      })
+  }
+
   async function GetArrDoniNavi(context, { ricalcola }) {
     console.log('GetArrDoniNavi')
 
@@ -934,25 +957,37 @@ namespace Actions {
       })
   }
 
+  function isMyLang(rec) {
+    if (!rec.lang)
+      return true
+
+    return (rec.lang === tools.getLocale(false) || tools.getLocale() === '')
+  }
+
   async function addDynamicPages(context) {
 
     const arrpagesroute: IListRoutes[] = []
     for (const page of state.mypage) {
       if (page.active) {
-        arrpagesroute.push({
-          active: true,
-          order: page.order,
-          path: '/' + page.path,
-          name: undefined,
-          text: page.title,
-          materialIcon: page.icon,
-          component: () => import('@/root/mypage/mypage.vue'),
-          inmenu: page.inmenu,
-          infooter: page.infooter,
-          onlyif_logged: page.onlyif_logged,
-          level_child: page.l_child,
-          level_parent: page.l_par,
-        })
+        // console.log('page', page.lang)
+        if (isMyLang(page)) {
+          // console.log('page', page.lang, 'OK')
+          arrpagesroute.push({
+            active: true,
+            order: page.order,
+            lang: page.lang,
+            path: '/' + page.path,
+            name: undefined,
+            text: page.title,
+            materialIcon: page.icon,
+            component: () => import('@/root/mypage/mypage.vue'),
+            inmenu: page.inmenu,
+            infooter: page.infooter,
+            onlyif_logged: page.onlyif_logged,
+            level_child: page.l_child,
+            level_parent: page.l_par,
+          })
+        }
       }
     }
 
@@ -1005,6 +1040,7 @@ namespace Actions {
     InviaMsgADonatori: b.dispatch(InviaMsgADonatori),
     GetArrNavi: b.dispatch(GetArrNavi),
     GetArrDoniNavi: b.dispatch(GetArrDoniNavi),
+    GetData: b.dispatch(GetData),
     addDynamicPages: b.dispatch(addDynamicPages)
   }
 

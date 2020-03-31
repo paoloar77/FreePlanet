@@ -1,7 +1,7 @@
 <template>
     <CMyPage img="" :title="$t('otherpages.admin.userlist')" keywords="" description="">
         <CGridTableRec :prop_mytitle="$t('otherpages.admin.tableslist')"
-                       nodataLabel="Nessun Dato"
+                       :nodataLabel="$t('grid.nodata')"
                        noresultLabel="Il filtro selezionato non ha trovato nessun risultato"
                        :tablesList="gettablesList"
         >

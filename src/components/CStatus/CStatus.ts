@@ -556,7 +556,7 @@ export default class CStatus extends MixinBase {
   }
 
   get strpercstep() {
-    return this.$t('steps.completed') + ' ' + (this.getstep) + ' ' + this.$t('steps.passi_su') + ' ' + this.NUMSTEP_OBBLIGATORI
+    return this.$t('steps.completed') + ' ' + this.$t('steps.passi_su', {passo: this.getstep, totpassi: this.NUMSTEP_OBBLIGATORI })
   }
 
   get stepcompleti() {

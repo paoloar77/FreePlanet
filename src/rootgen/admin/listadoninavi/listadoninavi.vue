@@ -28,14 +28,21 @@
                                 {{ props.row.index }}
                             </q-td>
                             <q-td key="rigacol" :props="props">
-                                {{ props.row.riga }}.{{ props.row.col }}
+
+                                <q-btn flat
+                                       rounded color="blue"
+                                       :label="props.row.riga + `.` + props.row.col"
+                                       @click="Mostraplacca(props.row.riga, props.row.col)">
+                                </q-btn>
+
                             </q-td>
                             <q-td key="date_gift_chat_open" :props="props">
 
                                 <div>
                                     <div class="text-center cursor-pointer">
                                         <a v-if="!!props.row.rec.donatore.navepersistente.link_chat"
-                                           :href="props.row.rec.donatore.navepersistente.link_chat" target="_blank">Link</a>
+                                           :href="props.row.rec.donatore.navepersistente.link_chat"
+                                           target="_blank">Link</a>
 
                                         <q-popup-edit v-model="props.row.rec.donatore.navepersistente.link_chat"
                                                       title="Link della Chat Telegram" buttons
@@ -47,26 +54,30 @@
                                         <div v-if="!props.row.rec.donatore.navepersistente.link_chat">---</div>
                                     </div>
                                     <div v-if="!!props.row.rec.donatore.navepersistente">
-                                        {{ tools.getstrshortDate(props.row.rec.donatore.navepersistente.date_gift_chat_open)
+                                        {{
+                                        tools.getstrshortDate(props.row.rec.donatore.navepersistente.date_gift_chat_open)
                                         }}
                                     </div>
 
                                 </div>
 
-                                <div v-if="props.row.rec.donatore.recmediatore.sent_msg_howto_make_gift">(Link
-                                    Inviato)
+                                <div v-if="props.row.rec.donatore.recmediatore.sent_msg_howto_make_gift">(Link Inviato)
                                 </div>
                             </q-td>
                             <q-td key="date_start" :props="props">
                                 <div v-if="!!props.row.rec.donatore.navepersistente">
                                     {{ tools.getstrshortDate(props.row.rec.donatore.navepersistente.date_start) }}
-                                    <div v-if="!!props.row.rec.donatore.navepersistente.provvisoria">
-                                        (Temporanea)
-                                    </div>
+                                </div>
+                            </q-td>
+                            <q-td key="provvisoria" :props="props">
+                                <div v-if="!!props.row.rec.donatore.navepersistente">
+                                    <q-toggle dark color="green"
+                                              v-model="props.row.rec.donatore.navepersistente.provvisoria"
+                                              @input="SaveField(props.row.rec.donatore.navepersistente, 'navepersistente', 'provvisoria')"></q-toggle>
                                 </div>
                             </q-td>
                             <q-td key="tutor" :props="props">
-                                <div>
+                                <div class="text-center">
                                     <div class="text-center cursor-pointer">
                                         {{ props.row.tutor }}
                                         <q-popup-edit v-model="props.row.rec.donatore.navepersistente.tutor"
@@ -101,7 +112,8 @@
                                 </q-btn>
                             </q-td>
                             <q-td key="donatori" :props="props">
-                                <q-btn flat rounded color="blue"
+
+                                <q-btn v-if="EsistonoDonatori(props.row.rec)" flat rounded color="blue"
                                        :label="$t('dashboard.donatori')"
                                        @click="clickdonatori(props.row.rec)">
                                 </q-btn>
@@ -132,7 +144,9 @@
                                                   title="Note che compariranno sulla Placca dell'Utente" buttons
                                                   @save="SaveField(props.row.rec.donatore.navepersistente, 'navepersistente', 'note_bot')">
                                         <q-field>
-                                            <q-input v-model="props.row.rec.donatore.navepersistente.note_bot"/>
+                                            <q-input type="textarea" autogrow
+                                                     v-model="props.row.rec.donatore.navepersistente.note_bot">
+                                            </q-input>
                                         </q-field>
                                     </q-popup-edit>
                                 </div>
@@ -148,7 +162,10 @@
                                                   buttons
                                                   @save="SaveField(props.row.rec.donatore.navepersistente, 'navepersistente', 'note_interne')">
                                         <q-field>
-                                            <q-input v-model="props.row.rec.donatore.navepersistente.note_interne"/>
+                                            <q-input type="textarea"
+                                                     autogrow
+                                                     v-model="props.row.rec.donatore.navepersistente.note_interne">
+                                            </q-input>
                                         </q-field>
                                     </q-popup-edit>
                                 </div>
@@ -178,6 +195,7 @@
                                         :data="selrec.donatore.arrdonatori"
                                         :columns="coldonatori"
                                         :Pagination="pagination2"
+                                        :nodataLabel="$t('grid.nodata')"
                                         row-key="index">
                                     <template v-slot:body="props">
                                         <q-tr :props="props">
@@ -275,6 +293,23 @@
 
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                    </q-card-section>
+                </q-card>
+            </q-dialog>
+            <q-dialog v-model="showtesto">
+                <q-card v-if="seltesto" :style="`min-width: `+ tools.myheight_dialog() + `px;` ">
+                    <q-toolbar class="bg-primary text-white" style="min-height: 30px;">
+                        <q-toolbar-title>
+                            Testo:
+                        </q-toolbar-title>
+                        <q-btn flat round color="white" icon="close" v-close-popup clickable @click="Chiudi"></q-btn>
+                    </q-toolbar>
+                    <q-card-section class="inset-shadow" style="padding: 4px !important;">
+                        <div class="">
+                            <div>
+                                <pre>{{ seltesto }}</pre>
                             </div>
                         </div>
                     </q-card-section>

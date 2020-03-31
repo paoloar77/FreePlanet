@@ -167,6 +167,9 @@ export default class CMyNave extends MixinNave {
   }
 
   public getNavePartByInd(ind) {
+
+    this.getrigaNaveByInd(ind)
+
     if (!!this.navi_partenza[ind])
       return tools.getstrshortDate(this.navi_partenza[ind].date_start)
     else
@@ -407,10 +410,19 @@ export default class CMyNave extends MixinNave {
   }
 
   public gettitlenave(ind) {
+    let ris = ''
     if (ind === 1)
       return this.getRiganave(this.nave.riga) + '.' + this.getColnave(this.nave.col)
-    else
-      return (this.getrigaNaveByInd(ind)) + '.x'
+    else {
+      ris = (this.getrigaNaveByInd(ind)) + '.' + this.getcolNaveByInd(ind)
+    }
+    let add = ''
+    // for (let index = 0; index < (4 - ris.length); index++) {
+    //   add += '&nbsp;'
+    // }
+
+    ris = add + ris
+    return ris
   }
 
   public getdatanave(rec) {
@@ -425,11 +437,35 @@ export default class CMyNave extends MixinNave {
       }
     }
 
-    return this.getNavePartByInd(rec.ind)
+    const riga = this.getrigaNaveByInd(rec.ind)
+    const col = this.getcolNaveByInd(rec.ind)
+    const mynavepart = this.getnavePartenzaByRigaCol(riga, col)
+    if (!!mynavepart) {
+      if (!!mynavepart.date_start)
+        return tools.getstrshortDate(mynavepart.date_start)
+    }
+    return ' --/-- '
+    // return this.getNavePartByInd(rec.ind)
+  }
+
+  public getnavePartenzaByRigaCol(riga, col) {
+    for (const mynave of this.navi_partenza) {
+      if (!!mynave) {
+        if ((mynave.riga === riga) && (mynave.col === col)) {
+          return mynave
+        }
+      }
+    }
+    return null
   }
 
   public getrigaNaveByInd(ind) {
     return this.getRiganave(this.nave.riga + ind - 1)
+  }
+
+  public getcolNaveByInd(ind) {
+    const miacol = this.nave.col * Math.pow(2, ind - 1)
+    return this.getColnave(miacol)
   }
 
   public NaveeseguitabyInd(riga) {
@@ -451,14 +487,23 @@ export default class CMyNave extends MixinNave {
     // console.log('this.rigadoni', this.rigadoni, 'ind', rec.ind)
     if (!rec.ind)
       return ''
+
+    const riga = this.getrigaNaveByInd(rec.ind)
+    const col = this.getcolNaveByInd(rec.ind)
+    const mynavepart = this.getnavePartenzaByRigaCol(riga, col)
+    if (!!mynavepart) {
+      if (mynavepart.DoniConfermati > 0) {
+        return 'fas fa-gift'
+      }
+    }
     if (this.rigadoni >= this.getrigaNaveByInd(rec.ind)) {
-      return 'fas fa-gift'
+      // return 'fas fa-gift'
     }
   }
 
   public async InviaMsgANave(msgobj, navemediatore) {
 
-    let msgtitle = translate('dashboard.invia_link_chat')
+    let msgtitle = translate('dashboard.controlla_donatori')
     let msginvia = msgtitle
     if (msgobj.inviareale) {
       msgtitle = translate('dashboard.invia_link_chat')
@@ -506,11 +551,11 @@ export default class CMyNave extends MixinNave {
   }
 
   public gettitlemediatore() {
-    return this.getdatastr(this.partenza_primo_donatore()) + ' ' + 'NAVE' + ' ' + this.mediatore.riga + '.' + this.mediatore.col + ' ' + '🎁' + 'AYNI'
+    return this.getdatastr(this.partenza_primo_donatore()) + ' ' + this.$t('dashboard.nave') + ' ' + this.getisProvvisoriaMediatoreStr() + this.mediatore.riga + '.' + this.mediatore.col + ' ' + '🎁' + 'AYNI'
   }
 
   public gettitledonatore() {
-    return this.getdatastr(this.donatore_navepers.date_start) + ' ' + 'NAVE' + ' ' + this.donatore_navepers.riga + '.' + this.donatore_navepers.col + ' ' + '🎁' + 'AYNI'
+    return this.getdatastr(this.donatore_navepers.date_start) + ' ' + this.$t('dashboard.nave') + ' ' + this.getisProvvisoriaStr() + this.donatore_navepers.riga + '.' + this.donatore_navepers.col + ' ' + '🎁' + 'AYNI'
   }
 
   public gettesto() {
@@ -518,17 +563,46 @@ export default class CMyNave extends MixinNave {
   }
 
   public getisProvvisoriaStr() {
+    let istemp = false
+
     if (!!this.donatore_navepers) {
       if (this.donatore_navepers.provvisoria) {
-        return ' Temporanea '
+        istemp = true
       }
+    } else {
+      istemp = true
+    }
+    if (istemp) {
+      return ' ' + this.$t('dashboard.temporanea') + ' '
     }
     return ''
   }
 
+  public getisProvvisoriaMediatoreStr() {
+    let istemp = false
+
+    if (!!this.mediatore_navepers) {
+      if (this.mediatore_navepers.provvisoria) {
+        istemp = true
+      }
+    } else {
+      istemp = true
+    }
+    if (istemp) {
+      return ' ' + this.$t('dashboard.temporanea') + ' '
+    }
+      return ''
+  }
+
+  public isDefinitivaMediatore() {
+    if (!!this.mediatore_navepers)
+      return (!this.mediatore_navepers.provvisoria)
+    return false
+  }
+
   public getindex(recdonatore, index) {
     if (recdonatore.ind_order === this.nave.rec.donatore.recmediatore.ind_order && (recdonatore.num_tess === 2))
-      return 'TESS'
+      return this.$t('dashboard.ritessitura')
 
     return 'D' + (index)
   }

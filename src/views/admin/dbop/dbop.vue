@@ -23,12 +23,12 @@
             -->
 
             <div class="row">
-                <q-btn label="CREA NAVI PERSISTENTI" color="primary" @click="EseguiFunz('CreaNaviPersistenti')"></q-btn>
-                <br>
+                <!--<q-btn label="CREA NAVI PERSISTENTI" color="primary" @click="EseguiFunz('CreaNaviPersistenti')"></q-btn>
+                <br>-->
                 <q-btn label="CORREGGI NUM_TESS" color="primary" @click="EseguiFunz('Corregginumtess')"></q-btn>
                 <br>
-                <q-btn label="CORREGGI DATA GIFT CHAT" color="primary" @click="EseguiFunz('CorreggiDataGiftChat')"></q-btn>
-                <br>
+                <!--<q-btn label="CORREGGI DATA GIFT CHAT" color="primary" @click="EseguiFunz('CorreggiDataGiftChat')"></q-btn>
+                <br>-->
             </div>
             <div class="row">
                 <!--<q-btn label="Inizializza ListaIngresso" color="negative"
@@ -59,10 +59,7 @@
                 </CDateTime>
                 <q-input v-model="numpersone" type="number" autofocus label="Num Persone to Add"
                          style="width: 50px;"></q-input>
-                <q-btn label="Crea Navi Provvisorie" color="primary"
-                       @click="EseguiFunz('creaNaviProvvisorie')"></q-btn>
-                <br>
-                <q-btn label="Crea Navi Definitive" color="primary" @click="EseguiFunz('creaNaviDefinitive')"></q-btn>
+                <q-btn label="Crea Navi" color="primary" @click="EseguiFunz('creaNavi')"></q-btn>
             </div>
             <div v-if="!incaricamento" class="row">
                 <CMyFieldDb title="Riga"
@@ -109,6 +106,9 @@
             <div class="row">
                 <q-btn label="Visualizza ListaIngresso" color="primary"
                        @click="EseguiFunz('visuListaIngresso')"></q-btn>
+                <br>
+                <q-btn label="Visualizza ListaIngresso Nuovi" color="primary"
+                       @click="EseguiFunz('visuListaIngressoNuovi')"></q-btn>
                 <br>
             </div>
             <!--<div class="row">

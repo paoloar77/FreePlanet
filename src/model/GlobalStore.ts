@@ -53,6 +53,7 @@ export interface ITeachUname {
 export interface IMyPage {
   _id?: string
   author_username?: string
+  lang?: string
   title?: string
   icon?: string
   order?: number
@@ -189,6 +190,7 @@ export interface IListRoutes {
   order: number
   path: string
   name: string
+  lang?: string
   materialIcon?: string
   component?: Component
   reqauth?: boolean

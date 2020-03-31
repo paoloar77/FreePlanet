@@ -17,6 +17,7 @@ import translate from './../../globalroutines/util'
 import * as Types from '@src/store/Api/ApiTypes'
 import { ICalendarState, ICfgServer } from '@src/model'
 import { shared_consts } from '../../common/shared_vuejs'
+import { IDataPass } from '@src/model/GlobalStore'
 
 const bcrypt = require('bcryptjs')
 
@@ -353,6 +354,7 @@ namespace Mutations {
     localStorage.setItem(tools.localStorage.lang, state.lang)
   }
 
+
   function UpdatePwd(mystate: IUserState, x_auth_token: string) {
     mystate.x_auth_token = x_auth_token
     if (!mystate.my.tokens) {
@@ -480,6 +482,26 @@ namespace Actions {
       })
 
   }
+
+  async function setLangServer(context) {
+
+    const mydata = {
+      username: state.my.username,
+      lang: state.lang
+    }
+
+    return await Api.SendReq(`/setlang`, 'PATCH', { data: mydata })
+      .then((res) => {
+        if (res) {
+          return (res.data.code === serv_constants.RIS_CODE_OK)
+        } else
+          return false
+      })
+      .catch((error) => {
+        return false
+      })
+  }
+
 
   async function requestpwd(context, paramquery) {
 
@@ -957,6 +979,7 @@ namespace Actions {
     importemail: b.dispatch(importemail),
     importExtraList: b.dispatch(importExtraList),
     execDbOp: b.dispatch(execDbOp),
+    setLangServer: b.dispatch(setLangServer),
     newsletterload: b.dispatch(newsletterload),
     newsletter_setactivate: b.dispatch(newsletter_setactivate),
     getDashboard: b.dispatch(getDashboard),

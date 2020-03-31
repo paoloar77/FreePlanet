@@ -488,6 +488,7 @@ export const fieldsTable = {
     AddCol({ name: 'profile.vuole_ritessersi', field: 'profile', subfield: 'vuole_ritessersi', label_trans: 'reg.vuole_ritessersi', fieldtype: tools.FieldType.boolean  }),
     AddCol({ name: 'profile.saw_and_accepted', field: 'profile', subfield: 'saw_and_accepted', label_trans: 'reg.saw_and_accepted', fieldtype: tools.FieldType.binary, jointable: 'accepted'  }),
     AddCol({ name: 'profile.my_dream', field: 'profile', subfield: 'my_dream', label_trans: 'reg.my_dream' }),
+    AddCol({ name: 'lang', field: 'lang', label_trans: 'reg.lang' }),
     AddCol({ name: 'profile.nationality', field: 'profile', subfield: 'nationality', label_trans: 'reg.nationality' }),
     AddCol({ name: 'profile.intcode_cell', field: 'profile', subfield: 'intcode_cell', label_trans: 'reg.intcode_cell' }),
     AddCol({ name: 'profile.iso2_cell', field: 'profile', subfield: 'iso2_cell', label_trans: 'reg.iso2_cell' }),

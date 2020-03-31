@@ -1682,6 +1682,9 @@ export const tools = {
       if ((mylang.toLowerCase() === 'it') || (mylang.toLowerCase() === 'it-it') || (mylang.toLowerCase() === 'itit')) {
         mylang = 'it'
       }
+      if ((mylang.toLowerCase() === 'si') || (mylang.toLowerCase() === 'si-si') || (mylang.toLowerCase() === 'sisi')) {
+        mylang = 'si'
+      }
 
       if (!(static_data.arrLangUsed.includes(mylang))) {
         // console.log('non incluso ', mylang)
@@ -2187,7 +2190,7 @@ export const tools = {
       es: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'iernes', 'Sábado'],
       pt: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
       de: ['Sonntag', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag'],
-      si: ['nedelja', 'Ponedeljek', 'torek', 'sreda', 'četrtek', 'petek', 'sobota'],
+      si: ['Nedelja', 'Ponedeljek', 'Torek', 'Sreda', 'četrtek', 'Petek', 'Sobota'],
     }
 
     return isNaN(dayOfWeek) ? '' : myday[lang][dayOfWeek].substring(0, 3)
@@ -2706,10 +2709,12 @@ export const tools = {
       })
     })
 
+    GlobalStore.actions.addDynamicPages()
+
     // this.$q.lang.set(mylang)
 
-  }
-  ,
+  },
+
   getappname(mythis, short) {
     if (mythis === undefined)
       return ''
@@ -3281,6 +3286,8 @@ export const tools = {
         return 'fa-flag-fr'
       else if (lang === 'SI')
         return 'fa-flag-si'
+      else if (lang === 'NG')
+        return 'fa-flag-ng'
       else if (lang === 'SK')
         return 'fa-flag-sk'
       else if (lang === 'CH')
@@ -3297,6 +3304,8 @@ export const tools = {
         return 'fa-flag-hr'
       else if (lang === 'RO')
         return 'fa-flag-ro'
+      else if (lang === 'VE')
+        return 'fa-flag-ve'
       else if (lang === 'CL')
         return 'fa-flag-cl'
       else if (lang === 'PL')
@@ -3336,6 +3345,8 @@ export const tools = {
       return 'Slovenia'
     } else if (nat === 'SK') {
       return 'Slovakia'
+    } else if (nat === 'NG') {
+      return 'Nigeria'
     } else if (nat === 'ES') {
       return 'Spain'
     } else if (nat === 'DE') {
@@ -3374,6 +3385,8 @@ export const tools = {
       return 'Ukraine'
     } else if (nat === 'RO') {
       return 'Romania'
+    } else if (nat === 'VE') {
+      return 'Venezuela'
     } else if (nat === 'CL') {
       return 'Chile'
     } else if (nat === 'PL') {

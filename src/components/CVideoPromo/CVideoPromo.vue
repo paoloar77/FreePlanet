@@ -8,7 +8,7 @@
                     clcolor="text-white"
                     myclass="myshad" canopen="true" :visible="true">
 
-        <CVideo myvideokey="85zU-2A-Rxs">
+        <CVideo myvideokey="ybrjGr52jOI">
 
         </CVideo>
       </CTitleBanner>
@@ -16,10 +16,12 @@
                     clcolor="text-white"
                     myclass="myshad" canopen="true" :visible="false">
 
-        <CVideo myvideokey="3JDRkN9z_rM">
+        <CVideo myvideokey="u90hVKBRD6w">
 
         </CVideo>
       </CTitleBanner>
+
+        <!--
       <CTitleBanner class="q-pa-xs" :title="$t('steps.video_intro_3')" bgcolor="bg-primary"
                     clcolor="text-white"
                     myclass="myshad" canopen="true" :visible="false">
@@ -37,6 +39,7 @@
 
         </CVideo>
       </CTitleBanner>
+      -->
 
       <div v-if="showconditions">
         <q-checkbox

@@ -221,7 +221,7 @@
       <p>Dernière mise à jour : {{lastdataupdate}}</p>
 
     </div>
-    <div v-else>
+    <div v-else-if="toolsext.isLang('es')">
       <p class="text-subtitle1">Política de privacidad de {{url}}</p>
       <p class="text-subtitle1">Información sobre el procesamiento de datos personales de conformidad con el art.
         13 del Reglamento (UE) n. 2016/679</p>
@@ -349,6 +349,130 @@
 
                   <p>Última actualización: {{lastdataupdate}} </p>
     </div>
+      <div v-else>
+          <p class="text-subtitle1">Privacy Policy {{url}}</p>
+          <p class="text-subtitle1">Information on the processing of personal data in accordance with art. 13 of the
+              Regulation
+              (EU) No 2016/679</p>
+
+          <p>In accordance with art. 13 of Regulation (EU) no. 2016/679, also called General Data Protection
+              Regulation
+              (hereinafter the "GDPR"), {{SiteName}}} informs you that your personal data (hereinafter the "Data"),
+              will be treated in compliance with the provisions of the GDPR and any applicable legislation in reference to
+              to the processing of personal data in accordance with the information below.</p>
+
+          <p><span class="text-subtitle2">1. Data Controller</span><br/>
+              {{ownerDataName}}</p>
+          <p><span class="boldhigh">Data processing and data protection officer:</span><br/>
+              {{managerDate}}
+          </p>
+
+          <p class="text-subtitle2">2. Data Categories</p>
+
+          <p>Data processed by the Data Controller includes: {{includeData}}.</p>.
+
+          <p class="text-subtitle2">3. Purpose and legal basis of the processing. Legitimate interest.</p>
+
+          <p>Data will be processed for the fulfilment of informative, commercial and administrative purposes to
+              legal obligations, pursuant to Article 6, paragraph 1, letters b) and c) of the GDPR, as well as the pursuit of the
+              legitimate
+              interest of the Holder, in art. 6, paragraph 1, letter f of the GDPR, with reference to:
+              compliance with internal administrative procedures and fulfillment of legal obligations or regulations in force in
+              {{country}}
+              the sending of communications of an informative, commercial and promotional nature.</p>
+
+          <p>In any case, the processing of your Data carried out on the basis of your legitimate interest of
+              In addition to the provisions of art. 6, paragraph 1, letter f of the GDPR, the Owner is also in
+              compliance
+              to the provisions of recital 47 and Opinion No 6/2014 Article 29 Data Protection Working
+              Party, par. III.3.1.</p>
+
+          <p class="text-subtitle2">4. Treatment modalities.</p>
+
+          <p>Your Data are collected and recorded in a lawful and correct manner for the above purposes
+              indicated and are also processed with the aid of electronic and automated tools, including by means of
+              insertion and
+              the organisation into databases, in accordance with the provisions of the GDPR on measures of
+              security, and, in any case, in such a way as to guarantee the security and confidentiality of the Data itself.</p>
+
+          <p class="text-subtitle2">5. Recipients or categories of recipients.</p>
+
+          <p>Data may be made accessible, brought to the knowledge of or communicated to the following subjects, the
+              who will be appointed by the Owner, as the case may be, as responsible - whose list is available
+              at the registered office of the Owner - or persons in charge:
+              employees and/or collaborators in any capacity of the Owner;
+              public or private subjects, natural or legal persons, of which the Holder avails himself for the
+              carrying out the activities instrumental to the achievement of the above mentioned purpose or to which the Owner is
+              bound to
+              communicate the Data by virtue of legal or contractual obligations.</p>
+
+          <p>In any case, the Data will not be disseminated.</p>
+
+          <p class="text-subtitle2">6. Place</p>
+
+          <p>Data are processed at the Owner's operating offices and in any other place where the parties
+              involved in the treatment are localized. For further information, please contact the Data Controller at the following contact details
+              reported in
+              opening.</p>
+
+          <p class="text-subtitle2">7. Conservation period.</p>
+
+          <p>Data will be kept for a period of time not exceeding 10 (ten) years for the following purposes
+              administrative and, in any case, for the time strictly necessary for the pursuit of the legitimate interest of the
+              Owner.</p>
+
+          <p class="text-subtitle2">8. Access rights, deletion, restriction and portability.</p>
+
+          <p>The Owner informs you that you are entitled to the rights set out in articles 15 to 20 of the GDPR. By way of
+              example, by sending a specific request to the email address {{owneremail}}, you can:
+              obtain confirmation whether or not personal data concerning you is being processed;
+              if a processing operation is in progress, obtain access to the data and information relating to the
+              processing and request a copy of the data;
+              obtain rectification of inaccurate data and integration of incomplete personal data;
+
+
+
+
+
+          <p class="text-subtitle2">8. Access rights, deletion, restriction and portability.</p>
+
+          <p>The Owner informs you that you are entitled to the rights set out in articles 15 to 20 of the GDPR. By way of
+              example, by sending a specific request to the email address {{owneremail}}, you can:
+              obtain confirmation whether or not personal data concerning you is being processed;
+              if a processing operation is in progress, obtain access to the data and information relating to the
+              processing and request a copy of the data;
+              obtain rectification of inaccurate data and integration of incomplete personal data;
+              to obtain, if one of the conditions provided for in art. 17 of the GDPR is met, the cancellation of the
+              Data concerning you; to obtain, in the cases provided for by art. 18 of the GDPR, the limitation of the treatment of your personal data.
+              Data that La
+              regard; receive the Data concerning you in a structured format, in common use and readable by
+              device
+              automatic and request their transmission to another owner, if technically feasible.</p>
+
+          <p class="text-subtitle2">9. Right of opposition.</p>
+
+          <p>In accordance with Art. 21 of the GDPR, you also have the right to object at any time to the
+              processing of its own Data carried out for the pursuit of the legitimate interest of the Data Controller by writing
+              at the email address
+              {{owneremail}} In case of opposition, the Data will no longer be processed, provided that you do not
+              there are legitimate grounds for processing, which override the interests, rights and interests of the data subject.
+              freedom of the persons concerned, or for the establishment, exercise or defence of a right in headquarters
+              judicial.</p>
+
+          <p class="text-subtitle2">Data Protection Officer</p>.
+          <p>The data controller has appointed a data protection officer who is contactable at the
+              following mailbox {{owneremail}}.</p>
+
+          <p class="text-subtitle2">10. Right to lodge a complaint with the Guarantor.</p>
+
+          <p>The Owner also informs you that you can lodge a complaint with the Guarantor for the Protection of Personal Data in the
+              if it considers that its rights under GDPR or any other law have been infringed
+              applicable legislation, according to the modalities indicated on the website of the Data Protection Supervisor
+              Personal accessible at the address: <a href="http://www.garanteprivacy.it" target="_blank">www.garanteprivacy.it</a>.
+          </p>
+
+          <p>Last Update: {{lastdataupdate}}</p>
+      </div>
 
 
   </q-page>

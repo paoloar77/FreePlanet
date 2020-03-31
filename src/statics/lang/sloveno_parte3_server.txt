@@ -1,0 +1,54 @@
+﻿Anche qui, la prima parola chiave non va tradotta.
+
+  "chiave_da_non_tradurre": "testo da tradurre"
+
+  Il \n significa che c'è un ritorno a capo.
+
+
+
+
+  si: {
+    "Email je že bila preverjena": "Email je že bila preverjenaL'Email è già stata Verificata",
+    "Nuova Registrazione": "Nova Registracija",
+    "Effettuata una Nuova Registrazione": "Izpelji novo Registracijo",
+    "partecipanti": "Udeleženci",
+    'TESTO_ASSISTENZA': "Za vstop na spletno stran:\nhttps://ayni.gifteconomy.app\n\nSi pozabil geslo za vstop na stran?\nhttps://ayni.gifteconomy.app/requestresetpwd\n\nKlepet AYNI BOT (questa):\nhttps://t.me/notevoleaynibot\n\nKlepet AYNI - EMPOWER: Vstopi ⛩ v našo Skupnost klepet:\n https://t.me/joinchat/C741mkx5QYXu-kyYCYvA8g\n\nKlepet AYNI-BIBLIO: https://t.me/joinchat/AL2qKExZKvenLgpVhOyefQ \n\nKlepet za Pomoč in Suport: 'AYNI - HELP'\nhttps://t.me/joinchat/C741mlVmB_RMcOUpNqWC8w\n1 - Postavi svoje vprašanje in prosi za asistenco.\n2 - KO si sprejel pomoč, izstopi iz klepeta.\n Vstopil boš lahko vedno, ko boš potreboval pomoč.",
+
+
+    'BENVENUTO': "Dobrodošel",
+    'TUE_NAVI': "Tvoje programirane Ladje",
+    'HAI_I_7_REQUISITI': 'PRVI KORAKI OK!\nIzpolnjuješ Prvih 7 Zahtev za vstop na Listo d\'Vkrcanje!',
+    'NON_HAI_I_7_REQUISITI': 'Pozor!\nŠe vedno nimaš izpolnjenih 7 Zahtev za vstop na listo\'Vkrcanje!',
+    'HAI_I_9_REQUISITI': 'ČESTITAMO!\nIzpolnil si VSEH 9 korakov v navodilih! Hvala ker pomagaš k širitvi AYNI !',
+    'NON_HAI_I_9_REQUISITI': 'Zapomni si, če želiš Pomagati Rasti in Širit Gibanje, lahko to storiš z delitvijo med ljudmi!',
+    'INFO_LA_MIA_LAVAGNA': '✨ Seznam Krajev: ✨ \n',
+    'INFO_LAVAGNA_SITO_COMPLETARE': 'Da izpolneš vse zahteve, pojdi na spletno stran:\n%s\nDa pogledaš status svoje Ladje in status svojih povabljencev, klikni na levi strani zgoraj na tri črte in izberi "Tabla".\n',
+    'INFO_LAVAGNA_SITO': 'Da lahko podrobno pogledaš status svoje Ladje,na spletni strani AYNI, klikni, na levi strani zgoraj, na tri črtice in izberi "Tabla".\n',
+    'INFO_LINK_DA_CONDIVIDERE': 'Link, ki ga deliš svojim povabljencem, da se lahko registrirajo na spletni strani Ayni:\n%s\n\nLink, ki ga deliš za udeležbo na Zoom (Konferenca OnLine):\n%s',
+    'ZOOM_CONFERENCE': 'Tu najdeš datume prihajajočih Zoom-ov:',
+    "NON_VERIF": "Ni Preverjena",
+    "VERIF": "Preverjena",
+    'EMAIL': "Email",
+    'BOT': "AYNI BOT",
+    'EMAIL_NON_VERIF': "Email ni preverjen\npojdi v svoj poštni nabiralnik in najdi**\"Potrditev Registracije na Ayni\"**<br>e klikni na gumb **\"Potrdi Registracijo\"**",
+    'TELEGRAM_NOT_CONNECTED': "Telegram ni povezan s tvojim računom!",
+    'NESSUN_INVITATO': 'Nisi povabil nikogar',
+    'ZOOM_PARTECIPATO': 'Udeležba na vsaj 1 Konferenci (Zoom-u)',
+    'LINEE_GUIDA': 'Sprejemam pogoje poslovanja',
+    'VIDEO_INTRO': 'Pogledal sem video AYNI',
+    'SCRITTO_SOGNO': 'Sem zapisal Sanje',
+    'PAYMENTS': 'Načini Plačila (Obvezen Paypal)',
+    'INVITATI': 'registrirane osebe, ki si povabil',
+    'INVITATI_ATTIVI': 'Povabljenci s 7 Zahtevami',
+    'NONREG': 'Neregistrirani povabljenci',
+    'CLICCA_PER_ZOOM': 'NA DOLOČENO URO IN DATUM, ZA VSTOP V VIDEO KONFERENCO,KLIKNI TU',
+    'CLICCA_ENTRA': 'KLIKNI TU ZA VSTOP !',
+    'ZOOM_INIZIATO': 'TA KONFERENCA JE\' PRIČELA!',
+    'SCEGLI_VOCE': 'izberi en glas:',
+    'INVITATI_LISTA': 'Tvoji povabljenci (v zelenem, s izpolnjenimi vsaj 7-imi zahtevami)',
+    'CIAO': 'Zdravo',
+    'ADDED_TOLISTAINGRESSO': 'Si bil dodan na Seznam oseb, ki bodo vstopile v Listo D\'Vkrcanje !',
+    'NO_PROG': 'Trenutno še nisi na Listi d\'Vkrcanja!',
+    'SEND_LINK_CHAT_DONATORI': 'Zdravo %s!\nTvoja LADJA bo končno Izplula!\nVstopi v Darilni (Gift) klepet s klikom tu: %s'
+  },
+

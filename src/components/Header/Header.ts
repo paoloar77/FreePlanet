@@ -133,6 +133,11 @@ export default class Header extends Vue {
     this.setshortlang(mylangtopass)
 
     this.setLangAtt(mylangtopass)
+
+    UserStore.actions.setLangServer()
+
+    // Update Server
+
   }
 
   @Watch('GlobalStore.state.stateConnection', { immediate: true, deep: true })
@@ -237,8 +242,7 @@ export default class Header extends Vue {
       })
     })
 
-    // this.$q.lang.set(mylang)
-
+    GlobalStore.actions.addDynamicPages()
   }
 
   public beforeMount() {

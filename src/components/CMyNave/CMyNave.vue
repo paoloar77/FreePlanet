@@ -21,8 +21,8 @@
                         align="justify"
                         narrow-indicator
                 >
-                    <q-tab name="tragitto" label="Tragitto"></q-tab>
-                    <q-tab name="mediatore" label="Mediatore"></q-tab>
+                    <q-tab name="tragitto" :label="$t('dashboard.tragitto')"></q-tab>
+                    <q-tab name="mediatore" :label="$t('dashboard.mediatore')"></q-tab>
                 </q-tabs>
 
 
@@ -31,14 +31,14 @@
                         <q-chip class="glossy q-ma-sm" color="orange" text-color="white" icon="star">
                             {{getposizione()}}
                         </q-chip>
-                        <div class="row justify-between">
+                        <div class="row justify-between no-wrap">
                             <div class="cont_pos_intest">N</div>
 
-                            <div class="cont_intestaz q-mx-sm"> Nome<br>dei Passaggi</div>
+                            <div class="cont_intestaz q-mx-sm passoint" v-html="$t('dashboard.nome_dei_passaggi')"></div>
 
-                            <div class="cont_intestaz">Nave</div>
-                            <div class="cont_intestaz">Data<br>Partenza</div>
-                            <div class="cont_intestaz_small">Doni<br>Inviati</div>
+                            <div class="cont_intestaz titlenave">{{$t('dashboard.nave')}}</div>
+                            <div class="cont_intestaz datanave_int" v-html="$t('dashboard.data_partenza')"></div>
+                            <div class="cont_intestaz_small" v-html="$t('dashboard.doni_inviati')"></div>
                         </div>
 
                         <div v-for="rec in tragitto" :key="rec.ind">
@@ -53,12 +53,12 @@
                                         </q-chip>
                                     </div>
                                 </div>
-                                <div class="">
+                                <div class="titlenave">
                                     <q-chip class="glossy" :color="rec.color" text-color="white">
-                                        {{ gettitlenave(rec.ind) }}
+                                        <div class="" v-html="gettitlenave(rec.ind)"></div>
                                     </q-chip>
                                 </div>
-                                <div class="">
+                                <div class="datanave">
                                     <q-chip class="glossy" :color="rec.color" text-color="white">
                                         {{ getdatanave(rec) }}
                                     </q-chip>
@@ -74,7 +74,7 @@
 
                         <div class="row justify-center q-gutter-md">
                             <div v-if="nave.rec.mediatore.recsognatori">
-                                <div class="sognatore">SOGNATORI:</div>
+                                <div class="sognatore">{{$t('dashboard.sognatori')}}:</div>
                                 <div v-for="(sognatore, index) in nave.rec.mediatore.recsognatori" :key="10+index">
                                     <div v-if="sognatore" :class="`cont_sognatore ` + getclassSelect(sognatore)">
                                         A{{3 - index}} - {{ sognatore.name }} {{ sognatore.surname }}
@@ -82,7 +82,7 @@
                                     </div>
                                 </div>
                                 <div class="">
-                                    <div class="mediatore">MEDIATORE:</div>
+                                    <div class="mediatore text-uppercase">{{$t('dashboard.mediatore')}}:</div>
                                     <div :class="`cont_mediatore ` + getclassSelect(nave.rec.mediatore.recmediatore)">
                                         {{ nave.rec.mediatore.recmediatore.name }} {{
                                         nave.rec.mediatore.recmediatore.surname }} ({{
@@ -90,7 +90,7 @@
                                     </div>
                                 </div>
                                 <div class="">
-                                    <div class="intermedio3">INTERMEDIO3:</div>
+                                    <div class="intermedio3">{{$t('dashboard.intermedio')}}3:</div>
                                     <div v-for="(terra, index) in nave.rec.mediatore.arrterra" :key="index">
                                         <div v-if="terra" :class="`cont_donatore ` + getclassSelect(terra)">
                                             B{{index + 1}} - {{ terra.name }} {{ terra.surname }} ({{ terra.username }})
@@ -100,7 +100,7 @@
                                     </div>
                                 </div>
                                 <div class="">
-                                    <div class="intermedio2">INTERMEDIO2:</div>
+                                    <div class="intermedio2">{{$t('dashboard.intermedio')}}2:</div>
                                     <div v-for="(aria, index) in nave.rec.mediatore.arraria" :key="index">
                                         <div v-if="aria" :class="`cont_donatore ` + getclassSelect(aria)">
                                             C{{index + 1}} - {{ aria.name }} {{ aria.surname }} ({{ aria.username }}) -
@@ -109,7 +109,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="donatore">DONATORI:</div>
+                                <div class="donatore text-uppercase">{{$t('dashboard.donatori')}}:</div>
                                 <div v-for="(donatore, index) in nave.rec.mediatore.arrdonatori" :key="index">
                                     <div v-if="donatore" :class="`cont_donatore row ` + getclassSelect(donatore)">
                                         {{ getindex(donatore, index + 1) }} - {{ donatore.name }} {{ donatore.surname }}
@@ -122,27 +122,30 @@
                             </div>
                         </div>
 
-                        <div class="q-my-md">
+                        <div v-if="isDefinitivaMediatore()" class="q-my-md">
                             <div class="text-left" v-html="gettesto()"></div>
 
-                            <q-input v-model="link_chat" :label="$t('dashboard.link_chat')"
-                                     debounce="1000"
-                                     input-class="myinput-area"
-                                     @input="change_link_chat">
+                            <div>
+                                <q-input v-model="link_chat" :label="$t('dashboard.link_chat')"
+                                         debounce="1000"
+                                         input-class="myinput-area"
+                                         @input="change_link_chat">
 
-                            </q-input>
+                                </q-input>
 
-                            <div class="row justify-center centermydiv q-gutter-sm" style="max-width: 420px;">
-                                <!--<q-btn rounded text-color="secondary" icon="fab fa-telegram"
-                                       :label="$t('dashboard.controlla_donatori')"
-                                       @click="InviaLinkChatADonatori(false)"></q-btn>-->
+                                <div class="row justify-center centermydiv q-gutter-sm" style="max-width: 420px;">
+                                    <q-btn rounded text-color="secondary" icon="fab fa-telegram"
+                                           :label="$t('dashboard.controlla_donatori')"
+                                           @click="InviaLinkChatADonatori(false)"></q-btn>
 
-                                <q-btn rounded text-color="primary" icon="fab fa-telegram"
-                                       :disable="!linkchatesiste"
-                                       :label="$t('dashboard.invia_link_chat')"
-                                       @click="InviaLinkChatADonatori(true)"></q-btn>
+                                    <q-btn rounded text-color="primary" icon="fab fa-telegram"
+                                           :disable="!linkchatesiste"
+                                           :label="$t('dashboard.invia_link_chat')"
+                                           @click="InviaLinkChatADonatori(true)"></q-btn>
 
+                                </div>
                             </div>
+
                         </div>
 
                     </q-tab-panel>
@@ -157,8 +160,8 @@
                         narrow-indicator
                 >
 
-                    <q-tab name="donatore" label="Donatore"></q-tab>
-                    <q-tab name="sognatore" label="Sognatore"></q-tab>
+                    <q-tab name="donatore" :label="$t('dashboard.donatore')"></q-tab>
+                    <q-tab name="sognatore" :label="$t('dashboard.sognatore')"></q-tab>
                 </q-tabs>
                 <q-tab-panels v-model="cosa2" animated>
                     <q-tab-panel name="donatore">
@@ -168,7 +171,7 @@
                         <div class="">
                             <div class="row justify-center q-gutter-md">
                                 <div v-if="nave.rec.donatore.recsognatori">
-                                    <div class="sognatore">SOGNATORI:</div>
+                                    <div class="sognatore">{{$t('dashboard.sognatori')}}:</div>
                                     <div v-for="(sognatore, index) in nave.rec.donatore.recsognatori" :key="10+index">
                                         <div v-if="sognatore" :class="`cont_sognatore ` + getclassSelect(sognatore)">
                                             A{{3 - index}} - {{ sognatore.name }} {{ sognatore.surname }}
@@ -176,7 +179,7 @@
                                         </div>
                                     </div>
                                     <div class="">
-                                        <div class="mediatore">MEDIATORE:</div>
+                                        <div class="mediatore text-uppercase">{{$t('dashboard.mediatore')}}:</div>
                                         <div :class="`cont_mediatore ` + getclassSelect(nave.rec.donatore.recmediatore)">
                                             {{ nave.rec.donatore.recmediatore.name }} {{
                                             nave.rec.donatore.recmediatore.surname }} ({{
@@ -184,7 +187,7 @@
                                         </div>
                                     </div>
                                     <div class="">
-                                        <div class="intermedio3">INTERMEDIO3:</div>
+                                        <div class="intermedio3">{{$t('dashboard.intermedio')}}3:</div>
                                         <div v-for="(terra, index) in nave.rec.donatore.arrterra" :key="index">
                                             <div v-if="terra" :class="`cont_donatore ` + getclassSelect(terra)">
                                                 B{{index + 1}} - {{ terra.name }} {{ terra.surname }} ({{ terra.username
@@ -194,7 +197,7 @@
                                         </div>
                                     </div>
                                     <div class="">
-                                        <div class="intermedio2">INTERMEDIO2:</div>
+                                        <div class="intermedio2">{{$t('dashboard.intermedio')}}2:</div>
                                         <div v-for="(aria, index) in nave.rec.donatore.arraria" :key="index">
                                             <div v-if="aria" :class="`cont_donatore ` + getclassSelect(aria)">
                                                 C{{index + 1}} - {{ aria.name }} {{ aria.surname }} ({{ aria.username
@@ -203,7 +206,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="donatore">DONATORI:</div>
+                                    <div class="donatore text-uppercase">{{$t('dashboard.donatori')}}:</div>
                                     <div v-for="(donatore, index) in nave.rec.donatore.arrdonatori" :key="index">
                                         <div v-if="donatore" :class="`cont_donatore row ` + getclassSelect(donatore)">
                                             <div>
@@ -224,7 +227,7 @@
                         </div>
 
                         <div class="q-ma-md q-butter-sm" v-if="!!linkchatopen">
-                            Per entrare nella Gift Chat, clicca qui:<br>
+                            {{$t('dashboard.gift_chat')}}:<br>
                             <div class="q-ma-md">
                                 <q-btn rounded color="primary" icon="fab fa-telegram"
                                        :label="$t('dashboard.entra_in_gift_chat')"
@@ -245,10 +248,10 @@
 
                                 <div v-if="!FattoDono" class="text-evidente bordo_stondato">
 
-                                    <div>Quando effettuare il Regalo: <strong>{{ getGiornoDelDono() }}</strong><br>
+                                    <div>{{$t('dashboard.quando_eff_il_tuo_dono')}}: <strong>{{ getGiornoDelDono() }}</strong><br>
                                     </div>
                                     <div>
-                                        Metodi Disponibili:
+                                        {{$t('dashboard.metodi_disponibili')}}:
 
                                         <CMyChipList
                                                 :type="tools.FieldType.multiselect"
@@ -260,30 +263,26 @@
 
                                     </div>
                                     <div>
-                                        Importo: <strong>33€</strong>
+                                        {{$t('dashboard.importo')}}: <strong>33€</strong>
                                     </div>
                                     <br>
+
+                                    <CTitleBanner class="q-pa-xs"
+                                                  :title="$t('dashboard.come_inviare_regalo_con_paypal')"
+                                                  bgcolor="bg-primary"
+                                                  clcolor="text-white"
+                                                  myclass="myshad" canopen="true" :visible="false">
+
+                                        <CVideo myvideokey="5rp_XEV6Mzg">
+
+                                        </CVideo>
+                                    </CTitleBanner>
+
                                 </div>
                                 <div class="text-evidente bordo_stondato_blu">
                                     <div v-if="GiornoDelDonoArrivato">
 
-                                        <div v-if="!FattoDono">
-
-                                            E' arrivato il momento di Effettuare il proprio Dono!<br>
-                                            Inviare tramite PayPal a: <strong>{{ getemailPagamentoSognatore()
-                                            }}</strong><br>
-                                            (Scegliere l'opzione "Invia ad Amici")<br>
-
-                                            <CTitleBanner class="q-pa-xs"
-                                                          :title="$t('dashboard.come_inviare_regalo_con_paypal')"
-                                                          bgcolor="bg-primary"
-                                                          clcolor="text-white"
-                                                          myclass="myshad" canopen="true" :visible="false">
-
-                                                <CVideo myvideokey="5rp_XEV6Mzg">
-
-                                                </CVideo>
-                                            </CTitleBanner>
+                                        <div v-if="!FattoDono" v-html="$t('dashboard.effettua_il_dono', {email: getemailPagamentoSognatore() })">
 
                                             <div v-if="!donoinviato">
                                                 {{$t('dashboard.clicca_conferma_dono')}}:<br>
@@ -329,30 +328,30 @@
                             <div class="text-evidente bordo_stondato justify-between q-pa-xs-sm">
                                 <div class="">
                                     <div>
-                                        Doni Ricevuti:
+                                        {{$t('dashboard.doni_ricevuti')}}:
                                     </div>
                                     <div class="ricevuti dati">{{getDoniConfermati()}}</div>
                                 </div>
                                 <div class="">
                                     <div class="inviati">
-                                        Doni Inviati (da confermare):
+                                        {{$t('dashboard.doni_inviati_da_confermare')}}:
                                     </div>
                                     <div class="inviati dati">{{getDoniAttesaDiConferma()}}</div>
                                 </div>
                                 <div class="">
                                     <div class="">
-                                        Doni Mancanti:
+                                        {{$t('dashboard.doni_mancanti')}}:
                                     </div>
                                     <div class="mancanti dati">{{getDoniMancanti()}}</div>
                                 </div>
-
                             </div>
                             <q-table
                                     dense
                                     color="primary"
-                                    title="Donatori"
+                                    :title="$t('dashboard.donatori')"
                                     :data="arrdonatori"
                                     :columns="coldonatori"
+                                    :nodataLabel="$t('grid.nodata')"
                                     :Pagination.sync="MyPagination"
                                     row-key="index">
                                 <template v-slot:body="props">
