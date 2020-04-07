@@ -199,6 +199,8 @@ const msg_si = {
       nessun_invitato: 'Ni gostov',
       legenda_title: 'Kliknite na povabljeno ime, da si ogledate stanje njihovih zahtev.',
       nave_in_partenza: 'ladja v odhodu',
+      nave_partita: 'levo naprej',
+      tutor: 'Tutor',
       sonomediatore: 'Ko postaneš Mediator te kontaktira en <strong>TUTOR</strong>, z njim moraš:<br><ol class="lista">' +
       '<li>Odpret svoj <strong>Gift- Darilni klepet</strong> (ti kot lastnik in Tutor ' +
       'kot administrator) s tem imenom: <strong>{nomenave}</strong></li>' +
@@ -209,7 +211,7 @@ const msg_si = {
       '<li>Pošlji Link Gift Klepeta vsem Donatorjem, tako, da klikneš na spodnji gumb.</li></ol>',
       sonodonatore: '<ol class="lista"><li>Ko si na tej poziciji, boš povabljen, da vstopiš v <strong>Gift Klepet</strong> (Telegram) in tam boš našel še ostalih 7 Donatorjev, Mediatorja, Sanjača in enega predstavnika Tima.</li>' +
       '<li>Izpeljal boš svoje vplačilo- donacijo<strong> TOČNO na že določen datum </strong>z načinom vplačila, ki ga imaš napisanega tu.<br></ol>',
-      sonodonatore_seconda_tessitura: '<ol class="lista"><li>Tu si ti Mediator in tudi Donator, ampak ker je to tvoj drugi ponovni vstop, ni potrebno, ponovno vplačolo<br></ol>',
+      sonodonatore_seconda_tessitura: '<ol class="lista"><li>Tu si istočasno Mediator in Donator. Ker je to tvoj avtomatičen vpis, ti ni sedaj potrebno vplačati!<br></ol>',
       controlla_donatori: 'Preverite seznam donatorjev',
       link_chat: 'Povezava telegrama darilnega klepeta',
       tragitto: 'Način',
@@ -217,12 +219,12 @@ const msg_si = {
       data_partenza: 'Datum<br>odhoda',
       doni_inviati: 'Darila<br>poslana',
       nome_dei_passaggi: 'Ime<br />prehodov',
-      donatori: 'Donatorjev',
+      donatori: 'Donator',
       donatore: 'Donator',
       mediatore: 'Mediator',
-      sognatore: 'Sanjača',
-      sognatori: 'Sanjača',
-      intermedio: 'INTERMEDIATE',
+      sognatore: 'Sanjač',
+      sognatori: 'Sanjači',
+      intermedio: 'POTNIK',
       pos2: 'Interm. 2',
       pos3: 'Interm. 3',
       pos5: 'Interm. 5',
@@ -236,11 +238,12 @@ const msg_si = {
       metodi_disponibili: 'Načini na Voljo',
       importo: 'Uvoz',
       effettua_il_dono: 'Je\' prišel trenutek da Vplačaš svoje darilo!<br>' +
-      'Vplačaj preko PayPal a: <strong>{email}</strong>' +
-      '(Scegliere l\'opzione "Pošlji prijatelju")<br>',
+      'Vplačaj preko PayPal a: <strong>{email}</strong><br>' +
+      '(Izberi možnost "Pošlji prijatelju")<br>',
+      qui_compariranno_le_info: 'Na dan odhoda Ladje, prejmete vse potrebne  informacije s strani Sanjača',
       posizione: 'Pozicija',
       come_inviare_regalo_con_paypal: 'Kako vplačati preko',
-      ho_effettuato_il_dono: 'Sem izpeljal vlačilo',
+      ho_effettuato_il_dono: 'POTRJUJEM VPLAČILO',
       clicca_conferma_dono: 'Klikni tu, da potrdiš izvedeno vplačilo',
       fatto_dono: 'Potrdil si, da je vplačilo bilo izvedeno',
       confermi_dono: 'Potrdi da si vplačal 33€',
@@ -248,7 +251,7 @@ const msg_si = {
       dono_ricevuto_2: 'Sprejeto',
       dono_ricevuto_3: 'Prispelo!',
       confermi_dono_ricevuto: 'Potrjujem, da sem sprejel darilo v znesku 33€ z strani {donatore}',
-      confermi_dono_ricevuto_msg: '{sognatore} potrjuje da je prejel Darilo 33€ iz strani {donatore}',
+      confermi_dono_ricevuto_msg: 'Potrjena da je prejel Darilo 33€ iz strani {donatore}',
       msg_bot_conferma: '{donatore} je potrdil, da je poslal svoje Darilo v vrednosti 33€ {sognatore}',
       ricevuto_dono_ok: 'Potrdil si da si darilo Sprejel',
       entra_in_lavagna: 'Vstopi v svojo Tablo, da pogledaš Ladje, ki bodo izplule',
@@ -256,7 +259,7 @@ const msg_si = {
       doni_inviati_da_confermare: 'Poslana Darila (za potrditev)',
       doni_mancanti: 'Manjkajoča Darila',
       temporanea: 'Začasna',
-      ritessitura: 'PONOVNI VPIS',
+      ritessitura: 'Avtomatičen Vpis',
     },
     reg: {
       registered: 'Registriran',

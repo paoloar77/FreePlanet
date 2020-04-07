@@ -8,7 +8,7 @@
                     mystyle="" myclass="myshad" canopen="true">
 
         <CMyNave v-for="(mianave, index) in ris.arrnavi" :naveprop="mianave" :key="index"
-                 :navi_partenzaprop="ris.navi_partenza">
+                 :navi_partenzaprop="ris.navi_partenza" :listanavi="true">
 
         </CMyNave>
 

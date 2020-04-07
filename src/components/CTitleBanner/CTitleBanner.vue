@@ -3,9 +3,9 @@
     <q-banner
       inline-actions
       rounded dense
-      :class="bgcolor+` q-my-sm `+clcolor+ ` ` + myclass"
+      :class="bgcolor+` cursor-pointer q-my-sm `+clcolor+ ` ` + myclass"
       style="text-align: center; "
-      @click="myvisible = !myvisible"
+      @click="apri()"
     >
       <template v-slot:avatar>
         <q-icon v-if="canopen && icon" :name="icon" color="white"/>

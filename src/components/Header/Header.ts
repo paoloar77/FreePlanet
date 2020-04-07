@@ -61,6 +61,10 @@ export default class Header extends Vue {
     return UserStore.state.isManager
   }
 
+  get isTutor() {
+    return UserStore.state.isTutor
+  }
+
   get conndata_changed() {
     return GlobalStore.state.connData
   }

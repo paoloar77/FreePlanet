@@ -790,6 +790,7 @@ namespace Actions {
       msgextra: msgobj.msgextra,
       msgpar1: msgobj.msgpar1,
       username: msgobj.username,
+      username_mitt: msgobj.username_mitt,
       tipomsg,
       inviareale: msgobj.inviareale,
       navemediatore
@@ -817,6 +818,33 @@ namespace Actions {
     }
 
     return await Api.SendReq('/dashboard/getnavi', 'POST', mydata)
+      .then((res) => {
+        if (res.status === 200) {
+          if (res.data.code === serv_constants.RIS_CODE_OK) {
+            return res.data.ris
+          }
+        }
+        return null
+      })
+      .catch((error) => {
+        console.error(error)
+        return null
+      })
+  }
+
+  async function GetNave(context, { riga, col, riga1don, col1don, ind_order }) {
+    // console.log('GetNave')
+
+    const mydata = {
+      idapp: process.env.APP_ID,
+      riga,
+      col,
+      riga1don,
+      col1don,
+      ind_order
+    }
+
+    return await Api.SendReq('/dashboard/getnave', 'POST', mydata)
       .then((res) => {
         if (res.status === 200) {
           if (res.data.code === serv_constants.RIS_CODE_OK) {
@@ -920,7 +948,7 @@ namespace Actions {
           const islogged = localStorage.getItem(tools.localStorage.username)
           console.log('islogged', islogged)
 
-          CalendarStore.state.editable = UserStore.state.isAdmin || UserStore.state.isManager
+          CalendarStore.state.editable = UserStore.state.isAdmin || UserStore.state.isManager || UserStore.state.isTutor
           if (res.data.myuser === null) {
             if (islogged) {
               // Fai Logout
@@ -1039,6 +1067,7 @@ namespace Actions {
     DuplicateRec: b.dispatch(DuplicateRec),
     InviaMsgADonatori: b.dispatch(InviaMsgADonatori),
     GetArrNavi: b.dispatch(GetArrNavi),
+    GetNave: b.dispatch(GetNave),
     GetArrDoniNavi: b.dispatch(GetArrDoniNavi),
     GetData: b.dispatch(GetData),
     addDynamicPages: b.dispatch(addDynamicPages)

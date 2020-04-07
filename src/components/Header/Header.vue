@@ -142,7 +142,10 @@
                  dense flat round icon="close" @click="rightDrawerOpen = !rightDrawerOpen">
           </q-btn>
           <div v-if="isLogged" class="text-weight-bold text-user">{{ Username }} - {{ myName }} <span
-            v-if="isAdmin"> [Admin]</span><span v-if="isManager"> [Manager]</span></div>
+            v-if="isAdmin"> [Admin]</span>
+              <span v-if="isManager"> [Manager]</span>
+              <span v-if="isTutor"> [Tutor]</span>
+          </div>
           <div v-else class="text-user text-italic bg-red">
             {{ $t('user.loggati') }}
           </div>

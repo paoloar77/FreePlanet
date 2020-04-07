@@ -1408,7 +1408,8 @@ export const tools = {
 
   visumenu(elem) {  // : IListRoutes
     let visu = ((elem.onlyAdmin && UserStore.state.isAdmin) || (elem.onlyManager && UserStore.state.isManager)
-      || ((!elem.onlyAdmin) && (!elem.onlyManager))) && elem.active
+      || (elem.onlyTutor && UserStore.state.isTutor)
+      || ((!elem.onlyAdmin) && (!elem.onlyManager) && (!elem.onlyTutor))) && elem.active
 
     if (!tools.isLoggedToSystem()) {
       if (elem.onlyif_logged)
@@ -1884,6 +1885,10 @@ export const tools = {
     return UserStore.state.isManager
   },
 
+  isTutor() {
+    return UserStore.state.isTutor
+  },
+
   getstrDate(mytimestamp) {
     // console.log('getstrDate', mytimestamp)
     if (!!mytimestamp)
@@ -2172,7 +2177,7 @@ export const tools = {
     const datenow = tools.getDateNow()
     const diff = date.getDateDiff(datenow, mydate)
     // console.log('diff = ' + diff)
-    if (diff >= 0) {
+    if (diff >= -1) {
       return true
     }
     return false
@@ -3286,6 +3291,8 @@ export const tools = {
         return 'fa-flag-fr'
       else if (lang === 'SI')
         return 'fa-flag-si'
+      else if (lang === 'MD')
+        return 'fa-flag-md'
       else if (lang === 'NG')
         return 'fa-flag-ng'
       else if (lang === 'SK')
@@ -3347,6 +3354,8 @@ export const tools = {
       return 'Slovakia'
     } else if (nat === 'NG') {
       return 'Nigeria'
+    } else if (nat === 'MD') {
+      return 'Moldova'
     } else if (nat === 'ES') {
       return 'Spain'
     } else if (nat === 'DE') {

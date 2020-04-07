@@ -193,6 +193,8 @@ const msg_enUs = {
       nessun_invitato: 'No_invited',
       legenda_title: 'Click on the name of the guest to see the status of his Requirements.',
       nave_in_partenza: 'on Departure on',
+      nave_partita: 'departed on',
+      tutor: 'Tutor',
       sonomediatore: '',
       sonodonatore: '',
       sonodonatore_seconda_tessitura: '',
@@ -222,8 +224,9 @@ const msg_enUs = {
       metodi_disponibili: 'Available Methods',
       importo: 'Amount',
       effettua_il_dono: 'It\'s time to make your Gift!<br>' +
-      'Send via PayPal to: <strong>{email}</strong>' +
+      'Send via PayPal to: <strong>{email}</strong><br>' +
       '(Choose the option "Send to Friends")<br>',
+      qui_compariranno_le_info: 'On the day of departure of the Ship, the information of the Dreamer will appear',
       posizione: 'Position',
       come_inviare_regalo_con_paypal: 'How to send the gift via Paypal',
       ho_effettuato_il_dono: 'I Sent the Gift',
@@ -234,7 +237,7 @@ const msg_enUs = {
       dono_ricevuto_2: 'Received',
       dono_ricevuto_3: 'Arrived!',
       confermi_dono_ricevuto: 'Confirm that you have received the 33€ Gift from {donatore}',
-      confermi_dono_ricevuto_msg: '{sognatore} confirms that you have received the 33€ Gift from {donatore}',
+      confermi_dono_ricevuto_msg: 'Confirmed that you have received the 33€ Gift from {donatore}',
       msg_bot_conferma: '{donatore} has confirmed that he has sent his 33€ gift to {sognatore}',
       ricevuto_dono_ok: 'You have confirmed the gift has been received',
       entra_in_lavagna: 'Enter on your Dashboard to see the departing ships',

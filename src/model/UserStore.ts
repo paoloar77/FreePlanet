@@ -38,7 +38,7 @@ export interface IDashboard {
   downline: any[],
   downnotreg: any[],
   downbyuser: any[]
-  arrnavi?: any[]
+  arrposizioni?: any[]
 }
 
 export interface ICalcStat {
@@ -96,6 +96,7 @@ export interface IUserState {
   isLogged?: boolean
   isAdmin?: boolean
   isManager?: boolean
+  isTutor?: boolean
   isTeacher?: boolean
   usersList?: IUserFields[]
   countusers?: number

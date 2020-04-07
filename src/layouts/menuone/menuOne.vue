@@ -19,7 +19,7 @@
                 :header-class="getmymenuclass(myitemmenu)"
                 active-class="my-menu-active">
 
-                  <div v-for="(child2, index) in myitemmenu.routes2" :key="index" v-if="child2.active">
+                  <div v-for="(child2, index) in myitemmenu.routes2" :key="index" v-if="child2.active && tools.visumenu(child2)">
                       <span v-if="child2.isseparator">
                         <q-separator></q-separator>
                       </span>

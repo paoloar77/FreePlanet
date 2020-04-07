@@ -116,7 +116,7 @@ export default class Listadoninavi extends MixinBase {
   }
 
   public deveDonare(rec) {
-    return (rec.ind_order !== this.selrec.donatore.recmediatore.ind_order && rec.num_tess === 2)
+    return (rec.ind_order !== this.selrec.donatore.recmediatore.ind_order && (rec.num_tess % 2) !== 0)
   }
 
   public clickdonatori(rec) {
@@ -214,7 +214,10 @@ export default class Listadoninavi extends MixinBase {
       msgpar1: this.msg_tosend_user,
       username: this.seluser.username,
       inviareale: true,
+      username_mitt: '',
     }
+
+    msgobj.username_mitt = UserStore.state.my.username
 
     const naveuser = this.seluser
 

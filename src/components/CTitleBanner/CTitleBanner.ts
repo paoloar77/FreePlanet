@@ -24,7 +24,7 @@ import { Screen } from 'quasar'
   name: 'CTitleBanner'
 })
 export default class CTitleBanner extends Vue {
-  @Prop({ required: true}) public title: string
+  @Prop({ required: true }) public title: string
   @Prop({ required: false, default: 'bg-primary' }) public bgcolor: string
   @Prop({ required: false, default: 'text-white' }) public clcolor: string
   @Prop({ required: false, default: '' }) public mystyle: string
@@ -46,5 +46,11 @@ export default class CTitleBanner extends Vue {
       return 'fas fa-chevron-down q-icon q-expansion-item__toggle-icon q-focusable '
     else
       return 'fas fa-chevron-down q-icon q-expansion-item__toggle-icon q-focusable rotate-180'
+  }
+
+  public apri() {
+    this.myvisible = !this.myvisible
+    if (this.myvisible)
+      this.$emit('apri')
   }
 }

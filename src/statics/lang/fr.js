@@ -191,6 +191,8 @@ const msg_fr = {
       nessun_invitato: 'Non_invité',
       legenda_title: 'Cliquez sur le nom de l\'invité pour voir l\'état de ses besoins',
       nave_in_partenza: 'part le',
+      nave_partita: 'parti sur',
+      tutor: 'Tuteur',
       sonomediatore: 'Quand vous devenez Médiateur vous êtes contacté par un <strong>TUTEUR</strong>, avec lui vous devez:<br><ol class="lista">' +
       '<li>Ouvrir votre <strong>Gift Chat</strong> (vous comme propriétaire et le Tuteur ' +
       'comme administrateur) avec ce nom: <strong>{nomenave}</strong></li>' +
@@ -228,8 +230,9 @@ const msg_fr = {
       metodi_disponibili: 'Méthodes disponibles',
       importo: 'Montant',
       effettua_il_dono: 'Il est temps de faire votre propre regalo ! ' +
-      'Envoyez via PayPal à : <strong>{email}</strong>' +
+      'Envoyez via PayPal à : <strong>{email}</strong><br>' +
       '(Choisissez l\'option "Envoyer à des amis")<br>',
+      qui_compariranno_le_info: 'Le jour du départ du navire, les informations du Dreamer apparaîtront',
       posizione: 'Localisation',
       come_inviare_regalo_con_paypal: 'Comment envoyer le regalo via Paypal',
       ho_effettuato_il_dono: 'J\'ai effectué le Regalo',
@@ -240,7 +243,7 @@ const msg_fr = {
       dono_ricevuto_2: 'Reçu',
       dono_ricevuto_3: 'Arrivé!',
       confermi_dono_ricevuto: 'Confirmez que vous avez reçu le regalo de 33 $ de {donatore}',
-      confermi_dono_ricevuto_msg: '{sognatore} confirme la réception du regalo de 33€ de {donatore}',
+      confermi_dono_ricevuto_msg: 'Confirme la réception du regalo de 33€ de {donatore}',
       msg_bot_conferma: '{donatore} a confirmé qu\'il avait envoyé son cadeau de 33 € a {sognatore}',
       ricevuto_dono_ok: 'Vous avez confirmé que le cadeau a été reçu',
       entra_in_lavagna: 'Montez sur votre tableau noir pour voir les navires au départ',

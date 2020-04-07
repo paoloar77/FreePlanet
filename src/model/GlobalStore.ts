@@ -202,6 +202,7 @@ export interface IListRoutes {
   onlyAdmin?: boolean
   onlyif_logged?: boolean
   onlyManager?: boolean
+  onlyTutor?: boolean
   extraclass?: string
   meta?: any
   idelem?: string

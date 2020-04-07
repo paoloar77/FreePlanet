@@ -25,8 +25,8 @@
             </CRequisiti>
           </div>
 
-          <CMyNave v-for="(mianave, index) in dashboard.arrnavi" :naveprop="mianave" :key="index"
-                   :navi_partenzaprop="dashboard.navi_partenza">
+          <CMyNave v-for="(mianave, index) in dashboard.arrposizioni" :posizprop="mianave" :key="index"
+                   :navi_partenzaprop="dashboard.navi_partenza" :listanavi="false">
 
           </CMyNave>
         </CTitleBanner>

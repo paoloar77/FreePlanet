@@ -277,8 +277,17 @@
                     <q-card-section class="inset-shadow" style="padding: 4px !important;">
                         <div class="row justify-center q-gutter-md">
                             <div>
+                                <div>
+                                    <q-btn
+                                            fab-mini
+                                            icon="fab fa-whatsapp"
+                                            color="white" text-color="green" type="a"
+                                            size="sm"
+                                            :href="tools.getHttpForWhatsapp(seluser.profile.cell)" target="__blank">
+                                    </q-btn>
+                                </div>
                                 <div class="q-ma-sm text-center">
-                                    <div>Invia un Messaggio a {{seluser.name }} {{ seluser.surname }}:</div>
+                                    <div>{{$t('dialog.sendmsg')}} -> {{seluser.name }} {{ seluser.surname }}:</div>
                                     <q-input type="textarea"
                                              autogrow
                                              v-model="msg_tosend_user" :label="$t('cal.msgbooking')"
@@ -288,7 +297,7 @@
 
                                     <div class="row justify-center centermydiv q-gutter-sm" style="max-width: 420px;">
                                         <q-btn rounded text-color="secondary" icon="fab fa-telegram"
-                                               :label="$t('dialog.sendmsg') + ` a ` + seluser.name + ` ` + seluser.surname"
+                                               :label="$t('dialog.sendmsg') + ` -> ` + seluser.name + ` ` + seluser.surname"
                                                @click="InviaMsgAUser()"></q-btn>
 
                                     </div>

@@ -25,8 +25,8 @@
             <div class="row">
                 <!--<q-btn label="CREA NAVI PERSISTENTI" color="primary" @click="EseguiFunz('CreaNaviPersistenti')"></q-btn>
                 <br>-->
-                <q-btn label="CORREGGI NUM_TESS" color="primary" @click="EseguiFunz('Corregginumtess')"></q-btn>
-                <br>
+                <!--<q-btn label="CORREGGI NUM_TESS" color="primary" @click="EseguiFunz('Corregginumtess')"></q-btn>
+                <br>-->
                 <!--<q-btn label="CORREGGI DATA GIFT CHAT" color="primary" @click="EseguiFunz('CorreggiDataGiftChat')"></q-btn>
                 <br>-->
             </div>
@@ -111,6 +111,9 @@
                        @click="EseguiFunz('visuListaIngressoNuovi')"></q-btn>
                 <br>
             </div>
+            <q-btn label="Visu Navi con utenti Eliminati" color="primary"
+                   @click="EseguiFunz('visuNaviUtentiEliminati')"></q-btn>
+            <br>
             <!--<div class="row">
                 <q-btn label="CHECK SE INSERIRE UTENTI IN Nave" color="primary"
                        @click="EseguiFunz('checkInserimentiUtentiInNave')"></q-btn>
@@ -125,7 +128,7 @@
                 <q-btn label="Visualizza Nave" color="primary" @click="EseguiFunz('visuNave')"></q-btn>
                 <br>
             </div>
-            <div class="row">listadonatoridelsognatore
+            <div class="row">
                 <q-input v-model="placca" type="textarea" autofocus label="Placca" autogrow
                          style="width: 500px; height: 400px;"></q-input>
                 <br>

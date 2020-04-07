@@ -398,7 +398,7 @@ export const fieldsTable = {
 
   getTableJoinByName(table) {
     if (table === 'permissions')
-      return [shared_consts.Permissions.Admin, shared_consts.Permissions.Manager, shared_consts.Permissions.Teacher]
+      return [shared_consts.Permissions.Admin, shared_consts.Permissions.Manager, shared_consts.Permissions.Teacher, shared_consts.Permissions.Tutor]
     else if (table === 'accepted')
       return [shared_consts.Accepted.CHECK_READ_GUIDELINES, shared_consts.Accepted.CHECK_SEE_VIDEO_PRINCIPI]
     else if (table === 'fieldstype')
@@ -469,7 +469,7 @@ export const fieldsTable = {
 
     // IColGridTable
   colTableUsers: [
-    // AddCol({ name: '_id', label_trans: 'reg.id' }),
+    AddCol({ name: '_id', label_trans: 'reg.id' }),
     AddCol({ name: 'ind_order', label_trans: 'reg.ind_order' }),
     AddCol({ name: 'date_reg', label_trans: 'reg.date_reg', fieldtype: tools.FieldType.date }),
     AddCol({ name: 'date_temp_reg', label_trans: 'reg.date_temp_reg', fieldtype: tools.FieldType.date }),

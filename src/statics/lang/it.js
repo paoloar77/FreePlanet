@@ -207,6 +207,8 @@ const msg_it = {
       nessun_invitato: 'Nessun Invitato',
       legenda_title: 'Clicca sul nome dell\'invitato per vedere lo stato dei suoi Requisiti.',
       nave_in_partenza: 'in Partenza il',
+      nave_partita: 'Partita il',
+      tutor: 'Tutor',
       sonomediatore: 'Quando diventi Meditore vieni contattato da un <strong>TUTOR</strong>, con lui devi:<br><ol class="lista">' +
       '<li>Aprire la tua <strong>Gift Chat</strong> (tu come proprietario e il Tutor ' +
       'come amministratore) con questo nome: <strong>{nomenave}</strong></li>' +
@@ -244,8 +246,9 @@ const msg_it = {
       metodi_disponibili: 'Metodi Disponibili',
       importo: 'Importo',
       effettua_il_dono: 'E\' arrivato il momento di Effettuare il proprio Dono!<br>' +
-      'Inviare tramite PayPal a: <strong>{email}</strong>' +
+      'Inviare tramite PayPal a: <strong>{email}</strong><br>' +
       '(Scegliere l\'opzione "Invia ad Amici")<br>',
+      qui_compariranno_le_info: 'Nel giorno della partenza della Nave, compariranno le informazioni del Sognatore',
       posizione: 'Posizione',
       come_inviare_regalo_con_paypal: 'Come Inviare il regalo tramite Paypal',
       ho_effettuato_il_dono: 'Ho effettuato il Dono',
@@ -256,7 +259,7 @@ const msg_it = {
       dono_ricevuto_2: 'Ricevuto',
       dono_ricevuto_3: 'Arrivato!',
       confermi_dono_ricevuto: 'Confermi di aver ricevuto il Dono di 33€ da parte di {donatore}',
-      confermi_dono_ricevuto_msg: '{sognatore} conferma di aver ricevuto il Dono di 33€ da parte di {donatore}',
+      confermi_dono_ricevuto_msg: 'Confermato di aver ricevuto il Dono di 33€ da parte di {donatore}',
       msg_bot_conferma: '{donatore} ha confermato di aver inviato il suo Dono di 33€ a {sognatore}',
       ricevuto_dono_ok: 'Hai confermato che il dono è stato Ricevuto',
       entra_in_lavagna: 'Entra sulla Tua Lavagna per vedere le Navi in Partenza',

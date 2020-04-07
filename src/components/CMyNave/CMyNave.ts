@@ -6,31 +6,34 @@ import { toolsext } from '@src/store/Modules/toolsext'
 import MixinBase from '@src/mixins/mixin-base'
 import MixinNave from '../../mixins/mixin-nave'
 import { CTitleBanner } from '../CTitleBanner'
-import { UserStore } from '../../store/Modules'
+import { GlobalStore, UserStore } from '../../store/Modules'
 import { lists } from '../../store/Modules/lists'
 import translate from '../../globalroutines/util'
 import { CMyChipList } from '../CMyChipList'
 import { CVideo } from '../CVideo'
 
 @Component({
-  components: { CTitleBanner, CMyChipList, CVideo },
+  components: { CTitleBanner, CMyChipList, CVideo }
 })
 
 export default class CMyNave extends MixinNave {
-  @Prop({ required: true }) public naveprop
+  @Prop({ required: false, default: null }) public naveprop
+  @Prop({ required: false, default: null }) public posizprop
   @Prop({ required: true }) public navi_partenzaprop: any[]
+  @Prop({ required: true }) public listanavi: boolean
   public navi_partenza: any[]
   public $t
   public link_chat: string = ''
   public cosa: string = 'tragitto'
   public cosa2: string = 'donatore'
   public nave: any = null
+  public posiz: any = null
   public numpercorso = 7
   public riga: number = 1
   public col: number = 1
   public rigadoni: number = 1
   public coldoni: number = 1
-  public mediatore: any = {}
+  public mediatore: any = null
   public donatore: any = {}
   public donatore_navepers: any = {}
   public mediatore_navepers: any = {}
@@ -39,6 +42,10 @@ export default class CMyNave extends MixinNave {
   public donoinviato: boolean = false
   public arrdonatori: any[] = []
   public recsel = null
+  public loading: boolean = false
+  public showmsguser: boolean = false
+  public seluser = null
+  public msg_tosend_user: string = ''
   public MyPagination: {
     sortBy: string,
     descending: boolean,
@@ -55,9 +62,11 @@ export default class CMyNave extends MixinNave {
       field: 'index',
       sortable: true
     },*/
-    { name: 'name', align: 'center', label: 'Nome', field: 'name', sortable: true },
-    { name: 'surname', align: 'center', label: 'Cognome', field: 'surname', sortable: true },
+    { name: 'name', align: 'center', label: translate('reg.name'), field: 'name', sortable: true },
+    { name: 'surname', align: 'center', label: translate('reg.surname'), field: 'surname', sortable: true },
+    { name: 'posizione', align: 'center', label: 'Posizione', field: 'riga', sortable: true },
     { name: 'date_made_gift', align: 'center', label: 'Inviato', field: 'date_made_gift', sortable: true },
+    { name: 'tel', align: 'center', label: 'Tel', field: 'tel', sortable: true },
     { name: 'made_gift', align: 'center', label: 'Confermato', field: 'made_gift', sortable: true },
   ]
 
@@ -107,34 +116,47 @@ export default class CMyNave extends MixinNave {
   ]
 
   public mounted() {
-    this.nave = this.naveprop
+    this.posiz = this.posizprop
     this.navi_partenza = this.navi_partenzaprop
+    this.nave = this.naveprop
+    if (!this.listanavi) {
+      this.apri()
+    }
+    this.aggiorna()
+  }
+
+  public aggiorna() {
 
     this.riga = tools.getValDb('riga', false, 1)
     this.col = tools.getValDb('col', false, 1)
     this.rigadoni = tools.getValDb('rigadoni', false, 1)
     this.coldoni = tools.getValDb('coldoni', false, 1)
 
-    this.mediatore = this.getmediatore()
-    this.donatore = this.getdonatore()
-    if (!!this.nave.rec.donatore)
-      this.donatore_navepers = this.nave.rec.donatore.navepersistente
-    if (!!this.nave.rec.mediatore)
-      this.mediatore_navepers = this.nave.rec.mediatore.navepersistente
+    if (!!this.nave) {
+      if (!!this.nave.rec) {
+        if (!!this.nave.rec.donatore)
+          this.donatore_navepers = this.nave.rec.donatore.navepersistente
+        if (!!this.nave.rec.mediatore) {
+          this.mediatore = this.getmediatore()
+          this.donatore = this.getdonatore()
+          if (!!this.nave.rec.mediatore)
+            this.mediatore_navepers = this.nave.rec.mediatore.navepersistente
 
-    this.iodonatore = this.getIoDonatore()
-    this.iosognatore = this.getIoSognatore()
-    this.donoinviato = this.getDonoInviato
+          this.iodonatore = this.getIoDonatore()
+          this.iosognatore = this.getIoSognatore()
+          this.donoinviato = this.getDonoInviato
 
+          // console.log('this.mediatore', this.mediatore)
+          // console.log('this.donatore', this.donatore)
 
-    // console.log('this.mediatore', this.mediatore)
-    // console.log('this.donatore', this.donatore)
+          if (!!this.mediatore_navepers) {
+            this.link_chat = this.mediatore_navepers.link_chat
+          }
 
-    if (!!this.mediatore_navepers) {
-      this.link_chat = this.mediatore_navepers.link_chat
+          this.arrdonatori = this.creaarrDonatori()
+        }
+      }
     }
-
-    this.arrdonatori = this.creaarrDonatori()
   }
 
   public getListaDonatoriDaConfermare() {
@@ -166,24 +188,38 @@ export default class CMyNave extends MixinNave {
     return arr
   }
 
-  public getNavePartByInd(ind) {
+  public getRiganave() {
+    if (this.listanavi) {
+      return this.nave.riga
+    } else {
+      if (!!this.posiz) {
+        let ris = this.posiz.riga - 3
+        if (ris <= 1)
+          ris = 1
 
-    this.getrigaNaveByInd(ind)
+        return ris
+      }
 
-    if (!!this.navi_partenza[ind])
-      return tools.getstrshortDate(this.navi_partenza[ind].date_start)
-    else
-      return ' --/--/-- '
+      return 1
+    }
   }
 
-  public getRiganave(riga) {
-    let ris = riga - 3
-    if (ris <= 1)
-      ris = 1
-    return ris
+  public getColnave() {
+    if (this.listanavi) {
+      return this.nave.col
+    } else {
+      if (!this.posiz) {
+        return 1
+      } else {
+        let ris = Math.ceil(this.posiz.col / (2 * 4))
+        if (ris <= 1)
+          ris = 1
+        return ris
+      }
+    }
   }
 
-  public getColnave(col) {
+  public getColnaveriduci(col) {
     let ris = Math.ceil(col / (2 * 4))
     if (ris <= 1)
       ris = 1
@@ -193,10 +229,10 @@ export default class CMyNave extends MixinNave {
   public sonoMediatore() {
     if (!!this.nave) {
       if (!!this.nave.rec.donatore)
-        return this.nave.rec.donatore.recmediatore.ind_order === this.nave.ind_order
+        return this.nave.rec.donatore.recmediatore.ind_order === this.myindorder
       else {
         if (!!this.nave.rec.mediatore)
-          return this.nave.rec.mediatore.recmediatore.ind_order === this.nave.ind_order
+          return this.nave.rec.mediatore.recmediatore.ind_order === this.myindorder
       }
     }
 
@@ -235,10 +271,12 @@ export default class CMyNave extends MixinNave {
   public getIoDonatore() {
     if (!!this.nave) {
       if (!!this.nave.rec.donatore) {
-        for (const rec of this.nave.rec.donatore.arrdonatori) {
-          if (!!rec) {
-            if (rec.ind_order === this.nave.ind_order)
-              return rec
+        if (this.nave.rec.donatore.arrdonatori) {
+          for (const rec of this.nave.rec.donatore.arrdonatori) {
+            if (!!rec) {
+              if (rec.ind_order === this.myindorder)
+                return rec
+            }
           }
         }
       }
@@ -246,10 +284,17 @@ export default class CMyNave extends MixinNave {
     return null
   }
 
+  get myindorder() {
+    if (this.listanavi)
+      return this.nave.ind_order
+    else
+      return this.posiz.ind_order
+  }
+
   public getIoSognatore() {
     const sognatore = this.sognatoredelDono()
     if (!!sognatore) {
-      return sognatore.ind_order === this.nave.ind_order
+      return sognatore.ind_order === this.myindorder
     }
     return null
   }
@@ -270,8 +315,7 @@ export default class CMyNave extends MixinNave {
     })
 
     const mymsg = this.$t('dashboard.confermi_dono_ricevuto_msg', {
-      sognatore: this.sognatoredelDono().name + ' ' + this.sognatoredelDono().surname,
-      donatore: rec.name + ' ' + rec.surname
+      donatore: rec.name + ' ' + rec.surname + ' (' + this.$t('dashboard.posizione') + ' ' + rec.riga + '.' + rec.col + ')'
     })
 
     tools.askConfirm(this.$q, msgtitle, msginvia + ' ' + '?', translate('dialog.yes'), translate('dialog.no'), this, '', lists.MenuAction.DONO_RICEVUTO, 0, {
@@ -361,7 +405,7 @@ export default class CMyNave extends MixinNave {
     for (const rec of this.nave.rec.donatore.arrdonatori) {
       if (!!rec) {
         if (mediatore) {
-          if ((mediatore.ind_order === rec.ind_order) && (rec.num_tess === 2))
+          if ((mediatore.ind_order === rec.ind_order) && (rec.num_tess % 2) === 0)
             return true
         }
       }
@@ -405,14 +449,14 @@ export default class CMyNave extends MixinNave {
   }
 
   public getclassSelect(rec) {
-    if (rec.ind_order === this.nave.ind_order)
+    if (rec.ind_order === this.myindorder)
       return ' you'
   }
 
   public gettitlenave(ind) {
     let ris = ''
     if (ind === 1)
-      return this.getRiganave(this.nave.riga) + '.' + this.getColnave(this.nave.col)
+      return this.getRiganave() + '.' + this.getColnave()
     else {
       ris = (this.getrigaNaveByInd(ind)) + '.' + this.getcolNaveByInd(ind)
     }
@@ -448,6 +492,20 @@ export default class CMyNave extends MixinNave {
     // return this.getNavePartByInd(rec.ind)
   }
 
+  public getTutor(rec) {
+    const mynavepart = this.getnavePartenzaByRigaCol(rec.riga, rec.col)
+    if (!!mynavepart)
+      return mynavepart.tutor_namesurname
+    return ''
+  }
+
+  public getTutor_username(rec) {
+    const mynavepart = this.getnavePartenzaByRigaCol(rec.riga, rec.col)
+    if (!!mynavepart)
+      return mynavepart.tutor
+    return ''
+  }
+
   public getnavePartenzaByRigaCol(riga, col) {
     for (const mynave of this.navi_partenza) {
       if (!!mynave) {
@@ -460,12 +518,25 @@ export default class CMyNave extends MixinNave {
   }
 
   public getrigaNaveByInd(ind) {
-    return this.getRiganave(this.nave.riga + ind - 1)
+    if (this.listanavi) {
+      return this.nave.riga + ind - 1
+    } else {
+      let ris = this.posiz.riga + ind - 1 - 3
+      if (ris <= 1)
+        ris = 1
+      return ris
+    }
   }
 
   public getcolNaveByInd(ind) {
-    const miacol = this.nave.col * Math.pow(2, ind - 1)
-    return this.getColnave(miacol)
+    if (this.listanavi) {
+      return this.nave.col * Math.pow(2, ind - 1)
+    } else {
+      let ris = Math.ceil(this.posiz.col * Math.pow(2, ind - 1) / (2 * 4))
+      if (ris <= 1)
+        ris = 1
+      return ris
+    }
   }
 
   public NaveeseguitabyInd(riga) {
@@ -541,7 +612,13 @@ export default class CMyNave extends MixinNave {
       tipomsg: tools.TipoMsg.SEND_LINK_CHAT_DONATORI,
       msgpar1: this.link_chat,
       inviareale,
+      username_mitt: ''
     }
+
+    if (!!this.nave.username)
+      msgobj.username_mitt = this.nave.username
+    else
+      msgobj.username_mitt = UserStore.state.my.username
 
     this.InviaMsgADonatori(msgobj)
   }
@@ -591,7 +668,7 @@ export default class CMyNave extends MixinNave {
     if (istemp) {
       return ' ' + this.$t('dashboard.temporanea') + ' '
     }
-      return ''
+    return ''
   }
 
   public isDefinitivaMediatore() {
@@ -601,14 +678,18 @@ export default class CMyNave extends MixinNave {
   }
 
   public getindex(recdonatore, index) {
-    if (recdonatore.ind_order === this.nave.rec.donatore.recmediatore.ind_order && (recdonatore.num_tess === 2))
+    if (recdonatore.ind_order === this.nave.rec.donatore.recmediatore.ind_order && (recdonatore.num_tess % 2) === 0)
       return this.$t('dashboard.ritessitura')
 
     return 'D' + (index)
   }
 
   public getposizione() {
-    return this.$t('dashboard.posizione') + ' ' + this.getisProvvisoriaStr() + this.nave.riga + '.' + this.nave.col
+    let pos = ''
+    if (!this.listanavi) {
+      pos = this.$t('dashboard.posizione') + ' ' + this.getisProvvisoriaStr() + this.posiz.riga + '.' + this.posiz.col
+    }
+    return pos
   }
 
   public getDoniAttesaDiConferma() {
@@ -621,6 +702,139 @@ export default class CMyNave extends MixinNave {
 
   public getDoniMancanti() {
     return this.arrdonatori.filter((rec) => (!rec.made_gift && !rec.date_made_gift)).reduce((sum, item) => sum + 1, 0)
+  }
+
+  public async apri() {
+    let riga = 0
+    let col = 0
+    let riga1don = 1
+    let col1don = 1
+    let ind_order = -1;
+    if (this.listanavi) {
+      riga = this.nave.riga
+      col = this.nave.col
+      riga1don = riga + 3
+      col1don = col * Math.pow(2, 3)
+      if (!!this.sognatoredelDono())
+        ind_order = this.sognatoredelDono().ind_order
+    } else {
+      riga1don = this.posiz.riga
+      col1don = this.posiz.col
+      ind_order = this.posiz.ind_order
+      riga = this.posiz.riga - 3
+      col = this.getColnaveriduci(this.posiz.col)
+      if (riga < 1)
+        riga = 1
+      if (col < 1)
+        col = 1
+    }
+
+    this.loading = true
+    const ris = await GlobalStore.actions.GetNave({ riga, col, riga1don, col1don, ind_order })
+    this.navi_partenza = ris.navi_partenza
+    this.nave = ris.nave
+    // console.log('apri', ris)
+
+    this.aggiorna()
+    this.loading = false
+  }
+
+  public getstrinpartenza() {
+    if (this.GiornoDelDonoArrivato) {
+      return this.$t('dashboard.nave_partita')
+    }
+    return this.$t('dashboard.nave_in_partenza')
+  }
+
+  public getpartenza() {
+    let myrec = null
+    if (this.listanavi)
+      myrec = this.nave.rec
+    else {
+      if (!!this.posiz)
+        myrec = this.posiz.rec
+    }
+
+    if (!!myrec)
+      return tools.getstrDate(myrec.donatore.navepersistente.date_start)
+
+    return ''
+  }
+
+  public titolonave() {
+
+    if (this.listanavi && !this.nave) {
+      return ''
+    }
+
+    let str = this.$t('pages.nave') + ` ` + this.getisProvvisoriaStr() + this.getRiganave() + `.` + this.getColnave() + ` ` + this.getstrinpartenza() + ` ` + this.getpartenza()
+    if (!!this.nave) {
+      if (this.GiornoDelDonoArrivato && !!this.nave.DoniConfermati) {
+        str += ' (' + this.$t('dashboard.doni_ricevuti') + ' = ' + this.nave.DoniConfermati + ')'
+      }
+      if (this.GiornoDelDonoArrivato && this.nave.DoniMancanti > 0) {
+        str += ' (' + this.$t('dashboard.doni_mancanti') + ' = ' + this.nave.DoniMancanti + ')'
+      }
+    }
+
+    return str
+  }
+
+  public getcolortitle() {
+    if (this.listanavi && !this.nave) {
+      return 'bg-primary'
+    }
+    if (this.listanavi) {
+      if (!!this.nave.DoniConfermati && this.nave.DoniMancanti > 0)
+        return 'bg-negative'
+      if (!!this.nave.DoniConfermati && this.nave.DoniConfermati > 0)
+        return 'bg-positive'
+    }
+
+    return 'bg-primary'
+  }
+
+  public clickseluser(rec) {
+    this.seluser = rec
+    this.showmsguser = true
+  }
+
+  public async InviaMsgAUserConfirm(msgobj, navemediatore) {
+
+    const msgtitle = translate('dialog.sendmsg')
+
+    tools.askConfirm(this.$q, msgtitle, msgobj.msgpar1 + ' ' + '?', translate('dialog.yes'), translate('dialog.no'), this, '', lists.MenuAction.INVIA_MSG_A_SINGOLO, 0, {
+      param1: msgobj,
+      param2: navemediatore,
+    })
+
+  }
+
+  public Chiudi() {
+    this.showmsguser = false
+  }
+
+  public InviaMsgAUser() {
+
+    if (!this.msg_tosend_user)
+      return
+
+    const msgobj = {
+      tipomsg: tools.TipoMsg.SEND_MSG_SINGOLO,
+      msgpar1: this.msg_tosend_user,
+      username: this.seluser.username,
+      inviareale: true,
+      username_mitt: '',
+    }
+
+    if (!!this.nave.username)
+      msgobj.username_mitt = this.nave.username
+    else
+      msgobj.username_mitt = UserStore.state.my.username
+
+    const naveuser = this.seluser
+
+    this.InviaMsgAUserConfirm(msgobj, naveuser)
   }
 
 }

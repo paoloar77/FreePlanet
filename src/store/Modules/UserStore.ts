@@ -78,6 +78,7 @@ const state: IUserState = {
   isLogged: false,
   isAdmin: false,
   isManager: false,
+  isTutor: false,
   usersList: [],
   countusers: 0,
   lastparamquery: {}
@@ -288,6 +289,7 @@ namespace Mutations {
 
     mystate.isAdmin = tools.isBitActive(mystate.my.perm, shared_consts.Permissions.Admin.value)
     mystate.isManager = tools.isBitActive(mystate.my.perm, shared_consts.Permissions.Manager.value)
+    mystate.isTutor = tools.isBitActive(mystate.my.perm, shared_consts.Permissions.Tutor.value)
     mystate.isTeacher = tools.isBitActive(mystate.my.perm, shared_consts.Permissions.Teacher.value)
 
     // console.log('authUser', 'state.isAdmin', mystate.isAdmin)

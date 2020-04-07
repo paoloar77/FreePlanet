@@ -47,6 +47,12 @@ export const shared_consts = {
       label: 'event.teacher',
       icon: 'fas fa-user-tie',
       color: 'blue'
+    },
+    Tutor: {
+      value: 8,
+      label: 'dashboard.tutor',
+      icon: 'fas fa-user-tie',
+      color: 'blue'
     }
   },
 

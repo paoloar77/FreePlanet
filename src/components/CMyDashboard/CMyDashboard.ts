@@ -41,7 +41,7 @@ export default class CMyDashboard extends MixinUsers {
     downline: [],
     downnotreg: [],
     downbyuser: [],
-    arrnavi: []
+    arrposizioni: []
   }
 
   @Prop({ required: true }) public username
@@ -104,7 +104,7 @@ export default class CMyDashboard extends MixinUsers {
   }
 
   public HasNave() {
-    return this.dashboard.arrnavi.length > 0
+    return this.dashboard.arrposizioni.length > 0
   }
 
 
