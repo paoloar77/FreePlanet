@@ -14,6 +14,6 @@ export default class Logo extends Vue {
   }
 
   get logoalt() {
-    return this.$t('msg.myAppName')
+    return this.$t('ws.sitename')
   }
 }

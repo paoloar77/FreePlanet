@@ -95,7 +95,12 @@
             </div>
 
             <div class="row">
-                <q-btn label="Pulisci chi non è presente in Nave" color="primary"
+                <q-btn label="Statistiche" color="warning" @click="EseguiFunz('visuUtentiNonInNavi')"></q-btn>
+
+            </div>
+
+            <div class="row">
+                <q-btn label="Pulisci chi non è presente in Nave" color="positive"
                        @click="EseguiFunz('pulisciNonPresenzeInNave')"></q-btn>
                 <br>
             </div>

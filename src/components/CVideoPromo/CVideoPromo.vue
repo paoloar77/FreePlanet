@@ -1,10 +1,10 @@
 <template>
   <div>
 
-    <CTitleBanner title="Video AYNI"></CTitleBanner>
+    <CTitleBanner :title="`Video ` + $t('site.sitename')"></CTitleBanner>
     <CImgText src="">
 
-      <CTitleBanner class="q-pa-xs" :title="$t('steps.video_intro_1')" bgcolor="bg-primary"
+      <CTitleBanner class="q-pa-xs" :title="$t('steps.video_intro_1', {sitename: $t('ws.sitename')})" bgcolor="bg-primary"
                     clcolor="text-white"
                     myclass="myshad" canopen="true" :visible="true">
 
@@ -12,7 +12,7 @@
 
         </CVideo>
       </CTitleBanner>
-      <CTitleBanner class="q-pa-xs" :title="$t('steps.video_intro_2')" bgcolor="bg-primary"
+      <CTitleBanner class="q-pa-xs" :title="$t('steps.video_intro_2', {sitename: $t('ws.sitename')})" bgcolor="bg-primary"
                     clcolor="text-white"
                     myclass="myshad" canopen="true" :visible="false">
 

@@ -64,7 +64,19 @@
                     mysubkey="teleg_id"
                     :type="tools.FieldType.number">
         </CMyFieldDb>-->
+
+          <br />
+          <div class="row justify-center">
+              <q-btn push
+                     rounded
+                     color="primary"
+                     size="md"
+                     to="/requestresetpwd"
+                     :label="$t('reg.modificapassword')">
+              </q-btn>
+          </div>
       </div>
+
     </CTitleBanner>
     <CTitleBanner class="q-pa-xs" :title="$t('pages.payment')" bgcolor="bg-primary" clcolor="text-white"
                    myclass="myshad" :canopen="true">

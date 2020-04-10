@@ -628,11 +628,11 @@ export default class CMyNave extends MixinNave {
   }
 
   public gettitlemediatore() {
-    return this.getdatastr(this.partenza_primo_donatore()) + ' ' + this.$t('dashboard.nave') + ' ' + this.getisProvvisoriaMediatoreStr() + this.mediatore.riga + '.' + this.mediatore.col + ' ' + '🎁' + 'AYNI'
+    return this.getdatastr(this.partenza_primo_donatore()) + ' ' + this.$t('dashboard.nave') + ' ' + this.getisProvvisoriaMediatoreStr() + this.mediatore.riga + '.' + this.mediatore.col + ' ' + '🎁' + this.$t('ws.sitename')
   }
 
   public gettitledonatore() {
-    return this.getdatastr(this.donatore_navepers.date_start) + ' ' + this.$t('dashboard.nave') + ' ' + this.getisProvvisoriaStr() + this.donatore_navepers.riga + '.' + this.donatore_navepers.col + ' ' + '🎁' + 'AYNI'
+    return this.getdatastr(this.donatore_navepers.date_start) + ' ' + this.$t('dashboard.nave') + ' ' + this.getisProvvisoriaStr() + this.donatore_navepers.riga + '.' + this.donatore_navepers.col + ' ' + '🎁' + this.$t('ws.sitename')
   }
 
   public gettesto() {

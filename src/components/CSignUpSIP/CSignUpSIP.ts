@@ -31,7 +31,7 @@ Vue.use(VueCountryCode)
   components: { Logo, CTitleBanner, PagePolicy }
 })
 
-export default class CSignUpNotevole extends MixinBase {
+export default class CSignUpSIP extends MixinBase {
   @Prop({ required: false, default: false }) public showadultcheck: boolean
   @Prop({ required: false, default: false }) public showcell: boolean
   @Prop({ required: false, default: false }) public showaportador: boolean
@@ -46,6 +46,7 @@ export default class CSignUpNotevole extends MixinBase {
   public duplicate_email: boolean = false
   public duplicate_username: boolean = false
   public showdisclaimer: boolean = false
+
 
   public signup: ISignupOptions = {
     email: process.env.TEST_EMAIL || '',
@@ -283,6 +284,6 @@ export default class CSignUpNotevole extends MixinBase {
   }
 
   get gettitlereg() {
-    return this.$t('pages.SignUp')
+      return this.$t('pages.SignUp')
   }
 }

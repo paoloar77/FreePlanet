@@ -2726,9 +2726,9 @@ export const tools = {
     if (mythis.$t === undefined)
       return ''
     if (short) {
-      return mythis.$t('msg.myAppNameShort')
+      return mythis.$t('ws.siteshortname')
     } else {
-      return mythis.$t('msg.myAppName')
+      return mythis.$t('ws.sitename')
     }
   },
 
@@ -2843,7 +2843,7 @@ export const tools = {
       tools.showNotif(mythis.$q, msg)
     } else if (riscode === tools.OK) {
       mythis.$router.push('/regok')
-      tools.showNotif(mythis.$q, mythis.$t('components.authentication.email_verification.link_sent'), {
+      tools.showNotif(mythis.$q, mythis.$t('components.authentication.email_verification.link_sent', {botname: mythis.$t('ws.botname') }), {
         color: 'green',
         textColor: 'black'
       })
@@ -3089,8 +3089,8 @@ export const tools = {
   },
   metafunc(mythis) {
     return {
-      title: mythis.$t('msg.myAppName'),
-      titleTemplate: (title) => `${tools.getsuffisso()} ${mythis.mymeta.title} - ${mythis.$t('msg.myAppName')}`,
+      title: mythis.$t('ws.sitename'),
+      titleTemplate: (title) => `${tools.getsuffisso()} ${mythis.mymeta.title} - ${mythis.$t('ws.sitename')}`,
       meta: {
         keywords: {
           name: 'keywords',

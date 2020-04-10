@@ -467,6 +467,8 @@ namespace Actions {
       return
     }
 
+    console.log('createPushSubscription: INIT')
+
     if (!('PushManager' in window)) {
       return
     }
@@ -508,6 +510,8 @@ namespace Actions {
 
   // Calling the Server to Save in the MongoDB the Subscriber
   function saveNewSubscriptionToServer(context, newSub) {
+
+    console.log('saveNewSubscriptionToServer')
     // If already subscribed, exit
     if (true) {
       return

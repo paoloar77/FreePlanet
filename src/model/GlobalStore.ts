@@ -335,6 +335,7 @@ export interface IFunctionality {
   SHOW_MESSAGES?: boolean
   BOOKING_EVENTS?: boolean
   ENABLE_REG_AYNI?: boolean
+  ENABLE_REG_SIP?: boolean
 }
 
 export interface IParamsQuery {

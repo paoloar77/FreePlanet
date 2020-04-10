@@ -127,7 +127,6 @@ const msg_de = {
       aportador_solidario: 'Solidarity Contributor',
       aportador_solidario_nome_completo: 'A.S. Name',
       aportador_solidario_ind_order: 'A.S.Ind',
-      already_registered: 'I have already registered on the Ayni Chat',
       reflink: 'Links to share to your friends:',
       linkzoom: 'Link to enter in Zoom',
       page_title: 'Registration',
@@ -143,6 +142,7 @@ const msg_de = {
       email_paypal: 'Email Paypal',
       country_pay: 'Country of Destination Payments',
       username_telegram: 'Username Telegram',
+      telegram: 'Chat Telegram \'{botname}\'',
       teleg_id: 'Telegram ID',
       teleg_auth: 'Authorization Code',
       paymenttype: 'Available Payment Methods',
@@ -170,6 +170,7 @@ const msg_de = {
       verificato: "Verified",
       non_verificato: "Not Verified",
       forgetpassword: "Forget Password?",
+      modificapassword: "Modify Password",
       err: {
         required: 'is required',
         email: 'must be a valid email',

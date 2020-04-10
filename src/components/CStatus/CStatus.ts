@@ -371,9 +371,9 @@ export default class CStatus extends MixinBase {
 
   get telegramtext() {
     if (this.TelegVerificato)
-      return this.$t('reg.telegram') + ' ' + this.$t('pages.statusreg.verified')
+      return this.$t('reg.telegram', {botname: this.$t('ws.botname')}) + ' ' + this.$t('pages.statusreg.verified')
     else
-      return this.$t('reg.telegram') + ' ' + this.$t('pages.statusreg.nonverified')
+      return this.$t('reg.telegram', {botname: this.$t('ws.botname')}) + ' ' + this.$t('pages.statusreg.nonverified')
   }
 
   get paymenttext() {
@@ -402,7 +402,7 @@ export default class CStatus extends MixinBase {
   }
 
   public gettextstep(step, index) {
-    let tit = (index + 1) + ' - ' + this.$t(step.title)
+    let tit = (index + 1) + ' - ' + this.$t(step.title, {botname: this.$t('ws.botname'), sitename: this.$t('ws.sitename')})
 
     if (step.funcok())
       tit += ' ' + this.$t(step.funcok())

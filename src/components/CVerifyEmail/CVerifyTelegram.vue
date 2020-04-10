@@ -9,21 +9,21 @@
 
       </CCopyBtn>
 
-      <div class="text-h6 text-center" v-html="$t('reg.teleg_torna_sul_bot')">
+      <div class="text-h6 text-center" v-html="$t('reg.teleg_torna_sul_bot', {botname: $t('ws.botname')})">
       </div>
     </div>
 
     <div v-if="!TelegVerificato" class="q-pa-sm q-gutter-sm">
       <div v-if="!TelegCode"><strong>{{ $t('components.authentication.telegram.open')}}</strong></div>
       <div class="q-ma-md">
-        <q-btn rounded color="primary" icon="fab fa-telegram" :label="$t('components.authentication.telegram.openbot')"
+        <q-btn rounded color="primary" icon="fab fa-telegram" :label="$t('components.authentication.telegram.openbot', {botname: $t('ws.sitename') })"
                type="a"
                :href="getLinkBotTelegram" target="_blank"></q-btn>
         <br>
       </div>
-      <strong>{{ $t('components.authentication.telegram.ifclose')}}</strong>
+      <strong>{{ $t('components.authentication.telegram.ifclose', {botname: $t('ws.botname') })}}</strong>
       <div class="q-my-sm">
-        <q-img src="statics/images/ayni_bot.jpg" class="" alt="AYNI BOT" style="height: 100px; width: 250px;">
+        <q-img src="statics/images/ayni_bot.jpg" class="" :alt="$t('ws.sitename')" style="height: 100px; width: 250px;">
         </q-img>
       </div>
     </div>

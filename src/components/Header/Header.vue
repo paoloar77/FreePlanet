@@ -32,7 +32,7 @@
         <q-btn ripple
                size="md"
                id="newvers" v-if="isNewVersionAvailable" color="secondary" rounded icon="refresh"
-               class="btnNewVersShow" @click="RefreshApp" :label="$t('notification.newVersionAvailable')"/>
+               class="btnNewVersShow" @click="RefreshApp()" :label="$t('notification.newVersionAvailable')"/>
 
 
         <q-toolbar-title class="row items-center">

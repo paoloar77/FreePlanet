@@ -61,7 +61,9 @@ export default class Dbop extends Vue {
 
       if (miafunz === 'visuPlacca') {
         this.placca = ris.placca
-      } else if (miafunz === 'visuListaIngresso' || miafunz === 'visuListaIngressoNuovi' || miafunz === 'visuNaviUtentiEliminati' || miafunz === 'visuListaNave' || miafunz === 'visuNave' || miafunz === 'creaNavi') {
+      } else if (miafunz === 'visuListaIngresso' || miafunz === 'visuListaIngressoNuovi' || miafunz === 'visuNaviUtentiEliminati'
+        || miafunz === 'visuListaNave' || miafunz === 'visuNave' || miafunz === 'creaNavi'
+        || (miafunz === 'visuUtentiNonInNavi')) {
         this.placca = ris.mystr
       } else {
         this.ris = ris

@@ -255,7 +255,7 @@
         <q-card-section class="inset-shadow">
           <PagePolicy
             owneremail="ayni.gifteconomy@gmail.com"
-            SiteName="Ayni"
+            :SiteName="$t('ws.sitename')"
             ownerDataName="Ayni"
             managerData="Ayni"
             includeData="dati anagrafici (ragione sociale, nome, cognome), recapiti (telefono, indirizzo email)"

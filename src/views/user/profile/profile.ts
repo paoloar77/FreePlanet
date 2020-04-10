@@ -28,7 +28,7 @@ export default class Profile extends MixinBase {
   public eliminaAccount() {
 
     this.$q.dialog({
-      message: this.$t('reg.cancellami'),
+      message: this.$t('reg.cancellami', {sitename: this.$t('ws.sitename')}),
       cancel: {
         label: this.$t('dialog.cancel')
       },
@@ -39,7 +39,7 @@ export default class Profile extends MixinBase {
       title: this.$t('pages.profile')
     }).onOk(async () => {
       this.$q.dialog({
-        message: this.$t('reg.cancellami_2'),
+        message: this.$t('reg.cancellami_2', {sitename: this.$t('ws.sitename')}),
         cancel: {
           label: this.$t('dialog.cancel')
         },

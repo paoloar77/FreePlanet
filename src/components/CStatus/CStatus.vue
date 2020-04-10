@@ -97,7 +97,7 @@
                     </div>
                     <div v-else-if="mystep.title === 'steps.paymenttype'">
                         <div v-if="mystep.descr">
-                            <div v-html="$t(mystep.descr)"></div>
+                            <div v-html="$t(mystep.descr, {sitename: $t('pages.sitename')})"></div>
                         </div>
 
                         <CTitleBanner class="q-pa-xs" :title="$t('steps.paymenttype_paypal')" bgcolor="bg-primary"
@@ -331,7 +331,7 @@
 
 
                         <CRequisiti v-if="Completato9Req" :statebool="Completato9Req"
-                                    :msgTrue="$t('steps.enter_nave_9req_ok')"
+                                    :msgTrue="$t('steps.enter_nave_9req_ok', {sitename: $t('pages.sitename')})"
                                     :msgFalse="$t('steps.enter_nave_9req_ko')">
                         </CRequisiti>
 

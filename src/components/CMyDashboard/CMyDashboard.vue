@@ -163,7 +163,7 @@
         <div class="row items-center q-pa-xs">
           <CCardState :mytext="$t('pages.statusreg.req')" :myval="9" :myperc="100" size="50px" size_mob="40px"
                       fontsize="0.75rem" myclass="my-card-small-stat" mycolor="green"></CCardState>
-          <div class="bg-blue text-white clBorderxs q-ml-sm">{{$t('pages.statusreg.req9')}}</div>
+          <div class="bg-blue text-white clBorderxs q-ml-sm">{{$t('pages.statusreg.req9', {sitename: $t('ws.sitename')})}}</div>
         </div>
         <div class="row items-center q-pa-xs">
           <CCardState :mytext="$t('pages.statusreg.people')" :myval="2" :myperc="100" size="50px" size_mob="40px"

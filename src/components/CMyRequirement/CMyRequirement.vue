@@ -11,7 +11,7 @@
 
         <div v-if="!isextralist(seluser)">
           <div v-for="(req, index) of arrrequisiti">
-            <CRequisito :icon="req.icon" :text="(index + 1) + `. ` + $t(req.textlang) + req.textadd(seluser)"
+            <CRequisito :icon="req.icon" :text="(index + 1) + `. ` + $t(req.textlang, {botname: $t('ws.botname')}) + req.textadd(seluser)"
                         :icon_error="geticonerror(true)"
                         :no_check="false"
                         :isok="req.isok(seluser)"
@@ -82,7 +82,7 @@
 
           <div v-if="!isextralist(seluser)">
             <div v-for="(req, index) of arrrequisiti_liberi">
-              <CRequisito :icon="req.icon" :text="$t(req.textlang) + req.textadd(seluser)"
+              <CRequisito :icon="req.icon" :text="$t(req.textlang, {botname: $t('ws.botname')}) + req.textadd(seluser)"
                           :icon_error="geticonerror(false)"
                           :no_check="true"
                           :isok="req.isok(seluser)"

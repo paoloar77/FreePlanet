@@ -29,9 +29,9 @@ export default class CMyPage extends Vue {
 
   // public metaInfo() {
   //   return {
-  //     // title: this.$t('msg.myAppName'),
+  //     // title: this.$t('ws.sitename'),
   //     title: 'PROVA TITOLOOOOOOO!!!!!!!!!!!!!!!!!!!!**************************',
-  //     titleTemplate: (title) => `${this.title} - ${this.$t('msg.myAppName')}`,
+  //     titleTemplate: (title) => `${this.title} - ${this.$t('ws.sitename')}`,
   //     meta: {
   //       keywords: { name: 'keywords', content: this.keywords },
   //       description: { name: 'description', content: this.description },

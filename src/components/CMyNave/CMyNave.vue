@@ -472,7 +472,7 @@
                                         </q-btn>
                                     </div>
                                     <div class="q-ma-sm text-center clBorderSteps">
-                                        <div>TELEGRAM AYNI BOT {{$t('dialog.sendmsg')}} -> {{seluser.name }} {{
+                                        <div>TELEGRAM {{$t('ws.sitename')}} BOT {{$t('dialog.sendmsg')}} -> {{seluser.name }} {{
                                             seluser.surname }}:
                                         </div>
                                         <q-input type="textarea"

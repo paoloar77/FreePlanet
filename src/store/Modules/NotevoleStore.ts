@@ -57,7 +57,7 @@ namespace Actions {
       username: UserStore.state.my.username
     }
 
-    return await Api.SendReq('/ayni/load', 'POST', paramquery)
+    return await Api.SendReq('/site/load', 'POST', paramquery)
       .then((res) => {
         // console.log('res', res)
         state.datastat = res.data.datastat

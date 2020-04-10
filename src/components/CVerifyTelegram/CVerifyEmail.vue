@@ -6,7 +6,7 @@
     <q-chip v-else color="negative" text-color="white" icon="email">
       {{ `Email ` + $t('pages.statusreg.nonverified') }}
     </q-chip>
-    <div v-if="!isEmailVerified" v-html="$t('components.authentication.email_verification.link_sent')">
+    <div v-if="!isEmailVerified" v-html="$t('components.authentication.email_verification.link_sent', {botname: $t('site.botname') })">
 
     </div>
     <div v-if="!isEmailVerified" v-html="$t('components.authentication.email_verification.se_non_ricevo')">

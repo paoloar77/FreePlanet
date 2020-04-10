@@ -20,7 +20,7 @@
         class="bg-warning text-black"
         color="primary q-title"
         style="text-align: center;">
-        <div class="mybanner" v-html="$t('components.authentication.email_verification.link_sent')">
+        <div class="mybanner" v-html="$t('components.authentication.email_verification.link_sent', {botname: $t('site.botname') })">
 
         </div>
 

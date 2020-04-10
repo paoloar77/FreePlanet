@@ -58,6 +58,8 @@ export default class UsersList extends Vue {
 
     if (static_data.functionality.ENABLE_REG_AYNI) {
       return this.db_fieldsTable.colTableUsers
+    } else if (static_data.functionality.ENABLE_REG_SIP) {
+      return this.db_fieldsTable.colTableUsersSIP
     } else {
       return this.db_fieldsTable.colTableUsersBase
     }
