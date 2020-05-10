@@ -1,3 +1,6 @@
+import { translation } from '@src/store/Modules/translation'
+import { Privacy } from '@src/model'
+
 export const shared_consts = {
 
   Accepted: {
@@ -52,7 +55,13 @@ export const shared_consts = {
       value: 8,
       label: 'dashboard.tutor',
       icon: 'fas fa-user-tie',
-      color: 'blue'
+      color: 'fuchsia'
+    },
+    Traduttrici: {
+      value: 16,
+      label: 'dashboard.traduttrici',
+      icon: 'fas fa-user-tie',
+      color: 'orange'
     }
   },
 
@@ -60,6 +69,34 @@ export const shared_consts = {
     Notify_ByEmail: 2,
     Notify_ByPushNotification: 4
   },
+
+  TypeMsg: {
+    SEND_TO_ALL: 1,
+  },
+
+  TypeMsg_Actions: {
+    NORMAL: 0,
+    YESNO: 1,
+    OPZ1_2: 2,
+  },
+
+  selectActions: [
+    {
+      id: 0,
+      label: 'Normale',
+      value: 0
+    },
+    {
+      id: 1,
+      label: 'Si / No',
+      value: 1
+    },
+    {
+      id: 2,
+      label: 'Opzione 1 / Opzione 2',
+      value: 2
+    }
+  ],
 
   fieldsUserToChange() {
     return ['_id', 'username', 'email', 'name', 'surname', 'perm', 'date_reg', 'verified_email', 'img', 'ipaddr', 'lasttimeonline', 'profile', 'news_on']

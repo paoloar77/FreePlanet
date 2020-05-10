@@ -11,8 +11,12 @@ import { lists } from '../../store/Modules/lists'
 import translate from '../../globalroutines/util'
 import { CMyChipList } from '../CMyChipList'
 import { CVideo } from '../CVideo'
+import { validations } from './CMyNave-validate'
+import { validationMixin } from 'vuelidate'
 
 @Component({
+  mixins: [validationMixin],
+  validations,
   components: { CTitleBanner, CMyChipList, CVideo }
 })
 
@@ -23,6 +27,7 @@ export default class CMyNave extends MixinNave {
   @Prop({ required: true }) public listanavi: boolean
   public navi_partenza: any[]
   public $t
+  public $v
   public link_chat: string = ''
   public cosa: string = 'tragitto'
   public cosa2: string = 'donatore'
@@ -46,6 +51,7 @@ export default class CMyNave extends MixinNave {
   public showmsguser: boolean = false
   public seluser = null
   public msg_tosend_user: string = ''
+  public username_sostituire: string = ''
   public MyPagination: {
     sortBy: string,
     descending: boolean,
@@ -63,11 +69,10 @@ export default class CMyNave extends MixinNave {
       sortable: true
     },*/
     { name: 'name', align: 'center', label: translate('reg.name'), field: 'name', sortable: true },
-    { name: 'surname', align: 'center', label: translate('reg.surname'), field: 'surname', sortable: true },
-    { name: 'posizione', align: 'center', label: 'Posizione', field: 'riga', sortable: true },
+    // { name: 'surname', align: 'center', label: translate('reg.surname'), field: 'surname', sortable: true },
     { name: 'date_made_gift', align: 'center', label: 'Inviato', field: 'date_made_gift', sortable: true },
-    { name: 'tel', align: 'center', label: 'Tel', field: 'tel', sortable: true },
-    { name: 'made_gift', align: 'center', label: 'Confermato', field: 'made_gift', sortable: true },
+    // { name: 'tel', align: 'center', label: 'Tel', field: 'tel', sortable: true },
+    { name: 'made_gift', align: 'center', label: 'Conferm.', field: 'made_gift', sortable: true },
   ]
 
   public tragitto = [
@@ -318,10 +323,12 @@ export default class CMyNave extends MixinNave {
       donatore: rec.name + ' ' + rec.surname + ' (' + this.$t('dashboard.posizione') + ' ' + rec.riga + '.' + rec.col + ')'
     })
 
-    tools.askConfirm(this.$q, msgtitle, msginvia + ' ' + '?', translate('dialog.yes'), translate('dialog.no'), this, '', lists.MenuAction.DONO_RICEVUTO, 0, {
+    tools.askConfirm(this.$q, msgtitle, msginvia + ' ' + '? (Pos ' + rec.riga + '.' + rec.col + ')', translate('dialog.yes'), translate('dialog.no'), this, '', lists.MenuAction.DONO_RICEVUTO, 0, {
       param1: {
         _id: rec._id,
-        made_gift: true
+        made_gift: true,
+        riga: rec.riga,
+        col: rec.col,
       },
       param2: rec.username,
       param3: mymsg
@@ -709,7 +716,7 @@ export default class CMyNave extends MixinNave {
     let col = 0
     let riga1don = 1
     let col1don = 1
-    let ind_order = -1;
+    let ind_order = -1
     if (this.listanavi) {
       riga = this.nave.riga
       col = this.nave.col
@@ -739,6 +746,12 @@ export default class CMyNave extends MixinNave {
     this.loading = false
   }
 
+  public async update_nave() {
+    this.showmsguser = false
+    this.apri()
+    this.aggiorna()
+  }
+
   public getstrinpartenza() {
     if (this.GiornoDelDonoArrivato) {
       return this.$t('dashboard.nave_partita')
@@ -756,7 +769,8 @@ export default class CMyNave extends MixinNave {
     }
 
     if (!!myrec)
-      return tools.getstrDate(myrec.donatore.navepersistente.date_start)
+      if (!!myrec.donatore.navepersistente)
+        return tools.getstrDate(myrec.donatore.navepersistente.date_start)
 
     return ''
   }
@@ -835,6 +849,49 @@ export default class CMyNave extends MixinNave {
     const naveuser = this.seluser
 
     this.InviaMsgAUserConfirm(msgobj, naveuser)
+  }
+
+  get isAdmin() {
+    return UserStore.state.isAdmin
+  }
+
+  get isManager() {
+    return UserStore.state.isManager
+  }
+
+  get isTutor() {
+    return UserStore.state.isTutor
+  }
+
+  get isTratuttrici() {
+    return UserStore.state.isTratuttrici
+  }
+
+  get allowSubmit() {
+    let error = this.$v.$error || this.$v.$invalid
+
+    error = error || (this.username_sostituire === this.seluser.username_sostituire)
+
+    return !error
+
+  }
+
+  get getnotifBotTxt() {
+    return this.seluser.name + ' ' + this.seluser.surname + ' è stato sostituito con ' + this.username_sostituire
+  }
+
+  public async SostituisciUtente(user, usernamesost, notifBottxt) {
+    usernamesost = usernamesost.trim()
+
+    await tools.askConfirm(this.$q, 'Sostituisci', notifBottxt + ' ?', translate('dialog.yes'), translate('dialog.no'), this, '', lists.MenuAction.SOSTITUISCI, 0, {
+      param1: user,
+      param2: { username: usernamesost, riga: user.riga, col: user.col },
+      param3: notifBottxt
+    })
+  }
+
+  public getnavestr(row) {
+    return tools.getRiganave(row.riga) + '.' + tools.getColnave(row.col)
   }
 
 }

@@ -65,6 +65,10 @@ export default class Header extends Vue {
     return UserStore.state.isTutor
   }
 
+  get isTratuttrici() {
+    return UserStore.state.isTratuttrici
+  }
+
   get conndata_changed() {
     return GlobalStore.state.connData
   }
@@ -182,7 +186,7 @@ export default class Header extends Vue {
       if (this.static_data.functionality.SHOW_IF_IS_SERVER_CONNECTION) {
 
         if (!!oldValue) {
-          tools.showNotif(this.$q, this.$t('connection') + ` disc__value}`, {
+          tools.showNotif(this.$q, this.$t('connection') + ` {disc__value}`, {
             color,
             icon: 'wifi'
           })

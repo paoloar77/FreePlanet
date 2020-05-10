@@ -57,6 +57,11 @@ export default class MixinUsers extends Vue {
     return (ris !== '') ? 'statics/' + ris : ''
   }
 
+  get getMyImgforIcon() {
+    const ris = UserStore.getters.getImgByUsername(UserStore.state.my.username)
+    return (ris !== '') ? 'img:statics/' + ris : 'fas fa-user-circle'
+  }
+
   get MenuCollapse() {
     return GlobalStore.state.menuCollapse
     // return true

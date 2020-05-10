@@ -12,6 +12,8 @@ const msg_de = {
       tableslist: 'Tables',
     },
     otherpages: {
+      modifprof: 'Modify Profile',
+      biografia: 'Biografia',
       admin: {
         menu: 'Administration',
         eventlist: 'Your Booking',

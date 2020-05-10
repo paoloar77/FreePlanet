@@ -38,7 +38,11 @@ export interface IDashboard {
   downline: any[],
   downnotreg: any[],
   downbyuser: any[]
+  arrimbarchi?: any[]
   arrposizioni?: any[]
+  navi_partenza?: any[]
+  lastnave?: any
+  arrusers?: any[]
 }
 
 export interface ICalcStat {
@@ -48,6 +52,7 @@ export interface ICalcStat {
 
 export interface IUserFields {
   _id?: string
+  ind_order?: number
   email?: string
   username?: string
   name?: string
@@ -57,7 +62,7 @@ export interface IUserFields {
   perm?: number
   verified_email?: boolean
   aportador_solidario?: string
-  date_temp_reg?: Date
+
   made_gift?: boolean
   tokens?: IToken[]
   lasttimeonline?: Date
@@ -97,6 +102,7 @@ export interface IUserState {
   isAdmin?: boolean
   isManager?: boolean
   isTutor?: boolean
+  isTraduttrici?: boolean
   isTeacher?: boolean
   usersList?: IUserFields[]
   countusers?: number

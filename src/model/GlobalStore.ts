@@ -16,6 +16,7 @@ export interface IConnData {
 
 export interface ICfgServer {
   chiave: string
+  idapp: string
   userId: string
   valore: string
 }
@@ -203,6 +204,7 @@ export interface IListRoutes {
   onlyif_logged?: boolean
   onlyManager?: boolean
   onlyTutor?: boolean
+  onlyTraduttrici?: boolean
   extraclass?: string
   meta?: any
   idelem?: string

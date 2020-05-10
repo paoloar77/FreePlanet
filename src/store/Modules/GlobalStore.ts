@@ -80,7 +80,7 @@ const state: IGlobalState = {
   gallery: [],
   mailinglist: [],
   mypage: [],
-  calzoom: [],
+  calzoom: []
 }
 
 async function getConfig(id) {
@@ -142,17 +142,17 @@ namespace Getters {
 
   }, 'getPage')
 
-  const getmenu = b.read((state) => {
+  const getmenu = b.read((mystate: IGlobalState) => {
     // console.log('getmenu', cfgrouter.getmenu())
 
-    state.menulinks = {
+    mystate.menulinks = {
       Dashboard: {
         routes: cfgrouter.getmenu(),
         show: true
       }
     }
 
-    return state.menulinks
+    return mystate.menulinks
 
     // console.log('state.menulinks', state.menulinks)
 
@@ -309,7 +309,7 @@ namespace Getters {
 
     get isNewVersionAvailable() {
       // console.log('state.cfgServer', state.cfgServer)
-      const serversrec = state.cfgServer.find((x) => x.chiave === tools.SERVKEY_VERS)
+      const serversrec = state.cfgServer.find((x) => (x.chiave === tools.SERVKEY_VERS) && (x.idapp === process.env.APP_ID))
       // console.log('Record ', serversrec)
       if (serversrec) {
         console.log('Vers Server ', serversrec.valore, 'Vers locale:', process.env.APP_VERSION)
@@ -467,8 +467,6 @@ namespace Actions {
       return
     }
 
-    console.log('createPushSubscription: INIT')
-
     if (!('PushManager' in window)) {
       return
     }
@@ -484,6 +482,8 @@ namespace Actions {
         return swreg.pushManager.getSubscription()
       })
       .then((subscription) => {
+        console.log('subscription = ', subscription)
+
         mystate.wasAlreadySubscribed = !(subscription === null)
 
         if (mystate.wasAlreadySubscribed) {
@@ -511,11 +511,10 @@ namespace Actions {
   // Calling the Server to Save in the MongoDB the Subscriber
   function saveNewSubscriptionToServer(context, newSub) {
 
-    console.log('saveNewSubscriptionToServer')
     // If already subscribed, exit
-    if (true) {
-      return
-    }
+    // if (true) {
+    //   return
+    // }
 
     if (!newSub) {
       return
@@ -528,12 +527,19 @@ namespace Actions {
     // console.log('saveSubscriptionToServer: ', newSub)
     // console.log('context', context)
 
+    console.log('saveNewSubscriptionToServer')
+
     let options = null
+    let notreg = false
+
+    if (UserStore.getters.isTokenInvalid) {
+      notreg = true
+    }
 
     // If is not already stored in DB, then show the message to the user.
-    if (!state.wasAlreadySubscribed) {
+    if (!state.wasAlreadySubscribed || notreg) {
       options = {
-        title: translate('notification.title_subscribed'),
+        title: tools.translate('notification.title_subscribed', [{strin: 'sitename', strout: translate('ws.sitename')}]),
         content: translate('notification.subscribed'),
         openUrl: '/'
       }
@@ -686,6 +692,19 @@ namespace Actions {
 
   }
 
+  async function sendPushNotif(context, { params }) {
+
+    return await Api.SendReq('/push/send', 'POST', { params })
+      .then((res) => {
+        // console.table(res)
+        return res.data
+      })
+      .catch((error) => {
+        console.log('error sendPushNotif', error)
+        return null
+      })
+  }
+
   async function loadTable(context, params: IParamsQuery) {
     // console.log('loadTable', params)
 
@@ -723,6 +742,21 @@ namespace Actions {
       .then((res) => {
         if (res) {
           Mutations.mutations.UpdateValuesInMemory(mydata)
+          return (res.data.code === serv_constants.RIS_CODE_OK)
+        } else
+          return false
+      })
+      .catch((error) => {
+        return false
+      })
+  }
+
+  async function callFunz(context, { mydata }) {
+    // console.log('saveFieldValue', mydata)
+
+    return await Api.SendReq(`/callfunz`, 'PATCH', { data: mydata })
+      .then((res) => {
+        if (res) {
           return (res.data.code === serv_constants.RIS_CODE_OK)
         } else
           return false
@@ -1034,12 +1068,32 @@ namespace Actions {
       infooter: false
     }
 
-    static_data.routes = [...static_data.baseroutes, ...arrpagesroute, last]
+    const sito_offline = {
+      active: true,
+      order: 20,
+      path: '/sito_offline',
+      materialIcon: 'home',
+      name: 'otherpages.sito_offline',
+      component: () => import('@/rootgen/sito_offline/sito_offline.vue'),
+      inmenu: true,
+      infooter: true
+    }
+
+    if (!tools.sito_online(false)) {
+      static_data.routes = [sito_offline, last]
+    } else {
+      static_data.routes = [...static_data.baseroutes, ...arrpagesroute, last]
+    }
 
     // Sort array
     static_data.routes = static_data.routes.sort((a, b) => a.order - b.order)
 
-    router.addRoutes([...arrpagesroute, last])
+    if (tools.sito_online(false)) {
+      router.addRoutes([...arrpagesroute, last])
+    } else {
+      router.addRoutes([sito_offline, last])
+      this.$router.replace('/sito_offline')
+    }
   }
 
   async function sendFile(context, formdata) {
@@ -1063,6 +1117,8 @@ namespace Actions {
     saveCfgServerKey: b.dispatch(saveCfgServerKey),
     checkUpdates: b.dispatch(checkUpdates),
     saveFieldValue: b.dispatch(saveFieldValue),
+    callFunz: b.dispatch(callFunz),
+    sendPushNotif: b.dispatch(sendPushNotif),
     loadTable: b.dispatch(loadTable),
     saveTable: b.dispatch(saveTable),
     DeleteRec: b.dispatch(DeleteRec),

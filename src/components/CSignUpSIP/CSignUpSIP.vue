@@ -3,26 +3,9 @@
         <div class="text-center">
             <p>
                 <logo mystyle="height:200px;"></logo>
-                <CTitleBanner :title="gettitlereg"></CTitleBanner>
+                <CTitleBanner :title="gettitlereg" :canopen="false"></CTitleBanner>
             </p>
         </div>
-
-        <q-banner
-                v-if="!nuovareg"
-                rounded
-                class="bg-primary text-white"
-                style="text-align: center; font-size:1rem;">
-            <span class="mybanner" v-html="$t('reg.reg_lista_prec')"></span>
-        </q-banner>
-
-        <br>
-        <q-banner
-                v-if="!nuovareg"
-                rounded
-                class="bg-warning text-black"
-                style="text-align: center; font-size:1rem;">
-            <span class="mybanner">{{ $t('reg.nuove_registrazioni')}}</span>
-        </q-banner>
 
         <!--Prova URL :  {{env('PROVA_PAOLO')}}-->
 
@@ -84,6 +67,8 @@
                         rounded outlined
                         @blur="$v.signup.username.$touch"
                         :error="$v.signup.username.$error"
+                        @keydown.native.52="(event) => event.preventDefault()"
+                        @keydown.native.54="(event) => event.preventDefault()"
                         @keydown.space="(event) => event.preventDefault()"
                         maxlength="20"
                         debounce="1000"

@@ -84,6 +84,8 @@
           rounded outlined
           @blur="$v.signup.username.$touch"
           :error="$v.signup.username.$error"
+          @keydown.native.54="(event) => event.preventDefault()"
+          @keydown.native.52="(event) => event.preventDefault()"
           @keydown.space="(event) => event.preventDefault()"
           maxlength="20"
           debounce="1000"

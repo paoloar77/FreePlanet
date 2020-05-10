@@ -17,7 +17,15 @@ const msg_it = {
       directory: 'Directory',
       list: 'Lista',
     },
+    profile: {
+      chisei: 'Chi Sei? Raccontaci di te:',
+      iltuoimpegno: 'Quale è stato il tuo impegno per salvare il pianeta ad oggi?',
+      come_aiutare: 'Cosa vorresti fare per aiutare il pianeta?',
+    },
     otherpages: {
+      sito_offline: 'Sito in Aggiornamento',
+      modifprof: 'Modifica Profilo',
+      biografia: 'Biografia',
       update: 'Aggiornamento in Corso...',
       error404: 'error404',
       error404def: 'error404def',
@@ -40,7 +48,8 @@ const msg_it = {
       manage: {
         menu: 'Gestione',
         manager: 'Gestore',
-        nessuno: 'Nessuno'
+        nessuno: 'Nessuno',
+        sendpushnotif: 'Invia Msg Push',
       },
       messages: {
         menu: 'I tuoi Messaggi'
@@ -50,6 +59,7 @@ const msg_it = {
       write: 'scrive'
     },
     stat: {
+      imbarcati: 'Imbarcati in Attesa',
       qualificati: 'Qualificati con almeno 2 invitati',
       requisiti: 'Utenti con i 7 Requisiti',
       zoom: 'Partecipato in Zoom',
@@ -60,9 +70,16 @@ const msg_it = {
       telegram_non_attivi: 'Telegram Non Attivi',
       telegram_pendenti: 'Telegram Pendenti',
       reg_daily:'Registrazioni Giornaliere',
+      reg_weekly:'Registrazioni Settimanali',
       reg_total: 'Registrazioni Totali',
     },
     steps: {
+      nuovo_imbarco: 'Prenota un altro Viaggio',
+      vuoi_entrare_nuova_nave: 'Se confermi, quando la tua Nave sarà pronta a salpare, farai un Nuovo Dono per ripetere un altro viaggio.<br>' +
+      'In questo modo aiuterai tutte le Navi ad avanzare e a far crescere il movimento.',
+      inserisci_invitante: 'Inserisci qui sotto l\'username della persona che vuoi aiutare, donandoti come suo Invitato:',
+      vuoi_cancellare_imbarco: 'Sicuro di voler cancellare questo imbarco in Nave AYNI?',
+      sei_stato_aggiunto: 'Sei stato aggiunto alla lista d\'imbarco! Nei prossimi giorni verrai aggiunto ad una Nuova Nave in partenza!',
       completed: 'Completati',
       passi_su: '{passo} passi su {totpassi}',
       video_intro_1: '1. Benvenuti in {sitename}',
@@ -85,7 +102,7 @@ const msg_it = {
       zoom_partecipa: 'Partecipato ad almeno 1 Zoom',
       zoom_no_partecipato: 'Attualmente non hai ancora partecipato ad uno Zoom (è un requisito per poter entrare)',
       zoom_long: 'Si richiede di partecipare ad almeno 1 Zoom, ma è consigliato prendere parte al movimento in maniera più attiva.<br><br><strong>Partecipando agli Zoom lo Staff registrerà le presenze e verrai così abilitato.</strong>',
-      zoom_what: 'Tutorial come installare Zoom',
+      zoom_what: 'Tutorial come installare Zoom Cloud Meeting',
       // sharemovement_devi_invitare_almeno_2: 'Ancora non hai invitato 2 persone',
       // sharemovement_hai_invitato: 'Hai invitato almeno 2 persone',
       sharemovement_invitati_attivi_si: 'Hai almeno 2 persone invitate Attive',
@@ -94,7 +111,9 @@ const msg_it = {
       sharemovement_long: 'Condividi il Movimento {sitename} e invitali a partecipare agli Zoom di Benvenuto per entrare a far parte di questa grande Famiglia &#128516 .<br>',
       inv_attivi_long: '',
       enter_prog_completa_requisiti: 'Completa tutti i requisiti richiesti, per poter entrare nella Lista d\'imbarco.',
-      enter_prog_requisiti_ok: 'Hai completato tutti i 7 requisiti per entrare nella Lista d\'Imbarco.<br>Riceverai un messaggio nei prossimi giorni appena la tua Nave sarà pronta!',
+      enter_prog_requisiti_ok: 'Hai completato tutti i 7 requisiti per entrare nella Lista d\'Imbarco.<br>',
+      enter_prog_msg: 'Riceverai un messaggio nei prossimi giorni su AYNI BOT, appena la tua Nave sarà pronta!',
+      enter_prog_msg_2: 'Ricorda che più persone inviti e più sali di Posizione, per accedere alla prossima Nave!',
       enter_nave_9req_ok: 'COMPLIMENTI! Hai Completato TUTTI i 9 Passi della Guida! Grazie per Aiutare {sitename} ad Espandersi!<br>Potrai molto presto partire con il tuo Viaggio, facendo il tuo dono e proseguendo verso il Sognatore',
       enter_nave_9req_ko: 'Ricorda che puoi Aiutare a far Crescere ed Espandere il Movimento, Condividendo con chiunque questo nostro viaggio!',
       enter_prog: 'Entro nella Lista d\'Imbarco',
@@ -191,6 +210,10 @@ const msg_it = {
       options: 'Opzioni',
     },
     dashboard: {
+      invitante: 'Invitante',
+      dono_da_effettuare: 'Dono che dovrai effettuare',
+      num_tessitura: 'Numero di Tessitura:',
+      attenzione: 'Attenzione',
       downline: 'Invitati',
       downnotreg: 'Invitati non Registrati',
       notreg: 'Non Registrato',
@@ -198,13 +221,14 @@ const msg_it = {
       numinvitati: 'Almeno 2 Invitati',
       telefono_wa: 'Contatta su Whatsapp',
       sendnotification: 'Invia Notifica al Destinatario su Telegram BOT',
-      ricevuto_dono: 'Hai ricevuto in Regalo un Invitato {invitato} da parte di {mittente} !',
+      ricevuto_dono: '😍🎊 Hai ricevuto in Regalo un Invitato {invitato} da parte di {mittente} !',
       nessun_invitante: 'Nessun Invitante',
       nessun_invitato: 'Nessun Invitato',
       legenda_title: 'Clicca sul nome dell\'invitato per vedere lo stato dei suoi Requisiti.',
       nave_in_partenza: 'in Partenza il',
       nave_partita: 'Partita il',
       tutor: 'Tutor',
+      traduttrici: 'Traduttrici',
       sonomediatore: 'Quando diventi Meditore vieni contattato da un <strong>TUTOR</strong>, con lui devi:<br><ol class="lista">' +
       '<li>Aprire la tua <strong>Gift Chat</strong> (tu come proprietario e il Tutor ' +
       'come amministratore) con questo nome: <strong>{nomenave}</strong></li>' +
@@ -286,6 +310,7 @@ const msg_it = {
       cancellami_2: 'ULTIMO AVVISO! Vuoi uscire Definitivamente da {sitename} ?',
       account_cancellato: 'Il tuo Profilo è stato cancellato correttamente',
       regala_invitato: 'Regala Invitato',
+      regala_invitante: 'Imposta Invitante',
       messaggio_invito: 'Messaggio di Invito',
       messaggio_invito_msg: 'Invia questo messaggio a tutti coloro a cui vuoi condividere questo Movimento !',
       videointro: 'Video Introduttivo',
@@ -329,8 +354,12 @@ const msg_it = {
       date_reg: 'Data Reg.',
       requirement: 'Requisiti',
       perm: 'Permessi',
+      elimina: 'Elimina',
+      deleted: 'Nascosto',
+      sospeso: 'Sospeso',
       username: 'Username (Pseudonimo)',
       username_short: 'Username',
+      username_main: 'Username Base',
       name: 'Nome',
       surname: 'Cognome',
       username_login: 'Username o email',
@@ -362,6 +391,7 @@ const msg_it = {
         duplicate_username: 'L\'Username è stato già utilizzato',
         aportador_not_exist: 'L\'Username di chi ti ha invitato non è presente. Contattaci.',
         aportador_regalare_not_exist: 'Inserire l\'Username della persona che si vuole regalare l\'invitato',
+        invitante_username_not_exist: 'Inserire l\'Username della persona che fa da invitante',
         sameaspassword: 'Le password devono essere identiche',
       },
       tips: {
@@ -433,7 +463,7 @@ const msg_it = {
       titlegranted: 'Permesso Notifiche Abilitato!',
       statusnot: 'Stato Notifiche',
       titledenied: 'Permesso Notifiche Disabilitato!',
-      title_subscribed: 'Sottoscrizione a FreePlanet.app!',
+      title_subscribed: 'Sottoscrizione a {sitename}!',
       subscribed: 'Ora potrai ricevere i messaggi e le notifiche.',
       newVersionAvailable: 'Aggiorna',
     },

@@ -52,7 +52,7 @@
             <q-btn v-if="mytable" label="" color="primary" @click="refresh" icon="search"></q-btn>
           </template>
         </q-input>
-        <q-toggle v-if="mytable" v-model="canEdit" :val="lists.MenuAction.CAN_EDIT_TABLE" class="q-mx-sm"
+        <q-toggle v-if="mytable" v-model="canEdit" :disable="disabilita" :val="lists.MenuAction.CAN_EDIT_TABLE" class="q-mx-sm"
                   :label="$t('grid.editvalues')" @input="changefuncAct"
         ></q-toggle>
 
@@ -117,6 +117,7 @@
                 v-if="colVisib.includes(col.field + col.subfield)">
             <div :class="getclrow(props.row)">
               <CMyPopupEdit :canEdit="canEdit"
+                            :disable="disabilita"
                             :col="col"
                             :row.sync="props.row"
                             :field="col.field"
@@ -172,6 +173,7 @@
           <div class="q-ma-sm q-pa-sm colmodif col-grow rounded-borders " style="border: 1px solid #bbb"
                @click="colclicksel = mycol">
             <CMyPopupEdit :canEdit="true"
+                          :disable="disabilita"
                           view="field"
                           :col="mycol"
                           :showall="true"

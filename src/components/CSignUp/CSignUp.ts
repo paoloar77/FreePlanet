@@ -12,7 +12,7 @@ import { validationMixin } from 'vuelidate'
 import { Logo } from '../../components/logo'
 import { DefaultProfile } from '../../store/Modules/UserStore'
 
-import 'vue-country-code/dist/vue-country-code.css'
+// import 'vue-country-code/dist/vue-country-code.css'
 import { serv_constants } from '@src/store/Modules/serv_constants'
 
 import VueCountryCode from 'vue-country-code'

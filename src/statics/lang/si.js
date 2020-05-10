@@ -18,6 +18,8 @@ const msg_si = {
       list: 'Lista',
     },
     otherpages: {
+      modifprof: 'Uredi pProfil',
+      biografia: 'Biografia',
       update: 'Posodobitev v teku...',
       error404: 'error404',
       error404def: 'error404def',
@@ -60,9 +62,14 @@ const msg_si = {
       telegram_non_attivi: 'Telegram ni aktiven',
       telegram_pendenti: 'Čakajoči Telegram',
       reg_daily: 'Dnevne registracije',
+      reg_weekly:'Tedenske prijave',
       reg_total: 'Skupne registracije',
     },
     steps: {
+      nuovo_imbarco: 'Rezerviraj še eno potovanje',
+      vuoi_entrare_nuova_nave: 'Če potrdiš, ko bo tvoja Ladja pripravljena za izplutje, boš Ponovno Doniral in ponovil novo potovanje.<br>' +
+      'Na ta način boste pomagali vsem ladjam pri napredovanju in rasti gibanja',
+      vuoi_cancellare_imbarco: 'Ali ste prepričani, da želite izbrisati vaš vstop v Ladjo Ayni?',
       completed: 'zaključen',
       passi_su: '{passo} od {totpassi} koraki',
       video_intro_1: '1. Dobrodošli v {sitename}',
@@ -86,7 +93,7 @@ const msg_si = {
       zoom_no_partecipato: 'Še niste sodelovali pri zoomu (zahteva, da lahko vstopite)',
       zoom_long: 'Potrebno je sodelovati pri vsaj enem zoomu, vendar je priporočljivo, da se v gibanje vključite bolj aktivno. <br> <br>\n' +
       '<strong> Osebje bo s sodelovanjem v zoomih beležilo udeležbe in vam bo omogočeno. </strong>',
-      zoom_what: 'Navodila, kako namestiti Zoom',
+      zoom_what: 'Navodila, kako namestiti Zoom Cloud Meeting',
       // sharemovement_devi_invitare_almeno_2: 'Nisi še vpisal 2-eh oseb',
       // sharemovement_hai_invitato: 'Si vpisaj vsaj 2 osebi',
       sharemovement_invitati_attivi_si: 'Imate vsaj 2 aktivna povabljena',
@@ -95,7 +102,8 @@ const msg_si = {
       sharemovement_long: 'Delite gibanje {sitename} in jih povabite, da sodelujejo v zoomih dobrodošlice, da postanejo del te velike družine &#128516 .<br>',
       inv_attivi_long: '',
       enter_prog_completa_requisiti: 'Izpolnite vse potrebne zahteve, da lahko vstopite na seznam za vstop.',
-      enter_prog_requisiti_ok: 'Izpolnili ste vseh 7 zahtev za vpis na vstopni seznam. <br> V naslednjih dneh boste takoj, ko bo vaša ladja pripravljena, prejeli sporočilo!',
+      enter_prog_requisiti_ok: 'Izpolnili ste vseh 7 zahtev za vpis na vstopni seznam. <br>',
+      enter_prog_msg: 'V naslednjih dneh boste takoj, ko bo vaša ladja pripravljena, prejeli sporočilo!',
       enter_nave_9req_ok: 'ČESTITKE! Izpolnili ste VSE 9 korakov! Hvala, ker ste pomagali {sitename} pri razširitvi! <br> Zelo kmalu boste lahko odšli na potovanje, si priskrbeli darilo in nadaljevali proti sanjaču ',
       enter_nave_9req_ko: 'Ne pozabite, da lahko pomagate rasti in razširiti gibanje, tako da svoje potovanje delite z drugimi!',
       enter_prog: 'Vpišem se na Seznam vkrcavanja',
@@ -183,6 +191,8 @@ const msg_si = {
       loggati: 'Uporabnik ni prijavljen'
     },
     dashboard: {
+      num_tessitura: 'Numero di Tessitura:',
+      attenzione: 'Pozornosti',
       downline: 'povabljen',
       downnotreg: 'Neregistrirani gostje',
       notreg: 'Ni registrirano',
@@ -190,7 +200,7 @@ const msg_si = {
       numinvitati: 'Z vsaj 2-emi povabljenici',
       telefono_wa: 'Pišite na Whatsapp',
       sendnotification: 'Obvestilo pošljite prejemniku na Telegram BOT',
-      ricevuto_dono: 'Prejeli ste darilo {invitato} kot darilo od {mittente} !',
+      ricevuto_dono: '😍🎊 Prejeli ste darilo {invitato} kot darilo od {mittente} !',
       nessun_invitante: 'Nobenega povabljenega',
       nessun_invitato: 'Ni gostov',
       legenda_title: 'Kliknite na povabljeno ime, da si ogledate stanje njihovih zahtev.',

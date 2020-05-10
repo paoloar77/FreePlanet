@@ -20,8 +20,31 @@
 
         </div>
 
-        <div v-if="ismydownline(seluser)">
-          <CTitleBanner class="shadow-2 rounded-borders" :title="$t('reg.regala_invitato')"
+        <CTitleBanner class="shadow-2 rounded-borders"
+                      :title="$t('steps.sharemovement') + ` - ` + seluser.name + ` ` + seluser.surname + ``"
+                      bgcolor="bg-secondary"
+                      clcolor="text-white"
+                      mystyle=" " myclass="myshad" :canopen="true">
+
+          <div :class="myclassreq">
+
+            <div v-if="!isextralist(seluser)">
+              <div v-for="(req, index) of arrrequisiti_liberi">
+                <CRequisito :icon="req.icon" :text="$t(req.textlang, {botname: $t('ws.botname')}) + req.textadd(seluser)"
+                            :icon_error="geticonerror(false)"
+                            :no_check="true"
+                            :isok="req.isok(seluser)"
+                            :info="req.info"></CRequisito>
+              </div>
+
+            </div>
+
+          </div>
+        </CTitleBanner>
+
+        <div v-if="ismydownline(seluser) || showregalainv">
+
+          <CTitleBanner class="shadow-2 rounded-borders" :title="gettitleregala()"
                         bgcolor="bg-positive"
                         clcolor="text-white"
                         :visible="false"
@@ -49,7 +72,12 @@
 
               <q-toggle v-model="notifBot" :label="$t('dashboard.sendnotification')"/>
 
-              <q-btn class="q-ma-sm" rounded color="positive" text-color="white" icon="fas fa-gift"
+              <q-btn v-if="isregalainvitante()" class="q-ma-sm" rounded color="positive" text-color="white" icon="fas fa-gift"
+                     :label="$t('reg.regala_invitante')"
+                     :disabled='!allowSubmit'
+                     @click="RegalaInvitante(seluser, aportador_solidario, ind_order_ingr, id_listaingr, getnotifBotTxtInvitante)"></q-btn>
+
+              <q-btn v-else class="q-ma-sm" rounded color="positive" text-color="white" icon="fas fa-gift"
                      :label="$t('reg.regala_invitato')"
                      :disabled='!allowSubmit'
                      @click="RegalaInvitato(seluser, aportador_solidario, getnotifBotTxt)"></q-btn>
@@ -72,27 +100,6 @@
         </div>
 
       </div>
-      <CTitleBanner class="shadow-2 rounded-borders"
-                    :title="$t('steps.sharemovement') + ` - ` + seluser.name + ` ` + seluser.surname + ``"
-                    bgcolor="bg-secondary"
-                    clcolor="text-white"
-                    mystyle=" " myclass="myshad" :canopen="true">
-
-        <div :class="myclassreq">
-
-          <div v-if="!isextralist(seluser)">
-            <div v-for="(req, index) of arrrequisiti_liberi">
-              <CRequisito :icon="req.icon" :text="$t(req.textlang, {botname: $t('ws.botname')}) + req.textadd(seluser)"
-                          :icon_error="geticonerror(false)"
-                          :no_check="true"
-                          :isok="req.isok(seluser)"
-                          :info="req.info"></CRequisito>
-            </div>
-
-          </div>
-
-        </div>
-      </CTitleBanner>
       <!--<div v-else>
         <div class="column justify-center q-gutter-sm q-pa-sm">
 

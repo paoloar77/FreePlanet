@@ -1,6 +1,13 @@
 import Vue from 'vue'
+import { Component, Prop, Watch } from 'vue-property-decorator'
 
-export default class Signin_noreg extends Vue {
+import { CSigninNoreg } from '@components'
+
+@Component({
+  components: { CSigninNoreg }
+})
+
+export default class SigninNoreg extends Vue {
   public $v
   public $q
 

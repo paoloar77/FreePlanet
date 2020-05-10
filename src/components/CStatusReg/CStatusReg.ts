@@ -27,9 +27,9 @@ export default class CStatusReg extends MixinBase {
   public polling = null
   public numpolled: number = 0
   public datastat: INotData = {
-    num_tot_lista: 0,
-    num_reg_lista: 0,
     num_reg: 0,
+    num_passeggeri: 0,
+    num_imbarcati: 0,
     num_teleg_attivo: 0,
     email_non_verif: 0,
     num_teleg_pending: 0,
@@ -39,7 +39,7 @@ export default class CStatusReg extends MixinBase {
 
   public async checkifpolling() {
     if (UserStore.state.my.profile) {
-      if (!UserStore.state.my.verified_email || UserStore.state.my.profile.teleg_id <= 0)
+      if (!UserStore.state.my.verified_email || (UserStore.state.my.profile.teleg_id <= 0 && (tools.appid() === tools.IDAPP_AYNI)))
         this.NUMSEC_TO_POLLING = 10
     }
 
@@ -124,13 +124,6 @@ export default class CStatusReg extends MixinBase {
     this.checkifpolling()
   }
 
-  get perc_reg() {
-    if (this.datastat.num_tot_lista > 0)
-      return (this.datastat.num_reg_lista / this.datastat.num_tot_lista * 100)
-    else
-      return 0
-  }
-
   public calcperc(val1, valmax ) {
     if (valmax > 0)
       return (val1 / valmax * 100)
@@ -139,7 +132,7 @@ export default class CStatusReg extends MixinBase {
   }
 
   get visustat() {
-    return this.datastat.num_reg > 0 || this.datastat.num_reg_lista > 0
+    return this.datastat.num_reg > 0
   }
 
   get telegnonattivi() {

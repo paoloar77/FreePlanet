@@ -63,6 +63,7 @@ namespace Actions {
         state.datastat = res.data.datastat
         state.datastat.arr_nations = JSON.parse(state.datastat.arr_nations)
         state.datastat.reg_daily = JSON.parse(state.datastat.reg_daily)
+        state.datastat.reg_weekly = JSON.parse(state.datastat.reg_weekly)
         state.datastat.checkuser = JSON.parse(state.datastat.checkuser)
 
         return state.datastat

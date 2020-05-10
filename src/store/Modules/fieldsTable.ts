@@ -1,12 +1,12 @@
+import { tools } from './tools'
 import { IColGridTable } from '../../model'
 import { lists } from './lists'
-import { tools } from '@src/store/Modules/tools'
 import { shared_consts } from '@src/common/shared_vuejs'
 import { GlobalStore, UserStore } from '@store'
 
 const DeleteRec = {
   name: 'deleterec',
-  label_trans: 'newsletter.reset',
+  label_trans: 'reg.elimina',
   align: 'right',
   field: tools.NOFIELD,
   sortable: false,
@@ -163,20 +163,20 @@ const colnavi = [
   AddCol({ name: '_id', label_trans: 'others.value' }),
   AddCol({ name: 'riga', label_trans: 'reg.riga' }),
   AddCol({ name: 'col', label_trans: 'reg.col' }),
-  AddCol({ name: 'indprimario', label_trans: 'indprimario' }),
   AddCol({ name: 'ind_order', label_trans: 'ind_order' }),
-  AddCol({ name: 'parent_id', label_trans: 'parent_id' }),
+  AddCol({ name: 'created', label_trans: 'cal.data', fieldtype: tools.FieldType.date }),
   // AddCol({ name: 'date_start', label_trans: 'date_start', fieldtype: tools.FieldType.date }),
   // AddCol({ name: 'date_gift_chat_open', label_trans: 'date_gift_chat_open', fieldtype: tools.FieldType.date }),
   // AddCol({ name: 'link_chat', label_trans: 'reg.link_chat' }),
+  AddCol({ name: 'parent_id', label_trans: 'parent_id' }),
   AddCol({ name: 'sent_msg_howto_make_gift', label_trans: 'sent_msg_howto_make_gift', fieldtype: tools.FieldType.boolean }),
-  AddCol({ name: 'made_gift', label_trans: 'reg.made_gift', fieldtype: tools.FieldType.boolean }),
   // AddCol({ name: 'provvisoria', label_trans: 'reg.provvisoria', fieldtype: tools.FieldType.boolean }),
+  AddCol({ name: 'made_gift', label_trans: 'reg.made_gift', fieldtype: tools.FieldType.boolean }),
   AddCol({ name: 'date_made_gift', label_trans: 'date_made_gift', fieldtype: tools.FieldType.date }),
-  AddCol({ name: 'received_gift', label_trans: 'received_gift', fieldtype: tools.FieldType.boolean }),
-  AddCol({ name: 'date_received_gift', label_trans: 'date_received_gift', fieldtype: tools.FieldType.date }),
+  // AddCol({ name: 'received_gift', label_trans: 'received_gift', fieldtype: tools.FieldType.boolean }),
+  // AddCol({ name: 'date_received_gift', label_trans: 'date_received_gift', fieldtype: tools.FieldType.date }),
   AddCol({ name: 'num_tess', label_trans: 'num_tess', fieldtype: tools.FieldType.number }),
-  // AddCol({ name: 'note_bot', label_trans: 'note_bot', fieldtype: tools.FieldType.string }),
+  AddCol({ name: 'note', label_trans: 'note', fieldtype: tools.FieldType.string }),
   // AddCol({ name: 'note_interne', label_trans: 'note_interne', fieldtype: tools.FieldType.string }),
   // AddCol({ name: 'tutor', label_trans: 'tutor', fieldtype: tools.FieldType.string }),
   AddCol(DeleteRec),
@@ -199,12 +199,14 @@ const colnavepersistente = [
 
 const collistaingresso = [
   AddCol({ name: '_id', label_trans: 'others.value' }),
-  AddCol({ name: 'indprimario', label_trans: 'indprimario' }),
   AddCol({ name: 'ind_order', label_trans: 'ind_order' }),
+  AddCol({ name: 'username', label_trans: 'reg.username_short' }),
+  AddCol({ name: 'invitante_username', label_trans: 'reg.aportador_solidario' }),
   AddCol({ name: 'date_added', label_trans: 'date_added', fieldtype: tools.FieldType.date }),
-  AddCol({ name: 'added', label_trans: 'added', fieldtype: tools.FieldType.boolean }),
+  AddCol({ name: 'added', label_trans: 'Aggiunto', fieldtype: tools.FieldType.boolean }),
   AddCol({ name: 'num_tess', label_trans: 'num_tess', fieldtype: tools.FieldType.number }),
-  AddCol({ name: 'deleted', label_trans: 'deleted', fieldtype: tools.FieldType.boolean }),
+  AddCol({ name: 'note', label_trans: 'reg.note', fieldtype: tools.FieldType.string }),
+  AddCol({ name: 'deleted', label_trans: 'reg.deleted', fieldtype: tools.FieldType.boolean }),
   AddCol(DuplicateRec),
   AddCol(DeleteRec)
 ]
@@ -398,7 +400,7 @@ export const fieldsTable = {
 
   getTableJoinByName(table) {
     if (table === 'permissions')
-      return [shared_consts.Permissions.Admin, shared_consts.Permissions.Manager, shared_consts.Permissions.Teacher, shared_consts.Permissions.Tutor]
+      return [shared_consts.Permissions.Admin, shared_consts.Permissions.Manager, shared_consts.Permissions.Teacher, shared_consts.Permissions.Tutor, shared_consts.Permissions.Traduttrici]
     else if (table === 'accepted')
       return [shared_consts.Accepted.CHECK_READ_GUIDELINES, shared_consts.Accepted.CHECK_SEE_VIDEO_PRINCIPI]
     else if (table === 'fieldstype')
@@ -446,6 +448,9 @@ export const fieldsTable = {
     AddCol({ name: 'typeconf', label_trans: 'zoom.typeconf' }),
     AddCol({ name: 'date_start', label_trans: 'event.dateTimeStart', fieldtype: tools.FieldType.date }),
     AddCol({ name: 'date_end', label_trans: 'event.dateTimeEnd' , fieldtype: tools.FieldType.date }),
+    AddCol({ name: 'benvenuto', label_trans: 'event.benvenuto' , fieldtype: tools.FieldType.boolean }),
+    AddCol({ name: 'icon', label_trans: 'event.icon' , fieldtype: tools.FieldType.string }),
+    AddCol({ name: 'color', label_trans: 'event.color' , fieldtype: tools.FieldType.string }),
     AddCol({ name: 'id_conf_zoom', label_trans: 'zoom.id_conf_zooom' }),
     AddCol({ name: 'note', label_trans: 'zoom.note' }),
     AddCol(DeleteRec),
@@ -453,7 +458,10 @@ export const fieldsTable = {
   ],
 
   colTableUsersBase: [
+    AddCol({ name: 'index', label_trans: 'reg.index' }),
     AddCol({ name: 'ind_order', label_trans: 'reg.ind_order' }),
+    AddCol({ name: 'sospeso', label_trans: 'reg.sospeso', fieldtype: tools.FieldType.boolean }),
+    AddCol({ name: 'deleted', label_trans: 'reg.deleted', fieldtype: tools.FieldType.boolean }),
     AddCol({ name: 'date_reg', label_trans: 'reg.date_reg', fieldtype: tools.FieldType.date }),
     AddCol({ name: 'username', label_trans: 'reg.username_short' }),
     AddCol({ name: 'name', label_trans: 'reg.name' }),
@@ -470,37 +478,41 @@ export const fieldsTable = {
     // IColGridTable
   colTableUsers: [
     AddCol({ name: '_id', label_trans: 'reg.id' }),
+    AddCol({ name: 'index', label_trans: 'reg.index', fieldtype: tools.FieldType.number }),
     AddCol({ name: 'ind_order', label_trans: 'reg.ind_order' }),
-    AddCol({ name: 'date_reg', label_trans: 'reg.date_reg', fieldtype: tools.FieldType.date }),
-    AddCol({ name: 'date_temp_reg', label_trans: 'reg.date_temp_reg', fieldtype: tools.FieldType.date }),
+    AddCol({ name: 'old_order', label_trans: 'old_order' }),
+    AddCol({ name: 'sospeso', label_trans: 'reg.sospeso', fieldtype: tools.FieldType.boolean }),
+    AddCol({ name: 'deleted', label_trans: 'reg.deleted', fieldtype: tools.FieldType.boolean }),
     AddCol({ name: 'username', label_trans: 'reg.username_short' }),
+    AddCol({ name: 'username_main', label_trans: 'reg.username_main' }),
     AddCol({ name: 'name', label_trans: 'reg.name' }),
     AddCol({ name: 'surname', label_trans: 'reg.surname' }),
     AddCol({ name: 'email', label_trans: 'reg.email' }),
-    AddCol({ name: 'made_gift', label_trans: 'reg.made_gift', fieldtype: tools.FieldType.boolean }),
-    AddCol({ name: 'note', label_trans: 'reg.note' }),
-    AddCol({ name: 'aportador_solidario_ind_order', label_trans: 'reg.aportador_solidario_ind_order' }),
-    AddCol({ name: 'aportador_solidario_nome_completo', label_trans: 'reg.aportador_solidario_nome_completo' }),
-    AddCol({ name: 'aportador_solidario', label_trans: 'reg.aportador_solidario' }),
     AddCol({ name: 'verified_email', label_trans: 'reg.verified_email', fieldtype: tools.FieldType.boolean }),
+    AddCol({ name: 'profile.teleg_id', field: 'profile', subfield: 'teleg_id', label_trans: 'reg.teleg_id' }),
+    AddCol({ name: 'profile.saw_and_accepted', field: 'profile', subfield: 'saw_and_accepted', label_trans: 'reg.saw_and_accepted', fieldtype: tools.FieldType.binary, jointable: 'accepted'  }),
     AddCol({ name: 'profile.saw_zoom_presentation', field: 'profile', subfield: 'saw_zoom_presentation', label_trans: 'reg.saw_zoom_presentation', fieldtype: tools.FieldType.boolean  }),
+    AddCol({ name: 'profile.my_dream', field: 'profile', subfield: 'my_dream', label_trans: 'reg.my_dream' }),
+    AddCol({ name: 'profile.email_paypal', field: 'profile', subfield: 'email_paypal', label_trans: 'reg.email_paypal' }),
+    AddCol({ name: 'profile.paymenttypes', field: 'profile', subfield: 'paymenttypes', label_trans: 'reg.paymenttype', fieldtype: tools.FieldType.multiselect, jointable: 'paymenttypes' }),
+    // AddCol({ name: 'made_gift', label_trans: 'reg.made_gift', fieldtype: tools.FieldType.boolean }),
+    AddCol({ name: 'note', label_trans: 'reg.note' }),
+    // AddCol({ name: 'aportador_solidario_ind_order', label_trans: 'reg.aportador_solidario_ind_order' }),
+    // AddCol({ name: 'aportador_solidario_nome_completo', label_trans: 'reg.aportador_solidario_nome_completo' }),
+    AddCol({ name: 'aportador_solidario', label_trans: 'reg.aportador_solidario' }),
     AddCol({ name: 'profile.special_req', field: 'profile', subfield: 'special_req', label_trans: 'reg.special_req', fieldtype: tools.FieldType.boolean  }),
     AddCol({ name: 'profile.vuole_ritessersi', field: 'profile', subfield: 'vuole_ritessersi', label_trans: 'reg.vuole_ritessersi', fieldtype: tools.FieldType.boolean  }),
-    AddCol({ name: 'profile.saw_and_accepted', field: 'profile', subfield: 'saw_and_accepted', label_trans: 'reg.saw_and_accepted', fieldtype: tools.FieldType.binary, jointable: 'accepted'  }),
-    AddCol({ name: 'profile.my_dream', field: 'profile', subfield: 'my_dream', label_trans: 'reg.my_dream' }),
     AddCol({ name: 'lang', field: 'lang', label_trans: 'reg.lang' }),
     AddCol({ name: 'profile.nationality', field: 'profile', subfield: 'nationality', label_trans: 'reg.nationality' }),
     AddCol({ name: 'profile.intcode_cell', field: 'profile', subfield: 'intcode_cell', label_trans: 'reg.intcode_cell' }),
     AddCol({ name: 'profile.iso2_cell', field: 'profile', subfield: 'iso2_cell', label_trans: 'reg.iso2_cell' }),
     AddCol({ name: 'profile.cell', field: 'profile', subfield: 'cell', label_trans: 'reg.cell' }),
-    AddCol({ name: 'profile.email_paypal', field: 'profile', subfield: 'email_paypal', label_trans: 'reg.email_paypal' }),
     AddCol({ name: 'profile.country_pay', field: 'profile', subfield: 'country_pay', label_trans: 'reg.country_pay' }),
-    AddCol({ name: 'profile.teleg_id', field: 'profile', subfield: 'teleg_id', label_trans: 'reg.teleg_id' }),
     AddCol({ name: 'profile.teleg_id_old', field: 'profile', subfield: 'teleg_id_old', label_trans: 'reg.teleg_id_old' }),
     AddCol({ name: 'profile.teleg_checkcode', field: 'profile', subfield: 'teleg_checkcode', label_trans: 'reg.teleg_checkcode' }),
     AddCol({ name: 'profile.manage_telegram', field: 'profile', subfield: 'manage_telegram', label_trans: 'reg.manage_telegram', fieldtype: tools.FieldType.boolean  }),
-    AddCol({ name: 'profile.paymenttypes', field: 'profile', subfield: 'paymenttypes', label_trans: 'reg.paymenttype', fieldtype: tools.FieldType.multiselect, jointable: 'paymenttypes' }),
     AddCol({ name: 'profile.img', field: 'profile', subfield: 'img', label_trans: 'reg.img', sortable: false }),
+    AddCol({ name: 'date_reg', label_trans: 'reg.date_reg', fieldtype: tools.FieldType.date }),
     AddCol({ name: 'lasttimeonline', label_trans: 'reg.lasttimeonline', fieldtype: tools.FieldType.date }),
     // AddCol({ name: 'idapp', label_trans: 'reg.idapp', fieldtype: tools.FieldType.string }),
     AddCol({ name: 'perm', label_trans: 'reg.perm', fieldtype: tools.FieldType.binary, jointable: 'permissions' }),
@@ -510,9 +522,10 @@ export const fieldsTable = {
   ],
 
   colTableUsersSIP: [
-    AddCol({ name: '_id', label_trans: 'reg.id' }),
+    // AddCol({ name: '_id', label_trans: 'reg.id' }),
     AddCol({ name: 'ind_order', label_trans: 'reg.ind_order' }),
-    AddCol({ name: 'date_reg', label_trans: 'reg.date_reg', fieldtype: tools.FieldType.date }),
+    AddCol({ name: 'sospeso', label_trans: 'reg.sospeso', fieldtype: tools.FieldType.boolean }),
+    AddCol({ name: 'deleted', label_trans: 'reg.deleted', fieldtype: tools.FieldType.boolean }),
     AddCol({ name: 'username', label_trans: 'reg.username_short' }),
     AddCol({ name: 'name', label_trans: 'reg.name' }),
     AddCol({ name: 'surname', label_trans: 'reg.surname' }),
@@ -534,8 +547,12 @@ export const fieldsTable = {
     AddCol({ name: 'profile.teleg_id_old', field: 'profile', subfield: 'teleg_id_old', label_trans: 'reg.teleg_id_old' }),
     AddCol({ name: 'profile.teleg_checkcode', field: 'profile', subfield: 'teleg_checkcode', label_trans: 'reg.teleg_checkcode' }),
     AddCol({ name: 'profile.manage_telegram', field: 'profile', subfield: 'manage_telegram', label_trans: 'reg.manage_telegram', fieldtype: tools.FieldType.boolean  }),
+    AddCol({ name: 'profile.chisei', field: 'profile', subfield: 'chisei', label_trans: 'reg.chisei'  }),
+    AddCol({ name: 'profile.iltuoimpegno', field: 'profile', subfield: 'iltuoimpegno', label_trans: 'reg.iltuoimpegno'  }),
+    AddCol({ name: 'profile.come_aiutare', field: 'profile', subfield: 'come_aiutare', label_trans: 'reg.iltuoimpegno'  }),
     AddCol({ name: 'profile.paymenttypes', field: 'profile', subfield: 'paymenttypes', label_trans: 'reg.paymenttype', fieldtype: tools.FieldType.multiselect, jointable: 'paymenttypes' }),
     AddCol({ name: 'profile.img', field: 'profile', subfield: 'img', label_trans: 'reg.img', sortable: false }),
+    AddCol({ name: 'date_reg', label_trans: 'reg.date_reg', fieldtype: tools.FieldType.date }),
     AddCol({ name: 'lasttimeonline', label_trans: 'reg.lasttimeonline', fieldtype: tools.FieldType.date }),
     // AddCol({ name: 'idapp', label_trans: 'reg.idapp', fieldtype: tools.FieldType.string }),
     AddCol({ name: 'perm', label_trans: 'reg.perm', fieldtype: tools.FieldType.binary, jointable: 'permissions' }),
@@ -625,7 +642,7 @@ export const fieldsTable = {
       label: 'Lista Ingresso',
       columns: collistaingresso,
       colkey: '_id',
-      collabel: 'indprimario',
+      collabel: 'ind_order',
     },
     {
       value: 'disciplines',

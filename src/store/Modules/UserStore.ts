@@ -79,6 +79,7 @@ const state: IUserState = {
   isAdmin: false,
   isManager: false,
   isTutor: false,
+  isTraduttrici: false,
   usersList: [],
   countusers: 0,
   lastparamquery: {}
@@ -93,13 +94,23 @@ namespace Getters {
 
   const isUserInvalid = b.read((mystate) => {
     try {
-      const ris = (mystate.my._id === undefined) || (mystate.my._id.trim() === '') || (mystate.my.tokens[0] === undefined)
+      // const ris = (mystate.my._id === undefined) || (mystate.my._id.trim() === '') || (mystate.my.tokens[0] === undefined)
+      const ris = (mystate.my._id === undefined) || (mystate.my._id.trim() === '')
       // console.log('state._id', state._id, 'ris', ris)
       return ris
     } catch (e) {
       return true
     }
   }, 'isUserInvalid')
+
+  const isTokenInvalid = b.read((mystate) => {
+    try {
+      const ris = (mystate.my.tokens.length <= 0)
+      return ris
+    } catch (e) {
+      return true
+    }
+  }, 'isTokenInvalid')
 
   const lang = b.read((mystate) => {
     if (state.lang !== '') {
@@ -225,6 +236,9 @@ namespace Getters {
     get isUserInvalid() {
       return isUserInvalid()
     },
+    get isTokenInvalid() {
+      return isTokenInvalid()
+    },
     get lang() {
       return lang()
     },
@@ -291,6 +305,7 @@ namespace Mutations {
     mystate.isManager = tools.isBitActive(mystate.my.perm, shared_consts.Permissions.Manager.value)
     mystate.isTutor = tools.isBitActive(mystate.my.perm, shared_consts.Permissions.Tutor.value)
     mystate.isTeacher = tools.isBitActive(mystate.my.perm, shared_consts.Permissions.Teacher.value)
+    mystate.isTraduttrici = tools.isBitActive(mystate.my.perm, shared_consts.Permissions.Traduttrici.value)
 
     // console.log('authUser', 'state.isAdmin', mystate.isAdmin)
     // console.table(mystate)
@@ -492,7 +507,7 @@ namespace Actions {
       lang: state.lang
     }
 
-    return await Api.SendReq(`/setlang`, 'PATCH', { data: mydata })
+    return Api.SendReq(`/setlang`, 'PATCH', { data: mydata })
       .then((res) => {
         if (res) {
           return (res.data.code === serv_constants.RIS_CODE_OK)
@@ -706,7 +721,7 @@ namespace Actions {
         if ('serviceWorker' in navigator) {
           sub = await navigator.serviceWorker.ready
             .then((swreg) => {
-              console.log('swreg')
+              // console.log('swreg')
               sub = swreg.pushManager.getSubscription()
               return sub
             })
@@ -721,7 +736,7 @@ namespace Actions {
     }
 
     const options = {
-      title: translate('notification.title_subscribed'),
+      title: tools.translate('notification.title_subscribed', [{strin: 'sitename', strout: translate('ws.sitename')}]),
       content: translate('notification.subscribed'),
       openUrl: '/'
     }

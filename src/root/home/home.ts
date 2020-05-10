@@ -46,6 +46,10 @@ export default class Home extends Vue {
     this.initprompt()
   }
 
+  get mythis() {
+    return this
+  }
+
   public mounted() {
     let primo = true
     const mytime = 10000

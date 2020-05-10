@@ -28,8 +28,11 @@ import { shared_consts } from '../../common/shared_vuejs'
 
 export default class CMyRequirement extends MixinUsers {
   @Prop({ required: true }) public myseluser
+  @Prop({ required: false, default: -1 }) public ind_order_ingr: number
+  @Prop({ required: false, default: -1 }) public id_listaingr: number
   @Prop({ required: true }) public mydashboard
   @Prop({ required: false, default: false }) public notitle
+  @Prop({ required: false, default: false }) public showregalainv
   public $t
   public $v
   public $q
@@ -160,8 +163,8 @@ export default class CMyRequirement extends MixinUsers {
               }
             }
             if (!!user.profile)
-              if (!!user.profile.paymenttypes) {
-                const ris = (user.profile.paymenttypes.length >= 1) && ispaypal
+              if (!!user.profile.email_paypal) {
+                const ris = (user.profile.email_paypal !== '') && ispaypal
                 return ris
               }
 
@@ -212,12 +215,20 @@ export default class CMyRequirement extends MixinUsers {
 
   }
 
+  public async update_username() {
+
+    await UserStore.actions.getDashboard({ username: this.dashboard.myself.username }).then((ris) => {
+      this.dashboard = ris
+      this.$emit('aggiorna')
+    })
+  }
+
   public isextralist(user) {
     return !!user.cell_complete
   }
 
   public ismyinvited_notreg(user) {
-    return this.dashboard.downnotreg.find((rec) => rec.ind_order === user.ind_order)
+    // return this.dashboard.downnotreg.find((rec) => rec.ind_order === user.ind_order)
   }
 
   public ismydownline(user) {
@@ -248,7 +259,20 @@ export default class CMyRequirement extends MixinUsers {
 
     await tools.askConfirm(this.$q, translate('reg.regala_invitato'), translate('reg.regala_invitato') + ' ' + user.name + ' ' + user.surname + ' a ' + aportador_solidario + ' ?', translate('dialog.yes'), translate('dialog.no'), this, '', lists.MenuAction.REGALA_INVITATO, 0, {
       param1: user,
-      param2: aportador_solidario,
+      param2: { aportador_solidario },
+      param3: notiftxt
+    })
+  }
+
+  public async RegalaInvitante(user, invitante_username, ind_order_ingr, id_listaingr, notifBottxt) {
+    let notiftxt = ''
+    invitante_username = invitante_username.trim()
+    if (this.notifBot)
+      notiftxt = notifBottxt
+
+    await tools.askConfirm(this.$q, translate('reg.regala_invitante'), translate('reg.regala_invitante') + ' ' + user.name + ' ' + user.surname + ' a ' + invitante_username + ' ?', translate('dialog.yes'), translate('dialog.no'), this, '', lists.MenuAction.REGALA_INVITANTE, 0, {
+      param1: id_listaingr,
+      param2: { invitante_username, ind_order_ingr },
       param3: notiftxt
     })
   }
@@ -294,6 +318,13 @@ export default class CMyRequirement extends MixinUsers {
     })
   }
 
+  get getnotifBotTxtInvitante() {
+    return this.$t('dashboard.ricevuto_dono', {
+      invitato: this.seluser.name + ' ' + this.seluser.surname,
+      mittente: this.dashboard.myself.username
+    })
+  }
+
   get myclassreq() {
     let mycl = 'text-center'
     mycl += (this.ismydownline) ? ' ' + 'background-color: green;' : ''
@@ -307,5 +338,17 @@ export default class CMyRequirement extends MixinUsers {
     else
       return ''
   }
+
+  public isregalainvitante() {
+    return this.ind_order_ingr >= 0
+  }
+
+  public gettitleregala() {
+    if (this.isregalainvitante())
+      return this.$t('reg.regala_invitante')
+    else
+      return this.$t('reg.regala_invitato')
+  }
+
 
 }

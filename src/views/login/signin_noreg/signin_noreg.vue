@@ -1,7 +1,7 @@
 <template>
     <q-page padding class="signin">
-        <CSignInNoreg>
-        </CSignInNoreg>
+        <CSigninNoreg :showregbutt="false">
+        </CSigninNoreg>
     </q-page>
 </template>
 

@@ -23,6 +23,10 @@ export default class CUserBadge extends MixinBase {
   @Prop({ required: true }) public user: IUserFields
   @Prop({ required: true }) public numpeople: number
   @Prop({ required: true }) public mycolor: string
+  @Prop({ required: false, default: true }) public showsteps: boolean
+  @Prop({ required: false, default: true }) public showregalainv: boolean
+  @Prop({ required: false, default: -1 }) public ind_order_ingr: number
+  @Prop({ required: false, default: -1 }) public id_listaingr: number
   public $v
   public $t: any
 
@@ -47,10 +51,12 @@ export default class CUserBadge extends MixinBase {
   }
 
   public getindorder(user) {
-    if (!!user.ind_order)
+    /*if (!!user.username)
       return ' (' + user.ind_order + ')'
     else
       return ''
+      */
+    return ''
   }
 
   public getmoneycolor(user) {
@@ -92,7 +98,7 @@ export default class CUserBadge extends MixinBase {
   }
 
   public execclick(user) {
-    this.$emit('myclick', user)
+    this.$emit('myclick', user, this.showregalainv, this.ind_order_ingr, this.id_listaingr)
   }
 
   public getnumreq(user) {

@@ -1,0 +1,53 @@
+.title-nave {
+  color: blue;
+}
+
+.titlenave{
+  width: 100px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.cont_pos {
+  border: solid 2px #4198ef;
+  padding: 2px 8px;
+  margin: 2px 4px;
+  font-size: 1rem;
+  border-radius: 16px;
+}
+
+.cont_pos, .cont_pos_intest{
+  padding-left: 12px;
+  padding-right: 12px;
+  border-radius: 64px !important;
+  color: red;
+}
+
+.cont_pos_intest {
+  width: 37px;
+  font-size: 0.75rem;
+}
+
+.extra{
+  opacity: 1;
+}
+
+.passo{
+  font-weight: bold;
+  width: 100px;
+}
+
+.posizione_imbarco {
+  font-weight: bold;
+  font-size: 1rem;
+  color: blue;
+  text-align: -webkit-center;
+}
+
+.ins_invitante{
+  font-weight: bold;
+}
+
+.q-tab-panel {
+  padding: 8px;
+}

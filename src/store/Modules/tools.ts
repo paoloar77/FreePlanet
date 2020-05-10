@@ -40,6 +40,7 @@ const { height, width } = dom
 
 import Cookies from 'js-cookie'
 import { forEachComment } from 'tslint'
+import messages from '@src/statics/i18n'
 
 const TokenKey = 'Admin-Token'
 
@@ -51,12 +52,16 @@ export interface INotify {
 
 export const tools = {
   CAN_EDIT: 'q-ce',
+  TABBED_DASHBOARD: 't-db',
 
   getprefCountries: ['it', 'si', 'us', 'es', 'pt', 'uk', 'fr', 'de', 'ch', 'br', 'sk'],
 
   APORTADOR_NONE: '------',
 
   APORTADOR_SOLIDARIO: 'apsol',
+
+  IDAPP_AYNI: '7',
+  IDAPP_SIP: '9',
 
   TipoMsg: {
     SEND_LINK_CHAT_DONATORI: 1,
@@ -83,6 +88,7 @@ export const tools = {
 
   TABUSER: 'users',
   TABNAVI: 'navi',
+  TABLISTAINGRESSO: 'listaingressos',
   TABEVENTS: 'myevents',
   TABEXTRALIST: 'extralist',
   TABNEWSLETTER: 'newstosent',
@@ -1157,7 +1163,7 @@ export const tools = {
 
   getItemLS(item) {
     let ris = localStorage.getItem(item)
-    if ((ris == null) || (ris === '') || (ris === 'null')) {
+    if ((ris == null) || (ris === '') || (ris === 'null') || !ris) {
       ris = ''
     }
 
@@ -1408,8 +1414,8 @@ export const tools = {
 
   visumenu(elem) {  // : IListRoutes
     let visu = ((elem.onlyAdmin && UserStore.state.isAdmin) || (elem.onlyManager && UserStore.state.isManager)
-      || (elem.onlyTutor && UserStore.state.isTutor)
-      || ((!elem.onlyAdmin) && (!elem.onlyManager) && (!elem.onlyTutor))) && elem.active
+      || (elem.onlyTutor && UserStore.state.isTutor) || (elem.onlyTraduttrici && UserStore.state.isTraduttrici)
+      || ((!elem.onlyAdmin) && (!elem.onlyManager) && (!elem.onlyTutor) && (!elem.onlyTraduttrici))) && elem.active
 
     if (!tools.isLoggedToSystem()) {
       if (elem.onlyif_logged)
@@ -1466,21 +1472,116 @@ export const tools = {
       })
     } else if (func === lists.MenuAction.REGALA_INVITATO) {
       // console.log('param1', par.param1, 'id', par.param1._id)
+      let mydatatosave = {
+        id: null,
+        username: '',
+        table: '',
+        fieldsvalue: {},
+        notifBot: {}
+      };
+
+      if (!!par.param1.invitante_username) {
+        mydatatosave = {
+          id: par.param1._id,
+          username: par.param1.username,
+          table: tools.TABLISTAINGRESSO,
+          fieldsvalue: { invitante_username: par.param2.aportador_solidario },
+          notifBot: null
+        }
+      } else {
+        mydatatosave = {
+          id: par.param1._id,
+          username: '',
+          table: tools.TABUSER,
+          fieldsvalue: { aportador_solidario: par.param2.aportador_solidario },
+          notifBot: null
+        }
+      }
+
+      console.log('** par.param1', par.param1)
+      console.log('** id', par.param1._id)
+
+      if (par.param3) {
+        mydatatosave.notifBot = { un: par.param2.aportador_solidario, txt: par.param3 }
+      }
+
+      GlobalStore.actions.saveFieldValue(mydatatosave).then((ris) => {
+        console.log('ris saveFieldValue', ris)
+        if (ris) {
+          tools.showPositiveNotif(myself.$q, myself.$t('reg.invitato_regalato') + ' "' + par.param1.name + ' ' + par.param1.surname + '"')
+          myself.update_username()
+        } else
+          tools.showNegativeNotif(myself.$q, myself.$t('db.recfailed'))
+      })
+    } else if (func === lists.MenuAction.REGALA_INVITANTE) {
+      // console.log('param1', par.param1, 'id', par.param1._id)
       const mydatatosave = {
-        id: par.param1._id,
-        table: tools.TABUSER,
-        fieldsvalue: { aportador_solidario: par.param2 },
+        id: par.param1,
+        table: tools.TABLISTAINGRESSO,
+        fieldsvalue: { invitante_username: par.param2.invitante_username, ind_order_ingr: par.param2.ind_order_ingr },
         notifBot: null
       }
 
       if (par.param3) {
-        mydatatosave.notifBot = { un: par.param2, txt: par.param3 }
+        mydatatosave.notifBot = { un: par.param2.invitante_username, txt: par.param3 }
       }
 
       GlobalStore.actions.saveFieldValue(mydatatosave).then((ris) => {
+        console.log('ris saveFieldValue', ris)
+        if (ris) {
+          tools.showPositiveNotif(myself.$q, myself.$t('reg.invitato_regalato') + ' "' + par.param1.name + ' ' + par.param1.surname + '"')
+          myself.update_username()
+        } else
+          tools.showNegativeNotif(myself.$q, myself.$t('db.recfailed'))
+      })
+    } else if ((func === lists.MenuAction.AGGIUNGI_NUOVO_IMBARCO) || (func === lists.MenuAction.CANCELLA_IMBARCO)) {
+      const mydatatosave = {
+        username: par.param1.username,
+        invitante_username: '',
+        ind_order: -1,
+        myfunc: func,
+        data: par.param2,
+        notifBot: null
+      }
+
+      if (func === lists.MenuAction.CANCELLA_IMBARCO) {
+        mydatatosave.ind_order = par.param1.ind_order
+      }
+      if (func === lists.MenuAction.AGGIUNGI_NUOVO_IMBARCO) {
+        mydatatosave.invitante_username = par.param1.invitante_username
+      }
+
+      myself.loading = true
+
+      mydatatosave.notifBot = { un: par.param2, txt: par.param3 }
+
+      GlobalStore.actions.callFunz({ mydata: mydatatosave }).then((ris) => {
+        myself.loading = false
         if (ris) {
           myself.update_username()
-          tools.showPositiveNotif(myself.$q, myself.$t('reg.invitato_regalato') + ' "' + par.param1.name + ' ' + par.param1.surname + '"')
+          if (func === lists.MenuAction.AGGIUNGI_NUOVO_IMBARCO)
+            tools.showPositiveNotif(myself.$q, myself.$t('steps.sei_stato_aggiunto'))
+          else if (func === lists.MenuAction.CANCELLA_IMBARCO)
+            tools.showPositiveNotif(myself.$q, myself.$t('event.deleted'))
+        } else
+          tools.showNegativeNotif(myself.$q, myself.$t('db.recfailed'))
+      })
+    } else if (func === lists.MenuAction.SOSTITUISCI) {
+      // console.log('param1', par.param1, 'id', par.param1._id)
+      const mydatatosave = {
+        id: par.param1._id,
+        ind_order: par.param1.ind_order,
+        myfunc: func,
+        data: par.param2,
+        notifBot: null
+      }
+
+      mydatatosave.notifBot = { un: par.param2, txt: par.param3 }
+
+      GlobalStore.actions.callFunz({ mydata: mydatatosave }).then((ris) => {
+        if (ris) {
+          myself.update_nave()
+          tools.showPositiveNotif(myself.$q, par.param3 + '\n' + ' e inviato messaggio per aprire la Gift Chat!')
         } else
           tools.showNegativeNotif(myself.$q, myself.$t('db.recfailed'))
       })
@@ -1552,7 +1653,7 @@ export const tools = {
       const mydatatosave = {
         id: par.param1._id,
         table: tools.TABNAVI,
-        fieldsvalue: { made_gift: par.param1.made_gift },
+        fieldsvalue: { made_gift: par.param1.made_gift, riga: par.param1.riga, col: par.param1.col },
         notifBot: null
       }
 
@@ -1591,6 +1692,7 @@ export const tools = {
   async askConfirm($q: any, mytitle, mytext, ok, cancel, myself: any, table, funcok: number, funccancel: number, par: IParamDialog) {
     return $q.dialog({
       message: mytext,
+      html: true,
       ok: {
         label: ok,
         push: true
@@ -1663,12 +1765,14 @@ export const tools = {
   ,
 
   checkLangPassed(mylang) {
-    // console.log('checkLangPassed')
+    console.log('checkLangPassed ', mylang)
 
     const mybrowserLang = Quasar.lang.isoName
 
     if (mylang !== '') {
-      if ((mylang.toLowerCase() === 'enus') || (mylang.toLowerCase() === 'en-us')) {
+      if ((mylang.toLowerCase() === 'enus') || (mylang.toLowerCase() === 'en-us') || (mylang.toLowerCase() === 'uk')
+        || (mylang.toLowerCase() === 'uk-uk') || (mylang.toLowerCase() === 'en-uk') || (mylang.toLowerCase() === 'en-gb')
+        || (mylang.toLowerCase() === 'gb-gb')) {
         mylang = 'enUs'
       }
       if ((mylang.toLowerCase() === 'es') || (mylang.toLowerCase() === 'es-es') || (mylang.toLowerCase() === 'eses')) {
@@ -1698,6 +1802,7 @@ export const tools = {
 
     if (!mylang) {
       mylang = process.env.LANG_DEFAULT
+      console.log('LANG DEFAULT: ', mylang)
     }
 
     if (toolsext.getLocale(true) === '') {
@@ -1889,6 +1994,10 @@ export const tools = {
     return UserStore.state.isTutor
   },
 
+  isTraduttrici() {
+    return UserStore.state.isTraduttrici
+  },
+
   getstrDate(mytimestamp) {
     // console.log('getstrDate', mytimestamp)
     if (!!mytimestamp)
@@ -1909,6 +2018,14 @@ export const tools = {
     // console.log('getstrDate', mytimestamp)
     if (!!mytimestamp)
       return date.formatDate(mytimestamp, 'DD/MM HH:mm')
+    else
+      return ''
+  },
+
+  getstrshortDayDateTime(mytimestamp) {
+    // console.log('getstrDate', mytimestamp)
+    if (!!mytimestamp)
+      return date.formatDate(mytimestamp, 'DD HH:mm')
     else
       return ''
   },
@@ -2346,15 +2463,16 @@ export const tools = {
   }
   ,
 
-  askfornotification() {
-    tools.showNotif(this.$q, this.$t('notification.waitingconfirm'), { color: 'positive', icon: 'notifications' })
+  askfornotification(mythis) {
+    console.log('askfornotification')
+    tools.showNotif(mythis.$q, mythis.$t('notification.waitingconfirm'), { color: 'positive', icon: 'notifications' })
 
     Notification.requestPermission((result) => {
       console.log('User Choice', result)
       if (result === 'granted') {
-        tools.showNotif(this.$q, this.$t('notification.confirmed'), { color: 'positive', icon: 'notifications' })
+        tools.showNotif(mythis.$q, mythis.$t('notification.confirmed'), { color: 'positive', icon: 'notifications' })
       } else {
-        tools.showNotif(this.$q, this.$t('notification.denied'), { color: 'negative', icon: 'notifications' })
+        tools.showNotif(mythis.$q, mythis.$t('notification.denied'), { color: 'negative', icon: 'notifications' })
 
         // displayConfirmNotification();
       }
@@ -2843,7 +2961,7 @@ export const tools = {
       tools.showNotif(mythis.$q, msg)
     } else if (riscode === tools.OK) {
       mythis.$router.push('/regok')
-      tools.showNotif(mythis.$q, mythis.$t('components.authentication.email_verification.link_sent', {botname: mythis.$t('ws.botname') }), {
+      tools.showNotif(mythis.$q, mythis.$t('components.authentication.email_verification.link_sent', { botname: mythis.$t('ws.botname') }), {
         color: 'green',
         textColor: 'black'
       })
@@ -3425,12 +3543,38 @@ export const tools = {
     return val
   },
 
+  translate(params, options?) {
+    const msg = params.split('.')
+    const lang = toolsext.getLocale()
+
+    const stringa = messages[lang]
+
+    let ris = stringa
+    if (!!ris) {
+      msg.forEach((param) => {
+        ris = ris[param]
+      })
+
+      if (!!options) {
+        ris = this.myprintf(ris, options)
+      }
+
+    } else {
+      console.log('ERRORE IN TRANSLATE! ', params, ' NON ESISTE!')
+      return params
+    }
+
+    return ris
+  },
+
   isPayPalSel(user) {
     let ispaypal = false
     if (user.profile.paymenttypes) {
       if (user.profile.paymenttypes.includes('paypal')) {
-        if (user.email_paypal !== '')
-          ispaypal = true
+        if (!!user.profile.email_paypal) {
+          if (user.profile.email_paypal !== '')
+            ispaypal = true
+        }
       }
     }
     return ispaypal
@@ -3454,6 +3598,109 @@ export const tools = {
   Is7ReqOk(user) {
     return this.getnumrequisiti(user) === 7
   },
+
+  getRiganave(riga) {
+    let ris = riga - 3
+    if (ris <= 1)
+      ris = 1
+
+    return ris
+  },
+
+  getColnave(col) {
+    let ris = Math.ceil(col / (2 * 4))
+    if (ris <= 1)
+      ris = 1
+    return ris
+  },
+
+  getrigacolstr(mianave) {
+    return this.getRiganave(mianave.riga) + '.' + this.getColnave(mianave.col)
+  },
+
+  getmaxcol(riga) {
+
+    return Math.pow(2, riga - 1)
+  },
+
+  getrigaNaveByPosiz(riga) {
+    let ris = riga + 3
+    if (ris <= 1)
+      ris = 1
+    return ris
+
+  },
+
+  getcolNaveByPosiz(col) {
+    let ris = Math.ceil(col * Math.pow(2, 3) / (2 * 4))
+    if (ris <= 1)
+      ris = 1
+    return ris
+
+  },
+
+  getfirstnaveSognatore(riga, col) {
+    const myriga = this.getrigaNaveByPosiz(riga)
+    const mycol = this.getcolNaveByPosiz(col)
+
+    return { riga: myriga, col: mycol }
+  },
+
+  getnumnavi_finoa(naveorig, navedest, lastnave) {
+    let contaattuale = 0
+    let contatot = 0
+
+    const indrigaattuale = lastnave.riga
+    const indcolattuale = lastnave.col
+
+    if (navedest.riga < indrigaattuale) {
+      return { perc: 100, totale: 0, contaattuale: 0 }
+    }
+
+    for (let indriga = naveorig.riga; indriga <= navedest.riga; indriga++) {
+
+      let startcol = 0
+      if (indriga === naveorig.riga) {
+        startcol = naveorig.col
+      }
+      let endcol = this.getmaxcol(indriga)
+      if (indriga === navedest.riga) {
+        endcol = navedest.col
+      }
+
+      if (indriga <= navedest.riga) {
+        contatot += (endcol - startcol)
+      }
+
+      if (indriga < indrigaattuale) {
+        contaattuale += (endcol - startcol)
+      } else if (indriga === indrigaattuale) {
+        contaattuale += indcolattuale
+      }
+    }
+
+    let perc = 0
+    if (contatot > 0)
+      perc = (contaattuale / contatot) * 100
+
+    if (perc > 100)
+      perc = 100
+
+    console.log('naveorig', naveorig.riga, '.', naveorig.col, 'dest', navedest.riga, ',', navedest.col)
+    console.log('lastnave', lastnave.riga, '.', lastnave.col)
+    console.log('contaattuale', contaattuale, 'contatot', contatot, 'perc', perc)
+
+    return { perc, totale: contatot, contaattuale }
+  },
+
+  sito_online(pertutti) {
+
+    let ris = true
+    const online = this.getValDb('SITO_ONLINE', false, true)
+    ris = UserStore.state.isAdmin && !pertutti ? true : online
+    // console.log('isadmin', UserStore.state.isAdmin)
+    return ris
+  }
 
 
 // getLocale() {

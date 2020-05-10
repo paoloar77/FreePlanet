@@ -74,9 +74,9 @@ export default class Listadoninavi extends MixinBase {
     { name: 'mediatore', align: 'center', label: '🌀 Mediatore', field: '', sortable: true },
     { name: 'sognatore', align: 'center', label: 'Sognatore', field: '', sortable: true },
     { name: 'donatori', align: 'center', label: 'Donatori', field: '', sortable: true },
+    { name: 'DoniConfermati', align: 'center', label: '🎁 OK', field: 'DoniConfermati', sortable: true },
     { name: 'DoniAttesaDiConferma', align: 'center', label: '🎁 Wait', field: 'DoniAttesaDiConferma', sortable: true },
     { name: 'DoniMancanti', align: 'center', label: '🎁 Miss', field: 'DoniMancanti', sortable: true },
-    { name: 'DoniConfermati', align: 'center', label: '🎁 OK', field: 'DoniConfermati', sortable: true },
     { name: 'note_bot', align: 'left', label: 'Note Placca', field: 'note_bot', sortable: true },
     { name: 'note_interne', align: 'left', label: 'Note Interne', field: 'note_interne', sortable: true },
   ]
@@ -140,10 +140,12 @@ export default class Listadoninavi extends MixinBase {
       donatore: rec.name + ' ' + rec.surname
     })
 
-    tools.askConfirm(this.$q, msgtitle, msginvia + ' ' + '?', translate('dialog.yes'), translate('dialog.no'), this, '', lists.MenuAction.DONO_RICEVUTO, 0, {
+    tools.askConfirm(this.$q, msgtitle, msginvia + ' ' + '? (Pos ' + rec.riga + '.' + rec.col + ')', translate('dialog.yes'), translate('dialog.no'), this, '', lists.MenuAction.DONO_RICEVUTO, 0, {
       param1: {
         _id: rec._id,
-        made_gift: true
+        made_gift: true,
+        riga: rec.riga,
+        col: rec.col,
       },
       param2: '',
       param3: ''
@@ -172,7 +174,7 @@ export default class Listadoninavi extends MixinBase {
 
     tools.askConfirm(this.$q, msgtitle, msgobj.msgpar1 + ' ' + '?', translate('dialog.yes'), translate('dialog.no'), this, '', lists.MenuAction.INVIA_MSG_A_DONATORI, 0, {
       param1: msgobj,
-      param2: navemediatore,
+      param2: navemediatore
     })
 
   }
@@ -183,7 +185,7 @@ export default class Listadoninavi extends MixinBase {
 
     tools.askConfirm(this.$q, msgtitle, msgobj.msgpar1 + ' ' + '?', translate('dialog.yes'), translate('dialog.no'), this, '', lists.MenuAction.INVIA_MSG_A_SINGOLO, 0, {
       param1: msgobj,
-      param2: navemediatore,
+      param2: navemediatore
     })
 
   }
@@ -196,7 +198,7 @@ export default class Listadoninavi extends MixinBase {
     const msgobj = {
       tipomsg: tools.TipoMsg.SEND_MSG,
       msgpar1: this.msg_tosend,
-      inviareale: true,
+      inviareale: true
     }
 
     const navemediatore = this.selrec.donatore.recmediatore

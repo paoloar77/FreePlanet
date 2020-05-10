@@ -133,8 +133,8 @@
 
                         Il mio compito è quello di assicurarmi che tutti i Donatori facciano il Dono al Sognatore.
                         Il sistema invierà in automatico le istruzioni per fare il Dono, il Mediatore (io) verificherà e
-                        accompagnerà il processo.<br>
-                        Il passo 2, di norma, è attivato 4 giorni dopo il passo 1.</p>
+                        accompagnerà il processo.
+                        </p>
 
                     <div class="text-center">
                         <q-img src="statics/images/passo_3.jpg" class="img"></q-img>
@@ -146,7 +146,7 @@
                         Il mio compito è quello di aprirmi a ricevere i Doni da ciascun Donatore, completarmi e
                         celebrare
                         l’Abbondanza.<br>
-                        Il passo 3, di norma, è attivato 4 giorni dopo il passo 2.<br><br>
+                        <br>
                     </p>
 
                 </CTitleBanner>
@@ -265,8 +265,7 @@
                     <p>Klepet sestavlja 8 donatorjev (ki jim bom pomagal vstopiti v klepet) tako jaz, kot posrednik.<br>
                         Moja naloga je, da poskrbim, da bodo vsi donatorji sanjaču vplačali darilo. Sistem bo samodejno
                         poslal navodila za način vplačila, Posrednik (jaz) bo postopek preveril in spremljal.
-                        <br>
-                        Korak 2 se običajno aktivira 4 dni po koraku 1.</p>
+                        </p>
 
                     <div class="text-center">
                         <q-img src="statics/images/passo_3.jpg" class="img"></q-img>
@@ -275,9 +274,7 @@
                     <p>Klepet, kjer sem sanjač, je enak in z istimi ljudmi odprt v koraku 2 (kjer sem bil Mediator) in
                         tudi tukaj se vloge spreminjajo, torej je zdaj 8 mediatorjev in jaz, sanjač.
                         Moja naloga je, da se odprem, da sprejmem vplačila od vsakega donatorja, se dopolnim in
-                        proslavim obilje.<br>
-                        Korak 3 se običajno aktivira 4 dni po koraku 2.<br><br>
-
+                        proslavim obilje.
                     </p>
 
                 </CTitleBanner>
@@ -410,7 +407,6 @@
                         Mi trabajo es asegurarme de que todos los donantes le den el regalo al Soñador.
                         El sistema enviará automáticamente instrucciones para hacer el Regalo, el Mediador
                         verificará y acompañará el proceso.
-                        El paso 2 se activa normalmente 4 días después del paso 1.
 
                     <div class="text-center">
                         <q-img src="statics/images/passo_3.jpg" class="img"></q-img>
@@ -570,7 +566,6 @@
                         O sistema enviará automaticamente instruções para fazer o Presente, o Mediador (I) irá verificar
                         e
                         irá acompanhar o processo.<br>
-                        O passo 2 é normalmente activado 4 dias após o passo 1.
 
                     <div class="text-center">
                         <q-img src="statics/images/passi_3.jpg" class="img"></q-img>
@@ -581,7 +576,6 @@
                         e mesmo aqui os papéis mudam, ou seja, agora há 8 mediadores e eu, o Sonhador.<br>
                         Minha tarefa é abrir-me para receber os Presentes de cada Doador, completar-me e celebrar
                         a Abundância.<br>
-                        O passo 3 é normalmente activado 4 dias após o passo 2.<br>
                     </p>
 
                 </CTitleBanner>
@@ -716,7 +710,6 @@
                         Mon rôle consiste à m'assurer que tous les Donateurs fassent le Don au Rêveur. Le système
                         enverra automatiquement les instructions pour faire le Don, le Médiateur (moi) vérifiera et
                         accompagnera le processus.<br>
-                        L'étape 2 est normalement activée 4 jours après l'étape 1.
 
 
                     <div class="text-center">
@@ -728,7 +721,6 @@
                         moi, le Rêveur.<br>
                         Ma tâche est de m'ouvrir pour recevoir les Dons de chaque Donateur, de compléter et de célébrer
                         l'Abondance.<br>
-                        L'étape 3 est normalement activée 4 jours après l'étape 2.<br><br>.
                     </p>
 
                 </CTitleBanner>
@@ -864,7 +856,6 @@
                         My job is to make sure that all the Donors give the Gift to the Dreamer. The system will
                         automatically send instructions to make the Gift, the Mediator (me) will verify and will
                         accompany the process.<br>
-                        Step 2 is normally activated 4 days after step 1.
 
                     <div class="text-center">
                         <q-img src="statics/images/passo_3.jpg" class="img"></q-img>
@@ -874,7 +865,6 @@
                         Mediator) and here the roles change, there are now 8 mediators and me, the Dreamer.
                         My task is to open myself to receive the Gifts from each Donor, complete myself and celebrate
                         the Abundance.<br>
-                        Step 3 is normally activated 4 days after step 2.
                         <br><br>.
                     </p>
 

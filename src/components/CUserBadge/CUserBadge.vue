@@ -1,7 +1,7 @@
 <template>
   <div v-if="!!user">
     <q-item class="q-my-sm q-pa-sm myuserbadge shadow-5" clickable v-ripple @click="execclick(user)">
-      <q-item-section avatar>
+      <q-item-section avatar v-if="showsteps">
         <div class="row" style="margin-left: 4px;">
           <q-avatar v-if="yourinvite" :text-color="mycolor" size="md">
             {{ getnumber(user, index + 1) }}°
@@ -21,7 +21,7 @@
       </q-item-section>
 
 
-      <q-item-section side>
+      <q-item-section side v-if="showsteps">
         <div class="row q-gutter-xs justify-center items-center">
           <div>
             <CCardState :mytext="$t('pages.statusreg.req')" :myval="getnumreq(user)" :myperc="getnumperc(user)" size="50px" size_mob="40px" fontsize="0.75rem" myclass="my-card-small-stat" :mycolor="getcolor(user)"></CCardState>

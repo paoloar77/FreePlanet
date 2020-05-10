@@ -69,7 +69,7 @@
                                 :opticon="db_fieldsTable.getIconByTable(col.jointable)"></CMyChipList>
                     </div>
                     <div v-else-if="col.fieldtype === tools.FieldType.boolean">
-                        <q-toggle dark color="green" v-model="myvalue" :label="col.title"
+                        <q-toggle dark color="green" v-model="myvalue" :label="col.title" :disable="disable && col.name !== 'profile.saw_zoom_presentation'"
                                   @input="Savedb"></q-toggle>
                     </div>
                     <div v-else-if="col.fieldtype === tools.FieldType.html">

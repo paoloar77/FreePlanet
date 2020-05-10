@@ -77,7 +77,7 @@
                         <div v-else>
                             <br>
                             <q-btn color="primary" icon="fab fa-telegram"
-                                   :label="$t('components.authentication.telegram.openbot')"
+                                   :label="$t('components.authentication.telegram.openbot', {botname: $t('ws.botname')})"
                                    type="a"
                                    :href="getLinkBotTelegram" target="_blank"></q-btn>
                             <br>
@@ -166,15 +166,15 @@
                     </div>
                     <div v-else-if="mystep.title === 'steps.dream'">
                         <div v-if="mystep.descr">
-                            <div v-html="$t(mystep.descr)"></div>
+                            <div v-html="$t(mystep.descr, {sitename: $t('pages.sitename')})"></div>
                         </div>
                         <q-input v-model="my_dream" :label="$t('steps.dream')+' (min. 10):'"
                                  type="textarea" debounce="1000"
                                  input-class="myinput-area-big"
                                  autogrow
-                                 @input="change_mydream"
+                                 @input="change_mydream">
 
-                        ></q-input>
+                        </q-input>
 
                         <!--
                                     <CMyFieldDb :title="$t('reg.my_dream')"
@@ -186,18 +186,6 @@
                                     </CMyFieldDb>
                         -->
                     </div>
-                    <div v-else-if="mystep.title === 'steps.chat_biblio'">
-                        <div v-if="mystep.descr">
-                            <div v-html="$t(mystep.descr)"></div>
-                        </div>
-                        <br><strong>Entra in Chat BiblioBacheca, cliccando qui:</strong>
-
-                        <div class="landing__footer-icons row flex-center margin_buttons">
-                            <a v-if="!!TelegramBiblio" :href="TelegramBiblio" target="_blank">
-                                <i aria-hidden="true" class="q-icon fab fa-telegram icon_contact links"></i></a>
-                        </div>
-
-                    </div>
                     <div v-else-if="mystep.title === 'steps.zoom'">
 
                         <CRequisiti :statebool="VistoZoom" :msgTrue="$t('steps.zoom_si_partecipato')"
@@ -205,7 +193,7 @@
                         </CRequisiti>
 
                         <div v-if="mystep.descr">
-                            <div v-html="$t(mystep.descr)"></div>
+                            <div v-html="$t(mystep.descr, {sitename: $t('pages.sitename')})"></div>
                         </div>
                         <CTitleBanner class="q-pa-xs" :title="$t('steps.zoom_what')" bgcolor="bg-primary"
                                       clcolor="text-white"
@@ -216,13 +204,16 @@
                                 </CVideo>
 
                                 <div v-if="toolsext.isLang('it')">
-                                    <h3>ISTRUZIONI ZOOM</h3>
+                                    <h3>ISTRUZIONI ZOOM Cloud Meeting</h3>
 
                                     <ul style="text-align: left; font-size:0.75rem;">
-                                        <li>1. Scarica l'app (<a
+                                        <li>1. Scarica l'app per: (<a
                                                 href="https://play.google.com/store/apps/details?id=us.zoom.videomeetings"
-                                                target="_blank">store</a> o <a href="https://zoom.us/support/download"
-                                                                               target="_blank">da PC</a>)
+                                                target="_blank">Android</a> o per
+                                            <a href="https://apps.apple.com/us/app/zoom-cloud-meetings/id546505307" target="_blank">iPhone</a>
+                                            o per
+                                            <a href="https://zoom.us/support/download" target="_blank">PC Desktop</a>
+                                            )
                                         </li>
                                         <li>2. Inserisci il tuo Nome e Cognome per essere riconosciuto</li>
                                         <li>3. Clicca "join meeting"</li>
@@ -278,7 +269,7 @@
                                :label="$t('pages.dashboard')"></q-btn>
 
                         <div v-if="mystep.descr">
-                            <div v-html="$t(mystep.descr)"></div>
+                            <div v-html="$t(mystep.descr, {sitename: $t('pages.sitename')})"></div>
                         </div>
 
                         <div class="row justify-center q-ma-sm">
@@ -315,17 +306,17 @@
 
 
                         <div v-if="mystep.descr">
-                            <div v-html="$t(mystep.descr)"></div>
+                            <div v-html="$t(mystep.descr, {sitename: $t('pages.sitename')})"></div>
                         </div>
 
                     </div>
                     <div v-else-if="mystep.title === 'steps.enter_prog'">
 
                         <div v-if="mystep.descr">
-                            <div v-html="$t(mystep.descr)"></div>
+                            <div v-html="$t(mystep.descr, {sitename: $t('pages.sitename')})"></div>
                         </div>
 
-                        <CRequisiti :statebool="CompletatoRequisiti" :msgTrue="$t('steps.enter_prog_requisiti_ok')"
+                        <CRequisiti :statebool="CompletatoRequisiti" :msgTrue="$t('steps.enter_prog_requisiti_ok') + $t('steps.enter_prog_requisiti_ok')"
                                     :msgFalse="$t('steps.enter_prog_completa_requisiti')">
                         </CRequisiti>
 
@@ -345,7 +336,7 @@
                         <div v-if="mystep.page">
                             <CMyInnerPage :path=mystep.page>
                                 <div v-if="mystep.descr">
-                                    <div v-html="$t(mystep.descr)"></div>
+                                    <div v-html="$t(mystep.descr, {sitename: $t('pages.sitename')})"></div>
                                 </div>
                             </CMyInnerPage>
                         </div>

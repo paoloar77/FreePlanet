@@ -15,6 +15,14 @@
                     </q-field>
                 </q-popup-edit>
             </q-td>
+            <q-td key="idapp" :props="props">
+                {{ props.row.idapp }}
+                <q-popup-edit v-model="props.row.idapp" disable>
+                    <q-field count>
+                        <q-input v-model="props.row.idapp" />
+                    </q-field>
+                </q-popup-edit>
+            </q-td>
             <q-td key="userid" :props="props">
                 {{ props.row.userId }}
                 <q-popup-edit v-model="props.row.userId" disable>

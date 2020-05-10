@@ -26,6 +26,7 @@ export default class CMyPopupEdit extends Vue {
   @Prop({ required: false, default: false }) public showall
   @Prop({ required: false, default: 'row' }) public view
   @Prop({ required: false, default: '5' }) public minuteinterval
+  @Prop({ required: false, default: false }) public disable
 
   public myvalue = ''
   public myvalueprec = 'false'

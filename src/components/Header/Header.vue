@@ -32,14 +32,15 @@
         <q-btn ripple
                size="md"
                id="newvers" v-if="isNewVersionAvailable" color="secondary" rounded icon="refresh"
-               class="btnNewVersShow" @click="RefreshApp()" :label="$t('notification.newVersionAvailable')"/>
+               class="btnNewVersShow" @click="RefreshApp()" :label="$t('notification.newVersionAvailable')">
+        </q-btn>
 
 
         <q-toolbar-title class="row items-center">
           <q-avatar>
             <img :src="imglogo" height="27" alt="Immagine Logo">
           </q-avatar>
-          <div class="q-mx-sm">{{getappname}}</div>
+          <div class="q-mx-sm titlesite">{{getappname}}</div>
           <div slot="subtitle">{{$t('msg.myDescriz')}} {{ getAppVersion() }}</div>
         </q-toolbar-title>
 
@@ -108,8 +109,7 @@
                @click="rightDrawerOpen = !rightDrawerOpen">
         </q-btn>
         <q-btn class="q-mx-xs" v-if="static_data.functionality.SHOW_USER_MENU && isLogged" round dense flat
-               @click="rightDrawerOpen = !rightDrawerOpen">
-          <CMyAvatar :myimg="getMyImg"></CMyAvatar>
+               @click="rightDrawerOpen = !rightDrawerOpen" :icon="getMyImgforIcon">
         </q-btn>
 
       </q-toolbar>
@@ -145,6 +145,7 @@
             v-if="isAdmin"> [Admin]</span>
               <span v-if="isManager"> [Manager]</span>
               <span v-if="isTutor"> [Tutor]</span>
+              <span v-if="isTratuttrici"> [Trad]</span>
           </div>
           <div v-else class="text-user text-italic bg-red">
             {{ $t('user.loggati') }}

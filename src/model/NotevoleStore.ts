@@ -7,23 +7,21 @@ export interface ICheckUser {
 }
 
 export interface INotData {
-  num_tot_lista?: number
-  num_reg_lista?: number
   num_reg?: number
+  num_passeggeri?: number
+  num_imbarcati?: number
   email_non_verif?: number
   num_teleg_attivo?: number
   num_teleg_pending?: number
   num_part_zoom?: number
   num_part_accepted?: number
-  num_qualificati?: number
-  num_requisiti?: number
   num_modalita_pagamento?: number
-  num_users_dream?: number
   arr_nations?: string
   lastsreg?: IUserFields[]
   checkuser?: ICheckUser | any
   numreg_untilday?: number
   reg_daily?: string
+  reg_weekly?: string
 }
 
 export interface INotevoleState {

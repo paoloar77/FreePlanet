@@ -71,6 +71,30 @@ export default class CGridTableRec extends Vue {
 
   public selected = []
 
+  get isAdmin() {
+    return UserStore.state.isAdmin
+  }
+
+  get isManager() {
+    return UserStore.state.isManager
+  }
+
+  get isTutor() {
+    return UserStore.state.isTutor
+  }
+
+  get isTratuttrici() {
+    return UserStore.state.isTratuttrici
+  }
+
+  get disabilita() {
+    if ((this.mytable === 'users') && (this.isTutor)) {
+      return true
+    }
+
+    return false
+  }
+
   get lists() {
     return lists
   }
@@ -374,6 +398,7 @@ export default class CGridTableRec extends Vue {
       this.canEdit = tools.getCookie(tools.CAN_EDIT, this.canEdit) === 'true'
       this.tablesel = tools.getCookie('tablesel', this.tablesel)
     }
+    console.log('this.tablesel', this.tablesel)
 
     if (this.tablesel === '') {
       if (!!this.tablesList)
@@ -381,6 +406,8 @@ export default class CGridTableRec extends Vue {
       else
         this.tablesel = this.mytable
     }
+
+    console.log('2) this.tablesel', this.tablesel)
 
     this.changeTable(false)
 
@@ -442,7 +469,10 @@ export default class CGridTableRec extends Vue {
   }
 
   public changeCol(newval) {
-    tools.setCookie(this.mytable, this.colVisib.join('|'))
+    console.log('changecol', this.mytable)
+    if (!!this.mytable) {
+      tools.setCookie(this.mytable, this.colVisib.join('|'))
+    }
   }
 
   public changeTable(mysel) {
@@ -489,7 +519,9 @@ export default class CGridTableRec extends Vue {
       this.mytable = mytab.value
     }
 
-    tools.setCookie('tablesel', this.tablesel)
+    if (!!this.tablesList) {
+      tools.setCookie('tablesel', this.tablesel)
+    }
 
     this.updatedcol()
 
@@ -521,7 +553,9 @@ export default class CGridTableRec extends Vue {
   }
 
   public changefuncAct(newval) {
-    tools.setCookie(tools.CAN_EDIT, newval)
+    if (!this.disabilita) {
+      tools.setCookie(tools.CAN_EDIT, newval)
+    }
   }
 
   public clickrowcol(row, col) {

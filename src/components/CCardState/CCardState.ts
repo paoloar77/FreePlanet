@@ -10,8 +10,8 @@ import MixinBase from '@src/mixins/mixin-base'
 })
 
 export default class CCardState extends MixinBase {
-  @Prop({ required: true, default: '' }) public mytext
-  @Prop({ required: true, default: 0 }) public myval
+  @Prop({ required: false, default: '' }) public mytext
+  @Prop({ required: false, default: 0 }) public myval
   @Prop({ required: true, default: 0 }) public myperc
   @Prop({ required: false, default: '' }) public imgsrc
   @Prop({ required: false, default: false }) public isperc

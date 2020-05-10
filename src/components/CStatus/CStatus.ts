@@ -466,10 +466,6 @@ export default class CStatus extends MixinBase {
 
   }
 
-  get TelegramBiblio() {
-    return 'https://t.me/joinchat/AL2qKExZKvenLgpVhOyefQ'
-  }
-
   public geticonstep(mystep) {
     if (!!mystep.icon)
       return mystep.icon
@@ -552,7 +548,7 @@ export default class CStatus extends MixinBase {
   }
 
   get progressstep() {
-    return this.$t(this.arrsteps[this.steptodo].title)
+    return this.$t(this.arrsteps[this.steptodo].title, {botname: this.$t('ws.botname')})
   }
 
   get strpercstep() {

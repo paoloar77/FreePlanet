@@ -2,6 +2,17 @@
     <div>
         <CTitleBanner title="Operazioni su DB:"></CTitleBanner>
         <div class="row justify-center q-gutter-sm q-list--bordered center_img" style="max-width: 600px">
+          <CMyFieldDb title="SITO_ONLINE"
+                      mykey="SITO_ONLINE"
+                      :serv="false"
+                      :type="tools.FieldType.boolean">
+          </CMyFieldDb>
+          <br>
+
+
+          <div class="row">
+            <q-btn label="Crea Utenti Test" color="primary" @click="EseguiFunz('creaUtentiTest')"></q-btn><br>
+          </div>
             <!--<div class="row">
               <q-btn label="Passa i codici Telefoni sul campo cell" color="primary"
                      @click="EseguiFunz('changeCellInt')"></q-btn>
@@ -10,9 +21,6 @@
               <q-btn label="Trasforma le email tutte in minuscolo" color="primary"
                      @click="EseguiFunz('changeEmailLowerCase')"></q-btn>
               <br></div>
-            <div class="row">
-              <q-btn label="Crea Utenti Test" color="primary" @click="EseguiFunz('creaUtentiTest')"></q-btn><br>
-            </div>
             <div class="row">
               <q-btn label="IMPOSTARE A TUTTI PAYPAL" color="primary" @click="EseguiFunz('ImpostaATuttiPaypal')"></q-btn><br>
             </div>
@@ -49,16 +57,16 @@
                 <q-btn label="Elimina Navi Provvisorie" color="negative"
                        @click="EseguiFunz('delNaviProvvisorie')"></q-btn>
 
-                <q-btn label="Crea ListaIngresso" color="positive" @click="EseguiFunz('creaLista')"></q-btn>
+                <!--<q-btn label="Crea ListaIngresso" color="positive" @click="EseguiFunz('creaLista')"></q-btn>-->
             </div>
-            <div class="q-pa-sm">
+            <div class="q-pa-sm row">
                 <CDateTime
                         :value.sync="date_start"
                         :label="$t('cal.eventstartdatetime')"
                         :readonly="false">
                 </CDateTime>
                 <q-input v-model="numpersone" type="number" autofocus label="Num Persone to Add"
-                         style="width: 50px;"></q-input>
+                         style="width: 100px;"></q-input>
                 <q-btn label="Crea Navi" color="primary" @click="EseguiFunz('creaNavi')"></q-btn>
             </div>
             <div v-if="!incaricamento" class="row">
@@ -72,7 +80,7 @@
                             :serv="false"
                             :type="tools.FieldType.number">
                 </CMyFieldDb>
-                <CMyFieldDb title="Riga Doni"
+                <!--<CMyFieldDb title="Riga Doni"
                             mykey="rigadoni"
                             :serv="false"
                             :type="tools.FieldType.number">
@@ -81,7 +89,7 @@
                             mykey="coldoni"
                             :serv="false"
                             :type="tools.FieldType.number">
-                </CMyFieldDb>
+                </CMyFieldDb>-->
                 <CMyFieldDb title="Visu_TEST"
                             mykey="VISU_TEST"
                             :serv="false"
@@ -95,7 +103,7 @@
             </div>
 
             <div class="row">
-                <q-btn label="Statistiche" color="warning" @click="EseguiFunz('visuUtentiNonInNavi')"></q-btn>
+                <q-btn label="Statistiche" color="warning" @click="EseguiFunz('visuStat')"></q-btn>
 
             </div>
 
@@ -118,6 +126,15 @@
             </div>
             <q-btn label="Visu Navi con utenti Eliminati" color="primary"
                    @click="EseguiFunz('visuNaviUtentiEliminati')"></q-btn>
+            <br>
+          <div class="row">
+              <q-btn label="1) CONVERTI TUTTA LA STRUTTURA NEL NUOVO SISTEMA !" color="negative"
+                     @click="EseguiFunz('creaTessituraeConv')"></q-btn>
+              <br>
+          </div>
+          <div class="row">
+              <q-btn label="2) CONVERTI Navi Num_Tess 3 e 5 in Record di ListaIngresso" color="negative" @click="EseguiFunz('convNaviTessinListaIngressoRec')"></q-btn><br>
+            </div>
             <br>
             <!--<div class="row">
                 <q-btn label="CHECK SE INSERIRE UTENTI IN Nave" color="primary"

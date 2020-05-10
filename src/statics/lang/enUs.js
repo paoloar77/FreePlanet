@@ -12,6 +12,8 @@ const msg_enUs = {
       tableslist: 'Tables',
     },
     otherpages: {
+      modifprof: 'Modify Profile',
+      biografia: 'Bio',
       error404: 'error404',
       error404def: 'error404def',
       admin: {
@@ -50,6 +52,10 @@ const msg_enUs = {
       reg_total: 'Total registrations',
     },
     steps: {
+      nuovo_imbarco: 'Book another Trip',
+      vuoi_entrare_nuova_nave: 'If you confirm, when your ship is ready to sail, you will make a New Gift to repeat another Trip.<br>' +
+      'In this way you will help all ships to advance and grow the movement.',
+      vuoi_cancellare_imbarco: 'Are you sure you want to cancel this boarding on the AYNI ship?',
       completed: 'Completed',
       passi_su: '{passo} steps out of {totpassi}',
       video_intro_1: '1. Welcome to {sitename}',
@@ -71,7 +77,7 @@ const msg_enUs = {
       zoom_partecipa: 'Participated in at least 1 Zoom',
       zoom_no_partecipato: 'You have not yet participated in a Zoom (it is a requirement to enter)',
       zoom_long: 'You are required to participate in at least 1 Zoom, but it is recommended that you take part in the movement more actively.<br><br><strong>By participating in Zooms the Staff will record attendance and you will be enabled.</strong>',
-      zoom_what: 'Tutorial how to install Zoom',
+      zoom_what: 'Tutorial how to install Zoom Cloud Meeting',
       // sharemovement_devi_invitare_almeno_2: 'You still haven\'t invited 2 people',
       // sharemovement_hai_invitato: 'You invited at least 2 people',
       sharemovement_invitati_attivi_si: 'You have at least 2 people invited Active',
@@ -80,7 +86,8 @@ const msg_enUs = {
       sharemovement_long: 'Share the {sitename} Movement and invite them to participate in the Welcome Zooms to become part of this great Family &#128516 .<br>.',
       inv_attivi_long: '',
       enter_prog_completa_requisiti: 'Complete all the requirements to enter the boarding list.',
-      enter_prog_requisiti_ok: 'You have completed all 7 requirements to enter the boarding list.<br>You will receive a message in the next few days as soon as your ship is ready!',
+      enter_prog_requisiti_ok: 'You have completed all 7 requirements to enter the boarding list.<br>',
+      enter_prog_msg: 'You will receive a message in the next few days as soon as your ship is ready!',
       enter_nave_9req_ok: 'CONGRATULATIONS! You have completed ALL 9 steps guide! Thank you for helping {sitename} to Expand! <br>You will be able to leave very soon with your Journey, making your gift and continuing towards the Dreamer.',
       enter_nave_9req_ko: 'Remember that you can help the Movement grow and expand by sharing our journey with everyone!',
       enter_prog: 'I\'m going in Programming',
@@ -177,6 +184,8 @@ const msg_enUs = {
       options: 'Options',
     },
     dashboard: {
+      num_tessitura: 'Numero di Tessitura:',
+      attenzione: 'Attenzione',
       downline: 'Guests',
       downnotreg: 'Non-registered Guests',
       notreg: 'Not Registered',
@@ -184,7 +193,7 @@ const msg_enUs = {
       numinvitati: 'At least 2 guests',
       telefono_wa: 'Contact on Whatsapp',
       sendnotification: 'Send Notification to the Recipient on Telegram BOT',
-      ricevuto_dono: 'You received a Gift Invitation {invitato} from {mittente} !',
+      ricevuto_dono: '😍🎊 You received a Gift Invitation {invitato} from {mittente} !',
       nessun_invitante: 'No Inviting',
       nessun_invitato: 'No_invited',
       legenda_title: 'Click on the name of the guest to see the status of his Requirements.',
