@@ -34,6 +34,7 @@ export default class Listadoninavi extends MixinBase {
   public msg_tosend: string = ''
   public msg_tosend_user: string = ''
   public showtesto: boolean = false
+  public showall: boolean = false
   public seltesto: string = ''
   public pagination = {
     sortBy: 'desc',
@@ -69,10 +70,10 @@ export default class Listadoninavi extends MixinBase {
       sortable: true
     },
     { name: 'date_start', align: 'center', label: '⏰ Partenza', field: 'date_start', sortable: true },
+    { name: 'sognatore', align: 'center', label: 'Sognatore', field: '', sortable: true },
     { name: 'provvisoria', align: 'center', label: 'Temp.', field: 'provvisoria', sortable: true },
     { name: 'tutor', align: 'left', label: 'Tutor', field: 'tutor', sortable: true },
     { name: 'mediatore', align: 'center', label: '🌀 Mediatore', field: '', sortable: true },
-    { name: 'sognatore', align: 'center', label: 'Sognatore', field: '', sortable: true },
     { name: 'donatori', align: 'center', label: 'Donatori', field: '', sortable: true },
     { name: 'DoniConfermati', align: 'center', label: '🎁 OK', field: 'DoniConfermati', sortable: true },
     { name: 'DoniAttesaDiConferma', align: 'center', label: '🎁 Wait', field: 'DoniAttesaDiConferma', sortable: true },
@@ -106,7 +107,7 @@ export default class Listadoninavi extends MixinBase {
     this.loading = true
     // this.$q.loading.show({ message: this.$t('otherpages.update') })
 
-    const ris = await GlobalStore.actions.GetArrDoniNavi({ ricalcola })
+    const ris = await GlobalStore.actions.GetArrDoniNavi({ ricalcola, showall: this.showall })
     console.log('ris', ris)
     this.arrdoninavi = ris.arrnavi
 

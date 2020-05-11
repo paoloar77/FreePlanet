@@ -1,5 +1,9 @@
 const msg_es = {
   es: {
+    words:{
+      da: 'del',
+      a: 'al',
+    },
     home: {
       guida_passopasso: 'Guía paso a paso'
     },
@@ -54,8 +58,8 @@ const msg_es = {
     },
     steps: {
       nuovo_imbarco: 'Reserva otro viaje',
-      vuoi_entrare_nuova_nave: 'Si confirma, cuando su barco esté listo para zarpar, hará un nuevo regalo para repetir otro viaje..<br>' +
-      'De esta manera ayudarás a todas las naves a avanzar y hacer crecer el movimiento.',
+      vuoi_entrare_nuova_nave: '¿Desea ayudar al Movimiento a avanzar y tiene la intención de entrar en otra nave?<br>Haciendo un nuevo regalo de 33 euros, podrá hacer otro viaje y tener otra oportunidad de convertirse en un Soñador!<br>' +
+      'Si lo confirma, se le añadirá a la lista de espera para el próximo embarque.',
       vuoi_cancellare_imbarco: '¿Está seguro de que quiere cancelar el embarque en el barco de AYNI?',
       completed: 'Completado',
       passi_su: '{passo} pasos de cada {totpassi}',
@@ -203,7 +207,7 @@ const msg_es = {
       traduttrici: 'Traduttrici',
       sonomediatore: 'Cuando te conviertes en Mediador vienes contactado por un <strong>TUTOR</strong>, con él debes:<br><ol class="lista">' +
       '<li>Abrir tu <strong>Gift Chat</strong> (tu como propietario, y el Tutor ' +
-      'como administrador) con este nombre: <strong>{nomenave}</strong></li>' +
+      'como administrador) con este nombre:<br><strong>{nomenave}</strong></li>' +
       '<li>Haz clic en tu nombre en la chat en la parte de arriba-> Modifica -> Administradores -> "Agregar Administrador", selecciona el Tutor en el elenco.</li>' +
       '<li>Debes configurar la chat en modo que quien entre vea también los post precedentes (haz clic en el nombre en la chat arriba, haz clic en modificar, ' +
       'cambia la "cronología para los nuevos miembros" de oculto a visible.</li>' +
@@ -238,7 +242,7 @@ const msg_es = {
       metodi_disponibili: 'Métodos disponibles',
       importo: 'Cantidad',
       effettua_il_dono: 'Es hora de hacer tu regalo!<br>' +
-      'Enviar por medio de PayPal a: <strong>{email}</strong><br>' +
+      'Enviar por medio de <a href="https://www.paypal.com" target="_blank">PayPal</a> a: <strong>{email}</strong><br>' +
       '(Elija la opción "ENVIAR A ALGUIEN DE CONFIANZA")<br>',
       qui_compariranno_le_info: 'El día de la salida de la nave, la información del Soñador aparecerá',
       posizione: 'Position',
@@ -247,7 +251,7 @@ const msg_es = {
       clicca_conferma_dono: 'Haz clic aquí para confirmar que has hecho tu regalo',
       fatto_dono: 'Ha confirmado que el regalo ha sido enviado',
       confermi_dono: 'Confirme que ha enviado su regalo de 33 €',
-      dono_ricevuto: 'Tu regalo ha sido recibido correctamente',
+      dono_ricevuto: 'Tu regalo ha sido recibido!',
       dono_ricevuto_2: 'Recibido',
       dono_ricevuto_3: 'Ha llegado!',
       confermi_dono_ricevuto: 'Confirme que ha recibido el regalo de 33 € de {donatore}',

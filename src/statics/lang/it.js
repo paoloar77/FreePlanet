@@ -1,5 +1,9 @@
 const msg_it = {
   it: {
+    words:{
+      da: 'dal',
+      a: 'al',
+    },
     home: {
       guida_passopasso: 'Guida Passo Passo'
     },
@@ -75,8 +79,8 @@ const msg_it = {
     },
     steps: {
       nuovo_imbarco: 'Prenota un altro Viaggio',
-      vuoi_entrare_nuova_nave: 'Se confermi, quando la tua Nave sarà pronta a salpare, farai un Nuovo Dono per ripetere un altro viaggio.<br>' +
-      'In questo modo aiuterai tutte le Navi ad avanzare e a far crescere il movimento.',
+      vuoi_entrare_nuova_nave: 'Desideri aiutare il Movimento ad avanzare e intendi entrare in un\'altra Nave?<br>Effettuando un Nuovo Dono di 33€, potrai percorrere un altro viaggio ed avere un\'altra opportunità di diventare Sognatore!<br>' +
+      'Se confermi verrai aggiunto alla lista d\'attesa per i prossimi imbarchi.',
       inserisci_invitante: 'Inserisci qui sotto l\'username della persona che vuoi aiutare, donandoti come suo Invitato:',
       vuoi_cancellare_imbarco: 'Sicuro di voler cancellare questo imbarco in Nave AYNI?',
       sei_stato_aggiunto: 'Sei stato aggiunto alla lista d\'imbarco! Nei prossimi giorni verrai aggiunto ad una Nuova Nave in partenza!',
@@ -231,7 +235,7 @@ const msg_it = {
       traduttrici: 'Traduttrici',
       sonomediatore: 'Quando diventi Meditore vieni contattato da un <strong>TUTOR</strong>, con lui devi:<br><ol class="lista">' +
       '<li>Aprire la tua <strong>Gift Chat</strong> (tu come proprietario e il Tutor ' +
-      'come amministratore) con questo nome: <strong>{nomenave}</strong></li>' +
+      'come amministratore) con questo nome:<br><strong>{nomenave}</strong></li>' +
       '<li>Clicca sul nome della chat in alto -> Modifica -> Amministratori -> "Aggiungi Amministratore", seleziona il Tutor nell’elenco.</li>' +
       '<li>Devi configurare la chat in modo che chi entra vede anche i post precedenti (clicca sul nome della chat in alto, clicca su modifica, ' +
       'cambia la "cronologia per i nuovi membri" da nascosta a visibile.</li>' +
@@ -245,7 +249,7 @@ const msg_it = {
       tragitto: 'Tragitto',
       nave: 'Nave',
       data_partenza: 'Data<br>Partenza',
-      doni_inviati: 'Doni<br>Inviati',
+      doni_inviati: 'Doni',
       nome_dei_passaggi:'Nome<br>dei Passaggi',
       donatori:'Donatori',
       donatore:'Donatore',
@@ -266,7 +270,7 @@ const msg_it = {
       metodi_disponibili: 'Metodi Disponibili',
       importo: 'Importo',
       effettua_il_dono: 'E\' arrivato il momento di Effettuare il proprio Dono!<br>' +
-      'Inviare tramite PayPal a: <strong>{email}</strong><br>' +
+      'Inviare tramite <a href="https://www.paypal.com" target="_blank">PayPal</a> a: <strong>{email}</strong><br>' +
       '(Scegliere l\'opzione "INVIA A UNA PERSONA DI FIDUCIA")<br>',
       qui_compariranno_le_info: 'Nel giorno della partenza della Nave, compariranno le informazioni del Sognatore',
       posizione: 'Posizione',
@@ -275,7 +279,7 @@ const msg_it = {
       clicca_conferma_dono: 'Clicca qui per confermare che hai effettuato il tuo dono',
       fatto_dono: 'Hai confermato che il dono è stato Inviato',
       confermi_dono: 'Confermi che hai inviato il tuo Dono di 33€',
-      dono_ricevuto: 'Il tuo Dono è stato Ricevuto Correttamente',
+      dono_ricevuto: 'Il tuo Dono è stato Ricevuto!',
       dono_ricevuto_2: 'Ricevuto',
       dono_ricevuto_3: 'Arrivato!',
       confermi_dono_ricevuto: 'Confermi di aver ricevuto il Dono di 33€ da parte di {donatore}',

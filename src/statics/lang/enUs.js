@@ -1,5 +1,9 @@
 const msg_enUs = {
   enUs: {
+    words:{
+      da: 'from',
+      a: 'to',
+    },
     home: {
       guida_passopasso: 'Step By Step Guide'
     },
@@ -53,8 +57,8 @@ const msg_enUs = {
     },
     steps: {
       nuovo_imbarco: 'Book another Trip',
-      vuoi_entrare_nuova_nave: 'If you confirm, when your ship is ready to sail, you will make a New Gift to repeat another Trip.<br>' +
-      'In this way you will help all ships to advance and grow the movement.',
+      vuoi_entrare_nuova_nave: 'Do you wish to help the Movement to advance and intend to enter another Ship?<br>By making a New Gift of 33€, you will be able to travel another journey and have another opportunity to become a Dreamer!<br>' +
+      'If you confirm, you\'ll be added to the waiting list for the next boarding.',
       vuoi_cancellare_imbarco: 'Are you sure you want to cancel this boarding on the AYNI ship?',
       completed: 'Completed',
       passi_su: '{passo} steps out of {totpassi}',
@@ -200,9 +204,16 @@ const msg_enUs = {
       nave_in_partenza: 'on Departure on',
       nave_partita: 'departed on',
       tutor: 'Tutor',
-      sonomediatore: '',
-      sonodonatore: '',
-      sonodonatore_seconda_tessitura: '',
+      sonomediatore: 'When you become a Medalist you are contacted by a <strong>TUTOR</strong>, with him you must:<br><ol class="list">' +
+      '<li>Open your <strong>Gift Chat</strong> (you as owner and the Tutor as administrator) with this name:<br><strong>{nomenave}</strong></li>' +
+      '<li>Click on the chat name at the top -> Edit -> Administrators -> "Add Administrator", select the Tutor in the list.</li>' +
+      '<li>You have to configure the chat so that whoever enters also sees the previous posts (click on the chat name at the top, click on edit,' +
+      'change "new members\' history" from hidden to visible.</li>' +
+      '<li>To find the <strong>link to the newly created Chat</strong>: Click on the Chat name at the top, click on the Pencil -> "Group Type" -> "invite to group via link", click on "copy link" and paste it in the <strong>"Link Gift Chat"</strong></li>" + box below.' +
+      '<li>Send the Gift Chat Link to all Donors by clicking on the button below.</li></ol>.',
+      sonodonatore: '<ol class="list"><li>When you are in this position, you will be invited to enter a <strong>Gift Chat</strong> (Telegram) and here you will also find the other 7 Donors, the Mediator, the Dreamer and a Staff representative.' +
+      '<li>You will make your gift <strong>EXACTLY on the days indicated</strong> and in the payment method that you will find written here.<br></ol>.',
+      sonodonatore_seconda_tessitura: '<ol class="lista"><li>Here you are Mediator and also Donor, but being the second Weaving, you won\'t need to make your gift again.<br></ol>',
       controlla_donatori: 'Check Donor List',
       link_chat: 'Gift Chat Telegram links',
       tragitto: 'Route',
@@ -229,7 +240,7 @@ const msg_enUs = {
       metodi_disponibili: 'Available Methods',
       importo: 'Amount',
       effettua_il_dono: 'It\'s time to make your Gift!<br>' +
-      'Send via PayPal to: <strong>{email}</strong><br>' +
+      'Send via <a href="https://www.paypal.com" target="_blank">PayPal</a> to: <strong>{email}</strong><br>' +
       '(Choose the option "SEND TO SOMEONE YOU TRUST")<br>',
       qui_compariranno_le_info: 'On the day of departure of the Ship, the information of the Dreamer will appear',
       posizione: 'Position',
@@ -238,7 +249,7 @@ const msg_enUs = {
       clicca_conferma_dono: 'Click here to confirm that you have made your gift',
       fatto_dono: 'You have confirmed that the gift has been sent',
       confermi_dono: 'Confirm that you have sent your 33€ Gift',
-      dono_ricevuto: 'Your Gift has been Received Correctly',
+      dono_ricevuto: 'Your Gift has been Received!',
       dono_ricevuto_2: 'Received',
       dono_ricevuto_3: 'Arrived!',
       confermi_dono_ricevuto: 'Confirm that you have received the 33€ Gift from {donatore}',

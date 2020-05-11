@@ -53,4 +53,11 @@ export default class CTitleBanner extends Vue {
     if (this.myvisible)
       this.$emit('apri')
   }
+
+  get getclass(){
+    if (this.myvisible)
+      return 'isvisibile'
+    else
+      return 'nonvisibile glossy'
+  }
 }

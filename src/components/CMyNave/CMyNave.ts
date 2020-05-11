@@ -25,10 +25,12 @@ export default class CMyNave extends MixinNave {
   @Prop({ required: false, default: null }) public posizprop
   @Prop({ required: true }) public navi_partenzaprop: any[]
   @Prop({ required: true }) public listanavi: boolean
+  @Prop({ required: false, default: null }) public dashboard: any
   public navi_partenza: any[]
   public $t
   public $v
   public link_chat: string = ''
+  public tabnave: string = 'donatore'
   public cosa: string = 'tragitto'
   public cosa2: string = 'donatore'
   public nave: any = null
@@ -50,6 +52,11 @@ export default class CMyNave extends MixinNave {
   public loading: boolean = false
   public showmsguser: boolean = false
   public seluser = null
+  public showtesto: boolean = false
+  public notifBot: boolean = true
+  public deleteUser: boolean = true
+  public AddImbarco: boolean = true
+  public seltesto: string = ''
   public msg_tosend_user: string = ''
   public username_sostituire: string = ''
   public MyPagination: {
@@ -59,7 +66,7 @@ export default class CMyNave extends MixinNave {
     rowsNumber: number, // specifying this determines pagination is server-side
     rowsPerPage: number
   } = { sortBy: 'index', descending: false, page: 1, rowsNumber: 10, rowsPerPage: 10 }
-  public coldonatori: any[] = [
+  public coldonatori_cell: any[] = [
     /*{
       name: 'index',
       required: true,
@@ -70,6 +77,23 @@ export default class CMyNave extends MixinNave {
     },*/
     { name: 'name', align: 'center', label: translate('reg.name'), field: 'name', sortable: true },
     // { name: 'surname', align: 'center', label: translate('reg.surname'), field: 'surname', sortable: true },
+    // { name: 'date_made_gift', align: 'center', label: 'Inviato', field: 'date_made_gift', sortable: true },
+    // { name: 'tel', align: 'center', label: 'Tel', field: 'tel', sortable: true },
+    { name: 'made_gift', align: 'center', label: 'Conferm.', field: 'made_gift', sortable: true },
+  ]
+
+  public coldonatori: any[] = [
+    {
+      name: 'index',
+      required: true,
+      label: 'Num',
+      align: 'left',
+      field: 'index',
+      sortable: true
+    },
+    { name: 'nave', align: 'center', label: 'Gift Chat', field: 'nave', sortable: true },
+    { name: 'name', align: 'center', label: 'Nome Cognome', field: 'name', sortable: true },
+    { name: 'posizione', align: 'center', label: 'Posizione', field: 'posizione', sortable: true },
     { name: 'date_made_gift', align: 'center', label: 'Inviato', field: 'date_made_gift', sortable: true },
     // { name: 'tel', align: 'center', label: 'Tel', field: 'tel', sortable: true },
     { name: 'made_gift', align: 'center', label: 'Conferm.', field: 'made_gift', sortable: true },
@@ -128,6 +152,17 @@ export default class CMyNave extends MixinNave {
       this.apri()
     }
     this.aggiorna()
+  }
+
+  public created() {
+    if (!!tools.getCookie(tools.TABBED_NAVE)) {
+      this.tabnave = tools.getCookie(tools.TABBED_NAVE)
+    }
+  }
+
+  public changetab(val) {
+    tools.setCookie(tools.TABBED_NAVE, val)
+    // console.log('setcook', val)
   }
 
   public aggiorna() {
@@ -232,6 +267,12 @@ export default class CMyNave extends MixinNave {
   }
 
   public sonoMediatore() {
+    if (!this.nave)
+      return false
+
+    if (!this.nave.rec.donatore.recmediatore)
+      return false
+
     if (!!this.nave) {
       if (!!this.nave.rec.donatore)
         return this.nave.rec.donatore.recmediatore.ind_order === this.myindorder
@@ -247,6 +288,15 @@ export default class CMyNave extends MixinNave {
   public partenza_primo_donatore() {
     if (!!this.nave) {
       if (!!this.mediatore_navepers) {
+        return this.mediatore_navepers.date_gift_chat_open
+      }
+    }
+    return ''
+  }
+
+  public fine_doni() {
+    if (!!this.nave) {
+      if (!!this.mediatore_navepers) {
         return this.mediatore_navepers.date_start
       }
     }
@@ -255,13 +305,13 @@ export default class CMyNave extends MixinNave {
 
   public getGiornoDelDono() {
     if (!!this.nave) {
-      return tools.getstrDate(this.donatore_navepers.date_start)
+      return tools.getstrDate(this.donatore_navepers.date_gift_chat_open)
     }
   }
 
   get GiornoDelDonoArrivato() {
     if (!!this.nave) {
-      return tools.isDateArrived(this.donatore_navepers.date_start)
+      return tools.isDateArrived(this.donatore_navepers.date_gift_chat_open)
     }
     return false
   }
@@ -408,12 +458,18 @@ export default class CMyNave extends MixinNave {
   }
 
   public sonoSecondaTessituraDonatore() {
-    const mediatore = this.getmediatore()
-    for (const rec of this.nave.rec.donatore.arrdonatori) {
-      if (!!rec) {
-        if (mediatore) {
-          if ((mediatore.ind_order === rec.ind_order) && (rec.num_tess % 2) === 0)
-            return true
+    if (!!this.nave) {
+      const mediatore = this.getmediatore()
+      if (!!this.nave.rec.donatore && !!mediatore) {
+        if (!!this.nave.rec.donatore.arrdonatori) {
+          for (const rec of this.nave.rec.donatore.arrdonatori) {
+            if (!!rec) {
+              if (mediatore) {
+                if ((mediatore.ind_order === rec.ind_order) && (rec.num_tess % 2) === 0)
+                  return true
+              }
+            }
+          }
         }
       }
     }
@@ -426,8 +482,10 @@ export default class CMyNave extends MixinNave {
   }
 
   public getmediatore() {
-    if (!!this.nave.rec.mediatore)
-      return this.nave.rec.mediatore.recmediatore
+    if (!!this.nave) {
+      if (!!this.nave.rec.mediatore)
+        return this.nave.rec.mediatore.recmediatore
+    }
     return null
   }
 
@@ -455,7 +513,10 @@ export default class CMyNave extends MixinNave {
     return this.donatore_navepers.link_chat
   }
 
-  public getclassSelect(rec) {
+  public getclassSelect(rec, sognatore, index) {
+    if (sognatore && index === 0) {
+      return ' issognatore'
+    }
     if (rec.ind_order === this.myindorder)
       return ' you'
   }
@@ -467,24 +528,24 @@ export default class CMyNave extends MixinNave {
     else {
       ris = (this.getrigaNaveByInd(ind)) + '.' + this.getcolNaveByInd(ind)
     }
-    let add = ''
-    // for (let index = 0; index < (4 - ris.length); index++) {
-    //   add += '&nbsp;'
-    // }
-
-    ris = add + ris
     return ris
   }
 
   public getdatanave(rec) {
+    if (!this.nave)
+      return ''
+
     if (this.sonoDonatore()) {
       if (rec.ind === 1) {
-        return tools.getstrshortDate(this.nave.date_start) // Donatore
+        return tools.getstrshortDate(this.nave.date_gift_chat_open) // Donatore
       }
     }
     if (this.sonoMediatore()) {
+      if (!rec)
+        return false
+
       if (rec.ind === 4) {
-        return tools.getstrshortDate(this.nave.date_start) // Mediatore
+        return tools.getstrshortDate(this.nave.date_gift_chat_open) // Mediatore
       }
     }
 
@@ -492,11 +553,22 @@ export default class CMyNave extends MixinNave {
     const col = this.getcolNaveByInd(rec.ind)
     const mynavepart = this.getnavePartenzaByRigaCol(riga, col)
     if (!!mynavepart) {
-      if (!!mynavepart.date_start)
-        return tools.getstrshortDate(mynavepart.date_start)
+      if (!!mynavepart.date_gift_chat_open)
+        return tools.getstrshortDate(mynavepart.date_gift_chat_open)
     }
     return ' --/-- '
     // return this.getNavePartByInd(rec.ind)
+  }
+
+  public getlinkchat(row) {
+    const riga = tools.getRiganave(row.riga)
+    const col = tools.getColnave(row.col)
+
+    const mynavepart = this.getnavePartenzaByRigaCol(riga, col)
+    if (!!mynavepart) {
+      if (!!mynavepart.link_chat)
+        return mynavepart.link_chat
+    }
   }
 
   public getTutor(rec) {
@@ -551,10 +623,12 @@ export default class CMyNave extends MixinNave {
   }
 
   public getclpos(rec) {
-    if (this.NaveeseguitabyInd(this.getrigaNaveByInd(rec.ind))) {
-      return 'you'
-    } else {
-      return ''
+    if (!!this.dashboard) {
+      if (this.dashboard.lastnave.riga >= this.getrigaNaveByInd(rec.ind)) {
+        return 'you'
+      } else {
+        return ''
+      }
     }
   }
 
@@ -634,16 +708,27 @@ export default class CMyNave extends MixinNave {
     return tools.getstrshortDate(mydata)
   }
 
-  public gettitlemediatore() {
-    return this.getdatastr(this.partenza_primo_donatore()) + ' ' + this.$t('dashboard.nave') + ' ' + this.getisProvvisoriaMediatoreStr() + this.mediatore.riga + '.' + this.mediatore.col + ' ' + '🎁' + this.$t('ws.sitename')
+  public datefromto() {
+    if (this.partenza_primo_donatore() !== this.fine_doni())
+    // return this.$t('words.da') + ' ' + this.getdatastr(this.partenza_primo_donatore()) + ' ' + this.$t('words.a') + ' ' + this.getdatastr(this.fine_doni())
+      return this.getdatastr(this.partenza_primo_donatore()) + ' - ' + this.getdatastr(this.fine_doni())
+    else
+      return this.getdatastr(this.fine_doni())
+  }
+
+  public gettitlemediatore(acapo) {
+    let add = ' - '
+    if (acapo)
+      add = ' '
+    return this.datefromto() + add + this.$t('dashboard.nave') + ' ' + this.getisProvvisoriaMediatoreStr() + this.mediatore.riga + '.' + this.mediatore.col + ' ' + '🎁' + this.$t('ws.sitename')
   }
 
   public gettitledonatore() {
-    return this.getdatastr(this.donatore_navepers.date_start) + ' ' + this.$t('dashboard.nave') + ' ' + this.getisProvvisoriaStr() + this.donatore_navepers.riga + '.' + this.donatore_navepers.col + ' ' + '🎁' + this.$t('ws.sitename')
+    return this.getdatastr(this.donatore_navepers.date_gift_chat_open) + ' ' + this.$t('dashboard.nave') + ' ' + this.getisProvvisoriaStr() + this.donatore_navepers.riga + '.' + this.donatore_navepers.col + ' ' + '🎁' + this.$t('ws.sitename')
   }
 
   public gettesto() {
-    return this.$t('dashboard.sonomediatore', { nomenave: this.gettitlemediatore() })
+    return this.$t('dashboard.sonomediatore', { nomenave: this.gettitlemediatore(false) })
   }
 
   public getisProvvisoriaStr() {
@@ -761,16 +846,17 @@ export default class CMyNave extends MixinNave {
 
   public getpartenza() {
     let myrec = null
-    if (this.listanavi)
-      myrec = this.nave.rec
-    else {
+    if (this.listanavi) {
+      if (!!this.nave)
+        myrec = this.nave.rec
+    } else {
       if (!!this.posiz)
         myrec = this.posiz.rec
     }
 
     if (!!myrec)
       if (!!myrec.donatore.navepersistente)
-        return tools.getstrDate(myrec.donatore.navepersistente.date_start)
+        return tools.getstrDate(myrec.donatore.navepersistente.date_gift_chat_open)
 
     return ''
   }
@@ -826,6 +912,7 @@ export default class CMyNave extends MixinNave {
 
   public Chiudi() {
     this.showmsguser = false
+    this.showtesto = false
   }
 
   public InviaMsgAUser() {
@@ -885,13 +972,72 @@ export default class CMyNave extends MixinNave {
 
     await tools.askConfirm(this.$q, 'Sostituisci', notifBottxt + ' ?', translate('dialog.yes'), translate('dialog.no'), this, '', lists.MenuAction.SOSTITUISCI, 0, {
       param1: user,
-      param2: { username: usernamesost, riga: user.riga, col: user.col },
+      param2: {
+        username: usernamesost,
+        username_da_sostituire: user.username,
+        riga: user.riga,
+        col: user.col,
+        notifBot: this.notifBot,
+        deleteUser: this.deleteUser,
+        AddImbarco: this.AddImbarco,
+      },
       param3: notifBottxt
     })
   }
 
   public getnavestr(row) {
     return tools.getRiganave(row.riga) + '.' + tools.getColnave(row.col)
+  }
+
+  get gettitolonave() {
+    if (this.listanavi)
+      return this.titolonave()
+    else
+      return this.$t('dashboard.tragitto')
+  }
+
+  get getcol() {
+    if (tools.isMobile())
+      return this.coldonatori_cell
+    else
+      return this.coldonatori
+  }
+
+  public getlivellostr(index) {
+
+    let str = ''
+    str += (7 - index) + '° - '
+    if (index === 0)
+      str += this.$t('dashboard.sognatore')
+    else if ((index === 1) || (index === 2) || (index === 4) || (index === 5))
+      str += this.$t('dashboard.intermedio')
+    else if (index === 3)
+      str += this.$t('dashboard.mediatore')
+    else if (index === 6)
+      str += this.$t('dashboard.donatori')
+
+    return str
+
+  }
+
+  public getclasselivello(index) {
+    if (index === 0)
+      return 'sognatore'
+    else if (index === 3)
+      return 'mediatore'
+    else if (index === 6)
+      return 'donatore'
+    else
+      return 'intermedio' + index
+  }
+
+  public async Mostraplacca(riga, col) {
+    const data = {
+      riga,
+      col
+    }
+    this.showtesto = true
+    this.seltesto = await GlobalStore.actions.GetData({ data })
   }
 
 }

@@ -1,5 +1,9 @@
 const msg_si = {
   si: {
+    words:{
+      da: 'da',
+      a: 'a',
+    },
     home: {
       guida_passopasso: 'Vodnik po korakih'
     },
@@ -67,8 +71,8 @@ const msg_si = {
     },
     steps: {
       nuovo_imbarco: 'Rezerviraj še eno potovanje',
-      vuoi_entrare_nuova_nave: 'Če potrdiš, ko bo tvoja Ladja pripravljena za izplutje, boš Ponovno Doniral in ponovil novo potovanje.<br>' +
-      'Na ta način boste pomagali vsem ladjam pri napredovanju in rasti gibanja',
+      vuoi_entrare_nuova_nave: 'Želis pomagati Gibanju, napredovati in vstopiti v še eno\novo Ladjico?<br>Z novim vplačilom 33€, lahko pričneš novo potovanje in tako dobiš\še eno priložnost, da postaneš Sanjač!<br>' +
+      'Če potrdiš boš dodan na seznam \čakajočih za vkrcavanje.',
       vuoi_cancellare_imbarco: 'Ali ste prepričani, da želite izbrisati vaš vstop v Ladjo Ayni?',
       completed: 'zaključen',
       passi_su: '{passo} od {totpassi} koraki',
@@ -209,7 +213,7 @@ const msg_si = {
       tutor: 'Tutor',
       sonomediatore: 'Ko postaneš Mediator te kontaktira en <strong>TUTOR</strong>, z njim moraš:<br><ol class="lista">' +
       '<li>Odpret svoj <strong>Gift- Darilni klepet</strong> (ti kot lastnik in Tutor ' +
-      'kot administrator) s tem imenom: <strong>{nomenave}</strong></li>' +
+      'kot administrator) s tem imenom:<br><strong>{nomenave}</strong></li>' +
       '<li>Klikni na ime klepeta na vrhu-> Popravi -> Administratorji -> "Dodaj Administratorja", izberi Tutorja v imeniku.</li>' +
       '<li>Moraš nastaviti klepet na način, da vsak, ki vstopi vidi predhodne objave(klikni na ime klepeta na vrhu, klikni na popravi, ' +
       'spremeni "zgodovina za nove člane" iz skrite v vidno.</li>' +
@@ -244,7 +248,7 @@ const msg_si = {
       metodi_disponibili: 'Načini na Voljo',
       importo: 'Uvoz',
       effettua_il_dono: 'Je\' prišel trenutek da Vplačaš svoje darilo!<br>' +
-      'Vplačaj preko PayPal a: <strong>{email}</strong><br>' +
+      'Vplačaj preko <a href="https://www.paypal.com" target="_blank">PayPal</a> a: <strong>{email}</strong><br>' +
       '(Izberi možnost "Pošlji osebi, ki ji zaupaš")<br>',
       qui_compariranno_le_info: 'Na dan odhoda Ladje, prejmete vse potrebne  informacije s strani Sanjača',
       posizione: 'Pozicija',
@@ -253,7 +257,7 @@ const msg_si = {
       clicca_conferma_dono: 'Klikni tu, da potrdiš izvedeno vplačilo',
       fatto_dono: 'Potrdil si, da je vplačilo bilo izvedeno',
       confermi_dono: 'Potrdi da si vplačal 33€',
-      dono_ricevuto: 'Tvoje vplačilo je prejeto',
+      dono_ricevuto: 'Tvoje vplačilo je prejeto!',
       dono_ricevuto_2: 'Sprejeto',
       dono_ricevuto_3: 'Prispelo!',
       confermi_dono_ricevuto: 'Potrjujem, da sem sprejel darilo v znesku 33€ z strani {donatore}',

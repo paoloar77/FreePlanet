@@ -53,6 +53,7 @@ export interface INotify {
 export const tools = {
   CAN_EDIT: 'q-ce',
   TABBED_DASHBOARD: 't-db',
+  TABBED_NAVE: 't-nave',
 
   getprefCountries: ['it', 'si', 'us', 'es', 'pt', 'uk', 'fr', 'de', 'ch', 'br', 'sk'],
 
@@ -1573,10 +1574,12 @@ export const tools = {
         ind_order: par.param1.ind_order,
         myfunc: func,
         data: par.param2,
+        username: par.param2.username,
         notifBot: null
       }
 
-      mydatatosave.notifBot = { un: par.param2, txt: par.param3 }
+      if (par.param2.notifBot)
+        mydatatosave.notifBot = { un: par.param2, txt: par.param3 }
 
       GlobalStore.actions.callFunz({ mydata: mydatatosave }).then((ris) => {
         if (ris) {
@@ -2546,11 +2549,13 @@ export const tools = {
     if (Screen.width < 410) {
       return '337'
     } else if (Screen.width < 600) {
-      return '400'
-    } else if (Screen.width < 900) {
+      return '450'
+    } else if (Screen.width < 800) {
       return '500'
-    } else {
+    } else if (Screen.width < 900) {
       return '600'
+    } else {
+      return '700'
     }
   },
 
@@ -3618,6 +3623,10 @@ export const tools = {
     return this.getRiganave(mianave.riga) + '.' + this.getColnave(mianave.col)
   },
 
+  getlastnavestr(lastnave) {
+    return lastnave.riga + '.' + lastnave.col
+  },
+
   getmaxcol(riga) {
 
     return Math.pow(2, riga - 1)
@@ -3632,17 +3641,17 @@ export const tools = {
   },
 
   getcolNaveByPosiz(col) {
-    let ris = Math.ceil(col * Math.pow(2, 3) / (2 * 4))
+    let ris = Math.ceil(col * Math.pow(2, 3))
     if (ris <= 1)
       ris = 1
     return ris
-
   },
 
   getfirstnaveSognatore(riga, col) {
     const myriga = this.getrigaNaveByPosiz(riga)
     const mycol = this.getcolNaveByPosiz(col)
 
+    // console.log(`${riga}.${col} => ${myriga}.${mycol}`)
     return { riga: myriga, col: mycol }
   },
 
@@ -3686,9 +3695,9 @@ export const tools = {
     if (perc > 100)
       perc = 100
 
-    console.log('naveorig', naveorig.riga, '.', naveorig.col, 'dest', navedest.riga, ',', navedest.col)
-    console.log('lastnave', lastnave.riga, '.', lastnave.col)
-    console.log('contaattuale', contaattuale, 'contatot', contatot, 'perc', perc)
+    // console.log('naveorig', naveorig.riga, '.', naveorig.col, 'dest', navedest.riga, ',', navedest.col)
+    // console.log('lastnave', lastnave.riga, '.', lastnave.col)
+    // console.log('contaattuale', contaattuale, 'contatot', contatot, 'perc', perc)
 
     return { perc, totale: contatot, contaattuale }
   },
@@ -3700,6 +3709,14 @@ export const tools = {
     ris = UserStore.state.isAdmin && !pertutti ? true : online
     // console.log('isadmin', UserStore.state.isAdmin)
     return ris
+  },
+
+  getsize() {
+    if (this.isMobile()) {
+      return '0.85rem'
+    } else {
+      return '1rem'
+    }
   }
 
 

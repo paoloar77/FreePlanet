@@ -920,12 +920,13 @@ namespace Actions {
       })
   }
 
-  async function GetArrDoniNavi(context, { ricalcola }) {
+  async function GetArrDoniNavi(context, { ricalcola, showall }) {
     console.log('GetArrDoniNavi')
 
     const mydata = {
       idapp: process.env.APP_ID,
-      ricalcola
+      ricalcola,
+      showall
     }
 
     return await Api.SendReq('/dashboard/getdoninavi', 'POST', mydata)

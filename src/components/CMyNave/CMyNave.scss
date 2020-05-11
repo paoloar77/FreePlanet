@@ -1,4 +1,5 @@
-.donatore, .mediatore, .sognatore, .title-nave, .intermedio2, .intermedio3 {
+
+.title-nave {
   padding: 2px 4px;
   margin: 2px 4px;
   color: white;
@@ -6,6 +7,33 @@
   border-radius: 16px;
 }
 
+.donatore, .mediatore, .sognatore, .intermedio1, .intermedio2, .intermedio4, .intermedio5{
+  color: white;
+  background-color: lightblue;
+  padding: 1px 2px;
+  margin: 1px 2px;
+  font-size: 0.8rem;
+  border-radius: 32px;
+  font-weight: bold;
+  text-transform: uppercase;
+  max-width: 200px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.intermedio1{
+  background-color: indigo;
+}
+.intermedio2{
+  background-color: blue;
+}
+.intermedio4{
+  background-color: yellow;
+  color: black;
+}
+.intermedio5{
+  background-color: orange;
+}
 
 .tutor{
 
@@ -17,24 +45,19 @@
 
 .donatore {
   background-color: red;
+  text-transform: uppercase;
 }
 
 .mediatore {
   background-color: green;
+  text-transform: uppercase;
 }
 
 .sognatore {
   background-color: purple;
+  text-transform: uppercase;
 }
 
-.intermedio2{
-  background-color: orange;
-}
-
-.intermedio3{
-  background-color: yellow;
-  color: black;
-}
 
 .cont_donatore, .cont_sognatore, .cont_mediatore, .cont_tragitto, .cont_pos, .cont_intestaz, .cont_pos_intest, .cont_intestaz_small {
   border: solid 2px #4198ef;
@@ -50,6 +73,13 @@
 
 .you {
   background-color: yellow;
+}
+.issognatore {
+  background-color: orangered;
+  color: white;
+  font-size: 1.10rem;
+  border-radius: 64px;
+  font-weight: bold;
 }
 
 .cont_tragitto{
@@ -102,7 +132,7 @@
 }
 
 .titlenave{
-  width: 55px;
+  width: 75px;
   text-align: center;
 }
 

@@ -1,5 +1,9 @@
 const msg_pt = {
   pt: {
+    words:{
+      da: 'od',
+      a: 'do',
+    },
     home: {
       guida_passopasso: 'Guia Passo a Passo'
     },
@@ -64,8 +68,8 @@ const msg_pt = {
     },
     steps: {
       nuovo_imbarco: 'Reservar outra Viagem',
-      vuoi_entrare_nuova_nave: 'Se confirmar, quando o seu navio estiver pronto para navegar, fará um Novo Presente para repetir outra viagem..<br>' +
-      'Desta forma, ajudará todos os navios a avançar e a fazer crescer o movimento.',
+      vuoi_entrare_nuova_nave: 'Deseja ajudar o Movimento a avançar e pretende entrar noutro Navio?<br>Ao fazer um Novo Presente de 33 euros, poderá viajar outra viagem e ter outra oportunidade de se tornar um Sonhador!<br>' +
+      'Se confirmar, será acrescentado à lista de espera para o próximo embarque.',
       vuoi_cancellare_imbarco: 'Tem a certeza de que quer cancelar este embarque no navio AYNI?',
       completed: 'Completado',
       passi_su: '{passo} passos em {totpassi}',
@@ -212,7 +216,7 @@ const msg_pt = {
       tutor: 'Tutor',
       sonomediatore: 'Quando diventi Meditore vieni contattato da un <strong>TUTOR</strong>, con lui devi:<br><ol class="lista">' +
       '<li>Aprire la tua <strong>Gift Chat</strong> (tu come proprietario e il Tutor ' +
-      'come amministratore) con questo nome: <strong>{nomenave}</strong></li>' +
+      'come amministratore) con questo nome:<br><strong>{nomenave}</strong></li>' +
       '<li>Clicca sul nome della chat in alto -> Modifica -> Amministratori -> "Aggiungi Amministratore", seleziona il Tutor nell’elenco.</li>' +
       '<li>Devi configurare la chat in modo che chi entra vede anche i post precedenti (clicca sul nome della chat in alto, clicca su modifica, ' +
       'cambia la "cronologia per i nuovi membri" da nascosta a visibile.</li>' +
@@ -247,7 +251,7 @@ const msg_pt = {
       metodi_disponibili: 'Métodos disponíveis',
       importo: 'Importo',
       effettua_il_dono: 'Chegou o momento de fazer o seu Presente!<br>' +
-      'Enviar via PayPal para: <strong>{email}</strong><br>' +
+      'Enviar via <a href="https://www.paypal.com" target="_blank">PayPal</a> para: <strong>{email}</strong><br>' +
       '(Escolha a opção "ENVIAR A ALGUÉM DA SUA CONFIANÇA".)<br>',
       qui_compariranno_le_info: 'No dia da partida do Navio, a informação do Sonhador aparecerá',
       posizione: 'Localização',
@@ -256,7 +260,7 @@ const msg_pt = {
       clicca_conferma_dono: 'Clique aqui para confirmar que você fez o seu presente',
       fatto_dono: 'Você confirmou que o presente foi enviado',
       confermi_dono: 'Confirme que você enviou o seu Presente de 33€',
-      dono_ricevuto: 'O seu Presente foi Recebido Correctamente',
+      dono_ricevuto: 'O seu Presente foi Recebido!',
       dono_ricevuto_2: 'Recebido',
       dono_ricevuto_3: 'Chegou!',
       confermi_dono_ricevuto: 'Por favor, confirme que você recebeu o presente de 33€ de {donatore}',

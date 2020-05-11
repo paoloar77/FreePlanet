@@ -16,6 +16,10 @@
 
       </q-tabs>
 
+      <div v-if="loading" class="q-ma-md text-center" style="height: 100px;">
+        <q-spinner-gears size="50px" color="primary"/>
+      </div>
+
       <q-tab-panels v-model="tab" animated>
         <q-tab-panel name="requisiti">
           <div v-if="!!dashboard.myself.name">
@@ -141,10 +145,112 @@
         </q-tab-panel>
         <q-tab-panel name="navi">
 
+          <div>
+            <div v-if="!Completato9Req && !HasNave">
+              <CTitleBanner icon="person" :canopen="true" class="q-pa-xs text-center"
+                            :title="$t('pages.posizione_in_programmazione')" bgcolor="bg-blue"
+                            clcolor="text-white" mystyle=" " myclass="myshad">
+                <CRequisiti :statebool="Completato7Req"
+                            :msgTrue="$t('steps.enter_prog_requisiti_ok') + $t('steps.enter_prog_requisiti_ok')"
+                            :msgFalse="$t('steps.enter_prog_completa_requisiti')">
+                </CRequisiti>
+              </CTitleBanner>
+            </div>
+          </div>
+
           <div v-if="dashboard.myself.qualified">
-            <CTitleBanner icon="fas fa-gift" :canopen="true" class="q-pa-xs text-center"
-                          :title="$t('pages.posizione_in_nave')" bgcolor="bg-green"
-                          clcolor="text-white" mystyle=" " myclass="myshad">
+
+            <CTitleBanner class=""
+                          v-if="imbarchipresenti()"
+                          :title="$t('pages.posizione_in_programmazione')"
+                          bgcolor="bg-primary"
+                          clcolor="text-white"
+                          mystyle="" myclass="myshad" canopen="true">
+              <div class="row justify-center items-center ">
+                <div class="col-2">
+                  {{ $t('dashboard.num_tessitura') }}
+                </div>
+                <div class="col-3 ">
+                  {{ $t('dashboard.posizione') }}
+                </div>
+                <div class="col-4 ">
+                  {{ $t('dashboard.invitante') }}
+                </div>
+                <div class="col-2 ">
+                  {{ $t('dashboard.downline') }}
+                </div>
+                <!--<div class="col-2">
+                  {{ $t('dashboard.dono_da_effettuare') }}
+                </div>-->
+                <div class="col-1">
+                  {{ $t('reg.elimina') }}
+                </div>
+
+              </div>
+
+              <div v-for="(mioimbarco, index) in dashboard.arrimbarchi" :key="index">
+                <div v-if="!mioimbarco.added" class="row justify-center items-center ">
+                  <div class="col-2">
+                    <div class="posizione_imbarco">{{ index }}</div>
+                  </div>
+                  <div class="col-3">
+                    <div class="posizione_imbarco">{{ mioimbarco.posiz.posiz }} / {{
+                      mioimbarco.posiz.totposiz }}
+                    </div>
+                  </div>
+                  <div class="col-4">
+                    <div class="posizione_imbarco">
+                      <CUserBadge :yourinvite="false" :showsteps="false" :showregalainv="true"
+                                  :user="dashboard.arrusers[mioimbarco.invitante_username]" mycolor="orange"
+                                  :ind_order_ingr="mioimbarco.ind_order"
+                                  :id_listaingr="mioimbarco._id"
+                                  :index="index"
+                                  :numpeople="0"
+                                  @myclick="selectclick">
+                      </CUserBadge>
+                    </div>
+                  </div>
+                  <div class="col-2">
+                    <div class="posizione_imbarco">
+                      <CCardState :mytext="$t('pages.statusreg.people')"
+                                  :myval="getnuminvattivi(index, dashboard.myself, mioimbarco.posiz)+'/'+getnuminv(index, dashboard.myself, mioimbarco.posiz)"
+                                  :myperc="getnuminvperc(index, dashboard.myself, mioimbarco.posiz)" size="50px"
+                                  size_mob="40px"
+                                  fontsize="0.75rem" myclass="my-card-small-stat"
+                                  :mycolor="getcolorinvitati(index, dashboard.myself, mioimbarco.posiz)"></CCardState>
+
+                    </div>
+                  </div>
+                  <!--<div class="col-2">
+                    <div class="posizione_imbarco">33 €</div>
+                  </div>-->
+                  <div class="col-1">
+                    <div class="posizione_imbarco">
+                      <q-btn flat round color="red" icon="fas fa-trash-alt" size="sm"
+                             @click="cancellaImbarco(mioimbarco)"></q-btn>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+              <CRequisiti :statebool="true"
+                          :msgTrue="$t('steps.enter_prog_msg') + '<br><strong>' + $t('steps.enter_prog_msg_2') + '</strong>'"
+                          msgFalse="">
+              </CRequisiti>
+
+            </CTitleBanner>
+
+            <div class="text-center">
+              <q-btn class="q-ma-md" rounded size="md"
+                     icon="fas fa-info"
+                     color="primary" @click="shownuovoviaggio=true"
+                     :label="$t('steps.nuovo_imbarco')">
+
+              </q-btn>
+            </div>
+
+            <div class="q-pa-xs text-center">
 
               <div v-if="!!dashboard.myself.name">
                 <div v-if="!HasNave">
@@ -152,21 +258,6 @@
                               :color_ko="true"
                               :msgFalse="$t('steps.enter_nave_9req_ko')">
                   </CRequisiti>
-                </div>
-
-                <div v-if="loading" class="text-center" style="height: 50px;">
-                  <q-spinner-gears size="50px" color="primary"/>
-                </div>
-
-                <div class="row justify-center no-wrap">
-                  <div class="col-1 cont_pos_intest">Num</div>
-
-                  <div class="col-3 cont_intestaz ">{{$t('dashboard.nave')}}</div>
-                  <div class="col-3 cont_intestaz " v-html="$t('dashboard.data_partenza')"></div>
-                  <div class="col-3 cont_intestaz_small" v-html="$t('dashboard.doni_inviati')"></div>
-                  <div class="col-2 cont_intestaz_small" v-html="$t('reg.note')"></div>
-                  <!--<div class="col-3 cont_intestaz " v-html="$t('dashboard.tragitto')"></div>-->
-                  <!--<div class="col-1 cont_intestaz ">Tot:</div>-->
                 </div>
 
                 <div v-for="(mianave, index) in dashboard.arrposizioni" :key="index"
@@ -191,13 +282,14 @@
                         </q-chip>
                       </div>
 
-                      <div class="row items-center justify-center q-ma-xs">
-                        <div class="row items-center justify-around q-ma-xs no-wrap" style="width: 100%; font-weight: bold; font-size: 1rem">
+                      <div class="row items-center justify-between q-ma-xs" style="width: 100%;">
+                        <div class="row items-center justify-between q-ma-xs no-wrap"
+                             style="width: 100%; font-weight: bold; font-size: 1rem">
                           <div>{{$t('dashboard.donatore')}}</div>
                           <div>{{$t('dashboard.mediatore')}}</div>
                           <div>{{$t('dashboard.sognatore')}}</div>
                         </div>
-                        <div class="row items-center justify-around q-ma-xs no-wrap" style="width: 100%;">
+                        <div class="row items-center justify-between q-ma-xs no-wrap" style="width: 100%;">
                           <q-chip class="glossy q-ma-sm" color="red" text-color="white"
                                   icon="fas fa-ship">
                             {{ tools.getrigacolstr(mianave) }}
@@ -208,16 +300,36 @@
                           </q-chip>
                           <q-chip class="glossy q-ma-sm" color="purple" text-color="white"
                                   icon="fas fa-ship">
-                            {{ getNaveSognatoreStr(mianave, 0)}}
+                            {{ getNaveSognatoreStr(mianave)}}
                           </q-chip>
                           <!--<span v-for="index of 8">{{ getNaveSognatoreStr(mianave, index)}} - </span>-->
                         </div>
                       </div>
 
-                      <div class="row items-center justify-center q-ma-xs" style="width: 100%;">
-                        <q-list>
+                      <div class="q-pa-md" style="width: 100%;">
+                        <!--<q-badge color="primary">
+                          {{$t('dashboard.nave')}} {{ myrigaattuale }}.{{ mycolattuale }}
+                        </q-badge>-->
+                        <q-list dense>
+                          <q-item>
+                            <q-item-section avatar>
+                              <q-icon color="blue" name="fas fa-ship"></q-icon>
+                            </q-item-section>
+                            <q-item-section>
+                              <q-slider
+                                v-model="myrigaattuale"
+                                markers
+                                label
+                                :label-value="tools.getlastnavestr(dashboard.lastnave)"
+                                label-always
+                                readonly
+                                :min="tools.getRiganave(mianave.riga)"
+                                :max="tools.getRiganave(mianave.riga)+6">
 
-                          <q-item clickable>
+                              </q-slider>
+                            </q-item-section>
+                          </q-item>
+                          <q-item>
                             <q-item-section avatar>
                               <q-icon :color="colordono(mianave)" inverted size="sm" name="fas fa-gift"
                                       class="gift"></q-icon>
@@ -225,7 +337,15 @@
 
                             <q-item-section>
                               <q-item-label>
-                                <div v-if="mianave.made_gift">{{ $t('dashboard.ho_effettuato_il_dono') }}</div>
+                                <div v-if="mianave.made_gift">
+                                  <q-chip class="glossy"
+                                          size="md"
+                                          text-color="green"
+                                          color="white"
+                                          icon="fas fa-gift">
+                                    {{ $t('dashboard.ho_effettuato_il_dono') }}
+                                  </q-chip>
+                                </div>
                               </q-item-label>
                             </q-item-section>
                           </q-item>
@@ -234,15 +354,18 @@
                     </div>
                     <div class="row items-center justify-around q-ma-xs">
                       <q-input v-model="mianave.note" :label="$t('reg.note')"
+                               rounded outlined
                                debounce="1000"
                                style="width: 100%;"
                                @input="change_mynote(mianave)">
-
+                        <template v-slot:prepend>
+                          <q-icon name="edit"/>
+                        </template>
                       </q-input>
                     </div>
                     <div>
                       <CMyNave :posizprop="mianave" :key="index"
-                               :navi_partenzaprop="dashboard.navi_partenza" :listanavi="false">
+                               :navi_partenzaprop="dashboard.navi_partenza" :listanavi="false" :dashboard="dashboard">
 
                       </CMyNave>
                     </div>
@@ -265,105 +388,11 @@
                   </div>-->
 
                 </div>
-                <CTitleBanner class=""
-                              v-if="imbarchipresenti()"
-                              :title="$t('pages.posizione_in_programmazione')"
-                              bgcolor="bg-primary"
-                              clcolor="text-white"
-                              mystyle="" myclass="myshad" canopen="true">
-                  <div class="row justify-center items-center ">
-                    <div class="col-2">
-                      {{ $t('dashboard.num_tessitura') }}
-                    </div>
-                    <div class="col-3 ">
-                      {{ $t('dashboard.posizione') }}
-                    </div>
-                    <div class="col-4 ">
-                      {{ $t('dashboard.invitante') }}
-                    </div>
-                    <div class="col-2 ">
-                      {{ $t('dashboard.downline') }}
-                    </div>
-                    <!--<div class="col-2">
-                      {{ $t('dashboard.dono_da_effettuare') }}
-                    </div>-->
-                    <div class="col-1">
-                      {{ $t('reg.elimina') }}
-                    </div>
 
-                  </div>
-
-                  <div v-for="(mioimbarco, index) in dashboard.arrimbarchi" :key="index">
-                    <div v-if="!mioimbarco.added" class="row justify-center items-center ">
-                      <div class="col-2">
-                        <div class="posizione_imbarco">{{ index }}</div>
-                      </div>
-                      <div class="col-3">
-                        <div class="posizione_imbarco">{{ mioimbarco.posiz.posiz }} / {{
-                          mioimbarco.posiz.totposiz }}
-                        </div>
-                      </div>
-                      <div class="col-4">
-                        <div class="posizione_imbarco">
-                          <CUserBadge :yourinvite="false" :showsteps="false" :showregalainv="true"
-                                      :user="dashboard.arrusers[mioimbarco.invitante_username]" mycolor="orange"
-                                      :ind_order_ingr="mioimbarco.ind_order"
-                                      :id_listaingr="mioimbarco._id"
-                                      :index="index"
-                                      :numpeople="0"
-                                      @myclick="selectclick">
-                          </CUserBadge>
-                        </div>
-                      </div>
-                      <div class="col-2">
-                        <div class="posizione_imbarco">
-                          <CCardState :mytext="$t('pages.statusreg.people')"
-                                      :myval="getnuminvattivi(index, dashboard.myself, mioimbarco.posiz)+'/'+getnuminv(index, dashboard.myself, mioimbarco.posiz)"
-                                      :myperc="getnuminvperc(index, dashboard.myself, mioimbarco.posiz)" size="50px"
-                                      size_mob="40px"
-                                      fontsize="0.75rem" myclass="my-card-small-stat"
-                                      :mycolor="getcolorinvitati(index, dashboard.myself, mioimbarco.posiz)"></CCardState>
-
-                        </div>
-                      </div>
-                      <!--<div class="col-2">
-                        <div class="posizione_imbarco">33 €</div>
-                      </div>-->
-                      <div class="col-1">
-                        <div class="posizione_imbarco">
-                          <q-btn flat round color="red" icon="fas fa-trash-alt" size="sm"
-                                 @click="cancellaImbarco(mioimbarco)"></q-btn>
-                        </div>
-                      </div>
-                    </div>
-
-                  </div>
-                  <q-btn class="q-ma-md" rounded size="md"
-                         icon="fas fa-info"
-                         color="primary" @click="shownuovoviaggio=true"
-                         :label="$t('steps.nuovo_imbarco')">
-
-                  </q-btn>
-
-                  <CRequisiti :statebool="true"
-                              :msgTrue="$t('steps.enter_prog_msg') + '<br><strong>' + $t('steps.enter_prog_msg_2') + '</strong>'"
-                              msgFalse="">
-                  </CRequisiti>
-
-                </CTitleBanner>
-
-
-                <!--<div>
-                  <CMyNave v-for="(mianave, index) in dashboard.arrposizioni" :posizprop="mianave"
-                           :key="index"
-                           :navi_partenzaprop="dashboard.navi_partenza" :listanavi="false">
-
-                  </CMyNave>
-                </div>-->
               </div>
 
 
-            </CTitleBanner>
+            </div>
 
           </div>
 
@@ -372,21 +401,6 @@
     </div>
 
     <div>
-
-      <div>
-        <div v-if="!Completato9Req && !HasNave">
-          <CTitleBanner icon="person" :canopen="true" class="q-pa-xs text-center"
-                        :title="$t('pages.posizione_in_programmazione')" bgcolor="bg-blue"
-                        clcolor="text-white" mystyle=" " myclass="myshad">
-            <CRequisiti :statebool="Completato7Req"
-                        :msgTrue="$t('steps.enter_prog_requisiti_ok') + $t('steps.enter_prog_requisiti_ok')"
-                        :msgFalse="$t('steps.enter_prog_completa_requisiti')">
-            </CRequisiti>
-          </CTitleBanner>
-        </div>
-      </div>
-
-
       <div v-if="!!dashboard.myself.name">
         <div v-if="dashboard.myself.deleted">
           <span style="color: red;"> <h2><strong>UTENTE CANCELLATO (Nascosto: true) !</strong></h2></span>
@@ -396,10 +410,6 @@
           <span style="color: blue;"> <h2><strong>UTENTE SOSPESO !</strong></h2></span>
         </div>
 
-      </div>
-
-      <div v-if="loading" class="text-center" style="height: 50px;">
-        <q-spinner-gears size="50px" color="primary"/>
       </div>
 
 
@@ -423,10 +433,6 @@
           </div>
         </CTitleBanner>
     -->
-
-    <CCopyBtn :title="$t('reg.reflink')" :texttocopy="getRefLink">
-
-    </CCopyBtn>
 
     <br>
 
@@ -457,10 +463,7 @@
         </q-toolbar>
         <q-card-section class="inset-shadow" style="padding: 4px !important;">
 
-          <CTitleBanner class="q-pa-xs text-center" :title="$t('steps.nuovo_imbarco')" bgcolor="bg-blue"
-                        clcolor="text-white"
-                        mystyle=" " myclass="myshad">
-
+          <div class="q-pa-sm">
             <div v-html="$t('steps.vuoi_entrare_nuova_nave')">
 
             </div>
@@ -491,7 +494,7 @@
 
               </q-input>
 
-              <q-toggle v-model="notifBot" :label="$t('dashboard.sendnotification')"/>
+              <!--<q-toggle v-model="notifBot" :label="$t('dashboard.sendnotification')"/>-->
 
               <q-btn class="q-ma-md" rounded size="md"
                      icon="fas fa-ship"
@@ -500,10 +503,7 @@
                      :label="$t('steps.nuovo_imbarco')">
               </q-btn>
             </div>
-
-
-          </CTitleBanner>
-
+          </div>
         </q-card-section>
       </q-card>
     </q-dialog>

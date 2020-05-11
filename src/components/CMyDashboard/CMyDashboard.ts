@@ -58,6 +58,8 @@ export default class CMyDashboard extends MixinUsers {
   public showregalainv: boolean = false
   public id_listaingr: number = -1
   public ind_order_ingr: number = -1
+  public myrigaattuale: number = 0
+  public mycolattuale: number = 0
   public dashboard: IDashboard = {
     myself: DefaultUser,
     aportador: DefaultUser,
@@ -76,10 +78,10 @@ export default class CMyDashboard extends MixinUsers {
 
   @Watch('UserStore.state.my.dashboard')
   public changedash() {
-    console.log('changedash')
+    // console.log('changedash')
     this.dashboard = UserStore.state.my.dashboard
     if (!!this.dashboard)
-      this.invitante_username = this.dashboard.myself.aportador_solidario
+      this.invitante_username = this.dashboard.myself.username
 
   }
 
@@ -96,7 +98,7 @@ export default class CMyDashboard extends MixinUsers {
 
   public changetab(val) {
     tools.setCookie(tools.TABBED_DASHBOARD, val)
-    console.log('setcook', val)
+    // console.log('setcook', val)
   }
 
   @Watch('this.username')
@@ -112,7 +114,7 @@ export default class CMyDashboard extends MixinUsers {
   }
 
   public async update_username() {
-    console.log('update_username')
+    // console.log('update_username')
     this.loading = true
     if (this.username === '')
       this.myusername = this.getMyUsername()
@@ -125,9 +127,12 @@ export default class CMyDashboard extends MixinUsers {
       this.dashboard = ris
 
       if (!!this.dashboard)
-        this.invitante_username = this.dashboard.myself.aportador_solidario
+        this.invitante_username = this.dashboard.myself.username
 
-      console.log('this.invitante_username', this.invitante_username)
+      this.myrigaattuale = this.dashboard.lastnave.riga
+      this.mycolattuale = this.dashboard.lastnave.col
+
+      // console.log('this.invitante_username', this.invitante_username)
       this.loading = false
     })
 
@@ -184,8 +189,8 @@ export default class CMyDashboard extends MixinUsers {
   public datanave(mianave) {
     // const mynavepart = this.getnavePartenzaByRigaCol(tools.getRiganave(mianave.riga), tools.getColnave(mianave.col))
     if (!!mianave.nave_partenza) {
-      if (!!mianave.nave_partenza.date_start)
-        return tools.getstrshortDate(mianave.nave_partenza.date_start)
+      if (!!mianave.nave_partenza.date_gift_chat_open)
+        return tools.getstrshortDate(mianave.nave_partenza.date_gift_chat_open)
     }
     return ' --/-- '
   }
@@ -340,7 +345,7 @@ export default class CMyDashboard extends MixinUsers {
   get allowSubmit() {
     let error = this.$v.$error || this.$v.$invalid
 
-    error = error || (this.invitante_username === this.dashboard.myself.username)
+    // error = error || (this.invitante_username === this.dashboard.myself.username)
 
     return !error
 
@@ -370,9 +375,11 @@ export default class CMyDashboard extends MixinUsers {
     tools.saveFieldToServer(this, 'navi', mianave._id, mydata)
   }
 
-  public getNaveSognatoreStr(mianave, index) {
+  public getNaveSognatoreStr(mianave) {
     const mynavedest = tools.getfirstnaveSognatore(mianave.riga, mianave.col)
-    return mynavedest.riga + '.' + parseInt(mynavedest.col, 10) + index
+    const ris = mynavedest.riga + '.' + mynavedest.col
+    // console.log('ris', ris)
+    return ris
   }
 
   public getNaveMediatoreStr(mianave) {

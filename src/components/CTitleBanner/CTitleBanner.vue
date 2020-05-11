@@ -3,7 +3,7 @@
     <q-banner
       inline-actions
       rounded dense
-      :class="bgcolor+` cursor-pointer q-my-sm `+clcolor+ ` ` + myclass"
+      :class="bgcolor+` cursor-pointer q-my-sm `+clcolor+ ` ` + myclass + ' ' + getclass"
       style="text-align: center; "
       @click="apri()"
     >

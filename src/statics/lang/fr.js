@@ -1,5 +1,9 @@
 const msg_fr = {
   fr: {
+    words: {
+      da: 'du',
+      a: 'au',
+    },
     home: {
       guida_passopasso: 'Guide pas-à-pas'
     },
@@ -54,8 +58,8 @@ const msg_fr = {
     },
     steps: {
       nuovo_imbarco: 'Réserver un autre voyage',
-      vuoi_entrare_nuova_nave: 'Si vous confirmez, lorsque votre navire est prêt à naviguer, vous ferez un Nouveau Cadeau pour répéter un autre voyage.<br>' +
-      'De cette façon, vous aiderez tous les navires à aller de l\'avant et à développer le mouvement.',
+      vuoi_entrare_nuova_nave: 'Vous souhaitez aider le Mouvement à avancer et avez l\'intention d\'entrer dans un autre navire ?<br>En faisant un nouveau don de 33€, vous pourrez faire un autre voyage et avoir une autre opportunité de devenir un Rêveur !<br>' +
+      'Si vous confirmez, vous serez ajouté à la liste d\'attente pour le prochain embarquement.',
       vuoi_cancellare_imbarco: 'Êtes-vous sûr de vouloir annuler cet embarquement sur le navire AYNI ?',
       completed: 'Complétée',
       passi_su: '{passo} étapes sur {totpassi}',
@@ -201,7 +205,7 @@ const msg_fr = {
       tutor: 'Tuteur',
       sonomediatore: 'Quand vous devenez Médiateur vous êtes contacté par un <strong>TUTEUR</strong>, avec lui vous devez:<br><ol class="lista">' +
       '<li>Ouvrir votre <strong>Gift Chat</strong> (vous comme propriétaire et le Tuteur ' +
-      'comme administrateur) avec ce nom: <strong>{nomenave}</strong></li>' +
+      'comme administrateur) avec ce nom:<br><strong>{nomenave}</strong></li>' +
       '<li>Cliquez sur le nom du chat en haut -> Modifiez -> Administrateurs -> "Ajoutez Administrateur", sélectionner le Tuteur dans la liste.</li>' +
       '<li>Vous devez configurer le chat de façon que la personne qui entre puisse également voir les post précédents  (cliquez sur le nom du chat en haut, cliquez sur modifiez, ' +
       'changez la "chronologie pour les nouveaux membres" de cachée à visibile.</li>' +
@@ -236,7 +240,7 @@ const msg_fr = {
       metodi_disponibili: 'Méthodes disponibles',
       importo: 'Montant',
       effettua_il_dono: 'Il est temps de faire votre propre regalo ! ' +
-      'Envoyez via PayPal à : <strong>{email}</strong><br>' +
+      'Envoyez via <a href="https://www.paypal.com" target="_blank">PayPal</a> à : <strong>{email}</strong><br>' +
       '(Choisissez l\'option "ENVOYER À UNE PERSONNE DE CONFIANCE")<br>',
       qui_compariranno_le_info: 'Le jour du départ du navire, les informations du Dreamer apparaîtront',
       posizione: 'Localisation',
@@ -245,7 +249,7 @@ const msg_fr = {
       clicca_conferma_dono: 'Cliquez ici pour confirmer que vous avez fait votre regalo',
       fatto_dono: 'Vous avez confirmé que le Regalo a été envoyé',
       confermi_dono: 'Confirmez que vous avez envoyé votre Regalo de 33€',
-      dono_ricevuto: 'Votre regalo a été reçu correctement',
+      dono_ricevuto: 'Votre regalo a été reçu!',
       dono_ricevuto_2: 'Reçu',
       dono_ricevuto_3: 'Arrivé!',
       confermi_dono_ricevuto: 'Confirmez que vous avez reçu le regalo de 33 $ de {donatore}',

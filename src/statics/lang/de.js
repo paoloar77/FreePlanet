@@ -1,5 +1,9 @@
 const msg_de = {
   de: {
+    words:{
+      da: 'from',
+      a: 'to',
+    },
     home: {
       guida_passopasso: 'Step By Step Guide'
     },
