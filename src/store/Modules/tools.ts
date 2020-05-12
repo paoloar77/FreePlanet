@@ -1530,7 +1530,7 @@ export const tools = {
       GlobalStore.actions.saveFieldValue(mydatatosave).then((ris) => {
         console.log('ris saveFieldValue', ris)
         if (ris) {
-          tools.showPositiveNotif(myself.$q, myself.$t('reg.invitato_regalato') + ' "' + par.param1.name + ' ' + par.param1.surname + '"')
+          tools.showPositiveNotif(myself.$q, myself.$t('reg.invitante_regalato') + ' "' + par.param2.name + ' ' + par.param2.surname + '"')
           myself.update_username()
         } else
           tools.showNegativeNotif(myself.$q, myself.$t('db.recfailed'))

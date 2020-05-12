@@ -42,7 +42,7 @@
           </div>
         </CTitleBanner>
 
-        <div v-if="ismydownline(seluser) || showregalainv">
+        <div v-if="(ismydownline(seluser) && seluser.username !== mydashboard.myself.username) || showregalainv">
 
           <CTitleBanner class="shadow-2 rounded-borders" :title="gettitleregala()"
                         bgcolor="bg-positive"

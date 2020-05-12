@@ -223,7 +223,7 @@ export default class CMyDashboard extends MixinUsers {
 
   public async NuovoImbarco(username, invitante_username) {
 
-    await tools.askConfirm(this.$q, translate('steps.nuovo_imbarco'), translate('dialog.continue'), translate('dialog.yes'), translate('dialog.no'), this, '', lists.MenuAction.AGGIUNGI_NUOVO_IMBARCO, 0, {
+    await tools.askConfirm(this.$q, translate('steps.nuovo_imbarco') , translate('dialog.continue') + ' ?', translate('dialog.yes'), translate('dialog.no'), this, '', lists.MenuAction.AGGIUNGI_NUOVO_IMBARCO, 0, {
       param1: { username, invitante_username }
     })
     this.shownuovoviaggio = false
@@ -234,7 +234,7 @@ export default class CMyDashboard extends MixinUsers {
   }
 
   public async cancellaImbarco(imbarco) {
-    await tools.askConfirm(this.$q, translate('dashboard.attenzione'), translate('steps.vuoi_cancellare_imbarco'), translate('dialog.yes'), translate('dialog.no'), this, '', lists.MenuAction.CANCELLA_IMBARCO, 0, {
+    await tools.askConfirm(this.$q, translate('dashboard.attenzione'), translate('steps.vuoi_cancellare_imbarco') , translate('dialog.yes'), translate('dialog.no'), this, '', lists.MenuAction.CANCELLA_IMBARCO, 0, {
       param1: { ind_order: imbarco.ind_order, username: imbarco.username },
       param2: { num_tess: imbarco.num_tess }
     })
@@ -360,7 +360,13 @@ export default class CMyDashboard extends MixinUsers {
     return presente
   }
 
-  public getcolorbynave(mianave){
+  public isprovvisoria(mianave) {
+    if (!!mianave && mianave.nave_partenza)
+      return mianave.nave_partenza.provvisoria
+    return false
+  }
+
+  public getcolorbynave(mianave) {
     if (!!mianave.nave_partenza)
       return mianave.nave_partenza.provvisoria ? 'gray' : 'green'
     else
@@ -386,5 +392,51 @@ export default class CMyDashboard extends MixinUsers {
     return mianave.riga + '.' + mianave.col
   }
 
+  get getstrinvitati() {
+    if (this.dashboard.myself.numinvitati)
+      return this.dashboard.myself.numinvitati + ` ` + this.$t('dashboard.downline')
+    else
+      return ` (...) ` + this.$t('dashboard.downline')
+  }
 
+  public getmyrigaattuale(rigamin) {
+    let riga = this.myrigaattuale
+
+    if (riga < rigamin)
+      riga = rigamin
+    if (riga > rigamin + 6)
+      riga = rigamin + 6
+
+    return riga
+  }
+
+  public getval7(mianave) {
+    let val = this.getmyrigaattuale(tools.getRiganave(mianave.riga))
+    return val - tools.getRiganave(mianave.riga) + 1
+  }
+
+  public getcolorbyval(mianave) {
+    let val = this.getval7(mianave)
+
+    if (val === 7)
+      return 'purple'
+    else if (val === 6)
+      return 'indigo'
+    else if (val === 5)
+      return 'blue'
+    else if (val === 4)
+      return 'green'
+    else if (val === 3)
+      return 'yellow'
+    else if (val === 2)
+      return 'orange'
+    else if (val === 1)
+      return 'red'
+
+    return val
+  }
+
+  gettextcolor(mianave) {
+    return this.getval7(mianave) === 3 ? 'black' : 'white'
+  }
 }

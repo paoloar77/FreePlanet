@@ -226,6 +226,7 @@ const msg_it = {
       telefono_wa: 'Contatta su Whatsapp',
       sendnotification: 'Invia Notifica al Destinatario su Telegram BOT',
       ricevuto_dono: '😍🎊 Hai ricevuto in Regalo un Invitato {invitato} da parte di {mittente} !',
+      ricevuto_dono_invitante: '😍🎊 Hai ricevuto in Regalo un Invitante da parte di {mittente} !',
       nessun_invitante: 'Nessun Invitante',
       nessun_invitato: 'Nessun Invitato',
       legenda_title: 'Clicca sul nome dell\'invitato per vedere lo stato dei suoi Requisiti.',
@@ -291,6 +292,7 @@ const msg_it = {
       doni_inviati_da_confermare: 'Doni Inviati (da confermare)',
       doni_mancanti: 'Doni Mancanti',
       temporanea: 'Temporanea',
+      nave_provvisoria: 'Ti è stata assegnata una <strong>Nave Temporanea</strong>.<br>E\' normale che vedrai variare la data di partenza, dovuto all\'aggiornamento della graduatoria dei passeggeri.',
       ritessitura: 'RITESSITURA',
     },
     reg: {
@@ -319,6 +321,7 @@ const msg_it = {
       messaggio_invito_msg: 'Invia questo messaggio a tutti coloro a cui vuoi condividere questo Movimento !',
       videointro: 'Video Introduttivo',
       invitato_regalato: 'Invitato Regalato',
+      invitante_regalato: 'Invitante Regalato',
       legenda: 'Legenda',
       aportador_solidario: 'Chi ti ha Invitato',
       username_regala_invitato: 'Username del Destinatario del regalo',

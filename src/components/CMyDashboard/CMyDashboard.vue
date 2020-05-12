@@ -1,5 +1,5 @@
 <template>
-  <div class="q-my-xs q-gutter-xs q-py-xs" v-if="myusername !== ''">
+  <div class="q-gutter-xs" v-if="myusername !== ''">
     <div>
       <q-tabs
         v-model="tab"
@@ -25,7 +25,8 @@
           <div v-if="!!dashboard.myself.name">
 
 
-            <CMyRequirement :myseluser="dashboard.myself" :mydashboard="dashboard" @aggiorna="aggiorna">
+            <CMyRequirement :myseluser="dashboard.myself" :mydashboard="dashboard" @aggiorna="aggiorna"
+            >
 
             </CMyRequirement>
           </div>
@@ -60,7 +61,7 @@
 
         </q-tab-panel>
         <q-tab-panel name="invitati">
-          <CTitleBanner class="shadow-2 rounded-borders" :title="$t('dashboard.downline')" bgcolor="bg-positive"
+          <CTitleBanner class="shadow-2 rounded-borders" :title="getstrinvitati" bgcolor="bg-positive"
                         clcolor="text-white"
                         mystyle=" " myclass="myshad" :canopen="true">
 
@@ -73,15 +74,17 @@
                 >
 
                 </CUserBadge>
-                <div style="margin-left:10px;" v-for="(user2, index2) in dashboard.downbyuser[user.username]"
-                     :key="index2">
-                  <CUserBadge :yourinvite="false" :user="user2" mycolor="orange" :index="index2"
-                              :showregalainv="false"
-                              :numpeople="dashboard.downbyuser[user2.username].length"
-                              @myclick="selectclick"
-                  >
+                <div v-if="user.username !== dashboard.myself.username">
+                  <div style="margin-left:10px;" v-for="(user2, index2) in dashboard.downbyuser[user.username]"
+                       :key="index2">
+                    <CUserBadge :yourinvite="false" :user="user2" mycolor="orange" :index="index2"
+                                :showregalainv="false"
+                                :numpeople="dashboard.downbyuser[user2.username].length"
+                                @myclick="selectclick"
+                    >
 
-                  </CUserBadge>
+                    </CUserBadge>
+                  </div>
                 </div>
               </div>
             </q-list>
@@ -158,249 +161,307 @@
             </div>
           </div>
 
-          <div v-if="dashboard.myself.qualified">
+          <div v-if="!!dashboard">
+            <div v-if="dashboard.myself.qualified">
 
-            <CTitleBanner class=""
-                          v-if="imbarchipresenti()"
-                          :title="$t('pages.posizione_in_programmazione')"
-                          bgcolor="bg-primary"
-                          clcolor="text-white"
-                          mystyle="" myclass="myshad" canopen="true">
-              <div class="row justify-center items-center ">
-                <div class="col-2">
-                  {{ $t('dashboard.num_tessitura') }}
-                </div>
-                <div class="col-3 ">
-                  {{ $t('dashboard.posizione') }}
-                </div>
-                <div class="col-4 ">
-                  {{ $t('dashboard.invitante') }}
-                </div>
-                <div class="col-2 ">
-                  {{ $t('dashboard.downline') }}
-                </div>
-                <!--<div class="col-2">
-                  {{ $t('dashboard.dono_da_effettuare') }}
-                </div>-->
-                <div class="col-1">
-                  {{ $t('reg.elimina') }}
-                </div>
-
-              </div>
-
-              <div v-for="(mioimbarco, index) in dashboard.arrimbarchi" :key="index">
-                <div v-if="!mioimbarco.added" class="row justify-center items-center ">
-                  <div class="col-2">
-                    <div class="posizione_imbarco">{{ index }}</div>
+              <CTitleBanner class=""
+                            v-if="imbarchipresenti()"
+                            :title="$t('pages.posizione_in_programmazione')"
+                            bgcolor="bg-primary"
+                            clcolor="text-white"
+                            mystyle="" myclass="myshad" canopen="true">
+                <div class="row justify-between items-center" style="text-align: center;">
+                  <div class="col-3 ">
+                    {{ $t('dashboard.posizione') }}
                   </div>
-                  <div class="col-3">
-                    <div class="posizione_imbarco">{{ mioimbarco.posiz.posiz }} / {{
-                      mioimbarco.posiz.totposiz }}
-                    </div>
+                  <div class="col-5 ">
+                    {{ $t('dashboard.invitante') }}
                   </div>
-                  <div class="col-4">
-                    <div class="posizione_imbarco">
-                      <CUserBadge :yourinvite="false" :showsteps="false" :showregalainv="true"
-                                  :user="dashboard.arrusers[mioimbarco.invitante_username]" mycolor="orange"
-                                  :ind_order_ingr="mioimbarco.ind_order"
-                                  :id_listaingr="mioimbarco._id"
-                                  :index="index"
-                                  :numpeople="0"
-                                  @myclick="selectclick">
-                      </CUserBadge>
-                    </div>
-                  </div>
-                  <div class="col-2">
-                    <div class="posizione_imbarco">
-                      <CCardState :mytext="$t('pages.statusreg.people')"
-                                  :myval="getnuminvattivi(index, dashboard.myself, mioimbarco.posiz)+'/'+getnuminv(index, dashboard.myself, mioimbarco.posiz)"
-                                  :myperc="getnuminvperc(index, dashboard.myself, mioimbarco.posiz)" size="50px"
-                                  size_mob="40px"
-                                  fontsize="0.75rem" myclass="my-card-small-stat"
-                                  :mycolor="getcolorinvitati(index, dashboard.myself, mioimbarco.posiz)"></CCardState>
-
-                    </div>
+                  <div class="col-2 ">
+                    {{ $t('dashboard.downline') }}
                   </div>
                   <!--<div class="col-2">
-                    <div class="posizione_imbarco">33 €</div>
+                    {{ $t('dashboard.dono_da_effettuare') }}
                   </div>-->
-                  <div class="col-1">
-                    <div class="posizione_imbarco">
-                      <q-btn flat round color="red" icon="fas fa-trash-alt" size="sm"
-                             @click="cancellaImbarco(mioimbarco)"></q-btn>
-                    </div>
+                  <div class="col-2">
+                    {{ $t('reg.elimina') }}
                   </div>
+
                 </div>
 
-              </div>
+                <div v-for="(mioimbarco, index) in dashboard.arrimbarchi" :key="index">
+                  <div v-if="!mioimbarco.added" class="row justify-between items-center ">
+                    <!--<div class="col-2">
+                      <div class="posizione_imbarco">{{ index }}</div>
+                    </div>-->
+                    <div class="col-3">
+                      <div class="posizione_imbarco">{{ mioimbarco.posiz.posiz }}° su {{
+                        mioimbarco.posiz.totposiz }}
+                      </div>
+                    </div>
+                    <div class="col-5">
+                      <div class="posizione_imbarco">
+                        <CUserBadge :yourinvite="false" :showsteps="false" :showregalainv="true"
+                                    :user="dashboard.arrusers[mioimbarco.invitante_username]" mycolor="orange"
+                                    :ind_order_ingr="mioimbarco.ind_order"
+                                    :id_listaingr="mioimbarco._id"
+                                    :index="index"
+                                    :numpeople="0"
+                                    @myclick="selectclick">
+                        </CUserBadge>
+                      </div>
+                    </div>
+                    <div class="col-2">
+                      <div class="posizione_imbarco">
+                        <CCardState :mytext="$t('pages.statusreg.people')"
+                                    :myval="getnuminvattivi(index, dashboard.myself, mioimbarco.posiz)+'/'+getnuminv(index, dashboard.myself, mioimbarco.posiz)"
+                                    :myperc="getnuminvperc(index, dashboard.myself, mioimbarco.posiz)" size="50px"
+                                    size_mob="40px"
+                                    fontsize="0.75rem" myclass="my-card-small-stat"
+                                    :mycolor="getcolorinvitati(index, dashboard.myself, mioimbarco.posiz)"></CCardState>
 
-              <CRequisiti :statebool="true"
-                          :msgTrue="$t('steps.enter_prog_msg') + '<br><strong>' + $t('steps.enter_prog_msg_2') + '</strong>'"
-                          msgFalse="">
-              </CRequisiti>
+                      </div>
+                    </div>
+                    <!--<div class="col-2">
+                      <div class="posizione_imbarco">33 €</div>
+                    </div>-->
+                    <div class="col-2">
+                      <div class="posizione_imbarco">
+                        <q-btn flat round color="red" icon="fas fa-trash-alt" size="sm"
+                               @click="cancellaImbarco(mioimbarco)"></q-btn>
+                      </div>
+                    </div>
+                  </div>
 
-            </CTitleBanner>
+                </div>
 
-            <div class="text-center">
-              <q-btn class="q-ma-md" rounded size="md"
-                     icon="fas fa-info"
-                     color="primary" @click="shownuovoviaggio=true"
-                     :label="$t('steps.nuovo_imbarco')">
-
-              </q-btn>
-            </div>
-
-            <div class="q-pa-xs text-center">
-
-              <div v-if="!!dashboard.myself.name">
-                <div v-if="!HasNave">
-                  <CRequisiti :statebool="Completato9Req" :msgTrue="$t('steps.enter_nave_9req_ok')"
-                              :color_ko="true"
-                              :msgFalse="$t('steps.enter_nave_9req_ko')">
+                <div class="centermydiv">
+                  <CRequisiti :statebool="true"
+                              :msgTrue="$t('steps.enter_prog_msg') + '<br><strong>' + $t('steps.enter_prog_msg_2') + '</strong>'"
+                              msgFalse="">
                   </CRequisiti>
                 </div>
 
-                <div v-for="(mianave, index) in dashboard.arrposizioni" :key="index"
-                     class="q-pa-sm row items-start q-gutter-sm">
+              </CTitleBanner>
+
+              <div class="text-center">
+                <q-btn class="q-ma-md" rounded size="md"
+                       icon="fas fa-info"
+                       color="primary" @click="shownuovoviaggio=true"
+                       :label="$t('steps.nuovo_imbarco')">
+
+                </q-btn>
+              </div>
+
+              <div class="q-pa-xs text-center">
+
+                <div v-if="!!dashboard.myself.name">
+                  <div v-if="!HasNave">
+                    <CRequisiti :statebool="Completato9Req" :msgTrue="$t('steps.enter_nave_9req_ok')"
+                                :color_ko="true"
+                                :msgFalse="$t('steps.enter_nave_9req_ko')">
+                    </CRequisiti>
+                  </div>
                   <q-card class="my-card-shadow yes_shadow">
                     <q-img
-                      src="statics/images/nave.jpg"
-                      style="width: 100%"
+                      src="statics/images/listanavi.jpg"
+                      style="width: 100%;"
                       native-context-menu>
-                      <div class="absolute-bottom text-subtitle1 text-center text-sobig">
-                        {{ getnumtessstr(mianave.num_tess, index) }} - {{$t('dashboard.nave') + ' ' +
-                        tools.getrigacolstr(mianave)}}
+                      <div class="absolute-bottom text-subtitle1 text-center">
+                        {{$t('pages.posizione_in_nave')}}
                       </div>
                     </q-img>
-                    <div class="row justify-sm-start items-center rounded-borders">
+                    <div class="q-ma-xs">&nbsp;</div>
+                    <div v-for="(mianave, index) in dashboard.arrposizioni" :key="index">
+                      <q-list dense>
+                        <q-item>
+                          <q-item-section avatar style="width: 70px; font-size: 0.75rem;">
+                            {{ getnumtessstr(1, index) }}
+                            - {{ tools.getrigacolstr(mianave)}}
+                            <q-icon color="blue" name="fas fa-ship"></q-icon>
+                          </q-item-section>
+                          <q-item-section>
+                            <q-slider
+                              :value="getmyrigaattuale(tools.getRiganave(mianave.riga))"
+                              :label-text-color="gettextcolor(mianave)"
+                              :label-value="getval7(mianave) + '/7'"
+                              :color="getcolorbyval(mianave)"
+                              markers
+                              dense
+                              label
+                              label-always
+                              readonly
+                              :min="tools.getRiganave(mianave.riga)"
+                              :max="tools.getRiganave(mianave.riga)+6">
 
-                      <div class="row items-center justify-center q-ma-xs" style="width: 100%">
-                        <q-chip class="glossy q-ma-md" :color="getcolorbynave(mianave)" text-color="white"
-                                icon="fas fa-ship">
-                          &nbsp;
-                          {{ $t('dashboard.nave_in_partenza') + ' ' + datanave(mianave) }}
-                        </q-chip>
-                      </div>
-
-                      <div class="row items-center justify-between q-ma-xs" style="width: 100%;">
-                        <div class="row items-center justify-between q-ma-xs no-wrap"
-                             style="width: 100%; font-weight: bold; font-size: 1rem">
-                          <div>{{$t('dashboard.donatore')}}</div>
-                          <div>{{$t('dashboard.mediatore')}}</div>
-                          <div>{{$t('dashboard.sognatore')}}</div>
-                        </div>
-                        <div class="row items-center justify-between q-ma-xs no-wrap" style="width: 100%;">
-                          <q-chip class="glossy q-ma-sm" color="red" text-color="white"
-                                  icon="fas fa-ship">
-                            {{ tools.getrigacolstr(mianave) }}
-                          </q-chip>
-                          <q-chip class="glossy q-ma-sm" color="green" text-color="white"
-                                  icon="fas fa-ship">
-                            {{ getNaveMediatoreStr(mianave)}}
-                          </q-chip>
-                          <q-chip class="glossy q-ma-sm" color="purple" text-color="white"
-                                  icon="fas fa-ship">
-                            {{ getNaveSognatoreStr(mianave)}}
-                          </q-chip>
-                          <!--<span v-for="index of 8">{{ getNaveSognatoreStr(mianave, index)}} - </span>-->
-                        </div>
-                      </div>
-
-                      <div class="q-pa-md" style="width: 100%;">
-                        <!--<q-badge color="primary">
-                          {{$t('dashboard.nave')}} {{ myrigaattuale }}.{{ mycolattuale }}
-                        </q-badge>-->
-                        <q-list dense>
-                          <q-item>
-                            <q-item-section avatar>
-                              <q-icon color="blue" name="fas fa-ship"></q-icon>
-                            </q-item-section>
-                            <q-item-section>
-                              <q-slider
-                                v-model="myrigaattuale"
-                                markers
-                                label
-                                :label-value="tools.getlastnavestr(dashboard.lastnave)"
-                                label-always
-                                readonly
-                                :min="tools.getRiganave(mianave.riga)"
-                                :max="tools.getRiganave(mianave.riga)+6">
-
-                              </q-slider>
-                            </q-item-section>
-                          </q-item>
-                          <q-item>
-                            <q-item-section avatar>
-                              <q-icon :color="colordono(mianave)" inverted size="sm" name="fas fa-gift"
-                                      class="gift"></q-icon>
-                            </q-item-section>
-
-                            <q-item-section>
-                              <q-item-label>
-                                <div v-if="mianave.made_gift">
-                                  <q-chip class="glossy"
-                                          size="md"
-                                          text-color="green"
-                                          color="white"
-                                          icon="fas fa-gift">
-                                    {{ $t('dashboard.ho_effettuato_il_dono') }}
-                                  </q-chip>
-                                </div>
-                              </q-item-label>
-                            </q-item-section>
-                          </q-item>
-                        </q-list>
-                      </div>
+                            </q-slider>
+                          </q-item-section>
+                        </q-item>
+                      </q-list>
                     </div>
-                    <div class="row items-center justify-around q-ma-xs">
-                      <q-input v-model="mianave.note" :label="$t('reg.note')"
-                               rounded outlined
-                               debounce="1000"
-                               style="width: 100%;"
-                               @input="change_mynote(mianave)">
-                        <template v-slot:prepend>
-                          <q-icon name="edit"/>
-                        </template>
-                      </q-input>
-                    </div>
-                    <div>
-                      <CMyNave :posizprop="mianave" :key="index"
-                               :navi_partenzaprop="dashboard.navi_partenza" :listanavi="false" :dashboard="dashboard">
-
-                      </CMyNave>
-                    </div>
-
-                    <!--<q-card-actions>
-                      <q-btn flat>Action 1</q-btn>
-                      <q-btn flat>Action 2</q-btn>
-                    </q-card-actions>-->
                   </q-card>
-                  <!--<div class="col-3">
-                      <div>
-                          <CCardState :isperc="true" size="50px" size_mob="40px" fontsize="0.75rem"
-                                      :myperc="getposizioneattuale(mianave)"></CCardState>
+
+                  <div v-for="(mianave, index) in dashboard.arrposizioni" :key="index"
+                       class="q-pa-sm row items-start q-gutter-sm">
+
+                    <q-card class="my-card-shadow yes_shadow">
+                      <q-img
+                        src="statics/images/nave.jpg"
+                        style="width: 100%"
+                        native-context-menu>
+                        <div class="absolute-bottom text-subtitle1 text-center text-sobig">
+                          {{ getnumtessstr(mianave.num_tess, index) }} - {{$t('dashboard.nave') + ' ' +
+                          tools.getrigacolstr(mianave)}}
+                        </div>
+                      </q-img>
+                      <div class="row justify-sm-start items-center rounded-borders">
+
+                        <div class="row items-center justify-center q-ma-xs" style="width: 100%">
+                          <q-chip class="glossy q-ma-md" :color="getcolorbynave(mianave)" text-color="white"
+                                  icon="fas fa-ship">
+                            &nbsp;
+                            {{ $t('dashboard.nave_in_partenza') + ' ' + datanave(mianave) }}
+                          </q-chip>
+                        </div>
+
+                        <div v-if="isprovvisoria(mianave)">
+                          <CRequisiti :statebool="true"
+                                      :msgTrue="$t('dashboard.nave_provvisoria') + `<br><strong>` + $t('steps.enter_prog_msg') + `</strong>`"
+                                      msgFalse="">
+                          </CRequisiti>
+                        </div>
+
+
+                        <div class="row items-center justify-between q-ma-xs" style="width: 100%;">
+                          <div class="row items-center justify-between q-ma-xs no-wrap"
+                               style="width: 100%; font-weight: bold; font-size: 1rem">
+                            <div>{{$t('dashboard.donatore')}}</div>
+                            <div>{{$t('dashboard.mediatore')}}</div>
+                            <div>{{$t('dashboard.sognatore')}}</div>
+                          </div>
+                          <div class="row items-center justify-between q-ma-xs no-wrap" style="width: 100%;">
+                            <q-chip class="glossy q-ma-sm" color="red" text-color="white"
+                                    icon="fas fa-ship">
+                              {{ tools.getrigacolstr(mianave) }}
+                            </q-chip>
+                            <q-chip class="glossy q-ma-sm" color="green" text-color="white"
+                                    icon="fas fa-ship">
+                              {{ getNaveMediatoreStr(mianave)}}
+                            </q-chip>
+                            <q-chip class="glossy q-ma-sm" color="purple" text-color="white"
+                                    icon="fas fa-ship">
+                              {{ getNaveSognatoreStr(mianave)}}
+                            </q-chip>
+                            <!--<span v-for="index of 8">{{ getNaveSognatoreStr(mianave, index)}} - </span>-->
+                          </div>
+                        </div>
+
+                        <div class="q-pa-md" style="width: 100%;">
+                          <!--<q-badge color="primary">
+                            {{$t('dashboard.nave')}} {{ myrigaattuale }}.{{ mycolattuale }}
+                          </q-badge>-->
+                          <q-list dense>
+                            <q-item>
+                              <q-item-section avatar>
+                                {{tools.getlastnavestr(dashboard.lastnave) }} &nbsp;
+                                <q-icon color="blue" name="fas fa-ship"></q-icon>
+                              </q-item-section>
+                              <q-item-section>
+                                <q-slider
+                                  :value="getmyrigaattuale(tools.getRiganave(mianave.riga))"
+                                  :label-text-color="gettextcolor(mianave)"
+                                  :label-value="getval7(mianave) + '/7'"
+                                  :color="getcolorbyval(mianave)"
+                                  markers
+                                  label
+                                  label-always
+                                  readonly
+                                  :min="tools.getRiganave(mianave.riga)"
+                                  :max="tools.getRiganave(mianave.riga)+6">
+
+                                </q-slider>
+                              </q-item-section>
+                            </q-item>
+                            <q-item>
+                              <q-item-section avatar>
+                                <q-icon :color="colordono(mianave)" inverted size="sm" name="fas fa-gift"
+                                        class="gift"></q-icon>
+                              </q-item-section>
+
+                              <q-item-section>
+                                <q-item-label>
+                                  <div v-if="mianave.made_gift">
+                                    <q-chip class="glossy"
+                                            size="md"
+                                            text-color="green"
+                                            color="white"
+                                            icon="fas fa-gift">
+                                      {{ $t('dashboard.ho_effettuato_il_dono') }}
+                                    </q-chip>
+                                  </div>
+                                </q-item-label>
+                              </q-item-section>
+                            </q-item>
+                            <q-item>
+                              <q-item-section avatar>
+                                <q-icon size="sm" name="fas fa-heart" color="red"></q-icon>
+                              </q-item-section>
+                              <q-item-section>
+                                <q-item-label>
+
+                                  <q-input v-model="mianave.note" :label="$t('reg.my_dream')"
+                                           rounded outlined
+                                           debounce="1000"
+                                           autogrow
+                                           dense
+                                           style="width: 100%; font-size:0.75rem;"
+                                           @input="change_mynote(mianave)">
+                                  </q-input>
+                                </q-item-label>
+                              </q-item-section>
+                            </q-item>
+                          </q-list>
+                        </div>
                       </div>
-                  </div>-->
-                  <!--<div class="col-1">
                       <div>
-                          {{ getposizioneattuale(mianave, true) }}
+                        <CMyNave :posizprop="mianave" :key="index"
+                                 :navi_partenzaprop="dashboard.navi_partenza" :listanavi="false" :dashboard="dashboard">
+
+                        </CMyNave>
                       </div>
-                  </div>-->
+
+                      <!--<q-card-actions>
+                        <q-btn flat>Action 1</q-btn>
+                        <q-btn flat>Action 2</q-btn>
+                      </q-card-actions>-->
+                    </q-card>
+                    <!--<div class="col-3">
+                        <div>
+                            <CCardState :isperc="true" size="50px" size_mob="40px" fontsize="0.75rem"
+                                        :myperc="getposizioneattuale(mianave)"></CCardState>
+                        </div>
+                    </div>-->
+                    <!--<div class="col-1">
+                        <div>
+                            {{ getposizioneattuale(mianave, true) }}
+                        </div>
+                    </div>-->
+
+                  </div>
 
                 </div>
 
+
               </div>
 
-
             </div>
-
           </div>
 
         </q-tab-panel>
       </q-tab-panels>
     </div>
 
-    <div>
+    <div v-if="!!dashboard">
       <div v-if="!!dashboard.myself.name">
         <div v-if="dashboard.myself.deleted">
           <span style="color: red;"> <h2><strong>UTENTE CANCELLATO (Nascosto: true) !</strong></h2></span>

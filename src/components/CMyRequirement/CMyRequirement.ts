@@ -272,7 +272,7 @@ export default class CMyRequirement extends MixinUsers {
 
     await tools.askConfirm(this.$q, translate('reg.regala_invitante'), translate('reg.regala_invitante') + ' ' + user.name + ' ' + user.surname + ' a ' + invitante_username + ' ?', translate('dialog.yes'), translate('dialog.no'), this, '', lists.MenuAction.REGALA_INVITANTE, 0, {
       param1: id_listaingr,
-      param2: { invitante_username, ind_order_ingr },
+      param2: { invitante_username, ind_order_ingr, name: user.name, surname: user.surname },
       param3: notiftxt
     })
   }
@@ -319,8 +319,7 @@ export default class CMyRequirement extends MixinUsers {
   }
 
   get getnotifBotTxtInvitante() {
-    return this.$t('dashboard.ricevuto_dono', {
-      invitato: this.seluser.name + ' ' + this.seluser.surname,
+    return this.$t('dashboard.ricevuto_dono_invitante', {
       mittente: this.dashboard.myself.username
     })
   }

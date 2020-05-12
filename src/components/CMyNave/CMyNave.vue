@@ -1,6 +1,5 @@
 <template>
   <div class="text-center">
-
     <CTitleBanner v-if="!!getpartenza()" class=""
                   :title="gettitolonave"
                   :bgcolor="getcolortitle()"
@@ -198,7 +197,7 @@
                       <div :class="getclasselivello(index)">{{ getlivellostr(index, false)}}:</div>
                       <div v-if="sognatore"
                            :class="`cont_sognatore ` + getclassSelect(sognatore, true, index)">
-                        A{{3 - index}} - {{ sognatore.name }} {{ sognatore.surname }}
+                        {{ sognatore.name }} {{ sognatore.surname }}
                         ({{sognatore.username }})
                       </div>
                     </div>
@@ -216,9 +215,7 @@
                       <div :class="getclasselivello(4)">{{ getlivellostr(4, true)}}:</div>
                       <div v-for="(terra, index) in nave.rec.donatore.arrterra" :key="index">
                         <div v-if="terra" :class="`cont_donatore text-small ` + getclassSelect(terra)">
-                          B{{index + 1}} - {{ terra.name }} {{ terra.surname }} ({{
-                          terra.username
-                          }}) - {{
+                          {{ terra.name }} {{ terra.surname }} ({{ terra.username }}) - {{
                           terra.riga}}.{{terra.col}}<br>
                         </div>
                       </div>
@@ -227,10 +224,7 @@
                       <div :class="getclasselivello(5)">{{ getlivellostr(5, false)}}:</div>
                       <div v-for="(aria, index) in nave.rec.donatore.arraria" :key="index">
                         <div v-if="aria" :class="`cont_donatore text-small ` + getclassSelect(aria)">
-                          C{{index + 1}} - {{ aria.name }} {{ aria.surname }} ({{
-                          aria.username
-                          }}) - {{
-                          aria.riga}}.{{aria.col}}<br>
+                          {{ aria.name }} {{ aria.surname }} ({{aria.username }}) - {{aria.riga}}.{{aria.col}}<br>
                         </div>
                       </div>
                     </div>
@@ -311,7 +305,7 @@
                       <div :class="getclasselivello(index)">{{ getlivellostr(index, false)}}:</div>
                       <div v-if="sognatore"
                            :class="`cont_sognatore ` + getclassSelect(sognatore, true, index)">
-                        A{{3 - index}} - {{ sognatore.name }} {{ sognatore.surname }}
+                        {{ sognatore.name }} {{ sognatore.surname }}
                         ({{sognatore.username }})
                       </div>
                     </div>
@@ -329,7 +323,7 @@
                       <div :class="getclasselivello(4)">{{ getlivellostr(4, true)}}:</div>
                       <div v-for="(terra, index) in nave.rec.mediatore.arrterra" :key="index">
                         <div v-if="terra" :class="`cont_donatore text-small ` + getclassSelect(terra)">
-                          B{{index + 1}} - {{ terra.name }} {{ terra.surname }} ({{
+                          {{ terra.name }} {{ terra.surname }} ({{
                           terra.username
                           }}) - {{
                           terra.riga}}.{{terra.col}}<br>
@@ -340,7 +334,7 @@
                       <div :class="getclasselivello(5)">{{ getlivellostr(5, false)}}:</div>
                       <div v-for="(aria, index) in nave.rec.mediatore.arraria" :key="index">
                         <div v-if="aria" :class="`cont_donatore text-small ` + getclassSelect(aria)">
-                          C{{index + 1}} - {{ aria.name }} {{ aria.surname }} ({{
+                          {{ aria.name }} {{ aria.surname }} ({{
                           aria.username
                           }}) - {{
                           aria.riga}}.{{aria.col}}<br>
@@ -412,10 +406,11 @@
                 <template v-slot:body="props">
                   <q-tr :props="props">
                     <q-td v-if="!tools.isMobile()" key="index" :props="props">
-                        {{ props.row.index }}
+                      {{ props.row.index }}
                     </q-td>
                     <q-td v-if="!tools.isMobile()" key="nave" :props="props">
-                      <div style="font-size:1rem;"><a :href="getlinkchat(props.row)" target="_blank">{{ getnavestr(props.row)}}</a></div>
+                      <div style="font-size:1rem;"><a :href="getlinkchat(props.row)" target="_blank">{{
+                        getnavestr(props.row)}}</a></div>
                     </q-td>
                     <q-td key="name" :props="props">
                       <q-btn v-if="!!props.row.profile" flat rounded color="blue"
@@ -425,7 +420,8 @@
                       </q-btn>
                       <div v-if="tools.isMobile()">
                         <br>
-                        {{'(' + getnavestr(props.row) + ')'}} - {{ tools.getstrshortDateTime(props.row.date_made_gift) }}
+                        {{'(' + getnavestr(props.row) + ')'}} - {{ tools.getstrshortDateTime(props.row.date_made_gift)
+                        }}
                       </div>
                     </q-td>
                     <q-td v-if="!tools.isMobile()" key="posizione" :props="props">

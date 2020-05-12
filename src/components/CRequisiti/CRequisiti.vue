@@ -1,6 +1,6 @@
 <template>
   <div class="q-ma-sm">
-    <div :class="getcl">
+    <div :class="getcl" style="margin-left: auto; margin-right: auto;">
       <div v-if="statebool" v-html="msgTrue"></div>
       <div v-else v-html="msgFalse"></div>
     </div>

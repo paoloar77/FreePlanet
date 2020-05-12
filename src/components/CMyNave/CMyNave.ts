@@ -55,7 +55,7 @@ export default class CMyNave extends MixinNave {
   public showtesto: boolean = false
   public notifBot: boolean = true
   public deleteUser: boolean = true
-  public AddImbarco: boolean = true
+  public AddImbarco: boolean = false
   public seltesto: string = ''
   public msg_tosend_user: string = ''
   public username_sostituire: string = ''
