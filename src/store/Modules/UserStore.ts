@@ -45,7 +45,8 @@ export const DefaultUser: IUserFields = {
   },
   downline: [],
   calcstat: DefaultCalc,
-  dashboard: null
+  dashboard: null,
+  mydownline: null
 }
 
 export const DefaultProfile: IUserProfile = {
@@ -963,6 +964,26 @@ namespace Actions {
       }).catch((error) => {
         return {
           aportador: {},
+        }
+      })
+  }
+
+  async function getDownline(context, paramquery) {
+
+    if (paramquery === null)
+      paramquery = state.lastparamquery
+    else
+      state.lastparamquery = paramquery
+
+    return await Api.SendReq('/dashboard/downline', 'POST', paramquery)
+      .then((res) => {
+        if (res.status === 200) {
+          state.my.mydownline = res.data.downline
+
+          return state.my.mydownline
+        }
+      }).catch((error) => {
+        return {
           downline: []
         }
       })
@@ -1000,6 +1021,7 @@ namespace Actions {
     newsletterload: b.dispatch(newsletterload),
     newsletter_setactivate: b.dispatch(newsletter_setactivate),
     getDashboard: b.dispatch(getDashboard),
+    getDownline: b.dispatch(getDownline)
   }
 
 }

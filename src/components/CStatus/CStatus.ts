@@ -250,8 +250,8 @@ export default class CStatus extends MixinBase {
       funcko() {
         return ''
       },
-    },
-    {
+    }
+    /*{
       title: 'steps.collaborate',
       descr: 'steps.collaborate_long',
       page: '/collaborate',
@@ -318,7 +318,7 @@ export default class CStatus extends MixinBase {
       funcko() {
         return ''
       },
-    },
+    },*/
   ]
 
   public setstep() {

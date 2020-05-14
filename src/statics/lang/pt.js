@@ -5,6 +5,7 @@ const msg_pt = {
       a: 'do',
     },
     home: {
+      guida: 'Guia',
       guida_passopasso: 'Guia Passo a Passo'
     },
     grid: {
@@ -35,6 +36,7 @@ const msg_pt = {
         extralist: 'Lista Extra',
         dbop: 'Db Operations',
         tableslist: 'Lista Tabelle',
+        navi: 'Navios',
         newsletter: 'Newsletter',
         pages: 'Pagine',
         media: 'Media',
@@ -103,6 +105,7 @@ const msg_pt = {
       enter_prog_completa_requisiti: 'Preencher todos os requisitos para entrar na lista de embarque.',
       enter_prog_requisiti_ok: 'O usuário completou todos os 7 requisitos para entrar na lista de embarque.<br>',
       enter_prog_msg: 'Você receberá uma mensagem nos próximos dias, assim que o seu navio estiver pronto!',
+      enter_prog_msg_2: '',
       enter_nave_9req_ok: 'PARABÉNS! Você completou TODOS os 9 passos do Guia! Obrigado por ajudar a {sitename} a Expandir! <br>Você poderá partir muito em breve com a sua Jornada, fazendo o seu presente e continuando para o Sonhador.',
       enter_nave_9req_ko: 'Lembre-se que você pode ajudar o Movimento a crescer e expandir, compartilhando nossa jornada com todos!',
       enter_prog: 'Vou em Lista Programação',
@@ -119,6 +122,7 @@ const msg_pt = {
       ricevo_dono_long: 'Viva!!!! <br><strong> ESTE MOVIMENTO É REAL E POSSÍVEL SE FABRICARMOS TODOS JUNTOS!!</strong>',
     },
     dialog: {
+      continue: 'Continuar',
       close: 'Fechar',
       copyclipboard: 'Copiado para a prancheta',
       ok: 'Ok',
@@ -198,6 +202,7 @@ const msg_pt = {
       options: 'Opzioni',
     },
     dashboard: {
+      invitante: 'Convidados',
       num_tessitura: 'Numero di Tessitura:',
       attenzione: 'Atenção',
       downline: 'Convidados',
@@ -212,7 +217,8 @@ const msg_pt = {
       nessun_invitante: 'Sem Convite',
       nessun_invitato: 'Sem Convidados',
       legenda_title: 'Clique no nome do convidado para ver o status de seus Requisitos',
-      nave_in_partenza: 'in Partenza il',
+      nave_in_partenza: 'em Partida em',
+      nave_in_chiusura: 'Encerramento Gift Chat',
       nave_partita: 'que partiu em',
       tutor: 'Tutor',
       sonomediatore: 'Quando diventi Meditore vieni contattato da un <strong>TUTOR</strong>, con lui devi:<br><ol class="lista">' +
@@ -223,8 +229,8 @@ const msg_pt = {
       'cambia la "cronologia per i nuovi membri" da nascosta a visibile.</li>' +
       '<li>Per trovare il <strong>link della Chat appena creata</strong>: clicca sul nome della chat in alto, clicca sulla Matita -> "Tipo di Gruppo" -> "invita nel gruppo tramite link", clicca su "copia link" e incollalo qui sotto, sulla casella <strong>"Link Gift Chat"</strong></li>' +
       '<li>Invia il Link della Gift Chat a tutti i Donatori, cliccando sul bottone qui sotto.</li></ol>',
-      sonodonatore: '<ol class="lista"><li>Quando sei in questa posizione, verrai invitato ad entrare in una <strong>Gift Chat</strong> (Telegram) e qui troverai anche gli altri 7 Donatori, il Mediatore, il Sognatore e un rappresentante dello Staff.</li>' +
-      '<li>Effettuerai il tuo dono <strong>ESATTAMENTE il giorno indicato</strong> e nella modalità di pagamento che troverai scritto qui.<br></ol>',
+      sonodonatore: '<ol class="lista"><li>Quando sei in questa posizione, verrai invitato (tramite un messaggio su <strong>AYNI BOT</strong>) ad entrare in una <strong>Gift Chat</strong> (Telegram) e qui troverai anche gli altri 7 Donatori, il Mediatore, il Sognatore e un rappresentante dello Staff.</li>' +
+      '<li>Avrai tempo 4 giorni per entrare nella chat e massimo 7 gg per fare il tuo Dono, nella modalità di pagamento che troverai scritto qui.<br></ol>',
       sonodonatore_seconda_tessitura: '<ol class="lista"><li>Qui tu sei Mediatore e anche Donatore, ma essendo la seconda Tessitura, non avrai bisogno di effettuare nuovamente il tuo dono<br></ol>',
       controlla_donatori: 'Verifique a Lista de Doadores',
       link_chat: 'Links de telegramas para o Gift Chat',
@@ -273,9 +279,12 @@ const msg_pt = {
       doni_inviati_da_confermare: 'Presentes enviados (a serem confirmados)',
       doni_mancanti: 'Presentes em falta',
       temporanea: 'Temporário',
+      nave_provvisoria: 'Foi-lhe atribuído um <strong>NAVIO TEMPORÁRIO</strong>.<br>É normal que veja uma alteração na data de partida, devido à actualização da classificação dos passageiros',
       ritessitura: 'ESCRITENDO',
     },
     reg: {
+      volta: 'vez',
+      volte: 'vezes',
       registered: 'Registrato',
       contacted: 'Contattato',
       name_complete: 'Nome Completo',
@@ -290,6 +299,7 @@ const msg_pt = {
       you: 'Tu',
       cancella_invitato: 'Eliminar Convidado',
       regala_invitato: 'Presente Convidado',
+      regala_invitante: 'Presente Convite',
       messaggio_invito: 'Mensagem de Convite',
       messaggio_invito_msg: 'Envie esta mensagem a todos aqueles para quem você quer compartilhar este Movimento !',
       videointro: 'Vídeo Introdutório',
@@ -297,7 +307,7 @@ const msg_pt = {
       invitante_regalato: 'Convite Convidado',
       legenda: 'Lenda',
       aportador_solidario: 'Quem o convidou',
-      username_regala_invitato: 'Username del Destinatario del regalo',
+      username_regala_invitato: 'Nome de utilizador do destinatário do presente',
       aportador_solidario_nome_completo: 'Nominativo Invitante',
       aportador_solidario_nome_completo_orig: 'Invitante Originario',
       aportador_solidario_ind_order: 'Num Invitante',

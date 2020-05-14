@@ -16,20 +16,27 @@
 
       </q-tabs>
 
-      <div v-if="loading" class="q-ma-md text-center" style="height: 100px;">
-        <q-spinner-gears size="50px" color="primary"/>
-      </div>
-
       <q-tab-panels v-model="tab" animated>
         <q-tab-panel name="requisiti">
-          <div v-if="!!dashboard.myself.name">
 
-
-            <CMyRequirement :myseluser="dashboard.myself" :mydashboard="dashboard" @aggiorna="aggiorna"
-            >
-
-            </CMyRequirement>
+          <div v-if="loading" class="q-ma-md text-center" style="height: 50px;">
+            <q-spinner-gears size="50px" color="primary"/>
           </div>
+
+          <div v-if="!!dashboard && !!dashboard.myself">
+            <div v-if="!!dashboard.myself.name">
+
+
+              <CMyRequirement :myseluser="dashboard.myself" :mydashboard="dashboard" :mydownline="downline"
+                              @aggiorna="aggiorna"
+              >
+
+              </CMyRequirement>
+            </div>
+          </div>
+
+        </q-tab-panel>
+        <q-tab-panel name="invitati">
 
           <CTitleBanner class="shadow-2" :title="$t('reg.aportador_solidario')" bgcolor="bg-accent"
                         clcolor="text-white"
@@ -37,7 +44,6 @@
 
             <CUserBadge v-if="!!dashboard.aportador" :user="dashboard.aportador" :index="0"
                         :showregalainv="false"
-                        :numpeople="dashboard.numpeople_aportador"
                         mycolor="accent" @myclick="selectclick">
 
             </CUserBadge>
@@ -52,34 +58,33 @@
 
             <CUserBadge v-if="!!dashboard.myself" :user="dashboard.myself" :index="0"
                         :showregalainv="false"
-                        :numpeople="dashboard.downline.length"
                         @myclick="selectclick"
                         mycolor="blue">
 
             </CUserBadge>
           </CTitleBanner>
 
-        </q-tab-panel>
-        <q-tab-panel name="invitati">
           <CTitleBanner class="shadow-2 rounded-borders" :title="getstrinvitati" bgcolor="bg-positive"
                         clcolor="text-white"
                         mystyle=" " myclass="myshad" :canopen="true">
 
-            <q-list bordered v-if="!!dashboard.downline && dashboard.downline.length > 0" class="rounded-borders">
-              <div v-for="(user, index) in dashboard.downline" :key="index">
+            <div v-if="loading_invitati" class="q-ma-md text-center" style="height: 50px;">
+              <q-spinner-hourglass size="50px" color="primary"/>
+            </div>
+
+            <q-list bordered v-if="!!downline.downline && downline.downline.length > 0" class="rounded-borders">
+              <div v-for="(user, index) in downline.downline" :key="index">
                 <CUserBadge :yourinvite="true" :user="user" mycolor="positive" :index="index"
                             :showregalainv="false"
-                            :numpeople="dashboard.downbyuser[user.username].length"
                             @myclick="selectclick"
                 >
 
                 </CUserBadge>
                 <div v-if="user.username !== dashboard.myself.username">
-                  <div style="margin-left:10px;" v-for="(user2, index2) in dashboard.downbyuser[user.username]"
+                  <div style="margin-left:10px;" v-for="(user2, index2) in downline.downbyuser[user.username]"
                        :key="index2">
                     <CUserBadge :yourinvite="false" :user="user2" mycolor="orange" :index="index2"
                                 :showregalainv="false"
-                                :numpeople="dashboard.downbyuser[user2.username].length"
                                 @myclick="selectclick"
                     >
 
@@ -89,7 +94,9 @@
               </div>
             </q-list>
             <div v-else class="q-pa-sm text-center">
-              {{ $t('dashboard.nessun_invitato')}}
+              <div v-if="!loading_invitati">
+                {{ $t('dashboard.nessun_invitato')}}
+              </div>
             </div>
           </CTitleBanner>
 
@@ -148,20 +155,24 @@
         </q-tab-panel>
         <q-tab-panel name="navi">
 
+          <div v-if="loading" class="q-ma-md text-center" style="height: 50px;">
+            <q-spinner-gears size="50px" color="primary"/>
+          </div>
+
           <div>
             <div v-if="!Completato9Req && !HasNave">
               <CTitleBanner icon="person" :canopen="true" class="q-pa-xs text-center"
                             :title="$t('pages.posizione_in_programmazione')" bgcolor="bg-blue"
                             clcolor="text-white" mystyle=" " myclass="myshad">
                 <CRequisiti :statebool="Completato7Req"
-                            :msgTrue="$t('steps.enter_prog_requisiti_ok') + $t('steps.enter_prog_requisiti_ok')"
+                            :msgTrue="$t('steps.enter_prog_requisiti_ok') + $t('steps.enter_prog_msg')"
                             :msgFalse="$t('steps.enter_prog_completa_requisiti')">
                 </CRequisiti>
               </CTitleBanner>
             </div>
           </div>
 
-          <div v-if="!!dashboard">
+          <div v-if="!!dashboard && dashboard.myself">
             <div v-if="dashboard.myself.qualified">
 
               <CTitleBanner class=""
@@ -180,11 +191,8 @@
                   <div class="col-2 ">
                     {{ $t('dashboard.downline') }}
                   </div>
-                  <!--<div class="col-2">
-                    {{ $t('dashboard.dono_da_effettuare') }}
-                  </div>-->
                   <div class="col-2">
-                    {{ $t('reg.elimina') }}
+                    {{ $t('dialog.delete') }}
                   </div>
 
                 </div>
@@ -206,7 +214,7 @@
                                     :ind_order_ingr="mioimbarco.ind_order"
                                     :id_listaingr="mioimbarco._id"
                                     :index="index"
-                                    :numpeople="0"
+                                    :mydisabled="getifdisableInvitante(mioimbarco, index)"
                                     @myclick="selectclick">
                         </CUserBadge>
                       </div>
@@ -253,7 +261,7 @@
                 </q-btn>
               </div>
 
-              <div class="q-pa-xs text-center">
+              <div v-if="!!dashboard.myself" class="q-pa-xs text-center">
 
                 <div v-if="!!dashboard.myself.name">
                   <div v-if="!HasNave">
@@ -282,7 +290,7 @@
                           </q-item-section>
                           <q-item-section>
                             <q-slider
-                              :value="getmyrigaattuale(tools.getRiganave(mianave.riga))"
+                              :value="getmyrigaattuale(mianave)"
                               :label-text-color="gettextcolor(mianave)"
                               :label-value="getval7(mianave) + '/7'"
                               :color="getcolorbyval(mianave)"
@@ -296,6 +304,9 @@
 
                             </q-slider>
                           </q-item-section>
+                          <q-item-section avatar>
+                            <q-icon color="blue" name="fas fa-flag-checkered"></q-icon>
+                          </q-item-section>
                         </q-item>
                       </q-list>
                     </div>
@@ -306,7 +317,7 @@
 
                     <q-card class="my-card-shadow yes_shadow">
                       <q-img
-                        src="statics/images/nave.jpg"
+                        :src="`statics/images/nave${index+1}.jpg`"
                         style="width: 100%"
                         native-context-menu>
                         <div class="absolute-bottom text-subtitle1 text-center text-sobig">
@@ -317,14 +328,17 @@
                       <div class="row justify-sm-start items-center rounded-borders">
 
                         <div class="row items-center justify-center q-ma-xs" style="width: 100%">
-                          <q-chip class="glossy q-ma-md" :color="getcolorbynave(mianave)" text-color="white"
+                          <q-chip class="glossy q-mx-md" :color="getcolorbynave(mianave)" text-color="white"
                                   icon="fas fa-ship">
-                            &nbsp;
-                            {{ $t('dashboard.nave_in_partenza') + ' ' + datanave(mianave) }}
+                            {{ $t('dashboard.nave_in_partenza') + ' ' + datagiftchat(mianave) }}
+                          </q-chip>
+                          <q-chip v-if="datagiftchat(mianave) !== datanave(mianave)" class="glossy q-mx-md" color="blue" text-color="white"
+                                  icon="fas fa-ship">
+                            {{ $t('dashboard.nave_in_chiusura') + ' ' + datanave(mianave) }}
                           </q-chip>
                         </div>
 
-                        <div v-if="isprovvisoria(mianave)">
+                        <div v-if="isprovvisoria(mianave)" class="text-center centermydiv">
                           <CRequisiti :statebool="true"
                                       :msgTrue="$t('dashboard.nave_provvisoria') + `<br><strong>` + $t('steps.enter_prog_msg') + `</strong>`"
                                       msgFalse="">
@@ -368,7 +382,7 @@
                               </q-item-section>
                               <q-item-section>
                                 <q-slider
-                                  :value="getmyrigaattuale(tools.getRiganave(mianave.riga))"
+                                  :value="getmyrigaattuale(mianave)"
                                   :label-text-color="gettextcolor(mianave)"
                                   :label-value="getval7(mianave) + '/7'"
                                   :color="getcolorbyval(mianave)"
@@ -380,6 +394,9 @@
                                   :max="tools.getRiganave(mianave.riga)+6">
 
                                 </q-slider>
+                              </q-item-section>
+                              <q-item-section avatar>
+                                <q-icon color="blue" name="fas fa-flag-checkered"></q-icon>
                               </q-item-section>
                             </q-item>
                             <q-item>
@@ -417,6 +434,22 @@
                                            style="width: 100%; font-size:0.75rem;"
                                            @input="change_mynote(mianave)">
                                   </q-input>
+                                </q-item-label>
+                              </q-item-section>
+                            </q-item>
+                            <q-item v-if="mianave.num_tess % 2 !== 0">
+                              <q-item-section avatar>
+                                <q-icon size="sm" name="fas fa-user" color="blue"></q-icon>
+                              </q-item-section>
+                              <q-item-section>
+                                <q-item-label>
+                                  <q-input v-model="mianave.invitante_username" :label="$t('dashboard.invitante')"
+                                           rounded outlined
+                                           readonly
+                                           dense
+                                           style="width: 100%; font-size:0.75rem;">
+                                  </q-input>
+
                                 </q-item-label>
                               </q-item-section>
                             </q-item>
@@ -461,7 +494,7 @@
       </q-tab-panels>
     </div>
 
-    <div v-if="!!dashboard">
+    <div v-if="!!dashboard.myself">
       <div v-if="!!dashboard.myself.name">
         <div v-if="dashboard.myself.deleted">
           <span style="color: red;"> <h2><strong>UTENTE CANCELLATO (Nascosto: true) !</strong></h2></span>
@@ -507,7 +540,7 @@
         </q-toolbar>
         <q-card-section class="inset-shadow" style="padding: 4px !important;">
           <CMyRequirement :id_listaingr="id_listaingr" :myseluser="seluser" :showregalainv="showregalainv"
-                          :mydashboard="dashboard" :notitle="false" @aggiorna="aggiorna"
+                          :mydashboard="dashboard" :mydownline="downline" :notitle="false" @aggiorna="aggiorna"
                           :ind_order_ingr="ind_order_ingr">
 
           </CMyRequirement>

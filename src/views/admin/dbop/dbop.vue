@@ -129,6 +129,11 @@
              @click="EseguiFunz('visuNaviUtentiEliminati')"></q-btn>
       <br>
       <div class="row">
+        <q-btn label="0) ELIMINA VECCHI LISTEINGRESSO !" color="negative"
+               @click="EseguiFunz('eliminaListeIngressoNascoste')"></q-btn>
+        <br>
+      </div>
+      <div class="row">
         <q-btn label="1) CONVERTI TUTTA LA STRUTTURA NEL NUOVO SISTEMA !" color="negative"
                @click="EseguiFunz('creaTessituraeConv')"></q-btn>
         <br>
@@ -138,12 +143,12 @@
                @click="EseguiFunz('convNaviTessinListaIngressoRec')"></q-btn>
         <br>
       </div>
-      <br>
       <div class="row">
-        <q-btn label="3) ELIMINA VECCHI LISTEINGRESSO !" color="negative"
-               @click="EseguiFunz('eliminaListeIngressoNascoste')"></q-btn>
+        <q-btn label="3) Rendi Visibile i Record Nascosti di ListaINGRESSO" color="negative"
+               @click="EseguiFunz('RendiVisibileIrecordNascosti')"></q-btn>
         <br>
       </div>
+      <br>
       <br>
       <!--<div class="row">
           <q-btn label="CHECK SE INSERIRE UTENTI IN Nave" color="primary"

@@ -5,6 +5,7 @@ const msg_de = {
       a: 'to',
     },
     home: {
+      guida: 'Guide',
       guida_passopasso: 'Step By Step Guide'
     },
     grid: {
@@ -41,6 +42,7 @@ const msg_de = {
       write: 'write'
     },
     dialog: {
+      continue: 'Continue',
       close: 'Close',
       copyclipboard: 'Copied to clipboard',
       ok: 'Ok',
@@ -122,6 +124,8 @@ const msg_de = {
       downline: 'People you\'ve invited',
     },
     reg: {
+      volte: 'time',
+      volta: 'times',
       verified_email: 'Email Verified',
       reg_lista_prec: 'Please enter the First Name, Last Name and mobile phone number you left in the past when you signed up for the Chat! <br>This way the system will recognize you and keep the position of the list',
       nuove_registrazioni: 'If this is a NEW registration, you must contact the person who INVITED you, who will leave you the CORRECT LINK to do the Registration under him/her',

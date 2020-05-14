@@ -10,7 +10,7 @@ import { CMyFieldDb } from '../CMyFieldDb'
 import { CCopyBtn } from '../CCopyBtn'
 import { CUserBadge } from '../CUserBadge'
 import { CLegenda } from '../CLegenda'
-import { IDashboard, IUserProfile } from '../../model'
+import { IDashboard, IDownline, IUserProfile } from '../../model'
 import { IUserFields } from '../../model/UserStore'
 import { CRequisito } from '../CRequisito'
 import translate from '../../globalroutines/util'
@@ -31,6 +31,7 @@ export default class CMyRequirement extends MixinUsers {
   @Prop({ required: false, default: -1 }) public ind_order_ingr: number
   @Prop({ required: false, default: -1 }) public id_listaingr: number
   @Prop({ required: true }) public mydashboard
+  @Prop({ required: true }) public mydownline
   @Prop({ required: false, default: false }) public notitle
   @Prop({ required: false, default: false }) public showregalainv
   public $t
@@ -42,7 +43,10 @@ export default class CMyRequirement extends MixinUsers {
   public dashboard: IDashboard = {
     myself: DefaultUser,
     aportador: DefaultUser,
-    numpeople_aportador: 0,
+    numpeople_aportador: 0
+  }
+
+  public downline: IDownline = {
     downline: [],
     downnotreg: [],
     downbyuser: []
@@ -52,6 +56,12 @@ export default class CMyRequirement extends MixinUsers {
   public changedash() {
     console.log('changedash')
     this.dashboard = this.mydashboard
+  }
+
+  @Watch('mydownline')
+  public changedl() {
+    console.log('changedl')
+    this.downline = this.mydownline
   }
 
   @Watch('myusersel')
@@ -211,6 +221,7 @@ export default class CMyRequirement extends MixinUsers {
 
   public created() {
     this.dashboard = this.mydashboard
+    this.downline = this.mydownline
     this.seluser = this.myseluser
 
   }
@@ -219,8 +230,14 @@ export default class CMyRequirement extends MixinUsers {
 
     await UserStore.actions.getDashboard({ username: this.dashboard.myself.username }).then((ris) => {
       this.dashboard = ris
-      this.$emit('aggiorna')
+
+      UserStore.actions.getDownline({ username: this.dashboard.myself.username }).then((ris2) => {
+        this.downline = ris2
+        this.$emit('aggiorna')
+      })
+
     })
+
   }
 
   public isextralist(user) {
@@ -232,7 +249,7 @@ export default class CMyRequirement extends MixinUsers {
   }
 
   public ismydownline(user) {
-    return this.dashboard.downline.find((rec) => rec.username === user.username)
+    return this.downline.downline.find((rec) => rec.username === user.username)
   }
 
   public async deleteUserFromExtraList(user) {
@@ -305,7 +322,9 @@ export default class CMyRequirement extends MixinUsers {
   get allowSubmit() {
     let error = this.$v.$error || this.$v.$invalid
 
-    error = error || (this.aportador_solidario === this.seluser.aportador_solidario)
+    if (!this.showregalainv) {
+      error = error || (this.aportador_solidario === this.seluser.aportador_solidario)
+    }
 
     return !error
 

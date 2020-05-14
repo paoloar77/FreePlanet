@@ -21,8 +21,8 @@ export default class CUserBadge extends MixinBase {
   @Prop({ required: true }) public index: number
   @Prop({ required: false, default: false }) public yourinvite: boolean
   @Prop({ required: true }) public user: IUserFields
-  @Prop({ required: true }) public numpeople: number
   @Prop({ required: true }) public mycolor: string
+  @Prop({ required: false, default: false }) public mydisabled: string
   @Prop({ required: false, default: true }) public showsteps: boolean
   @Prop({ required: false, default: true }) public showregalainv: boolean
   @Prop({ required: false, default: -1 }) public ind_order_ingr: number
@@ -51,11 +51,17 @@ export default class CUserBadge extends MixinBase {
   }
 
   public getindorder(user) {
-    /*if (!!user.username)
-      return ' (' + user.ind_order + ')'
-    else
-      return ''
-      */
+    if (!!user.index)
+      return ' (n°' + user.index + ')'
+    return ''
+  }
+
+  public getquanti(user) {
+    if (!!user.quanti) {
+      if (user.quanti > 1) {
+        return ' (' + user.quanti + ' ' + this.$t('reg.volte') + ')'
+      }
+    }
     return ''
   }
 
@@ -98,7 +104,7 @@ export default class CUserBadge extends MixinBase {
   }
 
   public execclick(user) {
-    this.$emit('myclick', user, this.showregalainv, this.ind_order_ingr, this.id_listaingr)
+    this.$emit('myclick', user, this.showregalainv, this.ind_order_ingr, this.id_listaingr, this.mydisabled)
   }
 
   public getnumreq(user) {
@@ -126,7 +132,7 @@ export default class CUserBadge extends MixinBase {
       return (user.numinvitati / 2) * 100
   }
 
-  public getcolorpeople(user){
+  public getcolorpeople(user) {
     if (user.numinvitati === 1)
       return 'blue'
     else if (user.numinvitati === 2)

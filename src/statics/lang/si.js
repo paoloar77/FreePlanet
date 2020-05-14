@@ -5,6 +5,7 @@ const msg_si = {
       a: 'a',
     },
     home: {
+      guida: 'Vodnik',
       guida_passopasso: 'Vodnik po korakih'
     },
     grid: {
@@ -36,7 +37,7 @@ const msg_si = {
         extralist: 'Dodatni seznam',
         dbop: 'Operacije Db',
         tableslist: 'Seznam tabel',
-        navi: 'Ladje"',
+        navi: 'Ladje',
         listadoni_navi: 'Seznam daril ladjic',
         newsletter: 'Novosti',
         pages: 'Strani',
@@ -108,6 +109,7 @@ const msg_si = {
       enter_prog_completa_requisiti: 'Izpolnite vse potrebne zahteve, da lahko vstopite na seznam za vstop.',
       enter_prog_requisiti_ok: 'Izpolnili ste vseh 7 zahtev za vpis na vstopni seznam. <br>',
       enter_prog_msg: 'V naslednjih dneh boste takoj, ko bo vaša ladja pripravljena, prejeli sporočilo!',
+      enter_prog_msg_2: '',
       enter_nave_9req_ok: 'ČESTITKE! Izpolnili ste VSE 9 korakov! Hvala, ker ste pomagali {sitename} pri razširitvi! <br> Zelo kmalu boste lahko odšli na potovanje, si priskrbeli darilo in nadaljevali proti sanjaču ',
       enter_nave_9req_ko: 'Ne pozabite, da lahko pomagate rasti in razširiti gibanje, tako da svoje potovanje delite z drugimi!',
       enter_prog: 'Vpišem se na Seznam vkrcavanja',
@@ -195,6 +197,7 @@ const msg_si = {
       loggati: 'Uporabnik ni prijavljen'
     },
     dashboard: {
+      invitante: 'povabljenca',
       num_tessitura: 'Numero di Tessitura:',
       attenzione: 'Pozornosti',
       downline: 'povabljen',
@@ -205,11 +208,12 @@ const msg_si = {
       telefono_wa: 'Pišite na Whatsapp',
       sendnotification: 'Obvestilo pošljite prejemniku na Telegram BOT',
       ricevuto_dono: '😍🎊 Prejeli ste darilo {invitato} kot darilo od {mittente} !',
-      ricevuto_dono_invitante: '😍🎊 Prejeli ste povabljenega kot darilo od {mittente} !',
+      ricevuto_dono_invitante: '😍🎊 Prejeli ste povabljenca kot darilo od {mittente} !',
       nessun_invitante: 'Nobenega povabljenega',
       nessun_invitato: 'Ni gostov',
       legenda_title: 'Kliknite na povabljeno ime, da si ogledate stanje njihovih zahtev.',
       nave_in_partenza: 'ladja v odhodu',
+      nave_in_chiusura: 'Zapiranje Gift- Darilni klepet',
       nave_partita: 'levo naprej',
       tutor: 'Tutor',
       sonomediatore: 'Ko postaneš Mediator te kontaktira en <strong>TUTOR</strong>, z njim moraš:<br><ol class="lista">' +
@@ -221,11 +225,11 @@ const msg_si = {
       '<li>Da najdeš <strong>link pravkar ustvarjenega klepeta </strong>: klikni na ime klepeta na vrhu, klikni na svinčnik -> "Vrsta Skupine" -> "z linkom povabi v skupino", klikni na"kopiraj link" in prilepi tu spodaj, v okvir<strong>"Link Gift Klepet"</strong></li>' +
       '<li>Pošlji Link Gift Klepeta vsem Donatorjem, tako, da klikneš na spodnji gumb.</li></ol>',
       sonodonatore: '<ol class="lista"><li>Ko si na tej poziciji, boš povabljen, da vstopiš v <strong>Gift Klepet</strong> (Telegram) in tam boš našel še ostalih 7 Donatorjev, Mediatorja, Sanjača in enega predstavnika Tima.</li>' +
-      '<li>Izpeljal boš svoje vplačilo- donacijo<strong> TOČNO na že določen datum </strong>z načinom vplačila, ki ga imaš napisanega tu.<br></ol>',
+      '<li>Imel boš 4 dni časa za vstop v klepet in maksimalno 7 dni za izpeljati vplačilo, ki ga imaš napisanega tu.<br></ol>',
       sonodonatore_seconda_tessitura: '<ol class="lista"><li>Tu si istočasno Mediator in Donator. Ker je to tvoj avtomatičen vpis, ti ni sedaj potrebno vplačati!<br></ol>',
       controlla_donatori: 'Preverite seznam donatorjev',
       link_chat: 'Povezava telegrama darilnega klepeta',
-      tragitto: 'Način',
+      tragitto: 'Potovanje',
       nave: 'Ladja',
       data_partenza: 'Datum<br>odhoda',
       doni_inviati: 'Darila<br>poslana',
@@ -270,9 +274,12 @@ const msg_si = {
       doni_inviati_da_confermare: 'Poslana Darila (za potrditev)',
       doni_mancanti: 'Manjkajoča Darila',
       temporanea: 'Začasna',
+      nave_provvisoria: 'Dodeljena ti je bila <strong>ZAČASNA ladja</strong>.<br>Normalno je, da boš zaradi posodobitve seznama potnikov videli spremenjen datum odhoda.',
       ritessitura: 'Avtomatičen Vpis',
     },
     reg: {
+      volta: 'krat',
+      volte: 'krat',
       registered: 'Registriran',
       contacted: 'Obveščen',
       name_complete: 'Popolno ime',
@@ -293,6 +300,7 @@ const msg_si = {
       cancellami_2: 'ZADNJE OBVESTILO! Bi rad Definitivno izstopil iz {sitename} ?',
       account_cancellato: 'Tvoj profil je pravilno izbrisan',
       regala_invitato: 'Podari povabljenca',
+      regala_invitante: 'Podari Povabljenega',
       messaggio_invito: 'Povabilno sporočilo',
       messaggio_invito_msg: 'Pošlji sporočilo vsem, s katerimi želiš deliti to Gibanje!',
       videointro: 'Predstavitveni Video',

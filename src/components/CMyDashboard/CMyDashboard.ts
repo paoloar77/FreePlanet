@@ -10,7 +10,7 @@ import { CMyFieldDb } from '../CMyFieldDb'
 import { CCopyBtn } from '../CCopyBtn'
 import { CUserBadge } from '../CUserBadge'
 import { CLegenda } from '../CLegenda'
-import { IDashboard, IUserProfile } from '../../model'
+import { IDashboard, IDownline, IUserProfile } from '../../model'
 import { IUserFields } from '../../model/UserStore'
 import { CRequisito } from '../CRequisito'
 import translate from '../../globalroutines/util'
@@ -52,6 +52,7 @@ export default class CMyDashboard extends MixinUsers {
   public shownuovoviaggio: boolean = false
   public notifBot: boolean = true
   public loading: boolean = false
+  public loading_invitati: boolean = false
   public seluser: IUserFields = null
   public aportador_solidario: string = ''
   public invitante_username: string = ''
@@ -64,14 +65,17 @@ export default class CMyDashboard extends MixinUsers {
     myself: DefaultUser,
     aportador: DefaultUser,
     numpeople_aportador: 0,
-    downline: [],
-    downnotreg: [],
-    downbyuser: [],
     arrimbarchi: [],
     arrposizioni: [],
     navi_partenza: [],
     lastnave: {},
     arrusers: [],
+  }
+
+  public downline: IDownline = {
+    downline: [],
+    downnotreg: [],
+    downbyuser: []
   }
 
   @Prop({ required: true }) public username
@@ -98,6 +102,15 @@ export default class CMyDashboard extends MixinUsers {
 
   public changetab(val) {
     tools.setCookie(tools.TABBED_DASHBOARD, val)
+    if (this.tab === 'invitati') {
+      if (this.downline.downline.length <= 0) {
+        this.loading_invitati = true
+        UserStore.actions.getDownline({ username: this.myusername }).then((ris) => {
+          this.downline = ris
+          this.loading_invitati = false
+        })
+      }
+    }
     // console.log('setcook', val)
   }
 
@@ -123,21 +136,36 @@ export default class CMyDashboard extends MixinUsers {
 
     this.loading = true
 
-    await UserStore.actions.getDashboard({ username: this.myusername }).then((ris) => {
-      this.dashboard = ris
+    UserStore.actions.getDashboard({ username: this.myusername })
+      .then((ris) => {
+        this.dashboard = ris
 
-      if (!!this.dashboard)
-        this.invitante_username = this.dashboard.myself.username
+        if (!!this.dashboard)
+          this.invitante_username = this.dashboard.myself.username
 
-      this.myrigaattuale = this.dashboard.lastnave.riga
-      this.mycolattuale = this.dashboard.lastnave.col
+        this.myrigaattuale = this.dashboard.lastnave.riga
+        this.mycolattuale = this.dashboard.lastnave.col
 
-      // console.log('this.invitante_username', this.invitante_username)
-      this.loading = false
-    })
+        this.loading = false
+      })
+      .catch((e) => {
+        this.loading = false
+      })
+
+    if (this.tab === 'invitati') {
+      this.loading_invitati = true
+      UserStore.actions.getDownline({ username: this.myusername })
+        .then((ris2) => {
+          this.downline = ris2
+          this.loading_invitati = false
+        })
+        .catch((e) => {
+          this.loading_invitati = false
+        })
+
+    }
 
     this.showuserinfo = false
-    this.loading = false
   }
 
   get getRefLink() {
@@ -145,34 +173,42 @@ export default class CMyDashboard extends MixinUsers {
   }
 
   get invitatinotreg() {
-    if (this.dashboard)
-      if (this.dashboard.downnotreg)
-        return this.dashboard.downnotreg.length > 0
+    if (this.downline)
+      if (this.downline.downnotreg)
+        return this.downline.downnotreg.length > 0
     return false
   }
 
-  public selectclick(user, showregalainv, ind_order_ingr, id_listaingr) {
-    this.showuserinfo = true
-    this.seluser = user
-    this.showregalainv = showregalainv
-    this.ind_order_ingr = ind_order_ingr
-    this.id_listaingr = id_listaingr
+  public selectclick(user, showregalainv, ind_order_ingr, id_listaingr, disabled) {
+    if (!disabled) {
+      this.showuserinfo = true
+      this.seluser = user
+      this.showregalainv = showregalainv
+      this.ind_order_ingr = ind_order_ingr
+      this.id_listaingr = id_listaingr
+    }
   }
 
   get Completato7Req() {
     // return tools.Is7ReqOk(this.dashboard.myself)
-    return this.dashboard.myself.qualified
+    if (!!this.dashboard.myself)
+      return this.dashboard.myself.qualified
+
+    return false
   }
 
   get Completato9Req() {
     // return tools.Is9ReqOk(this.dashboard.myself)
-    if (!!this.dashboard)
+    if (!!this.dashboard.myself)
       return this.dashboard.myself.qualified && (this.dashboard.myself.numinvitatiattivi >= 2)
     return false
   }
 
-  public HasNave() {
-    return this.dashboard.arrposizioni.length > 0
+  get HasNave() {
+    if (!!this.dashboard.arrposizioni)
+      return this.dashboard.arrposizioni.length > 0
+    else
+      return false
   }
 
   public getnavePartenzaByRigaCol(riga, col) {
@@ -189,8 +225,17 @@ export default class CMyDashboard extends MixinUsers {
   public datanave(mianave) {
     // const mynavepart = this.getnavePartenzaByRigaCol(tools.getRiganave(mianave.riga), tools.getColnave(mianave.col))
     if (!!mianave.nave_partenza) {
+      if (!!mianave.nave_partenza.date_start)
+        return tools.getstrDate(mianave.nave_partenza.date_start)
+    }
+    return ' --/-- '
+  }
+
+  public datagiftchat(mianave) {
+    // const mynavepart = this.getnavePartenzaByRigaCol(tools.getRiganave(mianave.riga), tools.getColnave(mianave.col))
+    if (!!mianave.nave_partenza) {
       if (!!mianave.nave_partenza.date_gift_chat_open)
-        return tools.getstrshortDate(mianave.nave_partenza.date_gift_chat_open)
+        return tools.getstrDate(mianave.nave_partenza.date_gift_chat_open)
     }
     return ' --/-- '
   }
@@ -223,7 +268,7 @@ export default class CMyDashboard extends MixinUsers {
 
   public async NuovoImbarco(username, invitante_username) {
 
-    await tools.askConfirm(this.$q, translate('steps.nuovo_imbarco') , translate('dialog.continue') + ' ?', translate('dialog.yes'), translate('dialog.no'), this, '', lists.MenuAction.AGGIUNGI_NUOVO_IMBARCO, 0, {
+    await tools.askConfirm(this.$q, translate('steps.nuovo_imbarco'), translate('dialog.continue') + ' ?', translate('dialog.yes'), translate('dialog.no'), this, '', lists.MenuAction.AGGIUNGI_NUOVO_IMBARCO, 0, {
       param1: { username, invitante_username }
     })
     this.shownuovoviaggio = false
@@ -234,7 +279,7 @@ export default class CMyDashboard extends MixinUsers {
   }
 
   public async cancellaImbarco(imbarco) {
-    await tools.askConfirm(this.$q, translate('dashboard.attenzione'), translate('steps.vuoi_cancellare_imbarco') , translate('dialog.yes'), translate('dialog.no'), this, '', lists.MenuAction.CANCELLA_IMBARCO, 0, {
+    await tools.askConfirm(this.$q, translate('dashboard.attenzione'), translate('steps.vuoi_cancellare_imbarco'), translate('dialog.yes'), translate('dialog.no'), this, '', lists.MenuAction.CANCELLA_IMBARCO, 0, {
       param1: { ind_order: imbarco.ind_order, username: imbarco.username },
       param2: { num_tess: imbarco.num_tess }
     })
@@ -258,7 +303,7 @@ export default class CMyDashboard extends MixinUsers {
     if (invattivi > 2)
       invattivi = 2
 
-    return  invattivi + '/' + inv
+    return invattivi + '/' + inv
   }
 
   public getinvit(index, myuser, posiz) {
@@ -281,21 +326,25 @@ export default class CMyDashboard extends MixinUsers {
 
     return { invattivi, inv }
   }
+
   public getnuminv(index, myuser, posiz) {
     const ris = this.getinvit(index, myuser, posiz)
 
     return ris.inv
   }
+
   public getnuminvattivi(index, myuser, posiz) {
     const ris = this.getinvit(index, myuser, posiz)
 
     return ris.invattivi
   }
+
   public getnuminvperc(index, myuser, posiz) {
     const ris = this.getinvit(index, myuser, posiz)
 
     return ris.invattivi / 2 * 100
   }
+
   public getcolorinvitati(index, myuser, posiz) {
 
     const ris = this.getinvit(index, myuser, posiz)
@@ -352,7 +401,7 @@ export default class CMyDashboard extends MixinUsers {
   }
 
   public imbarchipresenti() {
-    let presente = false;
+    let presente = false
     for (const rec of this.dashboard.arrimbarchi) {
       if (!rec.added)
         presente = true
@@ -393,14 +442,37 @@ export default class CMyDashboard extends MixinUsers {
   }
 
   get getstrinvitati() {
-    if (this.dashboard.myself.numinvitati)
-      return this.dashboard.myself.numinvitati + ` ` + this.$t('dashboard.downline')
-    else
+    if (!!this.dashboard && !!this.dashboard.myself)
+      if (!!this.dashboard.myself.numinvitati)
+        return this.dashboard.myself.numinvitati + ` ` + this.$t('dashboard.downline')
+
+    if (this.loading_invitati)
       return ` (...) ` + this.$t('dashboard.downline')
+    else
+      return this.$t('dashboard.downline')
   }
 
-  public getmyrigaattuale(rigamin) {
+  public getmyrigaattuale(mianave) {
+    const rigamin = tools.getRiganave(mianave.riga)
+    const colmin = tools.getColnave(mianave.col)
+
     let riga = this.myrigaattuale
+    let col = this.mycolattuale
+
+    let colvera = colmin
+    if (rigamin > 3) {
+      for (let index = rigamin; index < riga - 1; index++){
+        colvera = colvera * 2
+      }
+    } else {
+      colvera = 7
+    }
+
+    if (col <= colvera) {
+      riga = riga - 1
+    }
+
+    // console.log('[' + rigamin + '.' + colmin + ']', 'riga', riga, 'col', col, 'colvera', colvera)
 
     if (riga < rigamin)
       riga = rigamin
@@ -411,7 +483,7 @@ export default class CMyDashboard extends MixinUsers {
   }
 
   public getval7(mianave) {
-    let val = this.getmyrigaattuale(tools.getRiganave(mianave.riga))
+    let val = this.getmyrigaattuale(mianave)
     return val - tools.getRiganave(mianave.riga) + 1
   }
 
@@ -436,7 +508,15 @@ export default class CMyDashboard extends MixinUsers {
     return val
   }
 
-  gettextcolor(mianave) {
+  public gettextcolor(mianave) {
     return this.getval7(mianave) === 3 ? 'black' : 'white'
+  }
+
+  public getifdisableInvitante(imbarco, index) {
+    if ((index === 0) && (this.dashboard.arrposizioni.length <= 0)) {
+      return true
+    }
+    return false
+
   }
 }

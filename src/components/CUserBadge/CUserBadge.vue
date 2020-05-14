@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!!user">
+  <div v-if="!!user" :disabled="mydisabled">
     <q-item class="q-my-sm q-pa-sm myuserbadge shadow-5" clickable v-ripple @click="execclick(user)">
       <q-item-section avatar v-if="showsteps">
         <div class="row" style="margin-left: 4px;">
@@ -14,7 +14,7 @@
 
       <q-item-section>
         <q-item-label>{{ user.name }} {{ user.surname }} {{ getindorder(user) }}<br>
-          <span class="text-grey">({{ getusername(user) }})</span>
+          <span class="text-grey">({{ getusername(user) }}) {{ getquanti(user)}}</span>
           <br><!--<span v-if="isextralist(user)" class="notreg">{{ $t('dashboard.notreg') }}</span>-->
         </q-item-label>
         <!--<q-item-label caption lines="1">{{ user.email }}</q-item-label>-->

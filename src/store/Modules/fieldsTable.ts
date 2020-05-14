@@ -186,8 +186,8 @@ const colnavepersistente = [
   AddCol({ name: '_id', label_trans: 'others.value' }),
   AddCol({ name: 'riga', label_trans: 'reg.riga' }),
   AddCol({ name: 'col', label_trans: 'reg.col' }),
-  AddCol({ name: 'date_start', label_trans: 'date_start', fieldtype: tools.FieldType.date }),
-  AddCol({ name: 'date_gift_chat_open', label_trans: 'date_gift_chat_open', fieldtype: tools.FieldType.date }),
+  AddCol({ name: 'date_gift_chat_open', label_trans: 'dashboard.nave_in_partenza', fieldtype: tools.FieldType.date }),
+  AddCol({ name: 'date_start', label_trans: 'dashboard.nave_in_chiusura', fieldtype: tools.FieldType.date }),
   AddCol({ name: 'link_chat', label_trans: 'reg.link_chat' }),
   AddCol({ name: 'provvisoria', label_trans: 'reg.provvisoria', fieldtype: tools.FieldType.boolean }),
   AddCol({ name: 'note_bot', label_trans: 'note_bot', fieldtype: tools.FieldType.string }),
@@ -477,14 +477,13 @@ export const fieldsTable = {
 
     // IColGridTable
   colTableUsers: [
-    AddCol({ name: '_id', label_trans: 'reg.id' }),
+    // AddCol({ name: '_id', label_trans: 'reg.id' }),
     AddCol({ name: 'index', label_trans: 'reg.index', fieldtype: tools.FieldType.number }),
     AddCol({ name: 'ind_order', label_trans: 'reg.ind_order' }),
     AddCol({ name: 'old_order', label_trans: 'old_order' }),
     AddCol({ name: 'sospeso', label_trans: 'reg.sospeso', fieldtype: tools.FieldType.boolean }),
     AddCol({ name: 'deleted', label_trans: 'reg.deleted', fieldtype: tools.FieldType.boolean }),
     AddCol({ name: 'username', label_trans: 'reg.username_short' }),
-    AddCol({ name: 'username_main', label_trans: 'reg.username_main' }),
     AddCol({ name: 'name', label_trans: 'reg.name' }),
     AddCol({ name: 'surname', label_trans: 'reg.surname' }),
     AddCol({ name: 'email', label_trans: 'reg.email' }),

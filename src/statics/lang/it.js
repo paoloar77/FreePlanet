@@ -5,6 +5,7 @@ const msg_it = {
       a: 'al',
     },
     home: {
+      guida: 'Guida',
       guida_passopasso: 'Guida Passo Passo'
     },
     grid: {
@@ -105,7 +106,7 @@ const msg_it = {
       zoom_si_partecipato: 'Hai partecipato ad almeno 1 Zoom',
       zoom_partecipa: 'Partecipato ad almeno 1 Zoom',
       zoom_no_partecipato: 'Attualmente non hai ancora partecipato ad uno Zoom (è un requisito per poter entrare)',
-      zoom_long: 'Si richiede di partecipare ad almeno 1 Zoom, ma è consigliato prendere parte al movimento in maniera più attiva.<br><br><strong>Partecipando agli Zoom lo Staff registrerà le presenze e verrai così abilitato.</strong>',
+      zoom_long: 'Si richiede di partecipare ad almeno 1 Zoom, ma se sentirai che questi icontri sono anche un modo per condividere e stare in compagnia, allora potrai partecipare tutte le volte che lo desideri.<br><br><strong><br>Partecipando agli Zoom di Benvenuto lo Staff registrerà la vostra presenza <strong>ENTRO 24 ORE</strong>.</strong>',
       zoom_what: 'Tutorial come installare Zoom Cloud Meeting',
       // sharemovement_devi_invitare_almeno_2: 'Ancora non hai invitato 2 persone',
       // sharemovement_hai_invitato: 'Hai invitato almeno 2 persone',
@@ -230,7 +231,8 @@ const msg_it = {
       nessun_invitante: 'Nessun Invitante',
       nessun_invitato: 'Nessun Invitato',
       legenda_title: 'Clicca sul nome dell\'invitato per vedere lo stato dei suoi Requisiti.',
-      nave_in_partenza: 'in Partenza il',
+      nave_in_partenza: 'Apertura Gift Chat',
+      nave_in_chiusura: 'Chiusura Gift Chat',
       nave_partita: 'Partita il',
       tutor: 'Tutor',
       traduttrici: 'Traduttrici',
@@ -242,8 +244,8 @@ const msg_it = {
       'cambia la "cronologia per i nuovi membri" da nascosta a visibile.</li>' +
       '<li>Per trovare il <strong>link della Chat appena creata</strong>: clicca sul nome della chat in alto, clicca sulla Matita -> "Tipo di Gruppo" -> "invita nel gruppo tramite link", clicca su "copia link" e incollalo qui sotto, sulla casella <strong>"Link Gift Chat"</strong></li>' +
       '<li>Invia il Link della Gift Chat a tutti i Donatori, cliccando sul bottone qui sotto.</li></ol>',
-      sonodonatore: '<ol class="lista"><li>Quando sei in questa posizione, verrai invitato ad entrare in una <strong>Gift Chat</strong> (Telegram) e qui troverai anche gli altri 7 Donatori, il Mediatore, il Sognatore e un rappresentante dello Staff.</li>' +
-      '<li>Effettuerai il tuo dono <strong>ESATTAMENTE il giorno indicato</strong> e nella modalità di pagamento che troverai scritto qui.<br></ol>',
+      sonodonatore: '<ol class="lista"><li>Quando sei in questa posizione, verrai invitato (tramite un messaggio su <strong>AYNI BOT</strong>) ad entrare in una <strong>Gift Chat</strong> (Telegram) e qui troverai anche gli altri 7 Donatori, il Mediatore, il Sognatore e un rappresentante dello Staff.</li>' +
+      '<li>Avrai tempo 4 giorni per entrare nella chat e massimo 7 gg per fare il tuo Dono, nella modalità di pagamento che troverai scritto qui.<br></ol>',
       sonodonatore_seconda_tessitura: '<ol class="lista"><li>Qui tu sei Mediatore e anche Donatore, ma essendo la seconda Tessitura, non avrai bisogno di effettuare nuovamente il tuo dono<br></ol>',
       controlla_donatori: 'Controlla Lista Donatori',
       link_chat: 'Link della Gift Chat Telegram',
@@ -292,10 +294,12 @@ const msg_it = {
       doni_inviati_da_confermare: 'Doni Inviati (da confermare)',
       doni_mancanti: 'Doni Mancanti',
       temporanea: 'Temporanea',
-      nave_provvisoria: 'Ti è stata assegnata una <strong>Nave Temporanea</strong>.<br>E\' normale che vedrai variare la data di partenza, dovuto all\'aggiornamento della graduatoria dei passeggeri.',
+      nave_provvisoria: 'Ti è stata assegnata una <strong>Nave TEMPORANEA</strong>.<br>E\'normale che vedrai variare la data di partenza, dovuto all\'aggiornamento della graduatoria dei passeggeri.',
       ritessitura: 'RITESSITURA',
     },
     reg: {
+      volta: 'volta',
+      volte: 'volte',
       registered: 'Registrato',
       contacted: 'Contattato',
       name_complete: 'Nome Completo',
@@ -366,7 +370,6 @@ const msg_it = {
       sospeso: 'Sospeso',
       username: 'Username (Pseudonimo)',
       username_short: 'Username',
-      username_main: 'Username Base',
       name: 'Nome',
       surname: 'Cognome',
       username_login: 'Username o email',

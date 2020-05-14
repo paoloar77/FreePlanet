@@ -5,6 +5,7 @@ const msg_enUs = {
       a: 'to',
     },
     home: {
+      guida: 'Guide',
       guida_passopasso: 'Step By Step Guide'
     },
     grid: {
@@ -26,6 +27,7 @@ const msg_enUs = {
         usereventlist: 'Users Booking',
         userlist: 'Users List',
         tableslist: 'List of tables',
+        navi: 'Navi',
         newsletter: 'Newsletter',
         pages: 'Pages',
         media: 'Medias',
@@ -92,6 +94,7 @@ const msg_enUs = {
       enter_prog_completa_requisiti: 'Complete all the requirements to enter the boarding list.',
       enter_prog_requisiti_ok: 'You have completed all 7 requirements to enter the boarding list.<br>',
       enter_prog_msg: 'You will receive a message in the next few days as soon as your ship is ready!',
+      enter_prog_msg_2: '',
       enter_nave_9req_ok: 'CONGRATULATIONS! You have completed ALL 9 steps guide! Thank you for helping {sitename} to Expand! <br>You will be able to leave very soon with your Journey, making your gift and continuing towards the Dreamer.',
       enter_nave_9req_ko: 'Remember that you can help the Movement grow and expand by sharing our journey with everyone!',
       enter_prog: 'I\'m going in Programming',
@@ -109,6 +112,7 @@ const msg_enUs = {
     },
 
     dialog: {
+      continue: 'Continue',
       close: 'Close',
       copyclipboard: 'Copied to clipboard',
       ok: 'Ok',
@@ -188,6 +192,7 @@ const msg_enUs = {
       options: 'Options',
     },
     dashboard: {
+      invitante: 'Invitante',
       num_tessitura: 'Numero di Tessitura:',
       attenzione: 'Attenzione',
       downline: 'Guests',
@@ -203,6 +208,7 @@ const msg_enUs = {
       nessun_invitato: 'No_invited',
       legenda_title: 'Click on the name of the guest to see the status of his Requirements.',
       nave_in_partenza: 'on Departure on',
+      nave_in_chiusura: 'Closing Gift Chat',
       nave_partita: 'departed on',
       tutor: 'Tutor',
       sonomediatore: 'When you become a Medalist you are contacted by a <strong>TUTOR</strong>, with him you must:<br><ol class="list">' +
@@ -213,7 +219,7 @@ const msg_enUs = {
       '<li>To find the <strong>link to the newly created Chat</strong>: Click on the Chat name at the top, click on the Pencil -> "Group Type" -> "invite to group via link", click on "copy link" and paste it in the <strong>"Link Gift Chat"</strong></li>" + box below.' +
       '<li>Send the Gift Chat Link to all Donors by clicking on the button below.</li></ol>.',
       sonodonatore: '<ol class="list"><li>When you are in this position, you will be invited to enter a <strong>Gift Chat</strong> (Telegram) and here you will also find the other 7 Donors, the Mediator, the Dreamer and a Staff representative.' +
-      '<li>You will make your gift <strong>EXACTLY on the days indicated</strong> and in the payment method that you will find written here.<br></ol>.',
+      '<li>You will have <strong>4 days</strong> to enter the chat and maximum 7 days to make your Gift,  in the payment method that you will find written here.<br></ol>.',
       sonodonatore_seconda_tessitura: '<ol class="lista"><li>Here you are Mediator and also Donor, but being the second Weaving, you won\'t need to make your gift again.<br></ol>',
       controlla_donatori: 'Check Donor List',
       link_chat: 'Gift Chat Telegram links',
@@ -262,9 +268,12 @@ const msg_enUs = {
       doni_inviati_da_confermare: 'Gifts Sent (to be confirmed)',
       doni_mancanti: 'Missing Gifts',
       temporanea: 'Temporary',
+      nave_provvisoria: 'You have been assigned a <strong>TEMPORARY SHIP</strong>.<br>It is normal that you will see a change the departure date, due to the updating of the passenger ranking.',
       ritessitura: 'RETEXTURE',
     },
     reg: {
+      volta: 'time',
+      volte: 'times',
       registered: 'Registrato',
       contacted: 'Contattato',
       name_complete: 'Nome Completo',
@@ -281,6 +290,7 @@ const msg_enUs = {
       you: 'You',
       cancella_invitato: 'Delete Invited',
       regala_invitato: 'Give invited',
+      regala_invitante: 'Give inviting',
       messaggio_invito: 'Invitation Message',
       messaggio_invito_msg: 'Send this message to all those to whom you want to share this Movement !',
       videointro: 'Introductory Video',

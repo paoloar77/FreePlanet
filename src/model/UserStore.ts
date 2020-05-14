@@ -35,14 +35,17 @@ export interface IDashboard {
   myself?: IUserFields
   aportador?: IUserFields,
   numpeople_aportador?: number
-  downline: any[],
-  downnotreg: any[],
-  downbyuser: any[]
   arrimbarchi?: any[]
   arrposizioni?: any[]
   navi_partenza?: any[]
   lastnave?: any
   arrusers?: any[]
+}
+
+export interface IDownline {
+  downline: any[],
+  downnotreg: any[],
+  downbyuser: any[]
 }
 
 export interface ICalcStat {
@@ -70,6 +73,7 @@ export interface IUserFields {
   downline?: IUserFields[]
   calcstat?: ICalcStat
   dashboard?: IDashboard
+  mydownline?: IDownline
   qualified?: boolean
   numinvitati?: number
   numinvitatiattivi?: number
