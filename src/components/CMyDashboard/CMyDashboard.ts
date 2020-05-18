@@ -273,7 +273,7 @@ export default class CMyDashboard extends MixinUsers {
     })
     this.shownuovoviaggio = false
   }
-
+  
   public addNuovoImbarco() {
     this.NuovoImbarco(this.dashboard.myself.username, this.invitante_username)
   }
@@ -281,78 +281,23 @@ export default class CMyDashboard extends MixinUsers {
   public async cancellaImbarco(imbarco) {
     await tools.askConfirm(this.$q, translate('dashboard.attenzione'), translate('steps.vuoi_cancellare_imbarco'), translate('dialog.yes'), translate('dialog.no'), this, '', lists.MenuAction.CANCELLA_IMBARCO, 0, {
       param1: { ind_order: imbarco.ind_order, username: imbarco.username },
-      param2: { num_tess: imbarco.num_tess }
+      param2: { num_tess: imbarco.num_tess, rec: imbarco }
     })
 
   }
 
-  public getnuminvitatistr(index, myuser) {
-    let inv = myuser.numinvitati
-    let invattivi = myuser.numinvitatiattivi
+  public getnuminvperc(index, myrec) {
 
-    const step = (index - 1) * 2
-
-    inv -= step
-    invattivi -= step
-    if (inv < 0)
-      inv = 0
-    if (invattivi < 0)
-      invattivi = 0
-    if (inv > 2)
-      inv = 2
-    if (invattivi > 2)
-      invattivi = 2
-
-    return invattivi + '/' + inv
+    return myrec.invattivi / 2 * 100
   }
 
-  public getinvit(index, myuser, posiz) {
-    let inv = myuser.numinvitati
-    let invattivi = myuser.numinvitatiattivi
+  public getcolorinvitati(index, myrec) {
 
-    const step = (posiz.numNaviEntrato + index) * 2
-
-    inv -= step
-    // console.log('inv', inv, 'step = ', step)
-    invattivi -= step
-    if (inv < 0)
-      inv = 0
-    if (invattivi < 0)
-      invattivi = 0
-    if (inv > 2)
-      inv = 2
-    if (invattivi > 2)
-      invattivi = 2
-
-    return { invattivi, inv }
-  }
-
-  public getnuminv(index, myuser, posiz) {
-    const ris = this.getinvit(index, myuser, posiz)
-
-    return ris.inv
-  }
-
-  public getnuminvattivi(index, myuser, posiz) {
-    const ris = this.getinvit(index, myuser, posiz)
-
-    return ris.invattivi
-  }
-
-  public getnuminvperc(index, myuser, posiz) {
-    const ris = this.getinvit(index, myuser, posiz)
-
-    return ris.invattivi / 2 * 100
-  }
-
-  public getcolorinvitati(index, myuser, posiz) {
-
-    const ris = this.getinvit(index, myuser, posiz)
-    if (ris.invattivi === 1)
+    if (myrec.invattivi === 1)
       return 'blue'
-    if (ris.invattivi === 2)
+    if (myrec.invattivi === 2)
       return 'green'
-    if (ris.inv === 1)
+    if (myrec.inv === 1)
       return 'orange'
   }
 
@@ -361,7 +306,7 @@ export default class CMyDashboard extends MixinUsers {
     let str = index + 1 + '°'
 
     if (num_tess % 2 === 0) {
-      str += ' (Gratis)'
+      str += ' (' + this.$t('dashboard.ritorno') + ')'
     }
     return str
   }
@@ -407,6 +352,10 @@ export default class CMyDashboard extends MixinUsers {
         presente = true
     }
     return presente
+  }
+
+  public getvalstrinv(posiz) {
+    return Math.round((posiz.numinvitatiattiviTot - posiz.numNaviEntrato * 2) - (posiz.indimbarco - 1) * 2) + '/' + Math.round((posiz.numinvitatiTot - posiz.numNaviEntrato * 2) - (posiz.indimbarco - 1) * 2)
   }
 
   public isprovvisoria(mianave) {
@@ -461,7 +410,7 @@ export default class CMyDashboard extends MixinUsers {
 
     let colvera = colmin
     if (rigamin > 3) {
-      for (let index = rigamin; index < riga - 1; index++){
+      for (let index = rigamin; index < riga - 1; index++) {
         colvera = colvera * 2
       }
     } else {
@@ -474,17 +423,28 @@ export default class CMyDashboard extends MixinUsers {
 
     // console.log('[' + rigamin + '.' + colmin + ']', 'riga', riga, 'col', col, 'colvera', colvera)
 
-    if (riga < rigamin)
-      riga = rigamin
     if (riga > rigamin + 6)
       riga = rigamin + 6
+
+    if (riga < rigamin)
+      riga = 0
 
     return riga
   }
 
   public getval7(mianave) {
     let val = this.getmyrigaattuale(mianave)
-    return val - tools.getRiganave(mianave.riga) + 1
+    if (val === 0)
+      return ''
+    else
+      return val - tools.getRiganave(mianave.riga) + 1
+  }
+
+  public getcolornave(mianave) {
+    if (mianave.num_tess % 2 !== 0)
+      return 'blue'
+    else
+      return 'red'
   }
 
   public getcolorbyval(mianave) {
@@ -518,5 +478,20 @@ export default class CMyDashboard extends MixinUsers {
     }
     return false
 
+  }
+
+  public getIfregalareInvitati(seluser, showregalainv) {
+    if (!showregalainv)
+      return false
+
+    let stato = true
+
+    if (!!this.dashboard.myself) {
+
+      if ((this.dashboard.myself.numNaviEntrato * 2) < this.dashboard.myself.numinvitati)
+        stato = true
+    }
+
+    return stato
   }
 }

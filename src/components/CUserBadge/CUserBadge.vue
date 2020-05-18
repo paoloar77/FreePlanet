@@ -14,7 +14,7 @@
 
       <q-item-section>
         <q-item-label>{{ user.name }} {{ user.surname }} {{ getindorder(user) }}<br>
-          <span class="text-grey">({{ getusername(user) }}) {{ getquanti(user)}}</span>
+          <span class="text-grey">({{ getusername(user) }}) <strong>{{ getquanti(user)}}</strong></span>
           <br><!--<span v-if="isextralist(user)" class="notreg">{{ $t('dashboard.notreg') }}</span>-->
         </q-item-label>
         <!--<q-item-label caption lines="1">{{ user.email }}</q-item-label>-->
@@ -24,13 +24,13 @@
       <q-item-section side v-if="showsteps">
         <div class="row q-gutter-xs justify-center items-center">
           <div>
-            <CCardState :mytext="$t('pages.statusreg.req')" :myval="getnumreq(user)" :myperc="getnumperc(user)" size="50px" size_mob="40px" fontsize="0.75rem" myclass="my-card-small-stat" :mycolor="getcolor(user)"></CCardState>
+            <CCardState :mytext="$t('pages.statusreg.req')" :myval="getnumreq(user)" :myperc="getnumperc(user)" size="50px" size_mob="40px" fontsize="0.85rem" myclass="my-card-small-stat" :mycolor="getcolor(user)"></CCardState>
           </div>
 
           <!--<q-icon v-if="!isextralist(user)" size="sm" name="fab fa-telegram" :color="getstatecolor(user)"></q-icon>
           <q-icon v-if="!isextralist(user)" size="sm" name="fas fa-video" :color="getzoomcolor(user)"></q-icon>-->
           <div>
-            <CCardState :mytext="$t('pages.statusreg.people')" :myval="getnumpeople(user)" :myperc="getnumpercpeople(user)" size="50px" size_mob="40px" fontsize="0.75rem" myclass="my-card-small-stat" :mycolor="getcolorpeople(user)"></CCardState>
+            <CCardState :mytext="$t('pages.statusreg.people')" :myval="getnumpeople(user)" :myperc="getnumpercpeople(user)" size="50px" size_mob="40px" fontsize="0.85rem" myclass="my-card-small-stat" :mycolor="getcolorpeople(user)"></CCardState>
           </div>
           <div>
             <q-btn

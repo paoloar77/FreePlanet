@@ -191,6 +191,8 @@ const msg_fr = {
       options: 'Options',
     },
     dashboard: {
+      data: 'Données',
+      ritorno: 'Retour',
       invitante: 'Invitation',
       num_tessitura: 'Numero di Tessitura:',
       attenzione: 'Attention',

@@ -19,6 +19,14 @@ export default class UsersList extends Vue {
     if (tools.appid() === '7')
       this.arrfilterand = [
         {
+          label: 'Attivi',
+          value: shared_consts.FILTER_ATTIVI
+        },
+        {
+          label: 'Nascosti',
+          value: shared_consts.FILTER_NASCOSTI
+        },
+        {
           label: 'Non hanno visto Zoom',
           value: shared_consts.FILTER_USER_NO_ZOOM
         },

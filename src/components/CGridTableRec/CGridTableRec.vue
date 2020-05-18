@@ -52,7 +52,8 @@
             <q-btn v-if="mytable" label="" color="primary" @click="refresh" icon="search"></q-btn>
           </template>
         </q-input>
-        <q-toggle v-if="mytable" v-model="canEdit" :disable="disabilita" :val="lists.MenuAction.CAN_EDIT_TABLE" class="q-mx-sm"
+        <q-toggle v-if="mytable" v-model="canEdit" :disable="disabilita" :val="lists.MenuAction.CAN_EDIT_TABLE"
+                  class="q-mx-sm"
                   :label="$t('grid.editvalues')" @input="changefuncAct"
         ></q-toggle>
 
@@ -101,7 +102,8 @@
         </q-inner-loading>
 
         <div class="row">
-          <q-toggle v-for="(filter, index) of arrfilters" :key="index" v-model="myfilterand" :val="filter.value" :label="filter.label"></q-toggle>
+          <q-toggle v-for="(filter, index) of arrfilters" :key="index" v-model="myfilterand" :val="filter.value"
+                    :label="filter.label"></q-toggle>
         </div>
 
 
@@ -109,12 +111,12 @@
 
       <template v-slot:body="props">
 
-        <q-tr :props="props">
-          <q-td auto-width>
+        <q-tr :props="props" class="trclass">
+          <q-td auto-width class="tdclass">
             <q-checkbox dense v-model="props.selected"></q-checkbox>
           </q-td>
           <q-td v-for="col in mycolumns" :key="col.name" :props="props"
-                v-if="colVisib.includes(col.field + col.subfield)">
+                v-if="colVisib.includes(col.field + col.subfield)" class="tdclass">
             <div :class="getclrow(props.row)">
               <CMyPopupEdit :canEdit="canEdit"
                             :disable="disabilita"
@@ -130,7 +132,8 @@
               </CMyPopupEdit>
             </div>
           </q-td>
-          <q-td v-for="col in mycolumns" :key="col.name" :props="props" v-if="colExtra.includes(col.name)">
+          <q-td v-for="col in mycolumns" :key="col.name" :props="props" v-if="colExtra.includes(col.name)"
+                class="tdclass">
             <div v-if="col.action && visCol(col)">
               <q-btn flat round color="red" :icon="col.icon" size="sm"
                      @click="clickFunz(props.row, col)"></q-btn>

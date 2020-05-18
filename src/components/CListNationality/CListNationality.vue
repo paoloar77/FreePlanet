@@ -7,12 +7,12 @@
                         enter-active-class="animazione fadeIn"
                         leave-active-class="animazione fadeOut">
         <q-item v-for="(nat, index) in mydata" :key="nat._id" class="clitemnat">
-            <q-item-section avatar>
+            <q-item-section avatar  class="clitemnat">
               <q-avatar v-if="tools.geticon(nat._id)"
                         :class="tools.geticon(nat._id)" class="flag_icon">
 
               </q-avatar>
-              <q-avatar v-else color="primary" text-color="white" class="text-center">
+              <q-avatar v-else color="primary" text-color="white" class="text-center clitemnat">
                 {{ tools.capitalize(nat._id) }}
               </q-avatar>
             </q-item-section>

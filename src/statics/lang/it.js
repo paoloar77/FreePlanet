@@ -64,7 +64,9 @@ const msg_it = {
       write: 'scrive'
     },
     stat: {
-      imbarcati: 'Imbarcati in Attesa',
+      imbarcati: 'Imbarcati',
+      imbarcati_weekly: 'Imbarcati Settimanali',
+      imbarcati_in_attesa: 'Imbarcati in Attesa',
       qualificati: 'Qualificati con almeno 2 invitati',
       requisiti: 'Utenti con i 7 Requisiti',
       zoom: 'Partecipato in Zoom',
@@ -215,6 +217,8 @@ const msg_it = {
       options: 'Opzioni',
     },
     dashboard: {
+      data: 'Data',
+      ritorno: 'Ritorno',
       invitante: 'Invitante',
       dono_da_effettuare: 'Dono che dovrai effettuare',
       num_tessitura: 'Numero di Tessitura:',

@@ -31,6 +31,8 @@ export const shared_consts = {
   FILTER_USER_NO_DREAM: 256,
   FILTER_EXTRALIST_DELETED: 512,
   FILTER_USER_TELEGRAM_BLOCKED: 1024,
+  FILTER_ATTIVI: 2048,
+  FILTER_NASCOSTI: 4096,
 
   Permissions: {
     Admin: {

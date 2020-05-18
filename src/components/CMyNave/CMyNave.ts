@@ -59,6 +59,7 @@ export default class CMyNave extends MixinNave {
   public seltesto: string = ''
   public msg_tosend_user: string = ''
   public username_sostituire: string = ''
+  public userfreestr: string = ''
   public MyPagination: {
     sortBy: string,
     descending: boolean,
@@ -897,6 +898,8 @@ export default class CMyNave extends MixinNave {
   public clickseluser(rec) {
     this.seluser = rec
     this.showmsguser = true
+    this.username_sostituire = ''
+    this.userfreestr = ''
   }
 
   public async InviaMsgAUserConfirm(msgobj, navemediatore) {
@@ -1039,5 +1042,39 @@ export default class CMyNave extends MixinNave {
     this.showtesto = true
     this.seltesto = await GlobalStore.actions.GetData({ data })
   }
+
+  public async TrovaUserFree(username) {
+
+    this.ChiamaFunz(null, lists.MenuAction.DAMMI_PRIMO_UTENTE_LIBERO, null)
+
+  }
+
+  public async ChiamaFunz(username, func, data) {
+
+    const mydatatosave = {
+      username,
+      ind_order: -1,
+      myfunc: func,
+      notifBot: null,
+      data: null
+    }
+
+    if (!!data) {
+      mydatatosave.data = data
+    }
+
+    this.loading = true
+
+    GlobalStore.actions.askFunz({ mydata: mydatatosave }).then((ris) => {
+      this.loading = false
+      if (ris) {
+        if (func === lists.MenuAction.DAMMI_PRIMO_UTENTE_LIBERO) {
+          this.userfreestr = ris.username + ' (' + ris.name + ' ' + ris.surname + ')'
+          this.username_sostituire = ris.username
+        }
+      }
+    })
+  }
+
 
 }

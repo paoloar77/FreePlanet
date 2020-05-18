@@ -75,6 +75,7 @@ export interface IUserFields {
   dashboard?: IDashboard
   mydownline?: IDownline
   qualified?: boolean
+  numNaviEntrato?: number
   numinvitati?: number
   numinvitatiattivi?: number
 }

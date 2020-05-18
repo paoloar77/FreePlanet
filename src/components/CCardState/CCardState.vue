@@ -20,7 +20,7 @@
                 </div>
                 <div v-if="myval" class="mlvalue text-h5 text-blue boldhigh text-h5-short"> {{ myval }} {{ textadd }}
                 </div>
-                <div v-if="isperc" class="cltexth5" :style="'fontsize:' + fontsize">
+                <div v-if="isperc" class="cltexth5" >
                     {{ myperc.toFixed(1) }}%
                 </div>
             </div>

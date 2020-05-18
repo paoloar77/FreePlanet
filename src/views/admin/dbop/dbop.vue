@@ -9,6 +9,13 @@
       </CMyFieldDb>
       <br>
 
+      <CMyFieldDb title="ABILITA CRONTAB (1 ora)"
+                  mykey="CRONTAB"
+                  :serv="false"
+                  :type="tools.FieldType.boolean">
+      </CMyFieldDb>
+      <br>
+
 
       <div class="row">
         <q-btn label="Crea Utenti Test" color="primary" @click="EseguiFunz('creaUtentiTest')"></q-btn>
@@ -32,8 +39,6 @@
       -->
 
       <div class="row">
-        <!--<q-btn label="CREA NAVI PERSISTENTI" color="primary" @click="EseguiFunz('CreaNaviPersistenti')"></q-btn>
-        <br>-->
         <!--<q-btn label="CORREGGI NUM_TESS" color="primary" @click="EseguiFunz('Corregginumtess')"></q-btn>
         <br>-->
         <!--<q-btn label="CORREGGI DATA GIFT CHAT" color="primary" @click="EseguiFunz('CorreggiDataGiftChat')"></q-btn>
@@ -55,11 +60,23 @@
           <br>
       </div>-->
       <div class="row">
+        <q-btn label="Rigenera (Elim, Genera Graduat, Add Navi Temp" color="positive" size="lg"
+               @click="EseguiFunz('rigeneraTutto')"></q-btn>
+
+        <!--<q-btn label="Crea ListaIngresso" color="positive" @click="EseguiFunz('creaLista')"></q-btn>-->
+      </div>
+      <br>
+      <div class="row">
         <q-btn label="Elimina Navi Provvisorie" color="negative"
                @click="EseguiFunz('delNaviProvvisorie')"></q-btn>
 
         <!--<q-btn label="Crea ListaIngresso" color="positive" @click="EseguiFunz('creaLista')"></q-btn>-->
       </div>
+      <q-btn label="Genera Graduatoria" color="primary"
+             @click="EseguiFunz('GeneraGraduatoria')"></q-btn>
+      <br>
+      <q-btn label="1) Aggiungi in Navi Temporanee" color="primary" @click="EseguiFunz('creaNavi')"></q-btn>
+      <br>
       <div class="q-pa-sm row">
         <CDateTime
           :value.sync="date_start"
@@ -68,7 +85,9 @@
         </CDateTime>
         <q-input v-model="numpersone" type="number" autofocus label="Num Persone to Add"
                  style="width: 100px;"></q-input>
-        <q-btn label="Crea Navi" color="primary" @click="EseguiFunz('creaNavi')"></q-btn>
+        <q-btn label="2) CREA NAVI PERSISTENTI" color="primary" @click="EseguiFunz('CreaNaviPersistenti')"></q-btn>
+        <br>
+
       </div>
       <div v-if="!incaricamento" class="row">
         <CMyFieldDb title="Riga"
@@ -117,14 +136,18 @@
         <q-btn label="Visualizza Lista Nave" color="primary" @click="EseguiFunz('visuListaNave')"></q-btn>
 
       </div>
-      <div class="row">
+      <!--<div class="row">
         <q-btn label="Visualizza ListaIngresso" color="primary"
                @click="EseguiFunz('visuListaIngresso')"></q-btn>
         <br>
         <q-btn label="Visualizza ListaIngresso Nuovi" color="primary"
                @click="EseguiFunz('visuListaIngressoNuovi')"></q-btn>
         <br>
-      </div>
+      </div>-->
+
+      <q-btn label="Aggiorna Indice Graduatoria" color="primary"
+             @click="EseguiFunz('AggiornaIndiceGraduatoria')"></q-btn>
+      <br>
       <q-btn label="Visu Navi con utenti Eliminati" color="primary"
              @click="EseguiFunz('visuNaviUtentiEliminati')"></q-btn>
       <br>

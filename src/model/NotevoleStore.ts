@@ -21,6 +21,8 @@ export interface INotData {
   checkuser?: ICheckUser | any
   numreg_untilday?: number
   reg_daily?: string
+  imbarcati_daily?: string
+  imbarcati_weekly?: string
   reg_weekly?: string
 }
 

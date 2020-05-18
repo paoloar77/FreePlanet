@@ -197,6 +197,8 @@ const msg_si = {
       loggati: 'Uporabnik ni prijavljen'
     },
     dashboard: {
+      data: 'Data',
+      ritorno: 'Vrnitev',
       invitante: 'povabljenca',
       num_tessitura: 'Numero di Tessitura:',
       attenzione: 'Pozornosti',

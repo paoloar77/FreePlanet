@@ -1,6 +1,6 @@
 <template>
   <div class="row justify-between q-pa-xs-sm">
-    <div style="font-size:1rem; padding-right: 8px;">
+    <div :style="'font-size:'+ fontsize + ' padding-right: 8px;'">
       {{mytext}}
     </div>
     <div>

@@ -539,7 +539,10 @@ namespace Actions {
     // If is not already stored in DB, then show the message to the user.
     if (!state.wasAlreadySubscribed || notreg) {
       options = {
-        title: tools.translate('notification.title_subscribed', [{strin: 'sitename', strout: translate('ws.sitename')}]),
+        title: tools.translate('notification.title_subscribed', [{
+          strin: 'sitename',
+          strout: translate('ws.sitename')
+        }]),
         content: translate('notification.subscribed'),
         openUrl: '/'
       }
@@ -766,6 +769,18 @@ namespace Actions {
       })
   }
 
+  async function askFunz(context, { mydata }) {
+    // console.log('saveFieldValue', mydata)
+
+    return await Api.SendReq(`/askfunz`, 'PATCH', { data: mydata })
+      .then((ris) => {
+        return ris.data.out
+      })
+      .catch((error) => {
+        return null
+      })
+  }
+
   async function DeleteRec(context, { table, id }) {
     console.log('DeleteRec', table, id)
 
@@ -787,7 +802,7 @@ namespace Actions {
   async function DeleteFile(context, { filename }) {
     console.log('DeleteFile', filename)
 
-    return await Api.SendReq('/delfile', 'DELETE', {filename})
+    return await Api.SendReq('/delfile', 'DELETE', { filename })
       .then((res) => {
         if (res.status === 200) {
           if (res.data.code === serv_constants.RIS_CODE_OK) {
@@ -848,6 +863,7 @@ namespace Actions {
         return null
       })
   }
+
   async function GetArrNavi(context) {
     console.log('GetArrNavi')
 
@@ -1119,6 +1135,7 @@ namespace Actions {
     checkUpdates: b.dispatch(checkUpdates),
     saveFieldValue: b.dispatch(saveFieldValue),
     callFunz: b.dispatch(callFunz),
+    askFunz: b.dispatch(askFunz),
     sendPushNotif: b.dispatch(sendPushNotif),
     loadTable: b.dispatch(loadTable),
     saveTable: b.dispatch(saveTable),

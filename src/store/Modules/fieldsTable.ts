@@ -161,6 +161,7 @@ const colpaymenttype = [
 
 const colnavi = [
   AddCol({ name: '_id', label_trans: 'others.value' }),
+  AddCol({ name: 'idListaIngresso', label_trans: 'idListaIngresso' }),
   AddCol({ name: 'riga', label_trans: 'reg.riga' }),
   AddCol({ name: 'col', label_trans: 'reg.col' }),
   AddCol({ name: 'ind_order', label_trans: 'ind_order' }),
@@ -175,6 +176,7 @@ const colnavi = [
   AddCol({ name: 'date_made_gift', label_trans: 'date_made_gift', fieldtype: tools.FieldType.date }),
   // AddCol({ name: 'received_gift', label_trans: 'received_gift', fieldtype: tools.FieldType.boolean }),
   // AddCol({ name: 'date_received_gift', label_trans: 'date_received_gift', fieldtype: tools.FieldType.date }),
+  AddCol({ name: 'offerta_al_fondo', label_trans: 'offerta_al_fondo', fieldtype: tools.FieldType.number }),
   AddCol({ name: 'num_tess', label_trans: 'num_tess', fieldtype: tools.FieldType.number }),
   AddCol({ name: 'note', label_trans: 'note', fieldtype: tools.FieldType.string }),
   // AddCol({ name: 'note_interne', label_trans: 'note_interne', fieldtype: tools.FieldType.string }),
@@ -207,6 +209,26 @@ const collistaingresso = [
   AddCol({ name: 'num_tess', label_trans: 'num_tess', fieldtype: tools.FieldType.number }),
   AddCol({ name: 'note', label_trans: 'reg.note', fieldtype: tools.FieldType.string }),
   AddCol({ name: 'deleted', label_trans: 'reg.deleted', fieldtype: tools.FieldType.boolean }),
+  AddCol(DuplicateRec),
+  AddCol(DeleteRec)
+]
+
+const colgraduatoria = [
+  AddCol({ name: 'index', label_trans: 'index' }),
+  AddCol({ name: 'punteggio', label_trans: 'Punt', fieldtype: tools.FieldType.number }),
+  AddCol({ name: 'ind_order', label_trans: 'ind_order' }),
+  AddCol({ name: 'num_tess', label_trans: 'num_tess', fieldtype: tools.FieldType.number }),
+  AddCol({ name: 'username', label_trans: 'reg.username_short' }),
+  AddCol({ name: 'name', label_trans: 'reg.name' }),
+  AddCol({ name: 'surname', label_trans: 'reg.surname' }),
+  AddCol({ name: 'numNaviEntrato', label_trans: 'Navi', fieldtype: tools.FieldType.number }),
+  AddCol({ name: 'indimbarco', label_trans: 'Imbarco', fieldtype: tools.FieldType.number }),
+  // AddCol({ name: 'numinvitati', label_trans: 'Inv.', fieldtype: tools.FieldType.number }),
+  // AddCol({ name: 'numinvitatiattivi', label_trans: 'Att.', fieldtype: tools.FieldType.number }),
+  AddCol({ name: 'numinvitatiTot', label_trans: 'Inv (Tot)', fieldtype: tools.FieldType.number }),
+  AddCol({ name: 'numinvitatiattiviTot', label_trans: 'Att. Tot', fieldtype: tools.FieldType.number }),
+  AddCol({ name: 'invitante_username', label_trans: 'reg.aportador_solidario' }),
+  AddCol({ name: 'date_added', label_trans: 'date_added', fieldtype: tools.FieldType.date }),
   AddCol(DuplicateRec),
   AddCol(DeleteRec)
 ]
@@ -479,7 +501,7 @@ export const fieldsTable = {
   colTableUsers: [
     // AddCol({ name: '_id', label_trans: 'reg.id' }),
     AddCol({ name: 'index', label_trans: 'reg.index', fieldtype: tools.FieldType.number }),
-    AddCol({ name: 'ind_order', label_trans: 'reg.ind_order' }),
+    // AddCol({ name: 'ind_order', label_trans: 'reg.ind_order' }),
     AddCol({ name: 'old_order', label_trans: 'old_order' }),
     AddCol({ name: 'sospeso', label_trans: 'reg.sospeso', fieldtype: tools.FieldType.boolean }),
     AddCol({ name: 'deleted', label_trans: 'reg.deleted', fieldtype: tools.FieldType.boolean }),
@@ -642,6 +664,13 @@ export const fieldsTable = {
       columns: collistaingresso,
       colkey: '_id',
       collabel: 'ind_order',
+    },
+    {
+      value: 'graduatorias',
+      label: 'Graduatoria',
+      columns: colgraduatoria,
+      colkey: '_id',
+      collabel: 'index',
     },
     {
       value: 'disciplines',

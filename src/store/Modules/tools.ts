@@ -91,6 +91,7 @@ export const tools = {
   TABUSER: 'users',
   TABNAVI: 'navi',
   TABLISTAINGRESSO: 'listaingressos',
+  TABGRADUATORIA: 'graduatorias',
   TABEVENTS: 'myevents',
   TABEXTRALIST: 'extralist',
   TABNEWSLETTER: 'newstosent',
@@ -1480,7 +1481,7 @@ export const tools = {
         table: '',
         fieldsvalue: {},
         notifBot: {}
-      };
+      }
 
       if (!!par.param1.invitante_username) {
         mydatatosave = {
@@ -1548,6 +1549,7 @@ export const tools = {
 
       if (func === lists.MenuAction.CANCELLA_IMBARCO) {
         mydatatosave.ind_order = par.param1.ind_order
+        mydatatosave.data.id = par.param2.rec._id
       }
       if (func === lists.MenuAction.AGGIUNGI_NUOVO_IMBARCO) {
         mydatatosave.invitante_username = par.param1.invitante_username
@@ -3396,55 +3398,19 @@ export const tools = {
     if (langin === '')
       return ''
     try {
-      let lang = langin.toUpperCase()
-      if (lang === 'IT')
-        return 'fa-flag-it'
-      else if (lang === 'ES')
-        return 'fa-flag-es'
-      else if (lang === 'PT')
-        return 'fa-flag-pt'
-      else if (lang === 'BR')
-        return 'fa-flag-br'
-      else if (lang === 'US')
-        return 'fa-flag-us'
-      else if ((lang === 'GB') || (lang === 'UK'))
-        return 'fa-flag-gb'
-      else if (lang === 'DE')
-        return 'fa-flag-de'
-      else if (lang === 'FR')
-        return 'fa-flag-fr'
-      else if (lang === 'SI')
-        return 'fa-flag-si'
-      else if (lang === 'MD')
-        return 'fa-flag-md'
-      else if (lang === 'NG')
-        return 'fa-flag-ng'
-      else if (lang === 'SK')
-        return 'fa-flag-sk'
-      else if (lang === 'CH')
-        return 'fa-flag-ch'
-      else if (lang === 'CM')
-        return 'fa-flag-cm'
-      else if (lang === 'CO')
-        return 'fa-flag-co'
-      else if (lang === 'PE')
-        return 'fa-flag-pe'
-      else if (lang === 'SM')
-        return 'fa-flag-sm'
-      else if (lang === 'HR')
-        return 'fa-flag-hr'
-      else if (lang === 'RO')
-        return 'fa-flag-ro'
-      else if (lang === 'VE')
-        return 'fa-flag-ve'
-      else if (lang === 'CL')
-        return 'fa-flag-cl'
-      else if (lang === 'PL')
-        return 'fa-flag-pl'
-      else if (lang === 'EG')
-        return 'fa-flag-eg'
+      const lang = langin.toUpperCase()
+
+      const arrlang = ['IT', 'ES', 'PT', 'BR', 'US', 'GB', 'UK', 'DE', 'FR', 'SI', 'MD',
+        'NG', 'SK', 'CH', 'CM', 'CO', 'CG', 'PE', 'MS', 'SM', 'HR', 'RO', 'VE', 'CL', 'PL', 'EG', 'AR', 'MX', 'SN', 'PK', 'AT', 'NP',
+      'CU', 'MA', 'PH', 'BA', 'UA', 'BE', 'NL', 'CI']
+
+      const flag = arrlang.find((mylang) => mylang === lang)
+      if (!!flag) {
+        return 'fa-flag-' + flag.toLowerCase()
+      }
 
       return ''
+
     } catch (e) {
       return ''
     }
@@ -3528,6 +3494,36 @@ export const tools = {
       return 'Egypt'
     } else if (nat === 'BR') {
       return 'Brazil'
+    } else if (nat === 'CG') {
+      return 'Congo'
+    } else if (nat === 'AR') {
+      return 'Argentina'
+    } else if (nat === 'MX') {
+      return 'Mexico'
+    } else if (nat === 'SN') {
+      return 'Senegal'
+    } else if (nat === 'PK') {
+      return 'Pakistan'
+    } else if (nat === 'AT') {
+      return 'Austria'
+    } else if (nat === 'NP') {
+      return 'Nepal'
+    } else if (nat === 'CU') {
+      return 'Cuba'
+    } else if (nat === 'MA') {
+      return 'Morocco'
+    } else if (nat === 'PH') {
+      return 'Philippines'
+    } else if (nat === 'BA') {
+      return 'Bosnia and Herzegovina'
+    } else if (nat === 'BE') {
+      return 'Belgium'
+    } else if (nat === 'NL') {
+      return 'Netherlands'
+    } else if (nat === 'MS') {
+      return 'Montserrat'
+    } else if (nat === 'CI') {
+      return 'Cote d\'Ivoire'
     }
   },
 

@@ -202,6 +202,8 @@ const msg_pt = {
       options: 'Opzioni',
     },
     dashboard: {
+      data: 'Datum',
+      ritorno: 'Regresso',
       invitante: 'Convidados',
       num_tessitura: 'Numero di Tessitura:',
       attenzione: 'Atenção',
@@ -221,17 +223,18 @@ const msg_pt = {
       nave_in_chiusura: 'Encerramento Gift Chat',
       nave_partita: 'que partiu em',
       tutor: 'Tutor',
-      sonomediatore: 'Quando diventi Meditore vieni contattato da un <strong>TUTOR</strong>, con lui devi:<br><ol class="lista">' +
-      '<li>Aprire la tua <strong>Gift Chat</strong> (tu come proprietario e il Tutor ' +
-      'come amministratore) con questo nome:<br><strong>{nomenave}</strong></li>' +
-      '<li>Clicca sul nome della chat in alto -> Modifica -> Amministratori -> "Aggiungi Amministratore", seleziona il Tutor nell’elenco.</li>' +
-      '<li>Devi configurare la chat in modo che chi entra vede anche i post precedenti (clicca sul nome della chat in alto, clicca su modifica, ' +
-      'cambia la "cronologia per i nuovi membri" da nascosta a visibile.</li>' +
-      '<li>Per trovare il <strong>link della Chat appena creata</strong>: clicca sul nome della chat in alto, clicca sulla Matita -> "Tipo di Gruppo" -> "invita nel gruppo tramite link", clicca su "copia link" e incollalo qui sotto, sulla casella <strong>"Link Gift Chat"</strong></li>' +
-      '<li>Invia il Link della Gift Chat a tutti i Donatori, cliccando sul bottone qui sotto.</li></ol>',
-      sonodonatore: '<ol class="lista"><li>Quando sei in questa posizione, verrai invitato (tramite un messaggio su <strong>AYNI BOT</strong>) ad entrare in una <strong>Gift Chat</strong> (Telegram) e qui troverai anche gli altri 7 Donatori, il Mediatore, il Sognatore e un rappresentante dello Staff.</li>' +
-      '<li>Avrai tempo 4 giorni per entrare nella chat e massimo 7 gg per fare il tuo Dono, nella modalità di pagamento che troverai scritto qui.<br></ol>',
-      sonodonatore_seconda_tessitura: '<ol class="lista"><li>Qui tu sei Mediatore e anche Donatore, ma essendo la seconda Tessitura, non avrai bisogno di effettuare nuovamente il tuo dono<br></ol>',
+      sonomediatore: 'Quando você se torna um mediador, um <strong>TUTOR</strong> entra em contato com você, e deve:<br>' +
+           '<ol class="lista"><li>Abrir seu <strong>bate-papo</strong> do presente (você como proprietário e o tutor como administrador) com este nome: <br><strong>{nomenave}</strong></li>' +
+           '<li>Clique no nome do bate-papo na parte superior - > Editar -> Administradores -> "Adicionar administrador", selecione o Tutor na lista.</li>' +
+       '<li>Você deve configurar o bate-papo de forma que quem entra depois também veja as postagens anteriores (clique no nome do bate-papo na parte superior, clique em editar' +
+        ' altere o "histórico de novos membros" de oculto para visível.</li>' +
+        '<li>Para encontrar o link Bate-papo Recém-criado: Clique no nome do bate-papo na parte superior, clique no lápis -> "Tipo de grupo" -> "Convidar grupo via link", clique em "Copiar link" e cole-o abaixo' +
+        ', na caixa "Link do bate-papo para presente"'+
+        'Envie o link do bate-papo para presente a todos os doadores, clicando no botão abaixo.</li></ol>',
+
+      sonodonatore: '<ol class="lista"><li>Quando você estiver nessa posição, você será convidado (por meio de uma mensagem em <strong>AYNI BOT</strong>) a entrar em um bate-papo de presentes (Telegram) e aqui também encontrará os outros 7 doadores, o mediador, o sonhador e um representante da equipe.</li>'+
+          '<li>Você terá 4 dias para entrar no bate-papo e, no máximo, 7 dias para fazer seu presente, na forma de pagamento que você encontrará por escrito aqui.<br></ol>',
+      soydonante_secundo_tejido: '<ol class="lista"><li>Aqui você é Mediador e também Doador, mas sendo o segundo Tecido, você não terá que fazer seu presente novamente<br></ol>',
       controlla_donatori: 'Verifique a Lista de Doadores',
       link_chat: 'Links de telegramas para o Gift Chat',
       tragitto: 'Rota',

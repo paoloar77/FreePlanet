@@ -159,20 +159,21 @@
             <q-spinner-gears size="50px" color="primary"/>
           </div>
 
-          <div>
-            <div v-if="!Completato9Req && !HasNave">
-              <CTitleBanner icon="person" :canopen="true" class="q-pa-xs text-center"
-                            :title="$t('pages.posizione_in_programmazione')" bgcolor="bg-blue"
-                            clcolor="text-white" mystyle=" " myclass="myshad">
-                <CRequisiti :statebool="Completato7Req"
-                            :msgTrue="$t('steps.enter_prog_requisiti_ok') + $t('steps.enter_prog_msg')"
-                            :msgFalse="$t('steps.enter_prog_completa_requisiti')">
-                </CRequisiti>
-              </CTitleBanner>
-            </div>
-          </div>
 
-          <div v-if="!!dashboard && dashboard.myself">
+          <div v-if="!!dashboard && dashboard.myself && !loading">
+            <div>
+              <div v-if="!Completato9Req && !HasNave">
+                <CTitleBanner icon="person" :canopen="true" class="q-pa-xs text-center"
+                              :title="$t('pages.posizione_in_programmazione')" bgcolor="bg-blue"
+                              clcolor="text-white" mystyle=" " myclass="myshad">
+                  <CRequisiti :statebool="Completato7Req"
+                              :msgTrue="$t('steps.enter_prog_requisiti_ok') + $t('steps.enter_prog_msg')"
+                              :msgFalse="$t('steps.enter_prog_completa_requisiti')">
+                  </CRequisiti>
+                </CTitleBanner>
+              </div>
+            </div>
+
             <div v-if="dashboard.myself.qualified">
 
               <CTitleBanner class=""
@@ -185,7 +186,10 @@
                   <div class="col-3 ">
                     {{ $t('dashboard.posizione') }}
                   </div>
-                  <div class="col-5 ">
+                  <div class="col-2 ">
+                    {{ $t('dashboard.data') }}
+                  </div>
+                  <div class="col-3 ">
                     {{ $t('dashboard.invitante') }}
                   </div>
                   <div class="col-2 ">
@@ -207,7 +211,10 @@
                         mioimbarco.posiz.totposiz }}
                       </div>
                     </div>
-                    <div class="col-5">
+                    <div class="col-2">
+                      <div>{{ tools.getstrshortDate(mioimbarco.date_added) }}</div>
+                    </div>
+                    <div class="col-3">
                       <div class="posizione_imbarco">
                         <CUserBadge :yourinvite="false" :showsteps="false" :showregalainv="true"
                                     :user="dashboard.arrusers[mioimbarco.invitante_username]" mycolor="orange"
@@ -222,11 +229,11 @@
                     <div class="col-2">
                       <div class="posizione_imbarco">
                         <CCardState :mytext="$t('pages.statusreg.people')"
-                                    :myval="getnuminvattivi(index, dashboard.myself, mioimbarco.posiz)+'/'+getnuminv(index, dashboard.myself, mioimbarco.posiz)"
-                                    :myperc="getnuminvperc(index, dashboard.myself, mioimbarco.posiz)" size="50px"
+                                    :myval="getvalstrinv(mioimbarco.posiz)"
+                                    :myperc="getnuminvperc(index, mioimbarco.posiz)" size="50px"
                                     size_mob="40px"
-                                    fontsize="0.75rem" myclass="my-card-small-stat"
-                                    :mycolor="getcolorinvitati(index, dashboard.myself, mioimbarco.posiz)"></CCardState>
+                                    fontsize="0.85rem" myclass="my-card-small-stat"
+                                    :mycolor="getcolorinvitati(index, mioimbarco.posiz)"></CCardState>
 
                       </div>
                     </div>
@@ -286,7 +293,7 @@
                           <q-item-section avatar style="width: 70px; font-size: 0.75rem;">
                             {{ getnumtessstr(1, index) }}
                             - {{ tools.getrigacolstr(mianave)}}
-                            <q-icon color="blue" name="fas fa-ship"></q-icon>
+                            <q-icon :color="getcolornave(mianave)" name="fas fa-ship"></q-icon>
                           </q-item-section>
                           <q-item-section>
                             <q-slider
@@ -378,7 +385,7 @@
                             <q-item>
                               <q-item-section avatar>
                                 {{tools.getlastnavestr(dashboard.lastnave) }} &nbsp;
-                                <q-icon color="blue" name="fas fa-ship"></q-icon>
+                                <q-icon :color="getcolornave(mianave)" name="fas fa-ship"></q-icon>
                               </q-item-section>
                               <q-item-section>
                                 <q-slider
@@ -399,7 +406,7 @@
                                 <q-icon color="blue" name="fas fa-flag-checkered"></q-icon>
                               </q-item-section>
                             </q-item>
-                            <q-item>
+                            <q-item v-if="mianave.num_tess % 2 !== 0">
                               <q-item-section avatar>
                                 <q-icon :color="colordono(mianave)" inverted size="sm" name="fas fa-gift"
                                         class="gift"></q-icon>
@@ -419,7 +426,7 @@
                                 </q-item-label>
                               </q-item-section>
                             </q-item>
-                            <q-item>
+                            <q-item v-if="mianave.num_tess % 2 !== 0">
                               <q-item-section avatar>
                                 <q-icon size="sm" name="fas fa-heart" color="red"></q-icon>
                               </q-item-section>
@@ -539,7 +546,7 @@
           <q-btn flat round color="white" icon="close" v-close-popup></q-btn>
         </q-toolbar>
         <q-card-section class="inset-shadow" style="padding: 4px !important;">
-          <CMyRequirement :id_listaingr="id_listaingr" :myseluser="seluser" :showregalainv="showregalainv"
+          <CMyRequirement :id_listaingr="id_listaingr" :myseluser="seluser" :showregalainv="getIfregalareInvitati(seluser, showregalainv)"
                           :mydashboard="dashboard" :mydownline="downline" :notitle="false" @aggiorna="aggiorna"
                           :ind_order_ingr="ind_order_ingr">
 

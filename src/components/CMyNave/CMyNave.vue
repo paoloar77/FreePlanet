@@ -501,8 +501,7 @@
                   </div>
                   <div class="q-ma-sm text-center clBorderSteps">
                     <div>TELEGRAM {{$t('ws.sitename')}} BOT {{$t('dialog.sendmsg')}} ->
-                      {{seluser.name }} {{
-                      seluser.surname }}:
+                      {{seluser.name }} {{ seluser.surname }}:
                     </div>
                     <q-input type="textarea"
                              autogrow
@@ -546,9 +545,28 @@
 
                         </q-input>
 
-                        <q-toggle v-model="deleteUser" label="Elimina Utente sostituito"></q-toggle>
-                        <q-toggle v-model="AddImbarco" label="Aggiungi (senza spostarlo da altre Navi)"></q-toggle>
+                        <q-btn rounded color="warning" icon="fab fa-find"
+                               text-color="black"
+                               label="Cerca il primo Disponibile"
+                               @click="TrovaUserFree()"></q-btn>
+                        <div v-if="!!userfreestr">
+                          <q-field
+                            stack-label
+                            dense
+                          >
+                            <template v-slot:control>
+                              <div class="text-center" tabindex="0">{{userfreestr}}</div>
+                            </template>
+
+                          </q-field>
+                        </div>
+
+                        <q-toggle v-model="deleteUser" :label="'Elimina ' + seluser.name + ' ' + seluser.surname"></q-toggle>
+                        <q-toggle v-model="AddImbarco" label="Aggiungi Destinatario (senza spostarlo da altre Navi)"></q-toggle>
                         <q-toggle v-model="notifBot" :label="$t('dashboard.sendnotification')"></q-toggle>
+
+
+
 
                         <q-btn class="q-ma-sm" rounded color="positive" text-color="white"
                                icon="fas fa-gift"
