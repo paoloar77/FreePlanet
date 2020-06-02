@@ -185,7 +185,8 @@
                           :subfield="mycol.subfield"
                           @save="SaveValdb"
                           @show="selItem(rowclicksel, mycol)"
-                          @showandsave="showandsel">
+                          @showandsave="showandsel"
+                          @annulla="annulla">
 
             </CMyPopupEdit>
           </div>

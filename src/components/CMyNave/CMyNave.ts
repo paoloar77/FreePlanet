@@ -198,6 +198,14 @@ export default class CMyNave extends MixinNave {
         }
       }
     }
+
+    if (this.sonoDonatore()) {
+      this.tabnave = 'donatore'
+    } else if (this.sonoMediatore()) {
+      this.tabnave = 'mediatore'
+    } else if (this.sonoSognatore()) {
+      this.tabnave = 'sognatore'
+    }
   }
 
   public getListaDonatoriDaConfermare() {
@@ -676,7 +684,8 @@ export default class CMyNave extends MixinNave {
     const navemediatore = {
       id: this.mediatore._id,
       riga: this.mediatore.riga,
-      col: this.mediatore.col
+      col: this.mediatore.col,
+      username: this.mediatore.username
     }
 
     this.InviaMsgANave(msgobj, navemediatore)
@@ -1076,5 +1085,8 @@ export default class CMyNave extends MixinNave {
     })
   }
 
+  get rendivisibile() {
+    return !this.FattoDono && !this.sonoSecondaTessituraDonatore() && !this.listanavi
+  }
 
 }

@@ -61,6 +61,7 @@ export default class CMyDashboard extends MixinUsers {
   public ind_order_ingr: number = -1
   public myrigaattuale: number = 0
   public mycolattuale: number = 0
+  public upgrade_graduatorie: boolean = false
   public dashboard: IDashboard = {
     myself: DefaultUser,
     aportador: DefaultUser,
@@ -136,6 +137,8 @@ export default class CMyDashboard extends MixinUsers {
 
     this.loading = true
 
+    this.upgrade_graduatorie = tools.getValDb('UPDATE_GRAD', false, false)
+
     UserStore.actions.getDashboard({ username: this.myusername })
       .then((ris) => {
         this.dashboard = ris
@@ -144,7 +147,7 @@ export default class CMyDashboard extends MixinUsers {
           this.invitante_username = this.dashboard.myself.username
 
         this.myrigaattuale = this.dashboard.lastnave.riga
-        this.mycolattuale = this.dashboard.lastnave.col
+        this.mycolattuale = this.dashboard.lastnave.col + 8
 
         this.loading = false
       })
@@ -250,11 +253,13 @@ export default class CMyDashboard extends MixinUsers {
   }
 
   public colordono(mianave) {
-    if (mianave.made_gift) {
+    if (mianave.made_gift)
       return 'green'
-    } else {
+    else if (!!mianave.date_made_gift)
+      return 'blue'
+    else
       return 'grey'
-    }
+
   }
 
   public getposizioneattuale(mianave, totali) {
@@ -273,7 +278,7 @@ export default class CMyDashboard extends MixinUsers {
     })
     this.shownuovoviaggio = false
   }
-  
+
   public addNuovoImbarco() {
     this.NuovoImbarco(this.dashboard.myself.username, this.invitante_username)
   }
@@ -288,7 +293,15 @@ export default class CMyDashboard extends MixinUsers {
 
   public getnuminvperc(index, myrec) {
 
-    return myrec.invattivi / 2 * 100
+    let val1 = Math.round((myrec.numinvitatiattiviTot - myrec.numNaviEntrato * 2) - (myrec.indimbarco - 1) * 2)
+    if (val1 < 0)
+      val1 = 0
+
+    let valmax = val1;
+    if (valmax < 2)
+      valmax = 2
+
+    return val1 / valmax * 100
   }
 
   public getcolorinvitati(index, myrec) {
@@ -355,7 +368,14 @@ export default class CMyDashboard extends MixinUsers {
   }
 
   public getvalstrinv(posiz) {
-    return Math.round((posiz.numinvitatiattiviTot - posiz.numNaviEntrato * 2) - (posiz.indimbarco - 1) * 2) + '/' + Math.round((posiz.numinvitatiTot - posiz.numNaviEntrato * 2) - (posiz.indimbarco - 1) * 2)
+    let val1 = Math.round((posiz.numinvitatiattiviTot - posiz.numNaviEntrato * 2) - (posiz.indimbarco - 1) * 2)
+    let val2 = Math.round((posiz.numinvitatiTot - posiz.numNaviEntrato * 2) - (posiz.indimbarco - 1) * 2)
+    if (val1 < 0)
+      val1 = 0
+    if (val2 < 0)
+      val2 = 0
+
+    return  val1 + '/' + val2
   }
 
   public isprovvisoria(mianave) {
@@ -377,6 +397,14 @@ export default class CMyDashboard extends MixinUsers {
       note: mianave.note
     }
     tools.saveFieldToServer(this, 'navi', mianave._id, mydata)
+  }
+
+  public change_mynote_imbarco(mioimbarco) {
+
+    const mydata = {
+      note: mioimbarco.note
+    }
+    tools.saveFieldToServer(this, 'listaingressos', mioimbarco._id, mydata)
   }
 
   public getNaveSognatoreStr(mianave) {
@@ -440,7 +468,19 @@ export default class CMyDashboard extends MixinUsers {
       return val - tools.getRiganave(mianave.riga) + 1
   }
 
+  public getposiz(posiz) {
+
+    if (posiz.posiz === 100000) {
+      return '-----'
+    } else {
+      return posiz.posiz + ' su ' + posiz.totposiz + '°'
+    }
+  }
+
   public getcolornave(mianave) {
+    if (this.isprovvisoria(mianave)) {
+      return 'grey'
+    }
     if (mianave.num_tess % 2 !== 0)
       return 'blue'
     else

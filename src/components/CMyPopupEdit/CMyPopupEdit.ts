@@ -31,6 +31,7 @@ export default class CMyPopupEdit extends Vue {
   public myvalue = ''
   public myvalueprec = 'false'
   public countryname = ''
+  public visueditor : boolean = false
 
   get tools() {
     return tools
@@ -45,6 +46,7 @@ export default class CMyPopupEdit extends Vue {
   }
 
   public changeval(newval) {
+    console.log('changeval update:row', newval)
     this.$emit('update:row', newval)
   }
 
@@ -117,6 +119,10 @@ export default class CMyPopupEdit extends Vue {
     this.$emit('save', newVal, valinitial)
   }
 
+  public annulla(val) {
+    this.$emit('annulla', true)
+  }
+
   public Savedb(newVal, valinitial) {
 
     if (this.col.fieldtype === tools.FieldType.boolean) {
@@ -132,6 +138,7 @@ export default class CMyPopupEdit extends Vue {
     // console.log('Savedb', newVal)
 
     this.$emit('showandsave', this.row, this.col, newVal, valinitial)
+    this.visueditor = false
   }
 
   public visuValByType(val, col: IColGridTable, row) {

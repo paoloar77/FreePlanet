@@ -159,8 +159,15 @@
             <q-spinner-gears size="50px" color="primary"/>
           </div>
 
+          <div v-if="upgrade_graduatorie">
+            <CRequisiti :statebool="false"
+                        msgTrue=""
+                        msgFalse="Aggiornamento in Corso - Updating in Progress - Reload Page Please">
+            </CRequisiti>
 
-          <div v-if="!!dashboard && dashboard.myself && !loading">
+          </div>
+
+          <div v-if="!!dashboard && dashboard.myself && !loading & !upgrade_graduatorie">
             <div>
               <div v-if="!Completato9Req && !HasNave">
                 <CTitleBanner icon="person" :canopen="true" class="q-pa-xs text-center"
@@ -183,11 +190,14 @@
                             clcolor="text-white"
                             mystyle="" myclass="myshad" canopen="true">
                 <div class="row justify-between items-center" style="text-align: center;">
-                  <div class="col-3 ">
+                  <div class="col-2 ">
                     {{ $t('dashboard.posizione') }}
                   </div>
+                  <div class="col-1 ">
+                    <q-icon color="blue" name="fas fa-ship"></q-icon>
+                  </div>
                   <div class="col-2 ">
-                    {{ $t('dashboard.data') }}
+                    {{ $t('dashboard.data_rich') }}
                   </div>
                   <div class="col-3 ">
                     {{ $t('dashboard.invitante') }}
@@ -206,12 +216,13 @@
                     <!--<div class="col-2">
                       <div class="posizione_imbarco">{{ index }}</div>
                     </div>-->
-                    <div class="col-3">
-                      <div class="posizione_imbarco">{{ mioimbarco.posiz.posiz }}° su {{
-                        mioimbarco.posiz.totposiz }}
-                      </div>
-                    </div>
                     <div class="col-2">
+                      <div class="posizione_imbarco">{{getposiz(mioimbarco.posiz) }}</div>
+                    </div>
+                    <div class="col-1 text-center">
+                      <div class="boldhigh">{{ mioimbarco.navestr }}</div>
+                    </div>
+                    <div class="col-2  text-center">
                       <div>{{ tools.getstrshortDate(mioimbarco.date_added) }}</div>
                     </div>
                     <div class="col-3">
@@ -246,6 +257,26 @@
                                @click="cancellaImbarco(mioimbarco)"></q-btn>
                       </div>
                     </div>
+                  </div>
+                  <div class="full-width">
+                    <q-item>
+                      <q-item-section avatar>
+                        <q-icon size="sm" name="fas fa-heart" color="red"></q-icon>
+                      </q-item-section>
+                      <q-item-section>
+                        <q-item-label>
+
+                          <q-input v-model="mioimbarco.note" :label="$t('reg.my_dream')"
+                                   rounded outlined
+                                   debounce="1000"
+                                   autogrow
+                                   dense
+                                   style="font-size:0.75rem;"
+                                   @input="change_mynote_imbarco(mioimbarco)">
+                          </q-input>
+                        </q-item-label>
+                      </q-item-section>
+                    </q-item>
                   </div>
 
                 </div>
@@ -339,7 +370,8 @@
                                   icon="fas fa-ship">
                             {{ $t('dashboard.nave_in_partenza') + ' ' + datagiftchat(mianave) }}
                           </q-chip>
-                          <q-chip v-if="datagiftchat(mianave) !== datanave(mianave)" class="glossy q-mx-md" color="blue" text-color="white"
+                          <q-chip v-if="datagiftchat(mianave) !== datanave(mianave)" class="glossy q-mx-md" color="blue"
+                                  text-color="white"
                                   icon="fas fa-ship">
                             {{ $t('dashboard.nave_in_chiusura') + ' ' + datanave(mianave) }}
                           </q-chip>
@@ -417,7 +449,16 @@
                                   <div v-if="mianave.made_gift">
                                     <q-chip class="glossy"
                                             size="md"
-                                            text-color="green"
+                                            color="green"
+                                            text-color="white"
+                                            icon="fas fa-gift">
+                                      {{ $t('steps.dono') + ' ' + $t('dashboard.dono_ricevuto_2') }} !
+                                    </q-chip>
+                                  </div>
+                                  <div v-else-if="!!mianave.date_made_gift">
+                                    <q-chip class=""
+                                            size="md"
+                                            text-color="blue"
                                             color="white"
                                             icon="fas fa-gift">
                                       {{ $t('dashboard.ho_effettuato_il_dono') }}
@@ -426,7 +467,7 @@
                                 </q-item-label>
                               </q-item-section>
                             </q-item>
-                            <q-item v-if="mianave.num_tess % 2 !== 0">
+                            <q-item v-if="(mianave.num_tess % 2 !== 0) && !isprovvisoria(mianave)">
                               <q-item-section avatar>
                                 <q-icon size="sm" name="fas fa-heart" color="red"></q-icon>
                               </q-item-section>
@@ -546,7 +587,8 @@
           <q-btn flat round color="white" icon="close" v-close-popup></q-btn>
         </q-toolbar>
         <q-card-section class="inset-shadow" style="padding: 4px !important;">
-          <CMyRequirement :id_listaingr="id_listaingr" :myseluser="seluser" :showregalainv="getIfregalareInvitati(seluser, showregalainv)"
+          <CMyRequirement :id_listaingr="id_listaingr" :myseluser="seluser"
+                          :showregalainv="getIfregalareInvitati(seluser, showregalainv)"
                           :mydashboard="dashboard" :mydownline="downline" :notitle="false" @aggiorna="aggiorna"
                           :ind_order_ingr="ind_order_ingr">
 

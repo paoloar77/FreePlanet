@@ -22,6 +22,8 @@ export default class CMyEditor extends Vue {
   public myvalue = ''
   public mycolor = ''
 
+  public showeditor: boolean = true
+
   public myfonts = {
     arial: 'Arial',
     arial_black: 'Arial Black',
@@ -96,6 +98,20 @@ export default class CMyEditor extends Vue {
   public changeval(newval) {
     // console.log('changeval', newval)
     this.$emit('update:value', newval)
+  }
+
+  public annulla() {
+    this.$emit('annulla', true)
+  }
+  public saveval() {
+    // Converti i <b> in <strong>
+
+    this.myvalue = tools.convertiTagHTMLPerBOT(this.myvalue)
+
+    console.log('saveval', this.myvalue)
+    this.$emit('showandsave', this.myvalue)
+    // this.$emit('update:value', this.myvalue)
+    this.showeditor = false
   }
 
   public mounted() {

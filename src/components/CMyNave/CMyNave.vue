@@ -1,10 +1,11 @@
 <template>
-  <div class="text-center">
+  <div v-if="!!nave" class="text-center">
+
     <CTitleBanner v-if="!!getpartenza()" class=""
                   :title="gettitolonave"
                   :bgcolor="getcolortitle()"
                   clcolor="text-white"
-                  :visible="!!nave && !FattoDono && !sonoSecondaTessituraDonatore() && !listanavi"
+                  :visible="rendivisibile"
                   mystyle="" myclass="myshad" canopen="true" @apri="apri">
       <div class="">
         <q-chip class="glossy q-ma-sm" color="orange" text-color="white" icon="star">
@@ -123,6 +124,20 @@
                       <CVideo myvideokey="5rp_XEV6Mzg">
 
                       </CVideo>
+
+                    </CTitleBanner>
+
+                    <CTitleBanner class="q-pa-xs"
+                                  :title="$t('dashboard.come_inviare_regalo_con_paypal') + '.me'"
+                                  bgcolor="bg-primary"
+                                  clcolor="text-white"
+                                  myclass="myshad" canopen="true" :visible="false">
+
+                      <CVideo myvideokey="VzCy4BxQKhM">
+
+                      </CVideo>
+
+                      https://youtu.be/VzCy4BxQKhM
                     </CTitleBanner>
 
                   </div>
@@ -151,8 +166,8 @@
                         <div v-else>
                           <div class="row justify-center q-ma-sm">
                             <q-chip class="glossy"
-                                    text-color="white"
-                                    color="positive"
+                                    text-color="green"
+                                    color="white"
                                     icon="fas fa-gift">
                               {{ $t('dashboard.ho_effettuato_il_dono') }}
                             </q-chip>
@@ -274,6 +289,7 @@
               <div v-if="isDefinitivaMediatore()" class="q-my-md">
                 <div class="text-left" v-html="gettesto()"></div>
 
+                <!--
                 <div>
                   <q-input v-model="link_chat" :label="$t('dashboard.link_chat')"
                            debounce="1000"
@@ -293,7 +309,7 @@
                            @click="InviaLinkChatADonatori(true)"></q-btn>
 
                   </div>
-                </div>
+                </div>-->
 
               </div>
 

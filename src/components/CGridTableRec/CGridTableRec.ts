@@ -145,6 +145,12 @@ export default class CGridTableRec extends Vue {
     this.colsel = col
     this.idsel = row._id
     this.SaveValue(newval, valinitial)
+
+    // this.rowclicksel = null
+  }
+
+  public annulla(val) {
+    // this.rowclicksel = null
   }
 
   public SaveValue(newVal, valinitial) {

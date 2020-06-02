@@ -4,6 +4,7 @@ import { CSignIn } from '../../components/CSignIn'
 import { tools } from '../../store/Modules/tools'
 
 @Component({
+  name: 'CSigninNoreg',
   components: { CSignIn }
 })
 
