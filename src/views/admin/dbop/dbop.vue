@@ -157,6 +157,26 @@
         <br>
       </div>
       <div class="row">
+        <q-btn label="CONVERTI SUBACCOUNT !" color="negative"
+               @click="EseguiFunz('convSubAccount')"></q-btn>
+        <br>
+      </div>
+      <div class="row">
+        <q-btn label="FLAGGA GLI UTENTI CON NAVI NON PRESENTI!" color="primary"
+               @click="EseguiFunz('flagUtentiNaviNonPresenti')"></q-btn>
+        <br>
+      </div>
+      <div class="row">
+        <q-btn label="GENERA FLOTTE!" color="primary"
+               @click="EseguiFunz('generaFlotte')"></q-btn>
+        <br>
+      </div>
+      <!--<div class="row">
+        <q-btn label="AGGIUNGI NAVE PER UTENTI CHE NON CE L'HANNO (flag navinonpresenti)!" color="primary"
+               @click="EseguiFunz('addNavePerUtentiNaviNonPresenti')"></q-btn>
+        <br>
+      </div>-->
+      <div class="row">
         <q-btn label="1) CONVERTI TUTTA LA STRUTTURA NEL NUOVO SISTEMA !" color="negative"
                @click="EseguiFunz('creaTessituraeConv')"></q-btn>
         <br>

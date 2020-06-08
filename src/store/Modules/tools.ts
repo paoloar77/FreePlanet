@@ -68,7 +68,14 @@ export const tools = {
   TipoMsg: {
     SEND_LINK_CHAT_DONATORI: 1,
     SEND_MSG: 2,
-    SEND_MSG_SINGOLO: 3
+    SEND_MSG_SINGOLO: 3,
+    SEND_TO_ALL: 10,
+    SEND_MSG_EFFETTUA_IL_DONO: 1000,
+    SEND_MSG_SOLLECITO_DONATORI_NO_DONO: 1005,
+    SEND_MSG_A_MEDIATORI: 1010,
+    SEND_MSG_A_SOGNATORE: 1020,
+    SEND_MSG_A_UTENTE_SOSTITUITO: 1030,
+    SEND_MSG_DONO_RICEVUTO_CORRETTAMENTE: 1040,
   },
 
   listBestColor: [
@@ -1542,6 +1549,7 @@ export const tools = {
         username: par.param1.username,
         invitante_username: '',
         ind_order: -1,
+        num_tess: 0,
         myfunc: func,
         data: par.param2,
         notifBot: null
@@ -1549,6 +1557,7 @@ export const tools = {
 
       if (func === lists.MenuAction.CANCELLA_IMBARCO) {
         mydatatosave.ind_order = par.param1.ind_order
+        mydatatosave.num_tess = par.param1.num_tess
         mydatatosave.data.id = par.param2.rec._id
       }
       if (func === lists.MenuAction.AGGIUNGI_NUOVO_IMBARCO) {
@@ -1578,15 +1587,19 @@ export const tools = {
         myfunc: func,
         data: par.param2,
         username: par.param2.username,
-        notifBot: null
+        notifBot: null,
+        inviaemail: par.param2.inviaemail,
       }
 
       if (par.param2.notifBot)
-        mydatatosave.notifBot = { un: par.param2, txt: par.param3 }
+        mydatatosave.notifBot = { un: par.param2.notifBot, txt: par.param3 }
+
+      myself.EseguiCallServer()
 
       GlobalStore.actions.callFunz({ mydata: mydatatosave }).then((ris) => {
         if (ris) {
           myself.update_nave()
+          myself.Callback()
           tools.showPositiveNotif(myself.$q, par.param3 + '\n' + ' e inviato messaggio per aprire la Gift Chat!')
         } else
           tools.showNegativeNotif(myself.$q, myself.$t('db.recfailed'))
@@ -1623,6 +1636,24 @@ export const tools = {
         } else
           tools.showNegativeNotif(myself.$q, myself.$t('db.recfailed'))
       })
+    } else if (func === lists.MenuAction.INVIA_MSG_A_FLOTTA) {
+      // console.log('param1', par.param1)
+      myself.loading = true
+      GlobalStore.actions.InviaMsgAFlotta({
+        flotta: par.param1,
+        inviareale: par.param2.inviareale,
+        inviaemail: par.param2.inviaemail,
+        tipomsg: par.param3
+      }).then((ris) => {
+        myself.loading = false
+        if (ris) {
+          if (par.param1.inviareale)
+            tools.showPositiveNotif(myself.$q, myself.$t('dashboard.msg_donatori_ok'))
+          tools.askConfirm(myself.$q, '', ris.strout, translate('dialog.yes'), translate('dialog.no'), this, '', 0, 0, {})
+          myself.Callback()
+        } else
+          tools.showNegativeNotif(myself.$q, myself.$t('db.recfailed'))
+      })
     } else if (func === lists.MenuAction.INVIA_MSG_A_SINGOLO) {
       // console.log('param1', par.param1)
       GlobalStore.actions.InviaMsgADonatori({
@@ -1640,7 +1671,7 @@ export const tools = {
       const mydatatosave = {
         id: par.param1._id,
         table: tools.TABNAVI,
-        fieldsvalue: { date_made_gift: par.param1.date_made_gift },
+        fieldsvalue: { date_made_gift: par.param1.date_made_gift, commento_al_sognatore: par.param1.commento_al_sognatore },
         notifBot: null
       }
 
@@ -1656,11 +1687,18 @@ export const tools = {
           tools.showNegativeNotif(myself.$q, myself.$t('db.recfailed'))
       })
     } else if (func === lists.MenuAction.DONO_RICEVUTO) {
-      const mydatatosave = {
+      let mydatatosave = {
         id: par.param1._id,
         table: tools.TABNAVI,
-        fieldsvalue: { made_gift: par.param1.made_gift, riga: par.param1.riga, col: par.param1.col },
-        notifBot: null
+        fieldsvalue: {},
+        notifBot: null,
+        tipomsg: tools.TipoMsg.SEND_MSG_DONO_RICEVUTO_CORRETTAMENTE
+      }
+
+      if (!!par.param1.date_made_gift) {
+        mydatatosave.fieldsvalue = { made_gift: par.param1.made_gift, riga: par.param1.riga, col: par.param1.col, date_made_gift: par.param1.date_made_gift }
+      } else {
+        mydatatosave.fieldsvalue = { made_gift: par.param1.made_gift, riga: par.param1.riga, col: par.param1.col }
       }
 
       if (par.param3) {
@@ -2234,6 +2272,15 @@ export const tools = {
     return date.formatDate(mytimestamp, 'YYYY-MM-DD HH:mm:ss')
   },
 
+  gettimestampstrDate(mydatestr) {
+    if (!!mydatestr) {
+      let mydate = new Date(mydatestr)
+      if (!!mydate)
+        return mydate.getTime()
+    }
+    return 0
+  },
+
 // mystrdate "26.04.2013"
   convertstrtoDate(mystrdate: string) {
     if (mystrdate.length < 10) {
@@ -2556,9 +2603,13 @@ export const tools = {
     } else if (Screen.width < 800) {
       return '500'
     } else if (Screen.width < 900) {
-      return '600'
-    } else {
       return '700'
+    } else if (Screen.width < 1000) {
+      return '900'
+    } else if (Screen.width < 1100) {
+      return '1000'
+    } else {
+      return Screen.width - 200
     }
   },
 
@@ -2699,8 +2750,7 @@ export const tools = {
     else {
       return data.subtitle[static_data.arrLangUsed[0]]
     }
-  }
-  ,
+  },
   gettitlecoll(data: IColl) {
     if (data.title[toolsext.getLocale()])
       return data.title[toolsext.getLocale()]
@@ -2916,6 +2966,26 @@ export const tools = {
             mythis.$q.loading.hide()
           }, 500)
           tools.showNotif(mythis.$q, mythis.$t('login.errato'), { color: 'negative', icon: 'notifications' })
+          mythis.iswaitingforRes = false
+          if (ispageLogin) {
+            GlobalStore.state.RightDrawerOpen = true
+            // mythis.$router.push('/signin')
+          }
+        })
+
+      } else if (riscode === serv_constants.RIS_CODE_LOGIN_ERR_SUBACCOUNT) {
+
+        // Wait N seconds to avoid calling many times...
+        return new Promise((resolve, reject) => {
+          setTimeout(() => {
+            resolve('anything')
+          }, 1000)
+        }).then(() => {
+          setTimeout(() => {
+            // console.log('HIDE...')
+            mythis.$q.loading.hide()
+          }, 500)
+          tools.showNotif(mythis.$q, mythis.$t('login.subaccount'), { color: 'negative', icon: 'notifications' })
           mythis.iswaitingforRes = false
           if (ispageLogin) {
             GlobalStore.state.RightDrawerOpen = true
@@ -3276,7 +3346,7 @@ export const tools = {
     return splitStr.join(' ')
   },
 
-  getValDb(keystr, serv, def?, table?, subkey?) {
+  getValDb(keystr, serv, def?, table?, subkey?, id?) {
     if (table === 'users') {
       if (keystr === 'profile') {
         return UserStore.state.my.profile[subkey]
@@ -3402,7 +3472,7 @@ export const tools = {
 
       const arrlang = ['IT', 'ES', 'PT', 'BR', 'US', 'GB', 'UK', 'DE', 'FR', 'SI', 'MD',
         'NG', 'SK', 'CH', 'CM', 'CO', 'CG', 'PE', 'MS', 'SM', 'HR', 'RO', 'VE', 'CL', 'PL', 'EG', 'AR', 'MX', 'SN', 'PK', 'AT', 'NP',
-      'CU', 'MA', 'PH', 'BA', 'UA', 'BE', 'NL', 'CI']
+        'CU', 'MA', 'PH', 'BA', 'UA', 'BE', 'NL', 'CI']
 
       const flag = arrlang.find((mylang) => mylang === lang)
       if (!!flag) {
@@ -3714,8 +3784,23 @@ export const tools = {
     } else {
       return '1rem'
     }
-  }
+  },
 
+  getsizesmall() {
+    if (this.isMobile()) {
+      return '0.75rem'
+    } else {
+      return '0.85rem'
+    }
+  },
+
+  convertiTagHTMLPerBOT(msg) {
+
+    msg = msg.replace(/<strong>/g, '<b>')
+    msg = msg.replace(/<\/strong>/g, '</b>')
+
+    return msg
+  }
 
 // getLocale() {
   //   if (navigator.languages && navigator.languages.length > 0) {

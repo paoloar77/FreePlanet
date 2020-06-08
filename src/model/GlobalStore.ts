@@ -302,7 +302,7 @@ export interface IGallery {
 
 export interface IColl {
   title: IAllLang
-  date: string
+  date?: string
   subtitle?: IAllLang
   img: string
   img2?: string
@@ -310,6 +310,8 @@ export interface IColl {
   linkagg_type?: number
   width?: number
   height?: number
+  ingallery?: boolean
+  inexibitions?: boolean
 }
 
 export interface ICollaborations {

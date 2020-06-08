@@ -93,6 +93,21 @@
                     mysubkey="email_paypal"
                     :type="tools.FieldType.string">
         </CMyFieldDb>
+
+        <CMyFieldDb :title="$t('reg.link_payment')"
+                    table="users"
+                    mykey="profile"
+                    mysubkey="link_payment"
+                    :type="tools.FieldType.string">
+        </CMyFieldDb>
+
+        <CMyFieldDb :title="$t('reg.note_payment')"
+                    table="users"
+                    mykey="profile"
+                    mysubkey="note_payment"
+                    :type="tools.FieldType.string">
+        </CMyFieldDb>
+
       </div>
 
       <CMyFieldDb :title="$t('reg.paymenttype')"

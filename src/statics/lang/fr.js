@@ -17,6 +17,7 @@ const msg_fr = {
       tableslist: 'Tables',
     },
     otherpages: {
+      sito_offline: 'Site en cours de mise à jour',
       modifprof: 'Modifier le profil',
       biografia: 'Biografia',
       error404: 'error404',
@@ -191,7 +192,8 @@ const msg_fr = {
       options: 'Options',
     },
     dashboard: {
-      data: 'Données',
+      data: 'Date',
+      data_rich: 'Date demandée',
       ritorno: 'Retour',
       invitante: 'Invitation',
       num_tessitura: 'Numero di Tessitura:',
@@ -212,7 +214,7 @@ const msg_fr = {
       nave_in_chiusura: 'Clôture Gift Chat',
       nave_partita: 'parti sur',
       tutor: 'Tuteur',
-      sonomediatore: 'Quand vous devenez Médiateur vous êtes contacté par un <strong>TUTEUR</strong>, avec lui vous devez:<br><ol class="lista">' +
+      /* Quand vous devenez Médiateur vous êtes contacté par un <strong>TUTEUR</strong>, avec lui vous devez:<br><ol class="lista">' +
       '<li>Ouvrir votre <strong>Gift Chat</strong> (vous comme propriétaire et le Tuteur ' +
       'comme administrateur) avec ce nom:<br><strong>{nomenave}</strong></li>' +
       '<li>Cliquez sur le nom du chat en haut -> Modifiez -> Administrateurs -> "Ajoutez Administrateur", sélectionner le Tuteur dans la liste.</li>' +
@@ -220,8 +222,11 @@ const msg_fr = {
       'changez la "chronologie pour les nouveaux membres" de cachée à visibile.</li>' +
       '<li>Pour trouver le <strong>link du Chat à peine crée</strong>: cliquez sur le nom du chat en haut, cliquez sur le Crayon -> "Type de Groupe" -> "invitez dans le groupe à travers le link", cliquez sur "copiez link" et collez-le ci-dessous, dans la case <strong>"Link Gift Chat"</strong></li>' +
       '<li>Envoyez le Link de la Gift Chat à tous les Donateurs, en cliquant sur le boutton ci-dessous .</li></ol>',
-      sonodonatore: '<ol class="lista"><li>Quand vous êtes dans cette position, vous serez invité à entrer dans un  <strong>Gift Chat</strong> (Telegram) et là vous y trouverez également les autres 7 Donateurs,le Médiateur, le Rêveur et un représentant du Staff.</li>' +
-      '<li>Vous aurez <strong>4 jours</strong> pour entrer dans le chat et 7 jours maximum pour faire votre cadeau, dans la modalité de paiement que vous trouverez écrit ici.<br></ol>',
+      */
+      sonomediatore: 'Lorsque vous êtes un MEDIATEUR, vous serez contacté par <strong>TUTOR AYNI</strong> via un message sur le Chat <strong>AYNI BOT</strong>.',
+      superchat: 'Note : SEULEMENT si vous avez des problèmes de PAIEMENT, ou si vous voulez être REMPLACÉ, deux tuteurs vous attendent pour vous aider sur le Chat:<br><a href="{link_superchat}" target="_blank">Get into Gift Chat</a>.',
+      sonodonatore: '<ol class="lista"><li>Quand vous êtes dans cette position, vous serez invité pour faire votre cadeau</li>' +
+      '<li>Vous aurez <strong>4 jours</strong> pour faire votre cadeau.<br></ol>',
       sonodonatore_seconda_tessitura: '<ol class="liste"><li>Ici vous êtes Médiateur et également Donateur, mais étant le deuxième Tissage, vous n’aurez pas besoin d’éffectuer de nouveau votre don<br></ol>',
       controlla_donatori: 'Vérifiez la liste des donateurs',
       link_chat: 'Link de Gift Chat Telegram',
@@ -251,7 +256,14 @@ const msg_fr = {
       effettua_il_dono: 'Il est temps de faire votre propre regalo ! ' +
       'Envoyez via <a href="https://www.paypal.com" target="_blank">PayPal</a> à : <strong>{email}</strong><br>' +
       '(Choisissez l\'option "ENVOYER À UNE PERSONNE DE CONFIANCE")<br>',
+      paypal_me: '<br>2) Méthode simplifiée<br><a href="{link_payment}" target="_blank">Cliquez directement ici</a><br>' +
+      'ouvrira PayPal avec le montant et le destinataire déjà définis.<br>' +
+      'Ajouter comme message : <strong>Regalo</strong><br>' +
+      '<strong><span style="color:red">WARNING:</span> NE COCHEZ PAS LA BOITE</strong> : Protection des achats par Paypal<br>' +
+      'Si vous avez des doutes, regardez la vidéo ci-dessous pour voir comment:' +
+      'Enfin, cliquez sur "Envoyer de l\'argent maintenant"',
       qui_compariranno_le_info: 'Le jour du départ du navire, les informations du Dreamer apparaîtront',
+      commento_al_sognatore: 'Ecrivez ici un commentaire pour le Rêveur:',
       posizione: 'Localisation',
       come_inviare_regalo_con_paypal: 'Comment envoyer le regalo via Paypal',
       ho_effettuato_il_dono: 'J\'ai effectué le Regalo',
@@ -315,6 +327,8 @@ const msg_fr = {
       cellreg: 'Cellulare con cui ti eri registrato',
       nationality: 'Nationalité',
       email_paypal: 'Email Paypal',
+      link_payment: 'Liens Paypal.me pour effectuer le paiement',
+      note_payment: 'Notes complémentaires',
       country_pay: 'Pays de destination Paiements',
       username_telegram: 'Nom d\'utilisateur du Telegram',
       telegram: 'Chat Telegram \'{botname}\'',
@@ -393,6 +407,7 @@ const msg_fr = {
       enter: 'Entrez',
       esci: 'Sortir',
       errato: "Nom d'utilisateur, email ou mot de passe incorrect. réessayer",
+      subaccount: "Ce compte a été fusionné avec votre compte initial. Connectez-vous en utilisant le nom d'utilisateur (et l'adresse électronique) du compte FIRST.",
       completato: 'Connexion faite!',
       needlogin: 'Vous devez vous connecter avant de continuer',
     },

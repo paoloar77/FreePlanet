@@ -23,6 +23,7 @@ const msg_si = {
       list: 'Lista',
     },
     otherpages: {
+      sito_offline: 'Spletno mesto se posodablja',
       modifprof: 'Uredi pProfil',
       biografia: 'Biografia',
       update: 'Posodobitev v teku...',
@@ -72,8 +73,8 @@ const msg_si = {
     },
     steps: {
       nuovo_imbarco: 'Rezerviraj še eno potovanje',
-      vuoi_entrare_nuova_nave: 'Želis pomagati Gibanju, napredovati in vstopiti v še eno\novo Ladjico?<br>Z novim vplačilom 33€, lahko pričneš novo potovanje in tako dobiš\še eno priložnost, da postaneš Sanjač!<br>' +
-      'Če potrdiš boš dodan na seznam \čakajočih za vkrcavanje.',
+      vuoi_entrare_nuova_nave: 'Želis pomagati Gibanju, napredovati in vstopiti v še eno\novo Ladjico?<br>Z novim vplačilom 33€, lahko pričneš novo potovanje in tako dobiš še eno priložnost, da postaneš Sanjač!<br>' +
+      'Če potrdiš boš dodan na seznam čakajočih za vkrcavanje.',
       vuoi_cancellare_imbarco: 'Ali ste prepričani, da želite izbrisati vaš vstop v Ladjo Ayni?',
       completed: 'zaključen',
       passi_su: '{passo} od {totpassi} koraki',
@@ -197,7 +198,8 @@ const msg_si = {
       loggati: 'Uporabnik ni prijavljen'
     },
     dashboard: {
-      data: 'Data',
+      data: 'Datum',
+      data_rich: 'Zahtevani datum',
       ritorno: 'Vrnitev',
       invitante: 'povabljenca',
       num_tessitura: 'Numero di Tessitura:',
@@ -218,7 +220,7 @@ const msg_si = {
       nave_in_chiusura: 'Zapiranje Gift- Darilni klepet',
       nave_partita: 'levo naprej',
       tutor: 'Tutor',
-      sonomediatore: 'Ko postaneš Mediator te kontaktira en <strong>TUTOR</strong>, z njim moraš:<br><ol class="lista">' +
+      /*Ko postaneš Mediator te kontaktira en <strong>TUTOR</strong>, z njim moraš:<br><ol class="lista">' +
       '<li>Odpret svoj <strong>Gift- Darilni klepet</strong> (ti kot lastnik in Tutor ' +
       'kot administrator) s tem imenom:<br><strong>{nomenave}</strong></li>' +
       '<li>Klikni na ime klepeta na vrhu-> Popravi -> Administratorji -> "Dodaj Administratorja", izberi Tutorja v imeniku.</li>' +
@@ -226,8 +228,11 @@ const msg_si = {
       'spremeni "zgodovina za nove člane" iz skrite v vidno.</li>' +
       '<li>Da najdeš <strong>link pravkar ustvarjenega klepeta </strong>: klikni na ime klepeta na vrhu, klikni na svinčnik -> "Vrsta Skupine" -> "z linkom povabi v skupino", klikni na"kopiraj link" in prilepi tu spodaj, v okvir<strong>"Link Gift Klepet"</strong></li>' +
       '<li>Pošlji Link Gift Klepeta vsem Donatorjem, tako, da klikneš na spodnji gumb.</li></ol>',
+      */
+      sonomediatore: 'Ko ste MEDIATOR, vas bo <strong>TUTOR AYNI</strong> poklical preko sporočila na klepetu <strong>AYNI BOT</strong>',
+      superchat: 'Pozorno preberi: SAMO če imaš težave s PLAČILOM, ali želiš biti ZAMENJAN, te dva Tutorja pričakujeta, da ti lahko pomagata v Klepetu:<br><a href="{link_superchat}" target="_blank">Vstopi v Super Klepet</a>',
       sonodonatore: '<ol class="lista"><li>Ko si na tej poziciji, boš povabljen, da vstopiš v <strong>Gift Klepet</strong> (Telegram) in tam boš našel še ostalih 7 Donatorjev, Mediatorja, Sanjača in enega predstavnika Tima.</li>' +
-      '<li>Imel boš 4 dni časa za vstop v klepet in maksimalno 7 dni za izpeljati vplačilo, ki ga imaš napisanega tu.<br></ol>',
+      '<li>Imel boš 4 dni časa v za izpeljati vplačilo.<br></ol>',
       sonodonatore_seconda_tessitura: '<ol class="lista"><li>Tu si istočasno Mediator in Donator. Ker je to tvoj avtomatičen vpis, ti ni sedaj potrebno vplačati!<br></ol>',
       controlla_donatori: 'Preverite seznam donatorjev',
       link_chat: 'Povezava telegrama darilnega klepeta',
@@ -254,10 +259,19 @@ const msg_si = {
       msg_donatori_ok: 'Poslano sporočilo Donatorjem',
       metodi_disponibili: 'Načini na Voljo',
       importo: 'Uvoz',
-      effettua_il_dono: 'Je\' prišel trenutek da Vplačaš svoje darilo!<br>' +
-      'Vplačaj preko <a href="https://www.paypal.com" target="_blank">PayPal</a> a: <strong>{email}</strong><br>' +
-      '(Izberi možnost "Pošlji osebi, ki ji zaupaš")<br>',
+      effettua_il_dono: 'Je prišel trenutek da Vplačaš svoje darilo!<br>' +
+      '1) Tradicionalna metoda<br>' +
+      'Vplačilo preko PayPal na: {email}<br>' +
+      'V sporocilo dopiši: Darilo<br>' +
+      'Zberi možnost "POŠLJI OSEBI, KI JI ZAUPAŠ"',
+      paypal_me: '<br>2) Poenostavljena metoda<br><a href="{link_payment}" target="_blank">Klikneš direktno na link</a><br>' +
+      'odpre se ti si PayPal z že vpisanim zneskom in postavljenim emailom osebe, ki ji vplačuješ<br>' +
+      'V sporočilo dopiši: <strong>Darilo</strong><br>' +
+      '<strong><span style="color:red">POZOR NE OZNAČI POLJA</span></strong>: Zaščita nakupa Paypal<br>' +
+      'Če imaš dvome, si oglej celoten postopek v spodnjem videu:' +
+      'Na koncu klikni “Pošlji denar -Vplačaj”',
       qui_compariranno_le_info: 'Na dan odhoda Ladje, prejmete vse potrebne  informacije s strani Sanjača',
+      commento_al_sognatore: 'Tu napišite komentar za Sanjač:',
       posizione: 'Pozicija',
       come_inviare_regalo_con_paypal: 'Kako vplačati preko',
       ho_effettuato_il_dono: 'POTRJUJEM VPLAČILO',
@@ -298,7 +312,7 @@ const msg_si = {
       you: 'Ti',
       cancella_invitato: 'Odstrani povabljenca',
       cancella_account: 'Zbriši registracijo',
-      cancellami: 'Si siguren, da želiš popolnoma Izbrisati svojo Registracijo na {sitename} in tako izstopiti iz gibanja? Ne boš mogel več\' vstopiti na spletno stran s svojimi podatki, Izgubil Perderai boš svojo POZICIJO in tvoji povabljenci bodo PODARJENI osebi, ki te je povabila.',
+      cancellami: 'Si siguren, da želiš popolnoma Izbrisati svojo Registracijo na {sitename} in tako izstopiti iz gibanja? Ne boš mogel več vstopiti na spletno stran s svojimi podatki, Izgubil Perderai boš svojo POZICIJO in tvoji povabljenci bodo PODARJENI osebi, ki te je povabila.',
       cancellami_2: 'ZADNJE OBVESTILO! Bi rad Definitivno izstopil iz {sitename} ?',
       account_cancellato: 'Tvoj profil je pravilno izbrisan',
       regala_invitato: 'Podari povabljenca',
@@ -328,6 +342,8 @@ const msg_si = {
       cellreg: 'Telefonska s katero si se registriral',
       nationality: 'Nacionalnost',
       email_paypal: 'Email Paypal',
+      link_payment: 'Povezava paypal.me za izvedbo plačila',
+      note_payment: 'Dodatne opombe',
       country_pay: 'Država destinacije Vplačil',
       username_telegram: 'Uporabniško ime Telegram',
       telegram: 'Klepet Telegram \'{botname}\'',
@@ -368,19 +384,19 @@ const msg_si = {
         required: 'je zahtevano',
         email: 'vpiši veljaven email',
         errore_generico: 'Prosimo, da pravilno izpolnete vsa polja',
-        atleast: 'mora\'biti dolgo vsaj',
+        atleast: 'mora biti dolgo vsaj',
         complexity: 'ora vsebobati vsaj 1 malo črko, 1 veliko črko, 1 številko',
-        notmore: 'ne sme\'biti dolgo več kot',
+        notmore: 'ne sme biti dolgo več kot',
         char: 'karakterji',
         terms: 'Za nadaljevanje, moraš sprejeti pogoje poslovanja.',
-        email_not_exist: 'l\'Email ni prisotna v arhivu, preveri, če je pravilna',
-        duplicate_email: 'l\'Email je že bila registrirana',
+        email_not_exist: 'E-naslov ni prisotna v arhivu, preveri, če je pravilna',
+        duplicate_email: 'E-naslov je že bila registrirana',
         user_already_exist: 'Registracija s temi podatki (ime,priimek, telefonska)je že uporabljena.Za vstop na spletno stran, klikni na gumb LOGIN na Začetni Strani.',
         user_extralist_not_found: 'Uporabnik ni najden v arhivu, vpiši Ime,Priimek in telefonsko, ki si jo posredoval v listi leta 2019. Če je to nova registracija, se moraš prijaviti potom LINKA osebe, ki te vabi.',
         user_not_this_aportador: 'Uporabljaš link druge osebe, različen od tvojega originalnega povabljenca.',
-        duplicate_username: 'To\'Uporabniško ime je že uporabljeno',
-        aportador_not_exist: 'To\'Uporabniško ime, ki te je povabilo, ni več prisotno.Kontaktiraj nas.',
-        aportador_regalare_not_exist: 'Vpiši\'Uporabniško ime osebe, ki jo želiš podariti\'povabljencu',
+        duplicate_username: 'To Uporabniško ime je že uporabljeno',
+        aportador_not_exist: 'To Uporabniško ime, ki te je povabilo, ni več prisotno.Kontaktiraj nas.',
+        aportador_regalare_not_exist: 'Vpiši  Uporabniško ime osebe, ki jo želiš podariti povabljencu',
         sameaspassword: 'Geslo mora biti enako',
       },
       tips: {
@@ -397,8 +413,9 @@ const msg_si = {
       enter: 'Vstopi',
       esci: 'Izstopi',
       errato: "Uporabniško ime ali geslo napačna.Poskusi ponovno",
+      subaccount: "Ta profil je bil združen z vašim prvim profilom. Izpelji dostop z vpisom uporabniskega imena(ali emaila) iz PRVEGA vpisa",
       completato: 'Uspešen vpis!',
-      needlogin: 'Je\' potrebno izpeljati vpis preden nadaljuješ.'
+      needlogin: 'Je potrebno izpeljati vpis preden nadaljuješ.'
     },
     reset: {
       title_reset_pwd: "Ponastavi geslo",
@@ -471,7 +488,6 @@ const msg_si = {
       showpdf: 'Poglej PDF',
       bookingtextdefault: 'Rezerviram za',
       bookingtextdefault_of: 'od',
-      data: 'Datum',
       teachertitle: 'Učitelj',
       peoplebooked: 'Rezervacije.',
       showlastschedule: 'Poglej v kolendarju',

@@ -1,7 +1,7 @@
 import Vue from 'vue'
-import { Component, Prop, Watch } from 'vue-property-decorator'
+import { Component } from 'vue-property-decorator'
 import { CSignIn } from '../../../components/CSignIn'
-import CSigninNoreg from '../../../components/CSigninNoreg/CSigninNoreg'
+import { CSigninNoreg } from '@components'
 
 @Component({
   components: { CSigninNoreg }

@@ -17,6 +17,7 @@ const msg_de = {
       tableslist: 'Tables',
     },
     otherpages: {
+      sito_offline: 'Sito in Aggiornamento',
       modifprof: 'Modify Profile',
       biografia: 'Biografia',
       admin: {

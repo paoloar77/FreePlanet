@@ -26,7 +26,7 @@ export default class CMyFieldDb extends MixinBase {
   @Prop({ required: false, default: false }) public serv: boolean
   @Prop({ required: false, default: false }) public disable: boolean
   @Prop({ required: false, default: '' }) public jointable: string
-  @Prop({ required: false, default: '' }) public table: string
+  @Prop({ required: false, default: 'settings' }) public table: string
 
   public $t
   public myvalue = ''

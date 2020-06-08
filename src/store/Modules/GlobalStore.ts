@@ -864,6 +864,32 @@ namespace Actions {
       })
   }
 
+  async function InviaMsgAFlotta(context, { flotta, inviareale, inviaemail, tipomsg }) {
+    console.log('InviaMsgAFlotta')
+
+    const mydata = {
+      idapp: process.env.APP_ID,
+      tipomsg,
+      flotta,
+      inviareale,
+      inviaemail,
+    }
+
+    return await Api.SendReq('/dashboard/msgflotta', 'POST', mydata)
+      .then((res) => {
+        if (res.status === 200) {
+          if (res.data.code === serv_constants.RIS_CODE_OK) {
+            return res.data.ris
+          }
+        }
+        return null
+      })
+      .catch((error) => {
+        console.error(error)
+        return null
+      })
+  }
+
   async function GetArrNavi(context) {
     console.log('GetArrNavi')
 
@@ -872,6 +898,28 @@ namespace Actions {
     }
 
     return await Api.SendReq('/dashboard/getnavi', 'POST', mydata)
+      .then((res) => {
+        if (res.status === 200) {
+          if (res.data.code === serv_constants.RIS_CODE_OK) {
+            return res.data.ris
+          }
+        }
+        return null
+      })
+      .catch((error) => {
+        console.error(error)
+        return null
+      })
+  }
+
+  async function GetMsgTemplates(context) {
+    console.log('GetMsgTemplates')
+
+    const mydata = {
+      idapp: process.env.APP_ID
+    }
+
+    return await Api.SendReq('/dashboard/getmsg_templates', 'POST', mydata)
       .then((res) => {
         if (res.status === 200) {
           if (res.data.code === serv_constants.RIS_CODE_OK) {
@@ -950,6 +998,55 @@ namespace Actions {
         if (res.status === 200) {
           if (res.data.code === serv_constants.RIS_CODE_OK) {
             return res.data.ris
+          }
+        }
+        return null
+      })
+      .catch((error) => {
+        console.error(error)
+        return null
+      })
+  }
+
+  async function GetFlotte(context, { ricalcola, showall }) {
+    console.log('GetFlotte')
+
+    const mydata = {
+      idapp: process.env.APP_ID,
+      ricalcola,
+      showall
+    }
+
+    return await Api.SendReq('/dashboard/getflotte', 'POST', mydata)
+      .then((res) => {
+        if (res.status === 200) {
+          if (res.data.code === serv_constants.RIS_CODE_OK) {
+            return res.data.arrflotte
+          }
+        }
+        return null
+      })
+      .catch((error) => {
+        console.error(error)
+        return null
+      })
+  }
+
+  async function GetFlotta(context, { riga, col_prima, col_ultima}) {
+    console.log('GetFlotta')
+
+    const mydata = {
+      idapp: process.env.APP_ID,
+      riga,
+      col_prima,
+      col_ultima,
+    }
+
+    return await Api.SendReq('/dashboard/getflotta', 'POST', mydata)
+      .then((res) => {
+        if (res.status === 200) {
+          if (res.data.code === serv_constants.RIS_CODE_OK) {
+            return res.data
           }
         }
         return null
@@ -1144,9 +1241,13 @@ namespace Actions {
     sendEmailTest: b.dispatch(sendEmailTest),
     DuplicateRec: b.dispatch(DuplicateRec),
     InviaMsgADonatori: b.dispatch(InviaMsgADonatori),
+    InviaMsgAFlotta: b.dispatch(InviaMsgAFlotta),
     GetArrNavi: b.dispatch(GetArrNavi),
+    GetMsgTemplates: b.dispatch(GetMsgTemplates),
     GetNave: b.dispatch(GetNave),
     GetArrDoniNavi: b.dispatch(GetArrDoniNavi),
+    GetFlotta: b.dispatch(GetFlotta),
+    GetFlotte: b.dispatch(GetFlotte),
     GetData: b.dispatch(GetData),
     addDynamicPages: b.dispatch(addDynamicPages)
   }

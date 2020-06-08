@@ -42,6 +42,7 @@ export default class CMyNave extends MixinNave {
   public coldoni: number = 1
   public mediatore: any = null
   public donatore: any = {}
+  public flotta: any = null
   public donatore_navepers: any = {}
   public mediatore_navepers: any = {}
   public iodonatore: any = {}
@@ -60,6 +61,7 @@ export default class CMyNave extends MixinNave {
   public msg_tosend_user: string = ''
   public username_sostituire: string = ''
   public userfreestr: string = ''
+  public commento_al_sognatore: string = ''
   public MyPagination: {
     sortBy: string,
     descending: boolean,
@@ -98,6 +100,7 @@ export default class CMyNave extends MixinNave {
     { name: 'date_made_gift', align: 'center', label: 'Inviato', field: 'date_made_gift', sortable: true },
     // { name: 'tel', align: 'center', label: 'Tel', field: 'tel', sortable: true },
     { name: 'made_gift', align: 'center', label: 'Conferm.', field: 'made_gift', sortable: true },
+    { name: 'commento_al_sognatore', align: 'center', label: 'Commento', field: 'commento_al_sognatore', sortable: true },
   ]
 
   public tragitto = [
@@ -175,6 +178,8 @@ export default class CMyNave extends MixinNave {
 
     if (!!this.nave) {
       if (!!this.nave.rec) {
+        if (!!this.nave.rec.donatore.flotta)
+          this.flotta = this.nave.rec.donatore.flotta
         if (!!this.nave.rec.donatore)
           this.donatore_navepers = this.nave.rec.donatore.navepersistente
         if (!!this.nave.rec.mediatore) {
@@ -325,6 +330,12 @@ export default class CMyNave extends MixinNave {
     return false
   }
 
+  get getsuperchat(){
+    if (!!this.flotta) {
+      return this.flotta.link_superchat
+    }
+  }
+
   get FattoDono() {
     if (!!this.iodonatore) {
       return this.iodonatore.made_gift
@@ -378,7 +389,7 @@ export default class CMyNave extends MixinNave {
       donatore: rec.name + ' ' + rec.surname
     })
 
-    const mymsg = this.$t('dashboard.confermi_dono_ricevuto_msg', {
+    let mymsg = this.$t('dashboard.confermi_dono_ricevuto_msg', {
       donatore: rec.name + ' ' + rec.surname + ' (' + this.$t('dashboard.posizione') + ' ' + rec.riga + '.' + rec.col + ')'
     })
 
@@ -407,7 +418,8 @@ export default class CMyNave extends MixinNave {
     tools.askConfirm(this.$q, msgtitle, msginvia + ' ' + '?', translate('dialog.yes'), translate('dialog.no'), this, '', lists.MenuAction.DONO_INVIATO, 0, {
       param1: {
         _id: this.iodonatore._id,
-        date_made_gift: tools.getDateNow()
+        date_made_gift: tools.getDateNow(),
+        commento_al_sognatore: this.commento_al_sognatore,
       },
       param2: this.sognatoredelDono().username,
       param3: mymsg
@@ -450,6 +462,24 @@ export default class CMyNave extends MixinNave {
     if (!!rec) {
       if (!!rec.profile)
         return rec.profile.email_paypal
+    }
+    return ''
+  }
+
+  public getpaypalmePagamentoSognatore() {
+    const rec = this.sognatoredelDono()
+    if (!!rec) {
+      if (!!rec.profile)
+        return rec.profile.link_payment
+    }
+    return ''
+  }
+
+  public getnoteaggiuntivePagamentoSognatore() {
+    const rec = this.sognatoredelDono()
+    if (!!rec) {
+      if (!!rec.profile)
+        return rec.profile.note_payment
     }
     return ''
   }
@@ -847,6 +877,15 @@ export default class CMyNave extends MixinNave {
     this.aggiorna()
   }
 
+  public async EseguiCallServer() {
+    this.Chiudi()
+    this.loading = true
+  }
+
+  public Callback() {
+    this.loading = false
+  }
+
   public getstrinpartenza() {
     if (this.GiornoDelDonoArrivato) {
       return this.$t('dashboard.nave_partita')
@@ -976,7 +1015,7 @@ export default class CMyNave extends MixinNave {
   }
 
   get getnotifBotTxt() {
-    return this.seluser.name + ' ' + this.seluser.surname + ' è stato sostituito con ' + this.username_sostituire
+    return this.seluser.name + ' (' + this.seluser.surname + ') è stato sostituito con ' + this.username_sostituire
   }
 
   public async SostituisciUtente(user, usernamesost, notifBottxt) {

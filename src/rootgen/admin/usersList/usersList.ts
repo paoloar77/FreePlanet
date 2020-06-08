@@ -27,6 +27,10 @@ export default class UsersList extends Vue {
           value: shared_consts.FILTER_NASCOSTI
         },
         {
+          label: 'Navi Non Presenti!',
+          value: shared_consts.FILTER_NAVI_NON_PRESENTI
+        },
+        {
           label: 'Non hanno visto Zoom',
           value: shared_consts.FILTER_USER_NO_ZOOM
         },

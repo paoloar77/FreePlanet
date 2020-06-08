@@ -36,9 +36,9 @@ export default class MixinBase extends MixinMetaTags {
     return tools
   }
 
-  public getValDb(keystr, serv, def?, table?, subkey?) {
+  public getValDb(keystr, serv, def?, table?, subkey?, id?) {
 
-    return tools.getValDb(keystr, serv, def, table, subkey)
+    return tools.getValDb(keystr, serv, def, table, subkey, id)
   }
 
   public getValDbLang(keystr, serv, def?, table?, subkey?) {
@@ -48,7 +48,7 @@ export default class MixinBase extends MixinMetaTags {
     return ris
   }
 
-  public async setValDb(key, value, type, serv: boolean, table?, subkey?) {
+  public async setValDb(key, value, type, serv: boolean, table?, subkey?, id?) {
 
     // console.log('setValDb', key, value, serv, table, subkey)
     let mydatatosave = null
@@ -78,7 +78,7 @@ export default class MixinBase extends MixinMetaTags {
         fieldsvalue: myfield
       }
 
-    } else {
+    } else if (table === 'settings') {
       GlobalStore.mutations.setValueSettingsByKey({ key, value, serv })
 
       let myrec = GlobalStore.getters.getrecSettingsByKey(key, serv)
@@ -117,6 +117,24 @@ export default class MixinBase extends MixinMetaTags {
         table: 'settings',
         fieldsvalue: myrec
       }
+    } else {
+      const myfield = {}
+
+      // Save to the DB:
+      if (subkey) {
+        myfield[key + '.' + subkey] = value
+      } else {
+        myfield[key] = value
+      }
+
+      // console.log('myfield', myfield)
+
+      mydatatosave = {
+        id,
+        table,
+        fieldsvalue: myfield
+      }
+
     }
 
     // console.log('mydatatosave', mydatatosave)

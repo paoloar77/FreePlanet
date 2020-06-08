@@ -33,6 +33,7 @@ export const shared_consts = {
   FILTER_USER_TELEGRAM_BLOCKED: 1024,
   FILTER_ATTIVI: 2048,
   FILTER_NASCOSTI: 4096,
+  FILTER_NAVI_NON_PRESENTI: 8192,
 
   Permissions: {
     Admin: {

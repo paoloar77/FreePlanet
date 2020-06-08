@@ -141,13 +141,20 @@ export default class Listadoninavi extends MixinBase {
       donatore: rec.name + ' ' + rec.surname
     })
 
+    let param1 = {
+      _id: rec._id,
+      made_gift: true,
+      riga: rec.riga,
+      col: rec.col,
+      date_made_gift: null
+    }
+
+    if (!rec.date_made_gift) {
+      param1.date_made_gift = tools.getDateNow()
+    }
+
     tools.askConfirm(this.$q, msgtitle, msginvia + ' ' + '? (Pos ' + rec.riga + '.' + rec.col + ')', translate('dialog.yes'), translate('dialog.no'), this, '', lists.MenuAction.DONO_RICEVUTO, 0, {
-      param1: {
-        _id: rec._id,
-        made_gift: true,
-        riga: rec.riga,
-        col: rec.col,
-      },
+      param1,
       param2: '',
       param3: ''
     })

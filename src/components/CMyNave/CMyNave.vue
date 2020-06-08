@@ -114,49 +114,69 @@
                       {{$t('dashboard.importo')}}: <strong>33€</strong>
                     </div>
                     <br>
-
-                    <CTitleBanner class="q-pa-xs"
-                                  :title="$t('dashboard.come_inviare_regalo_con_paypal')"
-                                  bgcolor="bg-primary"
-                                  clcolor="text-white"
-                                  myclass="myshad" canopen="true" :visible="false">
-
-                      <CVideo myvideokey="5rp_XEV6Mzg">
-
-                      </CVideo>
-
-                    </CTitleBanner>
-
-                    <CTitleBanner class="q-pa-xs"
-                                  :title="$t('dashboard.come_inviare_regalo_con_paypal') + '.me'"
-                                  bgcolor="bg-primary"
-                                  clcolor="text-white"
-                                  myclass="myshad" canopen="true" :visible="false">
-
-                      <CVideo myvideokey="VzCy4BxQKhM">
-
-                      </CVideo>
-
-                      https://youtu.be/VzCy4BxQKhM
-                    </CTitleBanner>
-
                   </div>
                   <div class="text-evidente2 bordo_stondato_blu2">
 
                     <div v-if="GiornoDelDonoArrivato && !donatore_navepers.provvisoria">
-                      <div v-if="!FattoDono"
+
+                      <q-img src="statics/images/regalo.jpg"
+                             class=""
+                             style="height: 150px; width: 150px;"
+                             alt="regalo">
+                      </q-img>
+
+                      <div v-if="!FattoDono && !donoinviato"
                            v-html="$t('dashboard.effettua_il_dono', {email: getemailPagamentoSognatore() })">
+                      </div>
+                      <CTitleBanner v-if="!FattoDono  && !donoinviato" class="q-pa-xs"
+                                    :title="$t('dashboard.come_inviare_regalo_con_paypal')"
+                                    bgcolor="bg-primary"
+                                    clcolor="text-white"
+                                    myclass="myshad" canopen="true" :visible="false">
+
+                        <CVideo myvideokey="5rp_XEV6Mzg">
+
+                        </CVideo>
+
+                      </CTitleBanner>
+                      <div v-if="!FattoDono && !!getpaypalmePagamentoSognatore()  && !donoinviato"
+                           v-html="$t('dashboard.paypal_me', {link_payment: getpaypalmePagamentoSognatore() })">
+                      </div>
+                      <CTitleBanner v-if="!FattoDono && !!getpaypalmePagamentoSognatore()  && !donoinviato"
+                                    class="q-pa-xs"
+                                    :title="$t('dashboard.come_inviare_regalo_con_paypal') + '.me'"
+                                    bgcolor="bg-primary"
+                                    clcolor="text-white"
+                                    myclass="myshad" canopen="true" :visible="false">
+
+                        <CVideo myvideokey="VzCy4BxQKhM">
+
+                        </CVideo>
+
+                      </CTitleBanner>
+                      <div v-if="!FattoDono && !!getnoteaggiuntivePagamentoSognatore() && !donoinviato"
+                           v-html="getnoteaggiuntivePagamentoSognatore()">
                       </div>
                       <div v-if="!FattoDono">
                         <br/>
                         <div v-if="!donoinviato">
                           {{$t('dashboard.clicca_conferma_dono')}}:<br>
 
+
+                          <q-input type="textarea"
+                                   input-class="myinput-area"
+                                   v-model="commento_al_sognatore"
+                                   autogrow
+                                   :label="$t('dashboard.commento_al_sognatore')"
+                          >
+                          </q-input>
+
+
                           <div class="row justify-center q-ma-sm">
                             <q-btn push
                                    rounded
                                    color="positive"
-                                   size="md"
+                                   size="lg"
                                    :label="$t('dashboard.ho_effettuato_il_dono')"
                                    icon="fas fa-gift"
                                    @click="HoEffettuatoIlDono">
@@ -187,7 +207,14 @@
                     </div>
                   </div>
                 </div>
+
+                <div v-if="!!getsuperchat && !FattoDono"
+                     class="text-evidente bordo_stondato"
+                     v-html="$t('dashboard.superchat', {link_superchat: getsuperchat })">
+                </div>
+
               </div>
+              <br>
 
               <br>
               <div class="column justify-center items-center q-gutter-md tutor">
@@ -231,7 +258,7 @@
                       <div v-for="(terra, index) in nave.rec.donatore.arrterra" :key="index">
                         <div v-if="terra" :class="`cont_donatore text-small ` + getclassSelect(terra)">
                           {{ terra.name }} {{ terra.surname }} ({{ terra.username }}) - {{
-                          terra.riga}}.{{terra.col}}<br>
+                          terra.riga}}.{{terra.col}} <br>
                         </div>
                       </div>
                     </div>
@@ -253,7 +280,8 @@
                           {{ getindex(donatore, index + 1) }} - {{ donatore.name }} {{
                           donatore.surname }} ({{
                           donatore.username }}) - {{
-                          donatore.riga}}.{{donatore.col}}<br>
+                          donatore.riga}}.{{donatore.col}} <span
+                          v-if="isAdmin"> [ord:{{ donatore.ind_order }}]</span><br>
 
                         </div>
                         <div>
@@ -469,6 +497,9 @@
                         </q-chip>
                       </div>
                     </q-td>
+                    <q-td v-if="!tools.isMobile()" key="commento_al_sognatore" :props="props">
+                      {{ props.row.commento_al_sognatore }}
+                    </q-td>
                   </q-tr>
                 </template>
               </q-table>
@@ -577,11 +608,11 @@
                           </q-field>
                         </div>
 
-                        <q-toggle v-model="deleteUser" :label="'Elimina ' + seluser.name + ' ' + seluser.surname"></q-toggle>
-                        <q-toggle v-model="AddImbarco" label="Aggiungi Destinatario (senza spostarlo da altre Navi)"></q-toggle>
+                        <q-toggle v-model="deleteUser"
+                                  :label="'Elimina ' + seluser.name + ' ' + seluser.surname"></q-toggle>
+                        <q-toggle v-model="AddImbarco"
+                                  label="Aggiungi Destinatario (senza spostarlo da altre Navi)"></q-toggle>
                         <q-toggle v-model="notifBot" :label="$t('dashboard.sendnotification')"></q-toggle>
-
-
 
 
                         <q-btn class="q-ma-sm" rounded color="positive" text-color="white"

@@ -16,6 +16,8 @@ export interface IUserProfile {
   sex?: ESexType
   country_pay?: string
   email_paypal?: string
+  link_payment?: string
+  note_payment?: string
   username_telegram?: string
   teleg_id?: number
   teleg_checkcode?: number
@@ -24,6 +26,8 @@ export interface IUserProfile {
   manage_telegram?: boolean
   saw_zoom_presentation?: boolean
   saw_and_accepted?: boolean
+  qualified?: boolean
+  qualified_2invitati?: boolean
 }
 
 export interface IPaymentType {

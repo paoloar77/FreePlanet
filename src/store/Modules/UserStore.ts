@@ -42,6 +42,8 @@ export const DefaultUser: IUserFields = {
     teleg_id: 0,
     saw_zoom_presentation: false,
     saw_and_accepted: false,
+    qualified: false,
+    qualified_2invitati: false,
   },
   downline: [],
   calcstat: DefaultCalc,
@@ -58,6 +60,8 @@ export const DefaultProfile: IUserProfile = {
   sex: 0,
   country_pay: '',
   email_paypal: '',
+  link_payment: '',
+  note_payment: '',
   username_telegram: '',
   teleg_id: 0,
   teleg_checkcode: 0,
@@ -65,7 +69,9 @@ export const DefaultProfile: IUserProfile = {
   manage_telegram: false,
   saw_zoom_presentation: false,
   saw_and_accepted: false,
-  paymenttypes: []
+  paymenttypes: [],
+  qualified: false,
+  qualified_2invitati: false,
 }
 
 // State

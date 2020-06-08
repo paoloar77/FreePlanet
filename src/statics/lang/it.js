@@ -49,6 +49,7 @@ const msg_it = {
         pages: 'Pagine',
         media: 'Media',
         gallery: 'Gallerie',
+        listaflotte: 'Flotte',
       },
       manage: {
         menu: 'Gestione',
@@ -218,6 +219,7 @@ const msg_it = {
     },
     dashboard: {
       data: 'Data',
+      data_rich: 'Data Rich.',
       ritorno: 'Ritorno',
       invitante: 'Invitante',
       dono_da_effettuare: 'Dono che dovrai effettuare',
@@ -235,12 +237,12 @@ const msg_it = {
       nessun_invitante: 'Nessun Invitante',
       nessun_invitato: 'Nessun Invitato',
       legenda_title: 'Clicca sul nome dell\'invitato per vedere lo stato dei suoi Requisiti.',
-      nave_in_partenza: 'Apertura Gift Chat',
+      nave_in_partenza: 'La Nave salperà il',
       nave_in_chiusura: 'Chiusura Gift Chat',
       nave_partita: 'Partita il',
       tutor: 'Tutor',
       traduttrici: 'Traduttrici',
-      sonomediatore: 'Quando diventi Meditore vieni contattato da un <strong>TUTOR</strong>, con lui devi:<br><ol class="lista">' +
+/*      sonomediatore: 'Quando diventi Meditore vieni contattato da un <strong>TUTOR</strong>, con lui devi:<br><ol class="lista">' +
       '<li>Aprire la tua <strong>Gift Chat</strong> (tu come proprietario e il Tutor ' +
       'come amministratore) con questo nome:<br><strong>{nomenave}</strong></li>' +
       '<li>Clicca sul nome della chat in alto -> Modifica -> Amministratori -> "Aggiungi Amministratore", seleziona il Tutor nell’elenco.</li>' +
@@ -248,9 +250,12 @@ const msg_it = {
       'cambia la "cronologia per i nuovi membri" da nascosta a visibile.</li>' +
       '<li>Per trovare il <strong>link della Chat appena creata</strong>: clicca sul nome della chat in alto, clicca sulla Matita -> "Tipo di Gruppo" -> "invita nel gruppo tramite link", clicca su "copia link" e incollalo qui sotto, sulla casella <strong>"Link Gift Chat"</strong></li>' +
       '<li>Invia il Link della Gift Chat a tutti i Donatori, cliccando sul bottone qui sotto.</li></ol>',
-      sonodonatore: '<ol class="lista"><li>Quando sei in questa posizione, verrai invitato (tramite un messaggio su <strong>AYNI BOT</strong>) ad entrare in una <strong>Gift Chat</strong> (Telegram) e qui troverai anche gli altri 7 Donatori, il Mediatore, il Sognatore e un rappresentante dello Staff.</li>' +
-      '<li>Avrai tempo 4 giorni per entrare nella chat e massimo 7 gg per fare il tuo Dono, nella modalità di pagamento che troverai scritto qui.<br></ol>',
-      sonodonatore_seconda_tessitura: '<ol class="lista"><li>Qui tu sei Mediatore e anche Donatore, ma essendo la seconda Tessitura, non avrai bisogno di effettuare nuovamente il tuo dono<br></ol>',
+*/
+      sonomediatore: 'Quando sei MEDIATORE verrai contattato dai <strong>TUTOR AYNI</strong> tramite un messaggio sulla Chat <strong>AYNI BOT</strong> !',
+      superchat: 'Nota Bene: SOLO se hai problemi di PAGAMENTO, o se vuoi essere SOSTITUITO, due Tutor ti aspettano per aiutarti sulla Chat:<br><a href="{link_superchat}" target="_blank">Entra nella Gift Chat</a>',
+      sonodonatore: '<ol class="lista"><li>Quando sei in questa posizione, verrai invitato (tramite un messaggio su <strong>AYNI BOT</strong>) ad effettuare il Dono. Non sarà più necessario entrare in una Chat.</li>' +
+      '<li>Avrai tempo 4 giorni per fare il Regalo (poi verrai sostituito), nella modalità di pagamento che troverai scritto sul messaggio in <strong>AYNI BOT</strong> .<br></ol>',
+      sonodonatore_seconda_tessitura: '<ol class="lista"><li>Qui tu sei Mediatore e anche Donatore, ma essendo la seconda Tessitura (il Ritorno), non avrai bisogno di effettuare nuovamente il dono<br></ol>',
       controlla_donatori: 'Controlla Lista Donatori',
       link_chat: 'Link della Gift Chat Telegram',
       tragitto: 'Tragitto',
@@ -276,14 +281,22 @@ const msg_it = {
       msg_donatori_ok: 'Inviato messaggio ai Donatori',
       metodi_disponibili: 'Metodi Disponibili',
       importo: 'Importo',
-      effettua_il_dono: 'E\' arrivato il momento di Effettuare il proprio Dono!<br>' +
-      'Inviare tramite <a href="https://www.paypal.com" target="_blank">PayPal</a> a: <strong>{email}</strong><br>' +
-      '(Scegliere l\'opzione "INVIA A UNA PERSONA DI FIDUCIA")<br>',
+      effettua_il_dono: 'E\' arrivato il momento di Effettuare il proprio Dono!<br><br>' +
+      '1) Metodo Tradizionale<br>Inviare tramite PayPal a: <strong>{email}</strong><br>' +
+      'Aggiungere come messaggio la dicitura: <strong>Regalo</strong><br>' +
+      '(<strong>Scegliere l\'opzione</strong> "INVIA A UNA PERSONA DI FIDUCIA")<br>',
+      paypal_me: '<br>2) Metodo Semplificato<br><a href="{link_payment}" target="_blank">Cliccare direttamente qui</a><br>' +
+      'si aprirà PayPal con l\'importo e il destinatario gia impostato.<br>' +
+      'Aggiungere come messaggio la dicitura: <strong>Regalo</strong><br>' +
+      '<strong><span style="color:red">ATTENZIONE:</span> NON SPUNTARE LA CASELLA</strong>: Protezione acquisti Paypal<br>' +
+      'Se hai dubbi, guarda il video qui sotto per vedere come fare:' +
+      'infine Clicca su “Invia Denaro ora”.',
+      commento_al_sognatore: 'Scrivi qui un commento per il Sognatore:',
       qui_compariranno_le_info: 'Nel giorno della partenza della Nave, compariranno le informazioni del Sognatore',
       posizione: 'Posizione',
       come_inviare_regalo_con_paypal: 'Come Inviare il regalo tramite Paypal',
       ho_effettuato_il_dono: 'Ho effettuato il Dono',
-      clicca_conferma_dono: 'Clicca qui per confermare che hai effettuato il tuo dono',
+      clicca_conferma_dono: 'Una volta inviato il Dono, lascia un commento al Sognatore e Clicca qui sotto per confermare che hai effettuato il tuo dono',
       fatto_dono: 'Hai confermato che il dono è stato Inviato',
       confermi_dono: 'Confermi che hai inviato il tuo Dono di 33€',
       dono_ricevuto: 'Il tuo Dono è stato Ricevuto!',
@@ -349,6 +362,8 @@ const msg_it = {
       cellreg: 'Cellulare con cui ti eri registrato',
       nationality: 'Nazionalità',
       email_paypal: 'Email Paypal',
+      link_payment: 'Link Paypal.me per effettuare il pagamento',
+      note_payment: 'Note Aggiuntive',
       country_pay: 'Paese di Destinazione Pagamenti',
       username_telegram: 'Username Telegram',
       telegram: 'Chat Telegram \'{botname}\'',
@@ -433,6 +448,7 @@ const msg_it = {
       enter: 'Accedi',
       esci: 'Esci',
       errato: "Username o password errata. Riprovare",
+      subaccount: "Questo account è stato accorpato con il vostro Principale. Eseguire l'accesso utilizzando l'username (o email) del PRIMO account.",
       completato: 'Login effettuato!',
       needlogin: 'E\' necessario effettuare il login prima di continuare'
     },

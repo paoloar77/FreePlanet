@@ -1,6 +1,6 @@
 const msg_pt = {
   pt: {
-    words:{
+    words: {
       da: 'od',
       a: 'do',
     },
@@ -23,6 +23,7 @@ const msg_pt = {
       list: 'Lista',
     },
     otherpages: {
+      sito_offline: 'Site em actualização',
       modifprof: 'Editar Perfil',
       biografia: 'Biografia',
       error404: 'error404',
@@ -65,7 +66,7 @@ const msg_pt = {
       telegram_non_attivi: 'Telegrama Não Activo',
       telegram_pendenti: 'Telegram Pendants',
       reg_daily: 'Inscrições diárias',
-      reg_weekly:'Inscripciones semanales',
+      reg_weekly: 'Inscripciones semanales',
       reg_total: 'Inscrições Total',
     },
     steps: {
@@ -203,6 +204,7 @@ const msg_pt = {
     },
     dashboard: {
       data: 'Datum',
+      data_rich: 'Data Pedido',
       ritorno: 'Regresso',
       invitante: 'Convidados',
       num_tessitura: 'Numero di Tessitura:',
@@ -223,7 +225,7 @@ const msg_pt = {
       nave_in_chiusura: 'Encerramento Gift Chat',
       nave_partita: 'que partiu em',
       tutor: 'Tutor',
-      sonomediatore: 'Quando você se torna um mediador, um <strong>TUTOR</strong> entra em contato com você, e deve:<br>' +
+      /* Quando você se torna um mediador, um <strong>TUTOR</strong> entra em contato com você, e deve:<br>' +
            '<ol class="lista"><li>Abrir seu <strong>bate-papo</strong> do presente (você como proprietário e o tutor como administrador) com este nome: <br><strong>{nomenave}</strong></li>' +
            '<li>Clique no nome do bate-papo na parte superior - > Editar -> Administradores -> "Adicionar administrador", selecione o Tutor na lista.</li>' +
        '<li>Você deve configurar o bate-papo de forma que quem entra depois também veja as postagens anteriores (clique no nome do bate-papo na parte superior, clique em editar' +
@@ -231,9 +233,11 @@ const msg_pt = {
         '<li>Para encontrar o link Bate-papo Recém-criado: Clique no nome do bate-papo na parte superior, clique no lápis -> "Tipo de grupo" -> "Convidar grupo via link", clique em "Copiar link" e cole-o abaixo' +
         ', na caixa "Link do bate-papo para presente"'+
         'Envie o link do bate-papo para presente a todos os doadores, clicando no botão abaixo.</li></ol>',
-
-      sonodonatore: '<ol class="lista"><li>Quando você estiver nessa posição, você será convidado (por meio de uma mensagem em <strong>AYNI BOT</strong>) a entrar em um bate-papo de presentes (Telegram) e aqui também encontrará os outros 7 doadores, o mediador, o sonhador e um representante da equipe.</li>'+
-          '<li>Você terá 4 dias para entrar no bate-papo e, no máximo, 7 dias para fazer seu presente, na forma de pagamento que você encontrará por escrito aqui.<br></ol>',
+      */
+      sonomediatore: 'Quando você for um MEDIATOR será contactado por <strong>TUTOR AYNI</strong> através de uma mensagem no Chat <strong>AYNI BOT</strong>.',
+      superchat: 'Nota: SOMENTE se tiver problemas de PAGAMENTO, ou se quiser ser REPRESENTADO, dois Tutores estão à espera para o ajudar no Chat:<br>a href="{link_superchat}" target="_blank">Entre no Gift Chat</a>.',
+      sonodonatore: '<ol class="lista"><li>Quando você estiver nessa posição, você será convidado (por meio de uma mensagem em <strong>AYNI BOT</strong>) a entrar em um bate-papo de presentes (Telegram) e aqui também encontrará os outros 7 doadores, o mediador, o sonhador e um representante da equipe.</li>' +
+      '<li>Você terá 4 dias para entrar no bate-papo para fazer seu presente.<br></ol>',
       soydonante_secundo_tejido: '<ol class="lista"><li>Aqui você é Mediador e também Doador, mas sendo o segundo Tecido, você não terá que fazer seu presente novamente<br></ol>',
       controlla_donatori: 'Verifique a Lista de Doadores',
       link_chat: 'Links de telegramas para o Gift Chat',
@@ -241,13 +245,13 @@ const msg_pt = {
       nave: 'Navio',
       data_partenza: 'Data<br>de saída',
       doni_inviati: 'Donativos <br>enviados',
-      nome_dei_passaggi:'Nomes<br>de Passos',
-      donatori:'Doadores',
-      donatore:'Doadore',
-      mediatore:'Ombudsman',
-      sognatore:'Sonhador',
-      sognatori:'Sonhadores',
-      intermedio:'INTERMEDIAR',
+      nome_dei_passaggi: 'Nomes<br>de Passos',
+      donatori: 'Doadores',
+      donatore: 'Doadore',
+      mediatore: 'Ombudsman',
+      sognatore: 'Sonhador',
+      sognatori: 'Sonhadores',
+      intermedio: 'INTERMEDIAR',
       pos2: 'Interm. 2',
       pos3: 'Interm. 3',
       pos5: 'Interm. 5',
@@ -263,7 +267,14 @@ const msg_pt = {
       effettua_il_dono: 'Chegou o momento de fazer o seu Presente!<br>' +
       'Enviar via <a href="https://www.paypal.com" target="_blank">PayPal</a> para: <strong>{email}</strong><br>' +
       '(Escolha a opção "ENVIAR A ALGUÉM DA SUA CONFIANÇA".)<br>',
+      paypal_me: '<br>2) Método Simplificado<br><a href="{link_payment}" target="_blank">Click directamente aqui</a>>br>' +
+      'abrirá o PayPal com o montante e o destinatário já definidos.<br>' +
+      'Adicionar como mensagem: <strong>Presente</strong>>br>' +
+      '<strong><span style="color:red">AVISO:</span> NÃO SELECCIONAR A CAIXA</strong>: Protecção de compras Paypal<br>' +
+      'Se tiver alguma dúvida, veja o vídeo abaixo para ver como:' +
+      'Finalmente clique em "Enviar dinheiro agora"',
       qui_compariranno_le_info: 'No dia da partida do Navio, a informação do Sonhador aparecerá',
+      commento_al_sognatore: 'Escreva aqui um comentário para o Sonhador:',
       posizione: 'Localização',
       come_inviare_regalo_con_paypal: 'Como enviar o presente via Paypal',
       ho_effettuato_il_dono: 'Eu fiz o Presente',
@@ -328,6 +339,8 @@ const msg_pt = {
       cellreg: 'Cellulare con cui ti eri registrato',
       nationality: 'Nacionalidade',
       email_paypal: 'Email Paypal',
+      link_payment: 'Ligações Paypal.me para fazer o pagamento',
+      note_payment: 'Notas Adicionais',
       country_pay: 'País de destino dos pagamentos',
       username_telegram: 'Username Telegram',
       telegram: 'Chat Telegram \'{botname}\'',
@@ -407,6 +420,7 @@ const msg_pt = {
       enter: 'Entrar',
       esci: 'Saia',
       errato: "Username ou senha errados\". Por favor, tente novamente",
+      subaccount: "Esta conta foi fundida com a sua conta inicial. Entre utilizando o nome de utilizador (e e-mail) da conta FIRST.",
       completato: 'Login concluído!',
       needlogin: 'Você deve fazer o login antes de continuar'
     },

@@ -393,18 +393,33 @@
                             <div>{{$t('dashboard.sognatore')}}</div>
                           </div>
                           <div class="row items-center justify-between q-ma-xs no-wrap" style="width: 100%;">
-                            <q-chip class="glossy q-ma-sm" color="red" text-color="white"
-                                    icon="fas fa-ship">
-                              {{ tools.getrigacolstr(mianave) }}
-                            </q-chip>
-                            <q-chip class="glossy q-ma-sm" color="green" text-color="white"
-                                    icon="fas fa-ship">
-                              {{ getNaveMediatoreStr(mianave)}}
-                            </q-chip>
-                            <q-chip class="glossy q-ma-sm" color="purple" text-color="white"
-                                    icon="fas fa-ship">
-                              {{ getNaveSognatoreStr(mianave)}}
-                            </q-chip>
+                            <div class="justify-center">
+                              <q-chip class="glossy q-ma-sm" color="red" text-color="white"
+                                      icon="fas fa-ship">
+                                {{ tools.getrigacolstr(mianave) }}
+                              </q-chip>
+                              <div class="items-center">
+                                <q-icon color="blue" size="md" name="fas fa-gift"></q-icon>
+                              </div>
+                            </div>
+                            <div class="justify-center">
+                              <q-chip class="glossy q-ma-sm" color="green" text-color="white"
+                                      icon="fas fa-ship">
+                                {{ getNaveMediatoreStr(mianave)}}
+                              </q-chip>
+                              <div class="items-center">
+                                <q-icon color="blue" size="md" name="fas fa-user-check"></q-icon>
+                              </div>
+                            </div>
+                            <div class="justify-center">
+                              <q-chip class="glossy q-ma-sm" color="purple" text-color="white"
+                                      icon="fas fa-ship">
+                                {{ getNaveSognatoreStr(mianave)}}
+                              </q-chip>
+                              <div class="items-center">
+                                <q-icon color="blue" size="md" name="fas fa-flag-checkered"></q-icon>
+                              </div>
+                            </div>
                             <!--<span v-for="index of 8">{{ getNaveSognatoreStr(mianave, index)}} - </span>-->
                           </div>
                         </div>
@@ -416,7 +431,8 @@
                           <q-list dense>
                             <q-item>
                               <q-item-section avatar>
-                                {{tools.getlastnavestr(dashboard.lastnave) }} &nbsp;
+                                <!--{{tools.getlastnavestr(dashboard.lastnave) }} &nbsp;-->
+                                {{ tools.getrigacolstr(mianave)}}
                                 <q-icon :color="getcolornave(mianave)" name="fas fa-ship"></q-icon>
                               </q-item-section>
                               <q-item-section>
@@ -435,7 +451,9 @@
                                 </q-slider>
                               </q-item-section>
                               <q-item-section avatar>
-                                <q-icon color="blue" name="fas fa-flag-checkered"></q-icon>
+                                <!--{{tools.getlastnavestr(dashboard.lastnave) }} &nbsp;-->
+                                {{ getNaveSognatoreStr(mianave)}}
+                                <q-icon color="purple" name="fas fa-ship"></q-icon>
                               </q-item-section>
                             </q-item>
                             <q-item v-if="mianave.num_tess % 2 !== 0">
