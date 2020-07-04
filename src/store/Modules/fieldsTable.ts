@@ -200,6 +200,7 @@ const colnavi = [
   }),
   // AddCol({ name: 'provvisoria', label_trans: 'reg.provvisoria', fieldtype: tools.FieldType.boolean }),
   AddCol({ name: 'made_gift', label_trans: 'reg.made_gift', fieldtype: tools.FieldType.boolean }),
+  AddCol({ name: 'received_gift', label_trans: 'reg.received_gift', fieldtype: tools.FieldType.boolean }),
   AddCol({ name: 'date_made_gift', label_trans: 'date_made_gift', fieldtype: tools.FieldType.date }),
   // AddCol({ name: 'received_gift', label_trans: 'received_gift', fieldtype: tools.FieldType.boolean }),
   // AddCol({ name: 'date_received_gift', label_trans: 'date_received_gift', fieldtype: tools.FieldType.date }),
@@ -585,6 +586,12 @@ export const fieldsTable = {
       label_trans: 'reg.email_paypal'
     }),
     AddCol({
+      name: 'profile.revolut',
+      field: 'profile',
+      subfield: 'revolut',
+      label_trans: 'revolut'
+    }),
+    AddCol({
       name: 'profile.link_payment',
       field: 'profile',
       subfield: 'link_payment',
@@ -701,6 +708,12 @@ export const fieldsTable = {
       field: 'profile',
       subfield: 'email_paypal',
       label_trans: 'reg.email_paypal'
+    }),
+    AddCol({
+      name: 'profile.revolut',
+      field: 'profile',
+      subfield: 'revolut',
+      label_trans: 'revolut'
     }),
     AddCol({ name: 'profile.teleg_id', field: 'profile', subfield: 'teleg_id', label_trans: 'reg.teleg_id' }),
     AddCol({

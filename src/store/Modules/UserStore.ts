@@ -60,6 +60,7 @@ export const DefaultProfile: IUserProfile = {
   sex: 0,
   country_pay: '',
   email_paypal: '',
+  revolut: '',
   link_payment: '',
   note_payment: '',
   username_telegram: '',

@@ -81,12 +81,13 @@
     <CTitleBanner class="q-pa-xs" :title="$t('pages.payment')" bgcolor="bg-primary" clcolor="text-white"
                    myclass="myshad" :canopen="true">
       <div class="row fa-border justify-center items-center">
-        <CMyFieldDb :title="$t('reg.country_pay')"
+        <CMyFieldDb :title="$t('reg.revolut')"
                     table="users"
                     mykey="profile"
-                    mysubkey="country_pay"
-                    :type="tools.FieldType.nationality">
+                    mysubkey="revolut"
+                    :type="tools.FieldType.string">
         </CMyFieldDb>
+
         <CMyFieldDb :title="$t('reg.email_paypal')"
                     table="users"
                     mykey="profile"
@@ -101,6 +102,12 @@
                     :type="tools.FieldType.string">
         </CMyFieldDb>
 
+        <CMyFieldDb :title="$t('reg.country_pay')"
+                    table="users"
+                    mykey="profile"
+                    mysubkey="country_pay"
+                    :type="tools.FieldType.nationality">
+        </CMyFieldDb>
         <CMyFieldDb :title="$t('reg.note_payment')"
                     table="users"
                     mykey="profile"

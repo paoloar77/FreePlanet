@@ -151,6 +151,7 @@ const msg_de = {
       cellreg: 'Cellulare con cui ti eri registrato',
       nationality: 'Nationality',
       email_paypal: 'Email Paypal',
+      revolut: 'Revolut',
       country_pay: 'Country of Destination Payments',
       username_telegram: 'Username Telegram',
       telegram: 'Chat Telegram \'{botname}\'',

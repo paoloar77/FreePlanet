@@ -94,9 +94,9 @@ const msg_it = {
       video_intro_2: '2. Nascita di {sitename}',
       read_guidelines: 'Ho letto ed Accetto queste condizioni scritte qui sopra',
       saw_video_intro: 'Dichiaro di aver visto i Video',
-      paymenttype: 'Modalità di Pagamento (Paypal)',
-      paymenttype_long: 'I <strong>metodi di Pagamento sono: <ul><li><strong>Paypal</strong> (<strong>obbligatoria</strong>) perchè è un sistema molto diffuso in tutta Europa (il trasferimento e gratuito) e si possono collegare le carte prepagate, le carte di credito e il conto corrente <strong>SENZA COMMISSIONI</strong>. In questo modo non dovrai condividere i numeri delle tue carte o del c/c ma solo la mail che avrai usato in fase di iscrizione su Paypal. Disponibile l\'app per il cellulare.</li><li><strong>Revolut</strong>:  la Carta Prepagata Revolut con IBAN Inglese (fuori UE) completamente gratuita, più libera e semplice da utilizzare. Disponibile l\'app per il cellulare.</li>',
-      paymenttype_long2: 'E\' obbligatorio avere Paypal<br> Si consiglia di avere a disposizione <strong>almeno 2 Modalità di Pagamento</strong>, per scambiarsi i doni.',
+      paymenttype: 'Modalità di Pagamento (Revolut)',
+      paymenttype_long: 'I <strong>metodi di Pagamento sono: <ul><li><strong style="font-size: 1.25rem; color: green; background-color: yellow;">Revolut</strong> (ALTAMENTE CONSIGLIATA):<br>la Carta Prepagata Revolut con IBAN Inglese, trasferimenti gratuitu, più libera e semplice da utilizzare. Disponibile l\'app per il cellulare.</li><br><li><strong>Paypal</strong> perchè è un sistema molto diffuso in tutta Europa (il trasferimento e gratuito) e si possono collegare le carte prepagate, le carte di credito e il conto corrente <strong>SENZA COMMISSIONI</strong>. In questo modo non dovrai condividere i numeri delle tue carte o del c/c ma solo la mail che avrai usato in fase di iscrizione su Paypal. Disponibile l\'app per il cellulare. <br><br><span style="font-style: italic; font-size: 1rem; color:red;"><strong>NOTA BENE</strong>: Ultimamente Paypal sta avendo problemi perchè tendono a bloccare i soldi sul conto del Sognatore per 6 mesi per controlli, quindi da utilizzare SOLO se impossiblitati ad aprire un conto con Revolut.</span></li></ul>',
+      paymenttype_long2: 'Si consiglia di avere a disposizione <strong>almeno 2 Modalità di Pagamento</strong>, per scambiarsi i doni.',
       paymenttype_paypal: 'Come Aprire un conto Paypal (in 2 minuti)',
       paymenttype_paypal_carta_conto: 'Come associare una carta di Credito/Debito o un Conto Bancario su PayPal',
       paymenttype_paypal_link: 'Apri il Conto con Paypal',
@@ -105,11 +105,11 @@ const msg_it = {
       entra_zoom: 'Entra in Zoom',
       linee_guida: 'Accetto le Linee Guida',
       video_intro: 'Vedo il Video',
-      zoom: 'Partecipo ad almeno 1 Zoom',
-      zoom_si_partecipato: 'Hai partecipato ad almeno 1 Zoom',
+      zoom: 'Partecipo ad almeno 1 Video-Conferenza',
+      zoom_si_partecipato: 'Hai partecipato ad almeno 1 Video-Conferenza',
       zoom_partecipa: 'Partecipato ad almeno 1 Zoom',
-      zoom_no_partecipato: 'Attualmente non hai ancora partecipato ad uno Zoom (è un requisito per poter entrare)',
-      zoom_long: 'Si richiede di partecipare ad almeno 1 Zoom, ma se sentirai che questi icontri sono anche un modo per condividere e stare in compagnia, allora potrai partecipare tutte le volte che lo desideri.<br><br><strong><br>Partecipando agli Zoom di Benvenuto lo Staff registrerà la vostra presenza <strong>ENTRO 24 ORE</strong>.</strong>',
+      zoom_no_partecipato: 'Attualmente non hai ancora partecipato ad una Video-Conferenza (è un requisito per poter entrare)',
+      zoom_long: 'Si richiede di partecipare ad almeno 1 Video-Conferenza, ma se sentirai che questi icontri sono anche un modo per condividere e stare in compagnia, allora potrai partecipare tutte le volte che lo desideri.<br><br><strong><br>Partecipando alle Video-Conferenze di Benvenuto lo Staff registrerà la vostra presenza <strong>ENTRO 24 ORE</strong>.</strong>',
       zoom_what: 'Tutorial come installare Zoom Cloud Meeting',
       // sharemovement_devi_invitare_almeno_2: 'Ancora non hai invitato 2 persone',
       // sharemovement_hai_invitato: 'Hai invitato almeno 2 persone',
@@ -252,9 +252,9 @@ const msg_it = {
       '<li>Invia il Link della Gift Chat a tutti i Donatori, cliccando sul bottone qui sotto.</li></ol>',
 */
       sonomediatore: 'Quando sei MEDIATORE verrai contattato dai <strong>TUTOR AYNI</strong> tramite un messaggio sulla Chat <strong>AYNI BOT</strong> !',
-      superchat: 'Nota Bene: SOLO se hai problemi di PAGAMENTO, o se vuoi essere SOSTITUITO, due Tutor ti aspettano per aiutarti sulla Chat:<br><a href="{link_superchat}" target="_blank">Entra nella Gift Chat</a>',
+      superchat: 'Nota Bene: Non inviarci la ricevuta, non ci occorre. Attendi il messaggio di conferma da parte del Sognatore (sulla Chat AYNI BOT).<br>SOLO se hai problemi di PAGAMENTO, o ti manca la conferma del SOGNATORE (dopo aver atteso almeno 12 ore) o se vuoi essere SOSTITUITO, due Tutor ti aspettano per aiutarti sulla Chat:<br><a href="{link_superchat}" target="_blank">Entra nella Gift Chat</a>',
       sonodonatore: '<ol class="lista"><li>Quando sei in questa posizione, verrai invitato (tramite un messaggio su <strong>AYNI BOT</strong>) ad effettuare il Dono. Non sarà più necessario entrare in una Chat.</li>' +
-      '<li>Avrai tempo 4 giorni per fare il Regalo (poi verrai sostituito), nella modalità di pagamento che troverai scritto sul messaggio in <strong>AYNI BOT</strong> .<br></ol>',
+      '<li><strong>Avrai tempo 3 giorni per fare il Regalo</strong> (poi verrai sostituito), nella modalità di pagamento che troverai scritto sul messaggio in <strong>AYNI BOT</strong> .<br></ol>',
       sonodonatore_seconda_tessitura: '<ol class="lista"><li>Qui tu sei Mediatore e anche Donatore, ma essendo la seconda Tessitura (il Ritorno), non avrai bisogno di effettuare nuovamente il dono<br></ol>',
       controlla_donatori: 'Controlla Lista Donatori',
       link_chat: 'Link della Gift Chat Telegram',
@@ -281,15 +281,15 @@ const msg_it = {
       msg_donatori_ok: 'Inviato messaggio ai Donatori',
       metodi_disponibili: 'Metodi Disponibili',
       importo: 'Importo',
-      effettua_il_dono: 'E\' arrivato il momento di Effettuare il proprio Dono!<br><br>' +
-      '1) Metodo Tradizionale<br>Inviare tramite PayPal a: <strong>{email}</strong><br>' +
+      effettua_il_dono: 'E\' arrivato il momento di Effettuare il proprio Dono al Sognatore<br><strong>👉 {sognatore} 👈</strong>  !<br><br>' +
+      'Inviare tramite <a href="https://www.paypal.com/" target="_blank">PayPal</a> a: <strong>{email}</strong><br>' +
       'Aggiungere come messaggio la dicitura: <strong>Regalo</strong><br>' +
-      '(<strong>Scegliere l\'opzione</strong> "INVIA A UNA PERSONA DI FIDUCIA")<br>',
+      '<strong><span style="color:red">ATTENZIONE IMPORTANTE:</span> Scegliere l\'opzione</strong><BR>"INVIO DI DENARO A UN AMICO"<br>Cosi non pagherai delle commissioni extra!',
       paypal_me: '<br>2) Metodo Semplificato<br><a href="{link_payment}" target="_blank">Cliccare direttamente qui</a><br>' +
       'si aprirà PayPal con l\'importo e il destinatario gia impostato.<br>' +
       'Aggiungere come messaggio la dicitura: <strong>Regalo</strong><br>' +
-      '<strong><span style="color:red">ATTENZIONE:</span> NON SPUNTARE LA CASELLA</strong>: Protezione acquisti Paypal<br>' +
-      'Se hai dubbi, guarda il video qui sotto per vedere come fare:' +
+      '<strong><span style="color:red">ATTENZIONE IMPORTANTE:</span> TOGLIERE LA SPUNTA SU</strong>: Devi pagare beni o servizi? ... (Protezione acquisti Paypal)<br>Altrimenti pagherai inutilmente delle commissioni extra.<br>' +
+      'Se hai dubbi, guarda il video qui sotto per vedere come fare:<br>' +
       'infine Clicca su “Invia Denaro ora”.',
       commento_al_sognatore: 'Scrivi qui un commento per il Sognatore:',
       qui_compariranno_le_info: 'Nel giorno della partenza della Nave, compariranno le informazioni del Sognatore',
@@ -304,7 +304,7 @@ const msg_it = {
       dono_ricevuto_3: 'Arrivato!',
       confermi_dono_ricevuto: 'Confermi di aver ricevuto il Dono di 33€ da parte di {donatore}',
       confermi_dono_ricevuto_msg: 'Confermato di aver ricevuto il Dono di 33€ da parte di {donatore}',
-      msg_bot_conferma: '{donatore} ha confermato di aver inviato il suo Dono di 33€ a {sognatore}',
+      msg_bot_conferma: '{donatore} ha confermato di aver inviato il suo Dono di 33€ a {sognatore} (Commento: {commento})',
       ricevuto_dono_ok: 'Hai confermato che il dono è stato Ricevuto',
       entra_in_lavagna: 'Entra sulla Tua Lavagna per vedere le Navi in Partenza',
       doni_ricevuti: 'Doni Ricevuti',
@@ -362,7 +362,8 @@ const msg_it = {
       cellreg: 'Cellulare con cui ti eri registrato',
       nationality: 'Nazionalità',
       email_paypal: 'Email Paypal',
-      link_payment: 'Link Paypal.me per effettuare il pagamento',
+      revolut: 'Revolut',
+      link_payment: 'Link Paypal.me',
       note_payment: 'Note Aggiuntive',
       country_pay: 'Paese di Destinazione Pagamenti',
       username_telegram: 'Username Telegram',
@@ -378,7 +379,7 @@ const msg_it = {
       saw_and_accepted: 'Condizioni',
       saw_zoom_presentation: 'Ha visto Zoom',
       manage_telegram: 'Gestori Telegram',
-      paymenttype: 'Modalità di Pagamenti Disponbili',
+      paymenttype: 'Modalità di Pagamenti Disponbili (Revolut)',
       selected: 'Selezionati',
       img: 'Immagine',
       date_reg: 'Data Reg.',

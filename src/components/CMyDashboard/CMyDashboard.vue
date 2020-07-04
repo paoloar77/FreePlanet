@@ -343,6 +343,11 @@
                             </q-slider>
                           </q-item-section>
                           <q-item-section avatar>
+                            <!--{{tools.getlastnavestr(dashboard.lastnave) }} &nbsp;-->
+                            {{ getNaveSognatoreStr(mianave)}}
+                            <q-icon color="purple" name="fas fa-ship"></q-icon>
+                          </q-item-section>
+                          <q-item-section avatar>
                             <q-icon color="blue" name="fas fa-flag-checkered"></q-icon>
                           </q-item-section>
                         </q-item>

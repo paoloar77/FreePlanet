@@ -29,6 +29,7 @@ export default class CMyFlotta extends MixinNave {
   public flotta: any = null
   public flotta_completa: any = null
   public arrdonatori: any[] = []
+  public arrmediatori: any[] = []
   public loading: boolean = false
   public seluser = null
   public showmsguser: boolean = false
@@ -43,6 +44,9 @@ export default class CMyFlotta extends MixinNave {
   public username_sostituire: string = ''
   public userfreestr: string = ''
   public tuttiidoni: boolean = false
+  public showcommenti: boolean = true
+  public showcolmodifica: boolean = false
+  public showcoldati: boolean = false
   public inviaemail: boolean = false
   public seldonatore = null
   public ordinamento: string = 'data'
@@ -55,6 +59,7 @@ export default class CMyFlotta extends MixinNave {
   public tutorslo: string = ''
   public date_start: Date = null
   public date_close: Date = null
+  public revolut: string = ''
   public email_paypal: string = ''
   public note_payment: string = ''
   public link_payment: string = ''
@@ -129,10 +134,17 @@ export default class CMyFlotta extends MixinNave {
       this.date_start = this.flotta.date_start
       this.date_close = this.flotta.date_close
       this.note_payment = this.flotta.note_payment
+      this.revolut = this.flotta.revolut
       this.email_paypal = this.flotta.email_paypal
       this.link_payment = this.flotta.link_payment
       this.link_superchat = this.flotta.link_superchat
     }
+  }
+
+  public addstrnaveseprovv() {
+    if (this.flotta.provvisoria)
+      return ' (La FLOTTA è ancora Provvisoria !) '
+    return ''
   }
 
   public getflottastr() {
@@ -142,12 +154,24 @@ export default class CMyFlotta extends MixinNave {
         mystr += ' Provvisoria '
       mystr += 'Da ' + this.flotta.riga + '.' + Math.ceil(this.flotta.col_prima / 8) + ' a ' + this.flotta.riga + '.' + Math.ceil(this.flotta.col_ultima / 8)
 
-      let perc = 0;
-      if (this.flotta.DoniTotali > 0) {
-        perc = Math.round((this.flotta.DoniConfermati / this.flotta.DoniTotali) * 100)
+      let perc = 0
+      let conf = 0
+      let tot = 0
+
+      if (this.arrdonatori.length > 0) {
+        tot = this.getDoniTotali()
+        conf = this.getDoniConfermati()
+      } else {
+        tot = this.flotta.DoniTotali
+        conf = this.flotta.DoniConfermati
       }
 
-      mystr += ' (' + this.flotta.DoniConfermati + '/' + this.flotta.DoniTotali + ') [' + perc + '%]'
+      if (tot > 0) {
+        perc = Math.round((conf / tot) * 100)
+      }
+
+      mystr += ' (' + conf + '/' + tot + ') [' + perc + '%]'
+
 
       if (!!this.flotta.sognatore_nomecognome)
         mystr += ' - ' + this.flotta.sognatore_nomecognome
@@ -174,7 +198,7 @@ export default class CMyFlotta extends MixinNave {
       else if (this.flotta.DoniConfermati === this.flotta.DoniTotali && this.flotta.DoniTotali > 0)
         return 'bg-green'
       else if (this.flotta.DoniConfermati <= this.flotta.DoniTotali)
-        return 'bg-blue'
+        return 'bg-red'
       else
         return 'bg-blue'
     }
@@ -194,6 +218,7 @@ export default class CMyFlotta extends MixinNave {
 
     if (!!ris) {
       this.arrdonatori = ris.arrdonatori
+      this.arrmediatori = ris.arrmediatori
       this.flotta = ris.flotta
       this.flotta.log_attivita = this.flotta.log_attivita.replace(/\n/g, '<br>')
 
@@ -212,27 +237,49 @@ export default class CMyFlotta extends MixinNave {
     return this.seluser.name + ' (' + this.seluser.surname + ') è stato sostituito con ' + this.username_sostituire
   }
 
-  public getnavestr(row, index) {
-    return tools.getRiganave(row.riga) + '.' + tools.getColnave(row.col) +  ' D' + (((row.col - 1) % 8) + 1)
+  public getnave(row) {
+    return tools.getRiganave(row.riga) + '.' + tools.getColnave(row.col)
   }
 
-  public HoRicevutoIlDono(rec) {
+  public getnavestr(row, index) {
+    let flottastr = tools.getRiganave(row.riga) + '.' + tools.getColnave(row.col) + ' D' + (((row.col - 1) % 8) + 1)
+
+    if (this.showcoldati) {
+      flottastr += ' ' + row.riga + '.' + row.col
+    }
+
+    return flottastr
+  }
+
+  public getwidthpos() {
+    return (this.showcoldati) ? '80' : '60'
+  }
+
+  public HoRicevutoIlDono(rec, annulla) {
     this.seldonatore = rec
-    const msgtitle = this.$t('dashboard.dono_ricevuto_2')
-    const msginvia = this.$t('dashboard.confermi_dono_ricevuto', {
-      donatore: rec.name + ' ' + rec.surname
-    })
-
-    let mymsg = this.$t('dashboard.confermi_dono_ricevuto_msg', {
-      donatore: rec.name + ' ' + rec.surname + ' (' + this.$t('dashboard.posizione') + ' ' + rec.riga + '.' + rec.col + ')'
-    })
-
-    mymsg += ' [' + rec.riga + '.' + rec.col + ']'
+    let msgtitle = ''
+    let msginvia = ''
+    let mymsg = ''
+    if (annulla) {
+      msgtitle = 'Annulla la ricezione del dono'
+      msginvia = `Confermi di annullare il Dono da parte di ${rec.name} ${rec.surname} (${rec.username})'`
+      mymsg = ''
+    } else {
+      msgtitle = this.$t('dashboard.dono_ricevuto_2')
+      msginvia = this.$t('dashboard.confermi_dono_ricevuto', {
+        donatore: rec.name + ' ' + rec.surname
+      })
+      mymsg = this.$t('dashboard.confermi_dono_ricevuto_msg', {
+        donatore: rec.name + ' ' + rec.surname + ' (' + this.$t('dashboard.posizione') + ' ' + rec.riga + '.' + rec.col + ')'
+      })
+      mymsg += ' [' + rec.riga + '.' + rec.col + ']'
+    }
 
     tools.askConfirm(this.$q, msgtitle, msginvia + ' ' + '? (Pos ' + rec.riga + '.' + rec.col + ')', translate('dialog.yes'), translate('dialog.no'), this, '', lists.MenuAction.DONO_RICEVUTO, 0, {
       param1: {
         _id: rec._id,
-        made_gift: true,
+        made_gift: !annulla,
+        annulla,
         riga: rec.riga,
         col: rec.col
       },
@@ -288,6 +335,9 @@ export default class CMyFlotta extends MixinNave {
 
   public async InviaMsgAFlotta(inviareale, tipomsg, msg) {
 
+    if ((tipomsg === tools.TipoMsg.SEND_MSG_EFFETTUA_IL_DONO) || (tipomsg === tools.TipoMsg.SEND_MSG_SOLLECITO_DONATORI_NO_DONO)) {
+      msg = this.addstrnaveseprovv() + msg
+    }
     const msgtitle = msg
 
     tools.askConfirm(this.$q, msgtitle, msg, translate('dialog.yes'), translate('dialog.no'), this, '', lists.MenuAction.INVIA_MSG_A_FLOTTA, 0, {
@@ -314,12 +364,97 @@ export default class CMyFlotta extends MixinNave {
   }
 
   get getarr() {
+    let myarr = []
     if (this.ordinamento === 'data')
-      return this.arrdonatori.sort((a, b) => tools.gettimestampstrDate(a.date_made_gift) - tools.gettimestampstrDate(b.date_made_gift) * (this.direzordin))
+      myarr = this.arrdonatori.sort((a, b) => tools.gettimestampstrDate(a.date_made_gift) - tools.gettimestampstrDate(b.date_made_gift) * (this.direzordin))
     else if (this.ordinamento === 'num')
-      return this.arrdonatori.sort((a, b) => a.col - b.col * (this.direzordin))
+      myarr = this.arrdonatori.sort((a, b) => a.col - b.col * (this.direzordin))
+    else if (this.ordinamento === 'nationality')
+      myarr = this.arrdonatori.sort((a, b) => ('' + a.profile.nationality).localeCompare(b.profile.nationality) * (this.direzordin))
+    else
+      myarr = this.arrdonatori
 
-    return this.arrdonatori
+    return myarr.filter((rec) => ((!this.tuttiidoni && !rec.made_gift) || (this.tuttiidoni)))
+  }
+
+  public exportLista() {
+    let mystr = ''
+    let nave = ''
+    for (const rec of this.getarr) {
+      if (this.getnave(rec) !== nave) {
+        nave = this.getnave(rec)
+        mystr += '\n' + nave + ': ' + '\n'
+      }
+
+      if (rec.made_gift) {
+        mystr += '✅🎁'
+      } else {
+        if (!rec.date_made_gift) {
+          mystr += '     👉🏻 '
+        } else {
+          mystr += '     🎁 '
+        }
+      }
+
+      if (rec.profile.nationality === 'IT')
+        mystr += '🇮🇹'
+      else if (rec.profile.nationality === 'SI')
+        mystr += '🇸🇮'
+      else if (rec.profile.nationality === 'HR')
+        mystr += '🇭🇷'
+      else if (rec.profile.nationality === 'FR')
+        mystr += '🇫🇷'
+      else if (rec.profile.nationality === 'ES')
+        mystr += '🇪🇸'
+      else if (rec.profile.nationality === 'PT')
+        mystr += '🇵🇹'
+      else if (rec.profile.nationality === 'DE')
+        mystr += '🇩🇪'
+      else if (rec.profile.nationality === 'UK')
+        mystr += '🇬🇧'
+      else if (rec.profile.nationality === 'GB')
+        mystr += '🇬🇧'
+      else if (rec.profile.nationality === 'IE')
+        mystr += '🇮🇪'
+      else if (rec.profile.nationality === 'KE')
+        mystr += '🇰🇪'
+      else if (rec.profile.nationality === 'AU')
+        mystr += '🇦🇺'
+      else if (rec.profile.nationality === 'CM')
+        mystr += '🇨🇲'
+      else if (rec.profile.nationality === 'CO')
+        mystr += '🇨🇴'
+      else if (rec.profile.nationality === 'BR')
+        mystr += '🇧🇷'
+      else if (rec.profile.nationality === 'PL')
+        mystr += '🇵🇱'
+      else if (rec.profile.nationality === 'VE')
+        mystr += '🇻🇪'
+      else
+        mystr += '(' + rec.profile.nationality + ')'
+
+      mystr += ' ' + rec.name + ' ' + rec.surname + ' (' + rec.username + ')'
+
+      mystr += '\n'
+    }
+
+    tools.copyStringToClipboard(this, mystr, false)
+  }
+
+  public getDoniAttesaDiConferma() {
+    return this.arrdonatori.filter((rec) => (!!rec.date_made_gift && !rec.made_gift)).reduce((sum, item) => sum + 1, 0)
+  }
+
+  public getDoniTotali() {
+    return this.arrdonatori.filter((rec) => (!!rec)).reduce((sum, item) => sum + 1, 0)
+  }
+
+  public getDoniConfermati() {
+    return this.arrdonatori.filter((rec) => rec.made_gift).reduce((sum, item) => sum + 1, 0)
+  }
+
+  public getDoniMancanti() {
+    return this.arrdonatori.filter((rec) => (!rec.made_gift && !rec.date_made_gift)).reduce((sum, item) => sum + 1, 0)
   }
 
   public setordin(ord) {
@@ -465,7 +600,7 @@ export default class CMyFlotta extends MixinNave {
     if (!!this.flotta)
       open = (this.flotta.riga.toString() === this.last_riga_aperto) && (this.flotta.col_prima.toString() === this.last_col_aperto)
 
-    console.log('isaperto', open, 'lastriga = ', this.last_riga_aperto, this.flotta.riga, 'last_col_aperto', this.last_col_aperto, this.flotta.col_prima)
+    // console.log('isaperto', open, 'lastriga = ', this.last_riga_aperto, this.flotta.riga, 'last_col_aperto', this.last_col_aperto, this.flotta.col_prima)
     return open
 
   }
@@ -478,6 +613,21 @@ export default class CMyFlotta extends MixinNave {
   public async EseguiCallServer() {
     this.Chiudi()
     this.loading = true
+  }
+
+  public getnamebyrec(rec) {
+    let mystr = rec.name + ' ' + rec.surname
+    if (this.showcoldati)
+      mystr += ' (' + rec.username + ')'
+
+    return mystr
+  }
+
+  public getwidthnome() {
+    if (this.showcoldati)
+      return 'width: 250px; '
+    else
+      return 'width: 200px; '
   }
 
 }

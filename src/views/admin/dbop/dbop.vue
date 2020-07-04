@@ -176,6 +176,8 @@
                @click="EseguiFunz('addNavePerUtentiNaviNonPresenti')"></q-btn>
         <br>
       </div>-->
+
+      <!--
       <div class="row">
         <q-btn label="1) CONVERTI TUTTA LA STRUTTURA NEL NUOVO SISTEMA !" color="negative"
                @click="EseguiFunz('creaTessituraeConv')"></q-btn>
@@ -191,6 +193,7 @@
                @click="EseguiFunz('RendiVisibileIrecordNascosti')"></q-btn>
         <br>
       </div>
+      -->
       <br>
       <br>
       <!--<div class="row">

@@ -115,45 +115,114 @@
                     </div>
                     <br>
                   </div>
+
+
                   <div class="text-evidente2 bordo_stondato_blu2">
 
                     <div v-if="GiornoDelDonoArrivato && !donatore_navepers.provvisoria">
 
-                      <q-img src="statics/images/regalo.jpg"
-                             class=""
-                             style="height: 150px; width: 150px;"
-                             alt="regalo">
-                      </q-img>
+                      <q-tabs
+                        v-model="tabpagam"
+                        dense
+                        class="bg-blue text-white shadow-2"
+                        indicator-color="white"
+                        align="center"
+                        narrow-indicator
+                        @input="changetab"
+                      >
+                        <q-tab v-if="!!getlinkRevolutSognatore()" name="revolut" icon="img:statics/images/revolut.jpg" label="revolut"></q-tab>
+                        <q-tab v-if="!!getemailPagamentoSognatore()" name="paypal" icon="img:statics/images/paypal.jpg" label="paypal"></q-tab>
+                      </q-tabs>
 
-                      <div v-if="!FattoDono && !donoinviato"
-                           v-html="$t('dashboard.effettua_il_dono', {email: getemailPagamentoSognatore() })">
-                      </div>
-                      <CTitleBanner v-if="!FattoDono  && !donoinviato" class="q-pa-xs"
-                                    :title="$t('dashboard.come_inviare_regalo_con_paypal')"
-                                    bgcolor="bg-primary"
-                                    clcolor="text-white"
-                                    myclass="myshad" canopen="true" :visible="false">
+                      <q-tab-panels v-model="tabpagam" animated>
+                        <q-tab-panel name="paypal">
+                          <div>
+                            <q-img src="../../statics/images/regalo.jpg"
+                                   class=""
+                                   style="height: 150px; width: 150px;"
+                                   alt="regalo">
+                            </q-img>
+                            <q-img src="../../statics/images/paypal.jpg"
+                                   class=""
+                                   style="height: 150px; width: 150px;"
+                                   alt="regalo">
+                            </q-img>
 
-                        <CVideo myvideokey="5rp_XEV6Mzg">
 
-                        </CVideo>
+                            <CCopyBtn v-if="!FattoDono && !donoinviato"
+                                      title="Email Paypal" :texttocopy="getemailPagamentoSognatore()">
 
-                      </CTitleBanner>
-                      <div v-if="!FattoDono && !!getpaypalmePagamentoSognatore()  && !donoinviato"
-                           v-html="$t('dashboard.paypal_me', {link_payment: getpaypalmePagamentoSognatore() })">
-                      </div>
-                      <CTitleBanner v-if="!FattoDono && !!getpaypalmePagamentoSognatore()  && !donoinviato"
-                                    class="q-pa-xs"
-                                    :title="$t('dashboard.come_inviare_regalo_con_paypal') + '.me'"
-                                    bgcolor="bg-primary"
-                                    clcolor="text-white"
-                                    myclass="myshad" canopen="true" :visible="false">
+                            </CCopyBtn>
 
-                        <CVideo myvideokey="VzCy4BxQKhM">
+                            <div v-if="!FattoDono && !donoinviato"
+                                 v-html="$t('dashboard.effettua_il_dono', {email: getemailPagamentoSognatore(), sognatore: getnomesognatore() })">
 
-                        </CVideo>
+                            </div>
+                            <q-img v-if="!FattoDono && !donoinviato"
+                                   :src="getImgPaypal"
+                                   style="width: 366px; height: 254px;"
+                                   alt="sending to a friend">
+                            </q-img>
+                            <CTitleBanner v-if="!FattoDono  && !donoinviato" class="q-pa-xs"
+                                          :title="$t('dashboard.come_inviare_regalo_con_paypal')"
+                                          bgcolor="bg-primary"
+                                          clcolor="text-white"
+                                          myclass="myshad" canopen="true" :visible="false">
 
-                      </CTitleBanner>
+                              <CVideo myvideokey="5rp_XEV6Mzg">
+
+                              </CVideo>
+
+                            </CTitleBanner>
+                            <div v-if="!FattoDono && !!getpaypalmePagamentoSognatore()  && !donoinviato"
+                                 v-html="$t('dashboard.paypal_me', {link_payment: tools.getlinkstd(getpaypalmePagamentoSognatore()) })">
+                            </div>
+                            <CTitleBanner v-if="!FattoDono && !!getpaypalmePagamentoSognatore()  && !donoinviato"
+                                          class="q-pa-xs"
+                                          :title="$t('dashboard.come_inviare_regalo_con_paypal') + '.me'"
+                                          bgcolor="bg-primary"
+                                          clcolor="text-white"
+                                          myclass="myshad" canopen="true" :visible="false">
+
+                              <CVideo myvideokey="VzCy4BxQKhM">
+
+                              </CVideo>
+
+                            </CTitleBanner>
+                          </div>
+                        </q-tab-panel>
+                        <q-tab-panel name="revolut">
+                          <q-img src="../../statics/images/regalo.jpg"
+                                 class=""
+                                 style="height: 150px; width: 150px;"
+                                 alt="regalo">
+                          </q-img>
+                          <q-img src="../../statics/images/revolut.jpg"
+                                 class=""
+                                 style="height: 150px; width: 150px;"
+                                 alt="regalo">
+                          </q-img>
+                          <br>
+
+
+                          <q-btn
+                            rounded
+                            icon="fas fa-gift"
+                            color="primary"
+                            type="a"
+                            size="md"
+                            label="Link Revolut"
+                            :href="getlinkRevolutSognatore()"
+                            target="__blank">
+                          </q-btn>
+                          <br>
+                          <br>
+                          <a :href="getlinkRevolutSognatore()" target="_blank">{{ getlinkRevolutSognatore() }}</a>
+
+                        </q-tab-panel>
+                      </q-tab-panels>
+
+
                       <div v-if="!FattoDono && !!getnoteaggiuntivePagamentoSognatore() && !donoinviato"
                            v-html="getnoteaggiuntivePagamentoSognatore()">
                       </div>
@@ -466,6 +535,7 @@
                         <br>
                         {{'(' + getnavestr(props.row) + ')'}} - {{ tools.getstrshortDateTime(props.row.date_made_gift)
                         }}
+                        - {{ props.row.commento_al_sognatore }}
                       </div>
                     </q-td>
                     <q-td v-if="!tools.isMobile()" key="posizione" :props="props">

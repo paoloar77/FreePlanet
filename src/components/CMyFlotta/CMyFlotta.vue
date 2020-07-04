@@ -18,23 +18,23 @@
         <CDateTime
           label="Data Inizio"
           class="cursor-pointer"
-          :value.sync="date_close"
-          :readonly="false"
-          :minuteinterval="30"
-          :dense="true"
-          :canEdit="true"
-          @savetoclose="change_field('date_close')">
-        </CDateTime>
-
-        <CDateTime
-          label="Data Fine"
-          class="cursor-pointer"
           :value.sync="date_start"
           :readonly="false"
           :minuteinterval="30"
           :dense="true"
           :canEdit="true"
           @savetoclose="change_field('date_start')">
+        </CDateTime>
+
+        <CDateTime
+          label="Data Fine"
+          class="cursor-pointer"
+          :value.sync="date_close"
+          :readonly="false"
+          :minuteinterval="30"
+          :dense="true"
+          :canEdit="true"
+          @savetoclose="change_field('date_close')">
         </CDateTime>
       </div>
 
@@ -91,6 +91,13 @@
                      @input="change_field('email_paypal')">
 
             </q-input>
+            <q-input v-model="revolut" style="max-width: 300px;" label="Revolut:"
+                     filled dense
+                     :readonly="true"
+                     debounce="1000"
+                     @input="change_field('revolut')">
+
+            </q-input>
             <q-input standout bottom-slots
                      v-model="link_payment" style="max-width: 400px;" label="Link per Paypal.me:"
                      :readonly="true"
@@ -99,7 +106,7 @@
                      @input="change_link_payment">
 
               <q-btn round dense flat icon="send"
-                     type="a" :href="link_payment"
+                     type="a" :href="tools.getlinkstd(link_payment)"
                      target="_blank" color="primary">
               </q-btn>
             </q-input>
@@ -162,6 +169,34 @@
 
             </q-tab-panel>
             <q-tab-panel name="mediatore">
+
+              <div>
+                <strong>MEDIATORI:</strong>
+                <br>
+                <div v-for="(rec, index) of arrmediatori">
+                  <div class="row justify-center q-px-xs content-center" style="max-width: 350px;">
+                    <div style="width: 30px;">
+                      {{index + 1}}
+                    </div>
+                    <div :style="`color: blue; ` + getwidthnome()">
+                      <q-btn v-if="!!rec.profile" flat rounded dense color="blue"
+                             :size="tools.getsizesmall()"
+                             :label=getnamebyrec(rec)
+                             @click="viewdashboard(rec)">
+                      </q-btn>
+                    </div>
+                    <div style="color: blue; width: 40px;">
+                      <q-btn color="blue"
+                             dense
+                             size="md"
+                             label="Msg"
+                             @click="clickseluser(rec)">
+                      </q-btn>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
               <div class="row q-pa-sm q-ma-sm" style="max-width: 450px;">
                 <div class="q-pa-sm">
                   <q-btn rounded text-color="secondary" icon="fab fa-telegram"
@@ -171,7 +206,7 @@
                 </div>
                 <div class="q-pa-sm">
                   <q-btn rounded color="primary" icon="fab fa-telegram"
-                         :label="$t('dialog.sendmsg') + ` a Tutti Donatori`"
+                         :label="$t('dialog.sendmsg') + ` a Tutti Mediatori`"
                          @click="InviaMsgAFlotta(true, tools.TipoMsg.SEND_MSG_A_MEDIATORI, 'Inviare ai Mediatori?')"></q-btn>
                 </div>
               </div>
@@ -211,18 +246,22 @@
             </q-tab-panel>
           </q-tab-panels>
 
-          <q-field rounded outlined bg-color="orange-3" dense>
-            <div class="justify-evenly" style="max-width: 300px;">
-              <strong>Legenda dei codici speciali da inserire nei messaggi: </strong>
-              <div>{link_paypalme}</div>
-              <div>{link_superchat}</div>
-              <div>{tutor1}</div>
-              <div>{tutor2}</div>
-              <div>{tutor3}</div>
-              <div>{tutorslo}</div>
-              <div>{sognatore}</div>
-            </div>
-          </q-field>
+          <div v-if="tools.isAdmin()">
+            <q-field rounded outlined bg-color="orange-3" dense>
+              <div class="justify-evenly" style="max-width: 300px;">
+                <strong>Legenda dei codici speciali da inserire nei messaggi: </strong>
+                <div>{link_paypalme}</div>
+                <div>{link_superchat}</div>
+                <div>{tutor1}</div>
+                <div>{tutor2}</div>
+                <div>{tutor3}</div>
+                <div>{tutorslo}</div>
+                <div>{date_start}</div>
+                <div>{date_close}</div>
+                <div>{sognatore}</div>
+              </div>
+            </q-field>
+          </div>
 
         </q-tab-panel>
         <q-tab-panel name="flotta">
@@ -233,9 +272,23 @@
 
             </q-toggle>
 
+            <q-toggle v-model="showcommenti"
+                      label="Mostra i Commenti">
+
+            </q-toggle>
+
+            <q-toggle v-model="showcolmodifica"
+                      label="Modifica">
+            </q-toggle>
+
+            <q-toggle v-model="showcoldati"
+                      label="Mostra Dati Extra">
+            </q-toggle>
+
             <div v-if="!!flotta" class="text-evidente bordo_stondato justify-between q-pa-xs-sm">
               <div class="">
-                <q-btn rounded color="blue"
+                SOGNATORE:
+                <q-btn rounded color="green"
                        :label="flotta.sognatore_nomecognome + ' ' + ' (' + flotta.sognatore + ')'"
                        @click="viewdashboard({username: flotta.sognatore })">
                 </q-btn>
@@ -244,23 +297,33 @@
               <div class="">
                 <div>
                   {{$t('dashboard.doni_ricevuti')}}:
-                  <span class="ricevuti dati">{{flotta.DoniConfermati}}</span>
+                  <span class="ricevuti dati">{{getDoniConfermati()}}</span>
                 </div>
               </div>
               <div class="">
                 <div class="inviati">
                   {{$t('dashboard.doni_inviati_da_confermare')}}:
-                  <span class="inviati dati">{{flotta.DoniAttesaDiConferma}}</span>
+                  <span class="inviati dati">{{getDoniAttesaDiConferma()}}</span>
                 </div>
               </div>
               <div class="">
                 <div class="">
                   {{$t('dashboard.doni_mancanti')}}:
-                  <span class="mancanti dati">{{flotta.DoniMancanti}}</span>
+                  <span class="mancanti dati">{{getDoniMancanti()}}</span>
                 </div>
               </div>
 
             </div>
+
+            <q-btn
+                   rounded
+                   dense
+                   color="primary"
+                   size="md"
+                   label="Copia questa Lista negli appunti"
+
+                   @click="exportLista()">
+            </q-btn>
 
             <div class="row">
               <div class="row justify-center q-px-xs content-center">
@@ -291,22 +354,40 @@
                 <div style="width: 80px;">
                   Esegui
                 </div>
-                <div style="width: 40px;">
+                <div v-if="showcolmodifica" style="width: 80px;">
+                  Annulla
+                </div>
+                <div v-if="showcoldati" style="width: 70px;">
+                  Nave Posiz
+                </div>
+                <div v-else style="width: 40px;">
                   Nave
                 </div>
-                <div style="width: 250px;">
-                  Nome Cognome (Username)
+                <div style="width: 30px;">
+                  <q-btn
+                    flat
+                    rounded
+                    dense
+                    color="primary"
+                    size="md"
+                    label="Nat"
+
+                    @click="setordin('nationality')">
+                  </q-btn>
                 </div>
-                <div style="width: 40px;">
+                <div :style="getwidthnome()">
+                  Nome Cognome
+                </div>
+                <div v-if="showcoldati" style="width: 40px;">
                   Tess
                 </div>
-                <div style="width: 40px;">
+                <div v-if="showcoldati" style="width: 40px;">
                   Msg
                 </div>
-                <div style="width: 60px;">
+                <div v-if="showcolmodifica" style="width: 60px;">
                   Sostituisci
                 </div>
-                <div style="width: 100px;">
+                <div v-if="showcommenti" style="width: 100px;">
                   Commenti
                 </div>
 
@@ -315,8 +396,7 @@
 
             <div class="row" v-for="(rec, index) of getarr">
 
-              <div class="row justify-center q-px-xs content-center"
-                   v-if="(!tuttiidoni && !rec.made_gift) || (tuttiidoni)">
+              <div class="row justify-center q-px-xs content-center">
                 <div class="row items-center q-mx-md justify-between" style="padding: 2px;">
                   <div style="width: 40px;">
                     {{index + 1}}
@@ -334,7 +414,7 @@
                              size="md"
                              :label="$t('dashboard.dono_ricevuto_3', {donatore: rec.name })"
 
-                             @click="HoRicevutoIlDono(rec)">
+                             @click="HoRicevutoIlDono(rec, false)">
                       </q-btn>
                     </div>
                     <div v-if="rec.made_gift">
@@ -348,7 +428,17 @@
                       </q-chip>
                     </div>
                   </div>
-                  <div style="color: blue; width: 60px;">
+                  <div v-if="showcolmodifica" style="width: 80px;">
+                    <q-btn v-if="rec.made_gift || rec.date_made_gift"
+                           rounded
+                           dense
+                           color="negative"
+                           size="md"
+                           label="Annulla"
+                           @click="HoRicevutoIlDono(rec, true)">
+                    </q-btn>
+                  </div>
+                  <div :style="`color: blue; width: ` + getwidthpos() + `;`">
                     <q-btn rounded color="blue"
                            flat
                            dense
@@ -357,17 +447,22 @@
                            @click="Mostraplacca(tools.getRiganave(rec.riga), tools.getColnave(rec.col))">
                     </q-btn>
                   </div>
-                  <div style="color: blue; width: 250px;">
+                  <div style="width: 30px;">
+                    <q-avatar v-if="tools.geticon(rec.profile.nationality)" :class="tools.geticon(rec.profile.nationality)"
+                              size="sm">
+                    </q-avatar>
+                  </div>
+                  <div :style="`color: blue; ` + getwidthnome()">
                     <q-btn v-if="!!rec.profile" flat rounded dense color="blue"
                            :size="tools.getsizesmall()"
-                           :label="rec.name + ' ' + rec.surname + ' (' + rec.username + ')'"
+                           :label=getnamebyrec(rec)
                            @click="viewdashboard(rec)">
                     </q-btn>
                   </div>
-                  <div v-if="!tools.isMobile()">
+                  <div v-if="showcoldati && !tools.isMobile()">
                     ({{ rec.num_tess }})
                   </div>
-                  <div style="color: blue; width: 40px;">
+                  <div v-if="showcolmodifica" style="color: blue; width: 40px;">
                     <q-btn color="blue"
                            dense
                            size="md"
@@ -375,7 +470,7 @@
                            @click="clickseluser(rec)">
                     </q-btn>
                   </div>
-                  <div style="color: blue; width: 70px;">
+                  <div v-if="showcolmodifica" style="color: blue; width: 70px;">
                     <q-btn color="red"
                            dense
                            size="md"
@@ -384,8 +479,11 @@
                     </q-btn>
                   </div>
                 </div>
-                <div v-if="!!rec.commento_al_sognatore" class="wrap">
+                <div v-if="showcommenti && !!rec.commento_al_sognatore" class="wrap">
                   {{ rec.commento_al_sognatore }}
+                </div>
+                <div v-if="showcoldati && !!rec.ind_order" class="wrap">
+                  ({{ rec.ind_order }})
                 </div>
               </div>
 

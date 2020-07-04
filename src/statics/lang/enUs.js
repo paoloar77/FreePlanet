@@ -46,6 +46,9 @@ const msg_enUs = {
       write: 'write'
     },
     stat: {
+      imbarcati: 'Boarded',
+      imbarcati_weekly: 'Boarded Settimanali',
+      imbarcati_in_attesa: 'Boarded on hold',
       qualificati: 'Qualified with at least 2 guests',
       requisiti: 'Users with the 7 Requirements',
       zoom: 'Participated in Zoom',
@@ -69,7 +72,7 @@ const msg_enUs = {
       video_intro_2: '2. Birth of {sitename}',
       read_guidelines: 'I have read and agreed to these terms and conditions written above',
       saw_video_intro: 'I declare I\'ve seen the videos',
-      paymenttype: 'Methods of Payment (Mandatory Paypal)',
+      paymenttype: 'Methods of Payment (Revolut)',
       paymenttype_long: 'Choose <strong>at least 2 Payment Methods</strong>, to exchange gifts.<br><br>The <strong>payment methods are: <ul><li><strong>Paypal</strong> (<strong>mandatory</strong>) because it is a very popular system throughout Europe (the transfer is free of charge) and you can connect prepaid cards, credit cards and bank account <strong>WITHOUT COMMISSIONS</strong>. In this way you won\'t have to share your card or c/c numbers but only the email you used during the registration on Paypal. Available the app for your mobile phone.</li><li><strong>Revolut</strong>: the Revolut Prepaid Card with English IBAN (outside EU) completely free, more free and easy to use. Available the app for mobile.</li>',
       paymenttype_paypal: 'How to open a Paypal account (in 2 minutes)',
       paymenttype_paypal_carta_conto: 'How to associate a Credit/Debit Card or Bank Account on PayPal',
@@ -226,7 +229,7 @@ const msg_enUs = {
       sonomediatore: 'When you are a MEDIATOR you will be contacted by <strong>TUTOR AYNI</strong> by message Chat <strong>AYNI BOT</strong>',
       superchat: 'Note: ONLY if you have PAYMENT problems, or if you want to be REPLACED, two Tutors are waiting to help you on the Chat:<br><a href="{link_superchat}"  target="_blank">Get into Gift Chat</a>.',
       sonodonatore: '<ol class="lista"><li>When you are in this position, you will be invited (via a message on <strong>AYNI BOT</strong>) to make the Gift. You will no longer need to enter a Chat.</li>' +
-        '<li>You will have 4 days to make the Gift (then you will be replaced), in the payment method that you will find written on the message in <strong>AYNI BOT</strong>.<br></ol>',
+        '<li>You will have 3 days to make the Gift (then you will be replaced), in the payment method that you will find written on the message in <strong>AYNI BOT</strong>.<br></ol>',
       sonodonatore_seconda_tessitura: '<ol class="lista"><li>Here you are Mediator and also Donor, but being the second Weaving, you won\'t need to make your gift again.<br></ol>',
       controlla_donatori: 'Check Donor List',
       link_chat: 'Gift Chat Telegram links',
@@ -253,14 +256,14 @@ const msg_enUs = {
       msg_donatori_ok: '',
       metodi_disponibili: 'Available Methods',
       importo: 'Amount',
-      effettua_il_dono: 'It\'s time to make your Gift!<br>' +
+      effettua_il_dono: 'It\'s time to make your Gift to the Dreamer<br>👉 {sognatore} 👈!<br>' +
       'Send via <a href="https://www.paypal.com" target="_blank">PayPal</a> to: <strong>{email}</strong><br>' +
-      '(Choose the option "SEND TO SOMEONE YOU TRUST")<br>',
+      '<strong><span style="color:red">WARNING:</span> Choose the option <br>"SENDING TO A FRIEND"</strong><br>(So as not to pay fees).',
       paypal_me: '<br>2) Simplified Method<br><a href="{link_payment}" target="_blank">Click directly here</a><br>' +
       'will open PayPal with the amount and the recipient already set.<br>' +
       'Add as message: <strong>Gift</strong><br>' +
       '<strong><span style="color:red">WARNING:</span> DO NOT select the box</strong>: Paypal shopping protection<br>' +
-      'If you have any doubts, watch the video below to see how to:' +
+      'If you have any doubts, watch the video below to see how to:<br>' +
       'Finally click on "Send Money Now".',
       qui_compariranno_le_info: 'On the day of departure of the Ship, the information of the Dreamer will appear',
       commento_al_sognatore: 'Write here a comment for the Dreamer:',
@@ -275,7 +278,7 @@ const msg_enUs = {
       dono_ricevuto_3: 'Arrived!',
       confermi_dono_ricevuto: 'Confirm that you have received the 33€ Gift from {donatore}',
       confermi_dono_ricevuto_msg: 'Confirmed that you have received the 33€ Gift from {donatore}',
-      msg_bot_conferma: '{donatore} has confirmed that he has sent his 33€ gift to {sognatore}',
+      msg_bot_conferma: '{donatore} has confirmed that he has sent his 33€ gift to {sognatore}. (Commento: {commento})',
       ricevuto_dono_ok: 'You have confirmed the gift has been received',
       entra_in_lavagna: 'Enter on your Dashboard to see the departing ships',
       doni_ricevuti: 'Gifts Received',
@@ -326,7 +329,8 @@ const msg_enUs = {
       cellreg: 'Cellulare con cui ti eri registrato',
       nationality: 'Nationality',
       email_paypal: 'Email Paypal',
-      link_payment: 'Paypal.me link to make the payment',
+      revolut: 'Revolut',
+      link_payment: 'Paypal.me link',
       note_payment: 'Additional notes',
       country_pay: 'Country of Destination Payments',
       username_telegram: 'Username Telegram',
@@ -341,7 +345,7 @@ const msg_enUs = {
       saw_and_accepted: 'Condizioni',
       saw_zoom_presentation: 'Ha visto Zoom',
       manage_telegram: 'Gestori Telegram',
-      paymenttype: 'Available Payment Methods',
+      paymenttype: 'Available Payment Methods (Revolut)',
       selected: 'Selezionati',
       img: 'File Image',
       date_reg: 'Reg. Date',

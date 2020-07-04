@@ -58,6 +58,9 @@ const msg_si = {
       write: 'napiši'
     },
     stat: {
+      imbarcati: 'Vkrcavanje',
+      imbarcati_weekly: 'Vkrcavanje tedenske',
+      imbarcati_in_attesa: 'Vkrcavanje čaka',
       qualificati: 'Kvalificirajte se z vsaj dvema gostoma',
       requisiti: 'Uporabniki s 7 zahtevami',
       zoom: 'Sodeloval pri Zoomu',
@@ -82,8 +85,8 @@ const msg_si = {
       video_intro_2: '2. Rojstvo {sitename}',
       read_guidelines: 'Sem prebral in sprejel napisal zgornje pogoje',
       saw_video_intro: 'Izjavljam, da sem pogledal videoposnetke',
-      paymenttype: 'Načini plačila (Paypal)',
-      paymenttype_long: '<strong> Načini plačila so: <ul> <li> <strong> Paypal </strong> (je <strong> obvezen </strong>), ker gre za zelo pogost sistem po vsej Evropi (prenos je brezplačen ) kjer lahko povežete predplačniške kartice, kreditne kartice ali tekoči račun <strong> BREZ KOMISIJ </strong>. Na ta način vam ne bo treba deliti številk svojih kartic ali c / c, ampak samo e-pošto, ki ste jo uporabili pri prijavi na Paypal. Mobilna aplikacija je na voljo. </li> <li> <strong> Revolut </strong>: predplačniška kartica Revolut z angleškim IBAN (zunaj EU) popolnoma brezplačna, svobodnejša in enostavnejša za uporabo. Na voljo je aplikacija za mobilne naprave. </li>',
+      paymenttype: 'Načini plačila (Revolut)',
+      paymenttype_long: '<strong> Načini plačila so: <ul> <li> <strong> Revolut </strong>: predplačniška kartica Revolut z angleškim IBAN (zunaj EU) popolnoma brezplačna, svobodnejša in enostavnejša za uporabo. Na voljo je aplikacija za mobilne naprave. </li><li> <strong> Paypal </strong> ker gre za zelo pogost sistem po vsej Evropi (prenos je brezplačen ) kjer lahko povežete predplačniške kartice, kreditne kartice ali tekoči račun <strong> BREZ KOMISIJ </strong>. Na ta način vam ne bo treba deliti številk svojih kartic ali c / c, ampak samo e-pošto, ki ste jo uporabili pri prijavi na Paypal. Mobilna aplikacija je na voljo. </li></ul>',
       paymenttype_long2: 'Paypal je potreben <br> Za izmenjavo daril priporočamo, da imate na voljo <strong> vsaj 2 načina plačila </strong>.',
       paymenttype_paypal: 'Kako odpreti Paypal račun (v 2 minutah)',
       paymenttype_paypal_carta_conto: 'Kako povezati kreditno / debetno kartico ali bančni račun na PayPal',
@@ -232,7 +235,7 @@ const msg_si = {
       sonomediatore: 'Ko ste MEDIATOR, vas bo <strong>TUTOR AYNI</strong> poklical preko sporočila na klepetu <strong>AYNI BOT</strong>',
       superchat: 'Pozorno preberi: SAMO če imaš težave s PLAČILOM, ali želiš biti ZAMENJAN, te dva Tutorja pričakujeta, da ti lahko pomagata v Klepetu:<br><a href="{link_superchat}" target="_blank">Vstopi v Super Klepet</a>',
       sonodonatore: '<ol class="lista"><li>Ko si na tej poziciji, boš povabljen, da vstopiš v <strong>Gift Klepet</strong> (Telegram) in tam boš našel še ostalih 7 Donatorjev, Mediatorja, Sanjača in enega predstavnika Tima.</li>' +
-      '<li>Imel boš 4 dni časa v za izpeljati vplačilo.<br></ol>',
+      '<li>Imel boš 3 dni časa v za izpeljati vplačilo.<br></ol>',
       sonodonatore_seconda_tessitura: '<ol class="lista"><li>Tu si istočasno Mediator in Donator. Ker je to tvoj avtomatičen vpis, ti ni sedaj potrebno vplačati!<br></ol>',
       controlla_donatori: 'Preverite seznam donatorjev',
       link_chat: 'Povezava telegrama darilnega klepeta',
@@ -259,16 +262,15 @@ const msg_si = {
       msg_donatori_ok: 'Poslano sporočilo Donatorjem',
       metodi_disponibili: 'Načini na Voljo',
       importo: 'Uvoz',
-      effettua_il_dono: 'Je prišel trenutek da Vplačaš svoje darilo!<br>' +
-      '1) Tradicionalna metoda<br>' +
-      'Vplačilo preko PayPal na: {email}<br>' +
+      effettua_il_dono: 'Je prišel trenutek da Vplačaš svoje darilo Sanjarju<br>👉 {sognatore} 👈 !<br>' +
+      'Vplačilo preko <a href="https://www.paypal.com" target="_blank">PayPal</a> na: {email}<br>' +
       'V sporocilo dopiši: Darilo<br>' +
-      'Zberi možnost "POŠLJI OSEBI, KI JI ZAUPAŠ"',
+      '<strong><span style="color:red">POZOR POMEMBNO:</span> Zberi možnost<br>"SENDING TO A FRIEND"</strong><br>',
       paypal_me: '<br>2) Poenostavljena metoda<br><a href="{link_payment}" target="_blank">Klikneš direktno na link</a><br>' +
       'odpre se ti si PayPal z že vpisanim zneskom in postavljenim emailom osebe, ki ji vplačuješ<br>' +
       'V sporočilo dopiši: <strong>Darilo</strong><br>' +
-      '<strong><span style="color:red">POZOR NE OZNAČI POLJA</span></strong>: Zaščita nakupa Paypal<br>' +
-      'Če imaš dvome, si oglej celoten postopek v spodnjem videu:' +
+      '<strong><span style="color:red">POZOR POMEMBNO: ODMAKNI OZNAČBO NA </span></strong>: "Vplačujem storitve ali blago?" (Zaščita nakupa Paypal)<br>' +
+      'Če imaš dvome, si oglej celoten postopek v spodnjem videu:<br>' +
       'Na koncu klikni “Pošlji denar -Vplačaj”',
       qui_compariranno_le_info: 'Na dan odhoda Ladje, prejmete vse potrebne  informacije s strani Sanjača',
       commento_al_sognatore: 'Tu napišite komentar za Sanjač:',
@@ -283,7 +285,7 @@ const msg_si = {
       dono_ricevuto_3: 'Prispelo!',
       confermi_dono_ricevuto: 'Potrjujem, da sem sprejel darilo v znesku 33€ z strani {donatore}',
       confermi_dono_ricevuto_msg: 'Potrjena da je prejel Darilo 33€ iz strani {donatore}',
-      msg_bot_conferma: '{donatore} je potrdil, da je poslal svoje Darilo v vrednosti 33€ {sognatore}',
+      msg_bot_conferma: '{donatore} je potrdil, da je poslal svoje Darilo v vrednosti 33€ {sognatore} (Commento: {commento})',
       ricevuto_dono_ok: 'Potrdil si da si darilo Sprejel',
       entra_in_lavagna: 'Vstopi v svojo Tablo, da pogledaš Ladje, ki bodo izplule',
       doni_ricevuti: 'Sprejeta Darila',
@@ -342,7 +344,8 @@ const msg_si = {
       cellreg: 'Telefonska s katero si se registriral',
       nationality: 'Nacionalnost',
       email_paypal: 'Email Paypal',
-      link_payment: 'Povezava paypal.me za izvedbo plačila',
+      revolut: 'Revolut',
+      link_payment: 'Povezava paypal.me',
       note_payment: 'Dodatne opombe',
       country_pay: 'Država destinacije Vplačil',
       username_telegram: 'Uporabniško ime Telegram',
@@ -358,7 +361,7 @@ const msg_si = {
       saw_and_accepted: 'Pogoji',
       saw_zoom_presentation: 'Je bil prisoten na Zoom-u',
       manage_telegram: 'Skrbniki Telegram',
-      paymenttype: 'Razpoložljivi načini Plačila',
+      paymenttype: 'Razpoložljivi načini Plačila (Revolut)',
       selected: 'Izbrani',
       img: 'Slika',
       date_reg: 'Datum Reg.',

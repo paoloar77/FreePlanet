@@ -16,6 +16,7 @@ export interface IUserProfile {
   sex?: ESexType
   country_pay?: string
   email_paypal?: string
+  revolut?: string
   link_payment?: string
   note_payment?: string
   username_telegram?: string

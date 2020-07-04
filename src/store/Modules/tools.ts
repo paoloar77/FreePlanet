@@ -60,6 +60,9 @@ export const tools = {
 
   APORTADOR_NONE: '------',
 
+  TYPECONF_ZOOM: 'zoom',
+  TYPECONF_JITSI: 'jitsi',
+
   APORTADOR_SOLIDARIO: 'apsol',
 
   IDAPP_AYNI: '7',
@@ -1671,7 +1674,12 @@ export const tools = {
       const mydatatosave = {
         id: par.param1._id,
         table: tools.TABNAVI,
-        fieldsvalue: { date_made_gift: par.param1.date_made_gift, commento_al_sognatore: par.param1.commento_al_sognatore },
+        fieldsvalue: {
+          date_made_gift: par.param1.date_made_gift,
+          riga: par.param1.riga,
+          col: par.param1.col,
+          commento_al_sognatore: par.param1.commento_al_sognatore
+        },
         notifBot: null
       }
 
@@ -1691,14 +1699,27 @@ export const tools = {
         id: par.param1._id,
         table: tools.TABNAVI,
         fieldsvalue: {},
+        unset: null,
         notifBot: null,
         tipomsg: tools.TipoMsg.SEND_MSG_DONO_RICEVUTO_CORRETTAMENTE
       }
 
       if (!!par.param1.date_made_gift) {
-        mydatatosave.fieldsvalue = { made_gift: par.param1.made_gift, riga: par.param1.riga, col: par.param1.col, date_made_gift: par.param1.date_made_gift }
+        mydatatosave.fieldsvalue = {
+          made_gift: par.param1.made_gift,
+          riga: par.param1.riga,
+          col: par.param1.col,
+          date_made_gift: par.param1.date_made_gift
+        }
       } else {
         mydatatosave.fieldsvalue = { made_gift: par.param1.made_gift, riga: par.param1.riga, col: par.param1.col }
+      }
+
+      if (!!par.param1.annulla) {
+        if (par.param1.annulla) {
+          mydatatosave.fieldsvalue = { made_gift: false, riga: par.param1.riga, col: par.param1.col }
+          mydatatosave.unset = { date_made_gift: 1, received_gift: 1 }
+        }
       }
 
       if (par.param3) {
@@ -1708,7 +1729,12 @@ export const tools = {
       GlobalStore.actions.saveFieldValue(mydatatosave).then((ris) => {
         if (ris) {
           myself.ActionAfterYes(func, par.param1, par.param2)
-          tools.showPositiveNotif(myself.$q, myself.$t('dashboard.ricevuto_dono_ok'))
+          let msg = myself.$t('dashboard.ricevuto_dono_ok')
+          if (!!par.param1.annulla) {
+            if (par.param1.annulla)
+              msg = 'Dono Annullato'
+          }
+          tools.showPositiveNotif(myself.$q, msg)
         } else
           tools.showNegativeNotif(myself.$q, myself.$t('db.recfailed'))
       })
@@ -1837,7 +1863,8 @@ export const tools = {
 
       if (!(static_data.arrLangUsed.includes(mylang))) {
         // console.log('non incluso ', mylang)
-        mylang = static_data.arrLangUsed[0]
+        // mylang = static_data.arrLangUsed[0]
+        mylang = 'enUs'
 
         // Metti come default
         UserStore.mutations.setlang(mylang)
@@ -1856,6 +1883,10 @@ export const tools = {
     // console.log('mylang calc : ', mylang)
 
     return mylang
+  },
+
+  getlang() {
+    return toolsext.getLocale()
   },
 
   getimglogo() {
@@ -2032,6 +2063,10 @@ export const tools = {
 
   isManager() {
     return UserStore.state.isManager
+  },
+
+  isAdmin() {
+    return UserStore.state.isAdmin
   },
 
   isTutor() {
@@ -2780,8 +2815,7 @@ export const tools = {
       return data.link_text[static_data.arrLangUsed[0]]
     }
 
-  }
-  ,
+  },
 
   getlinkurl(data: ITimeLineEntry) {
     if (data.link_url_lang) {
@@ -3470,7 +3504,7 @@ export const tools = {
     try {
       const lang = langin.toUpperCase()
 
-      const arrlang = ['IT', 'ES', 'PT', 'BR', 'US', 'GB', 'UK', 'DE', 'FR', 'SI', 'MD',
+      const arrlang = ['IT', 'ES', 'PT', 'BR', 'US', 'GB', 'UK', 'DE', 'FR', 'SI', 'MD', 'IE', 'KE', 'AU', 'ML', 'DO',
         'NG', 'SK', 'CH', 'CM', 'CO', 'CG', 'PE', 'MS', 'SM', 'HR', 'RO', 'VE', 'CL', 'PL', 'EG', 'AR', 'MX', 'SN', 'PK', 'AT', 'NP',
         'CU', 'MA', 'PH', 'BA', 'UA', 'BE', 'NL', 'CI']
 
@@ -3594,6 +3628,16 @@ export const tools = {
       return 'Montserrat'
     } else if (nat === 'CI') {
       return 'Cote d\'Ivoire'
+    } else if (nat === 'IE') {
+      return 'Ireland'
+    } else if (nat === 'KE') {
+      return 'Kenya'
+    } else if (nat === 'AU') {
+      return 'Australia'
+    } else if (nat === 'ML') {
+      return 'Mali'
+    } else if (nat === 'DO') {
+      return 'Dominican Republic'
     }
   },
 
@@ -3800,6 +3844,17 @@ export const tools = {
     msg = msg.replace(/<\/strong>/g, '</b>')
 
     return msg
+  },
+
+  getlinkstd(link) {
+    let mylink = link
+    if (!!link) {
+      if (!link.startsWith('http')) {
+        mylink = 'https://' + link
+      }
+    }
+
+    return mylink
   }
 
 // getLocale() {

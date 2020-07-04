@@ -1,0 +1,32 @@
+.DoniMancanti{
+  color: red;
+}
+
+.DoniAttesaDiConferma{
+  color: blue;
+}
+
+.DoniConfermati{
+  color: green;
+}
+
+.cont_donatore {
+  border: solid 2px #4198ef;
+  padding: 2px 8px;
+  margin: 2px 4px;
+  font-size: 1rem;
+  border-radius: 16px;
+}
+
+.donatore, .mediatore, .sognatore, .title-nave, .intermedio2, .intermedio3 {
+  padding: 2px 4px;
+  margin: 2px 4px;
+  color: white;
+  font-size: 1rem;
+  border-radius: 16px;
+}
+
+.donatore {
+  background-color: red;
+}
+

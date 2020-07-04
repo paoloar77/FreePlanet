@@ -44,4 +44,28 @@ export default class CNextZoom extends MixinBase {
     }
     return false
   }
+
+  public getlinkzoom(rec) {
+    if (rec === null) {
+      rec = {
+        typeconf: tools.TYPECONF_ZOOM,
+        id_conf_zoom: ''
+      }
+    }
+    let typeconf = rec.typeconf
+    if (typeconf === '')
+      typeconf = tools.TYPECONF_ZOOM
+
+    let mylink = 'https://zoom.us/j/'
+    if (typeconf === tools.TYPECONF_JITSI)
+      mylink = 'https://meet.jit.si/'
+
+    if (rec.id_conf_zoom === '') {
+      rec.id_conf_zoom = '6668882000'
+    }
+
+    return mylink + rec.id_conf_zoom
+
+  }
+
 }

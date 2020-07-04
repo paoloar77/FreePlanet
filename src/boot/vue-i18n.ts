@@ -11,9 +11,11 @@ export default ({ app, store, Vue }) => {
   let mylang = tools.getItemLS(tools.localStorage.lang)
   console.log(`LANG LocalStorage ${mylang}`)
 
-  if ((navigator) && (mylang === '')) {
-    mylang = navigator.language
-    console.log(`LANG NAVIGATOR ${mylang}`)
+  if ((navigator)) {
+    const mylangnav = navigator.language
+    console.log(`LANG NAVIGATOR ${mylangnav}`)
+    if (mylang === '')
+      mylang = mylangnav
   }
 
   mylang = tools.checkLangPassed(mylang)

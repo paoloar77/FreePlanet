@@ -46,6 +46,9 @@ const msg_fr = {
       write: 'écrit'
     },
     stat: {
+      imbarcati: 'Embarqués',
+      imbarcati_weekly: 'Embarqués hebdomadaire',
+      imbarcati_in_attesa: 'Embarqués en attente',
       qualificati: 'Qualifié avec au moins 2 invités',
       requisiti: 'Utilisateurs ayant les 7 exigences',
       zoom: 'Participer à Zoom',
@@ -70,8 +73,8 @@ const msg_fr = {
       video_intro_2: '2. Naissance de l\'{sitename}',
       read_guidelines: 'J\'ai lu et j\'accepte ces conditions écrites ci-dessus',
       saw_video_intro: 'Je déclare avoir vu la vidéo',
-      paymenttype: 'Méthodes de paiement (Obligatoire Paypal)',
-      paymenttype_long: 'Choisissez <strong>au moins 2 modes de paiement</strong>, pour échanger des cadeaux.<br><br>Les modes de paiement <strong>sont : <ul><li><strong>Paypal</strong> (c\'est <strong>obligatoire</strong>) car c\'est un système très populaire dans toute l\'Europe (le transfert est gratuit) et vous pouvez connecter des cartes prépayées, des cartes de crédit et un compte bancaire <strong> SANS COMMISSIONS</strong>. De cette façon, vous n\'aurez pas à partager vos numéros de carte ou de c/c mais seulement l\'email que vous avez utilisé lors de l\'inscription sur Paypal. Disponible l\'application pour votre téléphone portable.</li><strong>Revolut</strong> : la carte prépayée Revolut avec IBAN anglais (hors UE) complètement gratuite, plus gratuite et facile à utiliser. Disponible l\'application pour mobile.</li>',
+      paymenttype: 'Méthodes de paiement (Revolut)',
+      paymenttype_long: 'Choisissez <strong>au moins 2 modes de paiement</strong>, pour échanger des cadeaux.<br><br>Les modes de paiement <strong>sont : <ul><li><strong>Revolut</strong> : la carte prépayée Revolut avec IBAN anglais (hors UE) complètement gratuite, plus gratuite et facile à utiliser. Disponible l\'application pour mobile.</li><li><strong>Paypal</strong>car c\'est un système très populaire dans toute l\'Europe (le transfert est gratuit) et vous pouvez connecter des cartes prépayées, des cartes de crédit et un compte bancaire <strong> SANS COMMISSIONS</strong>. De cette façon, vous n\'aurez pas à partager vos numéros de carte ou de c/c mais seulement l\'email que vous avez utilisé lors de l\'inscription sur Paypal. Disponible l\'application pour votre téléphone portable.</li></ul>',
       paymenttype_paypal: 'Comment ouvrir un compte Paypal (en 2 minutes)Comment ouvrir un compte Paypal (en 2 minutes)',
       paymenttype_paypal_carta_conto: "Comment associer une carte de crédit/débit ou un compte bancaire sur PayPal",
       paymenttype_paypal_link: 'Ouverture d\'un compte avec Paypal',
@@ -226,7 +229,7 @@ const msg_fr = {
       sonomediatore: 'Lorsque vous êtes un MEDIATEUR, vous serez contacté par <strong>TUTOR AYNI</strong> via un message sur le Chat <strong>AYNI BOT</strong>.',
       superchat: 'Note : SEULEMENT si vous avez des problèmes de PAIEMENT, ou si vous voulez être REMPLACÉ, deux tuteurs vous attendent pour vous aider sur le Chat:<br><a href="{link_superchat}" target="_blank">Get into Gift Chat</a>.',
       sonodonatore: '<ol class="lista"><li>Quand vous êtes dans cette position, vous serez invité pour faire votre cadeau</li>' +
-      '<li>Vous aurez <strong>4 jours</strong> pour faire votre cadeau.<br></ol>',
+      '<li>Vous aurez <strong>3 jours</strong> pour faire votre cadeau.<br></ol>',
       sonodonatore_seconda_tessitura: '<ol class="liste"><li>Ici vous êtes Médiateur et également Donateur, mais étant le deuxième Tissage, vous n’aurez pas besoin d’éffectuer de nouveau votre don<br></ol>',
       controlla_donatori: 'Vérifiez la liste des donateurs',
       link_chat: 'Link de Gift Chat Telegram',
@@ -253,14 +256,14 @@ const msg_fr = {
       msg_donatori_ok: 'Message envoyé aux donateurs',
       metodi_disponibili: 'Méthodes disponibles',
       importo: 'Montant',
-      effettua_il_dono: 'Il est temps de faire votre propre regalo ! ' +
+      effettua_il_dono: 'Il est temps de faire votre propre regalo au Rêveur<br>👉 {sognatore} 👈  ' +
       'Envoyez via <a href="https://www.paypal.com" target="_blank">PayPal</a> à : <strong>{email}</strong><br>' +
-      '(Choisissez l\'option "ENVOYER À UNE PERSONNE DE CONFIANCE")<br>',
+      '<strong><span style="color:red">ATTENTION:</span> Choisissez l\'option "SENDING TO A FRIEND"</strong><br>',
       paypal_me: '<br>2) Méthode simplifiée<br><a href="{link_payment}" target="_blank">Cliquez directement ici</a><br>' +
       'ouvrira PayPal avec le montant et le destinataire déjà définis.<br>' +
       'Ajouter comme message : <strong>Regalo</strong><br>' +
       '<strong><span style="color:red">WARNING:</span> NE COCHEZ PAS LA BOITE</strong> : Protection des achats par Paypal<br>' +
-      'Si vous avez des doutes, regardez la vidéo ci-dessous pour voir comment:' +
+      'Si vous avez des doutes, regardez la vidéo ci-dessous pour voir comment:<br>' +
       'Enfin, cliquez sur "Envoyer de l\'argent maintenant"',
       qui_compariranno_le_info: 'Le jour du départ du navire, les informations du Dreamer apparaîtront',
       commento_al_sognatore: 'Ecrivez ici un commentaire pour le Rêveur:',
@@ -275,7 +278,7 @@ const msg_fr = {
       dono_ricevuto_3: 'Arrivé!',
       confermi_dono_ricevuto: 'Confirmez que vous avez reçu le regalo de 33 $ de {donatore}',
       confermi_dono_ricevuto_msg: 'Confirme la réception du regalo de 33€ de {donatore}',
-      msg_bot_conferma: '{donatore} a confirmé qu\'il avait envoyé son cadeau de 33 € a {sognatore}',
+      msg_bot_conferma: '{donatore} a confirmé qu\'il avait envoyé son cadeau de 33 € a {sognatore} (Commento: {commento})',
       ricevuto_dono_ok: 'Vous avez confirmé que le cadeau a été reçu',
       entra_in_lavagna: 'Montez sur votre tableau noir pour voir les navires au départ',
       doni_ricevuti: 'Regalo reçus',
@@ -327,7 +330,8 @@ const msg_fr = {
       cellreg: 'Cellulare con cui ti eri registrato',
       nationality: 'Nationalité',
       email_paypal: 'Email Paypal',
-      link_payment: 'Liens Paypal.me pour effectuer le paiement',
+      revolut: 'Revolut',
+      link_payment: 'Liens Paypal.me',
       note_payment: 'Notes complémentaires',
       country_pay: 'Pays de destination Paiements',
       username_telegram: 'Nom d\'utilisateur du Telegram',
@@ -342,7 +346,7 @@ const msg_fr = {
       saw_and_accepted: 'Condizioni',
       saw_zoom_presentation: 'Ha visto Zoom',
       manage_telegram: 'Gestori Telegram',
-      paymenttype: 'Méthodes de paiement disponibles',
+      paymenttype: 'Méthodes de paiement disponibles (Revolut)',
       selected: 'sélectionné',
       img: 'Fichier image',
       date_reg: 'Date Inscript.',

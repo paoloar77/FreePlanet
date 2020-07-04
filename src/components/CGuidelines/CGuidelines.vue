@@ -71,13 +71,8 @@
                         Cuore desidera ardentemente?
                     </li>
                     <li>Attivare almeno <strong>2 metodi di pagamento</strong>.
-                        <strong>PayPal</strong> è obbligatorio (occorrono 2 minuti per attivarlo).
-                        Ti consente trasferimenti gratuiti in area Euro e puoi collegarci carte e conti
-                        correnti. I tuoi dati sono al sicuro e non condivisi con il ricevente.
-                        Sono consigliati il conto <strong>Revolut</strong> o <strong>N26</strong> come seconda opzione e
-                        <strong>Western
-                            Union</strong>, Xoom o TransferWise nei casi di
-                        regali extraeuropei.
+                        <strong>Revolut</strong> è quello maggiormente consigliato.<br>
+                      Come seconda scelta c'è Paypal, ma ultimamente stiamo avendo problemi perchè tendono a bloccare i soldi sul conto per 6 mesi per controlli, quindi da utilizzare solo se impossiblitati ad aprire un conto con Revolut.
                     </li>
                 </ol>
 

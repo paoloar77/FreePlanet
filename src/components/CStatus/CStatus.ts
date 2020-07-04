@@ -465,6 +465,19 @@ export default class CStatus extends MixinBase {
     }
 
   }
+  get isselectRevolut() {
+    if (UserStore.state.my.profile) {
+      // console.log('pay', UserStore.state.my.profile.paymenttypes)
+      if (UserStore.state.my.profile.paymenttypes) {
+        if (UserStore.state.my.profile.paymenttypes.includes('revolut')) {
+          return true
+        }
+      }
+
+      return false
+    }
+
+  }
 
   public geticonstep(mystep) {
     if (!!mystep.icon)

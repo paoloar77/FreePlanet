@@ -104,6 +104,22 @@
               <div v-html="$t(mystep.descr, {sitename: $t('ws.sitename')})"></div>
             </div>
 
+            <CTitleBanner class="q-pa-xs" :title="$t('steps.paymenttype_revolut')" bgcolor="bg-primary"
+                          clcolor="text-white"
+                          myclass="myshad" canopen="true" :visible="true">
+
+              <CVideo myvideokey="nST5iHM2LbE">
+
+              </CVideo>
+
+              <q-btn class="q-ma-md" size="md" type="a" href="https://www.revolut.com/"
+                     target="_blank" rounded color="primary" icon="info"
+                     :label="$t('steps.paymenttype_revolut_link')">
+              </q-btn>
+
+            </CTitleBanner>
+
+            <!--
             <CTitleBanner class="q-pa-xs" :title="$t('steps.paymenttype_paypal')" bgcolor="bg-primary"
                           clcolor="text-white"
                           myclass="myshad" canopen="true" :visible="false">
@@ -127,22 +143,8 @@
 
               </CTitleBanner>
             </CTitleBanner>
+            -->
 
-
-            <CTitleBanner class="q-pa-xs" :title="$t('steps.paymenttype_revolut')" bgcolor="bg-primary"
-                          clcolor="text-white"
-                          myclass="myshad" canopen="true" :visible="false">
-
-              <CVideo myvideokey="nST5iHM2LbE">
-
-              </CVideo>
-
-              <q-btn class="q-ma-md" size="md" type="a" href="https://www.revolut.com/"
-                     target="_blank" rounded color="primary" icon="info"
-                     :label="$t('steps.paymenttype_revolut_link')">
-              </q-btn>
-
-            </CTitleBanner>
 
             <div>
 
@@ -158,6 +160,13 @@
                           jointable="paymenttypes">
               </CMyFieldDb>
 
+              <CMyFieldDb v-if="isselectRevolut" :title="$t('reg.revolut')"
+                          table="users"
+                          mykey="profile"
+                          mysubkey="revolut"
+                          :type="tools.FieldType.string">
+              </CMyFieldDb>
+
               <CMyFieldDb v-if="isselectPaypal" :title="$t('reg.email_paypal')"
                           table="users"
                           mykey="profile"
@@ -171,6 +180,7 @@
                           mysubkey="link_payment"
                           :type="tools.FieldType.string">
               </CMyFieldDb>
+
 
               <CMyFieldDb :title="$t('reg.note_payment')"
                           table="users"

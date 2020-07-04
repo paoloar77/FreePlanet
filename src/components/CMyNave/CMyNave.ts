@@ -13,11 +13,12 @@ import { CMyChipList } from '../CMyChipList'
 import { CVideo } from '../CVideo'
 import { validations } from './CMyNave-validate'
 import { validationMixin } from 'vuelidate'
+import { CCopyBtn } from '../CCopyBtn'
 
 @Component({
   mixins: [validationMixin],
   validations,
-  components: { CTitleBanner, CMyChipList, CVideo }
+  components: { CTitleBanner, CMyChipList, CVideo, CCopyBtn }
 })
 
 export default class CMyNave extends MixinNave {
@@ -62,6 +63,7 @@ export default class CMyNave extends MixinNave {
   public username_sostituire: string = ''
   public userfreestr: string = ''
   public commento_al_sognatore: string = ''
+  public tabpagam: string = 'paypal'
   public MyPagination: {
     sortBy: string,
     descending: boolean,
@@ -100,7 +102,13 @@ export default class CMyNave extends MixinNave {
     { name: 'date_made_gift', align: 'center', label: 'Inviato', field: 'date_made_gift', sortable: true },
     // { name: 'tel', align: 'center', label: 'Tel', field: 'tel', sortable: true },
     { name: 'made_gift', align: 'center', label: 'Conferm.', field: 'made_gift', sortable: true },
-    { name: 'commento_al_sognatore', align: 'center', label: 'Commento', field: 'commento_al_sognatore', sortable: true },
+    {
+      name: 'commento_al_sognatore',
+      align: 'center',
+      label: 'Commento',
+      field: 'commento_al_sognatore',
+      sortable: true
+    },
   ]
 
   public tragitto = [
@@ -210,6 +218,10 @@ export default class CMyNave extends MixinNave {
       this.tabnave = 'mediatore'
     } else if (this.sonoSognatore()) {
       this.tabnave = 'sognatore'
+    }
+
+    if (!!this.getRevolutPagamentoSognatore()) {
+      this.tabpagam = 'revolut'
     }
   }
 
@@ -330,7 +342,7 @@ export default class CMyNave extends MixinNave {
     return false
   }
 
-  get getsuperchat(){
+  get getsuperchat() {
     if (!!this.flotta) {
       return this.flotta.link_superchat
     }
@@ -412,14 +424,17 @@ export default class CMyNave extends MixinNave {
 
     const mymsg = this.$t('dashboard.msg_bot_conferma', {
       donatore: this.iodonatore.name + ' ' + this.iodonatore.surname,
-      sognatore: this.sognatoredelDono().name + ' ' + this.sognatoredelDono().surname
+      sognatore: this.sognatoredelDono().name + ' ' + this.sognatoredelDono().surname,
+      commento: this.commento_al_sognatore + ' (' + this.tabpagam + ')',
     })
 
     tools.askConfirm(this.$q, msgtitle, msginvia + ' ' + '?', translate('dialog.yes'), translate('dialog.no'), this, '', lists.MenuAction.DONO_INVIATO, 0, {
       param1: {
+        riga: this.posiz.riga,
+        col: this.posiz.col,
         _id: this.iodonatore._id,
         date_made_gift: tools.getDateNow(),
-        commento_al_sognatore: this.commento_al_sognatore,
+        commento_al_sognatore: this.commento_al_sognatore + ' (' + this.tabpagam + ')',
       },
       param2: this.sognatoredelDono().username,
       param3: mymsg
@@ -466,6 +481,24 @@ export default class CMyNave extends MixinNave {
     return ''
   }
 
+  public getlinkRevolutSognatore() {
+    const rec = this.sognatoredelDono()
+    if (!!rec) {
+      if (!!rec.profile)
+        return rec.profile.revolut
+    }
+    return ''
+  }
+
+  public getRevolutPagamentoSognatore() {
+    const rec = this.sognatoredelDono()
+    if (!!rec) {
+      if (!!rec.profile)
+        return rec.profile.revolut
+    }
+    return ''
+  }
+
   public getpaypalmePagamentoSognatore() {
     const rec = this.sognatoredelDono()
     if (!!rec) {
@@ -480,6 +513,14 @@ export default class CMyNave extends MixinNave {
     if (!!rec) {
       if (!!rec.profile)
         return rec.profile.note_payment
+    }
+    return ''
+  }
+
+  public getnomesognatore() {
+    const rec = this.sognatoredelDono()
+    if (!!rec) {
+      return rec.name + ' ' + rec.surname
     }
     return ''
   }
@@ -1126,6 +1167,15 @@ export default class CMyNave extends MixinNave {
 
   get rendivisibile() {
     return !this.FattoDono && !this.sonoSecondaTessituraDonatore() && !this.listanavi
+  }
+
+  get getImgPaypal() {
+    if (!!this.iodonatore) {
+      if (tools.getlang() === 'it')
+        return 'statics/images/send_to_a_friend-it.jpg'
+    }
+
+    return 'statics/images/send_to_a_friend.jpg'
   }
 
 }
