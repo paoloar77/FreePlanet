@@ -388,6 +388,7 @@ const msg_es = {
         user_extralist_not_found: 'Usuario en el archivo no encontrado, inserte el nombre, apellido y número de teléfono enviado previamente',
         user_not_this_aportador: 'Stai utilizzando un link di una persona diversa dal tuo invitato originale.',
         duplicate_username: 'El nombre de usuario ya ha sido utilizado',
+        username_not_valid: 'Username not valid',
         aportador_not_exist: 'El nombre de usuario de la persona que lo invitó no está presente. Contactanos.',
         aportador_regalare_not_exist: 'Inserire l\'Username della persona che si vuole regalare l\'invitato',
         sameaspassword: 'Las contraseñas deben ser idénticas',

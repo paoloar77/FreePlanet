@@ -382,6 +382,7 @@ const msg_enUs = {
         user_extralist_not_found: 'User in archive not found, insert the Name, Surname and mobile phone sent previously',
         user_not_this_aportador: 'Stai utilizzando un link di una persona diversa dal tuo invitato originale.',
         duplicate_username: 'Username is already taken',
+        username_not_valid: 'Username not valid',
         aportador_not_exist: 'The username of the person who invited you is not present. Contact us.',
         aportador_regalare_not_exist: 'Inserire l\'Username della persona che si vuole regalare l\'invitato',
         sameaspassword: 'Passwords must be identical',

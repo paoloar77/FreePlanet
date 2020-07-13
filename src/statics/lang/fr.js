@@ -383,6 +383,7 @@ const msg_fr = {
         user_extralist_not_found: 'Utilisateur dans les archives introuvable, insérez le nom, le prénom et le numéro de téléphone portable envoyés précédemment',
         user_not_this_aportador: 'Stai utilizzando un link di una persona diversa dal tuo invitato originale.',
         duplicate_username: 'Le nom d\'utilisateur a déjà été utilisé',
+        username_not_valid: 'Username not valid',
         aportador_not_exist: 'Le nom d\'utilisateur de la personne qui vous a invité n\'est pas présent. Contactez-nous.',
         aportador_regalare_not_exist: 'Inserire l\'Username della persona che si vuole regalare l\'invitato',
         sameaspassword: 'Les mots de passe doivent être identiques',

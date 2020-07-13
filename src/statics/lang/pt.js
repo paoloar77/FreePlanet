@@ -396,6 +396,7 @@ const msg_pt = {
         user_extralist_not_found: 'Utilizador no arquivo não encontrado, introduza o Nome, Apelido e número de telemóvel comunicado na lista em 2019. Se este for um novo registo, deve registar-se através do LINK de quem o está a convidar.',
         user_not_this_aportador: 'Estás a usar um link de alguém que não o teu convidado original',
         duplicate_username: 'O nome de usuário já foi usado',
+        username_not_valid: 'Username not valid',
         aportador_not_exist: 'O nome de usuário da pessoa que o convidou não está presente. Por favor, contacte-nos.',
         aportador_regalare_not_exist: 'Digite o nome de usuário da pessoa que você quer dar ao convidado como presente',
         sameaspassword: 'As senhas devem ser idênticas',

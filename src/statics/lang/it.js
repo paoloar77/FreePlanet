@@ -419,6 +419,7 @@ const msg_it = {
         user_extralist_not_found: 'Utente in archivio non trovato, inserire il Nome, Cognome e numero di cellulare comunicato nella lista nel 2019. Se questa è una nuova registrazione, dovete registrarvi tramite il LINK di chi vi sta invitando.',
         user_not_this_aportador: 'Stai utilizzando un link di una persona diversa dal tuo invitato originale.',
         duplicate_username: 'L\'Username è stato già utilizzato',
+        username_not_valid: 'L\'Username non é valido',
         aportador_not_exist: 'L\'Username di chi ti ha invitato non è presente. Contattaci.',
         aportador_regalare_not_exist: 'Inserire l\'Username della persona che si vuole regalare l\'invitato',
         invitante_username_not_exist: 'Inserire l\'Username della persona che fa da invitante',

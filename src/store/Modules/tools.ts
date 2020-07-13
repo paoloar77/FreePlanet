@@ -3064,6 +3064,8 @@ export const tools = {
 
       tools.showNegativeNotif(mythis.$q, mythis.$t('reg.err.user_not_this_aportador') + ' ' + msg)
 
+    } else if (riscode === serv_constants.RIS_CODE_USERNAME_NOT_VALID) {
+      tools.showNotif(mythis.$q, mythis.$t('reg.err.username_not_valid'))
     } else if (riscode === serv_constants.RIS_CODE_USERNAME_ALREADY_EXIST) {
       tools.showNotif(mythis.$q, mythis.$t('reg.err.duplicate_username'))
     } else if (riscode === tools.ERR_SERVERFETCH) {
