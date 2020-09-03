@@ -41,6 +41,7 @@ export const DefaultUser: IUserFields = {
     img: '',
     teleg_id: 0,
     saw_zoom_presentation: false,
+    ask_zoom_partecipato: false,
     saw_and_accepted: false,
     qualified: false,
     qualified_2invitati: false,
@@ -60,6 +61,8 @@ export const DefaultProfile: IUserProfile = {
   sex: 0,
   country_pay: '',
   email_paypal: '',
+  payeer_id: '',
+  advcash_id: '',
   revolut: '',
   link_payment: '',
   note_payment: '',
@@ -69,6 +72,7 @@ export const DefaultProfile: IUserProfile = {
   my_dream: '',
   manage_telegram: false,
   saw_zoom_presentation: false,
+  ask_zoom_partecipato: false,
   saw_and_accepted: false,
   paymenttypes: [],
   qualified: false,
@@ -87,6 +91,7 @@ const state: IUserState = {
   isAdmin: false,
   isManager: false,
   isTutor: false,
+  isZoomeri: false,
   isTraduttrici: false,
   usersList: [],
   countusers: 0,
@@ -147,16 +152,23 @@ namespace Getters {
     return false
   }, 'VistoZoom')
 
+  const DiceDiAverPartecipato = b.read((mystate) => {
+    if (mystate.my && mystate.my.profile) {
+      return (mystate.my.profile.ask_zoom_partecipato)
+    }
+    return false
+  }, 'DiceDiAverPartecipato')
+
   const isServerError = b.read((mystate) => {
-    return (state.servercode === tools.ERR_SERVERFETCH)
+    return (mystate.servercode === tools.ERR_SERVERFETCH)
   }, 'isServerError')
 
   const getServerCode = b.read((mystate) => {
-    return state.servercode
+    return mystate.servercode
   }, 'getServerCode')
 
   const getMsg = b.read((mystate) => {
-    return state.msg
+    return mystate.msg
   }, 'getMsg')
 
   const getNameSurnameByUserId = b.read((mystate: IUserState) => (userId: string) => {
@@ -259,6 +271,9 @@ namespace Getters {
     get VistoZoom() {
       return VistoZoom()
     },
+    get DiceDiAverPartecipato() {
+      return DiceDiAverPartecipato()
+    },
     get getServerCode() {
       return getServerCode()
     },
@@ -312,6 +327,7 @@ namespace Mutations {
     mystate.isAdmin = tools.isBitActive(mystate.my.perm, shared_consts.Permissions.Admin.value)
     mystate.isManager = tools.isBitActive(mystate.my.perm, shared_consts.Permissions.Manager.value)
     mystate.isTutor = tools.isBitActive(mystate.my.perm, shared_consts.Permissions.Tutor.value)
+    mystate.isZoomeri = tools.isBitActive(mystate.my.perm, shared_consts.Permissions.Zoomeri.value)
     mystate.isTeacher = tools.isBitActive(mystate.my.perm, shared_consts.Permissions.Teacher.value)
     mystate.isTraduttrici = tools.isBitActive(mystate.my.perm, shared_consts.Permissions.Traduttrici.value)
 
@@ -392,6 +408,11 @@ namespace Mutations {
     mystate.servercode = num
   }
 
+  function setDiceDiAverPartecipato(mystate: IUserState, partecipato: boolean) {
+    console.log('setDiceDiAverPartecipato', partecipato)
+    mystate.my.profile.ask_zoom_partecipato = partecipato
+  }
+
   function setResStatus(mystate: IUserState, status: number) {
     mystate.resStatus = status
   }
@@ -468,6 +489,7 @@ namespace Mutations {
     setResStatus: b.commit(setResStatus),
     setAuth: b.commit(setAuth),
     clearAuthData: b.commit(clearAuthData),
+    setDiceDiAverPartecipato: b.commit(setDiceDiAverPartecipato),
     setErrorCatch: b.commit(setErrorCatch),
     getMsgError: b.commit(getMsgError),
     setusersList: b.commit(setusersList)

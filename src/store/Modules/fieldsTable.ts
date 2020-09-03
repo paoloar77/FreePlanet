@@ -457,7 +457,7 @@ export const fieldsTable = {
 
   getTableJoinByName(table) {
     if (table === 'permissions')
-      return [shared_consts.Permissions.Admin, shared_consts.Permissions.Manager, shared_consts.Permissions.Teacher, shared_consts.Permissions.Tutor, shared_consts.Permissions.Traduttrici]
+      return [shared_consts.Permissions.Admin, shared_consts.Permissions.Manager, shared_consts.Permissions.Teacher, shared_consts.Permissions.Tutor, shared_consts.Permissions.Traduttrici, shared_consts.Permissions.Zoomeri]
     else if (table === 'accepted')
       return [shared_consts.Accepted.CHECK_READ_GUIDELINES, shared_consts.Accepted.CHECK_SEE_VIDEO_PRINCIPI]
     else if (table === 'fieldstype')
@@ -565,6 +565,13 @@ export const fieldsTable = {
       fieldtype: tools.FieldType.boolean
     }),
     AddCol({
+      name: 'profile.ask_zoom_partecipato',
+      field: 'profile',
+      subfield: 'ask_zoom_partecipato',
+      label_trans: 'reg.ask_zoom_partecipato',
+      fieldtype: tools.FieldType.boolean
+    }),
+    AddCol({
       name: 'profile.qualified',
       field: 'profile',
       subfield: 'qualified',
@@ -584,6 +591,18 @@ export const fieldsTable = {
       field: 'profile',
       subfield: 'email_paypal',
       label_trans: 'reg.email_paypal'
+    }),
+    AddCol({
+      name: 'profile.payeer_id',
+      field: 'profile',
+      subfield: 'payeer_id',
+      label_trans: 'reg.payeer_id'
+    }),
+    AddCol({
+      name: 'profile.advcash_id',
+      field: 'profile',
+      subfield: 'advcash_id',
+      label_trans: 'reg.advcash_id'
     }),
     AddCol({
       name: 'profile.revolut',
@@ -708,6 +727,18 @@ export const fieldsTable = {
       field: 'profile',
       subfield: 'email_paypal',
       label_trans: 'reg.email_paypal'
+    }),
+    AddCol({
+      name: 'profile.payeer_id',
+      field: 'profile',
+      subfield: 'payeer_id',
+      label_trans: 'reg.payeer_id'
+    }),
+    AddCol({
+      name: 'profile.advcash_id',
+      field: 'profile',
+      subfield: 'advcash_id',
+      label_trans: 'reg.advcash_id'
     }),
     AddCol({
       name: 'profile.revolut',

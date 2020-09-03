@@ -130,11 +130,90 @@
                         narrow-indicator
                         @input="changetab"
                       >
-                        <q-tab v-if="!!getlinkRevolutSognatore()" name="revolut" icon="img:statics/images/revolut.jpg" label="revolut"></q-tab>
-                        <q-tab v-if="!!getemailPagamentoSognatore()" name="paypal" icon="img:statics/images/paypal.jpg" label="paypal"></q-tab>
+                        <q-tab v-if="!!getPayeerPagamentoSognatore()" name="payeer" icon="img:statics/images/payeer.jpg"
+                               label="payeer"></q-tab>
+                        <q-tab v-if="!!getAdvCashPagamentoSognatore()" name="advcash"
+                               icon="img:statics/images/advcash.jpg"
+                               label="advcash"></q-tab>
+                        <q-tab v-if="!!getlinkRevolutSognatore()" name="revolut" icon="img:statics/images/revolut.jpg"
+                               label="revolut"></q-tab>
+                        <q-tab v-if="!!getemailPagamentoSognatore()" name="paypal" icon="img:statics/images/paypal.jpg"
+                               label="paypal"></q-tab>
                       </q-tabs>
 
                       <q-tab-panels v-model="tabpagam" animated>
+                        <q-tab-panel name="payeer">
+                          <q-img src="../../statics/images/regalo.jpg"
+                                 class=""
+                                 style="height: 150px; width: 150px;"
+                                 alt="regalo">
+                          </q-img>
+                          <q-img src="../../statics/images/payeer.jpg"
+                                 class=""
+                                 style="height: 150px; width: 150px;"
+                                 alt="Payeer">
+                          </q-img>
+                          <br><br>
+
+
+                          <q-btn
+                            rounded
+                            icon="fas fa-gift"
+                            color="primary"
+                            type="a"
+                            size="md"
+                            label="Payeer"
+                            :href="getLinkPayeerPagamentoSognatore()"
+                            target="__blank">
+                          </q-btn>
+                          <br>
+                          <br>
+                          <a :href="getLinkPayeerPagamentoSognatore()" target="_blank">{{
+                            getLinkPayeerPagamentoSognatore() }}</a>
+                          <div class="text-center text-h4">
+                            <CCopyBtn title="Advanced Cash Email" :texttocopy="getPayeerPagamentoSognatore()">
+
+                            </CCopyBtn>
+                          </div>
+
+                        </q-tab-panel>
+                        <q-tab-panel name="advcash">
+                          <q-img src="../../statics/images/regalo.jpg"
+                                 class=""
+                                 style="height: 150px; width: 150px;"
+                                 alt="regalo">
+                          </q-img>
+                          <q-img src="../../statics/images/advcash.jpg"
+                                 class=""
+                                 style="height: 150px; width: 150px;"
+                                 alt="AdvCash">
+                          </q-img>
+                          <br><br>
+
+
+                          <q-btn
+                            rounded
+                            icon="fas fa-gift"
+                            color="primary"
+                            type="a"
+                            size="md"
+                            label="AdvCash"
+                            :href="getLinkAdvCashPagamentoSognatore()"
+                            target="__blank">
+                          </q-btn>
+                          <br>
+                          <br>
+                          <a :href="getLinkAdvCashPagamentoSognatore()" target="_blank">{{
+                            getLinkAdvCashPagamentoSognatore() }}</a>
+
+                          <div class="text-center text-h4">
+                            <CCopyBtn title="Advanced Cash Email" :texttocopy="getAdvCashPagamentoSognatore()">
+
+                            </CCopyBtn>
+                          </div>
+
+
+                        </q-tab-panel>
                         <q-tab-panel name="paypal">
                           <div>
                             <q-img src="../../statics/images/regalo.jpg"
@@ -246,7 +325,7 @@
                                    rounded
                                    color="positive"
                                    size="lg"
-                                   :label="$t('dashboard.ho_effettuato_il_dono')"
+                                   :label="$t('dashboard.ho_effettuato_il_dono') + ' (' + tabpagam + ')'"
                                    icon="fas fa-gift"
                                    @click="HoEffettuatoIlDono">
                             </q-btn>
@@ -258,7 +337,7 @@
                                     text-color="green"
                                     color="white"
                                     icon="fas fa-gift">
-                              {{ $t('dashboard.ho_effettuato_il_dono') }}
+                              {{ $t('dashboard.ho_effettuato_il_dono') + ' (' + tabpagam + ')' }}
                             </q-chip>
                           </div>
                         </div>

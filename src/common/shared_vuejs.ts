@@ -34,6 +34,8 @@ export const shared_consts = {
   FILTER_ATTIVI: 2048,
   FILTER_NASCOSTI: 4096,
   FILTER_NAVI_NON_PRESENTI: 8192,
+  FILTER_QUALIFIED: 16384,
+  FILTER_ASK_ZOOM_VISTO: 32768,
 
   Permissions: {
     Admin: {
@@ -65,6 +67,12 @@ export const shared_consts = {
       label: 'dashboard.traduttrici',
       icon: 'fas fa-user-tie',
       color: 'orange'
+    },
+    Zoomeri: {
+      value: 32,
+      label: 'dashboard.zoomeri',
+      icon: 'fas fa-user-tie',
+      color: 'yellow'
     }
   },
 

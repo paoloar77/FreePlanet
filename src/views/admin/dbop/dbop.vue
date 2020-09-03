@@ -171,6 +171,14 @@
                @click="EseguiFunz('generaFlotte')"></q-btn>
         <br>
       </div>
+      <div class="row">
+        <q-btn label="METTI SOGNO E PAYPAL (SOLO VISU)" color="primary"
+               @click="EseguiFunz('mettiSognoePaypalView')"></q-btn>
+        <br>
+        <q-btn label="METTI SOGNO E PAYPAL" color="primary"
+               @click="EseguiFunz('mettiSognoePaypal')"></q-btn>
+        <br>
+      </div>
       <!--<div class="row">
         <q-btn label="AGGIUNGI NAVE PER UTENTI CHE NON CE L'HANNO (flag navinonpresenti)!" color="primary"
                @click="EseguiFunz('addNavePerUtentiNaviNonPresenti')"></q-btn>

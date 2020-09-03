@@ -84,6 +84,20 @@
           </div>
 
           <div class="justify-sm-start q-ma-md">
+            <q-input v-model="payeer_id" style="max-width: 300px;" label="ID Payeer:"
+                     filled dense
+                     :readonly="true"
+                     debounce="1000"
+                     @input="change_field('payeer_id')">
+
+            </q-input>
+            <q-input v-model="advcash_id" style="max-width: 300px;" label="ID Advanced Cash:"
+                     filled dense
+                     :readonly="true"
+                     debounce="1000"
+                     @input="change_field('advcash_id')">
+
+            </q-input>
             <q-input v-model="email_paypal" style="max-width: 300px;" label="Email Paypal:"
                      filled dense
                      :readonly="true"
@@ -99,7 +113,7 @@
 
             </q-input>
             <q-input standout bottom-slots
-                     v-model="link_payment" style="max-width: 400px;" label="Link per Paypal.me:"
+                     v-model="link_payment" style="max-width: 400px;" label="Link MoneyBox PayPal:"
                      :readonly="true"
                      debounce="1000"
                      filled dense
@@ -251,6 +265,8 @@
               <div class="justify-evenly" style="max-width: 300px;">
                 <strong>Legenda dei codici speciali da inserire nei messaggi: </strong>
                 <div>{link_paypalme}</div>
+                <div>{payeer_id}</div>
+                <div>{advcash_id}</div>
                 <div>{link_superchat}</div>
                 <div>{tutor1}</div>
                 <div>{tutor2}</div>
@@ -447,7 +463,8 @@
                            @click="Mostraplacca(tools.getRiganave(rec.riga), tools.getColnave(rec.col))">
                     </q-btn>
                   </div>
-                  <div style="width: 30px;">
+                  <div v-if="!!rec.profile" style="width: 30px;">
+
                     <q-avatar v-if="tools.geticon(rec.profile.nationality)" :class="tools.geticon(rec.profile.nationality)"
                               size="sm">
                     </q-avatar>

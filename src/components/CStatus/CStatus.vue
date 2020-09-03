@@ -104,9 +104,10 @@
               <div v-html="$t(mystep.descr, {sitename: $t('ws.sitename')})"></div>
             </div>
 
+            <!--
             <CTitleBanner class="q-pa-xs" :title="$t('steps.paymenttype_revolut')" bgcolor="bg-primary"
                           clcolor="text-white"
-                          myclass="myshad" canopen="true" :visible="true">
+                          myclass="myshad" canopen="true" :visible="false">
 
               <CVideo myvideokey="nST5iHM2LbE">
 
@@ -118,6 +119,7 @@
               </q-btn>
 
             </CTitleBanner>
+            -->
 
             <!--
             <CTitleBanner class="q-pa-xs" :title="$t('steps.paymenttype_paypal')" bgcolor="bg-primary"
@@ -160,21 +162,39 @@
                           jointable="paymenttypes">
               </CMyFieldDb>
 
-              <CMyFieldDb v-if="isselectRevolut" :title="$t('reg.revolut')"
+              <CMyFieldDb v-if="tools.isselectRevolut()" :title="$t('reg.revolut')"
                           table="users"
                           mykey="profile"
                           mysubkey="revolut"
                           :type="tools.FieldType.string">
               </CMyFieldDb>
 
-              <CMyFieldDb v-if="isselectPaypal" :title="$t('reg.email_paypal')"
+              <CMyFieldDb v-if="tools.isselectPaypal()"
+                          :title="$t('reg.email_paypal')"
                           table="users"
                           mykey="profile"
                           mysubkey="email_paypal"
                           :type="tools.FieldType.string">
               </CMyFieldDb>
 
-              <CMyFieldDb :title="$t('reg.link_payment')"
+              <CMyFieldDb v-if="tools.isselectPayeer()"
+                          :title="$t('reg.payeer_id')"
+                          table="users"
+                          mykey="profile"
+                          mysubkey="payeer_id"
+                          :type="tools.FieldType.string">
+              </CMyFieldDb>
+
+              <CMyFieldDb v-if="tools.isselectAdvCash()"
+                          :title="$t('reg.advcash_id')"
+                          table="users"
+                          mykey="profile"
+                          mysubkey="advcash_id"
+                          :type="tools.FieldType.string">
+              </CMyFieldDb>
+
+              <CMyFieldDb v-if="tools.isselectPaypal()"
+                          :title="$t('reg.link_payment')"
                           table="users"
                           mykey="profile"
                           mysubkey="link_payment"
@@ -219,6 +239,19 @@
             <CRequisiti :statebool="VistoZoom" :msgTrue="$t('steps.zoom_si_partecipato')"
                         :msgFalse="$t('steps.zoom_no_partecipato')">
             </CRequisiti>
+
+            <div v-if="NoPartNoZoom()">
+              <q-btn rounded color="blue" @click="hagiapartecipato()"
+                     :label="$t('steps.zoom_gia_partecipato')"></q-btn>
+              <br>
+            </div>
+            <div v-else>
+              <CRequisiti v-if="!VistoZoom" :statebool="true" :msgTrue="$t('steps.zoom_richiesta_inviata')"
+                          msgFalse="">
+              </CRequisiti>
+            </div>
+
+
 
             <div v-if="mystep.descr">
               <div v-html="$t(mystep.descr, {sitename: $t('ws.sitename')})"></div>

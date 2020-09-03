@@ -1,10 +1,21 @@
 <template>
   <div class="text-center">
     <div class="row items-center justify-center q-gutter-md q-ma-xs">
+
       <div class="q-ma-xs">
-        <q-field rounded outlined bg-color="orange-3" dense style="min-width:110px;">
+        <q-field rounded outlined bg-color="blue-1" dense style="min-width:110px;">
           <template v-slot:control>
-            <div class="self-center full-width no-outline text-center" tabindex="0">{{title}}</div>
+            <div class="centermydiv">
+              <div v-if="myimg" class="text-center">
+                <q-img
+                       :src="myimg"
+                       class="text-center"
+                       style="height: 50px; width: 50px;"
+                       :alt="title">
+                </q-img>
+              </div>
+              <div class="self-center full-width no-outline text-center" tabindex="0">{{ title }}</div>
+            </div>
           </template>
         </q-field>
       </div>
@@ -56,7 +67,7 @@
           </div>
           <div v-else-if="type === tools.FieldType.intcode">
 
-            {{ myvalprinted }}
+            <div v-html="myvalprinted"></div>
 
           </div>
           <div v-else-if="((type === tools.FieldType.multiselect) || (type === tools.FieldType.multioption))">
@@ -88,7 +99,7 @@
                       @input="savefieldboolean"></q-toggle>
           </div>
           <div v-else>
-            {{ myvalprinted }}
+            <div v-html="myvalprinted"></div>
           </div>
 
           <q-popup-edit
@@ -103,7 +114,8 @@
             <div v-if="type === tools.FieldType.boolean">
               <q-checkbox v-model="myvalue" :label="col.title">
               </q-checkbox>
-              {{ visuValByType(myvalue) }}
+              <div v-html="visuValByType(myvalue)">
+              </div>
             </div>
             <div v-else-if="type === tools.FieldType.string">
               <q-input v-model="myvalue"
@@ -205,25 +217,25 @@
                              :isarray="true">
               </CMyToggleList>
 
-<!--
-              <q-select
-                v-model="myvalue"
-                rounded
-                dense
-                outlined
-                multiple
-                options-dense
-                :display-value="db_fieldsTable.getTitleByTable(col.jointable)"
-                emit-value
-                map-options
-                :options="db_fieldsTable.getTableJoinByName(col.jointable)"
-                :option-label="db_fieldsTable.getLabelByTable(col.jointable)"
-                :option-value="db_fieldsTable.getKeyByTable(col.jointable)"
-                style="min-width: 150px"
-              >
+              <!--
+                            <q-select
+                              v-model="myvalue"
+                              rounded
+                              dense
+                              outlined
+                              multiple
+                              options-dense
+                              :display-value="db_fieldsTable.getTitleByTable(col.jointable)"
+                              emit-value
+                              map-options
+                              :options="db_fieldsTable.getTableJoinByName(col.jointable)"
+                              :option-label="db_fieldsTable.getLabelByTable(col.jointable)"
+                              :option-value="db_fieldsTable.getKeyByTable(col.jointable)"
+                              style="min-width: 150px"
+                            >
 
-              </q-select>
-              -->
+                            </q-select>
+                            -->
             </div>
             <div v-else-if="col.fieldtype === tools.FieldType.multioption">
             </div>
@@ -239,5 +251,5 @@
 </script>
 
 <style lang="scss" scoped>
-  @import './CMyFieldDb.scss';
+@import './CMyFieldDb.scss';
 </style>

@@ -61,6 +61,8 @@ export default class CMyFlotta extends MixinNave {
   public date_close: Date = null
   public revolut: string = ''
   public email_paypal: string = ''
+  public payeer_id: string = ''
+  public advcash_id: string = ''
   public note_payment: string = ''
   public link_payment: string = ''
   public link_superchat: string = ''
@@ -136,6 +138,8 @@ export default class CMyFlotta extends MixinNave {
       this.note_payment = this.flotta.note_payment
       this.revolut = this.flotta.revolut
       this.email_paypal = this.flotta.email_paypal
+      this.payeer_id = this.flotta.payeer_id
+      this.advcash_id = this.flotta.advcash_id
       this.link_payment = this.flotta.link_payment
       this.link_superchat = this.flotta.link_superchat
     }

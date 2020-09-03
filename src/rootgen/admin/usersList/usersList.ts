@@ -35,6 +35,10 @@ export default class UsersList extends Vue {
           value: shared_consts.FILTER_USER_NO_ZOOM
         },
         {
+          label: 'hanno detto di aver visto lo Zoom',
+          value: shared_consts.FILTER_ASK_ZOOM_VISTO
+        },
+        {
           label: 'Non hanno l\'Invitante',
           value: shared_consts.FILTER_USER_NO_INVITANTE
         },

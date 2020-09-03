@@ -33,7 +33,8 @@ export const lists = {
     DAMMI_PRIMO_UTENTE_LIBERO: 390,
 
     CAN_EDIT_TABLE: 400,
-    SHOW_PREV_REC: 401
+    SHOW_PREV_REC: 401,
+    ZOOM_GIA_PARTECIPATO: 510
   },
 
   selectTheme: [

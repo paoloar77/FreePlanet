@@ -151,6 +151,8 @@ const msg_de = {
       cellreg: 'Cellulare con cui ti eri registrato',
       nationality: 'Nationality',
       email_paypal: 'Email Paypal',
+      payeer_id: 'ID Payeer',
+      advcash_id: 'Advanced Cash Email',
       revolut: 'Revolut',
       country_pay: 'Country of Destination Payments',
       username_telegram: 'Username Telegram',

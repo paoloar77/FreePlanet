@@ -97,15 +97,15 @@ export default class CMyNave extends MixinNave {
       sortable: true
     },
     { name: 'nave', align: 'center', label: 'Gift Chat', field: 'nave', sortable: true },
-    { name: 'name', align: 'center', label: 'Nome Cognome', field: 'name', sortable: true },
-    { name: 'posizione', align: 'center', label: 'Posizione', field: 'posizione', sortable: true },
-    { name: 'date_made_gift', align: 'center', label: 'Inviato', field: 'date_made_gift', sortable: true },
+    { name: 'name', align: 'center', label: translate('reg.name_complete'), field: 'name', sortable: true },
+    { name: 'posizione', align: 'center', label: translate('dashboard.posizione'), field: 'posizione', sortable: true },
+    { name: 'date_made_gift', align: 'center', label: translate('dashboard.inviato'), field: 'date_made_gift', sortable: true },
     // { name: 'tel', align: 'center', label: 'Tel', field: 'tel', sortable: true },
-    { name: 'made_gift', align: 'center', label: 'Conferm.', field: 'made_gift', sortable: true },
+    { name: 'made_gift', align: 'center', label: translate('dashboard.azione'), field: 'made_gift', sortable: true },
     {
       name: 'commento_al_sognatore',
       align: 'center',
-      label: 'Commento',
+      label: translate('dashboard.commento'),
       field: 'commento_al_sognatore',
       sortable: true
     },
@@ -222,6 +222,12 @@ export default class CMyNave extends MixinNave {
 
     if (!!this.getRevolutPagamentoSognatore()) {
       this.tabpagam = 'revolut'
+    }
+    if (!!this.getAdvCashPagamentoSognatore()) {
+      this.tabpagam = 'advcash'
+    }
+    if (!!this.getPayeerPagamentoSognatore()) {
+      this.tabpagam = 'payeer'
     }
   }
 
@@ -418,6 +424,10 @@ export default class CMyNave extends MixinNave {
 
   }
 
+  public getIdPagam() {
+
+  }
+
   public HoEffettuatoIlDono() {
     const msgtitle = translate('dashboard.confermi_dono')
     const msginvia = msgtitle
@@ -434,7 +444,7 @@ export default class CMyNave extends MixinNave {
         col: this.posiz.col,
         _id: this.iodonatore._id,
         date_made_gift: tools.getDateNow(),
-        commento_al_sognatore: this.commento_al_sognatore + ' (' + this.tabpagam + ')',
+        commento_al_sognatore: this.commento_al_sognatore + ' (' + this.tabpagam + ')' + this.getIdPagam(),
       },
       param2: this.sognatoredelDono().username,
       param3: mymsg
@@ -496,6 +506,41 @@ export default class CMyNave extends MixinNave {
       if (!!rec.profile)
         return rec.profile.revolut
     }
+    return ''
+  }
+
+  public getPayeerPagamentoSognatore() {
+    const rec = this.sognatoredelDono()
+    if (!!rec) {
+      if (!!rec.profile)
+        return rec.profile.payeer_id
+    }
+    return ''
+  }
+
+  public getAdvCashPagamentoSognatore() {
+    const rec = this.sognatoredelDono()
+    if (!!rec) {
+      if (!!rec.profile)
+        return rec.profile.advcash_id
+    }
+    return ''
+  }
+
+  public getLinkPayeerPagamentoSognatore() {
+    const payeerid = this.getPayeerPagamentoSognatore()
+    if (!!payeerid) {
+      return 'https://payeer.com/en/account/send/'
+    }
+
+    return ''
+  }
+  public getLinkAdvCashPagamentoSognatore() {
+    const advcash = this.getAdvCashPagamentoSognatore()
+    if (!!advcash) {
+      return 'https://wallet.advcash.com/pages/transfer/wallet'
+    }
+
     return ''
   }
 

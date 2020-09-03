@@ -164,20 +164,9 @@ export default class CMyRequirement extends MixinUsers {
         return ''
       },
       isok(user) {
-        let ispaypal = false
         if (user) {
           if (!!user.profile.paymenttypes) {
-            if (user.profile.paymenttypes.includes('paypal')) {
-              if (user.profile.email_paypal) {
-                ispaypal = true
-              }
-            }
-            if (!!user.profile)
-              if (!!user.profile.email_paypal) {
-                const ris = (user.profile.email_paypal !== '') && ispaypal
-                return ris
-              }
-
+            return UserStore.state.my.profile.paymenttypes.length > 1
           }
         }
         return false

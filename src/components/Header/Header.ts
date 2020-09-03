@@ -65,6 +65,10 @@ export default class Header extends Vue {
     return UserStore.state.isTutor
   }
 
+  get isZoomeri() {
+    return UserStore.state.isZoomeri
+  }
+
   get isTratuttrici() {
     return UserStore.state.isTratuttrici
   }

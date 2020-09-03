@@ -1483,6 +1483,29 @@ export const tools = {
         } else
           tools.showNegativeNotif(myself.$q, myself.$t('db.recfailed'))
       })
+    } else if (func === lists.MenuAction.ZOOM_GIA_PARTECIPATO) {
+      // console.log('param1', par.param1, 'id', par.param1._id)
+      const mydatatosave = {
+        id: par.param1._id,
+        ind_order: par.param1.ind_order,
+        myfunc: func,
+        data: par.param2,
+        username: par.param2.username,
+        notifBot: null,
+      }
+
+      // if (par.param2.notifBot)
+      //  mydatatosave.notifBot = { un: par.param2.notifBot, txt: par.param3 }
+
+      // myself.EseguiCallServer()
+
+      GlobalStore.actions.callFunz({ mydata: mydatatosave }).then((ris) => {
+        if (ris) {
+          myself.Callback(func)
+          tools.showPositiveNotif(myself.$q, par.param3)
+        } else
+          tools.showNegativeNotif(myself.$q, myself.$t('db.recfailed'))
+      })
     } else if (func === lists.MenuAction.REGALA_INVITATO) {
       // console.log('param1', par.param1, 'id', par.param1._id)
       let mydatatosave = {
@@ -2073,6 +2096,10 @@ export const tools = {
     return UserStore.state.isTutor
   },
 
+  isZoomeri() {
+    return UserStore.state.isZoomeri
+  },
+
   isTraduttrici() {
     return UserStore.state.isTraduttrici
   },
@@ -2183,7 +2210,7 @@ export const tools = {
                     ${ mythis.$t('cal.endtime')} ${ tools.getstrTime(myevent.dateTimeEnd) }`
       } else {
         mystr = `${tools.getstrDate(myevent.dateTimeStart)}
-                 ${mythis.$t('cal.starttime')} ${ tools.getstrTime(myevent.dateTimeStart) }          
+                 ${mythis.$t('cal.starttime')} ${ tools.getstrTime(myevent.dateTimeStart) }
                  ${ mythis.$t('cal.endtime')} ${ tools.getstrTime(myevent.dateTimeEnd) }`
       }
     } else {
@@ -3121,8 +3148,15 @@ export const tools = {
       param1: eventparam,
       param2: true
     })
-  }
-  ,
+  },
+  AskGiaPartecipatoZoom(mythis, user) {
+    console.log('AskGiaPartecipatoZoom', user.username)
+    tools.askConfirm(mythis.$q, translate('steps.zoom_gia_partecipato'), translate('steps.zoom_gia_partecipato'), translate('dialog.yes'), translate('dialog.no'), mythis, '', lists.MenuAction.ZOOM_GIA_PARTECIPATO, 0, {
+      param1: user,
+      param2: user,
+      param3: 'Confermato',
+    })
+  },
   ActionRecTable(mythis, action, table, id, item, askaction) {
     // console.log('ActionRecTable', id)
     return tools.askConfirm(mythis.$q, 'Action', translate(askaction) + '?', translate('dialog.yes'), translate('dialog.no'), mythis, table, action, 0, {
@@ -3508,7 +3542,7 @@ export const tools = {
 
       const arrlang = ['IT', 'ES', 'PT', 'BR', 'US', 'GB', 'UK', 'DE', 'FR', 'SI', 'MD', 'IE', 'KE', 'AU', 'ML', 'DO',
         'NG', 'SK', 'CH', 'CM', 'CO', 'CG', 'PE', 'MS', 'SM', 'HR', 'RO', 'VE', 'CL', 'PL', 'EG', 'AR', 'MX', 'SN', 'PK', 'AT', 'NP',
-        'CU', 'MA', 'PH', 'BA', 'UA', 'BE', 'NL', 'CI']
+        'CU', 'MA', 'PH', 'BA', 'UA', 'BE', 'NL', 'CI', 'BF']
 
       const flag = arrlang.find((mylang) => mylang === lang)
       if (!!flag) {
@@ -3630,6 +3664,8 @@ export const tools = {
       return 'Montserrat'
     } else if (nat === 'CI') {
       return 'Cote d\'Ivoire'
+    } else if (nat === 'BF') {
+      return 'Burkina Faso'
     } else if (nat === 'IE') {
       return 'Ireland'
     } else if (nat === 'KE') {
@@ -3685,19 +3721,14 @@ export const tools = {
     return ris
   },
 
-  isPayPalSel(user) {
-    let ispaypal = false
+  isSel2Metodi(user) {
     if (user.profile.paymenttypes) {
-      if (user.profile.paymenttypes.includes('paypal')) {
-        if (!!user.profile.email_paypal) {
-          if (user.profile.email_paypal !== '')
-            ispaypal = true
-        }
-      }
+      return user.profile.paymenttypes.length > 1
     }
-    return ispaypal
+    return false
 
   },
+
   getnumrequisiti(user) {
     let req = 0
 
@@ -3708,7 +3739,7 @@ export const tools = {
     req += user.profile.saw_zoom_presentation ? 1 : 0
     if (!!user.profile.my_dream)
       req += user.profile.my_dream.length >= 10 ? 1 : 0
-    req += this.isPayPalSel(user) ? 1 : 0
+    req += this.isSel2Metodi(user) ? 1 : 0
 
     return req
   },
@@ -3857,6 +3888,54 @@ export const tools = {
     }
 
     return mylink
+  },
+
+  isselectPaypal() {
+    if (UserStore.state.my.profile) {
+      if (UserStore.state.my.profile.paymenttypes) {
+        if (UserStore.state.my.profile.paymenttypes.includes('paypal')) {
+          return true
+        }
+      }
+
+      return false
+    }
+  },
+
+  isselectPayeer() {
+    if (UserStore.state.my.profile) {
+      if (UserStore.state.my.profile.paymenttypes) {
+        if (UserStore.state.my.profile.paymenttypes.includes('payeer')) {
+          return true
+        }
+      }
+
+      return false
+    }
+  },
+
+  isselectRevolut() {
+    if (UserStore.state.my.profile) {
+      if (UserStore.state.my.profile.paymenttypes) {
+        if (UserStore.state.my.profile.paymenttypes.includes('revolut')) {
+          return true
+        }
+      }
+
+      return false
+    }
+  },
+
+  isselectAdvCash() {
+    if (UserStore.state.my.profile) {
+      if (UserStore.state.my.profile.paymenttypes) {
+        if (UserStore.state.my.profile.paymenttypes.includes('advcash')) {
+          return true
+        }
+      }
+
+      return false
+    }
   }
 
 // getLocale() {

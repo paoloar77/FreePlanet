@@ -297,7 +297,7 @@ export default class CMyDashboard extends MixinUsers {
     if (val1 < 0)
       val1 = 0
 
-    let valmax = val1;
+    let valmax = val1
     if (valmax < 2)
       valmax = 2
 
@@ -375,7 +375,7 @@ export default class CMyDashboard extends MixinUsers {
     if (val2 < 0)
       val2 = 0
 
-    return  val1 + '/' + val2
+    return val1 + '/' + val2
   }
 
   public isprovvisoria(mianave) {
@@ -433,23 +433,31 @@ export default class CMyDashboard extends MixinUsers {
     const rigamin = tools.getRiganave(mianave.riga)
     const colmin = tools.getColnave(mianave.col)
 
+    const mynavedest = tools.getfirstnaveSognatore(mianave.riga, mianave.col)
+
     let riga = this.myrigaattuale
     let col = this.mycolattuale
 
     let colvera = colmin
-    if (rigamin > 3) {
-      for (let index = rigamin; index < riga - 1; index++) {
+    if (rigamin > 1) {
+      for (let index = rigamin; index < riga; index++) {
         colvera = colvera * 2
       }
     } else {
       colvera = 7
     }
 
-    if (col <= colvera) {
+    if (riga === mynavedest.riga) {
+      colvera = mynavedest.col
+    }
+
+    // colvera = mynavedest.col
+
+    if (col < colvera) {
       riga = riga - 1
     }
 
-    // console.log('[' + rigamin + '.' + colmin + ']', 'riga', riga, 'col', col, 'colvera', colvera)
+    console.log('[' + rigamin + '.' + colmin + ']', 'riga', riga, 'col', col, 'colvera', colvera)
 
     if (riga > rigamin + 6)
       riga = rigamin + 6

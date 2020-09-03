@@ -81,21 +81,43 @@
     <CTitleBanner class="q-pa-xs" :title="$t('pages.payment')" bgcolor="bg-primary" clcolor="text-white"
                    myclass="myshad" :canopen="true">
       <div class="row fa-border justify-center items-center">
-        <CMyFieldDb :title="$t('reg.revolut')"
+
+        <CMyFieldDb v-if="tools.isselectPayeer()"
+                    :title="$t('reg.payeer_id')"
+                    table="users"
+                    mykey="profile"
+                    myimg="statics/images/payeer.jpg"
+                    mysubkey="payeer_id"
+                    :type="tools.FieldType.string">
+        </CMyFieldDb>
+        <CMyFieldDb v-if="tools.isselectAdvCash()"
+                    :title="$t('reg.advcash_id')"
+                    table="users"
+                    mykey="profile"
+                    mysubkey="advcash_id"
+                    myimg="statics/images/advcash.jpg"
+                    :type="tools.FieldType.string">
+        </CMyFieldDb>
+        <CMyFieldDb v-if="tools.isselectRevolut()"
+                    :title="$t('reg.revolut')"
                     table="users"
                     mykey="profile"
                     mysubkey="revolut"
+                    myimg="statics/images/revolut.jpg"
                     :type="tools.FieldType.string">
         </CMyFieldDb>
 
-        <CMyFieldDb :title="$t('reg.email_paypal')"
+        <CMyFieldDb v-if="tools.isselectPaypal()"
+                    :title="$t('reg.email_paypal')"
                     table="users"
                     mykey="profile"
                     mysubkey="email_paypal"
+                    myimg="statics/images/paypal.jpg"
                     :type="tools.FieldType.string">
         </CMyFieldDb>
 
-        <CMyFieldDb :title="$t('reg.link_payment')"
+        <CMyFieldDb v-if="tools.isselectPaypal()"
+                    :title="$t('reg.link_payment')"
                     table="users"
                     mykey="profile"
                     mysubkey="link_payment"

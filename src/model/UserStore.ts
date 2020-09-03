@@ -16,6 +16,8 @@ export interface IUserProfile {
   sex?: ESexType
   country_pay?: string
   email_paypal?: string
+  payeer_id?: string
+  advcash_id?: string
   revolut?: string
   link_payment?: string
   note_payment?: string
@@ -26,6 +28,7 @@ export interface IUserProfile {
   paymenttypes?: IPaymentType[]
   manage_telegram?: boolean
   saw_zoom_presentation?: boolean
+  ask_zoom_partecipato?: boolean
   saw_and_accepted?: boolean
   qualified?: boolean
   qualified_2invitati?: boolean
@@ -112,6 +115,7 @@ export interface IUserState {
   isAdmin?: boolean
   isManager?: boolean
   isTutor?: boolean
+  isZoomeri?: boolean
   isTraduttrici?: boolean
   isTeacher?: boolean
   usersList?: IUserFields[]

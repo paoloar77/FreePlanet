@@ -71,8 +71,7 @@
                         Cuore desidera ardentemente?
                     </li>
                     <li>Attivare almeno <strong>2 metodi di pagamento</strong>.
-                        <strong>Revolut</strong> è quello maggiormente consigliato.<br>
-                      Come seconda scelta c'è Paypal, ma ultimamente stiamo avendo problemi perchè tendono a bloccare i soldi sul conto per 6 mesi per controlli, quindi da utilizzare solo se impossiblitati ad aprire un conto con Revolut.
+                        <strong>Revolut, Payeer e Paypal (tramite MoneyBox)</strong> sono quelli maggiormente consigliati.<br>
                     </li>
                 </ol>
 
@@ -208,10 +207,9 @@
                     </li>
                     <li>Pisanje svojih sanj: kaj je tisto, kar bi želeli doseči, in po čem vaše srce hrepeni?
                     </li>
-                    <li>Aktivirajte vsaj 2 načina plačila. PayPal je obvezen (za aktiviranje potrebujete 2 minuti).
-                        Omogoča vam brezplačne prenose v evro območju in nanj lahko povežete kartice in preverjate
-                        račune. Vaši podatki so varni in se ne delijo s prejemnikom. Račun Revolut ali N26 se priporoča
-                        kot druga možnost, Western Union, Xoom ali TransferWise pa v primeru neevropskih daril.
+                    <li>Aktivirajte vsaj 2 načina plačila.
+                      <strong>Revolut, Payeer in Paypal (preko MoneyBoxa)</strong> so najbolj priporočljivi.<br>
+
                     </li>
                 </ol>
 
@@ -342,12 +340,8 @@
                         deseas de corazón?
                     </li>
                     <li>Activar por lo menos <strong>2 métodos de pago</strong>.
-                        <strong>PayPal</strong> es obligatorio (toma 2 minutos activarlo). Te permite hacer
-                        transferencias gratuitas en la zona euro y puedes conectar tarjetas y cuenta corriente a ella.
-                        Tus datos están seguros y no se comparten con el receptor. Recomendamos la cuenta <strong>Revolut</strong>
-                        o <strong>N26</strong>
-                        como segunda opción y <strong>Western Union, Xoom o TransferWise</strong> en casos de regalos
-                        extra-europeos.
+                      <strong>Revolut, Payeer y Paypal (a través de MoneyBox)</strong> son los más recomendados.<br>
+
                     </li>
                 </ol>
 
@@ -502,13 +496,8 @@
                         Anseio do coração?
                     </li>
                     <li>Ativar pelo menos <strong>2 formas de pagamento</strong>.
-                        <strong>PayPal</strong> é obrigatório (demora 2 minutos a activá-lo).
-                        Permite-lhe transferências gratuitas na zona Euro e pode ligar-lhe cartões e contas.
-                        correntes. Os seus dados estão seguros e não são partilhados com o receptor.
-                        Recomendamos o <strong>Revolução</strong> ou <strong>N26</strong> conta como segunda opção e
-                        <strong>Ocidente
-                            Union</strong>, Xoom ou TransferWise em casos de
-                        presentes extra-europeus.
+                      <strong>Revolut, Payeer e Paypal (via MoneyBox)</strong> são os mais recomendados.<br>
+
                     </li>
                 </ol>
                 <p class="cltexth3 text-blue q-ma-lg">Passo 3: Programação e ativação do Navio</p>.
@@ -642,14 +631,8 @@
                     <li>Ecrivez <strong>Votre Rêve</strong>: quelle est la chose ou le projet que vous aimeriez réaliser
                         et que votre coeur désire ardemment ?
                     </li>
-                    <li>Activer au moins 2 <strong>moyens de paiement</strong>. <strong>PayPal</strong> est obligatoire
-                        (il faut 2 minutes pour
-                        l'activer). Il vous permet d'effectuer des transferts gratuits dans la zone Euro et vous pouvez
-                        y relier cartes bancaires et comptes courants. Vos données personnelles sont en sécurité et ne
-                        sont pas partagées avec le destinataire. Nous recommandons le compte <strong>Revolut</strong> ou
-                        <strong>N26</strong> comme
-                        deuxième option et <strong>Western Union, Xoom ou TransferWise</strong> pour les dons
-                        extra-européens.
+                    <li>Activer au moins 2 <strong>moyens de paiement</strong>
+                      <strong>Revolut, Payeer et Paypal (via MoneyBox)</strong> sont les plus recommandés.<br>
                     </li>
                 </ol>
                 <p class="cltexth3 text-blue q-ma-lg">Etape 3: PROGRAMMATION ET ACTIVATION DE DES NAVIRES</p>.
@@ -797,12 +780,7 @@
                         that your Heart is longing?
                     </li>
                     <li>Activate at least <strong>2 payment methods</strong> (is recommended).
-                        <strong>PayPal</strong> is mandatory (it takes 2 minutes to activate it).
-                        It allows you free transfers in the Euro area and you can connect cards and accounts to it.
-                        Your data is safe and not shared with the receiver.
-                        We recommend the <strong>Revolut</strong> or <strong>N26</strong> account as the second option
-                        and <strong>Western Union</strong>, Xoom or TransferWise in cases of
-                        extra-European gifts.
+                      <strong>Revolut, Payeer and Paypal (via MoneyBox)</strong> are the most recommended.<br>
                     </li>
                 </ol>
 
@@ -899,10 +877,6 @@
                         (Video-Conferenza On Line)
                     </li>
 
-                    <li>dichiaro di aver ben compreso che per la mia sicurezza devo aprire un <strong>conto
-                        Paypal</strong>
-                        per consegnare il regalo.
-                    </li>
                 </ul>
             </div>
             <div v-else-if="toolsext.isLang('si')">
@@ -927,10 +901,6 @@
                         video-konferenca)
 
                     </li>
-
-                    <li>Izjavljam, da razumem, da moram zaradi svoje varnosti odpreti <strong>Paypal</strong> račun za
-                        dostavo darila.
-                    </li>
                 </ul>
             </div>
             <div v-else-if="toolsext.isLang('es')">
@@ -948,10 +918,6 @@
 
                     <li>Declaro que he comprendido bien que debo <strong>participar al menos en una Zoom</strong> (Video
                         Conferencia En-línea).
-                    </li>
-
-                    <li>Declaro haber entendido bien que por mi seguridad tengo que abrir una <strong>cuenta de
-                        Paypal</strong> para hacer el regalo.
                     </li>
 
                     <li>
@@ -977,11 +943,6 @@
 
                     <li>Declaro que compreendi que devo <strong>participar em pelo menos um Zoom</strong>
                         (Videoconferência On Line)
-                    </li>
-
-                    <li>Eu declaro que compreendi bem que para minha segurança tenho que abrir uma <strong>conta
-                        Paypal</strong>.
-                        para entregar o presente.
                     </li>
 
                     <li>
@@ -1010,10 +971,6 @@
                         ligne);
                     </li>
 
-                    <li>Je déclare avoir bien compris que pour ma sécurité, je dois ouvrir un compte Paypal pour verser
-                        le Don;
-                    </li>
-
                     <li>Je peux exercer mon droit de rétractation dans les 14 jours suivant l'envoi du cadeau si je ne
                         souhaite plus poursuivre mon voyage.
                     </li>
@@ -1037,10 +994,6 @@
                     <li>I declare that I have well understood that I must <strong>participate at least in one
                         ZOOM</strong>
                         (Video-Conference On Line)
-                    </li>
-
-                    <li>I declare to have well understood that for my safety I have to open a <strong>Paypal</strong>
-                        account to deliver the gift.
                     </li>
 
                     <li>I can exercise my right of withdrawal within 14 days of sending the gift if I no longer wish to

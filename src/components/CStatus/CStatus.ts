@@ -16,6 +16,7 @@ import { CRequisiti } from '../CRequisiti'
 import { shared_consts } from '../../common/shared_vuejs'
 import { CGuidelines } from '../CGuidelines'
 import { CVideoPromo } from '../CVideoPromo'
+import { lists } from '../../store/Modules/lists'
 
 @Component({
   components: {
@@ -48,6 +49,16 @@ export default class CStatus extends MixinBase {
 
     return 0
   }
+
+  private DiceDiAverPartec: boolean = false
+
+  /*@Watch('UserStore.state.my.profile.ask_zoom_partecipato', { immediate: true, deep: true })
+  public array_changed() {
+    console.log('*** ask_zoom_partecipato *** ', '[', UserStore.state.my.profile.ask_zoom_partecipato, ']')
+    if (UserStore.state.my.profile.ask_zoom_partecipato !== undefined)
+      this.DiceDiAverPartec = UserStore.state.my.profile.ask_zoom_partecipato
+    console.log('*** this.DiceDiAverPartec *** ', '[', this.DiceDiAverPartec, ']')
+  }*/
 
   public arrsteps = [
     // {
@@ -175,18 +186,7 @@ export default class CStatus extends MixinBase {
       descr: 'steps.paymenttype_long',
       page: '',
       funccheck(index) {
-        let ispaypal = false
-        if (UserStore.state.my.profile.paymenttypes) {
-          if (UserStore.state.my.profile.paymenttypes.includes('paypal')) {
-            if (UserStore.state.my.profile.email_paypal)
-              ispaypal = true
-          }
-          if (UserStore.state.my.profile)
-            if (UserStore.state.my.profile.paymenttypes)
-              return (UserStore.state.my.profile.paymenttypes.length >= 1) && ispaypal
-
-        }
-        return false
+        return UserStore.state.my.profile.paymenttypes.length > 1
       },
       funccheck_error(index) {
         return true
@@ -344,10 +344,12 @@ export default class CStatus extends MixinBase {
   }
 
   public created() {
+    this.DiceDiAverPartec = UserStore.state.my.profile.ask_zoom_partecipato
+    this.my_dream = UserStore.state.my.profile.my_dream
+
     this.setstep()
     this.setsteptodo()
 
-    this.my_dream = UserStore.state.my.profile.my_dream
   }
 
   public change_mydream() {
@@ -452,33 +454,6 @@ export default class CStatus extends MixinBase {
     return UserStore.state.my.profile.paymenttypes
   }
 
-  get isselectPaypal() {
-    if (UserStore.state.my.profile) {
-      // console.log('pay', UserStore.state.my.profile.paymenttypes)
-      if (UserStore.state.my.profile.paymenttypes) {
-        if (UserStore.state.my.profile.paymenttypes.includes('paypal')) {
-          return true
-        }
-      }
-
-      return false
-    }
-
-  }
-  get isselectRevolut() {
-    if (UserStore.state.my.profile) {
-      // console.log('pay', UserStore.state.my.profile.paymenttypes)
-      if (UserStore.state.my.profile.paymenttypes) {
-        if (UserStore.state.my.profile.paymenttypes.includes('revolut')) {
-          return true
-        }
-      }
-
-      return false
-    }
-
-  }
-
   public geticonstep(mystep) {
     if (!!mystep.icon)
       return mystep.icon
@@ -526,24 +501,17 @@ export default class CStatus extends MixinBase {
 
   }
 
+  public hagiapartecipato() {
+    tools.AskGiaPartecipatoZoom(this, UserStore.state.my)
+  }
+
   get Completato9Req() {
     // return tools.Is9ReqOk(this.dashboard.myself)
     return this.CompletatoRequisiti && (this.getnuminvitati_attivi() >= 2)
   }
 
   get RequisitoPayment() {
-    let ispaypal = false
-    if (UserStore.state.my.profile.paymenttypes) {
-      if (UserStore.state.my.profile.paymenttypes.includes('paypal')) {
-        if (UserStore.state.my.profile.email_paypal)
-          ispaypal = true
-      }
-      if (UserStore.state.my.profile)
-        if (UserStore.state.my.profile.paymenttypes)
-          return (UserStore.state.my.profile.paymenttypes.length >= 1) && ispaypal
-
-    }
-    return false
+    return (UserStore.state.my.profile.paymenttypes.length > 1)
   }
 
   get percstep() {
@@ -572,6 +540,10 @@ export default class CStatus extends MixinBase {
     return this.getstep >= this.NUMSTEP_OBBLIGATORI
   }
 
+  public NoPartNoZoom() {
+    return !this.DiceDiAverPartec && !this.VistoZoom
+  }
+
   public scrolltostep(mystep) {
     this.step = mystep
     if (mystep > 0)
@@ -579,6 +551,18 @@ export default class CStatus extends MixinBase {
     const element = document.getElementById('step' + mystep)
     tools.scrollToElement(element)
 
+  }
+
+  public Callback(funz) {
+    console.log('callback')
+    if (funz === lists.MenuAction.ZOOM_GIA_PARTECIPATO) {
+      UserStore.mutations.setDiceDiAverPartecipato(true)
+      this.DiceDiAverPartec = UserStore.state.my.profile.ask_zoom_partecipato
+      // UserStore.state.my.profile.ask_zoom_partecipato = true
+
+      console.log('UserStore.state.my.profile.ask_zoom_partecipato = true')
+      console.log('this.DiceDiAverPartec', this.DiceDiAverPartec)
+    }
   }
 
   public nextstep(index) {

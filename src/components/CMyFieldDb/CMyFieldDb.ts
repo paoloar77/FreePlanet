@@ -12,6 +12,7 @@ import { CMySelect } from '../CMySelect'
 import { GlobalStore, UserStore } from '../../store/Modules'
 import { CMyChipList } from '../CMyChipList'
 import { CMyToggleList } from '../CMyToggleList'
+import translate from '@src/globalroutines/util'
 
 @Component({
   name: 'CMyFieldDb',
@@ -27,6 +28,7 @@ export default class CMyFieldDb extends MixinBase {
   @Prop({ required: false, default: false }) public disable: boolean
   @Prop({ required: false, default: '' }) public jointable: string
   @Prop({ required: false, default: 'settings' }) public table: string
+  @Prop({ required: false, default: '' }) public myimg: string
 
   public $t
   public myvalue = ''
@@ -90,9 +92,9 @@ export default class CMyFieldDb extends MixinBase {
         return '***************'
     } else {
       if (val === undefined)
-        return '-'
+        return ' <span class="text-grey">(' + translate('reg.select') + ')</span> '
       else if (val === '') {
-        return '-'
+        return ' <span class="text-grey">(' + translate('reg.select') + ')</span> '
       } else {
         let mystr = tools.firstchars(val, 5000)
         if (val) {
