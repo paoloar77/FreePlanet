@@ -285,7 +285,7 @@ export interface ITimeLineMain {
 }
 
 export interface IImgGallery {
-  _id?:string
+  _id?: string
   imagefile: string
   order?: number
   alt?: string
@@ -411,5 +411,5 @@ export const DefaultNewsState: INewsState = {
   totemail: 0,
   totsubscribed: 0,
   totunsubscribed: 0,
-  totsentlastid: 0,
+  totsentlastid: 0
 }

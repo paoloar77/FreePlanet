@@ -118,14 +118,14 @@
             <p class="q-ml-sm">{{ $t('dashboard.legenda_title')}}</p>
             <q-list bordered class="rounded-borders justify-center q-pa-sm">
               <div class="row items-center q-pa-xs">
-                <CCardState :mytext="$t('pages.statusreg.req')" :myval="7" :myperc="(7 / 9) * 100" size="50px"
+                <CCardState :mytext="$t('pages.statusreg.req')" :myval="5" :myperc="(5 / 7) * 100" size="50px"
                             size_mob="40px"
                             fontsize="0.75rem" myclass="my-card-small-stat" mycolor="orange">
                 </CCardState>
                 <div class="bg-blue text-white clBorderxs q-ml-sm">{{$t('pages.statusreg.req7')}}</div>
               </div>
               <div class="row items-center q-pa-xs">
-                <CCardState :mytext="$t('pages.statusreg.req')" :myval="9" :myperc="100" size="50px" size_mob="40px"
+                <CCardState :mytext="$t('pages.statusreg.req')" :myval="7" :myperc="100" size="50px" size_mob="40px"
                             fontsize="0.75rem" myclass="my-card-small-stat" mycolor="green"></CCardState>
                 <div class="bg-blue text-white clBorderxs q-ml-sm">{{$t('pages.statusreg.req9', {sitename:
                   $t('ws.sitename')})}}

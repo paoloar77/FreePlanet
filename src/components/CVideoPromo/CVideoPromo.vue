@@ -4,42 +4,18 @@
     <CTitleBanner :title="`Video ` + $t('site.sitename')"></CTitleBanner>
     <CImgText src="">
 
-      <CTitleBanner class="q-pa-xs" :title="$t('steps.video_intro_1', {sitename: $t('ws.sitename')})" bgcolor="bg-primary"
+      <CTitleBanner class="q-pa-xs" :title="$t('steps.video_intro_1', {sitename: $t('ws.sitename')})"
+                    bgcolor="bg-primary"
                     clcolor="text-white"
                     myclass="myshad" canopen="true" :visible="true">
 
-        <CVideo myvideokey="ybrjGr52jOI">
-
-        </CVideo>
+        <div v-if="toolsext.isLang('fr')">
+          <CVideo myvideokey="GZR0ncSaG8s"></CVideo>
+        </div>
+        <div v-else>
+          <CVideo myvideokey="DWfQzbOCK3s"></CVideo>
+        </div>
       </CTitleBanner>
-      <CTitleBanner class="q-pa-xs" :title="$t('steps.video_intro_2', {sitename: $t('ws.sitename')})" bgcolor="bg-primary"
-                    clcolor="text-white"
-                    myclass="myshad" canopen="true" :visible="false">
-
-        <CVideo myvideokey="u90hVKBRD6w">
-
-        </CVideo>
-      </CTitleBanner>
-
-        <!--
-      <CTitleBanner class="q-pa-xs" :title="$t('steps.video_intro_3')" bgcolor="bg-primary"
-                    clcolor="text-white"
-                    myclass="myshad" canopen="true" :visible="false">
-
-        <CVideo myvideokey="ameNIjUWC6A">
-
-        </CVideo>
-      </CTitleBanner>
-
-      <CTitleBanner class="q-pa-xs" :title="$t('steps.video_intro_4')" bgcolor="bg-primary"
-                    clcolor="text-white"
-                    myclass="myshad" canopen="true" :visible="false">
-
-        <CVideo myvideokey="OVlriFnOxG4">
-
-        </CVideo>
-      </CTitleBanner>
-      -->
 
       <div v-if="showconditions">
         <q-checkbox
@@ -61,5 +37,5 @@
 </script>
 
 <style lang="scss" scoped>
-  @import './CVideoPromo';
+@import './CVideoPromo';
 </style>

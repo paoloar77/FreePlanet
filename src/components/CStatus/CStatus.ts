@@ -143,7 +143,7 @@ export default class CStatus extends MixinBase {
         return ''
       }
     },
-    {
+    /*{
       title: 'steps.zoom',
       descr: 'steps.zoom_long',
       page: '/zoom',
@@ -180,7 +180,7 @@ export default class CStatus extends MixinBase {
       funcko() {
         return ''
       },
-    },
+    },*/
     {
       title: 'steps.paymenttype',
       descr: 'steps.paymenttype_long',
@@ -345,7 +345,7 @@ export default class CStatus extends MixinBase {
 
   public created() {
     this.DiceDiAverPartec = UserStore.state.my.profile.ask_zoom_partecipato
-    this.my_dream = UserStore.state.my.profile.my_dream
+    // this.my_dream = UserStore.state.my.profile.my_dream
 
     this.setstep()
     this.setsteptodo()
@@ -490,9 +490,8 @@ export default class CStatus extends MixinBase {
 
   get CompletatoRequisiti() {
     try {
-      return this.VistoZoom && this.RequisitoPayment &&
+      return  this.RequisitoPayment &&
         this.TelegVerificato &&
-        (UserStore.state.my.profile.my_dream.length >= 10) &&
         tools.isBitActive(UserStore.state.my.profile.saw_and_accepted, shared_consts.Accepted.CHECK_SEE_VIDEO_PRINCIPI.value) &&
         tools.isBitActive(UserStore.state.my.profile.saw_and_accepted, shared_consts.Accepted.CHECK_READ_GUIDELINES.value)
     }catch (e) {
@@ -501,9 +500,9 @@ export default class CStatus extends MixinBase {
 
   }
 
-  public hagiapartecipato() {
+  /*public hagiapartecipato() {
     tools.AskGiaPartecipatoZoom(this, UserStore.state.my)
-  }
+  }*/
 
   get Completato9Req() {
     // return tools.Is9ReqOk(this.dashboard.myself)

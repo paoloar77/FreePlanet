@@ -128,7 +128,7 @@ export default class CMyRequirement extends MixinUsers {
       },
       info: '',
     },
-    {
+    /*{
       icon: 'fas fa-video',
       textlang: 'steps.zoom',
       textadd(user) {
@@ -156,7 +156,7 @@ export default class CMyRequirement extends MixinUsers {
             return false
       },
       info: '',
-    },
+    },*/
     {
       icon: 'far fa-credit-card',
       textlang: 'steps.paymenttype',

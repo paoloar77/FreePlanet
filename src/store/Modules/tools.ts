@@ -3736,9 +3736,9 @@ export const tools = {
     req += user.profile.teleg_id > 0 ? 1 : 0
     req += this.isBitActive(user.profile.saw_and_accepted, shared_consts.Accepted.CHECK_READ_GUIDELINES.value) ? 1 : 0
     req += this.isBitActive(user.profile.saw_and_accepted, shared_consts.Accepted.CHECK_SEE_VIDEO_PRINCIPI.value) ? 1 : 0
-    req += user.profile.saw_zoom_presentation ? 1 : 0
-    if (!!user.profile.my_dream)
-      req += user.profile.my_dream.length >= 10 ? 1 : 0
+    // req += user.profile.saw_zoom_presentation ? 1 : 0
+    // if (!!user.profile.my_dream)
+    //   req += user.profile.my_dream.length >= 10 ? 1 : 0
     req += this.isSel2Metodi(user) ? 1 : 0
 
     return req

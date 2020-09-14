@@ -584,7 +584,6 @@
                 </div>
               </div>
               <q-table
-                dense
                 color="primary"
                 dense
                 flat

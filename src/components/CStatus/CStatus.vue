@@ -212,6 +212,7 @@
 
             </div>
           </div>
+          <!--
           <div v-else-if="mystep.title === 'steps.dream'">
             <div v-if="mystep.descr">
               <div v-html="$t(mystep.descr, {sitename: $t('ws.sitename')})"></div>
@@ -224,16 +225,8 @@
 
             </q-input>
 
-            <!--
-                        <CMyFieldDb :title="$t('reg.my_dream')"
-                                    table="users"
-                                    mykey="profile"
-                                    mysubkey="my_dream"
-                                    :type="tools.FieldType.string"
-                        >
-                        </CMyFieldDb>
-            -->
           </div>
+
           <div v-else-if="mystep.title === 'steps.zoom'">
 
             <CRequisiti :statebool="VistoZoom" :msgTrue="$t('steps.zoom_si_partecipato')"
@@ -319,7 +312,8 @@
               </div>
             </CTitleBanner>
 
-          </div>
+          </div> -->
+
           <div v-else-if="mystep.title === 'steps.sharemovement'">
 
             <!--<CRequisiti :statebool="getnuminvitati() >= 2" :msgTrue="$t('steps.sharemovement_hai_invitato')"
