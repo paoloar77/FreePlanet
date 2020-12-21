@@ -10,12 +10,12 @@
           <CCardState :mytext="$t('pages.statusreg.reg')" :myval="datastat.num_reg"
                       :myperc="100"></CCardState>
 
-          <CCardState :mytext="$t('pages.statusreg.passeggeri')"
+          <!--<CCardState :mytext="$t('pages.statusreg.passeggeri')"
                       mycolor="blue"
                       size="150px"
                       size_mob="130px"
                       :myval="datastat.num_passeggeri"
-                      :myperc="100"></CCardState>
+                      :myperc="100"></CCardState>-->
 
           <!--<CCardState :mytext="$t('statusreg.imbarcati')"
                       size="150px"
@@ -81,15 +81,17 @@
             </transition-group>
           </div>
 
-          <CGeoChart :mydata="datastat.arr_nations">
+          <!--<CGeoChart :mydata="datastat.arr_nations">
 
-          </CGeoChart>
+          </CGeoChart>-->
+
           <div class="row q-pa-sm text-center justify-center">
+            <!--
             <div class="clBorderZoom">
               <CListNationality :mydata="datastat.arr_nations">
 
               </CListNationality>
-            </div>
+            </div>-->
             <div class="clBorderTutor">
               <CLineChart :mydata="datastat.reg_daily" :title="$t('stat.reg_daily')">
 
@@ -97,19 +99,11 @@
               <CLineChart :mydata="datastat.reg_weekly" :title="$t('stat.reg_weekly')">
 
               </CLineChart>
-              <CLineChart :mydata="datastat.reg_daily" :title="$t('stat.reg_total')"
+              <!--<CLineChart :mydata="datastat.reg_daily" :title="$t('stat.reg_total')"
                           :offset="datastat.numreg_untilday" :sum="true"
                           :mycolors="['#0b0', '#666']">
 
-              </CLineChart>
-            </div>
-            <div class="clBorderSteps">
-              <CLineChart :mydata="datastat.imbarcati_daily" :title="$t('stat.imbarcati')">
-
-              </CLineChart>
-              <CLineChart :mydata="datastat.imbarcati_weekly" :title="$t('stat.imbarcati_weekly')">
-
-              </CLineChart>
+              </CLineChart>-->
             </div>
           </div>
         </div>

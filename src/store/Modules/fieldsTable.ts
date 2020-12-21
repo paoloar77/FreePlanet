@@ -163,6 +163,22 @@ const colTableWhere = [
   AddCol(DeleteRec)
 ]
 
+const colTableProducts = [
+  AddCol({ name: 'name', label_trans: 'products.name' }),
+  AddCol({ name: 'description', label_trans: 'products.description' }),
+  AddCol({ name: 'icon', label_trans: 'products.icon' }),
+  AddCol({ name: 'img', label_trans: 'products.img' }),
+  AddCol({ name: 'department', label_trans: 'products.department' }),
+  AddCol({ name: 'idProducer', label_trans: 'products.idProducer' }),
+  AddCol({ name: 'category', label_trans: 'products.category' }),
+  AddCol({ name: 'price', label_trans: 'products.price', fieldtype: tools.FieldType.number }),
+  AddCol({ name: 'color', label_trans: 'products.color' }),
+  AddCol({ name: 'size', label_trans: 'products.size' }),
+  AddCol({ name: 'quantity', label_trans: 'products.quantity', fieldtype: tools.FieldType.number }),
+  AddCol({ name: 'date', label_trans: 'products.date', fieldtype: tools.FieldType.date }),
+  AddCol(DeleteRec)
+]
+
 const colcontribtype = [
   AddCol({ name: 'label', label_trans: 'proj.longdescr' }),
   AddCol({ name: 'showprice', label_trans: 'event.showprice', fieldtype: tools.FieldType.boolean }),
@@ -295,7 +311,6 @@ const colTablePermission = [
   AddCol({ name: 'label', label_trans: 'proj.longdescr' }),
   AddCol(DeleteRec)
 ]
-
 
 const colTableOperator = [
   AddCol({ name: 'username', label_trans: 'reg.username_short' }),
@@ -837,6 +852,13 @@ export const fieldsTable = {
       columns: colTableOperator,
       colkey: 'username',
       collabel: (rec) => rec.name + ' ' + rec.surname
+    },
+    {
+      value: 'products',
+      label: 'Prodotti',
+      columns: colTableProducts,
+      colkey: 'id',
+      collabel: 'name'
     },
     {
       value: 'wheres',

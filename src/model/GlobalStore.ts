@@ -334,6 +334,7 @@ export interface IFunctionality {
   SHOW_IF_IS_SERVER_CONNECTION?: boolean
   ENABLE_TODOS_LOADING?: boolean
   ENABLE_PROJECTS_LOADING?: boolean
+  ENABLE_ECOMMERCE?: boolean
   SHOW_NEWSLETTER?: boolean
   SHOW_ONLY_POLICY?: boolean
   SHOW_MESSAGES?: boolean

@@ -290,24 +290,27 @@
 
               </CTitleBanner>
 
-              <div class="text-center">
-                <q-btn class="q-ma-md" rounded size="md"
-                       icon="fas fa-info"
-                       color="primary" @click="shownuovoviaggio=true"
-                       :label="$t('steps.nuovo_imbarco')">
-
-                </q-btn>
-              </div>
-
               <div v-if="!!dashboard.myself" class="q-pa-xs text-center">
 
                 <div v-if="!!dashboard.myself.name">
                   <div v-if="!HasNave">
-                    <CRequisiti :statebool="Completato9Req" :msgTrue="$t('steps.enter_nave_9req_ok')"
+                    <CRequisiti :statebool="Completato9Req" :msgTrue="$t('steps.enter_nave_9req_ok', {sitename:
+                  $t('ws.sitename')})"
                                 :color_ko="true"
                                 :msgFalse="$t('steps.enter_nave_9req_ko')">
                     </CRequisiti>
                   </div>
+
+                  <div class="text-center">
+                    <q-btn class="q-ma-md" rounded size="md"
+                           icon="fas fa-ship"
+                           color="positive" @click="shownuovoviaggio=true"
+                           :label="$t('steps.nuovo_imbarco')">
+
+                    </q-btn>
+                  </div>
+
+
                   <q-card class="my-card-shadow yes_shadow">
                     <q-img
                       src="statics/images/listanavi.jpg"
@@ -634,12 +637,13 @@
 
             </div>
             <br>
-            <div v-html="$t('steps.inserisci_invitante')" class="ins_invitante">
+            <!--<div v-html="$t('steps.inserisci_invitante')" class="ins_invitante">
 
-            </div>
+            </div>-->
             <br>
 
 
+            <!--
             <div class="column q-gutter-sm justify-center text-center">
               <q-input
                 bg-color="lightblue"
@@ -660,7 +664,8 @@
 
               </q-input>
 
-              <!--<q-toggle v-model="notifBot" :label="$t('dashboard.sendnotification')"/>-->
+              <q-toggle v-model="notifBot" :label="$t('dashboard.sendnotification')"/>
+              -->
 
               <q-btn class="q-ma-md" rounded size="md"
                      icon="fas fa-ship"
@@ -668,7 +673,6 @@
                      color="positive" @click="addNuovoImbarco"
                      :label="$t('steps.nuovo_imbarco')">
               </q-btn>
-            </div>
           </div>
         </q-card-section>
       </q-card>

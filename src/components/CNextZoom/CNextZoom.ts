@@ -14,7 +14,7 @@ import { CCopyBtn } from '../CCopyBtn'
 import { date } from 'quasar'
 
 @Component({
-  name: 'CStatusReg',
+  name: 'CNextZoom',
   components: { CTitleBanner, CCardState, CCopyBtn }
 })
 

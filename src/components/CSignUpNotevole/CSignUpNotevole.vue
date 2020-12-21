@@ -7,6 +7,7 @@
       </p>
     </div>
 
+    <!--
     <q-banner
       v-if="!nuovareg"
       rounded
@@ -23,6 +24,8 @@
       style="text-align: center; font-size:1rem;">
       <span class="mybanner">{{ $t('reg.nuove_registrazioni')}}</span>
     </q-banner>
+
+    -->
 
     <!--Prova URL :  {{env('PROVA_PAOLO')}}-->
 

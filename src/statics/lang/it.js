@@ -82,10 +82,9 @@ const msg_it = {
       reg_total: 'Registrazioni Totali',
     },
     steps: {
-      nuovo_imbarco: 'Prenota un altro Viaggio',
-      vuoi_entrare_nuova_nave: 'Desideri aiutare il Movimento ad avanzare e intendi entrare in un\'altra Nave?<br>Effettuando un Nuovo Dono di 33€, potrai percorrere un altro viaggio ed avere un\'altra opportunità di diventare Sognatore!<br>' +
-      'Se confermi verrai aggiunto alla lista d\'attesa per i prossimi imbarchi.',
-      inserisci_invitante: 'Inserisci qui sotto l\'username della persona che vuoi aiutare, donandoti come suo Invitato:',
+      nuovo_imbarco: 'Entra Effettuando il tuo Dono',
+      vuoi_entrare_nuova_nave: 'Scegli il metodo di pagamento che preferisci, inviando 33€ al Sognatore.<br>Ricorda di mettere nei commenti/causale del pagamento: "<strong>Dono</strong>"',
+      inserisci_invitante: 'Facoltativo: Puoi inserire qui sotto l\'username della persona che vuoi aiutare, donandoti come suo Invitato:',
       vuoi_cancellare_imbarco: 'Sicuro di voler cancellare questo imbarco in Nave AYNI?',
       sei_stato_aggiunto: 'Sei stato aggiunto alla lista d\'imbarco! Nei prossimi giorni verrai aggiunto ad una Nuova Nave in partenza!',
       completed: 'Completati',
@@ -124,7 +123,7 @@ const msg_it = {
       enter_prog_requisiti_ok: 'Hai completato tutti i 5 requisiti per entrare nella Lista d\'Imbarco.<br>',
       enter_prog_msg: 'Riceverai un messaggio nei prossimi giorni su AYNI BOT, appena la tua Nave sarà pronta!',
       enter_prog_msg_2: 'Ricorda che più persone inviti e più sali di Posizione, per accedere alla prossima Nave!',
-      enter_nave_9req_ok: 'COMPLIMENTI! Hai Completato TUTTI i 7 Passi della Guida! Grazie per Aiutare {sitename} ad Espandersi!<br>Potrai molto presto partire con il tuo Viaggio, facendo il tuo dono e proseguendo verso il Sognatore',
+      enter_nave_9req_ok: 'COMPLIMENTI! Hai Completato TUTTI i 7 Passi della Guida! Grazie per Aiutare {sitename} ad Espandersi !<br>Ora puoi Iniziare il tuo Nuovo Viaggio, effettuando il tuo Dono e proseguendo verso il Sognatore',
       enter_nave_9req_ko: 'Ricorda che puoi Aiutare a far Crescere ed Espandere il Movimento, Condividendo con chiunque questo nostro viaggio!',
       enter_prog: 'Entro nella Lista d\'Imbarco',
       enter_prog_long: 'Ricorda che puoi Aiutare a far Crescere ed Espandere il Movimento, Condividendo con chiunque questo nostro viaggio!<br>',

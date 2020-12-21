@@ -67,6 +67,7 @@ export const tools = {
 
   IDAPP_AYNI: '7',
   IDAPP_SIP: '9',
+  IDAPP_CNM: '10',
 
   TipoMsg: {
     SEND_LINK_CHAT_DONATORI: 1,
@@ -78,7 +79,7 @@ export const tools = {
     SEND_MSG_A_MEDIATORI: 1010,
     SEND_MSG_A_SOGNATORE: 1020,
     SEND_MSG_A_UTENTE_SOSTITUITO: 1030,
-    SEND_MSG_DONO_RICEVUTO_CORRETTAMENTE: 1040,
+    SEND_MSG_DONO_RICEVUTO_CORRETTAMENTE: 1040
   },
 
   listBestColor: [
@@ -1491,7 +1492,7 @@ export const tools = {
         myfunc: func,
         data: par.param2,
         username: par.param2.username,
-        notifBot: null,
+        notifBot: null
       }
 
       // if (par.param2.notifBot)
@@ -3242,16 +3243,19 @@ export const tools = {
 
   isBitActive(bit, whattofind) {
     if (whattofind > 0)
+      // tslint:disable-next-line:no-bitwise
       return ((bit & whattofind) === whattofind)
     else
       return false
   },
 
   SetBit(myval, bit) {
+    // tslint:disable-next-line:no-bitwise
     myval |= bit
     return myval
   },
   UnSetBit(myval, bit) {
+    // tslint:disable-next-line:no-bitwise
     myval &= ~bit
     return myval
   },
@@ -3407,7 +3411,7 @@ export const tools = {
 
   CapitalizeAllWords(str) {
     const splitStr = str.toLowerCase().split(' ')
-    for (var i = 0; i < splitStr.length; i++) {
+    for (let i = 0; i < splitStr.length; i++) {
       // You do not need to check if i is larger than splitStr length, as your for does that for you
       // Assign it back to the array
       splitStr[i] = splitStr[i].charAt(0).toUpperCase() + splitStr[i].substring(1)
