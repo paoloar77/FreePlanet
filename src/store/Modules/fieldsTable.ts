@@ -163,18 +163,53 @@ const colTableWhere = [
   AddCol(DeleteRec)
 ]
 
-const colTableProducts = [
+export const colTableProducer = [
+  AddCol({ name: 'name', label_trans: 'producer.name' }),
+  AddCol({ name: 'description', label_trans: 'producer.description' }),
+  AddCol({ name: 'referent', label_trans: 'producer.referent' }),
+  AddCol({ name: 'region', label_trans: 'producer.region' }),
+  AddCol({ name: 'city', label_trans: 'producer.city' }),
+  AddCol({ name: 'img', label_trans: 'producer.img' }),
+  AddCol({ name: 'website', label_trans: 'producer.website' }),
+]
+
+export const colTableStorehouse = [
+  AddCol({ name: 'name', label_trans: 'store.name' }),
+  AddCol({ name: 'description', label_trans: 'store.description' }),
+  AddCol({ name: 'referent', label_trans: 'store.referent' }),
+  AddCol({ name: 'address', label_trans: 'store.address' }),
+  AddCol({ name: 'city', label_trans: 'store.city' }),
+  AddCol({ name: 'region', label_trans: 'store.region' }),
+  AddCol({ name: 'img', label_trans: 'store.img' }),
+  AddCol({ name: 'website', label_trans: 'store.website' }),
+]
+
+export const colTableProducts = [
   AddCol({ name: 'name', label_trans: 'products.name' }),
   AddCol({ name: 'description', label_trans: 'products.description' }),
   AddCol({ name: 'icon', label_trans: 'products.icon' }),
   AddCol({ name: 'img', label_trans: 'products.img' }),
   AddCol({ name: 'department', label_trans: 'products.department' }),
-  AddCol({ name: 'idProducer', label_trans: 'products.idProducer' }),
+  // AddCol({ name: 'idProducer', label_trans: 'products.idProducer' }),
+  AddCol({
+    name: 'idProducer',
+    label_trans: 'products.producer',
+    fieldtype: tools.FieldType.select,
+    jointable: 'producers'
+  }),
+  AddCol({
+    name: 'idStorehouses',
+    label_trans: 'storehouses.name',
+    fieldtype: tools.FieldType.multiselect,
+    jointable: 'storehouses'
+  }),
   AddCol({ name: 'category', label_trans: 'products.category' }),
   AddCol({ name: 'price', label_trans: 'products.price', fieldtype: tools.FieldType.number }),
   AddCol({ name: 'color', label_trans: 'products.color' }),
   AddCol({ name: 'size', label_trans: 'products.size' }),
-  AddCol({ name: 'quantity', label_trans: 'products.quantity', fieldtype: tools.FieldType.number }),
+  AddCol({ name: 'quantityAvailable', label_trans: 'products.quantityAvailable', fieldtype: tools.FieldType.number }),
+  AddCol({ name: 'weight', label_trans: 'products.weight', fieldtype: tools.FieldType.number }),
+  AddCol({ name: 'stars', label_trans: 'products.stars', fieldtype: tools.FieldType.number }),
   AddCol({ name: 'date', label_trans: 'products.date', fieldtype: tools.FieldType.date }),
   AddCol(DeleteRec)
 ]
@@ -857,8 +892,22 @@ export const fieldsTable = {
       value: 'products',
       label: 'Prodotti',
       columns: colTableProducts,
-      colkey: 'id',
+      colkey: '_id',
       collabel: 'name'
+    },
+    {
+      value: 'producers',
+      label: 'Produttori',
+      columns: colTableProducer,
+      colkey: '_id',
+      collabel: 'name'
+    },
+    {
+      value: 'storehouses',
+      label: 'Magazzini',
+      columns: colTableStorehouse,
+      colkey: '_id',
+      collabel: (rec) => rec.name + ' (' + rec.city + ')'
     },
     {
       value: 'wheres',

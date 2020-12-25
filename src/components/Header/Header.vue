@@ -108,6 +108,14 @@
                icon="menu"
                @click="rightDrawerOpen = !rightDrawerOpen">
         </q-btn>
+        <q-btn class="q-mx-xs" v-if="static_data.functionality.ENABLE_ECOMMERCE && isLogged" round dense flat
+               @click="rightCartOpen = !rightCartOpen" icon="fas fa-shopping-cart">
+
+
+          <q-badge v-if="getnumItemsCart > 0" color="red" floating transparent>
+            {{getnumItemsCart}}
+          </q-badge>
+        </q-btn>
         <q-btn class="q-mx-xs" v-if="static_data.functionality.SHOW_USER_MENU && isLogged" round dense flat
                @click="rightDrawerOpen = !rightDrawerOpen" :icon="getMyImgforIcon">
         </q-btn>
@@ -128,6 +136,15 @@
 
     </q-drawer>
 
+    <!-- USER BAR -->
+    <q-drawer v-if="static_data.functionality.ENABLE_ECOMMERCE" v-model="rightCartOpen" side="right" elevated>
+      <q-btn class="absolute-top-right" style="margin-right: 10px; color: white;"
+             dense flat round icon="close" @click="rightCartOpen = !rightCartOpen">
+      </q-btn>
+      <div v-if="isLogged" class="text-weight-bold text-cart">Carrello
+      </div>
+      <CMyCart></CMyCart>
+    </q-drawer>
     <!-- USER BAR -->
     <q-drawer v-if="static_data.functionality.SHOW_USER_MENU" v-model="rightDrawerOpen" side="right" elevated>
       <div id="profile">

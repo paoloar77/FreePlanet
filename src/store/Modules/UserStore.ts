@@ -49,7 +49,13 @@ export const DefaultUser: IUserFields = {
   downline: [],
   calcstat: DefaultCalc,
   dashboard: null,
-  mydownline: null
+  mydownline: null,
+  cart: {
+    userId: '',
+    items: [],
+    totalPrice: 0,
+    totalQty: 0
+  }
 }
 
 export const DefaultProfile: IUserProfile = {

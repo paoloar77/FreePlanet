@@ -164,6 +164,16 @@ export const tools = {
     PRIORITY_LOW: 0
   },
 
+  OrderStatus: {
+    NONE: 0,
+    IN_CART: 1,
+    CHECKOUT_CONFIRMED: 2,
+    PAYED: 3,
+    DELIVEDED: 4,
+    RECEIVED: 5,
+    CANCELED: 10,
+  },
+
   Status: {
     NONE: 0,
     OPENED: 1,

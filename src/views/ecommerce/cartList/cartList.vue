@@ -12,10 +12,10 @@
   </q-page>
 </template>
 
-<script lang="ts" src="./productsList.ts">
+<script lang="ts" src="./cartList.ts">
 
 </script>
 
 <style lang="scss" scoped>
-@import './productsList';
+@import './cartList';
 </style>

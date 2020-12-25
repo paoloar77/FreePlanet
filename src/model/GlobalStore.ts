@@ -2,6 +2,7 @@ import { IAction } from '@src/model/Projects'
 import { Component } from 'vue-router/types/router'
 import { lists } from '@src/store/Modules/lists'
 import { IPaymentType } from '@src/model/UserStore'
+import { ICart, IProducer, IProduct, IStorehouse } from '@src/model/Products'
 
 export interface IPost {
   title: string
@@ -149,6 +150,7 @@ export interface IGlobalState {
   menuCollapse: boolean
   leftDrawerOpen: boolean
   RightDrawerOpen: boolean
+  rightCartOpen: boolean
   category: string
   stateConnection: string
   networkDataReceived: boolean
@@ -171,6 +173,8 @@ export interface IGlobalState {
   opzemail: ISettings[],
   mailinglist: IMailinglist[],
   calzoom: ICalZoom[],
+  producers: IProducer[],
+  storehouses: IStorehouse[],
   autoplaydisc: number
 }
 

@@ -1,4 +1,5 @@
 import { IToken } from 'model/other'
+import { ICart } from '@src/model/Products'
 
 const enum ESexType {
   None = 0,
@@ -86,6 +87,7 @@ export interface IUserFields {
   numNaviEntrato?: number
   numinvitati?: number
   numinvitatiattivi?: number
+  cart?: ICart
 }
 
 /*

@@ -13,7 +13,7 @@ import { costanti } from '@src/store/Modules/costanti'
 import { tools } from '@src/store/Modules/tools'
 import { toolsext } from '@src/store/Modules/toolsext'
 import * as ApiTables from '@src/store/Modules/ApiTables'
-import { CalendarStore, GlobalStore, MessageStore, Projects, Todos, UserStore } from '@store'
+import { CalendarStore, GlobalStore, MessageStore, Products, Projects, Todos, UserStore } from '@store'
 import messages from '../../statics/i18n'
 import globalroutines from './../../globalroutines/index'
 
@@ -45,6 +45,7 @@ const state: IGlobalState = {
   menuCollapse: true,
   leftDrawerOpen: true,
   RightDrawerOpen: false,
+  rightCartOpen: false,
   stateConnection: stateConnDefault,
   networkDataReceived: false,
   cfgServer: [],
@@ -80,7 +81,9 @@ const state: IGlobalState = {
   gallery: [],
   mailinglist: [],
   mypage: [],
-  calzoom: []
+  calzoom: [],
+  producers: [],
+  storehouses: []
 }
 
 async function getConfig(id) {
@@ -197,6 +200,10 @@ namespace Getters {
       return GlobalStore.state.mypage
     else if (table === tools.TABCALZOOM)
       return GlobalStore.state.calzoom
+    else if (table === 'producers')
+      return GlobalStore.state.producers
+    else if (table === 'storehouses')
+      return GlobalStore.state.storehouses
     else if (table === 'paymenttypes')
       return GlobalStore.state.paymenttypes
     else if (table === 'bookings')
@@ -1080,6 +1087,14 @@ namespace Actions {
           GlobalStore.state.paymenttypes = (res.data.paymenttypes) ? [...res.data.paymenttypes] : []
           GlobalStore.state.gallery = (res.data.gallery) ? [...res.data.gallery] : []
           GlobalStore.state.calzoom = (res.data.calzoom) ? [...res.data.calzoom] : []
+          GlobalStore.state.producers = (res.data.producers) ? [...res.data.producers] : []
+          GlobalStore.state.storehouses = (res.data.storehouses) ? [...res.data.storehouses] : []
+          // console.log('res.data.cart', res.data.cart)
+          if (res.data.cart)
+            Products.state.cart = (res.data.cart) ? {...res.data.cart} : {}
+          else
+            Products.state.cart = {}
+
 
           if (showall) {
             GlobalStore.state.newstosent = (res.data.newstosent) ? [...res.data.newstosent] : []

@@ -1,20 +1,14 @@
 <template>
-    <div>
-        <form>
-            <div class="q-gutter-xs">
-              Prodotti:
-              <ProductsList>
+  <div>
+    <ProductsList>
 
-              </ProductsList>
-            </div>
-
-        </form>
-    </div>
+    </ProductsList>
+  </div>
 </template>
 
 <script lang="ts" src="./CECommerce.ts">
 </script>
 
 <style lang="scss" scoped>
-    @import './CECommerce.scss';
+@import './CECommerce.scss';
 </style>

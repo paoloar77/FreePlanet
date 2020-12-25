@@ -5,7 +5,7 @@ import drawer from '../../layouts/drawer/drawer.vue'
 import messagePopover from '../../layouts/toolbar/messagePopover/messagePopover.vue'
 import { CSignIn } from '../../components/CSignIn'
 
-import { GlobalStore, UserStore } from '@modules'
+import { GlobalStore, Products, UserStore } from '@modules'
 // import { StateConnection } from '../../model'
 import { Prop, Watch } from 'vue-property-decorator'
 import { tools } from '../../store/Modules/tools'
@@ -17,13 +17,14 @@ import { static_data } from '../../db/static_data'
 import MixinUsers from '../../mixins/mixin-users'
 import { CMyAvatar } from '../CMyAvatar'
 import { CSigninNoreg } from '../CSigninNoreg'
+import { CMyCart } from '@components'
 
 @Component({
   name: 'Header',
   mixins: [MixinUsers],
   components: {
     drawer,
-    messagePopover, CSigninNoreg, CMyAvatar
+    messagePopover, CSigninNoreg, CMyAvatar, CMyCart
   }
 })
 
@@ -122,8 +123,16 @@ export default class Header extends Vue {
     return GlobalStore.state.RightDrawerOpen
   }
 
+  get rightCartOpen() {
+    return GlobalStore.state.rightCartOpen
+  }
+
   set rightDrawerOpen(value) {
     GlobalStore.state.RightDrawerOpen = value
+  }
+
+  set rightCartOpen(value) {
+    GlobalStore.state.rightCartOpen = value
   }
 
   get lang() {
@@ -368,6 +377,21 @@ export default class Header extends Vue {
   public clickregister() {
     this.rightDrawerOpen = false
     this.$router.replace('/signup')
+  }
+
+  get getnumItemsCart() {
+    const arrcart = Products.state.cart
+    if (!!arrcart) {
+      if (!!arrcart.items) {
+        const total = arrcart.items.reduce((sum, item) => sum + item.order.quantity, 0)
+        return total
+      }
+    }
+    return 0
+  }
+
+  get getcart() {
+    return Products.state.cart
   }
 
   get getClassColorHeader() {
