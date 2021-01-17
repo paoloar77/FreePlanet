@@ -6,7 +6,7 @@ import { CCardState } from '../CCardState'
 import { CCopyBtn } from '../CCopyBtn'
 
 import { IOrder, IProduct } from '@src/model'
-import { Products, UserStore } from '@store'
+import { GlobalStore, Products, UserStore } from '@store'
 import { CSingleCart } from '../../components/CSingleCart'
 import MixinUsers from '@src/mixins/mixin-users'
 
@@ -43,5 +43,9 @@ export default class CMyCart extends MixinUsers {
     } else {
       return 0
     }
+  }
+
+  public closecart() {
+    GlobalStore.state.rightCartOpen = false
   }
 }

@@ -63,6 +63,6 @@ export default class Vreg extends Vue {
   }
 
   public openrighttoolbar() {
-    GlobalStore.state.RightDrawerOpen = true
+    GlobalStore.state.rightDrawerOpen = true
   }
 }

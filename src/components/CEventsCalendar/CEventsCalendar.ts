@@ -467,7 +467,7 @@ export default class CEventsCalendar extends MixinEvents {
   public addBookEventMenu(eventparam) {
     if (!UserStore.state.isLogged || !UserStore.state.my.verified_email) {
       // Visu right Toolbar to make SignIn
-      GlobalStore.state.RightDrawerOpen = true
+      GlobalStore.state.rightDrawerOpen = true
       tools.showNeutralNotif(this.$q, this.$t('login.needlogin'))
       tools.scrollToTop()
       // window.scrollTo(0, 0)
@@ -490,7 +490,7 @@ export default class CEventsCalendar extends MixinEvents {
   public askForInfoEventMenu(eventparam) {
     if (!UserStore.state.isLogged || !UserStore.state.my.verified_email) {
       // Visu right Toolbar to make SignIn
-      GlobalStore.state.RightDrawerOpen = true
+      GlobalStore.state.rightDrawerOpen = true
 
       tools.showNeutralNotif(this.$q, this.$t('login.needlogin'))
       tools.scrollToTop()

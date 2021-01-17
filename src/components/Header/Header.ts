@@ -18,6 +18,7 @@ import MixinUsers from '../../mixins/mixin-users'
 import { CMyAvatar } from '../CMyAvatar'
 import { CSigninNoreg } from '../CSigninNoreg'
 import { CMyCart } from '@components'
+import { shared_consts } from '@src/common/shared_vuejs'
 
 @Component({
   name: 'Header',
@@ -60,6 +61,18 @@ export default class Header extends Vue {
 
   get isManager() {
     return UserStore.state.isManager
+  }
+
+  get isSocio() {
+    return UserStore.state.my.profile.socio
+  }
+
+  get isSocioResidente() {
+    return UserStore.state.my.profile.socioresidente
+  }
+
+  get getcolormenu() {
+    return this.isSocio ? 'green-7' : 'white'
   }
 
   get isTutor() {
@@ -120,19 +133,25 @@ export default class Header extends Vue {
   }
 
   get rightDrawerOpen() {
-    return GlobalStore.state.RightDrawerOpen
+    return GlobalStore.state.rightDrawerOpen
+  }
+
+  set rightDrawerOpen(value) {
+    GlobalStore.state.rightDrawerOpen = value
+
+    if (GlobalStore.state.rightDrawerOpen)
+      GlobalStore.state.rightCartOpen = false
   }
 
   get rightCartOpen() {
     return GlobalStore.state.rightCartOpen
   }
 
-  set rightDrawerOpen(value) {
-    GlobalStore.state.RightDrawerOpen = value
-  }
-
   set rightCartOpen(value) {
     GlobalStore.state.rightCartOpen = value
+
+    if (GlobalStore.state.rightCartOpen)
+      GlobalStore.state.rightDrawerOpen = false
   }
 
   get lang() {
@@ -195,11 +214,12 @@ export default class Header extends Vue {
       // console.log('SSSSSSSS: ', value, oldValue)
 
       const color = (value === 'online') ? 'positive' : 'warning'
+      const statoconn = this.$t('connection.conn') + ' ' +  ((value === 'online') ? this.$t('connection.online') : this.$t('connection.offline'))
 
       if (this.static_data.functionality.SHOW_IF_IS_SERVER_CONNECTION) {
 
         if (!!oldValue) {
-          tools.showNotif(this.$q, this.$t('connection') + ` {disc__value}`, {
+          tools.showNotif(this.$q, statoconn, {
             color,
             icon: 'wifi'
           })
@@ -386,6 +406,15 @@ export default class Header extends Vue {
         const total = arrcart.items.reduce((sum, item) => sum + item.order.quantity, 0)
         return total
       }
+    }
+    return 0
+  }
+
+  get getnumOrdersCart() {
+    // const arrorderscart = Products.state.orders.filter((rec) => rec.status < shared_consts.OrderStatus.RECEIVED)
+    const arrorderscart = Products.state.orders
+    if (!!arrorderscart) {
+      return arrorderscart.length
     }
     return 0
   }

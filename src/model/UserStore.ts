@@ -1,5 +1,5 @@
 import { IToken } from 'model/other'
-import { ICart } from '@src/model/Products'
+import { ICart, IOrderCart, IShareWithUs } from '@src/model/Products'
 
 const enum ESexType {
   None = 0,
@@ -33,6 +33,9 @@ export interface IUserProfile {
   saw_and_accepted?: boolean
   qualified?: boolean
   qualified_2invitati?: boolean
+  myshares?: IShareWithUs[]
+  socio?: boolean
+  socioresidente?: boolean
 }
 
 export interface IPaymentType {
@@ -88,6 +91,7 @@ export interface IUserFields {
   numinvitati?: number
   numinvitatiattivi?: number
   cart?: ICart
+  ordercart?: IOrderCart
 }
 
 /*

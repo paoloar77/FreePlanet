@@ -70,7 +70,7 @@ export default class MixinUsers extends Vue {
 
   get getMyImgforIcon() {
     const ris = UserStore.getters.getImgByUsername(UserStore.state.my.username)
-    return (ris !== '') ? 'img:statics/' + ris : 'fas fa-user-circle'
+    return (ris !== '') ? 'img:statics/' + ris : 'fas fa-user'
   }
 
   get getIconCart() {

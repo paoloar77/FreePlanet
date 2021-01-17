@@ -45,6 +45,9 @@ export const DefaultUser: IUserFields = {
     saw_and_accepted: false,
     qualified: false,
     qualified_2invitati: false,
+    socio: false,
+    socioresidente: false,
+    myshares: [],
   },
   downline: [],
   calcstat: DefaultCalc,
@@ -54,7 +57,8 @@ export const DefaultUser: IUserFields = {
     userId: '',
     items: [],
     totalPrice: 0,
-    totalQty: 0
+    totalQty: 0,
+    note: '',
   }
 }
 
@@ -80,6 +84,9 @@ export const DefaultProfile: IUserProfile = {
   saw_zoom_presentation: false,
   ask_zoom_partecipato: false,
   saw_and_accepted: false,
+  socio: false,
+  socioresidente: false,
+  myshares: [],
   paymenttypes: [],
   qualified: false,
   qualified_2invitati: false,

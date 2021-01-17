@@ -18,6 +18,7 @@ export default class CSingleCart extends MixinBase {
   public $t
   @Prop({ required: true }) public order: IOrder
   @Prop({ required: false, default: false }) public showall: boolean
+  @Prop({ required: false, default: false }) public nomodif: boolean
 
   get myimgclass() {
     if (this.showall) {

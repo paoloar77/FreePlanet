@@ -17,7 +17,10 @@ import { Products, UserStore } from '@store'
 
 export default class CProductCard extends MixinBase {
   public $t
-  @Prop({ required: true }) public product: IProduct
+  @Prop({ required: false, default: null }) public product: IProduct
+  public myproduct: IProduct = null
+  @Prop({ required: false, default: '' }) public code: string
+  @Prop({ required: false, default: false }) public complete: boolean
   @Prop({
     required: false,
     type: Object,
@@ -50,11 +53,17 @@ export default class CProductCard extends MixinBase {
 
   public addtoCart() {
 
+    if (!UserStore.state.isLogged) {
+      tools.showNeutralNotif(this.$q, 'Devi prima accedere alla tua Area Personale')
+      GlobalStore.state.rightDrawerOpen = true
+      return false
+    }
+
     // Controlla se esiste già nel carrello il prodotto
-    if (Products.getters.existProductInCart(this.product._id)) {
+    if (Products.getters.existProductInCart(this.myproduct._id)) {
       tools.showNegativeNotif(this.$q, 'Questo prodotto è stato già aggiunto al Carrello')
     } else {
-      Products.actions.addToCart({ product: this.product, order: this.order }).then((ris) => {
+      Products.actions.addToCart({ product: this.myproduct, order: this.order }).then((ris) => {
         let strprod = 'prodotto'
         if (this.order.quantity > 1)
           strprod = 'prodotti'
@@ -67,14 +76,14 @@ export default class CProductCard extends MixinBase {
   }
 
   public getnumstore() {
-    if (!!this.product.storehouses)
-      return this.product.storehouses.length
+    if (!!this.myproduct.storehouses)
+      return this.myproduct.storehouses.length
     else
       return 0
   }
 
   public getSingleStorehouse() {
-    const mystore = this.product.storehouses[0]
+    const mystore = this.myproduct.storehouses[0]
     return mystore.name + ' (' + mystore.city + ')'
   }
 
@@ -82,7 +91,7 @@ export default class CProductCard extends MixinBase {
 
     const myarr = []
     let ind = 1
-    this.product.storehouses.forEach((store) => {
+    this.myproduct.storehouses.forEach((store) => {
       myarr.push(
         {
           id: ind,
@@ -101,13 +110,36 @@ export default class CProductCard extends MixinBase {
     return !this.order.idStorehouse
   }
 
-  public infoproduct() {
 
+  @Watch('code')
+  public codechanged(value) {
+    console.log('change code')
+    this.load()
   }
 
-  public created() {
-    if (this.product.storehouses.length === 1) {
-      this.order.idStorehouse = this.product.storehouses[0]._id
+  public async load() {
+    // console.log('created Cproductcard', this.code)
+    if (this.code) {
+      this.myproduct = await Products.actions.loadProduct({ code: this.code })
+    } else {
+      this.myproduct = this.product
+    }
+    // console.log('this.myproduct', this.myproduct)
+
+    if (!!this.myproduct) {
+      if (this.myproduct.storehouses.length === 1) {
+        this.order.idStorehouse = this.myproduct.storehouses[0]._id
+      }
     }
   }
+
+  public async created() {
+    this.load()
+  }
+
+  get getmycardcl() {
+    return (this.complete) ? 'my-card-big' : 'my-card'
+  }
+
+
 }

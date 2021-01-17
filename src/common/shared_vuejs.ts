@@ -83,6 +83,9 @@ export const shared_consts = {
 
   TypeMsg: {
     SEND_TO_ALL: 1,
+    SEND_TO_SOCI: 2,
+    SEND_TO_SOCIO_RESIDENTE: 3,
+    SEND_TO_NON_SOCI: 10
   },
 
   TypeMsg_Actions: {
@@ -108,6 +111,40 @@ export const shared_consts = {
       value: 2
     }
   ],
+
+  selectDestination: [
+    {
+      id: 0,
+      label: 'A Tutti',
+      value: 1
+    },
+    {
+      id: 1,
+      label: 'Solo ai Soci',
+      value: 2
+    },
+    {
+      id: 2,
+      label: 'Solo ai Soci Residenti',
+      value: 3
+    },
+    {
+      id: 3,
+      label: 'Solo ai NON Soci',
+      value: 10
+    }
+  ],
+
+  OrderStatus: {
+    NONE: 0,
+    IN_CART: 1,
+    CHECKOUT_CONFIRMED: 2,
+    PAYED: 3,
+    DELIVEDED: 4,
+    RECEIVED: 5,
+    CANCELED: 10,
+  },
+
 
   fieldsUserToChange() {
     return ['_id', 'username', 'email', 'name', 'surname', 'perm', 'date_reg', 'verified_email', 'img', 'ipaddr', 'lasttimeonline', 'profile', 'news_on']

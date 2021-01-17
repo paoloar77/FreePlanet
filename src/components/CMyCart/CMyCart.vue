@@ -30,7 +30,7 @@
         Il Carrello è Vuoto
       </div>
       <div v-else style="text-align: center">
-        <q-btn rounded icon="fas fa-shopping-cart" color="green" label="Vai alla Cassa" class="q-mb-sm" to="/checkout"></q-btn>
+        <q-btn rounded icon="fas fa-shopping-cart" color="green" label="Vai alla Cassa" class="q-mb-sm" to="/checkout" @click="closecart"></q-btn>
       </div>
     </div>
   </div>

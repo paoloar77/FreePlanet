@@ -44,7 +44,7 @@ const state: IGlobalState = {
   mobileMode: false,
   menuCollapse: true,
   leftDrawerOpen: true,
-  RightDrawerOpen: false,
+  rightDrawerOpen: false,
   rightCartOpen: false,
   stateConnection: stateConnDefault,
   networkDataReceived: false,
@@ -83,7 +83,8 @@ const state: IGlobalState = {
   mypage: [],
   calzoom: [],
   producers: [],
-  storehouses: []
+  storehouses: [],
+  sharewithus: []
 }
 
 async function getConfig(id) {
@@ -204,6 +205,8 @@ namespace Getters {
       return GlobalStore.state.producers
     else if (table === 'storehouses')
       return GlobalStore.state.storehouses
+    else if (table === 'sharewithus')
+      return GlobalStore.state.sharewithus
     else if (table === 'paymenttypes')
       return GlobalStore.state.paymenttypes
     else if (table === 'bookings')
@@ -1093,8 +1096,9 @@ namespace Actions {
           if (res.data.cart)
             Products.state.cart = (res.data.cart) ? {...res.data.cart} : {}
           else
-            Products.state.cart = {}
+            Products.state.cart = { items: [], totalPrice: 0, totalQty: 0, userId: ''}
 
+          Products.state.orders = (res.data.orders) ? [...res.data.orders] : []
 
           if (showall) {
             GlobalStore.state.newstosent = (res.data.newstosent) ? [...res.data.newstosent] : []
@@ -1121,7 +1125,7 @@ namespace Actions {
               // Fai Logout
               console.log('Fai Logout', 'islogged', islogged)
               UserStore.actions.logout()
-              GlobalStore.state.RightDrawerOpen = true
+              GlobalStore.state.rightDrawerOpen = true
               return false
             }
           }

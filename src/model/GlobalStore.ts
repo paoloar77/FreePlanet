@@ -2,7 +2,7 @@ import { IAction } from '@src/model/Projects'
 import { Component } from 'vue-router/types/router'
 import { lists } from '@src/store/Modules/lists'
 import { IPaymentType } from '@src/model/UserStore'
-import { ICart, IProducer, IProduct, IStorehouse } from '@src/model/Products'
+import { ICart, IProducer, IProduct, IShareWithUs, IStorehouse } from '@src/model/Products'
 
 export interface IPost {
   title: string
@@ -149,7 +149,7 @@ export interface IGlobalState {
   mobileMode: boolean
   menuCollapse: boolean
   leftDrawerOpen: boolean
-  RightDrawerOpen: boolean
+  rightDrawerOpen: boolean
   rightCartOpen: boolean
   category: string
   stateConnection: string
@@ -175,6 +175,7 @@ export interface IGlobalState {
   calzoom: ICalZoom[],
   producers: IProducer[],
   storehouses: IStorehouse[],
+  sharewithus: IShareWithUs[],
   autoplaydisc: number
 }
 
@@ -345,6 +346,7 @@ export interface IFunctionality {
   BOOKING_EVENTS?: boolean
   ENABLE_REG_AYNI?: boolean
   ENABLE_REG_SIP?: boolean
+  ENABLE_REG_CNM?: boolean
 }
 
 export interface IParamsQuery {

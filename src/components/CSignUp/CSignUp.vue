@@ -14,6 +14,7 @@
         v-model="signup.email"
         rounded outlined
         @blur="$v.signup.email.$touch"
+        @input="changeemail"
         :error="$v.signup.email.$error"
         :error-message="errorMsg('email', $v.signup.email)"
         maxlength="50"
@@ -29,6 +30,7 @@
       <q-input
         v-model="signup.username"
         rounded outlined
+        @input="changeusername"
         @blur="$v.signup.username.$touch"
         :error="$v.signup.username.$error"
         @keydown.native.54="(event) => event.preventDefault()"

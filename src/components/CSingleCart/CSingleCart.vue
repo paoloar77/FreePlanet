@@ -13,7 +13,7 @@
       </div>
       <div class="col-3">
         <div class="row q-mb-xs no-wrap items-center centeritems">
-          <q-btn v-if="showall" round size="xs" text-color="grey" icon="fas fa-minus"
+          <q-btn v-if="showall && !nomodif" round size="xs" text-color="grey" icon="fas fa-minus"
                  @click="addsubqty(false, true)"></q-btn>
           <!--<q-field outlined dense style="width: 25px; height: 20px; " class="q-mx-xs text-subtitle4">
             <template v-slot:control>
@@ -21,15 +21,15 @@
             </template>
           </q-field>-->
           <div class="q-mx-sm text-blue-14">{{ order.quantity }}</div>
-          <q-btn v-if="showall" round size="xs" text-color="grey" icon="fas fa-plus"
+          <q-btn v-if="showall && !nomodif" round size="xs" text-color="grey" icon="fas fa-plus"
                  @click="addsubqty(true, false)"></q-btn>
         </div>
       </div>
       <div class="col-2 no-wrap text-subtitle3 q-mr-sm">
-        € {{ (order.price * order.quantity).toFixed(2) }}
+        €&nbsp;{{ (order.price * order.quantity).toFixed(2) }}
       </div>
       <div class="col-1">
-        <q-btn icon="fas fa-times" color="negative" round size="xs" @click="removeFromCard">
+        <q-btn v-if="!nomodif" icon="fas fa-times" color="negative" round size="xs" @click="removeFromCard">
         </q-btn>
       </div>
     </div>

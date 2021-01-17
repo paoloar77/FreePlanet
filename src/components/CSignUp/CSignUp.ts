@@ -117,6 +117,7 @@ export default class CSignUp extends MixinBase {
       if (!item.$error) {
         return ''
       }
+      console.log('item', item)
       // console.log('errorMsg', cosa, item)
       if (item.$params.email && !item.email) {
         return this.$t('reg.err.email')
@@ -157,6 +158,8 @@ export default class CSignUp extends MixinBase {
         }
       } else if (cosa === 'username') {
         // console.log(item);
+        console.log('username')
+        console.log(item.$error)
         if (!item.isUnique) {
           return this.$t('reg.err.duplicate_username')
         }
@@ -176,9 +179,22 @@ export default class CSignUp extends MixinBase {
     }
   }
 
+  public changeemail(value) {
+    this.signup.email = tools.removespaces(this.signup.email)
+    this.signup.email = this.signup.email.toLowerCase()
+    this.$emit('update:value', this.signup.email)
+  }
+
+  public changeusername(value) {
+    this.signup.username = tools.removespaces(this.signup.username)
+    this.$emit('update:value', this.signup.username)
+  }
+
   public submitOk() {
     this.$v.signup.$touch()
 
+    this.signup.email = tools.removespaces(this.signup.email)
+    this.signup.email = this.signup.email.toLowerCase()
     this.signup.username = tools.removespaces(this.signup.username)
 
     this.duplicate_email = false

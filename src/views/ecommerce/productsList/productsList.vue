@@ -4,7 +4,7 @@
       <div class="container">
         <div class="row">
           <div class="q-pa-md row items-start q-gutter-md" v-for="(product, index) in getProducts" :key="index">
-            <CProductCard :product="product"/>
+            <CProductCard :product="product" :complete="false"/>
           </div>
         </div>
       </div>

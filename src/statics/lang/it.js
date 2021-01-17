@@ -28,6 +28,7 @@ const msg_it = {
       come_aiutare: 'Cosa vorresti fare per aiutare il pianeta?',
     },
     otherpages: {
+      product: 'Prodotto',
       sito_offline: 'Sito in Aggiornamento',
       modifprof: 'Modifica Profilo',
       biografia: 'Biografia',
@@ -52,8 +53,8 @@ const msg_it = {
         listaflotte: 'Flotte',
       },
       manage: {
-        menu: 'Gestione',
-        manager: 'Gestore',
+        menu: 'Segreteria',
+        manager: 'Segreteria',
         nessuno: 'Nessuno',
         sendpushnotif: 'Invia Msg Push',
       },
@@ -320,6 +321,8 @@ const msg_it = {
       ritessitura: 'RITESSITURA',
     },
     reg: {
+      socio: 'Socio',
+      socioresidente: 'Residente',
       volta: 'volta',
       volte: 'volte',
       registered: 'Registrato',
@@ -508,7 +511,11 @@ const msg_it = {
       subscribed: 'Ora potrai ricevere i messaggi e le notifiche.',
       newVersionAvailable: 'Aggiorna',
     },
-    connection: 'Connessione',
+    connection: {
+      conn: 'Connessione',
+      online: 'Attiva',
+      offline: 'Disattiva',
+    },
     proj: {
       newproj: 'Titolo Progetto',
       newsubproj: 'Titolo Sotto-Progetto',

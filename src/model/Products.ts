@@ -1,17 +1,20 @@
 export interface IProduct {
   _id?: any
-  descr?: string,
   idProducer?: string,
   idStorehouses?: string[],
   producer?: IProducer,
   storehouses?: IStorehouse[],
+  code?: string,
   name?: string,
+  description?: string,
   department?: string,
   category?: string,
   price?: number,
   color?: string,
   size?: string,
   quantityAvailable?: number,
+  canBeShipped?: boolean,
+  canBeBuyOnline?: boolean,
   weight?: number,
   stars?: number,
   date?: Date,
@@ -51,6 +54,7 @@ export interface IOrder {
 export interface IProductsState {
   products: IProduct[]
   cart: ICart
+  orders: IOrderCart[]
 }
 
 export interface IProducer {
@@ -59,6 +63,7 @@ export interface IProducer {
   name?: string,
   description?: string,
   referent?: string,
+  username?: string,
   region?: string,
   city?: string,
   img?: string,
@@ -85,4 +90,28 @@ export interface ICart {
   totalQty?: number
   totalPrice?: number
   items?: IBaseOrder[]
+  note?: string
+  modify_at?: Date
+}
+
+export interface IOrderCart {
+  _id?: any
+  idapp?: string
+  numorder?: number
+  userId?: string
+  totalQty?: number
+  totalPrice?: number
+  items?: IBaseOrder[]
+  status?: number
+  note?: string
+  modify_at?: Date
+}
+
+export interface IShareWithUs {
+  _id?: any
+  idapp?: string
+  userId?: string
+  description?: string
+  numshared?: number
+  rating?: number
 }

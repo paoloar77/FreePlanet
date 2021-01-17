@@ -112,6 +112,7 @@ export const tools = {
   TABCALZOOM: 'calzoom',
   TABTEMPLEMAIL: 'templemail',
   TABOPZEMAIL: 'opzemail',
+  TABSHAREWITHUS: 'sharewithus',
 
   MAX_CHARACTERS: 60,
   projects: 'projects',
@@ -162,16 +163,6 @@ export const tools = {
     PRIORITY_HIGH: 2,
     PRIORITY_NORMAL: 1,
     PRIORITY_LOW: 0
-  },
-
-  OrderStatus: {
-    NONE: 0,
-    IN_CART: 1,
-    CHECKOUT_CONFIRMED: 2,
-    PAYED: 3,
-    DELIVEDED: 4,
-    RECEIVED: 5,
-    CANCELED: 10,
   },
 
   Status: {
@@ -1775,7 +1766,7 @@ export const tools = {
     }
   },
 
-  async saveFieldToServer(myself: any, table, id, mydata) {
+  async saveFieldToServer(myself: any, table, id, mydata, notif = true) {
     const mydatatosave = {
       id,
       table,
@@ -1785,7 +1776,8 @@ export const tools = {
 
     GlobalStore.actions.saveFieldValue(mydatatosave).then((ris) => {
       if (ris) {
-        tools.showPositiveNotif(myself.$q, myself.$t('db.recupdated'))
+        if (notif)
+          tools.showPositiveNotif(myself.$q, myself.$t('db.recupdated'))
       } else {
         tools.showNegativeNotif(myself.$q, myself.$t('db.recfailed'))
       }
@@ -1898,7 +1890,7 @@ export const tools = {
       if (!(static_data.arrLangUsed.includes(mylang))) {
         // console.log('non incluso ', mylang)
         // mylang = static_data.arrLangUsed[0]
-        mylang = 'enUs'
+        mylang = 'it'
 
         // Metti come default
         UserStore.mutations.setlang(mylang)
@@ -2620,7 +2612,7 @@ export const tools = {
       if (GlobalStore.state.leftDrawerOpen)
         myw -= 300
     if (!this.isMobile())
-      if (GlobalStore.state.RightDrawerOpen)
+      if (GlobalStore.state.rightDrawerOpen)
         myw -= 300
 
     maxh2 = (myw / coeff) + 20
@@ -3040,7 +3032,7 @@ export const tools = {
           tools.showNotif(mythis.$q, mythis.$t('login.errato'), { color: 'negative', icon: 'notifications' })
           mythis.iswaitingforRes = false
           if (ispageLogin) {
-            GlobalStore.state.RightDrawerOpen = true
+            GlobalStore.state.rightDrawerOpen = true
             // mythis.$router.push('/signin')
           }
         })
@@ -3060,7 +3052,7 @@ export const tools = {
           tools.showNotif(mythis.$q, mythis.$t('login.subaccount'), { color: 'negative', icon: 'notifications' })
           mythis.iswaitingforRes = false
           if (ispageLogin) {
-            GlobalStore.state.RightDrawerOpen = true
+            GlobalStore.state.rightDrawerOpen = true
             // mythis.$router.push('/signin')
           }
         })
@@ -3177,7 +3169,7 @@ export const tools = {
   }
   ,
 
-  async createNewRecord(mythis, table, data) {
+  async createNewRecord(mythis, table, data, withnotif = true) {
 
     const mydata = {
       table,
@@ -3187,10 +3179,12 @@ export const tools = {
     return await
       GlobalStore.actions.saveTable(mydata)
         .then((record) => {
-          if (record) {
-            tools.showPositiveNotif(mythis.$q, mythis.$t('db.recupdated'))
-          } else {
-            tools.showNegativeNotif(mythis.$q, mythis.$t('db.recfailed'))
+          if (withnotif) {
+            if (record) {
+              tools.showPositiveNotif(mythis.$q, mythis.$t('db.recupdated'))
+            } else {
+              tools.showNegativeNotif(mythis.$q, mythis.$t('db.recfailed'))
+            }
           }
           return record
         })
@@ -3208,7 +3202,7 @@ export const tools = {
     }
 
     if (withright)
-      if (GlobalStore.state.RightDrawerOpen)
+      if (GlobalStore.state.rightDrawerOpen)
         myw -= 300
     return myw
 

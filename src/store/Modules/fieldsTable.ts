@@ -167,10 +167,17 @@ export const colTableProducer = [
   AddCol({ name: 'name', label_trans: 'producer.name' }),
   AddCol({ name: 'description', label_trans: 'producer.description' }),
   AddCol({ name: 'referent', label_trans: 'producer.referent' }),
+  AddCol({ name: 'username', label_trans: 'producer.username' }),
   AddCol({ name: 'region', label_trans: 'producer.region' }),
   AddCol({ name: 'city', label_trans: 'producer.city' }),
   AddCol({ name: 'img', label_trans: 'producer.img' }),
   AddCol({ name: 'website', label_trans: 'producer.website' }),
+]
+
+export const colTableShareWithUs = [
+  AddCol({ name: 'description', label_trans: 'share.description' }),
+  AddCol({ name: 'numshared', label_trans: 'share.numshared', fieldtype: tools.FieldType.number }),
+  AddCol({ name: 'rating', label_trans: 'share.rating', fieldtype: tools.FieldType.number }),
 ]
 
 export const colTableStorehouse = [
@@ -185,6 +192,7 @@ export const colTableStorehouse = [
 ]
 
 export const colTableProducts = [
+  AddCol({ name: 'code', label_trans: 'products.code' }),
   AddCol({ name: 'name', label_trans: 'products.name' }),
   AddCol({ name: 'description', label_trans: 'products.description' }),
   AddCol({ name: 'icon', label_trans: 'products.icon' }),
@@ -208,6 +216,8 @@ export const colTableProducts = [
   AddCol({ name: 'color', label_trans: 'products.color' }),
   AddCol({ name: 'size', label_trans: 'products.size' }),
   AddCol({ name: 'quantityAvailable', label_trans: 'products.quantityAvailable', fieldtype: tools.FieldType.number }),
+  AddCol({ name: 'canBeShipped', label_trans: 'products.canBeShipped', fieldtype: tools.FieldType.boolean }),
+  AddCol({ name: 'canBeBuyOnline', label_trans: 'products.canBeBuyOnline', fieldtype: tools.FieldType.boolean }),
   AddCol({ name: 'weight', label_trans: 'products.weight', fieldtype: tools.FieldType.number }),
   AddCol({ name: 'stars', label_trans: 'products.stars', fieldtype: tools.FieldType.number }),
   AddCol({ name: 'date', label_trans: 'products.date', fieldtype: tools.FieldType.date }),
@@ -723,6 +733,12 @@ export const fieldsTable = {
       label_trans: 'reg.manage_telegram',
       fieldtype: tools.FieldType.boolean
     }),
+    AddCol({
+      name: 'profile.myshares',
+      field: 'profile',
+      subfield: 'myshares',
+      label_trans: 'reg.myshares'
+    }),
     AddCol({ name: 'profile.img', field: 'profile', subfield: 'img', label_trans: 'reg.img', sortable: false }),
     AddCol({ name: 'date_reg', label_trans: 'reg.date_reg', fieldtype: tools.FieldType.date }),
     AddCol({ name: 'lasttimeonline', label_trans: 'reg.lasttimeonline', fieldtype: tools.FieldType.date }),
@@ -733,7 +749,7 @@ export const fieldsTable = {
     AddCol(DuplicateRec)
   ],
 
-  colTableUsersSIP: [
+  colTableUsersCNM: [
     // AddCol({ name: '_id', label_trans: 'reg.id' }),
     AddCol({ name: 'ind_order', label_trans: 'reg.ind_order' }),
     AddCol({ name: 'sospeso', label_trans: 'reg.sospeso', fieldtype: tools.FieldType.boolean }),
@@ -744,7 +760,7 @@ export const fieldsTable = {
     AddCol({ name: 'email', label_trans: 'reg.email' }),
     AddCol({ name: 'made_gift', label_trans: 'reg.made_gift', fieldtype: tools.FieldType.boolean }),
     AddCol({ name: 'note', label_trans: 'reg.note' }),
-    AddCol({ name: 'aportador_solidario', label_trans: 'reg.aportador_solidario' }),
+    // AddCol({ name: 'aportador_solidario', label_trans: 'reg.aportador_solidario' }),
     AddCol({ name: 'verified_email', label_trans: 'reg.verified_email', fieldtype: tools.FieldType.boolean }),
     AddCol({
       name: 'profile.special_req',
@@ -816,6 +832,20 @@ export const fieldsTable = {
       label_trans: 'reg.manage_telegram',
       fieldtype: tools.FieldType.boolean
     }),
+    AddCol({
+      name: 'profile.socio',
+      field: 'profile',
+      subfield: 'socio',
+      label_trans: 'reg.socio',
+      fieldtype: tools.FieldType.boolean
+    }),
+    AddCol({
+      name: 'profile.socioresidente',
+      field: 'profile',
+      subfield: 'socioresidente',
+      label_trans: 'reg.socioresidente',
+      fieldtype: tools.FieldType.boolean
+    }),
     AddCol({ name: 'profile.chisei', field: 'profile', subfield: 'chisei', label_trans: 'reg.chisei' }),
     AddCol({
       name: 'profile.iltuoimpegno',
@@ -827,7 +857,7 @@ export const fieldsTable = {
       name: 'profile.come_aiutare',
       field: 'profile',
       subfield: 'come_aiutare',
-      label_trans: 'reg.iltuoimpegno'
+      label_trans: 'reg.come_aiutare'
     }),
     AddCol({
       name: 'profile.paymenttypes',
@@ -908,6 +938,13 @@ export const fieldsTable = {
       columns: colTableStorehouse,
       colkey: '_id',
       collabel: (rec) => rec.name + ' (' + rec.city + ')'
+    },
+    {
+      value: 'sharewithus',
+      label: 'Condividi con Noi',
+      columns: colTableShareWithUs,
+      colkey: '_id',
+      collabel: 'description'
     },
     {
       value: 'wheres',

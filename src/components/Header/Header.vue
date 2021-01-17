@@ -40,8 +40,8 @@
           <q-avatar>
             <img :src="imglogo" height="27" alt="Immagine Logo">
           </q-avatar>
-          <div class="q-mx-sm titlesite">{{getappname}}</div>
-          <div slot="subtitle">{{$t('msg.myDescriz')}} {{ getAppVersion() }}</div>
+          <div class="q-mx-sm titlesite">{{ getappname }}</div>
+          <div slot="subtitle">{{ $t('msg.myDescriz') }} {{ getAppVersion() }}</div>
         </q-toolbar-title>
 
 
@@ -87,7 +87,7 @@
                 <img :src="langrec.image" class="flagimg" alt="flag">
               </q-item-section>
               <q-item-section>
-                {{langrec.label}}
+                {{ langrec.label }}
               </q-item-section>
             </q-item>
           </q-list>
@@ -108,16 +108,32 @@
                icon="menu"
                @click="rightDrawerOpen = !rightDrawerOpen">
         </q-btn>
+
         <q-btn class="q-mx-xs" v-if="static_data.functionality.ENABLE_ECOMMERCE && isLogged" round dense flat
                @click="rightCartOpen = !rightCartOpen" icon="fas fa-shopping-cart">
 
 
           <q-badge v-if="getnumItemsCart > 0" color="red" floating transparent>
-            {{getnumItemsCart}}
+            {{ getnumItemsCart }}
           </q-badge>
         </q-btn>
+
+
+        <q-btn class="q-mx-xs" v-if="static_data.functionality.ENABLE_ECOMMERCE && isLogged && getnumOrdersCart > 0" round dense flat
+               to="/orderinfo" icon="fas fa-list-ol">
+
+
+          <q-badge v-if="getnumOrdersCart > 0" color="blue" floating transparent>
+            {{ getnumOrdersCart }}
+          </q-badge>
+        </q-btn>
+
+
         <q-btn class="q-mx-xs" v-if="static_data.functionality.SHOW_USER_MENU && isLogged" round dense flat
-               @click="rightDrawerOpen = !rightDrawerOpen" :icon="getMyImgforIcon">
+               @click="rightDrawerOpen = !rightDrawerOpen" :icon="getMyImgforIcon" :color="getcolormenu">
+          <!--<q-badge v-if="isSocio" color="green" floating transparent>
+            s
+          </q-badge>-->
         </q-btn>
 
       </q-toolbar>
@@ -152,33 +168,40 @@
                style="height: 150px" alt="section page">
         </q-img>
         <div class="absolute-top bg-transparent text-black center_img" style="margin-top: 10px;">
+          <div class="text-center q-ma-xs boldhigh text-white text-h7">Area Personale</div>
 
           <CMyAvatar :myimg="getMyImg"></CMyAvatar>
 
           <q-btn class="absolute-top-right" style="margin-right: 10px; color: white;"
                  dense flat round icon="close" @click="rightDrawerOpen = !rightDrawerOpen">
           </q-btn>
-          <div v-if="isLogged" class="text-weight-bold text-user">{{ Username }} - {{ myName }} <span
-            v-if="isAdmin"> [Admin]</span>
-              <span v-if="isManager"> [Manager]</span>
-              <span v-if="isTutor"> [Tutor]</span>
-              <span v-if="isTratuttrici"> [Trad]</span>
+
+          <div v-if="isLogged" class="text-weight-bold text-user">{{ Username }} - {{ myName }}
           </div>
-          <div v-else class="text-user text-italic bg-red">
+          <div class="row justify-evenly q-pa-xs-sm">
+            <div v-if="isLogged && isAdmin" class="text-weight-bold text-user bg-red q-px-xs">Admin</div>
+            <div v-if="isSocio" class="text-weight-bold text-user q-px-xs">Socio</div>
+            <div v-if="isSocioResidente" class="text-weight-bold text-user q-px-xs bg-amber">Residente</div>
+            <div v-if="isManager" class="text-weight-bold text-user bg-blue q-px-xs">Segreteria</div>
+            <div v-if="isTutor" class="text-weight-bold text-user q-px-xs">Tutor</div>
+            <div v-if="isTratuttrici" class="text-weight-bold text-user q-px-xs">Traduttrici</div>
+          </div>
+          <div v-if="!isLogged" class="text-user text-italic bg-red">
             {{ $t('user.loggati') }}
           </div>
 
           <div v-if="isLogged && !isEmailVerified" class="text-verified">{{
-            $t('components.authentication.email_verification.verify_email') }}
+              $t('components.authentication.email_verification.verify_email')
+            }}
           </div>
 
           <!--<span class="text-white" v-if="Verificato"> {{$t('reg.verificato')}} </span>-->
           <!--<span class="text-white background-red" v-else> {{$t('reg.non_verificato')}} </span>-->
 
           <div v-if="isLogged" id="user-actions" class="column justify-center q-gutter-sm q-ma-sm center-150">
-            <q-btn rounded color="primary" icon="person" to="/profile">{{$t('pages.profile')}}</q-btn>
+            <q-btn rounded color="primary" icon="person" to="/profile">{{ $t('pages.profile') }}</q-btn>
             <!--<q-btn round color="warning" icon="lock"></q-btn>-->
-            <q-btn rounded color="negative" icon="exit_to_app" @click='logoutHandler'>{{$t('login.esci')}}</q-btn>
+            <q-btn rounded color="negative" icon="exit_to_app" @click='logoutHandler'>{{ $t('login.esci') }}</q-btn>
           </div>
 
         </div>
@@ -204,6 +227,6 @@
 </script>
 
 <style lang="scss" scoped>
-  @import './Header.scss';
+@import './Header.scss';
 </style>
 

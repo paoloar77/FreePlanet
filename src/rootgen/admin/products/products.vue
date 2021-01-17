@@ -6,6 +6,7 @@
             keywords: '' } ) }}
         </span>
 
+
         <div class="q-ma-sm q-gutter-sm q-pa-xs">
             <CTitleBanner title="Prodotti"></CTitleBanner>
             <CGridTableRec prop_mytable="products"

@@ -7,6 +7,7 @@ import { fieldsTable, func } from '@src/store/Modules/fieldsTable'
 
 import { shared_consts } from '@src/common/shared_vuejs'
 import { GlobalStore, UserStore } from '../../../store/Modules'
+import { tools } from '@src/store/Modules/tools'
 
 @Component({
   components: { CMyPage }
@@ -24,6 +25,7 @@ export default class Sendpushnotif extends Vue {
   public opz2: string = ''
   public tag: string = ''
   public actiontype: number = shared_consts.TypeMsg_Actions.NORMAL
+  public destination: number = shared_consts.TypeMsg.SEND_TO_ALL
 
   public created() {
     this.title = this.$t('ws.sitename')
@@ -53,6 +55,9 @@ export default class Sendpushnotif extends Vue {
       this.$q.loading.show({ message: this.$t('otherpages.update') })
 
       const ris = await GlobalStore.actions.sendPushNotif({ params })
+
+      if (!!ris.msg)
+        tools.showPositiveNotif(this.$q, ris.msg)
 
       this.$q.loading.hide()
 
@@ -94,6 +99,7 @@ export default class Sendpushnotif extends Vue {
   }
 
   public SendMsgToAll() {
-    this.SendMsgToParam(shared_consts.TypeMsg.SEND_TO_ALL)
+
+    this.SendMsgToParam(this.destination)
   }
 }

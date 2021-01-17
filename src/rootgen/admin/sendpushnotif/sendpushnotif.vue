@@ -20,13 +20,18 @@
                         :options="shared_consts.selectActions"
                         label="Tipo Msg" emit-value map-options>
                 </q-select>
+                <q-select
+                        rounded outlined v-model="destination"
+                        :options="shared_consts.selectDestination"
+                        label="Destinazione" emit-value map-options>
+                </q-select>
                 <div v-if="actiontype === shared_consts.TypeMsg_Actions.OPZ1_2" class="row">
                     <q-input v-model="opz1" autofocus label="Opzione 1" style="width: 100px;"></q-input>
                     <q-input v-model="opz2" autofocus label="Opzione 2" style="width: 100px;"></q-input>
                 </div>
                 <br />
                 <div class="">
-                    <q-btn label="Invia Msg a Tutti" color="primary" @click="SendMsgToAll()"></q-btn>
+                    <q-btn label="Invia Msg" color="primary" @click="SendMsgToAll()"></q-btn>
                 </div>
             </div>
             <q-inner-loading id="spinner" :showing="incaricamento">

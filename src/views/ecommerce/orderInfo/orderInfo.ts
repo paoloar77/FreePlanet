@@ -11,7 +11,7 @@ import Products from '@src/store/Modules/Products'
 import { CSingleCart } from '../../../components/CSingleCart'
 import { CTitleBanner } from '@components'
 import { tools } from '@src/store/Modules/tools'
-import { ICart } from '@src/model'
+import { ICart, IOrderCart } from '@src/model'
 import MixinBase from '@src/mixins/mixin-base'
 import { shared_consts } from '@src/common/shared_vuejs'
 
@@ -31,70 +31,83 @@ const namespace: string = 'Products'
   }
 })
 
-export default class CheckOut extends MixinBase {
+export default class OrderInfo extends MixinBase {
   public $q: any
-  public mycart: ICart = {}
-  public myrec: any[]
-  public note: string = ''
+  public myorderscart: IOrderCart[] = []
+  public myarrrec: any = {}
 
   public conferma_carrello: boolean = false
   public conferma_ordine: boolean = false
+
+  public taborders: string = 'incorso'
+  public columns = [
+    {
+      name: 'numorder',
+      required: true,
+      align: 'left',
+      label: 'Numero Ordine',
+      field: 'numorder',
+      sortable: true
+    },
+    {
+      name: 'created_at',
+      required: true,
+      align: 'center',
+      label: 'Effettuato il',
+      field: 'created_at',
+      sortable: true
+    },
+    {
+      name: 'items',
+      required: true,
+      label: 'Articoli',
+      field: 'items',
+      sortable: true
+    },
+    {
+      name: 'totalPrice',
+      required: true,
+      label: 'Totale',
+      field: 'totalPrice',
+      sortable: true
+    },
+    {
+      name: 'status',
+      align: 'center',
+      required: true,
+      label: 'Stato',
+      field: 'status',
+      sortable: true
+    }
+  ]
 
   /*public $refs: {
     singleproject: SingleProject[],
     ctodo: CTodo
   }*/
 
-  get getItemsCart() {
-    const cart = Products.getters.getCart()
-    return cart.items || null
+  get getOrdersCart() {
+    return Products.getters.getOrdersCart(this.taborders)
   }
 
-  get getCart() {
-    return Products.getters.getCart()
-  }
-
-  get getNote() {
-    const cart = Products.getters.getCart()
-    return cart.note
-  }
-
-  public change_field(fieldname) {
-    if (this.myrec[fieldname] !== this[fieldname]) {
-      this.myrec[fieldname] = this[fieldname]
+  public change_field(myorderid, fieldname) {
+    if (this.myarrrec[myorderid][fieldname] !== this[fieldname]) {
+      this.myarrrec[myorderid][fieldname] = this[fieldname]
 
       const mydata = {
-        [fieldname]: this.myrec[fieldname]
+        [fieldname]: this.myarrrec[myorderid][fieldname]
       }
 
       const aggiorna = fieldname !== 'status'
-      tools.saveFieldToServer(this, 'carts', this.mycart._id, mydata, aggiorna)
-    }
-  }
-
-  get myTotalPrice() {
-    if (Products.state.cart && Products.state.cart.totalPrice) {
-      return Products.state.cart.totalPrice.toFixed(2)
-    } else {
-      return 0
-    }
-  }
-
-  get myTotalQty() {
-    if (Products.state.cart) {
-      return Products.state.cart.totalQty
-    } else {
-      return 0
+      tools.saveFieldToServer(this, 'orderscart', myorderid, mydata, aggiorna)
     }
   }
 
   public mounted() {
-    this.mycart = this.getCart
-    this.myrec = Object.keys(this.mycart)
-    this.note = this.mycart.note
-
-    console.log('myrec', this.myrec)
-    // Products.actions.loadCart()
+    this.myorderscart = this.getOrdersCart
+    for (const ordercart of this.myorderscart) {
+      this.myarrrec[ordercart._id] = Object.keys(ordercart)
+    }
   }
 
   public CanBeShipped() {
@@ -131,29 +144,6 @@ export default class CheckOut extends MixinBase {
 
   get nextstep() {
     return 0
-  }
-
-  public completeOrder() {
-    this.$q.dialog({
-      message: 'Confermare l\'ordine di acquisto di ' + this.myTotalQty + ' prodotti ?',
-      ok: {
-        label: this.$t('dialog.yes'),
-        push: true
-      },
-      cancel: {
-        label: this.$t('dialog.cancel')
-      },
-      title: 'Ordine'
-    }).onOk(async () => {
-      const status = shared_consts.OrderStatus.CHECKOUT_CONFIRMED
-      const statusnow = await Products.actions.UpdateStatusCart({ cart_id: this.mycart._id, status })
-
-      if (statusnow === status) {
-        tools.showPositiveNotif(this.$q, 'Ordine Confermato')
-      }
-      // this.change_field('status')
-      // this.change_field('status')
-    })
   }
 
 }

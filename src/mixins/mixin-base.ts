@@ -9,6 +9,8 @@ import { fieldsTable } from '@src/store/Modules/fieldsTable'
 import { CalendarStore } from '@store'
 import MixinMetaTags from '@src/mixins/mixin-metatags'
 
+import { shared_consts } from '../common/shared_vuejs'
+
 // You can declare a mixin as the same style as components.
 @Component
 export default class MixinBase extends MixinMetaTags {
@@ -34,6 +36,10 @@ export default class MixinBase extends MixinMetaTags {
 
   get tools() {
     return tools
+  }
+
+  get shared_consts() {
+    return shared_consts
   }
 
   public getValDb(keystr, serv, def?, table?, subkey?, id?) {
