@@ -91,10 +91,10 @@ export default class CTodo extends Vue {
   }
 
   public created() {
-    const $service = this.$dragula.$service
-    tools.dragula_option($service, this.dragname)
+    const service = this.$dragula.$service
+    tools.dragula_option(service, this.dragname)
 
-    $service.eventBus.$on('dragend', (args) => {
+    service.eventBus.$on('dragend', (args) => {
       // console.log('args', args)
       if (args.name === this.dragname) {
         const itemdragend: IDrag = {
@@ -106,10 +106,10 @@ export default class CTodo extends Vue {
       }
     })
 
-    $service.eventBus.$on('drag', (el, source) => {
+    service.eventBus.$on('drag', (el, source) => {
       this.scrollable = false
     })
-    $service.eventBus.$on('drop', (el, source) => {
+    service.eventBus.$on('drop', (el, source) => {
       this.scrollable = true
     })
 

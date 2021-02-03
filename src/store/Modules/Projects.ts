@@ -27,8 +27,8 @@ const stateglob: IProjectsState = {
   visuLastCompleted: 10
 }
 
-const listFieldsToChange: string [] = ['descr', 'longdescr', 'hoursplanned', 'hoursleft', 'hoursworked', 'id_parent', 'statusproj',
-  'category', 'expiring_at', 'priority', 'id_prev', 'pos', 'enableExpiring', 'progressCalc', 'live_url', 'test_url',
+const listFieldsToChange: string [] = ['descr', 'respUsername', 'viceRespUsername', 'longdescr', 'hoursplanned', 'hoursleft', 'hoursworked', 'id_parent', 'statusproj',
+  'category', 'expiring_at', 'priority', 'pos', 'groupId', 'enableExpiring', 'progressCalc', 'live_url', 'test_url',
   'begin_development', 'begin_test', 'actualphase', 'totalphases', 'hoursweeky_plannedtowork', 'endwork_estimate',
   'privacyread', 'privacywrite', 'id_main_project', 'typeproj', 'favourite', 'themecolor', 'themebgcolor']
 
@@ -62,12 +62,14 @@ function getproj(projects, idproj, tipoproj: string) {
   let ris = null
 
   if (tipoproj === RouteNames.myprojects)
-    ris = projects.filter((proj) => (proj.id_parent === idproj) && (proj.userId === UserStore.state.my._id) && (proj.privacyread === Privacy.onlyme))
+    ris = projects.filter((proj) => (proj.id_parent === idproj) && (proj.userId === UserStore.state.my._id))
   else if (tipoproj === RouteNames.projectsshared)
     ris = projects.filter((proj) => (proj.id_parent === idproj) && (proj.userId === UserStore.state.my._id) && (proj.privacyread !== Privacy.onlyme))
   else if (tipoproj === RouteNames.projectsall)
     ris = projects.filter((proj) => (proj.id_parent === idproj) && (proj.userId !== UserStore.state.my._id) )
 
+  if (ris)
+    ris = ris.sort((a, b) => a.pos - b.pos)
   // console.log('idproj', idproj, 'projects', projects, 'getproj', tipoproj, 'ris=', ris)
 
   return ris
@@ -93,7 +95,6 @@ namespace Getters {
       category: '',
       // expiring_at: tomorrow,
       enableExpiring: false,
-      id_prev: '',
       pos: 0,
       modified: false,
       live_url: '',
@@ -111,7 +112,10 @@ namespace Getters {
       hoursweeky_plannedtowork: 0,
       endwork_estimate: tools.getDateNull(),
       themecolor: '',
-      themebgcolor: ''
+      themebgcolor: '',
+      groupId: '',
+      respUsername: '',
+      viceRespUsername: ''
     }
 
     return obj
@@ -156,6 +160,8 @@ namespace Getters {
   }, 'getDescrById')
 
   const getRecordById = b.read((state: IProjectsState) => (id: string): IProject => {
+    // console.log('state.projects', state.projects)
+    // console.log('find', state.projects.find((item) => item._id === id))
     if (state.projects) {
       return state.projects.find((item) => item._id === id)
     }
@@ -293,6 +299,8 @@ namespace Actions {
     //   return false  // Login not made
     // }
 
+    console.log('UserStore.state.my', UserStore.state.my)
+
     console.log('dbLoad', nametable, checkPending, 'userid=', UserStore.state.my._id)
 
     const ris = await Api.SendReq('/projects/' + UserStore.state.my._id, 'GET', null)
@@ -333,15 +341,19 @@ namespace Actions {
     console.log('myobjtrov', myobjtrov.descr)
 
     if (!!myobjtrov) {
+      /*
       const myobjnext = tools.getElemPrevById(myarr, myobjtrov._id)
 
       if (!!myobjnext) {
-        myobjnext.id_prev = myobjtrov.id_prev
+        myobjnext.pos = myobjtrov.pos + 1
         myobjnext.modified = true
-        await modify(context, { myitem: myobjnext, field: 'id_prev' })
+        await modify(context, { myitem: myobjnext, field: 'pos' })
       }
 
-      ApiTables.table_DeleteRecord(nametable, myobjtrov, idobj)
+       */
+
+      // ApiTables.table_DeleteRecord(nametable, myobjtrov, idobj)
+      ApiTables.table_HideRecord(nametable, myobjtrov, idobj)
     }
   }
 
@@ -365,13 +377,13 @@ namespace Actions {
     if (atfirst) {
       console.log('INSERT AT THE TOP')
       elemtochange = tools.getFirstList(myarr)
-      objproj.id_prev = ApiTables.LIST_START
+      objproj.pos = 10
     } else {
       console.log('INSERT AT THE BOTTOM')
       // INSERT AT THE BOTTOM , so GET LAST ITEM
       const lastelem = tools.getLastListNotCompleted(nametable, objproj.id_parent, this.tipoProj)
 
-      objproj.id_prev = (!!lastelem) ? lastelem._id : ApiTables.LIST_START
+      objproj.pos = (!!lastelem) ? lastelem.pos + 10 : 10
     }
     objproj.modified = false
 
@@ -382,9 +394,9 @@ namespace Actions {
     let field = ''
     if (atfirst) {    // update also the last elem
       if (!!elemtochange) {
-        elemtochange.id_prev = id
+        elemtochange.pos = objproj.pos
         console.log('elemtochange', elemtochange)
-        field = 'id_prev'
+        field = 'pos'
 
         // Modify the other record
         await modify(context, { myitem: elemtochange, field })
@@ -429,7 +441,6 @@ namespace Actions {
           dest_obj.id_parent = dest._id
           dest_obj.id_main_project = dest.id_main_project
           dest_obj.modified = true
-          dest_obj.id_prev = null
 
           GlobalStore.state.lastaction.type = 0
 

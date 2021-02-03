@@ -67,7 +67,7 @@ async function readfromIndexDbToState(context, table) {
 
       } else {
         const arrris = tools.setArrayMainByTable(table, reccat)
-        // console.log('************  ARRAYS SALVATI IN MEMORIA ', table, arrris)
+        console.log('************  ARRAYS SALVATI IN MEMORIA ', table, arrris)
 
       }
 

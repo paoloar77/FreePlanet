@@ -174,10 +174,35 @@ export const colTableProducer = [
   AddCol({ name: 'website', label_trans: 'producer.website' }),
 ]
 
+export const getcolorderscart = [
+  AddCol({ name: 'numorder', label_trans: 'order.numorder' }),
+  AddCol({ name: 'created_at', label_trans: 'order.created_at', fieldtype: tools.FieldType.date }),
+  AddCol({ name: 'status', label_trans: 'order.status' }),
+  AddCol({ name: 'items', label_trans: 'order.items' }),
+  AddCol({ name: 'userId', label_trans: 'order.users', fieldtype: tools.FieldType.select, jointable: 'users' }),
+  AddCol({ name: 'note', label_trans: 'order.note' }),
+]
+
 export const colTableShareWithUs = [
   AddCol({ name: 'description', label_trans: 'share.description' }),
   AddCol({ name: 'numshared', label_trans: 'share.numshared', fieldtype: tools.FieldType.number }),
   AddCol({ name: 'rating', label_trans: 'share.rating', fieldtype: tools.FieldType.number }),
+]
+export const colTablegroups = [
+  AddCol({ name: 'descr', label_trans: 'share.description' }),
+  AddCol({ name: 'resp', label_trans: 'reg.resp' }),
+  AddCol({ name: 'viceResp', label_trans: 'reg.viceResp' }),
+  AddCol({
+    name: 'assignedToUsers',
+    label_trans: 'reg.userslist',
+    fieldtype: tools.FieldType.multiselect,
+    jointable: 'users'
+  }),
+]
+
+export const colTabledepartments = [
+  AddCol({ name: 'name', label_trans: 'store.name' }),
+  AddCol({ name: 'username', label_trans: 'store.username' })
 ]
 
 export const colTableStorehouse = [
@@ -197,7 +222,6 @@ export const colTableProducts = [
   AddCol({ name: 'description', label_trans: 'products.description' }),
   AddCol({ name: 'icon', label_trans: 'products.icon' }),
   AddCol({ name: 'img', label_trans: 'products.img' }),
-  AddCol({ name: 'department', label_trans: 'products.department' }),
   // AddCol({ name: 'idProducer', label_trans: 'products.idProducer' }),
   AddCol({
     name: 'idProducer',
@@ -211,6 +235,13 @@ export const colTableProducts = [
     fieldtype: tools.FieldType.multiselect,
     jointable: 'storehouses'
   }),
+  AddCol({
+    name: 'department',
+    label_trans: 'products.department',
+    fieldtype: tools.FieldType.select,
+    jointable: 'departments'
+  }),
+  // AddCol({ name: 'department', label_trans: 'products.department' }),
   AddCol({ name: 'category', label_trans: 'products.category' }),
   AddCol({ name: 'price', label_trans: 'products.price', fieldtype: tools.FieldType.number }),
   AddCol({ name: 'color', label_trans: 'products.color' }),
@@ -517,7 +548,7 @@ export const fieldsTable = {
 
   getTableJoinByName(table) {
     if (table === 'permissions')
-      return [shared_consts.Permissions.Admin, shared_consts.Permissions.Manager, shared_consts.Permissions.Teacher, shared_consts.Permissions.Tutor, shared_consts.Permissions.Traduttrici, shared_consts.Permissions.Zoomeri]
+      return [shared_consts.Permissions.Admin, shared_consts.Permissions.Manager, shared_consts.Permissions.Teacher, shared_consts.Permissions.Tutor, shared_consts.Permissions.Traduttrici, shared_consts.Permissions.Zoomeri, shared_consts.Permissions.Department]
     else if (table === 'accepted')
       return [shared_consts.Accepted.CHECK_READ_GUIDELINES, shared_consts.Accepted.CHECK_SEE_VIDEO_PRINCIPI]
     else if (table === 'fieldstype')
@@ -930,6 +961,13 @@ export const fieldsTable = {
       label: 'Produttori',
       columns: colTableProducer,
       colkey: '_id',
+      collabel: 'name'
+    },
+    {
+      value: 'departments',
+      label: 'Uffici',
+      columns: colTabledepartments,
+      colkey: 'username',
       collabel: 'name'
     },
     {

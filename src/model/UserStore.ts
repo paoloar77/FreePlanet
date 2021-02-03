@@ -120,6 +120,7 @@ export interface IUserState {
   isLogged?: boolean
   isAdmin?: boolean
   isManager?: boolean
+  isDepartment?: boolean
   isTutor?: boolean
   isZoomeri?: boolean
   isTraduttrici?: boolean

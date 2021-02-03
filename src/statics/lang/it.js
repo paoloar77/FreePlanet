@@ -220,6 +220,7 @@ const msg_it = {
       options: 'Opzioni',
     },
     dashboard: {
+      info: 'Info',
       commento: 'Commento',
       azione: 'Azione',
       inviato: 'Inviato',
@@ -416,6 +417,9 @@ const msg_it = {
       non_verificato: "Non Verificato",
       forgetpassword: "Password dimenticata?",
       modificapassword: "Modifica Password",
+      resp: "Responsabile",
+      viceResp: "Vice Rrsponsabile",
+      userslist: "Lista Persone",
       err: {
         required: 'è richiesto',
         email: 'inserire una email valida',
@@ -534,7 +538,8 @@ const msg_it = {
       privacywrite: 'Chi lo puo modificare:',
       totalphases: 'Totale Fasi',
       themecolor: 'Tema Colore',
-      themebgcolor: 'Tema Colore Sfondo'
+      themebgcolor: 'Tema Colore Sfondo',
+      group: 'Gruppo'
     },
     where: {
       code: 'Id',

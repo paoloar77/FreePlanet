@@ -60,7 +60,7 @@ export default class MenuOne extends Vue {
     return text
   }
 
-  get static_data(){
+  get static_data() {
     return static_data
   }
 
@@ -80,6 +80,10 @@ export default class MenuOne extends Vue {
       menu += ' isAdmin'
     if (elem.onlyManager)
       menu += ' isManager'
+    if (elem.onlySocioResidente)
+      menu += ' isSocioResidente'
+    if (elem.onlyDepartment)
+      menu += ' isDepartment'
     if (elem.onlyTutor)
       menu += ' isTutor'
     if (elem.onlyTraduttrici)

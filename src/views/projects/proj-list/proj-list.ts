@@ -37,74 +37,8 @@ const namespace: string = 'Projects'
 })
 
 export default class ProjList extends Vue {
-  public $q: any
-  public projbottom: string = ''
-  public prova: string = ''
-  public provatr: string = ''
-  public polling = null
-  public service: any
-  public scrollable = true
-  public dragname: string = 'second'
-  public idProjAtt: string = process.env.PROJECT_ID_MAIN
-  public splitterModel = 50 // start at 50%
-  public itemproj: IProject = null
-  public itemprojparent: IProject = null
-  public idsel: string = ''
-  public itemselproj: IProject = Projects.getters.getRecordEmpty()
-  public itemtodosel: ITodo = Todos.getters.getRecordEmpty()
-  public whatisSel: number = 0
-  public colProgress: string = 'blue'
-  public percProgress: string = 'percProgress'
-  public readonly: boolean = false
 
-  public selectStatus: any[] = tools.selectStatus[toolsext.getLocale()]
-  public selectPhase: any[] = tools.selectPhase[toolsext.getLocale()]
-  public selectPrivacy: any[] = tools.selectPrivacy[toolsext.getLocale()]
-
-  public $refs: {
-    singleproject: SingleProject[],
-    ctodo: CTodo
-  }
-
-  @Getter('projs_dacompletare', { namespace })
-  public projs_dacompletare: (state: IProjectsState, id_parent: string, tipoproj: string) => IProject[]
-
-  // @Watch('projs_dacompletare')
-  // public changeitems() {
-  //   this.updateindexProj()
-  // }
-
-  @Watch('$route.name')
-  public changename() {
-    console.log('tools.getUrlByTipoProj(this.tipoProj)', tools.getUrlByTipoProj(this.tipoProj))
-    this.changeparent()
-  }
-
-  @Watch('$route.params.idProj')
-  public changeparent() {
-    this.idProjAtt = this.$route.params.idProj
-    this.updateindexProj()
-    this.selproj()
-  }
-
-  @Watch('itemselproj.progressCalc')
-  public changeprogress() {
-    this.updateclasses()
-  }
-
-  private updateindexProj() {
-    // console.log('idProjAtt', this.idProjAtt)
-    this.itemproj = Projects.getters.getRecordById(this.idProjAtt)
-    if (!!this.itemproj) {
-      this.itemprojparent = Projects.getters.getRecordById(this.itemproj.id_parent)
-      console.log('this.itemproj.descr', this.itemproj.descr)
-    }
-    // console.log('idproj', this.idProjAtt, 'params' , this.$route.params)
-  }
-
-  public keyDownArea(e) {
-    console.log('keyDownArea')
-  }
+  public tabproj: string = 'info'
 
   get classTitle() {
     let cl = 'flex-item categorytitle shadow-4'
@@ -133,12 +67,19 @@ export default class ProjList extends Vue {
     } else {
       cl += ' text-black' + ' bg-light-blue'
     }
+
+    if (!tools.isMobile())
+      cl += ' full-width '
     return cl
   }
 
   get tipoProj() {
     // console.log('this.$route.name', this.$route.name)
-    return this.$route.name
+    const myarr = this.$route.name.split('.')
+    if (myarr)
+      return myarr[1]
+    else
+      return this.$route.name
   }
 
   get readonly_PanelPrivacy() {
@@ -182,7 +123,7 @@ export default class ProjList extends Vue {
   }
 
   set showtype(value) {
-    console.log('showtype', value)
+    // console.log('showtype', value)
     GlobalStore.mutations.setShowType(value)
   }
 
@@ -268,10 +209,10 @@ export default class ProjList extends Vue {
         if (date.getDateDiff(mydate, datenow) < 0) {
           mydate = datenow
         }
-        console.log('mydate', mydate)
+        // console.log('mydate', mydate)
         this.itemselproj.endwork_estimate = date.addToDate(mydate, { days })
 
-        console.log('   days', days, 'weeks', weeks, 'orerimaste', orerimaste, 'dateestimated', this.itemselproj.endwork_estimate)
+        // console.log('   days', days, 'weeks', weeks, 'orerimaste', orerimaste, 'dateestimated', this.itemselproj.endwork_estimate)
 
         return this.itemselproj.endwork_estimate
       } catch (e) {
@@ -295,10 +236,81 @@ export default class ProjList extends Vue {
 
   }
 
+  get isHorizontal() {
+    return (Screen.width < 600)
+  }
+
+  get myStyle() {
+    if (this.isHorizontal)
+      return 'height: 600px'
+    else
+      return ''
+  }
+  public $q: any
+  public projbottom: string = ''
+  public prova: string = ''
+  public provatr: string = ''
+  public polling = null
+  public service: any
+  public scrollable = true
+  public dragname: string = 'second'
+  public idProjAtt: string = process.env.PROJECT_ID_MAIN
+  public splitterModel = 50 // start at 50%
+  public itemproj: IProject = null
+  public itemprojparent: IProject = null
+  public idsel: string = ''
+  public itemselproj: IProject = Projects.getters.getRecordEmpty()
+  public itemtodosel: ITodo = Todos.getters.getRecordEmpty()
+  public whatisSel: number = 0
+  public colProgress: string = 'blue'
+  public percProgress: string = 'percProgress'
+  public readonly: boolean = false
+
+  public selectStatus: any[] = tools.selectStatus[toolsext.getLocale()]
+  public selectPhase: any[] = tools.selectPhase[toolsext.getLocale()]
+  public selectPrivacy: any[] = tools.selectPrivacy[toolsext.getLocale()]
+  public selectGroup: any[] = []
+
+  public $refs: {
+    singleproject: SingleProject[],
+    ctodo: CTodo
+  }
+
+  @Getter('projs_dacompletare', { namespace })
+  public projs_dacompletare: (state: IProjectsState, id_parent: string, tipoproj: string) => IProject[]
+
+  // @Watch('projs_dacompletare')
+  // public changeitems() {
+  //   this.updateindexProj()
+  // }
+
+  @Watch('$route.name')
+  public changename() {
+    // console.log('tools.getUrlByTipoProj(this.tipoProj)', tools.getUrlByTipoProj(this.tipoProj))
+    this.changeparent()
+  }
+
+  @Watch('$route.params.idProj')
+  public changeparent() {
+    // console.log('this.$route.params.idProj', this.$route.params)
+    this.idProjAtt = this.$route.params.idProj
+    this.updateindexProj()
+    this.selproj()
+  }
+
+  @Watch('itemselproj.progressCalc')
+  public changeprogress() {
+    this.updateclasses()
+  }
+
+  public keyDownArea(e) {
+    // console.log('keyDownArea')
+  }
+
   // I use this because the statustodo will disappear from the UI, so it won't call the status changed...
   // in this case I need to call manually the modify.
   public modifyfieldtodo(field) {
-    console.log('modifyfieldtodo', field)
+    // console.log('modifyfieldtodo', field)
     Todos.actions.modify({ myitem: this.itemtodosel, field })
   }
 
@@ -313,17 +325,17 @@ export default class ProjList extends Vue {
   }
 
   public async onEndproj(itemdragend) {
-    console.log('onEndproj...')
+    // console.log('onEndproj...')
     await Projects.actions.swapElems(itemdragend)
   }
 
   public created() {
-    const $service = this.$dragula.$service
-    tools.dragula_option($service, this.dragname)
+    const service = this.$dragula.$service
+    tools.dragula_option(service, this.dragname)
 
     this.updateclasses()
 
-    $service.eventBus.$on('dragend', (args) => {
+    service.eventBus.$on('dragend', (args) => {
 
       // console.log('args proj-list', args)
       if (args.name === this.dragname) {
@@ -340,25 +352,14 @@ export default class ProjList extends Vue {
       }
     })
 
-    $service.eventBus.$on('drag', (el, source) => {
+    service.eventBus.$on('drag', (el, source) => {
       this.scrollable = false
     })
-    $service.eventBus.$on('drop', (el, source) => {
+    service.eventBus.$on('drop', (el, source) => {
       this.scrollable = true
     })
 
     this.load()
-  }
-
-  get isHorizontal() {
-    return (Screen.width < 600)
-  }
-
-  get myStyle(){
-    if (this.isHorizontal)
-      return 'height: 600px'
-    else
-      return ''
   }
 
   public mounted() {
@@ -378,11 +379,15 @@ export default class ProjList extends Vue {
   }
 
   public async load() {
-    console.log('LOAD PROJECTS....')
+    // console.log('LOAD PROJECTS....')
     if (!!this.$route.params.idProj) {
       this.idProjAtt = this.$route.params.idProj
       this.updateindexProj()
     }
+
+    this.selectGroup = tools.getGroupList()[toolsext.getLocale()]
+
+    console.log('this.selectGroup', this.selectGroup)
 
     // Set last category selected
     // localStorage.setItem(tools.localStorage.categorySel, this.categoryAtt)
@@ -402,12 +407,12 @@ export default class ProjList extends Vue {
   }
 
   public mydeleteitemproj(idobj: string) {
-    console.log('mydeleteitemtodo', idobj)
+    // console.log('mydeleteitemtodo', idobj)
     return Projects.actions.deleteItem({ idobj })
   }
 
   public dbInsert() {
-    console.log('dbInsert')
+    // console.log('dbInsert')
     const descr = this.projbottom.trim()
 
     this.projbottom = ''
@@ -416,13 +421,17 @@ export default class ProjList extends Vue {
   }
 
   public async clickMenuProjList(action) {
-    console.log('clickMenuProjList: ', action)
+    // console.log('clickMenuProjList: ', action)
     if (action === lists.MenuAction.ADD_PROJECT) {
-      const idnewelem = await this.addProject('', this.tipoProj)
+      const idnewelem = await this.addProject('test...', this.tipoProj)
+      // console.log('idnewelem', idnewelem)
       // get element by id
       const elem = this.getCompProjectById(idnewelem)
-      // @ts-ignore
-      elem.activeEdit()
+
+      if (!!elem) {
+        // @ts-ignore
+        elem.activeEdit()
+      }
       // console.log('idnewelem', idnewelem, 'Elem Trovato', elem)
     } else if (action === lists.MenuAction.PASTE) {
 
@@ -441,7 +450,7 @@ export default class ProjList extends Vue {
 
   public getCompProjectById(id): SingleProject {
     if (!!this.$refs.singleproject) {
-      console.log('this.$refs.singleproject', this.$refs.singleproject)
+      // console.log('this.$refs.singleproject', this.$refs.singleproject)
       for (const elem of this.$refs.singleproject) {
         // @ts-ignore
         if (elem.itemproject._id === id) {
@@ -449,12 +458,14 @@ export default class ProjList extends Vue {
         }
       }
     }
+    return null
   }
 
   // const descr = this.$t('project.newproj').toString()
 
   public async addProject(descr, tipoproj: string) {
     const projatt = Projects.getters.getRecordById(this.idProjAtt)
+    // console.log('projatt', projatt)
     let myobj: IProject = null
     if (this.idProjAtt === process.env.PROJECT_ID_MAIN) {
       myobj = {
@@ -462,15 +473,21 @@ export default class ProjList extends Vue {
         id_parent: this.idProjAtt,
         privacyread: tools.getprivacyreadbytipoproj(tipoproj),
         privacywrite: tools.getprivacywritebytipoproj(tipoproj),
-        actualphase: projatt.actualphase
+      }
+
+      if (projatt) {
+        myobj.actualphase = projatt.actualphase
       }
     } else {
       myobj = {
         descr,
         id_parent: this.idProjAtt,
-        privacyread: projatt.privacyread,
-        privacywrite: projatt.privacywrite,
-        actualphase: projatt.actualphase
+      }
+
+      if (projatt) {
+        myobj.actualphase = projatt.actualphase
+        myobj.privacyread = projatt.privacyread
+        myobj.privacywrite = projatt.privacywrite
       }
     }
 
@@ -488,11 +505,13 @@ export default class ProjList extends Vue {
         myobj.id_main_project = this.itemproj.id_main_project
     }
 
+    // console.log('myobj', myobj)
+
     if (!tools.checkIfUserExist(this)) {
       return
     }
 
-    console.log('Nuovo PROJ', myobj)
+    // console.log('Nuovo PROJ', myobj)
     return await Projects.actions.dbInsert({ myobj, atfirst: false })
   }
 
@@ -518,14 +537,20 @@ export default class ProjList extends Vue {
   }
 
   public checkiftoenable() {
-    if (this.whatisSel === tools.WHAT_NOTHING)
-      this.splitterModel = 100
-    else
+
+    if (tools.isMobile()) {
+
+      if (this.whatisSel === tools.WHAT_NOTHING)
+        this.splitterModel = 100
+      else
+        this.splitterModel = 0
+    } else {
       this.splitterModel = 0
+    }
   }
 
   public setdeselectrow() {
-    console.log('setdeselectrow')
+    // console.log('setdeselectrow')
     this.itemtodosel = null
     this.itemselproj = null
     this.whatisSel = tools.WHAT_NOTHING
@@ -538,7 +563,7 @@ export default class ProjList extends Vue {
   }
 
   public async updateitemproj({ myitem, field }) {
-    console.log('calling MODIFY updateitemproj', myitem, field)
+    // console.log('calling MODIFY updateitemproj', myitem, field)
 
     await Projects.actions.modify({ myitem, field })
 
@@ -627,6 +652,16 @@ export default class ProjList extends Vue {
     ApiTables.waitAndcheckPendingMsg()
   }
 
+  private updateindexProj() {
+    // console.log('idProjAtt', this.idProjAtt)
+    this.itemproj = Projects.getters.getRecordById(this.idProjAtt)
+    if (!!this.itemproj) {
+      this.itemprojparent = Projects.getters.getRecordById(this.itemproj.id_parent)
+      // console.log('this.itemproj.descr', this.itemproj.descr)
+    }
+    // console.log('idproj', this.idProjAtt, 'params' , this.$route.params)
+  }
+
   private getElementIndex(el: any) {
     return [].slice.call(el.parentElement.children).indexOf(el)
   }
@@ -635,5 +670,19 @@ export default class ProjList extends Vue {
     return parseInt(el.attributes.index.value, 10)
   }
 
+  get iconPriority() {
+    let iconpriority = ''
+    if (this.itemtodosel.priority === tools.Priority.PRIORITY_HIGH) {
+      iconpriority = 'expand_less'
+    }  // expand_less
+    else if (this.itemtodosel.priority === tools.Priority.PRIORITY_NORMAL) {
+      iconpriority = 'remove'
+    }
+    else if (this.itemtodosel.priority === tools.Priority.PRIORITY_LOW) {
+      iconpriority = 'expand_more'
+    }  // expand_more
+
+    return iconpriority
+  }
 
 }

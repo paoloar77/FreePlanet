@@ -145,7 +145,7 @@ export default class CheckOut extends MixinBase {
       },
       title: 'Ordine'
     }).onOk(async () => {
-      const status = shared_consts.OrderStatus.CHECKOUT_CONFIRMED
+      const status = shared_consts.OrderStatus.CHECKOUT_SENT
       const statusnow = await Products.actions.UpdateStatusCart({ cart_id: this.mycart._id, status })
 
       if (statusnow === status) {

@@ -70,6 +70,13 @@ export interface IProducer {
   website?: string,
 }
 
+export interface IDepartment {
+  _id?: any
+  idapp?: string
+  name?: string,
+  username?: string,
+}
+
 export interface IStorehouse {
   _id?: any
   idapp?: string
@@ -89,6 +96,7 @@ export interface ICart {
   userId?: string
   totalQty?: number
   totalPrice?: number
+  department?: string
   items?: IBaseOrder[]
   note?: string
   modify_at?: Date
@@ -101,6 +109,7 @@ export interface IOrderCart {
   userId?: string
   totalQty?: number
   totalPrice?: number
+  department?: string
   items?: IBaseOrder[]
   status?: number
   note?: string

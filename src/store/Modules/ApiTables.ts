@@ -8,7 +8,7 @@ import { toolsext } from '@src/store/Modules/toolsext'
 
 export const OtherTables = ['categories', 'config', 'swmsg']
 export const MainTables = ['todos', 'projects']
-export const allMethod = ['sync_post_', 'sync_patch_', 'delete_']
+export const allMethod = ['sync_post_', 'sync_patch_', 'delete_', 'hide_']
 
 export function getLinkByTableName(nametable) {
   if (nametable === 'todos') {
@@ -24,9 +24,11 @@ export const DB = {
   CMD_SYNC: 'sync',
   CMD_SYNC_NEW: 'sync-new',
   CMD_DELETE: 'sync-delete',
+  CMD_HIDE: 'sync-hide',
   TABLE_SYNC_POST: 'sync_post_',
   TABLE_SYNC_PATCH: 'sync_patch_',
-  TABLE_DELETE: 'delete_'
+  TABLE_DELETE: 'delete_',
+  TABLE_HIDE: 'hide_'
 }
 
 export function allTables() {
@@ -82,9 +84,40 @@ async function dbDeleteItem(call, item) {
 
     call = '/' + call
 
-    const res = await Api.SendReq(call + item._id, 'DELETE', item)
+    const res = await Api.SendReq(call + item._id, 'DELETE', null)
       .then((myres) => {
         console.log('dbdeleteItem to the Server')
+        return myres
+      })
+      .catch((error) => {
+        UserStore.mutations.setErrorCatch(error)
+        return UserStore.getters.getServerCode
+      })
+
+    return res
+  }
+}
+
+async function dbHideItem(call, item) {
+
+  if (!('serviceWorker' in navigator)) {
+    // console.log('dbdeleteItem', item)
+    if (UserStore.getters.isUserInvalid) {
+      return false
+    } // Login not made
+
+    item = {
+      ...item,
+      hide: true
+    }
+
+    console.log('dbHideItem', item)
+
+    call = '/' + call
+
+    const res = await Api.SendReq(call + item._id + '/true', 'DELETE', null)
+      .then((myres) => {
+        console.log('dbHideItem to the Server')
         return myres
       })
       .catch((error) => {
@@ -105,7 +138,7 @@ async function Sync_Execute(cmd, tablesync, nametab, method, item: ITodo, id, ms
   }
 
   let cmdSw = cmd
-  if ((cmd === DB.CMD_SYNC_NEW) || (cmd === DB.CMD_DELETE)) {
+  if ((cmd === DB.CMD_SYNC_NEW) || (cmd === DB.CMD_DELETE) || (cmd === DB.CMD_HIDE)) {
     cmdSw = DB.CMD_SYNC
   }
 
@@ -161,7 +194,7 @@ async function Sync_Execute(cmd, tablesync, nametab, method, item: ITodo, id, ms
   }
 }
 
-async function Sync_ExecuteCmd(cmd, nametab: string, method, item: ITodo, id, msg: String) {
+async function Sync_ExecuteCmd(cmd, nametab: string, method, item: ITodo, id, msg: string) {
   // Send to Server to Sync
 
   let tablesync = ''
@@ -171,6 +204,8 @@ async function Sync_ExecuteCmd(cmd, nametab: string, method, item: ITodo, id, ms
     tablesync = DB.TABLE_SYNC_PATCH + nametab
   } else if (method === 'DELETE') {
     tablesync = DB.TABLE_DELETE + nametab
+  } else if (method === 'HIDE') {
+    tablesync = DB.TABLE_HIDE + nametab
   }
 
   const risdata = await Sync_Execute(cmd, tablesync, nametab, method, item, id, msg)
@@ -181,6 +216,8 @@ async function Sync_ExecuteCmd(cmd, nametab: string, method, item: ITodo, id, ms
     }
   } else if (cmd === DB.CMD_DELETE) {
     await dbDeleteItem(nametab, item)
+  } else if (cmd === DB.CMD_HIDE) {
+    await dbHideItem(nametab, item)
   }
 
   return risdata
@@ -192,6 +229,10 @@ export async function Sync_SaveItem(nametab: string, method, item) {
 
 export function Sync_DeleteItem(nametab: string, item, id) {
   Sync_ExecuteCmd(DB.CMD_DELETE, nametab, 'DELETE', item, id, '')
+}
+
+export function Sync_HideItem(nametab: string, item, id) {
+  Sync_ExecuteCmd(DB.CMD_HIDE, nametab, 'HIDE', item, id, '')
 }
 
 export async function aftercalling(ris, checkPending: boolean, nametabindex: string) {
@@ -387,13 +428,14 @@ function setmodifiedIfchanged(recOut, recIn, field) {
 }
 
 export async function table_ModifyRecord(nametable, myitem, listFieldsToChange, field) {
+  console.log('table_ModifyRecord ... ', nametable)
   if (myitem === null) {
     return new Promise((resolve, reject) => {
       resolve()
     })
   }
 
-  console.log('--> table_ModifyRecord', nametable, myitem.descr)
+  // console.log('--> table_ModifyRecord', nametable, myitem.descr)
 
   if ((field === 'status') && (nametable === 'todos') && (myitem.status === tools.Status.COMPLETED)) {
     myitem.completed_at = tools.getDateNow()
@@ -412,8 +454,10 @@ export async function table_ModifyRecord(nametable, myitem, listFieldsToChange, 
     setmodifiedIfchanged(miorec, myobjsaved, myfield)
   })
 
+  console.log( ' ... 4 ')
+
   if (miorec.modified) {
-    // console.log('    ' + nametable + ' MODIFICATO! ', miorec.descr, miorec.pos, 'SALVALO SULLA IndexedDB')
+    console.log('    ' + nametable + ' MODIFICATO! ', miorec.descr, miorec.pos, 'SALVALO SULLA IndexedDB')
     miorec.modify_at = tools.getDateNow()
     miorec.modified = false
 
@@ -429,7 +473,7 @@ export async function table_ModifyRecord(nametable, myitem, listFieldsToChange, 
         return Sync_SaveItem(nametable, 'PATCH', miorec)
 
       })
-  // } else {
+    // } else {
     //   console.log('      ', miorec.descr, 'NON MODIF!')
   }
 }
@@ -445,6 +489,21 @@ export function table_DeleteRecord(nametable, myobjtrov, id) {
   globalroutines(null, 'delete', nametable, null, id)
 
   // 3) Delete from the Server (call)
+  Sync_DeleteItem(nametable, myobjtrov, id)
+
+}
+
+export function table_HideRecord(nametable, myobjtrov, id) {
+
+  const mymodule = tools.getModulesByTable(nametable)
+
+  // 1) Delete from the Todos Array
+  mymodule.mutations.deletemyitem(myobjtrov)
+
+  // 2) Delete from the IndexedDb
+  globalroutines(null, 'delete', nametable, null, id)
+
+  // 3) Hide  from the Server (call)
   Sync_DeleteItem(nametable, myobjtrov, id)
 
 }

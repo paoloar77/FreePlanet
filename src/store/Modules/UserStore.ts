@@ -57,6 +57,7 @@ export const DefaultUser: IUserFields = {
     userId: '',
     items: [],
     totalPrice: 0,
+    department: '',
     totalQty: 0,
     note: '',
   }
@@ -103,6 +104,7 @@ const state: IUserState = {
   isLogged: false,
   isAdmin: false,
   isManager: false,
+  isDepartment: false,
   isTutor: false,
   isZoomeri: false,
   isTraduttrici: false,
@@ -341,6 +343,7 @@ namespace Mutations {
     mystate.isManager = tools.isBitActive(mystate.my.perm, shared_consts.Permissions.Manager.value)
     mystate.isTutor = tools.isBitActive(mystate.my.perm, shared_consts.Permissions.Tutor.value)
     mystate.isZoomeri = tools.isBitActive(mystate.my.perm, shared_consts.Permissions.Zoomeri.value)
+    mystate.isDepartment = tools.isBitActive(mystate.my.perm, shared_consts.Permissions.Department.value)
     mystate.isTeacher = tools.isBitActive(mystate.my.perm, shared_consts.Permissions.Teacher.value)
     mystate.isTraduttrici = tools.isBitActive(mystate.my.perm, shared_consts.Permissions.Traduttrici.value)
 
@@ -897,6 +900,7 @@ namespace Actions {
         GlobalStore.mutations.setCategorySel(localStorage.getItem(tools.localStorage.categorySel))
 
         GlobalStore.actions.checkUpdates()
+
       }
 
       const isok = await GlobalStore.actions.loadAfterLogin()

@@ -32,7 +32,7 @@ const state: ITodosState = {
   visuLastCompleted: 10
 }
 
-const listFieldsToChange: string [] = ['descr', 'statustodo', 'category', 'expiring_at', 'priority', 'id_prev', 'pos', 'enableExpiring', 'progress', 'phase', 'assigned_to_userId', 'hoursplanned', 'hoursworked', 'start_date', 'completed_at', 'themecolor', 'themebgcolor']
+const listFieldsToChange: string [] = ['descr', 'statustodo', 'category', 'expiring_at', 'priority', 'pos', 'enableExpiring', 'progress', 'phase', 'assigned_to_userId', 'hoursplanned', 'hoursworked', 'start_date', 'completed_at', 'themecolor', 'themebgcolor', 'assignedToUsers']
 
 const b = storeBuilder.module<ITodosState>('Todos', state)
 const stateGetter = b.state()
@@ -77,7 +77,6 @@ namespace Getters {
       category: '',
       expiring_at: tomorrow,
       enableExpiring: false,
-      id_prev: '',
       pos: 0,
       modified: false,
       progress: 0,
@@ -88,7 +87,8 @@ namespace Getters {
       hoursworked: 0,
       start_date: tools.getDateNull(),
       themecolor: 'blue',
-      themebgcolor: 'white'
+      themebgcolor: 'white',
+      assignedToUsers: []
     }
     // return this.copy(objtodo)
     return objtodo
@@ -103,6 +103,9 @@ namespace Getters {
     } else {
       arrout = []
     }
+
+    if (arrout)
+      arrout = arrout.sort((a, b) => a.pos - b.pos)
 
     // return tools.mapSort(arrout)
     return arrout
@@ -126,7 +129,10 @@ namespace Getters {
         arrout = []
       }
 
-      console.log('arrout', arrout)
+      if (arrout)
+        arrout = arrout.sort((a, b) => a.pos - b.pos)
+
+      // console.log('arrout', arrout)
 
       return arrout
       // return tools.mapSort(arrout)
@@ -309,15 +315,18 @@ namespace Actions {
       console.log('myobjtrov', myobjtrov.descr)
 
       if (!!myobjtrov) {
+        /*
         const myobjnext = tools.getElemPrevById(myarr, myobjtrov._id)
 
         if (!!myobjnext) {
-          myobjnext.id_prev = myobjtrov.id_prev
+          myobjnext.pos = myobjtrov.pos + 1
           myobjnext.modified = true
-          await modify(context, { myitem: myobjnext, field: 'id_prev' })
+          await modify(context, { myitem: myobjnext, field: 'pos' })
         }
 
-        ApiTables.table_DeleteRecord(nametable, myobjtrov, idobj)
+         */
+
+        ApiTables.table_HideRecord(nametable, myobjtrov, idobj)
       }
     }
   }
@@ -336,13 +345,13 @@ namespace Actions {
     if (atfirst) {
       console.log('INSERT AT THE TOP')
       elemtochange = tools.getFirstList(myarr)
-      objtodo.id_prev = ApiTables.LIST_START
+      objtodo.pos = 10
     } else {
       console.log('INSERT AT THE BOTTOM')
       // INSERT AT THE BOTTOM , so GET LAST ITEM
       const lastelem = tools.getLastListNotCompleted(nametable, objtodo.category, this.tipoProj)
 
-      objtodo.id_prev = (!!lastelem) ? lastelem._id : ApiTables.LIST_START
+      objtodo.pos = (!!lastelem) ? lastelem.pos + 10 : 10
     }
     objtodo.modified = false
 
@@ -353,9 +362,9 @@ namespace Actions {
     let field = ''
     if (atfirst) {    // update also the last elem
       if (!!elemtochange) {
-        elemtochange.id_prev = id
+        elemtochange.pos = objtodo.pos
         console.log('elemtochange', elemtochange)
-        field = 'id_prev'
+        field = 'pos'
 
         // Modify the other record
         await modify(context, { myitem: elemtochange, field })
@@ -444,7 +453,7 @@ namespace Actions {
         if (!!dest_obj) {
           dest_obj.category = action._id
           dest_obj.modified = true
-          dest_obj.id_prev = null
+          dest_obj.pos = 1
 
           GlobalStore.state.lastaction.type = 0
 

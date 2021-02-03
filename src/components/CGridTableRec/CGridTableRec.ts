@@ -79,6 +79,10 @@ export default class CGridTableRec extends Vue {
     return UserStore.state.isManager
   }
 
+  get isSocioResidente() {
+    return UserStore.state.my.profile.socioresidente
+  }
+
   get isTutor() {
     return UserStore.state.isTutor
   }

@@ -73,6 +73,12 @@ export const shared_consts = {
       label: 'dashboard.zoomeri',
       icon: 'fas fa-user-tie',
       color: 'yellow'
+    },
+    Department: {
+      value: 64,
+      label: 'pages.department',
+      icon: 'fas fa-user-tie',
+      color: 'yellow'
     }
   },
 
@@ -91,7 +97,7 @@ export const shared_consts = {
   TypeMsg_Actions: {
     NORMAL: 0,
     YESNO: 1,
-    OPZ1_2: 2,
+    OPZ1_2: 2
   },
 
   selectActions: [
@@ -138,13 +144,53 @@ export const shared_consts = {
   OrderStatus: {
     NONE: 0,
     IN_CART: 1,
-    CHECKOUT_CONFIRMED: 2,
-    PAYED: 3,
-    DELIVEDED: 4,
-    RECEIVED: 5,
-    CANCELED: 10,
+    CHECKOUT_SENT: 2,
+    ORDER_CONFIRMED: 3,
+    PAYED: 4,
+    DELIVEDED: 5,
+    RECEIVED: 6,
+    CANCELED: 10
   },
 
+  OrderStatusStr: [
+    {
+      label: 'Nessuno',
+      value: 0
+    },
+    {
+      label: 'In Carrello',
+      value: 1
+    },
+    {
+      label: 'Ordine Inviato',
+      value: 2
+    },
+    {
+      label: 'Ordine Confermato',
+      value: 3
+    },
+    {
+      label: 'Pagato',
+      value: 4
+    },
+    {
+      label: 'Spedito',
+      value: 5
+    },
+    {
+      label: 'Ricevuto',
+      value: 6
+    },
+    {
+      label: 'Cancellato',
+      value: 10
+    }
+  ],
+
+  getStatusStr(status) {
+    const trovatorec = this.OrderStatusStr.find((rec) => rec.value === status)
+    return (!!trovatorec) ? trovatorec.label : ''
+  },
 
   fieldsUserToChange() {
     return ['_id', 'username', 'email', 'name', 'surname', 'perm', 'date_reg', 'verified_email', 'img', 'ipaddr', 'lasttimeonline', 'profile', 'news_on']

@@ -75,9 +75,9 @@ namespace Getters {
 
   const getOrdersCart = b.read((stateparamf: IProductsState) => (tipoord: string): IOrderCart[] => {
     if (tipoord === 'incorso')
-      return state.orders.filter((rec) => rec.status <= shared_consts.OrderStatus.CHECKOUT_CONFIRMED)
+      return state.orders.filter((rec) => rec.status <= shared_consts.OrderStatus.CHECKOUT_SENT)
     else
-      return state.orders.filter((rec) => rec.status < shared_consts.OrderStatus.RECEIVED && rec.status > shared_consts.OrderStatus.CHECKOUT_CONFIRMED)
+      return state.orders.filter((rec) => rec.status < shared_consts.OrderStatus.RECEIVED && rec.status > shared_consts.OrderStatus.CHECKOUT_SENT)
   }, 'getOrdersCart')
 
   const existProductInCart = b.read((stateparamf: IProductsState) => (idproduct): boolean => {
@@ -218,14 +218,14 @@ namespace Actions {
     return ris
   }
 
-  async function loadCart(context) {
+  async function loadOrders(context) {
 
-    console.log('loadCart')
+    console.log('loadOrders')
 
     if (!static_data.functionality.ENABLE_ECOMMERCE)
       return null
 
-    console.log('loadCart', 'userid=', UserStore.state.my._id)
+    console.log('loadOrders', 'userid=', UserStore.state.my._id)
 
     // if (UserStore.state.my._id === '') {
     //   return new Types.AxiosError(0, null, 0, '')
@@ -244,7 +244,7 @@ namespace Actions {
         return res
       })
       .catch((error) => {
-        console.log('error loadCart', error)
+        console.log('error loadOrders', error)
         UserStore.mutations.setErrorCatch(error)
         return new Types.AxiosError(serv_constants.RIS_CODE_ERR, null, tools.ERR_GENERICO, error)
       })
@@ -349,7 +349,7 @@ namespace Actions {
     ris = await Api.SendReq('/cart/' + UserStore.state.my._id + '/cartstatus', 'POST', { cart_id, status })
       .then((res) => {
 
-        if (res.data.status === shared_consts.OrderStatus.CHECKOUT_CONFIRMED) {
+        if (res.data.status === shared_consts.OrderStatus.CHECKOUT_SENT) {
           ProductsModule.state.cart = {}
           if (res.data.orders)
             Products.state.orders = res.data.orders
@@ -366,13 +366,13 @@ namespace Actions {
   }
 
   export const actions = {
-    // loadCart: b.dispatch(loadCart),
     loadProduct: b.dispatch(loadProduct),
     loadProducts: b.dispatch(loadProducts),
     addToCart: b.dispatch(addToCart),
     addSubQtyToItem: b.dispatch(addSubQtyToItem),
     UpdateStatusCart: b.dispatch(UpdateStatusCart),
     removeFromCart: b.dispatch(removeFromCart),
+    loadOrders: b.dispatch(loadOrders),
   }
 
 }

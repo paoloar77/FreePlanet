@@ -114,8 +114,8 @@
                     </FormNewsletter>
 
                     <p class="text-center">
-                        <router-link v-if="static_data.functionality.SHOW_ONLY_POLICY" to="/policy"><span
-                                class="footer_link">{{$t('privacy_policy')}}</span></router-link>
+                        <router-link v-if="static_data.functionality.SHOW_ONLY_POLICY" to="/policy" custom v-slot="{ navigate }">
+                          <span class="footer_link"  @click="navigate" @keypress.enter="navigate" role="link">{{$t('privacy_policy')}}</span></router-link>
                     </p>
 
                 </div>
@@ -131,8 +131,8 @@
                                 <span class="footer_link">{{tools.getLabelByItem(myitemmenu, mythisfoot)}}</span><br/>
                             </div>
                             <div v-else>
-                                <router-link :to="myitemmenu.path">
-                                    <span class="footer_link"><span
+                                <router-link :to="myitemmenu.path" custom v-slot="{ navigate }">
+                                    <span class="footer_link"  @click="navigate" @keypress.enter="navigate" role="link"><span
                                             v-if="myitemmenu.level_child > 0">&nbsp;&nbsp;&nbsp;</span>
                                         {{tools.getLabelByItem(myitemmenu, mythisfoot)}}</span><br/>
                                 </router-link>

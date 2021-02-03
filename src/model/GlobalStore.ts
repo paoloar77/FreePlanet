@@ -2,7 +2,7 @@ import { IAction } from '@src/model/Projects'
 import { Component } from 'vue-router/types/router'
 import { lists } from '@src/store/Modules/lists'
 import { IPaymentType } from '@src/model/UserStore'
-import { ICart, IProducer, IProduct, IShareWithUs, IStorehouse } from '@src/model/Products'
+import { ICart, IDepartment, IProducer, IProduct, IShareWithUs, IStorehouse } from '@src/model/Products'
 
 export interface IPost {
   title: string
@@ -98,6 +98,11 @@ export interface ICalZoom {
   note?: string
 }
 
+export interface IGroup {
+  _id?: any
+  descr?: string
+}
+
 export interface IMailinglist {
   name?: string
   surname?: string
@@ -175,7 +180,9 @@ export interface IGlobalState {
   calzoom: ICalZoom[],
   producers: IProducer[],
   storehouses: IStorehouse[],
+  departments: IDepartment[],
   sharewithus: IShareWithUs[],
+  groups: IGroup[],
   autoplaydisc: number
 }
 
@@ -208,6 +215,8 @@ export interface IListRoutes {
   onlyAdmin?: boolean
   onlyif_logged?: boolean
   onlyManager?: boolean
+  onlySocioResidente?: boolean
+  onlyDepartment?: boolean
   onlyTutor?: boolean
   onlyTraduttrici?: boolean
   extraclass?: string

@@ -110,6 +110,7 @@ export const tools = {
   TABMAILINGLIST: 'mailinglist',
   TABMYPAGE: 'mypage',
   TABCALZOOM: 'calzoom',
+  TABGROUPS: 'groups',
   TABTEMPLEMAIL: 'templemail',
   TABOPZEMAIL: 'opzemail',
   TABSHAREWITHUS: 'sharewithus',
@@ -1072,11 +1073,9 @@ export const tools = {
 
     if (priority === tools.Priority.PRIORITY_HIGH) {
       cl = 'high_priority'
-    }
-    else if (priority === tools.Priority.PRIORITY_NORMAL) {
+    } else if (priority === tools.Priority.PRIORITY_NORMAL) {
       cl = 'medium_priority'
-    }
-    else if (priority === tools.Priority.PRIORITY_LOW) {
+    } else if (priority === tools.Priority.PRIORITY_LOW) {
       cl = 'low_priority'
     }
 
@@ -1116,12 +1115,12 @@ export const tools = {
   ,
 
   logelem(mystr, elem) {
-    console.log(mystr, 'elem [', elem._id, '] ', elem.descr, ' Pr(', tools.getPriorityByInd(elem.priority), ') [', elem.id_prev, '] modif=', elem.modified)
+    console.log(mystr, 'elem [', elem._id, '] ', elem.descr, 'pos', elem.pos, ' Pr(', tools.getPriorityByInd(elem.priority), ')  modif=', elem.modified)
   }
   ,
 
   getelemprojstr(elem) {
-    return 'elem [id= ' + elem._id + '] ' + elem.descr + ' [id_prev= ' + elem.id_prev + '] '
+    return elem.descr + ' [id= ' + elem._id + '] ' + 'pos: ' + elem.pos + ']\n'
   }
   ,
 
@@ -1141,7 +1140,7 @@ export const tools = {
   ,
 
   getstrelem(elem) {
-    return 'elem [' + elem._id + '] ' + elem.descr + ' Pr(' + tools.getPriorityByInd(elem.priority) + ') [ID_PREV=' + elem.id_prev + '] modif=' + elem.modified + ' '
+    return 'elem [' + elem._id + '] ' + elem.descr + ' Pr(' + tools.getPriorityByInd(elem.priority) + ') modif=' + elem.modified + ' '
   }
   ,
 
@@ -1151,7 +1150,7 @@ export const tools = {
   ) {
     let mystr = '\n'
     myarr.forEach((item) => {
-      mystr += '[' + item.pos + '] ' + item.descr + ' Pr(' + tools.getPriorityByInd(item.priority) + ') [' + item.id_prev + '] modif=' + item.modified + '\n'
+      mystr += '[' + item.pos + '] ' + item.descr + ' Pr(' + tools.getPriorityByInd(item.priority) + ')' + ' modif=' + item.modified + '\n'
       // mystr += '[' + item.pos + '] ' + item.descr + '\n'
     })
 
@@ -1198,24 +1197,27 @@ export const tools = {
   }
   ,
 
-  update_idprev(myarr, indelemchange, indelemId) {
+  /* update_idprev(myarr, indelemchange, indelemId) {
     if (tools.isOkIndex(myarr, indelemchange)) {
-      const id_prev = (indelemId >= 0) ? myarr[indelemId]._id : ApiTables.LIST_START
-      console.log('update_idprev [', indelemchange, ']', '[id_prev=', id_prev, ']')
-      if (myarr[indelemchange].id_prev !== id_prev) {
+      // const id_prev = (indelemId >= 0) ? myarr[indelemId]._id : ApiTables.LIST_START
+      const id_prevnew = myarr[indelemchange].id_prevnew
+      console.log('update_idprev [', indelemchange, ']', myarr[indelemchange].descr, '[id_prev=', myarr[indelemchange].id_prev, ']', '[id_prevnew=', id_prevnew, ']')
+      if (myarr[indelemchange].id_prev !== id_prevnew) {
         // tools.notifyarraychanged(myarr)
         // myarr[indelemchange].modified = true
         // console.log('update_idprev Index=', indelemchange, 'indtoget', indelemId, tools.getstrelem(myarr[indelemchange]))
-        console.log('   MODIFICATO! ', myarr[indelemchange].descr, ' PRIMA:', myarr[indelemchange].id_prev, 'DOPO: ', id_prev)
-        myarr[indelemchange].id_prev = id_prev
+        console.log('   MODIFICATO! ', myarr[indelemchange].descr, ' PRIMA:', myarr[indelemchange].id_prev, 'DOPO: ', id_prevnew)
+        myarr[indelemchange].id_prev = id_prevnew
         return myarr[indelemchange]
       }
     }
     return null
-  }
-  ,
+  }, */
+
 
   async swapGeneralElem(nametable, myarr, itemdragend, listFieldsToChange) {
+
+    const arrprec = [...myarr]
 
     if (itemdragend.field === 'priority') {
       // get last elem priority
@@ -1235,15 +1237,16 @@ export const tools = {
     if (tools.isOkIndex(myarr, itemdragend.newIndex) && tools.isOkIndex(myarr, itemdragend.oldIndex)) {
 
       console.log('***  SPLICE!')
-      // console.log('   PRIMA!', tools.logga_arrproj(myarr))
+      console.log('   PRIMA!', tools.logga_arrproj(myarr))
       myarr.splice(itemdragend.newIndex, 0, myarr.splice(itemdragend.oldIndex, 1)[0])
-      // console.log('   DOPO!', tools.logga_arrproj(myarr))
+      console.log('   DOPO!', tools.logga_arrproj(myarr))
 
       // Ora inverti gli indici
       const indold = itemdragend.oldIndex
       itemdragend.oldIndex = itemdragend.newIndex
       itemdragend.newIndex = indold
 
+      /*
       if (nametable === 'todos') {
         if (itemdragend.field !== 'priority') {
           const precind = itemdragend.newIndex - 1
@@ -1273,22 +1276,72 @@ export const tools = {
 
           }
         }
+      } */
+
+      let status = 0
+
+      // const arr = lists.selectPriority[toolsext.getLocale()]
+      // for (const priority of arr) {
+      for (let i = 0; i < myarr.length; ++i) {
+        if (nametable === 'todos') {
+          status = myarr[i].statustodo
+        } else if (nametable === 'projects') {
+          status = myarr[i].statusproj
+        }
+        if (status !== tools.Status.COMPLETED) {
+          myarr[i].pos = i
+
+          const findelem = arrprec.find((rec) => rec._id === myarr[i]._id)
+
+          if (findelem !== myarr[i].pos) {
+            myarr[i].modified = true
+            await ApiTables.table_ModifyRecord(nametable, myarr[i], listFieldsToChange, 'pos')
+          }
+        }
+
       }
+      for (let i = 0; i < myarr.length; ++i) {
+        if (nametable === 'todos') {
+          status = myarr[i].statustodo
+        } else if (nametable === 'projects') {
+          status = myarr[i].statusproj
+        }
+        // (myarr[i].priority === priority.value)
+        if ((status === tools.Status.COMPLETED)) {
+          myarr[i].pos = 1000 + i
 
-      // Update the id_prev property
-      const elem1 = tools.update_idprev(myarr, itemdragend.newIndex, itemdragend.newIndex - 1)       // 0, -1
-      const elem2 = tools.update_idprev(myarr, itemdragend.newIndex + 1, itemdragend.newIndex)   // 1, 0
-      const elem3 = tools.update_idprev(myarr, itemdragend.oldIndex, itemdragend.oldIndex - 1)       // 1, 0
-      const elem4 = tools.update_idprev(myarr, itemdragend.oldIndex + 1, itemdragend.oldIndex)   // 2, 1
+          const findelem = arrprec.find((rec) => rec._id === myarr[i]._id)
 
-      await
-        ApiTables.table_ModifyRecord(nametable, elem1, listFieldsToChange, 'id_prev')
-      await
-        ApiTables.table_ModifyRecord(nametable, elem2, listFieldsToChange, 'id_prev')
-      await
-        ApiTables.table_ModifyRecord(nametable, elem3, listFieldsToChange, 'id_prev')
-      await
-        ApiTables.table_ModifyRecord(nametable, elem4, listFieldsToChange, 'id_prev')
+          if (findelem !== myarr[i].pos) {
+            myarr[i].modified = true
+            await ApiTables.table_ModifyRecord(nametable, myarr[i], listFieldsToChange, 'pos')
+          }
+        }
+
+      }
+      // }
+
+      /*
+
+       console.table(myarr)
+
+       // Update the id_prev property
+       const elem1 = tools.update_idprev(myarr, itemdragend.newIndex, itemdragend.newIndex - 1)       // 0, -1
+       const elem2 = tools.update_idprev(myarr, itemdragend.newIndex + 1, itemdragend.newIndex)   // 1, 0
+       const elem3 = tools.update_idprev(myarr, itemdragend.oldIndex, itemdragend.oldIndex - 1)       // 1, 0
+       const elem4 = tools.update_idprev(myarr, itemdragend.oldIndex + 1, itemdragend.oldIndex)   // 2, 1
+
+       await
+       ApiTables.table_ModifyRecord(nametable, elem1, listFieldsToChange, 'id_prev')
+       await
+       ApiTables.table_ModifyRecord(nametable, elem2, listFieldsToChange, 'id_prev')
+       await
+       ApiTables.table_ModifyRecord(nametable, elem3, listFieldsToChange, 'id_prev')
+       await
+       ApiTables.table_ModifyRecord(nametable, elem4, listFieldsToChange, 'id_prev')
+
+
+       */
 
       tools.notifyarraychanged(myarr)
 
@@ -1318,8 +1371,8 @@ export const tools = {
     if (myarr === undefined)
       return null
     return myarr.find((elem) => elem.id_prev === id)
-  }
-  ,
+  },
+
 
   getLastFirstElemPriority(myarr, priority: number, atfirst: boolean, escludiId: string) {
     if (myarr === null) {
@@ -1350,8 +1403,7 @@ export const tools = {
     } else {
       if (priority === tools.Priority.PRIORITY_LOW) {
         return myarr.length - 1
-      }
-      else if (priority === tools.Priority.PRIORITY_HIGH) {
+      } else if (priority === tools.Priority.PRIORITY_HIGH) {
         return 0
       }
     }
@@ -1380,8 +1432,7 @@ export const tools = {
       Projects.state.projects = tools.jsonCopy(myarr)
       return Projects.state.projects
     }
-  }
-  ,
+  },
 
   getmyid(id) {
     return 'row' + id
@@ -1406,8 +1457,7 @@ export const tools = {
   getElemByIndex(myarr, index) {
     if (index >= 0 && index < myarr.length) {
       return myarr[index]
-    }
-    else {
+    } else {
       return null
     }
   }
@@ -1429,8 +1479,11 @@ export const tools = {
 
   visumenu(elem) {  // : IListRoutes
     let visu = ((elem.onlyAdmin && UserStore.state.isAdmin) || (elem.onlyManager && UserStore.state.isManager)
+      || (elem.onlySocioResidente && UserStore.state.my.profile.socioresidente)
       || (elem.onlyTutor && UserStore.state.isTutor) || (elem.onlyTraduttrici && UserStore.state.isTraduttrici)
-      || ((!elem.onlyAdmin) && (!elem.onlyManager) && (!elem.onlyTutor) && (!elem.onlyTraduttrici))) && elem.active
+      || (elem.onlyDepartment && UserStore.state.isDepartment)
+      || ((!elem.onlyAdmin) && (!elem.onlyManager) && (!elem.onlyTutor) && (!elem.onlyTraduttrici) && (!elem.onlyDepartment)
+        && (!elem.onlySocioResidente))) && elem.active
 
     if (!tools.isLoggedToSystem()) {
       if (elem.onlyif_logged)
@@ -2091,6 +2144,14 @@ export const tools = {
     return UserStore.state.isManager
   },
 
+  isSocioResidente() {
+    return UserStore.state.my.profile.socioresidente
+  },
+
+  isDepartment() {
+    return UserStore.state.isDepartment
+  },
+
   isAdmin() {
     return UserStore.state.isAdmin
   },
@@ -2209,24 +2270,24 @@ export const tools = {
     if (tools.getstrDate(myevent.dateTimeStart) === tools.getstrDate(myevent.dateTimeEnd)) {
       if (withhtml) {
         mystr += `<span class="cal__where-content">${tools.getstrDate(myevent.dateTimeStart)}</span>
-                    <span class="cal__hours-content">${mythis.$t('cal.starttime')} ${ tools.getstrTime(myevent.dateTimeStart) }
-                    ${ mythis.$t('cal.endtime')} ${ tools.getstrTime(myevent.dateTimeEnd) }`
+                    <span class="cal__hours-content">${mythis.$t('cal.starttime')} ${tools.getstrTime(myevent.dateTimeStart)}
+                    ${mythis.$t('cal.endtime')} ${tools.getstrTime(myevent.dateTimeEnd)}`
       } else {
         mystr = `${tools.getstrDate(myevent.dateTimeStart)}
-                 ${mythis.$t('cal.starttime')} ${ tools.getstrTime(myevent.dateTimeStart) }
-                 ${ mythis.$t('cal.endtime')} ${ tools.getstrTime(myevent.dateTimeEnd) }`
+                 ${mythis.$t('cal.starttime')} ${tools.getstrTime(myevent.dateTimeStart)}
+                 ${mythis.$t('cal.endtime')} ${tools.getstrTime(myevent.dateTimeEnd)}`
       }
     } else {
       mystr = `<span class="cal__where-content">${tools.getstrDate(myevent.dateTimeStart)}</span>
-                 <span class="cal__hours-content">${mythis.$t('cal.starttime')} ${ tools.getstrTime(myevent.dateTimeStart) } </span>
-                  ${ mythis.$t('cal.enddate')} ${tools.getstrDate(myevent.dateTimeEnd)}
-                  <span class="cal__hours-content">${ mythis.$t('cal.endtime')} ${ tools.getstrTime(myevent.dateTimeEnd) } </span>`
+                 <span class="cal__hours-content">${mythis.$t('cal.starttime')} ${tools.getstrTime(myevent.dateTimeStart)} </span>
+                  ${mythis.$t('cal.enddate')} ${tools.getstrDate(myevent.dateTimeEnd)}
+                  <span class="cal__hours-content">${mythis.$t('cal.endtime')} ${tools.getstrTime(myevent.dateTimeEnd)} </span>`
     }
 
     if (myevent.infoextra) {
       mystr += `<span class="cal__hours">
                   <span class="cal__hours-title">${mythis.$t('cal.hours')}: </span>
-                  <span class="cal__hours-content">${ myevent.infoextra }  </span>
+                  <span class="cal__hours-content">${myevent.infoextra}  </span>
               </span>
             </span>`
     }
@@ -2238,9 +2299,9 @@ export const tools = {
     // is same day?
     if (tools.getstrShortDate(myevent.dateTimeStart) === tools.getstrShortDate(myevent.dateTimeEnd)) {
       mystr = `${tools.getstrShortDate(myevent.dateTimeStart)}
-                 - ${ tools.getstrTime(myevent.dateTimeStart) }`
+                 - ${tools.getstrTime(myevent.dateTimeStart)}`
     } else {
-      mystr = `${tools.getstrVeryVeryShortDate(myevent.dateTimeStart)} - ${ tools.getstrShortDate(myevent.dateTimeEnd) }`
+      mystr = `${tools.getstrVeryVeryShortDate(myevent.dateTimeStart)} - ${tools.getstrShortDate(myevent.dateTimeEnd)}`
 
     }
 
@@ -2252,9 +2313,9 @@ export const tools = {
     // is same day?
     if (tools.getstrShortDate(myevent.dateTimeStart) === tools.getstrShortDate(myevent.dateTimeEnd)) {
       mystr = `${tools.getstrVeryShortDate(myevent.dateTimeStart)}
-                 h. ${ tools.getstrTime(myevent.dateTimeStart) }`
+                 h. ${tools.getstrTime(myevent.dateTimeStart)}`
     } else {
-      mystr = `${tools.getstrVeryShortDate(myevent.dateTimeStart)} - ${ tools.getstrVeryShortDate(myevent.dateTimeEnd) }`
+      mystr = `${tools.getstrVeryShortDate(myevent.dateTimeStart)} - ${tools.getstrVeryShortDate(myevent.dateTimeEnd)}`
 
     }
 
@@ -3076,8 +3137,7 @@ export const tools = {
     } finally {
       // ...
     }
-  }
-  ,
+  },
 
   SignUpcheckErrors(mythis, riscode: number, msg: string) {
     console.log('SignUpcheckErrors', riscode)
@@ -3114,19 +3174,16 @@ export const tools = {
     }
 
     return endload
-  }
-  ,
+  },
   isCssColor(color) {
     return !!color && !!color.match(/^(#|(rgb|hsl)a?\()/)
-  }
-  ,
+  },
   displayClasses(eventparam) {
     return {
       // [`bg-${eventparam.bgcolor}`]: !tools.isCssColor(eventparam.bgcolor),
       'text-white': !tools.isCssColor(eventparam.bgcolor)
     }
-  }
-  ,
+  },
   displayStyles(eventparam) {
     const s = { color: '' }
     if (tools.isCssColor(eventparam.bgcolor)) {
@@ -3134,8 +3191,7 @@ export const tools = {
       s.color = colors.luminosity(eventparam.bgcolor) > 0.5 ? 'black' : 'white'
     }
     return s
-  }
-  ,
+  },
   CancelBookingEvent(mythis, eventparam: IEvents, bookeventid: string, notify: boolean) {
     console.log('CancelBookingEvent ', eventparam)
     tools.askConfirm(mythis.$q, translate('cal.titlebooking'), translate('cal.cancelbooking') + ' ' + tools.gettextevent(mythis, eventparam) + '?', translate('dialog.yes'), translate('dialog.no'), mythis, '', lists.MenuAction.DELETE, 0, {
@@ -3143,8 +3199,7 @@ export const tools = {
       param2: notify,
       param3: eventparam.title
     })
-  }
-  ,
+  },
   CancelEvent(mythis, eventparam: IEvents) {
     console.log('CancelEvent ', eventparam)
     tools.askConfirm(mythis.$q, translate('cal.event'), translate('cal.cancelevent') + ' ' + tools.gettextevent(mythis, eventparam) + '?', translate('dialog.yes'), translate('dialog.no'), mythis, '', lists.MenuAction.DELETE_EVENT, 0, {
@@ -3166,8 +3221,7 @@ export const tools = {
       param1: id,
       param2: item
     })
-  }
-  ,
+  },
 
   async createNewRecord(mythis, table, data, withnotif = true) {
 
@@ -3687,6 +3741,14 @@ export const tools = {
     }
   },
 
+  getGroupById(myid) {
+    const group = GlobalStore.state.groups.find((rec) => rec._id === myid)
+    if (group) {
+      return group.descr
+    }
+    return ''
+  },
+
   getLinkZoom() {
     let id = ''
     if (GlobalStore.state.calzoom.length > 0) {
@@ -3944,6 +4006,30 @@ export const tools = {
 
       return false
     }
+  },
+
+  getGroupList() {
+
+    // console.log('GlobalStore.state.groups', GlobalStore.state.groups)
+    const mylist = {
+      it: [],
+      es: [],
+      enUs: []
+    }
+
+    let myrec = {}
+
+    for (const mygroup of GlobalStore.state.groups) {
+      myrec = {
+        id: mygroup._id,
+        label: mygroup.descr,
+        value: mygroup._id
+      }
+      mylist.it.push(myrec)
+
+    }
+
+    return mylist
   }
 
 // getLocale() {

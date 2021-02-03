@@ -83,6 +83,26 @@ export default class SingleProject extends Vue {
     this.watchupdate('themecolor')
   }
 
+  @Watch('itemproject.pos')
+  public valueChangedpos() {
+    this.watchupdate('pos')
+  }
+
+  @Watch('itemproject.groupId')
+  public valueChangedgroupId() {
+    this.watchupdate('groupId')
+  }
+
+  @Watch('itemproject.respUsername')
+  public valueChangedresp() {
+    this.watchupdate('respUsername')
+  }
+
+  @Watch('itemproject.viceRespUsername')
+  public valueChangedviceResp() {
+    this.watchupdate('viceRespUsername')
+  }
+
   @Watch('itemproject.themebgcolor')
   public valueChangedthemebgcolor() {
     this.watchupdate('themebgcolor')
@@ -130,7 +150,7 @@ export default class SingleProject extends Vue {
 
   @Watch('itemproject.progressCalc')
   public valueChanged6() {
-    console.log('itemproject.progressCalc')
+    // console.log('itemproject.progressCalc')
     this.updateClasses()
 
     // console.log('this.percentageProgress', this.percentageProgress, 'this.itemproject.progressCalc', this.itemproject.progressCalc)
@@ -169,7 +189,7 @@ export default class SingleProject extends Vue {
   }
 
   public watchupdate(field = '') {
-    console.log('watchupdate PROJ', field)
+    // console.log('watchupdate PROJ', field)
     this.$emit('eventupdateproj', { myitem: this.itemproject, field })
     this.updateicon()
   }
@@ -231,7 +251,7 @@ export default class SingleProject extends Vue {
   }
 
   public clickRiga(clickmenu: boolean = false) {
-    console.log('CLICK RIGA PROJ ************')
+    // console.log('CLICK RIGA PROJ ************')
 
     // if (!this.sel) {
 
@@ -287,7 +307,7 @@ export default class SingleProject extends Vue {
   }
 
   public activeEdit() {
-    console.log('Attiva Edit')
+    // console.log('Attiva Edit')
     this.attivaEdit = true
     this.editProject()
   }
@@ -297,7 +317,11 @@ export default class SingleProject extends Vue {
   }
 
   get tipoProj() {
-    return this.$route.name
+    const myarr = this.$route.name.split('.')
+    if (myarr)
+      return myarr[1]
+    else
+      return this.$route.name
   }
 
   get getrouteto() {
@@ -342,7 +366,7 @@ export default class SingleProject extends Vue {
       }
 
       // console.log('focus()')
-    }, 400)
+    }, 100)
   }
 
   public getFocus(e) {
@@ -379,7 +403,9 @@ export default class SingleProject extends Vue {
   }
 
   public keyDownArea(e) {
-    console.log('keyDownArea')
+    // console.log('keyDownArea', e.keyCode, 'key', e.key)
+    // console.log('precDescr', this.precDescr)
+    // console.log('shiftKey', e.shiftKey)
     /*
         if ((e.key === 'ArrowUp') && !e.shiftKey) {
           e.key = 'Tab'
@@ -405,6 +431,7 @@ export default class SingleProject extends Vue {
     }
 
     if (((e.key === 'Enter') || (e.key === 'Tab')) && !e.shiftKey) {
+      // console.log('   updateTodo...')
       this.updateTodo()
 
       if ((e.key === 'Tab') && !e.shiftKey) {
@@ -427,14 +454,17 @@ export default class SingleProject extends Vue {
   }
 
   public updateTodo() {
+    // console.log('this.itemproject.descr', this.itemproject.descr)
+    // console.log('precDescr', this.precDescr)
+
     if (this.itemproject.descr === this.precDescr) {
       return
     }
 
     this.itemproject.descr = this.precDescr
-    console.log('updateTodo', this.precDescr, this.itemproject.descr)
-    console.log('itemproject', this.itemproject)
-    console.log('Prec:', this.itemprojectPrec)
+    // console.log('updateTodo', this.precDescr, this.itemproject.descr)
+    // console.log('itemproject', this.itemproject)
+    // console.log('Prec:', this.itemprojectPrec)
 
     this.watchupdate('descr')
     this.inEdit = false
@@ -467,7 +497,7 @@ export default class SingleProject extends Vue {
 
   public updatedata(field: string) {
     // const myitem = tools.jsonCopy(this.itemproject)
-    console.log('calling this.$emit(eventupdateproj)', this.itemproject)
+    // console.log('calling this.$emit(eventupdateproj)', this.itemproject)
     this.$emit('eventupdateproj', { myitem: this.itemproject, field })
   }
 
@@ -497,7 +527,7 @@ export default class SingleProject extends Vue {
   }
 
   public async clickMenu(action) {
-    console.log('click menu: ', action)
+    // console.log('click menu: ', action)
     if (action === lists.MenuAction.DELETE) {
       return await this.askConfirmDelete()
     } else if (action === lists.MenuAction.TOGGLE_EXPIRING) {

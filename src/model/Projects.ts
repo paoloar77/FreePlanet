@@ -26,7 +26,6 @@ export interface IProject {
   completed_at?: Date
   expiring_at?: Date
   enableExpiring?: boolean
-  id_prev?: string
   modified?: boolean
   favourite?: number
   pos?: number
@@ -47,6 +46,9 @@ export interface IProject {
   privacywrite?: string
   themecolor?: string
   themebgcolor?: string
+  groupId?: string
+  respUsername?: string
+  viceRespUsername?: string
 }
 
 export interface IProjectsState {

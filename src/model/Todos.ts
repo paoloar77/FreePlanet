@@ -12,7 +12,6 @@ export interface ITodo {
   completed_at?: Date,
   expiring_at?: Date,
   enableExpiring?: boolean,
-  id_prev?: string,
   modified?: boolean,
   pos?: number,
   order?: number,
@@ -25,6 +24,7 @@ export interface ITodo {
   start_date?: Date
   themecolor?: string
   themebgcolor?: string
+  assignedToUsers?: string[]
 }
 
 export interface IParamTodo {

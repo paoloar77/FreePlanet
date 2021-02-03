@@ -83,7 +83,9 @@ const state: IGlobalState = {
   mypage: [],
   calzoom: [],
   producers: [],
+  groups: [],
   storehouses: [],
+  departments: [],
   sharewithus: []
 }
 
@@ -133,8 +135,7 @@ namespace Getters {
     const config = state.arrConfig.find((item) => item._id === costanti.CONFIG_ID_SHOW_TYPE_TODOS)
     if (config) {
       return config.value
-    }
-    else {
+    } else {
       return ''
     }
 
@@ -205,6 +206,10 @@ namespace Getters {
       return GlobalStore.state.producers
     else if (table === 'storehouses')
       return GlobalStore.state.storehouses
+    else if (table === 'groups')
+      return GlobalStore.state.groups
+    else if (table === 'departments')
+      return GlobalStore.state.departments
     else if (table === 'sharewithus')
       return GlobalStore.state.sharewithus
     else if (table === 'paymenttypes')
@@ -1042,7 +1047,7 @@ namespace Actions {
       })
   }
 
-  async function GetFlotta(context, { riga, col_prima, col_ultima}) {
+  async function GetFlotta(context, { riga, col_prima, col_ultima }) {
     console.log('GetFlotta')
 
     const mydata = {
@@ -1092,11 +1097,13 @@ namespace Actions {
           GlobalStore.state.calzoom = (res.data.calzoom) ? [...res.data.calzoom] : []
           GlobalStore.state.producers = (res.data.producers) ? [...res.data.producers] : []
           GlobalStore.state.storehouses = (res.data.storehouses) ? [...res.data.storehouses] : []
+          GlobalStore.state.groups = (res.data.groups) ? [...res.data.groups] : []
+          GlobalStore.state.departments = (res.data.departments) ? [...res.data.departments] : []
           // console.log('res.data.cart', res.data.cart)
           if (res.data.cart)
-            Products.state.cart = (res.data.cart) ? {...res.data.cart} : {}
+            Products.state.cart = (res.data.cart) ? { ...res.data.cart } : {}
           else
-            Products.state.cart = { items: [], totalPrice: 0, totalQty: 0, userId: ''}
+            Products.state.cart = { items: [], totalPrice: 0, totalQty: 0, userId: '' }
 
           Products.state.orders = (res.data.orders) ? [...res.data.orders] : []
 
@@ -1134,8 +1141,14 @@ namespace Actions {
 
         return true
 
-      })
-      .catch((error) => {
+      }).then((res) => {
+
+        if (static_data.functionality.ENABLE_PROJECTS_LOADING)
+          Projects.actions.dbLoad({ checkPending: false, onlyiffirsttime: true })
+
+        return res
+
+      }).catch((error) => {
         console.log('error dbLoad', error)
         // UserStore.mutations.setErrorCatch(error)
         return new Types.AxiosError(serv_constants.RIS_CODE_ERR, null, tools.ERR_GENERICO, error)
@@ -1222,9 +1235,15 @@ namespace Actions {
     static_data.routes = static_data.routes.sort((a, b) => a.order - b.order)
 
     if (tools.sito_online(false)) {
-      router.addRoutes([...arrpagesroute, last])
+      for (const r of arrpagesroute) {
+        router.addRoute(r)
+      }
+      router.addRoute(last)
+      // router.addRoutes([...arrpagesroute, last])
     } else {
-      router.addRoutes([sito_offline, last])
+      router.addRoute(sito_offline)
+      router.addRoute(last)
+      // router.addRoutes([sito_offline, last])
       this.$router.replace('/sito_offline')
     }
   }
