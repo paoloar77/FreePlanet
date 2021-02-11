@@ -229,12 +229,12 @@ export default class SingleTodo extends Vue {
       this.$emit('deselectAllRowsproj', null, false, false)
       this.$emit('deselectAllRowstodo', this.itemtodo, true)
 
-      if (!this.sel) {
-        this.selectRiga()
-      } else {
-        this.$emit('deselectAllRowsproj', null, false, false, true)
-        this.deselectRiga()
-      }
+      // if (!this.sel) {
+      this.selectRiga()
+      // } else {
+      //   this.$emit('deselectAllRowsproj', null, false, false, true)
+      //   this.deselectRiga()
+      // }
     }
   }
 

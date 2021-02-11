@@ -12,9 +12,23 @@ $heightBtn: 100%;
 
 .cpr-progrbar-item {
   //height: 10px
-  margin-top: 11px;
-  margin-bottom: 11px;
-  height:15px;
+  margin-top: 8px;
+  margin-bottom: 8px;
+  height:10px;
+}
+
+@media (max-width: 600px) {
+  .cpr-progrbar-item {
+    //height: 10px
+    margin-top: 6px;
+    margin-bottom: 6px;
+    height: 8px;
+  }
+
+  .progress-item {
+    padding-top: 2px;
+    padding-bottom: 2px;
+  }
 }
 
 .cpr-slider-item {

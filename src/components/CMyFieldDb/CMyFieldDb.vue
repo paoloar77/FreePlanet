@@ -31,6 +31,18 @@
           >
           </CDateTime>
         </div>
+        <div v-else-if="type === tools.FieldType.onlydate">
+          <CDateTime
+            :label="col.label"
+            class="cursor-pointer"
+            :value.sync="myvalue"
+            :readonly="false"
+            :dense="true"
+            :canEdit="canEdit"
+            view="date"
+          >
+          </CDateTime>
+        </div>
         <div v-else :class="mycl">
           <div v-if="type === tools.FieldType.binary">
             <CMyChipList

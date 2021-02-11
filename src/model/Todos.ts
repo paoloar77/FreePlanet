@@ -57,3 +57,14 @@ export interface ITodosState {
   insidePending: boolean
   visuLastCompleted: number
 }
+
+export interface IHours {
+  _id?: any,
+  userId?: string
+  descr?: string,
+  todoId?: string,
+  date?: Date,
+  time_start: number
+  time_end: number
+  hours: number
+}

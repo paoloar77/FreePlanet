@@ -11,20 +11,20 @@ import { lists } from '../../../store/Modules/lists'
 import * as ApiTables from '../../../store/Modules/ApiTables'
 
 import { GlobalStore, Projects, Todos } from '@store'
-import { UserStore } from '@store'
 
 import { Getter } from 'vuex-class'
 
 import { date, Screen } from 'quasar'
 import { CProgress } from '../../../components/CProgress'
 import { CDate } from '../../../components/CDate'
-import { RouteNames } from '@src/router/route-names'
+import { CMyFieldDb } from '../../../components/CMyFieldDb'
+import { CHours } from '../../../components/CHours'
 
 const namespace: string = 'Projects'
 
 @Component({
 
-  components: { SingleProject, CProgress, CTodo, CDate },
+  components: { SingleProject, CProgress, CTodo, CDate, CMyFieldDb, CHours },
   filters: {
     capitalize(value) {
       if (!value) {
@@ -38,7 +38,7 @@ const namespace: string = 'Projects'
 
 export default class ProjList extends Vue {
 
-  public tabproj: string = 'info'
+  public tabproj: string = 'lista'
 
   get classTitle() {
     let cl = 'flex-item categorytitle shadow-4'
@@ -171,6 +171,7 @@ export default class ProjList extends Vue {
     return Math.round(this.itemselproj.hoursworked / this.itemselproj.hoursplanned * 100)
 
   }
+
   get getCalcHoursLeft() {
 
     if (this.itemselproj.hoursleft <= 0) {
@@ -246,6 +247,7 @@ export default class ProjList extends Vue {
     else
       return ''
   }
+
   public $q: any
   public projbottom: string = ''
   public prova: string = ''
@@ -270,6 +272,8 @@ export default class ProjList extends Vue {
   public selectPhase: any[] = tools.selectPhase[toolsext.getLocale()]
   public selectPrivacy: any[] = tools.selectPrivacy[toolsext.getLocale()]
   public selectGroup: any[] = []
+  public selectResp: any[] = []
+  public selectWorkers: any[] = []
 
   public $refs: {
     singleproject: SingleProject[],
@@ -286,6 +290,7 @@ export default class ProjList extends Vue {
 
   @Watch('$route.name')
   public changename() {
+
     // console.log('tools.getUrlByTipoProj(this.tipoProj)', tools.getUrlByTipoProj(this.tipoProj))
     this.changeparent()
   }
@@ -301,6 +306,45 @@ export default class ProjList extends Vue {
   @Watch('itemselproj.progressCalc')
   public changeprogress() {
     this.updateclasses()
+  }
+
+  @Watch('itemselproj._id')
+  public changeidproj() {
+    this.aggiornastat()
+  }
+
+  @Watch('tabproj')
+  public changetabproj() {
+    this.aggiornastat()
+  }
+
+  @Watch('itemtodosel._id')
+  public changeidtodo() {
+    this.aggiornastat()
+  }
+
+  public aggiornastat() {
+    if (this.tabproj === 'stat') {
+      if (!!this.itemselproj) {
+        Projects.actions.calculateHoursProjects({
+          projId: this.itemselproj._id,
+          actualphase: this.itemselproj.actualphase
+        })
+          .then((rec) => {
+            if (rec) {
+              this.itemselproj.hoursworked = rec.hoursworked
+            }
+          })
+      } else if (!!this.itemtodosel) {
+        Todos.actions.calculateHoursTodo({ todoId: this.itemtodosel._id })
+          .then((rec) => {
+            if (rec) {
+              this.itemtodosel.hoursworked = rec.hoursworked
+            }
+          })
+
+      }
+    }
   }
 
   public keyDownArea(e) {
@@ -386,6 +430,8 @@ export default class ProjList extends Vue {
     }
 
     this.selectGroup = tools.getGroupList()[toolsext.getLocale()]
+    this.selectResp = tools.getRespList()[toolsext.getLocale()]
+    this.selectWorkers = tools.getWorkersList()[toolsext.getLocale()]
 
     console.log('this.selectGroup', this.selectGroup)
 
@@ -518,6 +564,7 @@ export default class ProjList extends Vue {
   public setidsel(id: string) {
     this.idsel = id
     this.whatisSel = tools.WHAT_PROJECT
+    this.itemtodosel = null
     this.itemselproj = Projects.getters.getRecordById(this.idsel)
     if ((this.itemselproj === undefined || this.itemselproj === null))
       this.whatisSel = tools.WHAT_NOTHING
@@ -526,12 +573,12 @@ export default class ProjList extends Vue {
 
     this.checkiftoenable()
   }
+
   public setitemsel(item: ITodo) {
+    this.itemselproj = null
     this.itemtodosel = item
     if (item !== null)
       this.whatisSel = tools.WHAT_TODO
-    else
-      this.whatisSel = tools.WHAT_NOTHING
 
     this.checkiftoenable()
   }
@@ -576,7 +623,7 @@ export default class ProjList extends Vue {
 
     // @ts-ignore
     for (const i in this.$refs.ctodo.$refs.single) {
-    // @ts-ignore
+      // @ts-ignore
       const contr = this.$refs.ctodo.$refs.single[i] as SingleTodo
       let des = true
       if (check) {
@@ -644,7 +691,7 @@ export default class ProjList extends Vue {
     if (!!this.itemselproj) {
       this.colProgress = tools.getProgressColor(this.itemselproj.progressCalc)
     } else {
-      this.whatisSel = tools.WHAT_NOTHING
+      // this.whatisSel = tools.WHAT_NOTHING
     }
   }
 
@@ -677,8 +724,7 @@ export default class ProjList extends Vue {
     }  // expand_less
     else if (this.itemtodosel.priority === tools.Priority.PRIORITY_NORMAL) {
       iconpriority = 'remove'
-    }
-    else if (this.itemtodosel.priority === tools.Priority.PRIORITY_LOW) {
+    } else if (this.itemtodosel.priority === tools.Priority.PRIORITY_LOW) {
       iconpriority = 'expand_more'
     }  // expand_more
 

@@ -48,7 +48,8 @@ export default class CShareWithUs extends MixinBase {
       filter: '',
       filterand: '',
       sortBy: myobj,
-      descending
+      descending,
+      userId: UserStore.state.my._id
     }
 
     console.log('myload', params)

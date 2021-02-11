@@ -304,6 +304,24 @@ namespace Actions {
     return ris
   }
 
+  async function calculateHoursTodo(context, { todoId }) {
+
+    let ris = null
+
+    ris = await Api.SendReq('/todos/calc/' + todoId, 'GET', null)
+      .then((res) => {
+        if (res.data.rec) {  // console.log('RISULTANTE CATEGORIES DAL SERVER = ', res.data.categories)
+          return res.data.rec
+        }
+        return null
+      })
+      .catch((error) => {
+        console.log('error calculateHoursTodo', error)
+      })
+
+    return ris
+  }
+
   async function deleteItemtodo(context, { cat, idobj }) {
     console.log('deleteItemtodo: KEY = ', idobj)
 
@@ -465,6 +483,7 @@ namespace Actions {
 
   export const actions = {
     dbLoad: b.dispatch(dbLoad),
+    calculateHoursTodo: b.dispatch(calculateHoursTodo),
     swapElems: b.dispatch(swapElems),
     deleteItemtodo: b.dispatch(deleteItemtodo),
     dbInsert: b.dispatch(dbInsert),

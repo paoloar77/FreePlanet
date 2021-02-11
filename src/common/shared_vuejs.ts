@@ -36,6 +36,8 @@ export const shared_consts = {
   FILTER_NAVI_NON_PRESENTI: 8192,
   FILTER_QUALIFIED: 16384,
   FILTER_ASK_ZOOM_VISTO: 32768,
+  FILTER_HOURS_MYLIST: 65536,
+  FILTER_HOURS_ALL: 131072,
 
   Permissions: {
     Admin: {

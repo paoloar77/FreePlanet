@@ -13,10 +13,11 @@ import { GlobalStore, UserStore } from '../../store/Modules'
 import { CMyChipList } from '../CMyChipList'
 import { CMyToggleList } from '../CMyToggleList'
 import translate from '@src/globalroutines/util'
+import { CDateTime } from '../CDateTime'
 
 @Component({
   name: 'CMyFieldDb',
-  components: { CMyEditor, CMySelect, CMyChipList, CMyToggleList }
+  components: { CMyEditor, CMySelect, CMyChipList, CMyToggleList, CDateTime }
 })
 
 export default class CMyFieldDb extends MixinBase {
@@ -29,6 +30,8 @@ export default class CMyFieldDb extends MixinBase {
   @Prop({ required: false, default: '' }) public jointable: string
   @Prop({ required: false, default: 'settings' }) public table: string
   @Prop({ required: false, default: '' }) public myimg: string
+  @Prop({ required: false, default: '' }) public id: string
+  @Prop({ required: false, default: '' }) public idmain: string
 
   public $t
   public myvalue = ''
@@ -37,18 +40,28 @@ export default class CMyFieldDb extends MixinBase {
   public countryname = ''
 
   public created() {
-    this.myvalue = this.getValDb(this.mykey, this.serv, '', this.table, this.mysubkey)
+    this.crea()
+  }
+
+  public crea() {
+
+    this.myvalue = this.getValDb(this.mykey, this.serv, '', this.table, this.mysubkey, this.id, this.idmain)
     this.col.jointable = this.jointable
     this.col.fieldtype = this.type
     this.col.label = this.title
 
-    // console.log('created', this.myvalue)
+    // console.log('CMyFieldDb crea', this.myvalue)
+  }
+
+  @Watch('id')
+  public idchanged(value) {
+    this.crea()
   }
 
   public getclassCol(col) {
     if (col) {
       let mycl = (this.disable || col.disable) ? '' : 'colmodif '
-      mycl += (col.fieldtype === tools.FieldType.date) ? ' coldate flex flex-container ' : ''
+      mycl += ((col.fieldtype === tools.FieldType.date) || (col.fieldtype === tools.FieldType.onlydate)) ? ' coldate flex flex-container ' : ''
 
       return mycl
     } else {
@@ -62,6 +75,12 @@ export default class CMyFieldDb extends MixinBase {
         return '[]'
       } else {
         return tools.getstrDateTime(val)
+      }
+    } else if (this.col.fieldtype === tools.FieldType.onlydate) {
+      if (val === undefined) {
+        return '[]'
+      } else {
+        return tools.getstrDate(val)
       }
     } else if (this.col.fieldtype === tools.FieldType.boolean) {
       return (val) ? this.$t('dialog.yes') : this.$t('dialog.no')
@@ -120,7 +139,7 @@ export default class CMyFieldDb extends MixinBase {
 
   public savefield(value, initialval) {
     this.myvalue = value
-    this.setValDb(this.mykey, this.myvalue, this.type, this.serv, this.table, this.mysubkey)
+    this.setValDb(this.mykey, this.myvalue, this.type, this.serv, this.table, this.mysubkey, this.id)
   }
 
   public savefieldboolean(value) {
@@ -129,10 +148,10 @@ export default class CMyFieldDb extends MixinBase {
     else
       this.myvalue = value
 
-    this.setValDb(this.mykey, this.myvalue, this.type, this.serv, this.table, this.mysubkey)
+    this.setValDb(this.mykey, this.myvalue, this.type, this.serv, this.table, this.mysubkey, this.id)
   }
 
-  public selectcountry({name, iso2, dialCode}) {
+  public selectcountry({ name, iso2, dialCode }) {
     // console.log(name, iso2, dialCode)
     this.myvalue = iso2
     this.countryname = name

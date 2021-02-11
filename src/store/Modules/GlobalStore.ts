@@ -84,6 +84,8 @@ const state: IGlobalState = {
   calzoom: [],
   producers: [],
   groups: [],
+  resps: [],
+  workers: [],
   storehouses: [],
   departments: [],
   sharewithus: []
@@ -208,6 +210,10 @@ namespace Getters {
       return GlobalStore.state.storehouses
     else if (table === 'groups')
       return GlobalStore.state.groups
+    else if (table === 'resps')
+      return GlobalStore.state.resps
+    else if (table === 'workers')
+      return GlobalStore.state.workers
     else if (table === 'departments')
       return GlobalStore.state.departments
     else if (table === 'sharewithus')
@@ -239,7 +245,7 @@ namespace Getters {
     const myrec = getters.getrecSettingsByKey(key, serv)
 
     if (!!myrec) {
-      if (myrec.type === tools.FieldType.date)
+      if ((myrec.type === tools.FieldType.date) || (myrec.type === tools.FieldType.onlydate))
         return myrec.value_date
       else if (myrec.type === tools.FieldType.number)
         return myrec.value_num
@@ -431,7 +437,7 @@ namespace Mutations {
       myrec = mystate.settings.find((rec) => rec.key === key)
 
     if (!!myrec) {
-      if (myrec.type === tools.FieldType.date)
+      if ((myrec.type === tools.FieldType.date) || (myrec.type === tools.FieldType.onlydate))
         myrec.value_date = value
       else if (myrec.type === tools.FieldType.number)
         myrec.value_num = value
@@ -1098,6 +1104,8 @@ namespace Actions {
           GlobalStore.state.producers = (res.data.producers) ? [...res.data.producers] : []
           GlobalStore.state.storehouses = (res.data.storehouses) ? [...res.data.storehouses] : []
           GlobalStore.state.groups = (res.data.groups) ? [...res.data.groups] : []
+          GlobalStore.state.resps = (res.data.resps) ? [...res.data.resps] : []
+          GlobalStore.state.workers = (res.data.workers) ? [...res.data.workers] : []
           GlobalStore.state.departments = (res.data.departments) ? [...res.data.departments] : []
           // console.log('res.data.cart', res.data.cart)
           if (res.data.cart)
@@ -1197,7 +1205,7 @@ namespace Actions {
             infooter: page.infooter,
             onlyif_logged: page.onlyif_logged,
             level_child: page.l_child,
-            level_parent: page.l_par,
+            level_parent: page.l_par
           })
         }
       }
@@ -1232,9 +1240,16 @@ namespace Actions {
     }
 
     // Sort array
-    static_data.routes = static_data.routes.sort((a, b) => a.order - b.order)
+    static_data.routes = static_data.routes.sort((a, myb) => a.order - myb.order)
 
     if (tools.sito_online(false)) {
+      router.addRoutes([...arrpagesroute, last])
+    } else {
+      router.addRoutes([sito_offline, last])
+      this.$router.replace('/sito_offline')
+    }
+
+    /* if (tools.sito_online(false)) {
       for (const r of arrpagesroute) {
         router.addRoute(r)
       }
@@ -1245,7 +1260,8 @@ namespace Actions {
       router.addRoute(last)
       // router.addRoutes([sito_offline, last])
       this.$router.replace('/sito_offline')
-    }
+    }*/
+
   }
 
   async function sendFile(context, formdata) {

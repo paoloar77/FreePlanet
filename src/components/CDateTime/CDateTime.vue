@@ -31,7 +31,7 @@
             <template v-slot:control>
                 <div style="">
                     <div class="self-center full-width no-outline" :style="mystyle" tabindex="0">
-                        {{ tools.getstrDateTime(myvalue) }}
+                        {{ getstrDate(myvalue) }}
                     </div>
                 </div>
             </template>
@@ -41,7 +41,7 @@
 
                         <q-scroller
                                 v-model="myvalue"
-                                view="date-time"
+                                :view="view"
                                 :locale="toolsext.getLocale()"
                                 :rounded-borders="true"
                                 border-color="#2196f3"

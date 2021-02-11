@@ -260,12 +260,12 @@ export default class SingleProject extends Vue {
       this.$emit('deselectAllRowstodo', null, false)
       this.$emit('deselectAllRowsproj', this.itemproject, true)
 
-      if (!this.sel) {
-        this.selectRiga()
-      } else {
-        this.$emit('deselectAllRowsproj', null, false, false, true)
-        this.deselectRiga()
-      }
+      // if (!this.sel) {
+      this.selectRiga()
+      // } else {
+      //   this.$emit('deselectAllRowsproj', null, false, false, true)
+      //   this.deselectRiga()
+      // }
     }
   }
 

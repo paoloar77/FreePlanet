@@ -49,7 +49,8 @@ function AddCol(params: IColGridTable) {
     fieldtype: (params.fieldtype === undefined) ? tools.FieldType.string : params.fieldtype,
     visuonlyEditVal: (params.visuonlyEditVal === undefined) ? false : params.visuonlyEditVal,
     askaction: (params.askaction === undefined) ? '' : params.askaction,
-    jointable: (params.jointable === undefined) ? '' : params.jointable
+    jointable: (params.jointable === undefined) ? '' : params.jointable,
+    notShowInNewRec: (params.notShowInNewRec === undefined) ? false : params.notShowInNewRec
   }
 }
 
@@ -188,6 +189,20 @@ export const colTableShareWithUs = [
   AddCol({ name: 'numshared', label_trans: 'share.numshared', fieldtype: tools.FieldType.number }),
   AddCol({ name: 'rating', label_trans: 'share.rating', fieldtype: tools.FieldType.number }),
 ]
+
+export const colTableHours = [
+  // AddCol({ name: 'userId', label_trans: 'hours.userId' }),
+  // AddCol({ name: 'todoId', label_trans: 'hours.todoId' }),
+  AddCol({ name: 'descr', label_trans: 'hours.descr' }),
+  AddCol({ name: 'username', label_trans: 'reg.username_short', notShowInNewRec: true }),
+  AddCol({ name: 'date', label_trans: 'hours.date', fieldtype: tools.FieldType.onlydate }),
+  AddCol({ name: 'time_start', label_trans: 'hours.time_start', fieldtype: tools.FieldType.number }),
+  AddCol({ name: 'time_end', label_trans: 'hours.time_end', fieldtype: tools.FieldType.number }),
+  AddCol({ name: 'hours', label_trans: 'hours.hours', fieldtype: tools.FieldType.number }),
+  AddCol(DeleteRec),
+  AddCol(DuplicateRec)
+]
+
 export const colTablegroups = [
   AddCol({ name: 'descr', label_trans: 'share.description' }),
   AddCol({ name: 'resp', label_trans: 'reg.resp' }),
@@ -265,6 +280,14 @@ const colpaymenttype = [
   AddCol({ name: '_id', label_trans: 'others.value' }),
   AddCol({ name: 'key', label_trans: 'reg.key' }),
   AddCol({ name: 'label', label_trans: 'proj.longdescr' }),
+  AddCol(DeleteRec)
+]
+
+const colworkers = [
+  AddCol({ name: '_id', label_trans: 'others.value' }),
+  AddCol({ name: 'username', label_trans: 'reg.username' }),
+  AddCol({ name: 'name', label_trans: 'reg.name' }),
+  AddCol({ name: 'surname', label_trans: 'reg.surname' }),
   AddCol(DeleteRec)
 ]
 
@@ -639,6 +662,20 @@ export const fieldsTable = {
     AddCol({ name: 'surname', label_trans: 'reg.surname' }),
     AddCol({ name: 'email', label_trans: 'reg.email' }),
     AddCol({ name: 'verified_email', label_trans: 'reg.verified_email', fieldtype: tools.FieldType.boolean }),
+    AddCol({
+      name: 'profile.resplist',
+      field: 'profile',
+      subfield: 'resplist',
+      label_trans: 'reg.resplist',
+      fieldtype: tools.FieldType.boolean
+    }),
+    AddCol({
+      name: 'profile.workerslist',
+      field: 'profile',
+      subfield: 'workerslist',
+      label_trans: 'reg.workerslist',
+      fieldtype: tools.FieldType.boolean
+    }),
     AddCol({ name: 'profile.teleg_id', field: 'profile', subfield: 'teleg_id', label_trans: 'reg.teleg_id' }),
     AddCol({
       name: 'profile.saw_and_accepted',
@@ -793,6 +830,20 @@ export const fieldsTable = {
     AddCol({ name: 'note', label_trans: 'reg.note' }),
     // AddCol({ name: 'aportador_solidario', label_trans: 'reg.aportador_solidario' }),
     AddCol({ name: 'verified_email', label_trans: 'reg.verified_email', fieldtype: tools.FieldType.boolean }),
+    AddCol({
+      name: 'profile.resplist',
+      field: 'profile',
+      subfield: 'resplist',
+      label_trans: 'reg.resplist',
+      fieldtype: tools.FieldType.boolean
+    }),
+    AddCol({
+      name: 'profile.workerslist',
+      field: 'profile',
+      subfield: 'workerslist',
+      label_trans: 'reg.workerslist',
+      fieldtype: tools.FieldType.boolean
+    }),
     AddCol({
       name: 'profile.special_req',
       field: 'profile',
@@ -1011,6 +1062,13 @@ export const fieldsTable = {
       columns: colpaymenttype,
       colkey: 'key',
       collabel: 'label'
+    },
+    {
+      value: 'workers',
+      label: 'Lavoratori Attivi',
+      columns: colworkers,
+      colkey: '_id',
+      collabel: (rec) => rec.name + ' ' + rec.surname
     },
     {
       value: 'navi',

@@ -52,6 +52,13 @@ export interface ITeachUname {
   username?: string
 }
 
+export interface IResp {
+  _id?: string
+  username?: string
+  name?: string
+  surname?: string
+}
+
 export interface IMyPage {
   _id?: string
   author_username?: string
@@ -183,6 +190,8 @@ export interface IGlobalState {
   departments: IDepartment[],
   sharewithus: IShareWithUs[],
   groups: IGroup[],
+  resps: IResp[],
+  workers: IResp[],
   autoplaydisc: number
 }
 
@@ -366,6 +375,14 @@ export interface IParamsQuery {
   filterand: string
   sortBy: any
   descending: number
+  userId: string
+  codeId?: string
+  lk_tab?: string,
+  lk_LF?: string,
+  lk_FF?: string,
+  lk_as?: string,
+  lk_proj?: string,
+  lk_col2?: string,
 }
 
 export interface IColGridTable {
@@ -388,6 +405,7 @@ export interface IColGridTable {
   jointable?: string
   resultjoin?: string[]
   visuonlyEditVal?: boolean
+  notShowInNewRec?: boolean
 }
 
 export interface ITableRec {
@@ -404,6 +422,8 @@ export interface ITableRec {
 export interface IFilter {
   label: string
   value: string
+  hide?: boolean
+  default?: boolean
 }
 
 export interface IDataPass {

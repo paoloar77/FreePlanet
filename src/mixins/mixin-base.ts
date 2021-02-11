@@ -42,9 +42,9 @@ export default class MixinBase extends MixinMetaTags {
     return shared_consts
   }
 
-  public getValDb(keystr, serv, def?, table?, subkey?, id?) {
+  public getValDb(keystr, serv, def?, table?, subkey?, id?, idmain?) {
 
-    return tools.getValDb(keystr, serv, def, table, subkey, id)
+    return tools.getValDb(keystr, serv, def, table, subkey, id, idmain)
   }
 
   public getValDbLang(keystr, serv, def?, table?, subkey?) {
@@ -61,7 +61,7 @@ export default class MixinBase extends MixinMetaTags {
     if (table === 'users') {
       const myid = UserStore.state.my._id
 
-      let myfield = {}
+      const myfield = {}
 
       if (key === 'profile') {
         UserStore.state.my.profile[subkey] = value
@@ -84,6 +84,25 @@ export default class MixinBase extends MixinMetaTags {
         fieldsvalue: myfield
       }
 
+    } else if (table === 'todos') {
+
+      const myfield = {}
+
+      // Save to the DB:
+      if (subkey) {
+        myfield[key + '.' + subkey] = value
+      } else {
+        myfield[key] = value
+      }
+
+      // console.log('myfield', myfield)
+
+      mydatatosave = {
+        id,
+        table,
+        fieldsvalue: myfield
+      }
+
     } else if (table === 'settings') {
       GlobalStore.mutations.setValueSettingsByKey({ key, value, serv })
 
@@ -95,7 +114,7 @@ export default class MixinBase extends MixinMetaTags {
           type
         }
         myrec.serv = serv
-        if (myrec.type === tools.FieldType.date)
+        if ((myrec.type === tools.FieldType.date) || (myrec.type === tools.FieldType.onlydate))
           myrec.value_date = value
         else if (myrec.type === tools.FieldType.number)
           myrec.value_num = value

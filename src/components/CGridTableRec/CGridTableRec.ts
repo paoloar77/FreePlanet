@@ -23,10 +23,18 @@ export default class CGridTableRec extends Vue {
   @Prop({ required: false }) public prop_mytable: string
   @Prop({ required: false, default: null }) public prop_mycolumns: any[]
   @Prop({ required: false, default: '' }) public prop_colkey: string
+  @Prop({ required: false, default: '' }) public prop_codeId: string
   @Prop({ required: false, default: '' }) public nodataLabel: string
   @Prop({ required: false, default: '' }) public noresultLabel: string
+  @Prop({ required: false, default: {} }) public defaultnewrec: any
   @Prop({ required: false, default: null }) public tablesList: ITableRec[]
   @Prop({ required: false, default: null }) public arrfilters: IFilter[]
+  @Prop({ required: false, default: [] }) public filterdef: number[]
+  @Prop({ required: false, default: {} }) public extraparams: any
+
+  public newRecordBool: boolean = false
+  public newRecord: any = {}
+  public savenewRec: boolean = false
 
   public mytable: string
   public mytitle: string
@@ -57,7 +65,7 @@ export default class CGridTableRec extends Vue {
   public separator: 'horizontal'
   public myfilter = undefined
   public myfilterand = []
-  public rowsel: any
+  public rowsel: any =  {}
   public dark: boolean = true
   public canEdit: boolean = false
 
@@ -70,6 +78,11 @@ export default class CGridTableRec extends Vue {
   public colclicksel: any = null
 
   public selected = []
+
+  @Watch('prop_codeId')
+  public changeprop_codeId() {
+    this.refresh()
+  }
 
   get isAdmin() {
     return UserStore.state.isAdmin
@@ -158,7 +171,11 @@ export default class CGridTableRec extends Vue {
   }
 
   public annulla(val) {
-    // this.rowclicksel = null
+    console.log('annulla')
+    GlobalStore.actions.DeleteRec({ table: this.mytable, id: this.newRecord._id })
+      .then((ris) => {
+        return true
+      })
   }
 
   public SaveValue(newVal, valinitial) {
@@ -296,15 +313,19 @@ export default class CGridTableRec extends Vue {
         myobj[sortBy] = 1
     }
 
-    const params: IParamsQuery = {
+    let params: IParamsQuery = {
       table: this.mytable,
       startRow,
       endRow,
       filter: myfilter,
       filterand: myfilterand,
       sortBy: myobj,
-      descending
+      descending,
+      userId: UserStore.state.my._id,
+      codeId: this.prop_codeId
     }
+
+    params = { ...params, ...this.extraparams }
 
     const data = await GlobalStore.actions.loadTable(params)
 
@@ -372,6 +393,26 @@ export default class CGridTableRec extends Vue {
     return this.returnedCount
   }
 
+  public async createNewRecordDialog() {
+
+    const mydata = {
+      table: this.mytable,
+      data: {}
+    }
+
+    mydata.data = this.defaultnewrec
+
+    // const mykey = fieldsTable.getKeyByTable(this.mytable)
+
+    // mydata.data[mykey] = ''
+
+    const data = await GlobalStore.actions.saveTable(mydata)
+
+    this.newRecord = data
+    this.newRecordBool = true
+
+  }
+
   public async createNewRecord() {
     this.loading = true
 
@@ -379,6 +420,8 @@ export default class CGridTableRec extends Vue {
       table: this.mytable,
       data: {}
     }
+
+    mydata.data = this.defaultnewrec
 
     // const mykey = fieldsTable.getKeyByTable(this.mytable)
 
@@ -412,6 +455,7 @@ export default class CGridTableRec extends Vue {
       this.canEdit = tools.getCookie(tools.CAN_EDIT, this.canEdit) === 'true'
       this.tablesel = tools.getCookie('tablesel', this.tablesel)
     }
+    this.myfilterand = this.filterdef
     console.log('this.tablesel', this.tablesel)
 
     if (this.tablesel === '') {
@@ -592,9 +636,11 @@ export default class CGridTableRec extends Vue {
     else
       return ''
   }
+
   public getSelectedString() {
     return this.selected.length === 0 ? '' : `${this.selected.length} record${this.selected.length > 1 ? 's' : ''} selected of ${this.serverData.length}`
   }
+
   public selectionclick(details) {
     // console.log('selectionclick this.selected', this.selected, 'details', details)
     if (details.added) {
@@ -621,5 +667,31 @@ export default class CGridTableRec extends Vue {
   @Watch('myfilterand')
   public changemyfilterand() {
     this.refresh()
+  }
+
+  public async saveNewRecord() {
+    console.log('saveNewRecord')
+    this.savenewRec = true
+    const mydata = {
+      table: this.mytable,
+      data: {}
+    }
+
+    mydata.data = this.newRecord
+
+    const data = await GlobalStore.actions.saveTable(mydata)
+      .then((ris) => {
+        if (ris) {
+          // console.log('ris', ris)
+          this.newRecordBool = false
+        }
+      })
+  }
+
+  public hidewindow() {
+    console.log('hidewindow')
+    if (!this.savenewRec) {
+      this.annulla(0)
+    }
   }
 }

@@ -417,6 +417,8 @@ const msg_it = {
       non_verificato: "Non Verificato",
       forgetpassword: "Password dimenticata?",
       modificapassword: "Modifica Password",
+      resplist: 'Possibile Responsabile',
+      workerslist: 'Lavoratore Attivo',
       resp: "Responsabile",
       viceResp: "Vice Rrsponsabile",
       userslist: "Lista Persone",
@@ -501,6 +503,8 @@ const msg_it = {
       completed_at: 'Data Completamento',
       expiring_at: 'Data Scadenza',
       phase: 'Fase',
+      assigned_to_userId: 'Assegnato a',
+      workers: 'Partecipanti Attivi'
     },
     notification: {
       status: 'Stato',
@@ -530,7 +534,7 @@ const msg_it = {
       hoursworked: 'Ore Lavorate',
       begin_development: 'Inizio Sviluppo',
       begin_test: 'Inizio Test',
-      progresstask: 'Progressione',
+      progresstask: 'Progr',
       actualphase: 'Fase Attuale',
       hoursweeky_plannedtowork: 'Ore settimanali previste',
       endwork_estimate: 'Data fine lavori stimata',
@@ -539,7 +543,9 @@ const msg_it = {
       totalphases: 'Totale Fasi',
       themecolor: 'Tema Colore',
       themebgcolor: 'Tema Colore Sfondo',
-      group: 'Gruppo'
+      group: 'Gruppo',
+      respUsername: 'Responsabile',
+      viceRespUsername: 'Vice Responsabile'
     },
     where: {
       code: 'Id',

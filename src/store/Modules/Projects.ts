@@ -331,6 +331,24 @@ namespace Actions {
     ApiTables.aftercalling(ris, checkPending, nametable)
   }
 
+  async function calculateHoursProjects(context, { projId, actualphase }) {
+
+    let ris = null
+
+    ris = await Api.SendReq('/projects/calc/' + projId + '/' + actualphase, 'GET', null)
+      .then((res) => {
+        if (res.data.rec) {  // console.log('RISULTANTE CATEGORIES DAL SERVER = ', res.data.categories)
+          return res.data.rec
+        }
+        return null
+      })
+      .catch((error) => {
+        console.log('error calculateHoursProjects', error)
+      })
+
+    return ris
+  }
+
   async function deleteItem(context, { idobj }) {
     console.log('deleteItem: KEY = ', idobj)
 
@@ -452,6 +470,7 @@ namespace Actions {
 
   export const actions = {
     dbLoad: b.dispatch(dbLoad),
+    calculateHoursProjects: b.dispatch(calculateHoursProjects),
     swapElems: b.dispatch(swapElems),
     deleteItem: b.dispatch(deleteItem),
     dbInsert: b.dispatch(dbInsert),

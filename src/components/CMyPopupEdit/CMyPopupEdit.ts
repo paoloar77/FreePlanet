@@ -6,6 +6,7 @@ import { toolsext } from '@src/store/Modules/toolsext'
 import { IColGridTable } from '../../model'
 import { fieldsTable } from '../../store/Modules/fieldsTable'
 import { CMyChipList } from '../CMyChipList'
+import { CDate } from '../CDate'
 import { CDateTime } from '../CDateTime'
 import { CMyToggleList } from '../CMyToggleList'
 import { CMySelect } from '../CMySelect'
@@ -14,7 +15,7 @@ import { CGallery } from '../CGallery'
 
 @Component({
   name: 'CMyPopupEdit',
-  components: { CMyChipList, CDateTime, CMyToggleList, CMySelect, CMyEditor, CGallery }
+  components: { CMyChipList, CDateTime, CDate, CMyToggleList, CMySelect, CMyEditor, CGallery }
 })
 
 export default class CMyPopupEdit extends Vue {
@@ -27,11 +28,12 @@ export default class CMyPopupEdit extends Vue {
   @Prop({ required: false, default: 'row' }) public view
   @Prop({ required: false, default: '5' }) public minuteinterval
   @Prop({ required: false, default: false }) public disable
+  @Prop({ required: false, default: false }) public visulabel
 
   public myvalue = ''
   public myvalueprec = 'false'
   public countryname = ''
-  public visueditor : boolean = false
+  public visueditor: boolean = false
 
   get tools() {
     return tools
@@ -48,6 +50,14 @@ export default class CMyPopupEdit extends Vue {
   public changeval(newval) {
     console.log('changeval update:row', newval)
     this.$emit('update:row', newval)
+  }
+
+  public changevalRec(newval) {
+    console.log('this.row', this.row, 'this.col', this.col, 'newval', newval)
+    console.log('this.row[this.col.name]', this.row[this.col.name])
+    this.row[this.col.name] = newval
+    console.log('changevalRec update:row', newval)
+    this.$emit('update:row', this.row)
   }
 
   public updatedata() {
@@ -161,6 +171,12 @@ export default class CMyPopupEdit extends Vue {
       } else {
         return tools.getstrDateTime(val)
       }
+    } else if (col.fieldtype === tools.FieldType.onlydate) {
+      if (val === undefined) {
+        return '[]'
+      } else {
+        return tools.getstrDate(val)
+      }
     } else if (col.fieldtype === tools.FieldType.boolean) {
       return (val) ? this.$t('dialog.yes') : this.$t('dialog.no')
     } else if (col.fieldtype === tools.FieldType.binary) {
@@ -201,10 +217,14 @@ export default class CMyPopupEdit extends Vue {
     }
   }
 
+  public visInNewRec(col) {
+    return !col.notShowInNewRec
+  }
+
   public getclassCol(col) {
     if (col) {
       let mycl = (col.disable || this.isviewfield) ? '' : 'colmodif'
-      mycl += (col.fieldtype === tools.FieldType.date) ? ' coldate flex flex-container' : ''
+      mycl += ((col.fieldtype === tools.FieldType.date) || (col.fieldtype === tools.FieldType.onlydate)) ? ' coldate flex flex-container' : ''
 
       return mycl
     } else {

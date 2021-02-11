@@ -187,7 +187,8 @@ export const tools = {
     image: 2048,
     nationality: 4096,
     intcode: 5000,
-    multioption: 6000
+    multioption: 6000,
+    onlydate: 7000
   },
 
   FieldTypeArr: [
@@ -2148,6 +2149,14 @@ export const tools = {
     return UserStore.state.my.profile.socioresidente
   },
 
+  isResp() {
+    return UserStore.state.my.profile.resplist
+  },
+
+  isWorkers() {
+    return UserStore.state.my.profile.workerslist
+  },
+
   isDepartment() {
     return UserStore.state.isDepartment
   },
@@ -3478,13 +3487,29 @@ export const tools = {
     return splitStr.join(' ')
   },
 
-  getValDb(keystr, serv, def?, table?, subkey?, id?) {
+  getValDb(keystr, serv, def?, table?, subkey?, id?, idmain?) {
     if (table === 'users') {
       if (keystr === 'profile') {
         return UserStore.state.my.profile[subkey]
       } else {
         return UserStore.state.my[keystr]
       }
+    } else if (table === 'todos') {
+      // console.log('id', id, 'idmain', idmain)
+      const indcat = Todos.state.categories.indexOf(idmain)
+      console.log('indcat', indcat)
+      if (indcat >= 0) {
+        const myrec = Todos.state.todos[indcat].find((rec) => rec._id === id)
+        console.log('myrec', myrec)
+        let ris = null
+        if (myrec) {
+          ris = myrec[keystr]
+        }
+        console.log('ris', ris)
+        return ris
+      }
+
+      return ''
     } else {
       const ris = GlobalStore.getters.getValueSettingsByKey(keystr, serv)
 
@@ -4024,6 +4049,54 @@ export const tools = {
         id: mygroup._id,
         label: mygroup.descr,
         value: mygroup._id
+      }
+      mylist.it.push(myrec)
+
+    }
+
+    return mylist
+  },
+
+  getRespList() {
+
+    // console.log('GlobalStore.state.groups', GlobalStore.state.groups)
+    const mylist = {
+      it: [],
+      es: [],
+      enUs: []
+    }
+
+    let myrec = {}
+
+    for (const myresp of GlobalStore.state.resps) {
+      myrec = {
+        id: myresp._id,
+        label: myresp.name + ' ' + myresp.surname,
+        value: myresp.username
+      }
+      mylist.it.push(myrec)
+
+    }
+
+    return mylist
+  },
+
+  getWorkersList() {
+
+    // console.log('GlobalStore.state.groups', GlobalStore.state.groups)
+    const mylist = {
+      it: [],
+      es: [],
+      enUs: []
+    }
+
+    let myrec = {}
+
+    for (const myresp of GlobalStore.state.workers) {
+      myrec = {
+        id: myresp._id,
+        label: myresp.name + ' ' + myresp.surname,
+        value: myresp.username
       }
       mylist.it.push(myrec)
 

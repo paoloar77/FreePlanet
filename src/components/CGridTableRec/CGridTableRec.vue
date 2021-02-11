@@ -1,5 +1,8 @@
 <template>
   <div class="q-pa-xs">
+    <q-btn v-if="mytable" flat dense color="primary"
+           :label="$t('grid.addrecord')"
+           @click="createNewRecordDialog"></q-btn>
 
 
     <q-table
@@ -54,15 +57,16 @@
         </q-input>
         <q-toggle v-if="mytable" v-model="canEdit" :disable="disabilita" :val="lists.MenuAction.CAN_EDIT_TABLE"
                   class="q-mx-sm"
-                  :label="$t('grid.editvalues')" @input="changefuncAct"
-        ></q-toggle>
+                  :label="$t('grid.editvalues')" @input="changefuncAct">
+        </q-toggle>
 
         <q-btn v-if="mytable" flat dense color="primary" :disable="loading || !canEdit"
                :label="$t('grid.addrecord')"
-               @click="createNewRecord"></q-btn>
+               @click="createNewRecord">
+
+        </q-btn>
 
         <q-space/>
-
 
         <!--<q-toggle v-for="(mycol, index) in mycolumns" v-model="colVisib" :val="rec.field" :label="mycol.label"></q-toggle>-->
 
@@ -102,11 +106,14 @@
         </q-inner-loading>
 
         <div class="row">
-          <q-toggle v-for="(filter, index) of arrfilters" :key="index" v-model="myfilterand" :val="filter.value"
-                    :label="filter.label"></q-toggle>
+          <q-toggle v-for="(filter, index) of arrfilters"
+                    :key="index"
+                    v-model="myfilterand" :disable="filter.hide"
+                    :val="filter.value"
+                    :label="filter.label">
+
+          </q-toggle>
         </div>
-
-
       </template>
 
       <template v-slot:body="props">
@@ -141,6 +148,7 @@
           </q-td>
         </q-tr>
       </template>
+
       <!--
                       <q-btn
                               flat round dense
@@ -169,7 +177,7 @@
           <div class="q-ma-xs">
             <q-field rounded outlined bg-color="orange-3" dense>
               <template v-slot:control>
-                <div class="self-center full-width no-outline" tabindex="0">{{mycol.label}}</div>
+                <div class="self-center full-width no-outline" tabindex="0">{{ mycol.label }}</div>
               </template>
             </q-field>
           </div>
@@ -193,11 +201,45 @@
         </div>
       </div>
     </div>
+    <q-dialog v-model="newRecordBool" @hide="hidewindow">
+      <q-card :style="`min-width: `+ tools.myheight_dialog() + `px;`">
+        <q-toolbar class="bg-primary text-white">
+          <q-toolbar-title>
+            {{ mytitle }}
+          </q-toolbar-title>
+          <q-btn flat round color="white" icon="close" v-close-popup></q-btn>
+        </q-toolbar>
+        <q-card-section class="inset-shadow">
+          <div v-for="col in mycolumns" :key="col.name"
+               v-if="colVisib.includes(col.field + col.subfield)">
+            <div>
+
+              <CMyPopupEdit :canEdit="true"
+                            :col="col"
+                            :row.sync="newRecord"
+                            :field="col.field"
+                            :subfield="col.subfield"
+                            minuteinterval="1"
+                            :visulabel="true"
+                            @save="SaveValue"
+                            @show="selItem(newRecord, col)"
+                            @showandsave="showandsel">
+
+              </CMyPopupEdit>
+            </div>
+          </div>
+        </q-card-section>
+        <q-card-actions align="center">
+          <q-btn flat :label="$t('dialog.ok')" color="primary" @click="saveNewRecord"></q-btn>
+          <q-btn flat :label="$t('dialog.cancel')" color="primary" v-close-popup @click="annulla"></q-btn>
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
   </div>
 </template>
 <script lang="ts" src="./CGridTableRec.ts">
 </script>
 
 <style lang="scss">
-  @import './CGridTableRec.scss';
+@import './CGridTableRec.scss';
 </style>

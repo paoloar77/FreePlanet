@@ -24,6 +24,7 @@ export default class CDateTime extends Vue {
   @Prop({ required: false, default: '' }) public bgcolor!: string
   @Prop({ required: false, default: false }) public dense: boolean
   @Prop({ required: false, default: '5' }) public minuteinterval: boolean
+  @Prop({ required: false, default: 'date-time' }) public view: string
 
   public mystyleicon: string = 'font-size: 1.5rem;'
   public showDateTimeScroller: boolean = false
@@ -117,5 +118,13 @@ export default class CDateTime extends Vue {
       return ''
     else
       return ''
+  }
+
+  public getstrDate(mydate) {
+    if (this.view === 'date-time') {
+      return tools.getstrDateTime(mydate)
+    } else {
+      return tools.getstrDate(mydate)
+    }
   }
 }

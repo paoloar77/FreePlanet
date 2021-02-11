@@ -41,6 +41,7 @@ export default class CMyToggleList extends Vue {
   }
 
   public mounted() {
+    console.log('mounted')
     this.myarrvalues = []
 
     // console.log('value', this.value)
@@ -50,11 +51,28 @@ export default class CMyToggleList extends Vue {
     if (this.isarray) {
       // console.table(this.options)
       this.options.forEach((rec) => {
-        console.log('rec: ', rec)
+        console.log('rec: ', rec, 'optval', this.optval, 'optlab', this.optlab)
         const mydata = {
-          label: this.$t(rec[this.optlab]),
+          label: '',
           value: rec[this.optval],
-          valbool: this.value.includes(rec[this.optval])
+          valbool: false
+        }
+
+        const lab = rec[`${this.optlab}`]
+        console.log('lab', lab)
+
+        if (tools.isObject(this.optlab)) {
+          const arr = this.options.filter((myrec) => myrec[this.optval] === mydata.value).map(this.optlab)
+          if (arr) {
+            // @ts-ignore
+            mydata.label = arr[0]
+          }
+        } else {
+          mydata.label = this.$t(rec[this.optlab])
+        }
+
+        if (this.value) {
+          mydata.valbool = this.value.includes(rec[this.optval])
         }
         console.log('mydata ', mydata)
         this.myarrvalues.push(mydata)
