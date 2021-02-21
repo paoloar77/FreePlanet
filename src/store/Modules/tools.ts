@@ -184,11 +184,13 @@ export const tools = {
     multiselect: 256,
     password: 512,
     listimages: 1024,
-    image: 2048,
+    exact: 2048,
+    image: 3000,
     nationality: 4096,
     intcode: 5000,
     multioption: 6000,
-    onlydate: 7000
+    onlydate: 7000,
+    hours: 8000
   },
 
   FieldTypeArr: [
@@ -201,7 +203,70 @@ export const tools = {
     { label: 'Number', value: 64 }
   ],
 
+  SelectHours: [
+    {
+      id: 0,
+      label: '0',
+      value: 0
+    },
+    {
+      id: 5,
+      label: '0.5',
+      value: 0.5
+    },
+    {
+      id: 10,
+      label: '1',
+      value: 1
+    },
+    {
+      id: 15,
+      label: '1.5',
+      value: 1.5
+    },
+    {
+      id: 20,
+      label: '2',
+      value: 2
+    },
+    {
+      id: 25,
+      label: '2.5',
+      value: 2.5
+    },
+    {
+      id: 30,
+      label: '3',
+      value: 3
+    },
+    {
+      id: 35,
+      label: '3.5',
+      value: 3.5
+    },
+    {
+      id: 40,
+      label: '4',
+      value: 4
+    },
+    {
+      id: 45,
+      label: '4.5',
+      value: 4.5
+    },
+    {
+      id: 50,
+      label: '5',
+      value: 5
+    }
+  ],
+
   SelectListNumPeople: [
+    {
+      id: 0,
+      label: '0',
+      value: 0
+    },
     {
       id: 1,
       label: '1',
@@ -320,6 +385,11 @@ export const tools = {
         id: 4,
         label: translation.it.privacy.onlyme,
         value: Privacy.onlyme
+      },
+      {
+        id: 5,
+        label: translation.it.privacy.inherited,
+        value: Privacy.inherited
       }
     ],
     es: [
@@ -342,6 +412,11 @@ export const tools = {
         id: 4,
         label: translation.es.privacy.onlyme,
         value: Privacy.onlyme
+      },
+      {
+        id: 5,
+        label: translation.es.privacy.inherited,
+        value: Privacy.inherited
       }
     ],
     enUs: [
@@ -364,6 +439,11 @@ export const tools = {
         id: 4,
         label: translation.enUs.privacy.onlyme,
         value: Privacy.onlyme
+      },
+      {
+        id: 5,
+        label: translation.enUs.privacy.inherited,
+        value: Privacy.inherited
       }
     ]
   },
@@ -1346,7 +1426,7 @@ export const tools = {
 
       tools.notifyarraychanged(myarr)
 
-      console.log('arr FINALE', tools.logga_arrproj(myarr))
+      // console.log('arr FINALE', tools.logga_arrproj(myarr))
 
       // Update the records:
     }
@@ -1883,6 +1963,7 @@ export const tools = {
       mycolor = 'primary'
     }
     q.notify({
+      // group: '',
       message: msg,
       icon: myicon,
       classes: 'my-notif-class',
@@ -2561,14 +2642,14 @@ export const tools = {
 
   getprivacyreadbytipoproj(tipoproj) {
     if (tipoproj === RouteNames.myprojects)
-      return Privacy.onlyme
+      return Privacy.inherited
     else
       return Privacy.all
   }
   ,
 
   getprivacywritebytipoproj(tipoproj) {
-    return Privacy.onlyme
+    return Privacy.inherited
   }
   ,
 
@@ -2736,13 +2817,13 @@ export const tools = {
     } else if (Screen.width < 600) {
       return '450'
     } else if (Screen.width < 800) {
-      return '500'
+      return '550'
     } else if (Screen.width < 900) {
       return '700'
     } else if (Screen.width < 1000) {
-      return '900'
+      return '800'
     } else if (Screen.width < 1100) {
-      return '1000'
+      return '900'
     } else {
       return Screen.width - 200
     }
@@ -4103,6 +4184,13 @@ export const tools = {
     }
 
     return mylist
+  },
+
+  IsLogged() {
+    if (!!UserStore)
+      return UserStore.state.isLogged
+    else
+      return false
   }
 
 // getLocale() {

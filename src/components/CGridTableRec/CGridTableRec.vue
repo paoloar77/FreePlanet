@@ -1,9 +1,11 @@
 <template>
-  <div class="q-pa-xs">
-    <q-btn v-if="mytable" flat dense color="primary"
-           :label="$t('grid.addrecord')"
-           @click="createNewRecordDialog"></q-btn>
-
+  <div class="q-pa-xs" v-if="isfinishLoading">
+    <div class="centermydiv q-ma-sm" style="text-align: center">
+      <q-btn v-if="mytable && visButtRow" rounded dense color="primary"
+             size="lg"
+             :label="getlabelAddRow"
+             @click="createNewRecordDialog"></q-btn>
+    </div>
 
     <q-table
       flat
@@ -23,8 +25,7 @@
       :no-results-label="noresultLabel"
       :selected-rows-label="getSelectedString"
       selection="single"
-      :selected.sync="selected"
-    >
+      :selected.sync="selected">
 
       <template v-slot:header="props">
 
@@ -45,7 +46,7 @@
       </template>
 
       <template v-slot:top="props">
-        <div class="col-2 q-table__title">{{ mytitle }}</div>
+        <div class="q-table__title" style="min-width: 150px;">{{ mytitle }}</div>
 
         <!--<p style="color:red"> Rows: {{ getrows }}</p>-->
 

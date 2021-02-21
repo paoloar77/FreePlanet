@@ -152,6 +152,13 @@
 
               </q-input>
             </div>
+            <div v-else-if="type === tools.FieldType.hours">
+              <CMySelect label="Ore" :value.sync="myvalue"
+                         optval="_id" optlab="label"
+                         :useinput="false"
+                         :options="tools.SelectHours">
+              </CMySelect>
+            </div>
             <div v-else-if="type === tools.FieldType.binary">
               <CMyToggleList :label="col.title"
                              :options="db_fieldsTable.getTableJoinByName(col.jointable)"

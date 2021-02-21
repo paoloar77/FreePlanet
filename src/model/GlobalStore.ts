@@ -166,6 +166,7 @@ export interface IGlobalState {
   category: string
   stateConnection: string
   networkDataReceived: boolean
+  clickcmd?: string
   cfgServer: ICfgServer[]
   testp1: ITestp1
   connData: IConnData
@@ -448,4 +449,12 @@ export const DefaultNewsState: INewsState = {
   totsubscribed: 0,
   totunsubscribed: 0,
   totsentlastid: 0
+}
+
+export interface IPagination {
+  sortBy: string,
+  descending: boolean
+  rowsNumber: number
+  page: number,
+  rowsPerPage: number // specifying this determines pagination is server-side
 }

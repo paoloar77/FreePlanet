@@ -7,7 +7,8 @@ import { tools } from '@src/store/Modules/tools'
 import { toolsext } from '@src/store/Modules/toolsext'
 
 export const OtherTables = ['categories', 'config', 'swmsg']
-export const MainTables = ['todos', 'projects']
+// export const MainTables = ['todos', 'projects']
+export const MainTables = []
 export const allMethod = ['sync_post_', 'sync_patch_', 'delete_', 'hide_']
 
 export function getLinkByTableName(nametable) {
@@ -44,7 +45,7 @@ export function allTables() {
 async function dbInsertSave(call, item, method) {
 
   let ret = true
-  if (!('serviceWorker' in navigator)) {
+  if (!useServiceWorker()) {
 
     console.log('dbInsertSave', item, method)
 
@@ -76,7 +77,8 @@ async function dbInsertSave(call, item, method) {
 
 async function dbDeleteItem(call, item) {
 
-  if (!('serviceWorker' in navigator)) {
+  let res = true
+  if (!useServiceWorker()) {
     // console.log('dbdeleteItem', item)
     if (UserStore.getters.isUserInvalid) {
       return false
@@ -84,9 +86,10 @@ async function dbDeleteItem(call, item) {
 
     call = '/' + call
 
-    const res = await Api.SendReq(call + item._id, 'DELETE', null)
+    res = await Api.SendReq(call + '/' + item._id, 'DELETE', null)
       .then((myres) => {
         console.log('dbdeleteItem to the Server')
+        // tools.showPositiveNotif(this.$q, 'Riga cancellata')
         return myres
       })
       .catch((error) => {
@@ -96,11 +99,13 @@ async function dbDeleteItem(call, item) {
 
     return res
   }
+
+  return res
 }
 
 async function dbHideItem(call, item) {
 
-  if (!('serviceWorker' in navigator)) {
+  if (!useServiceWorker()) {
     // console.log('dbdeleteItem', item)
     if (UserStore.getters.isUserInvalid) {
       return false
@@ -150,7 +155,7 @@ async function Sync_Execute(cmd, tablesync, nametab, method, item: ITodo, id, ms
   //   console.log('serviceWorker NON PRESENTE !')
   // }
 
-  if ('serviceWorker' in navigator) {
+  if (useServiceWorker()) {
     return await navigator.serviceWorker.ready
       .then((sw) => {
         // console.log('----------------------      navigator.serviceWorker.ready')
@@ -210,17 +215,18 @@ async function Sync_ExecuteCmd(cmd, nametab: string, method, item: ITodo, id, ms
 
   const risdata = await Sync_Execute(cmd, tablesync, nametab, method, item, id, msg)
 
+  let ris = false
   if (cmd === DB.CMD_SYNC_NEW) {
     if ((method === 'POST') || (method === 'PATCH')) {
-      await dbInsertSave(nametab, item, method)
+      ris = await dbInsertSave(nametab, item, method)
     }
   } else if (cmd === DB.CMD_DELETE) {
-    await dbDeleteItem(nametab, item)
+    ris = await dbDeleteItem(nametab, item)
   } else if (cmd === DB.CMD_HIDE) {
-    await dbHideItem(nametab, item)
+    ris = await dbHideItem(nametab, item)
   }
 
-  return risdata
+  return ris
 }
 
 export async function Sync_SaveItem(nametab: string, method, item) {
@@ -246,7 +252,7 @@ export async function aftercalling(ris, checkPending: boolean, nametabindex: str
     } else {
       tools.consolelogpao('NETWORK UNREACHABLE ! (Error in fetch)', UserStore.getters.getServerCode, ris.status)
     }
-    if ('serviceWorker' in navigator) {
+    if (useServiceWorker()) {
       // Read all data from IndexedDB Store into Memory
       await updatefromIndexedDbToState(nametabindex)
     }
@@ -296,11 +302,16 @@ async function checkPendingMsg() {
 
 }
 
+function useServiceWorker() {
+  return false
+  // return 'serviceWorker' in navigator
+}
+
 // If something in the call of Service Worker went wrong (Network or Server Down), then retry !
 async function sendSwMsgIfAvailable() {
   let something = false
 
-  if ('serviceWorker' in navigator) {
+  if (useServiceWorker()) {
     console.log(' -------- sendSwMsgIfAvailable')
 
     const count = await checkPendingMsg()
@@ -344,7 +355,7 @@ async function sendSwMsgIfAvailable() {
   })
 }
 
-async function waitAndRefreshData() {
+export async function waitAndRefreshData() {
   // #Todo++ waitAndRefreshData: Check if is OK
   await Projects.actions.dbLoad({ checkPending: false, onlyiffirsttime: false })
   return await Todos.actions.dbLoad({ checkPending: false })
@@ -428,14 +439,14 @@ function setmodifiedIfchanged(recOut, recIn, field) {
 }
 
 export async function table_ModifyRecord(nametable, myitem, listFieldsToChange, field) {
-  console.log('table_ModifyRecord ... ', nametable)
+  // console.log('table_ModifyRecord ... ', nametable)
   if (myitem === null) {
     return new Promise((resolve, reject) => {
       resolve()
     })
   }
 
-  // console.log('--> table_ModifyRecord', nametable, myitem.descr)
+  console.log('--> table_ModifyRecord', nametable, myitem)
 
   if ((field === 'status') && (nametable === 'todos') && (myitem.status === tools.Status.COMPLETED)) {
     myitem.completed_at = tools.getDateNow()
@@ -443,16 +454,24 @@ export async function table_ModifyRecord(nametable, myitem, listFieldsToChange, 
 
   const myobjsaved = tools.jsonCopy(myitem)
 
-  // get record from IndexedDb
-  const miorec = await globalroutines(null, 'read', nametable, null, myobjsaved._id)
-  if (miorec === undefined) {
-    console.log('~~~~~~~~~~~~~~~~~~~~ !!!!!!!!!!!!!!!!!!  Record not Found !!!!!! id=', myobjsaved._id)
-    return
-  }
+  let miorec = null
+  if (useServiceWorker()) {
+    // get record from IndexedDb
+    miorec = await globalroutines(null, 'read', nametable, null, myobjsaved._id)
+    if (miorec === undefined) {
+      console.log('~~~~~~~~~~~~~~~~~~~~ !!!!!!!!!!!!!!!!!!  Record not Found !!!!!! id=', myobjsaved._id)
 
-  listFieldsToChange.forEach((myfield) => {
-    setmodifiedIfchanged(miorec, myobjsaved, myfield)
-  })
+      // Prova cmq a salvarlo sul server
+      return Sync_SaveItem(nametable, 'PATCH', miorec)
+    }
+    listFieldsToChange.forEach((myfield) => {
+      setmodifiedIfchanged(miorec, myobjsaved, myfield)
+    })
+
+  } else {
+    miorec = myitem
+    miorec.modified = true
+  }
 
   console.log( ' ... 4 ')
 
@@ -464,17 +483,21 @@ export async function table_ModifyRecord(nametable, myitem, listFieldsToChange, 
     // 1) Permit to Update the Views
     tools.notifyarraychanged(miorec)
 
-    // 2) Modify on IndexedDb
-    console.log('// 2) Modify on IndexedDb', miorec)
-    return globalroutines(null, 'write', nametable, miorec)
-      .then((ris) => {
+    if (useServiceWorker()) {
+      // 2) Modify on IndexedDb
+      console.log('// 2) Modify on IndexedDb', miorec)
+      return globalroutines(null, 'write', nametable, miorec)
+        .then((ris) => {
 
-        // 3) Modify on the Server (call)
-        return Sync_SaveItem(nametable, 'PATCH', miorec)
+          // 3) Modify on the Server (call)
+          return Sync_SaveItem(nametable, 'PATCH', miorec)
 
-      })
-    // } else {
-    //   console.log('      ', miorec.descr, 'NON MODIF!')
+        })
+      // } else {
+      //   console.log('      ', miorec.descr, 'NON MODIF!')
+    } else {
+      return Sync_SaveItem(nametable, 'PATCH', miorec)
+    }
   }
 }
 

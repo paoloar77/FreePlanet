@@ -74,6 +74,8 @@ export const colgallery = [
     fieldtype: tools.FieldType.listimages,
     jointable: ''
   }),
+  AddCol(DeleteRec),
+  AddCol(DuplicateRec)
 ]
 
 export const colmsg_templates = [
@@ -90,7 +92,7 @@ export const colmsg_templates = [
   AddCol({ name: 'title_pt', label_trans: 'Tit POR', fieldtype: tools.FieldType.string }),
   AddCol({ name: 'msg_pt', label_trans: 'POR', fieldtype: tools.FieldType.html }),
   AddCol({ name: 'title_fr', label_trans: 'Tit FRA', fieldtype: tools.FieldType.string }),
-  AddCol({ name: 'msg_fr', label_trans: 'FRA', fieldtype: tools.FieldType.html }),
+  AddCol({ name: 'msg_fr', label_trans: 'FRA', fieldtype: tools.FieldType.html })
 ]
 
 export const colmypage = [
@@ -173,6 +175,8 @@ export const colTableProducer = [
   AddCol({ name: 'city', label_trans: 'producer.city' }),
   AddCol({ name: 'img', label_trans: 'producer.img' }),
   AddCol({ name: 'website', label_trans: 'producer.website' }),
+  AddCol(DeleteRec),
+  AddCol(DuplicateRec)
 ]
 
 export const getcolorderscart = [
@@ -182,42 +186,50 @@ export const getcolorderscart = [
   AddCol({ name: 'items', label_trans: 'order.items' }),
   AddCol({ name: 'userId', label_trans: 'order.users', fieldtype: tools.FieldType.select, jointable: 'users' }),
   AddCol({ name: 'note', label_trans: 'order.note' }),
+  AddCol(DeleteRec),
+  AddCol(DuplicateRec)
 ]
 
 export const colTableShareWithUs = [
   AddCol({ name: 'description', label_trans: 'share.description' }),
   AddCol({ name: 'numshared', label_trans: 'share.numshared', fieldtype: tools.FieldType.number }),
   AddCol({ name: 'rating', label_trans: 'share.rating', fieldtype: tools.FieldType.number }),
+  AddCol(DeleteRec),
+  AddCol(DuplicateRec)
 ]
 
 export const colTableHours = [
   // AddCol({ name: 'userId', label_trans: 'hours.userId' }),
   // AddCol({ name: 'todoId', label_trans: 'hours.todoId' }),
-  AddCol({ name: 'descr', label_trans: 'hours.descr' }),
-  AddCol({ name: 'username', label_trans: 'reg.username_short', notShowInNewRec: true }),
   AddCol({ name: 'date', label_trans: 'hours.date', fieldtype: tools.FieldType.onlydate }),
+  AddCol({ name: 'hours', label_trans: 'hours.hours', fieldtype: tools.FieldType.hours }),
   AddCol({ name: 'time_start', label_trans: 'hours.time_start', fieldtype: tools.FieldType.number }),
   AddCol({ name: 'time_end', label_trans: 'hours.time_end', fieldtype: tools.FieldType.number }),
-  AddCol({ name: 'hours', label_trans: 'hours.hours', fieldtype: tools.FieldType.number }),
+  AddCol({ name: 'descr', label_trans: 'hours.note' }),
+  AddCol({ name: 'username', label_trans: 'reg.username_short', notShowInNewRec: true }),
   AddCol(DeleteRec),
   AddCol(DuplicateRec)
 ]
 
 export const colTablegroups = [
-  AddCol({ name: 'descr', label_trans: 'share.description' }),
+  AddCol({ name: 'descr', label_trans: 'proj.longdescr' }),
   AddCol({ name: 'resp', label_trans: 'reg.resp' }),
   AddCol({ name: 'viceResp', label_trans: 'reg.viceResp' }),
   AddCol({
     name: 'assignedToUsers',
     label_trans: 'reg.userslist',
     fieldtype: tools.FieldType.multiselect,
-    jointable: 'users'
+    jointable: 'workers'
   }),
+  AddCol(DeleteRec),
+  AddCol(DuplicateRec)
 ]
 
 export const colTabledepartments = [
   AddCol({ name: 'name', label_trans: 'store.name' }),
-  AddCol({ name: 'username', label_trans: 'store.username' })
+  AddCol({ name: 'username', label_trans: 'store.username' }),
+  AddCol(DeleteRec),
+  AddCol(DuplicateRec)
 ]
 
 export const colTableStorehouse = [
@@ -229,6 +241,8 @@ export const colTableStorehouse = [
   AddCol({ name: 'region', label_trans: 'store.region' }),
   AddCol({ name: 'img', label_trans: 'store.img' }),
   AddCol({ name: 'website', label_trans: 'store.website' }),
+  AddCol(DeleteRec),
+  AddCol(DuplicateRec)
 ]
 
 export const colTableProducts = [
@@ -267,20 +281,23 @@ export const colTableProducts = [
   AddCol({ name: 'weight', label_trans: 'products.weight', fieldtype: tools.FieldType.number }),
   AddCol({ name: 'stars', label_trans: 'products.stars', fieldtype: tools.FieldType.number }),
   AddCol({ name: 'date', label_trans: 'products.date', fieldtype: tools.FieldType.date }),
-  AddCol(DeleteRec)
+  AddCol(DeleteRec),
+  AddCol(DuplicateRec)
 ]
 
 const colcontribtype = [
   AddCol({ name: 'label', label_trans: 'proj.longdescr' }),
   AddCol({ name: 'showprice', label_trans: 'event.showprice', fieldtype: tools.FieldType.boolean }),
-  AddCol(DeleteRec)
+  AddCol(DeleteRec),
+  AddCol(DuplicateRec)
 ]
 
 const colpaymenttype = [
   AddCol({ name: '_id', label_trans: 'others.value' }),
   AddCol({ name: 'key', label_trans: 'reg.key' }),
   AddCol({ name: 'label', label_trans: 'proj.longdescr' }),
-  AddCol(DeleteRec)
+  AddCol(DeleteRec),
+  AddCol(DuplicateRec)
 ]
 
 const colworkers = [
@@ -288,7 +305,8 @@ const colworkers = [
   AddCol({ name: 'username', label_trans: 'reg.username' }),
   AddCol({ name: 'name', label_trans: 'reg.name' }),
   AddCol({ name: 'surname', label_trans: 'reg.surname' }),
-  AddCol(DeleteRec)
+  AddCol(DeleteRec),
+  AddCol(DuplicateRec)
 ]
 
 const colflotte = [
@@ -408,7 +426,8 @@ const coldisciplines = [
 const colTablePermission = [
   AddCol({ name: '_id', label_trans: 'others.value' }),
   AddCol({ name: 'label', label_trans: 'proj.longdescr' }),
-  AddCol(DeleteRec)
+  AddCol(DeleteRec),
+  AddCol(DuplicateRec)
 ]
 
 const colTableOperator = [
@@ -464,6 +483,7 @@ const colTableEvents = [
   AddCol({ name: 'linkpage', label_trans: 'event.linkpage' }),
   AddCol({ name: 'linkpdf', label_trans: 'event.linkpdf' }),
   AddCol({ name: 'nobookable', label_trans: 'event.nobookable', fieldtype: tools.FieldType.boolean }),
+  AddCol({ name: 'internal', label_trans: 'event.internal', fieldtype: tools.FieldType.boolean }),
   AddCol({ name: 'news', label_trans: 'event.news', fieldtype: tools.FieldType.boolean }),
   AddCol({ name: 'canceled', label_trans: 'event.canceled', fieldtype: tools.FieldType.boolean }),
   AddCol({ name: 'deleted', label_trans: 'event.deleted', fieldtype: tools.FieldType.boolean }),
@@ -528,7 +548,6 @@ export const fieldsTable = {
         const myris = mylist.find((myrec) => myrec[key] === val)
         risultato = myris[collab]
       }
-
 
       if (key === 'username') {
         console.log('key=', key, 'collab', collab, 'val', val)
@@ -625,7 +644,7 @@ export const fieldsTable = {
     AddCol({ name: 'id_conf_zoom', label_trans: 'zoom.id_conf_zooom' }),
     AddCol({ name: 'note', label_trans: 'zoom.note' }),
     AddCol(DeleteRec),
-    AddCol(DuplicateRec),
+    AddCol(DuplicateRec)
   ],
 
   colTableUsersBase: [
@@ -1096,7 +1115,7 @@ export const fieldsTable = {
       label: 'Lista Ingresso',
       columns: collistaingresso,
       colkey: '_id',
-      collabel: 'ind_order',
+      collabel: 'ind_order'
     },
     {
       value: 'graduatorias',

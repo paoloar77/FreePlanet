@@ -48,6 +48,7 @@ const state: IGlobalState = {
   rightCartOpen: false,
   stateConnection: stateConnDefault,
   networkDataReceived: false,
+  clickcmd: '',
   cfgServer: [],
   testp1: { contatore: 0, mioarray: [] },
   category: 'personal',
@@ -240,6 +241,10 @@ namespace Getters {
       return mystate.settings.find((rec) => rec.key === key)
   }, 'getrecSettingsByKey')
 
+  const getCmdClick = b.read((mystate: IGlobalState) => (): string => {
+    return mystate.clickcmd
+  }, 'getCmdClick')
+
   const getValueSettingsByKey = b.read((mystate: IGlobalState) => (key, serv): any => {
 
     const myrec = getters.getrecSettingsByKey(key, serv)
@@ -247,7 +252,7 @@ namespace Getters {
     if (!!myrec) {
       if ((myrec.type === tools.FieldType.date) || (myrec.type === tools.FieldType.onlydate))
         return myrec.value_date
-      else if (myrec.type === tools.FieldType.number)
+      else if ((myrec.type === tools.FieldType.number) || (myrec.type === tools.FieldType.hours))
         return myrec.value_num
       else if (myrec.type === tools.FieldType.boolean)
         return myrec.value_bool
@@ -303,6 +308,10 @@ namespace Getters {
       return getListByTable()
     },
 
+    get getCmdClick() {
+      return getCmdClick()
+    },
+
     get getValueSettingsByKey() {
       return getValueSettingsByKey()
     },
@@ -352,6 +361,11 @@ namespace Mutations {
 
   function NewArray(state: IGlobalState, newarr: ICfgServer[]) {
     state.testp1.mioarray = newarr
+  }
+
+  function changeCmdClick(mystate: IGlobalState, value: string) {
+    console.log('changeCmdClick', value)
+    mystate.clickcmd = value
   }
 
   function setPaoArray_Delete(state: IGlobalState) {
@@ -439,7 +453,7 @@ namespace Mutations {
     if (!!myrec) {
       if ((myrec.type === tools.FieldType.date) || (myrec.type === tools.FieldType.onlydate))
         myrec.value_date = value
-      else if (myrec.type === tools.FieldType.number)
+      else if ((myrec.type === tools.FieldType.number) || (myrec.type === tools.FieldType.hours))
         myrec.value_num = value
       else if (myrec.type === tools.FieldType.boolean)
         myrec.value_bool = value
@@ -457,6 +471,7 @@ namespace Mutations {
     setCategorySel: b.commit(setCategorySel),
     setStateConnection: b.commit(setStateConnection),
     SetwasAlreadySubOnDb: b.commit(SetwasAlreadySubOnDb),
+    changeCmdClick: b.commit(changeCmdClick),
     saveConfig: b.commit(saveConfig),
     setPaoArray: b.commit(setPaoArray),
     setPaoArray_Delete: b.commit(setPaoArray_Delete),

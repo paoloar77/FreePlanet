@@ -10,7 +10,20 @@
       </q-btn>
     </div>
 
-    <q-icon :name="iconPriority"/>
+    <div :class="classMenuBtn" @mousedown="clickRiga">
+      <q-btn flat
+             :class="clButtPopover"
+             :readonly="!CanIModifyTodo"
+             icon="menu">
+        <q-menu v-if="CanIModifyTodo" ref="popmenu" self="top right">
+          <SubMenus :menuPopupTodo="menuPopupTodo" :itemtodo="itemtodo" @clickMenu="clickMenu"
+                    @selectSubMenu="selectSubMenu"></SubMenus>
+        </q-menu>
+
+      </q-btn>
+    </div>
+
+    <!-- <q-icon :name="iconPriority"/> -->
 
     <div class="flex-item donotdrag divdescrTot">
       <q-input v-if="sel && inEdit && itemtodo.statustodo !== tools.Status.COMPLETED" hide-underline type="textarea"
@@ -24,7 +37,7 @@
                @keydown="keyDownArea" v-on:keydown.esc="exitEdit" @blur="exitEdit(true)" @click="editTodo()"></q-input>
 
       <div v-else :class="classDescr"
-           @keydown="keyDownRow"><div class="clpos">{{itemtodo.pos}}: </div> {{ itemtodo.descr }}
+           @keydown="keyDownRow">{{ itemtodo.descr }}
       </div>
 
 
@@ -63,23 +76,10 @@
       </div>
     </div>
 
-
     <div v-if="itemtodo.enableExpiring" :class="classExpiring">
       <CDate :mydate="itemtodo.expiring_at" @input="itemtodo.expiring_at = new Date(arguments[0])"
              data_class="data_string" :readonly="!CanIModifyTodo">
       </CDate>
-    </div>
-    <div :class="classMenuBtn" @mousedown="clickRiga">
-      <q-btn flat
-             :class="clButtPopover"
-             :readonly="!CanIModifyTodo"
-             icon="menu">
-        <q-menu v-if="CanIModifyTodo" ref="popmenu" self="top right">
-          <SubMenus :menuPopupTodo="menuPopupTodo" :itemtodo="itemtodo" @clickMenu="clickMenu"
-                    @selectSubMenu="selectSubMenu"></SubMenus>
-        </q-menu>
-
-      </q-btn>
     </div>
   </div>
 

@@ -119,7 +119,8 @@
         </q-btn>
 
 
-        <q-btn class="q-mx-xs" v-if="static_data.functionality.ENABLE_ECOMMERCE && isLogged && getnumOrdersCart > 0" round dense flat
+        <q-btn class="q-mx-xs" v-if="static_data.functionality.ENABLE_ECOMMERCE && isLogged && getnumOrdersCart > 0"
+               round dense flat
                to="/orderinfo" icon="fas fa-list-ol">
 
 
@@ -215,7 +216,7 @@
         </div>
 
       </div>
-      <div v-if="isLogged" class="q-mt-lg"><br><br></div>
+      <div v-if="isLogged" class="q-mt-lg"></div>
 
       <slot></slot>
 

@@ -116,7 +116,7 @@ export default class MixinBase extends MixinMetaTags {
         myrec.serv = serv
         if ((myrec.type === tools.FieldType.date) || (myrec.type === tools.FieldType.onlydate))
           myrec.value_date = value
-        else if (myrec.type === tools.FieldType.number)
+        else if ((myrec.type === tools.FieldType.number) || (myrec.type === tools.FieldType.hours))
           myrec.value_num = value
         else if (myrec.type === tools.FieldType.boolean)
           myrec.value_bool = value

@@ -43,6 +43,7 @@ export default class Header extends Vue {
   public clCloudUpload: string = ''
   public clCloudDownload: string = ''
   public clCloudUp_Indexeddb: string = ''
+  public tabcmd: string = ''
   public clCloudDown_Indexeddb: string = 'clIndexeddbsend'
   public photo = ''
   public visuimg: boolean = true
@@ -430,5 +431,10 @@ export default class Header extends Vue {
       return 'bg-info'
     else
       return 'bg-primary'
+  }
+
+  public changecmd(value) {
+    console.log('changecmd', value)
+    GlobalStore.mutations.changeCmdClick(value)
   }
 }

@@ -1,8 +1,26 @@
 <template>
   <div :class="getClassRow()" @click="clickProject">
 
-    <q-btn :disable="isDisable" class="flex-item donotdrag " size="sm" push color="primary" round icon="arrow_forward"
-           :to="getrouteto"></q-btn>
+    <q-btn
+      v-if="isProject()"
+      :class="(itemproject.respUsername !== '' && itemproject.viceRespUsername !== '') ? 'clresp' : 'clrespempty' + ' clButtPopover pos-item'"
+      :readonly="!CanIModifyProject"
+      size="sm"
+      dense
+      flat
+      @mousedown="clickRiga"
+      :disable="!CanIModifyProject"
+      icon="menu">
+      <q-menu ref="popmenu" self="top right">
+        <SubMenusProj :menuPopupProj="menuPopupProj" :itemproject="itemproject" @clickMenu="clickMenu"
+                      @selectSubMenu="selectSubMenu"></SubMenusProj>
+      </q-menu>
+    </q-btn>
+
+    <!--<div :class="(itemproject.respUsername !== '' && itemproject.viceRespUsername !== '') ? 'clresp' : 'clrespempty' + ' pos-group flex-item'">
+      <q-icon class="" name="fas fa-user-friends"></q-icon>
+    </div>-->
+    <!--<div class="q-mx-xs"></div>-->
 
     <div class="flex-item donotdrag divdescrTot">
       <q-input v-if="(sel && inEdit)" hide-underline type="textarea" ref="inputprojdescr"
@@ -17,17 +35,20 @@
       </q-input>
 
       <div v-else :class="classDescr"
-           @keydown="keyDownRow"><div class="clpos">{{ itemproject.pos }}: </div> {{ itemproject.descr }}
+           @keydown="keyDownRow">
+
+        <!--<div class="clpos">{{ itemproject.pos }}.</div> -->
+        {{ itemproject.descr }}
       </div>
 
     </div>
 
-    <div>
+    <!--<div>
       {{ tools.getGroupById(itemproject.groupId) }}
-    </div>
+    </div>-->
 
 
-    <div v-if="isProject()" class="flex-item progress-item shadow-1">
+    <div v-if="isProject()" class="flex-item donotdrag progress-item shadow-1">
       <q-linear-progress
         stripe
         rounded
@@ -47,18 +68,12 @@
              data_class="data_string">
       </CDate>
     </div>
-    <div v-if="isProject()" class="flex-item pos-item " @mousedown="clickRiga">
-      <q-btn flat
-             :class="clButtPopover"
-             :readonly="!CanIModifyProject"
-             :disable="!CanIModifyProject"
-             icon="menu">
-        <q-menu ref="popmenu" self="top right">
-          <SubMenusProj :menuPopupProj="menuPopupProj" :itemproject="itemproject" @clickMenu="clickMenu"
-                        @selectSubMenu="selectSubMenu"></SubMenusProj>
-        </q-menu>
-      </q-btn>
-    </div>
+
+    <q-btn :disable="isDisable" class="flex-item donotdrag pos-go" size="sm" push color="primary" round
+           icon="arrow_forward"
+           :to="getrouteto">
+
+    </q-btn>
 
   </div>
 </template>

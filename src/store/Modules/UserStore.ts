@@ -394,7 +394,6 @@ namespace Mutations {
 
   }
 
-
   function setusersList(mystate: IUserState, usersList: IUserFields[]) {
     // console.log('setusersList', usersList)
     mystate.usersList = [...usersList]
@@ -410,7 +409,6 @@ namespace Mutations {
     tools.setLangAtt(newstr)
     localStorage.setItem(tools.localStorage.lang, state.lang)
   }
-
 
   function UpdatePwd(mystate: IUserState, x_auth_token: string) {
     mystate.x_auth_token = x_auth_token
@@ -662,6 +660,17 @@ namespace Actions {
   async function newsletterload(context, paramquery) {
 
     return await Api.SendReq('/news/load', 'POST', paramquery)
+      .then((res) => {
+        // console.log('res', res)
+        return res.data
+      }).catch((error) => {
+        return null
+      })
+  }
+
+  async function reportload(context, paramquery) {
+
+    return await Api.SendReq('/report/load', 'POST', paramquery)
       .then((res) => {
         // console.log('res', res)
         return res.data
@@ -1065,6 +1074,7 @@ namespace Actions {
     execDbOp: b.dispatch(execDbOp),
     setLangServer: b.dispatch(setLangServer),
     newsletterload: b.dispatch(newsletterload),
+    reportload: b.dispatch(reportload),
     newsletter_setactivate: b.dispatch(newsletter_setactivate),
     getDashboard: b.dispatch(getDashboard),
     getDownline: b.dispatch(getDownline)

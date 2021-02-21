@@ -74,6 +74,8 @@ export default class CEventsCalendar extends MixinEvents {
     msgbooking: '',
     infoevent: '',
     numpeople: 1,
+    numpeopleLunch: 0,
+    numpeopleDinner: 0,
     datebooked: tools.getDateNow(),
     booked: false,
     modified: false
@@ -137,29 +139,7 @@ export default class CEventsCalendar extends MixinEvents {
 
   }
 
-  public resources = [
-    {
-      label: 'John'
-    },
-    {
-      label: 'Mary'
-    },
-    {
-      label: 'Susan'
-    },
-    {
-      label: 'Olivia'
-    },
-    {
-      label: 'Board Room'
-    },
-    {
-      label: 'Room-1'
-    },
-    {
-      label: 'Room-2'
-    }
-  ]
+  public resources = []
 
   // public eventdata =
   //   [
@@ -365,6 +345,8 @@ export default class CEventsCalendar extends MixinEvents {
 
   get hasModifiedBooking() {
     return (this.bookEventpage.bookedevent.numpeople !== this.bookEventForm.numpeople) ||
+      (this.bookEventpage.bookedevent.numpeopleLunch !== this.bookEventForm.numpeopleLunch) ||
+      (this.bookEventpage.bookedevent.numpeopleDinner !== this.bookEventForm.numpeopleDinner) ||
       (this.bookEventpage.bookedevent.msgbooking !== this.bookEventForm.msgbooking) ||
       (this.bookEventpage.bookedevent.booked !== this.bookEventForm.booked)
   }
@@ -450,16 +432,18 @@ export default class CEventsCalendar extends MixinEvents {
     this.eventForm = { ...this.formDefault }
   }
 
-  public addEventMenu(day, type) {
-    // console.log('addeventmenu editable = ', this.editable)
+  public addEventMenu(day) {
+    console.log('addeventmenu', day)
     if (this.calendarView === 'scheduler' || this.calendarView === 'week-scheduler' || this.calendarView === 'month-scheduler' || !this.editable) {
       return
     }
     this.resetForm()
-    this.contextDay = { ...day }
+    this.contextDay = { ...day.scope }
 
-    this.eventForm.dateTimeStart = tools.getstrYYMMDDDateTime(day.date + ' 21:00:00')
-    this.eventForm.dateTimeEnd = tools.getstrYYMMDDDateTime(day.date + ' 22:00:00')
+    this.eventForm.dateTimeStart = tools.getstrYYMMDDDateTime(day.scope.date + ' 21:00:00')
+    this.eventForm.dateTimeEnd = tools.getstrYYMMDDDateTime(day.scope.date + ' 22:00:00')
+
+    console.log('eventForm', this.eventForm)
 
     this.addEvent = true // show dialog
   }
@@ -479,6 +463,8 @@ export default class CEventsCalendar extends MixinEvents {
       this.myevent = eventparam
       this.bookEventForm.msgbooking = ''
       this.bookEventForm.numpeople = 1
+      this.bookEventForm.numpeopleLunch = 0
+      this.bookEventForm.numpeopleDinner = 0
       this.bookEventForm.booked = true
       this.bookEventpage.state = EState.Creating
 
@@ -703,6 +689,8 @@ export default class CEventsCalendar extends MixinEvents {
     if (bookedevent) {
       this.bookEventForm._id = bookedevent._id
       this.bookEventForm.numpeople = bookedevent.numpeople
+      this.bookEventForm.numpeopleLunch = bookedevent.numpeopleLunch
+      this.bookEventForm.numpeopleDinner = bookedevent.numpeopleDinner
       this.bookEventForm.infoevent = bookedevent.infoevent
       this.bookEventForm.msgbooking = bookedevent.msgbooking
       this.bookEventForm.booked = bookedevent.booked
@@ -755,6 +743,8 @@ export default class CEventsCalendar extends MixinEvents {
         userId: UserStore.state.my._id,
         id_bookedevent: myevent._id,
         numpeople: self.bookEventForm.numpeople,
+        numpeopleLunch: self.bookEventForm.numpeopleLunch,
+        numpeopleDinner: self.bookEventForm.numpeopleDinner,
         infoevent: tools.gettextevent(self, myevent),
         msgbooking: self.bookEventForm.msgbooking,
         booked: self.bookEventForm.booked,

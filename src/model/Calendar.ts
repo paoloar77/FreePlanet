@@ -24,6 +24,13 @@ export interface IEvents {
   linkpage?: string
   linkpdf?: string
   nobookable?: boolean
+  lunchAvailable?: boolean
+  dinnerAvailable?: boolean
+  lunchType?: number
+  dinnerType?: number
+  lunchPrice?: number
+  dinnerPrice?: number
+  internal?: boolean
   news?: boolean
   canceled?: boolean
   deleted?: boolean
@@ -36,6 +43,8 @@ export interface IBookedEvent {
   userId: string
   id_bookedevent?: any
   numpeople: number
+  numpeopleLunch?: number
+  numpeopleDinner?: number
   infoevent: string
   msgbooking: string
   datebooked?: Date

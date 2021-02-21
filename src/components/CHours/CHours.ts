@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import { Component, Prop, Watch } from 'vue-property-decorator'
 
-import { colTableHours } from '@src/store/Modules/fieldsTable'
+import { colTableHours, colTableStorehouse } from '@src/store/Modules/fieldsTable'
 
 
 import { CCard, CGridTableRec, CMyPage, CTitleBanner, CImgText } from '@components'
@@ -25,6 +25,10 @@ export default class CHours extends MixinBase {
     page: 2,
     rowsPerPage: 5
     // rowsNumber: xx if getting data from a server
+  }
+
+  public created() {
+    console.log('created CHours')
   }
 
   get extraparams() {
@@ -74,7 +78,7 @@ export default class CHours extends MixinBase {
     return colTableHours
   }
 
-  get defaultnewrec() {
+  get getdefaultnewrec() {
     const myrec = {
       todoId: this.todoId,
       userId: UserStore.state.my._id,

@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import { Component, Watch } from 'vue-property-decorator'
 
-import { IAction, IDrag, IProject, IProjectsState, ITodo, Privacy, TypeProj } from '../../../model/index'
+import { IAction, IDrag, IGlobalState, IProject, IProjectsState, ITodo, Privacy, TypeProj } from '../../../model/index'
 import { SingleProject } from '../../../components/projects/SingleProject/index'
 import { CTodo } from '../../../components/todos/CTodo'
 
@@ -10,7 +10,7 @@ import { toolsext } from '@src/store/Modules/toolsext'
 import { lists } from '../../../store/Modules/lists'
 import * as ApiTables from '../../../store/Modules/ApiTables'
 
-import { GlobalStore, Projects, Todos } from '@store'
+import { GlobalStore, Projects, Todos, UserStore } from '@store'
 
 import { Getter } from 'vuex-class'
 
@@ -19,12 +19,18 @@ import { CProgress } from '../../../components/CProgress'
 import { CDate } from '../../../components/CDate'
 import { CMyFieldDb } from '../../../components/CMyFieldDb'
 import { CHours } from '../../../components/CHours'
+import { waitAndRefreshData } from '../../../store/Modules/ApiTables'
+import { CGridTableRec } from '@components'
+import { shared_consts } from '@src/common/shared_vuejs'
+import { colTableHours } from '@src/store/Modules/fieldsTable'
+import { costanti } from '@src/store/Modules/costanti'
 
 const namespace: string = 'Projects'
+const namespaceGS: string = 'GlobalState'
 
 @Component({
 
-  components: { SingleProject, CProgress, CTodo, CDate, CMyFieldDb, CHours },
+  components: { SingleProject, CProgress, CTodo, CDate, CMyFieldDb, CHours, CGridTableRec },
   filters: {
     capitalize(value) {
       if (!value) {
@@ -73,7 +79,20 @@ export default class ProjList extends Vue {
     return cl
   }
 
-  get tipoProj() {
+  get classTitleProjSelBread() {
+    let cl = 'flex-item shadow-4'
+    if (!!this.itemselproj) {
+      cl += ' text-' + this.itemselproj.themecolor + ' bg-' + this.itemselproj.themebgcolor
+    } else {
+      cl += ' text-black'
+    }
+
+    if (!tools.isMobile())
+      cl += ' full-width '
+    return cl
+  }
+
+  get gettipoProj() {
     // console.log('this.$route.name', this.$route.name)
     const myarr = this.$route.name.split('.')
     if (myarr)
@@ -111,7 +130,28 @@ export default class ProjList extends Vue {
   }
 
   get getrouteup() {
-    return tools.getUrlByTipoProj(this.tipoProj) + this.itemproj.id_parent
+    let id = ''
+    if (!!this.itemselproj) {
+      id = this.itemselproj.id_parent
+    }
+    if (!!this.itemproj) {
+      id = this.itemproj.id_parent
+    }
+    this.tabproj = 'lista'
+    return tools.getUrlByTipoProj(this.gettipoProj) + id
+  }
+
+  public getroutebyid(id) {
+    return tools.getUrlByTipoProj(this.gettipoProj) + id
+  }
+
+  get idparentSel() {
+    if ((this.whatisSel === tools.WHAT_PROJECT) && !!this.itemselproj) {
+      return this.idProjAtt !== this.itemselproj._id
+    } else if ((this.whatisSel === tools.WHAT_TODO) && !!this.itemtodosel) {
+      return this.idProjAtt !== this.itemtodosel.category
+    }
+    return false
   }
 
   get tools() {
@@ -131,9 +171,17 @@ export default class ProjList extends Vue {
     return this.idProjAtt === process.env.PROJECT_ID_MAIN
   }
 
+  get isRootProjectAtt() {
+    if ((this.whatisSel === tools.WHAT_PROJECT) && (!!this.itemselproj.descr)) {
+      return this.itemselproj.descr === '__PROJECTS'
+    } else if ((this.whatisSel === tools.WHAT_TODO) && (!!this.itemtodosel.descr)) {
+      return this.itemproj.descr === '__PROJECTS'
+    }
+  }
+
   get getIdParent() {
-    if (!!this.itemproj)
-      return this.itemproj.id_parent
+    if (!!this.itemselproj)
+      return this.itemselproj.id_parent
     else
       return ''
   }
@@ -259,6 +307,7 @@ export default class ProjList extends Vue {
   public idProjAtt: string = process.env.PROJECT_ID_MAIN
   public splitterModel = 50 // start at 50%
   public itemproj: IProject = null
+  public tipoproj: string = ''
   public itemprojparent: IProject = null
   public idsel: string = ''
   public itemselproj: IProject = Projects.getters.getRecordEmpty()
@@ -267,6 +316,7 @@ export default class ProjList extends Vue {
   public colProgress: string = 'blue'
   public percProgress: string = 'percProgress'
   public readonly: boolean = false
+  public tabcmd: string = ''
 
   public selectStatus: any[] = tools.selectStatus[toolsext.getLocale()]
   public selectPhase: any[] = tools.selectPhase[toolsext.getLocale()]
@@ -283,6 +333,27 @@ export default class ProjList extends Vue {
   @Getter('projs_dacompletare', { namespace })
   public projs_dacompletare: (state: IProjectsState, id_parent: string, tipoproj: string) => IProject[]
 
+  @Watch('GlobalStore.state.clickcmd')
+  public changeclickcmdOk(value) {
+    console.log('changeclickcmd', value)
+    if (GlobalStore.state.clickcmd !== '') {
+      const cmd = GlobalStore.state.clickcmd
+      if (cmd === 'back') {
+        this.tabproj = 'lista'
+        this.$router.replace(this.getrouteup)
+      } else if (cmd === 'ore') {
+        this.tabproj = 'ore'
+      } else if (cmd === 'stat') {
+        this.tabproj = 'stat'
+      } else if (cmd === 'nuovo') {
+        this.clickMenuProjList(lists.MenuAction.ADD_PROJECT)
+      }
+
+      GlobalStore.state.clickcmd = ''
+    }
+
+  }
+
   // @Watch('projs_dacompletare')
   // public changeitems() {
   //   this.updateindexProj()
@@ -291,20 +362,39 @@ export default class ProjList extends Vue {
   @Watch('$route.name')
   public changename() {
 
-    // console.log('tools.getUrlByTipoProj(this.tipoProj)', tools.getUrlByTipoProj(this.tipoProj))
+    // console.log('tools.getUrlByTipoProj(this.gettipoProj)', tools.getUrlByTipoProj(this.gettipoProj))
     this.changeparent()
+  }
+
+  get listacrumb() {
+    let arrger = []
+    if (this.itemselproj)
+      arrger = Projects.getters.listagerarchia(this.gettipoProj, this.itemselproj._id)
+    else if (this.itemtodosel)
+      arrger = Projects.getters.listagerarchia(this.gettipoProj, this.itemtodosel.category)
+
+    return arrger
   }
 
   @Watch('$route.params.idProj')
   public changeparent() {
-    // console.log('this.$route.params.idProj', this.$route.params)
+    console.log('this.$route.params.idProj', this.$route.params)
+    const oldtipoproj = this.tipoproj
     this.idProjAtt = this.$route.params.idProj
+    this.tabproj = 'lista'
     this.updateindexProj()
     this.selproj()
+    if (oldtipoproj !== this.gettipoProj)
+      this.updateData()
   }
 
   @Watch('itemselproj.progressCalc')
   public changeprogress() {
+    this.updateclasses()
+  }
+
+  @Watch('itemselproj.groupid')
+  public change_group() {
     this.updateclasses()
   }
 
@@ -358,6 +448,17 @@ export default class ProjList extends Vue {
     Todos.actions.modify({ myitem: this.itemtodosel, field })
   }
 
+  public modifyfieldproj(field) {
+    Projects.actions.modify({ myitem: this.itemselproj, field })
+      .then((ris) => {
+        console.log('ris', ris)
+        if (ris)
+          tools.showPositiveNotif(this.$q, 'Campo Aggiornato')
+        else
+          tools.showNegativeNotif(this.$q, 'Campo non Aggiornato!')
+      })
+  }
+
   public selproj() {
     this.deselectAllRowsproj(null, false, false)
     this.deselectAllRowstodo(null, false, false)
@@ -374,34 +475,37 @@ export default class ProjList extends Vue {
   }
 
   public created() {
-    const service = this.$dragula.$service
-    tools.dragula_option(service, this.dragname)
 
-    this.updateclasses()
+    if (costanti.DRAGULA) {
+      const service = this.$dragula.$service
+      tools.dragula_option(service, this.dragname)
 
-    service.eventBus.$on('dragend', (args) => {
+      this.updateclasses()
 
-      // console.log('args proj-list', args)
-      if (args.name === this.dragname) {
-        const itemdragend: IDrag = {
-          field: '',
-          id_proj: this.idProjAtt,
-          newIndex: this.getElementIndex(args.el),
-          oldIndex: this.getElementOldIndex(args.el),
-          tipoproj: this.tipoProj
+      service.eventBus.$on('dragend', (args) => {
+
+        // console.log('args proj-list', args)
+        if (args.name === this.dragname) {
+          const itemdragend: IDrag = {
+            field: '',
+            id_proj: this.idProjAtt,
+            newIndex: this.getElementIndex(args.el),
+            oldIndex: this.getElementOldIndex(args.el),
+            tipoproj: this.gettipoProj
+          }
+
+          // console.log('args', args, itemdragend)
+          this.onEndproj(itemdragend)
         }
+      })
 
-        // console.log('args', args, itemdragend)
-        this.onEndproj(itemdragend)
-      }
-    })
-
-    service.eventBus.$on('drag', (el, source) => {
-      this.scrollable = false
-    })
-    service.eventBus.$on('drop', (el, source) => {
-      this.scrollable = true
-    })
+      service.eventBus.$on('drag', (el, source) => {
+        this.scrollable = false
+      })
+      service.eventBus.$on('drop', (el, source) => {
+        this.scrollable = true
+      })
+    }
 
     this.load()
   }
@@ -417,6 +521,10 @@ export default class ProjList extends Vue {
     //   this.splitterModel = 50
     // }
     this.idProjAtt = this.$route.params.idProj
+    if (!this.idProjAtt) {
+      this.idProjAtt = process.env.PROJECT_ID_MAIN
+    }
+    console.log('this.idProjAtt', this.idProjAtt)
     this.updateindexProj()
 
     tools.touchmove(this.scrollable)
@@ -424,16 +532,21 @@ export default class ProjList extends Vue {
 
   public async load() {
     // console.log('LOAD PROJECTS....')
-    if (!!this.$route.params.idProj) {
-      this.idProjAtt = this.$route.params.idProj
+    if (!this.idProjAtt) {
+      this.idProjAtt = process.env.PROJECT_ID_MAIN
+    }
+    console.log('LOAD this.idProjAtt', this.idProjAtt)
+
+    if (!!this.idProjAtt) {
       this.updateindexProj()
+      this.selproj()
     }
 
     this.selectGroup = tools.getGroupList()[toolsext.getLocale()]
     this.selectResp = tools.getRespList()[toolsext.getLocale()]
     this.selectWorkers = tools.getWorkersList()[toolsext.getLocale()]
 
-    console.log('this.selectGroup', this.selectGroup)
+    // console.log('this.selectGroup', this.selectGroup)
 
     // Set last category selected
     // localStorage.setItem(tools.localStorage.categorySel, this.categoryAtt)
@@ -463,13 +576,13 @@ export default class ProjList extends Vue {
 
     this.projbottom = ''
 
-    return this.addProject(descr, this.tipoProj)
+    return this.addProject(descr, this.gettipoProj)
   }
 
   public async clickMenuProjList(action) {
     // console.log('clickMenuProjList: ', action)
     if (action === lists.MenuAction.ADD_PROJECT) {
-      const idnewelem = await this.addProject('test...', this.tipoProj)
+      const idnewelem = await this.addProject('inserisci qui...', this.gettipoProj)
       // console.log('idnewelem', idnewelem)
       // get element by id
       const elem = this.getCompProjectById(idnewelem)
@@ -562,14 +675,18 @@ export default class ProjList extends Vue {
   }
 
   public setidsel(id: string) {
+    // console.log('setidsel', id)
     this.idsel = id
     this.whatisSel = tools.WHAT_PROJECT
+    this.tipoproj = this.gettipoProj
     this.itemtodosel = null
     this.itemselproj = Projects.getters.getRecordById(this.idsel)
     if ((this.itemselproj === undefined || this.itemselproj === null))
       this.whatisSel = tools.WHAT_NOTHING
     // console.log('readonly = true')
     this.readonly = true
+
+    // console.log('   itemselproj', this.itemselproj)
 
     this.checkiftoenable()
   }
@@ -613,6 +730,12 @@ export default class ProjList extends Vue {
     // console.log('calling MODIFY updateitemproj', myitem, field)
 
     await Projects.actions.modify({ myitem, field })
+      .then((ris) => {
+        if (ris)
+          tools.showPositiveNotif(this.$q, 'Campo Aggiornato')
+        else
+          tools.showNegativeNotif(this.$q, 'Campo non Aggiornato!')
+      })
 
   }
 
@@ -621,28 +744,34 @@ export default class ProjList extends Vue {
 
     // return false
 
-    // @ts-ignore
-    for (const i in this.$refs.ctodo.$refs.single) {
+    try {
       // @ts-ignore
-      const contr = this.$refs.ctodo.$refs.single[i] as SingleTodo
-      let des = true
-      if (check) {
-        const id = contr.itemtodo._id
-        // Don't deselect the actual clicked!
-        if (onlythis) {
-          des = item._id === id
-        } else {
-          if (!!item) {
-            des = ((check && (item._id !== id)) || (!check))
+      // for (const i in this.$refs.ctodo.$refs.single) {
+      for (const elem of this.$refs.ctodo.$refs.single) {
+        // @ts-ignore
+        // const contr = this.$refs.ctodo.$refs.single[i] as SingleTodo
+        const contr = elem as SingleTodo
+        let des = true
+        if (check) {
+          const id = contr.itemtodo._id
+          // Don't deselect the actual clicked!
+          if (onlythis) {
+            des = item._id === id
           } else {
-            des = !check
+            if (!!item) {
+              des = ((check && (item._id !== id)) || (!check))
+            } else {
+              des = !check
+            }
           }
         }
+        if (des) {
+          // @ts-ignore
+          contr.deselectAndExitEdit()
+        }
       }
-      if (des) {
-        // @ts-ignore
-        contr.deselectAndExitEdit()
-      }
+    } catch (e) {
+
     }
   }
 
@@ -664,26 +793,30 @@ export default class ProjList extends Vue {
     if (this.$refs.singleproject === undefined)
       return
 
-    for (const i in this.$refs.singleproject) {
+    try {
+      for (const elem of this.$refs.singleproject) {
 
-      const contr = this.$refs.singleproject[i] as SingleProject
-      // @ts-ignore
-      const id = contr.itemproject._id
-      // Don't deselect the actual clicked!
-      let des = false
-      if (onlythis) {
-        des = item._id === id
-      } else {
-        if (!!item) {
-          des = ((check && (item._id !== id)) || (!check))
+        const contr = elem as SingleProject
+        // @ts-ignore
+        const id = contr.itemproject._id
+        // Don't deselect the actual clicked!
+        let des = false
+        if (onlythis) {
+          des = item._id === id
         } else {
-          des = !check
+          if (!!item) {
+            des = ((check && (item._id !== id)) || (!check))
+          } else {
+            des = !check
+          }
+        }
+        if (des) {
+          // @ts-ignore
+          contr.deselectAndExitEdit()
         }
       }
-      if (des) {
-        // @ts-ignore
-        contr.deselectAndExitEdit()
-      }
+    } catch (e) {
+
     }
   }
 
@@ -698,6 +831,11 @@ export default class ProjList extends Vue {
   public checkUpdate() {
     ApiTables.waitAndcheckPendingMsg()
   }
+
+  public updateData() {
+    ApiTables.waitAndRefreshData()
+  }
+
 
   private updateindexProj() {
     // console.log('idProjAtt', this.idProjAtt)
@@ -730,5 +868,102 @@ export default class ProjList extends Vue {
 
     return iconpriority
   }
+
+  get canShow() {
+    return ((this.whatisSel === tools.WHAT_PROJECT) && (!!this.itemselproj.descr)) ||
+      (this.whatisSel === tools.WHAT_TODO) && (!!this.itemtodosel.descr)
+  }
+
+  get showDescr() {
+    let mystr = ''
+    if ((this.whatisSel === tools.WHAT_PROJECT) && (!!this.itemselproj.descr)) {
+      mystr = this.itemselproj.descr
+    } else if ((this.whatisSel === tools.WHAT_TODO) && (!!this.itemtodosel.descr)) {
+      mystr = this.itemtodosel.descr
+    }
+    if (this.isRootProjectAtt)
+      return ''
+
+    return mystr
+  }
+
+  public clickrouteup() {
+    this.tabproj = 'lista'
+    this.selproj()
+  }
+
+  public pagination = {
+    sortBy: 'hours',
+    descending: true,
+    page: 2,
+    rowsPerPage: 5
+    // rowsNumber: xx if getting data from a server
+  }
+
+  get extraparams() {
+    return {
+      lk_tab: 'users',
+      lk_LF: 'userId',
+      lk_FF: '_id',
+      lk_as: 'user',
+      lk_proj: {
+        todoId: 1, userId: 1, descr: 1, date: 1, time_start: 1, time_end: 1, hours: 1,
+        username: 1, name: 1, surname: 1
+      }
+    }
+  }
+
+  public arrfilterand = [
+    {
+      label: 'Tutte le ore',
+      value: shared_consts.FILTER_HOURS_ALL
+    }
+  ]
+
+  get myfilterdef() {
+    return [shared_consts.FILTER_HOURS_MYLIST]
+  }
+
+  get myarrfilterand() {
+    const myfiltrodef = {
+      label: 'Mie Ore',
+      value: shared_consts.FILTER_HOURS_MYLIST,
+      hide: true,
+      default: true
+    }
+    let myarr = []
+    myarr.push(myfiltrodef)
+    if (this.arrfilterand)
+      myarr = [...myarr, ...this.arrfilterand]
+
+    console.log('myarr', myarr)
+    return myarr
+  }
+
+  public selected = []
+  public dataPages = []
+
+  get getcolHours() {
+    return colTableHours
+  }
+
+  get getdefaultnewrec() {
+    const myrec = {
+      todoId: '',
+      userId: UserStore.state.my._id,
+      descr: '',
+      hours: 0
+    }
+    if (!!this.itemtodosel) {
+      myrec.todoId = this.itemtodosel._id
+    } else if (!!this.itemselproj) {
+      myrec.todoId = this.itemselproj._id
+    } else {
+      return null
+    }
+
+    return myrec
+  }
+
 
 }

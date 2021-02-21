@@ -53,6 +53,9 @@ export default class CMyPopupEdit extends Vue {
   }
 
   public changevalRec(newval) {
+    if (this.col.fieldtype === tools.FieldType.hours) {
+      newval = newval.value
+    }
     console.log('this.row', this.row, 'this.col', this.col, 'newval', newval)
     console.log('this.row[this.col.name]', this.row[this.col.name])
     this.row[this.col.name] = newval
@@ -246,6 +249,10 @@ export default class CMyPopupEdit extends Vue {
   public intcode_change(coderec) {
     this.myvalueprec = this.myvalue
     this.myvalue = '+' + coderec.dialCode
+  }
+
+  public createHours(value) {
+
   }
 
 }

@@ -14,5 +14,7 @@ export const costanti = {
     CANCEL_BOOKING: 1
   },
 
+  DRAGULA: false,
+
   MAX_PHASES: 5,
 }

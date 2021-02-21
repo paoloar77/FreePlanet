@@ -30,7 +30,7 @@ export default class Eventlist extends Vue {
   public getEventsBookedByIdEvent: (state: ICalendarState, id, showall) => IBookedEvent[]
 
   @Getter('getNumParticipants', { namespace })
-  public getNumParticipants: (state: ICalendarState, event: IEvents, showall) => number
+  public getNumParticipants: (state: ICalendarState, event: IEvents, showall, tipo) => number
 
   public getNameSurnameByUserId(userid) {
     return UserStore.getters.getNameSurnameByUserId(userid)
@@ -51,7 +51,7 @@ export default class Eventlist extends Vue {
       let add = true
 
       if (!this.showall) {
-        add = CalendarStore.getters.getNumParticipants(myevent, this.showall) > 0
+        add = CalendarStore.getters.getNumParticipants(myevent, this.showall, 0) > 0
       }
 
       if (add) {
@@ -96,7 +96,7 @@ export default class Eventlist extends Vue {
       let add = true
 
       if (!this.showall) {
-        add = CalendarStore.getters.getNumParticipants(myevent, this.showall) > 0
+        add = CalendarStore.getters.getNumParticipants(myevent, this.showall, 0) > 0
       }
 
       if (add) {

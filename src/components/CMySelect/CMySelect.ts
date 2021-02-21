@@ -26,7 +26,9 @@ export default class CMySelect extends Vue {
   }
 
   public changeval(newval) {
+    console.log('changeval', newval)
     this.$emit('update:value', newval)
+    this.$emit('changeval', newval)
   }
 
   public mounted() {

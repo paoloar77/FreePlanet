@@ -5,7 +5,7 @@ import { GlobalStore, UserStore } from '../../store/Modules/index'
 import { tools } from '../../store/Modules/tools'
 
 import { shared_consts } from '../../common/shared_vuejs'
-import { ICategory, IColGridTable, IFilter, ITableRec } from '../../model'
+import { ICategory, IColGridTable, IFilter, ITableRec, IPagination } from '../../model'
 import { CTodo } from '../todos/CTodo'
 import { SingleProject } from '../projects/SingleProject'
 import { lists } from '../../store/Modules/lists'
@@ -19,18 +19,28 @@ import { CMyDashboard } from '../CMyDashboard'
   components: { CMyPopupEdit, CTitleBanner, CMyDashboard }
 })
 export default class CGridTableRec extends Vue {
+  private addRow: string = 'Aggiungi'
   @Prop({ required: true }) public prop_mytitle: string
   @Prop({ required: false }) public prop_mytable: string
   @Prop({ required: false, default: null }) public prop_mycolumns: any[]
   @Prop({ required: false, default: '' }) public prop_colkey: string
   @Prop({ required: false, default: '' }) public prop_codeId: string
   @Prop({ required: false, default: '' }) public nodataLabel: string
+  @Prop({ required: false, default: 'Aggiungi' }) public labelBtnAddRow: string
   @Prop({ required: false, default: '' }) public noresultLabel: string
-  @Prop({ required: false, default: {} }) public defaultnewrec: any
+  @Prop({
+    required: false, default: function mydef() {
+      return true
+    }
+  }) public defaultnewrec: any
   @Prop({ required: false, default: null }) public tablesList: ITableRec[]
   @Prop({ required: false, default: null }) public arrfilters: IFilter[]
   @Prop({ required: false, default: [] }) public filterdef: number[]
   @Prop({ required: false, default: {} }) public extraparams: any
+  @Prop({
+    required: false,
+    default: { sortBy: '', descending: false, page: 1, rowsNumber: 10, rowsPerPage: 10 }
+  }) public pagination: IPagination
 
   public newRecordBool: boolean = false
   public newRecord: any = {}
@@ -47,13 +57,6 @@ export default class CGridTableRec extends Vue {
   public $q
   public $t
   public loading: boolean = false
-  public pagination: {
-    sortBy: string,
-    descending: boolean
-    rowsNumber: number
-    page: number,
-    rowsPerPage: number // specifying this determines pagination is server-side
-  } = { sortBy: '', descending: false, page: 1, rowsNumber: 10, rowsPerPage: 10 }
 
   public serverData: any [] = []
   public spinner_visible: boolean = false
@@ -63,9 +66,9 @@ export default class CGridTableRec extends Vue {
   public valPrec: string = ''
 
   public separator: 'horizontal'
-  public myfilter = undefined
+  public myfilter: any = ''
   public myfilterand = []
-  public rowsel: any =  {}
+  public rowsel: any = {}
   public dark: boolean = true
   public canEdit: boolean = false
 
@@ -210,9 +213,15 @@ export default class CGridTableRec extends Vue {
     this.valPrec = valinitial
 
     this.saveFieldValue(mydata)
+
+  }
+
+  public beforeMount() {
+    console.log('beforeMount')
   }
 
   public created() {
+    console.log('created')
     // this.serverData = this.mylist.slice() // [{ chiave: 'chiave1', valore: 'valore 1' }]
 
     this.mytable = this.prop_mytable
@@ -450,6 +459,7 @@ export default class CGridTableRec extends Vue {
   }
 
   public mounted() {
+    console.log('GridTable mounted', this.tablesel)
 
     if (!!this.tablesList) {
       this.canEdit = tools.getCookie(tools.CAN_EDIT, this.canEdit) === 'true'
@@ -684,6 +694,7 @@ export default class CGridTableRec extends Vue {
         if (ris) {
           // console.log('ris', ris)
           this.newRecordBool = false
+          this.refresh()
         }
       })
   }
@@ -694,4 +705,17 @@ export default class CGridTableRec extends Vue {
       this.annulla(0)
     }
   }
+
+  get isfinishLoading() {
+    return GlobalStore.state.finishLoading
+  }
+
+  get getlabelAddRow() {
+    return this.labelBtnAddRow
+  }
+
+  get visButtRow() {
+    return this.labelBtnAddRow !== this.addRow
+  }
+
 }

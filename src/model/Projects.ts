@@ -62,7 +62,8 @@ export const Privacy = {
   all: 'all',
   friends: 'friends',
   mygroup: 'mygroup',
-  onlyme: 'onlyme'
+  onlyme: 'onlyme',
+  inherited: 'inherited'
 }
 
 export const TypeProj = {

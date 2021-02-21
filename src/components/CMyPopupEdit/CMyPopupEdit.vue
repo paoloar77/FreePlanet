@@ -11,7 +11,7 @@
                    :label="col.label">
           </q-input>
         </div>
-        <div v-if="col.fieldtype === tools.FieldType.date">
+        <div v-else-if="col.fieldtype === tools.FieldType.date">
           <CDateTime
             :label="col.label"
             class="cursor-pointer"
@@ -25,6 +25,21 @@
             @show="OpenEdit">
           </CDateTime>
         </div>
+        <div v-else-if="col.fieldtype === tools.FieldType.onlydate">
+          <CDateTime
+            :label="col.label"
+            class="cursor-pointer"
+            :valueDate="myvalue"
+            :readonly="false"
+            :minuteinterval="minuteinterval"
+            :dense="true"
+            @input="changevalRec"
+            canEdit="true"
+            @savetoclose="SaveValueInt"
+            @show="OpenEdit"
+            view="date">
+          </CDateTime>
+        </div>
         <div v-else-if="col.fieldtype === tools.FieldType.number">
           <q-input v-model="myvalue" type="number"
                    autofocus
@@ -33,6 +48,81 @@
           >
 
           </q-input>
+        </div>
+        <div v-else-if="col.fieldtype === tools.FieldType.hours">
+
+          <CMySelect label="Ore" :value.sync="myvalue"
+                     optval="value" optlab="label"
+                     :useinput="true"
+                     @changeval="changevalRec"
+                     :newvaluefunc="createHours"
+                     :options="tools.SelectHours">
+          </CMySelect>
+
+          <!--<q-input v-model="myvalue" type="number"
+                   autofocus
+                   @input="changevalRec"
+                   :label="col.label">
+          </q-input>
+          -->
+
+        </div>
+        <div v-else-if="col.fieldtype === tools.FieldType.listimages">
+          <CGallery :gall="row" :listimages="myvalue" :edit="isviewfield"
+                    @showandsave="Savedb"
+                    @input="changevalRec"
+          >
+
+          </CGallery>
+        </div>
+        <div v-else-if="col.fieldtype === tools.FieldType.image">
+          <CGallery :gall="row" :listimages="myvalue" :edit="isviewfield"
+                    @input="changevalRec"
+                    @showandsave="Savedb">
+
+          </CGallery>
+        </div>
+        <div v-if="col.fieldtype === tools.FieldType.binary">
+          <CMyChipList
+            :type="tools.FieldType.binary"
+            :value="myvalue"
+            @input="changevalRec"
+            :options="db_fieldsTable.getTableJoinByName(col.jointable)"
+            :optval="db_fieldsTable.getKeyByTable(col.jointable)"
+            :optlab="db_fieldsTable.getLabelByTable(col.jointable)"
+            :opticon="db_fieldsTable.getIconByTable(col.jointable)"></CMyChipList>
+        </div>
+        <!-- Show Value -->
+        <div v-else-if="col.fieldtype === tools.FieldType.multiselect">
+          <CMyChipList
+            @input="changevalRec"
+            :type="tools.FieldType.multiselect"
+            :value="myvalue"
+            :options="db_fieldsTable.getTableJoinByName(col.jointable)"
+            :optval="db_fieldsTable.getKeyByTable(col.jointable)"
+            :optlab="db_fieldsTable.getLabelByTable(col.jointable)"
+            :opticon="db_fieldsTable.getIconByTable(col.jointable)"></CMyChipList>
+        </div>
+        <div v-else-if="col.fieldtype === tools.FieldType.select">
+          <CMyChipList
+            @input="changevalRec"
+            myclass="text-center"
+            :type="tools.FieldType.select"
+            :value="myvalue"
+            :options="db_fieldsTable.getTableJoinByName(col.jointable)"
+            :optval="db_fieldsTable.getKeyByTable(col.jointable)"
+            :optlab="db_fieldsTable.getLabelByTable(col.jointable)"
+            :opticon="db_fieldsTable.getIconByTable(col.jointable)"></CMyChipList>
+        </div>
+        <div v-else-if="col.fieldtype === tools.FieldType.boolean">
+          <q-toggle dark color="green" v-model="myvalue" :label="col.title"
+                    :disable="disable && col.name !== 'profile.saw_zoom_presentation'"
+                    @input="changevalRec"></q-toggle>
+        </div>
+        <div v-else-if="col.fieldtype === tools.FieldType.html">
+          <div v-html="visuValByType(myvalue, col, row)" @click="visueditor = true">
+
+          </div>
         </div>
       </div>
     </div>
@@ -172,6 +262,12 @@
                 </q-input>
               </div>
               <div v-else-if="col.fieldtype === tools.FieldType.number">
+                <q-input v-model="myvalue" type="number"
+                         autofocus>
+
+                </q-input>
+              </div>
+              <div v-else-if="col.fieldtype === tools.FieldType.hours">
                 <q-input v-model="myvalue" type="number"
                          autofocus>
 

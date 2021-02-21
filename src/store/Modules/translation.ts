@@ -5,7 +5,8 @@ export const translation = {
       all: 'Tutti',
       friends: 'Amici',
       mygroup: 'Gruppo',
-      onlyme: 'Solo io'
+      onlyme: 'Solo io',
+      inherited: 'Ereditato'
     },
     proj: {
       newproj: 'Nuovo Progetto',
@@ -27,7 +28,8 @@ export const translation = {
       all: 'Todos',
       friends: 'Amigos',
       mygroup: 'Grupos',
-      onlyme: 'Solo yo'
+      onlyme: 'Solo yo',
+      inherited: 'Ereditato'
     },
     proj: {
       newproj: 'Nuevo Projecto',
@@ -49,7 +51,8 @@ export const translation = {
       all: 'All',
       friends: 'Friends',
       mygroup: 'Group',
-      onlyme: 'Only me'
+      onlyme: 'Only me',
+      inherited: 'Inherited'
     },
     proj: {
       newproj: 'New Project',

@@ -37,6 +37,19 @@ const listFieldsUpdateCalculation: string [] = ['hoursplanned', 'hoursleft', 'ho
 const b = storeBuilder.module<IProjectsState>('Projects', stateglob)
 const stateGetter = b.state()
 
+function getFirstInherited(proj, idparent, state) {
+  let myprojtocheck = null
+  while (proj.privacyread === Privacy.inherited) {
+    myprojtocheck = state.projects.find((rec) => rec._id === idparent)
+    if (!myprojtocheck)
+      return null
+
+    idparent = myprojtocheck.id_parent
+    proj = myprojtocheck
+  }
+  return myprojtocheck
+}
+
 function getarrByCategory(category: string) {
   if (!stateglob.projects) {
     return []
@@ -66,7 +79,7 @@ function getproj(projects, idproj, tipoproj: string) {
   else if (tipoproj === RouteNames.projectsshared)
     ris = projects.filter((proj) => (proj.id_parent === idproj) && (proj.userId === UserStore.state.my._id) && (proj.privacyread !== Privacy.onlyme))
   else if (tipoproj === RouteNames.projectsall)
-    ris = projects.filter((proj) => (proj.id_parent === idproj) && (proj.userId !== UserStore.state.my._id) )
+    ris = projects.filter((proj) => (proj.id_parent === idproj) && (proj.userId !== UserStore.state.my._id))
 
   if (ris)
     ris = ris.sort((a, b) => a.pos - b.pos)
@@ -105,8 +118,8 @@ namespace Getters {
       hoursplanned: 0,
       hoursleft: 0,
       progressCalc: 0,
-      privacyread: 'onlyme',
-      privacywrite: 'onlyme',
+      privacyread: 'inherited',
+      privacywrite: 'inherited',
       begin_development: tools.getDateNull(),
       begin_test: tools.getDateNull(),
       hoursweeky_plannedtowork: 0,
@@ -147,6 +160,33 @@ namespace Getters {
     }
   }, 'listaprojects')
 
+  const listagerarchia = b.read((state: IProjectsState) => (tipoproj: string, idparent: string): IMenuList[] => {
+    if (state.projects) {
+      // console.log('listagerarchia', idparent)
+      const myarrgerarchia: IMenuList[] = []
+      let myidparent = idparent
+      let precmyparent = '-1'
+
+      while (state.projects && myidparent) {
+        const proj = state.projects.find((rec) => rec._id === myidparent)
+        if (proj) {
+          myarrgerarchia.push({ nametranslate: '', description: proj.descr, idelem: proj._id })
+        } else {
+          break
+        }
+        if (myidparent === proj.id_parent || (!proj.id_parent && (precmyparent === myidparent)))
+          break
+        precmyparent = myidparent
+        myidparent = proj.id_parent
+      }
+      // console.log('  myarrgerarchia', myarrgerarchia)
+      return myarrgerarchia.reverse()
+
+    } else {
+      return []
+    }
+  }, 'listagerarchia')
+
   const getDescrById = b.read((state: IProjectsState) => (id: string): string => {
     if (id === process.env.PROJECT_ID_MAIN)
       return 'Projects'
@@ -177,9 +217,19 @@ namespace Getters {
       if (UserStore.state.my._id === proj.userId)  // If it's the owner
         return true
 
-      return (proj.privacyread === Privacy.all) ||
-        (proj.privacyread === Privacy.friends) && (UserStore.getters.IsMyFriend(proj.userId))
-        || ((proj.privacyread === Privacy.mygroup) && (UserStore.getters.IsMyGroup(proj.userId)))
+      let myprojtocheck = proj
+      if (proj.privacyread === Privacy.inherited) {
+        myprojtocheck = getFirstInherited(proj, proj.id_parent, state)
+        if (!myprojtocheck)
+          return true
+      }
+
+      console.log('privacyread', myprojtocheck.privacyread)
+
+      return (UserStore.state.my._id === myprojtocheck.userId) || (myprojtocheck.privacyread === Privacy.all) ||
+        (myprojtocheck.privacyread === Privacy.friends) && (UserStore.getters.IsMyFriend(myprojtocheck.userId))
+        || ((myprojtocheck.privacyread === Privacy.mygroup) && (UserStore.getters.IsMyGroup(myprojtocheck.userId)))
+
     } else {
       return false
     }
@@ -191,8 +241,18 @@ namespace Getters {
       return false
 
     if (!!UserStore) {
+
+      let myprojtocheck = proj
+      if (proj.privacywrite === Privacy.inherited) {
+        myprojtocheck = getFirstInherited(proj, proj.id_parent, state)
+        if (!myprojtocheck)
+          return true
+      }
+
       if (!!UserStore.state)
-        return ((UserStore.state.my._id === proj.userId) || (proj.privacywrite === Privacy.all))  // If it's the owner
+        return (UserStore.state.my._id === myprojtocheck.userId) || (myprojtocheck.privacywrite === Privacy.all) ||
+          (myprojtocheck.privacywrite === Privacy.friends) && (UserStore.getters.IsMyFriend(myprojtocheck.userId))
+          || ((myprojtocheck.privacywrite === Privacy.mygroup) && (UserStore.getters.IsMyGroup(myprojtocheck.userId)))
       else
         return false
     }
@@ -215,6 +275,9 @@ namespace Getters {
     get listaprojects() {
       return listaprojects()
     },
+    get listagerarchia() {
+      return listagerarchia()
+    },
     get getDescrById() {
       return getDescrById()
     },
@@ -236,17 +299,16 @@ namespace Mutations {
     }
     if (atfirst) {
       state.projects.unshift(objproj)
-    }
-    else {
+    } else {
       state.projects.push(objproj)
     }
   }
 
   function updateProject(state: IProjectsState, { objproj }) {
     if (!!objproj) {
-      console.log('updateProject', objproj)
+      // console.log('updateProject', objproj)
       const index = tools.getIndexById(state.projects, objproj._id)
-      console.log('index', index)
+      // console.log('index', index)
       if (index >= 0) {
         updateDataCalculated(state.projects[index], objproj)
 
@@ -263,7 +325,7 @@ namespace Mutations {
     ApiTables.removeitemfromarray(state.projects, ind)
   }
 
-  async function movemyitem(state: IProjectsState, { myitemorig, myitemdest } ) {
+  async function movemyitem(state: IProjectsState, { myitemorig, myitemdest }) {
     const indorig = tools.getIndexById(state.projects, myitemorig._id)
 
     state.projects.splice(indorig, 1)

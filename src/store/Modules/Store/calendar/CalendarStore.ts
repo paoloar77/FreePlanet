@@ -54,8 +54,8 @@ namespace Getters {
     return mystate.bookedevent.find((bookedevent) => (bookedevent.id_bookedevent === myevent._id) && (bookedevent.userId === UserStore.state.my._id) && ((isconfirmed && bookedevent.booked) || (!isconfirmed)))
   }, 'findEventBooked')
 
-  const getNumParticipants = b.read((mystate: ICalendarState) => (myevent: IEvents, showall) => {
-    const myarr = mystate.bookedevent.filter((bookedevent) => (bookedevent.id_bookedevent === myevent._id) && (bookedevent.booked) && (showall || (!showall && bookedevent.userId === UserStore.state.my._id) ))
+  const getNumParticipants = b.read((mystate: ICalendarState) => (myevent: IEvents, showall, tipo) => {
+    const myarr = mystate.bookedevent.filter((bookedevent) => (bookedevent.id_bookedevent === myevent._id) && (bookedevent.booked) && (showall || (!showall && bookedevent.userId === UserStore.state.my._id) ) && ((tipo === '') || ((tipo === 'lunch' && bookedevent.numpeopleLunch) || (tipo === 'dinner' && bookedevent.numpeopleDinner) )))
     if (myarr)
       return myarr.reduce((sum, bookedevent) => sum + bookedevent.numpeople, 0)
     else
@@ -157,6 +157,8 @@ namespace Actions {
       id_bookedevent: bookevent.id_bookedevent,
       infoevent: bookevent.infoevent,
       numpeople: bookevent.numpeople,
+      numpeopleLunch: bookevent.numpeopleLunch,
+      numpeopleDinner: bookevent.numpeopleDinner,
       msgbooking: bookevent.msgbooking,
       datebooked: bookevent.datebooked,
       userId: UserStore.state.my._id,

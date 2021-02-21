@@ -113,7 +113,7 @@ namespace Getters {
 
   const todos_completati = b.read((stateparam: ITodosState) => (cat: string): ITodo[] => {
     const indcat = getindexbycategory(cat)
-    console.log('todos_completati', cat, 'indcat=', indcat, 'state.categories=', state.categories)
+    // console.log('todos_completati', cat, 'indcat=', indcat, 'state.categories=', state.categories)
     if (stateparam.todos[indcat]) {
       let arrout = []
       if (stateparam.showtype === costanti.ShowTypeTask.SHOW_LAST_N_COMPLETED) {   // Show only the first N completed
@@ -234,7 +234,7 @@ namespace Mutations {
 
     console.log('stateparam.categories', stateparam.categories)
     console.log('myitemdest', myitemdest)
-    console.log('indcat', indcat, 'indcatdest', indcatdest, 'indorig', indorig)
+    // console.log('indcat', indcat, 'indcatdest', indcatdest, 'indorig', indorig)
 
     if (indcatdest === -1) {
       stateparam.categories.push(myitemdest.category)
@@ -288,7 +288,7 @@ namespace Actions {
 
         // console.log('ARRAY TODOS = ', state.todos)
         if (process.env.DEBUG === '1') {
-          console.log('dbLoad', 'state.todos', state.todos, 'state.categories', state.categories)
+          // console.log('dbLoad', 'state.todos', state.todos, 'state.categories', state.categories)
         }
 
         return res
@@ -438,7 +438,7 @@ namespace Actions {
   }
 
   async function modify(context, { myitem, field }) {
-    return await ApiTables.table_ModifyRecord(nametable, myitem, listFieldsToChange, field)
+    return ApiTables.table_ModifyRecord(nametable, myitem, listFieldsToChange, field)
   }
 
   async function swapElems(context, itemdragend: IDrag) {

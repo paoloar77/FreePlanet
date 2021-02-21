@@ -1,13 +1,6 @@
 <template>
     <div>
-        <span>{{ setmeta({
-            title: 'Lista Ore',
-            description: "",
-            keywords: '' } ) }}
-        </span>
-
         <div class="q-ma-sm q-gutter-sm q-pa-xs">
-            <CTitleBanner title="Lista Ore"></CTitleBanner>
             <CGridTableRec prop_mytable="hours"
                            prop_mytitle="Lista Ore"
                            :prop_mycolumns="getcolHours"
@@ -17,9 +10,9 @@
                            :arrfilters="myarrfilterand"
                            :filterdef="myfilterdef"
                            :prop_codeId="todoId"
-                           :defaultnewrec="defaultnewrec"
+                           :defaultnewrec="getdefaultnewrec"
                            :extraparams="extraparams"
-            >
+            labeladd="Aggiungi Ora">
 
             </CGridTableRec>
         </div>
