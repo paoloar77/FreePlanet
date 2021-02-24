@@ -8,6 +8,11 @@ export const translation = {
       onlyme: 'Solo io',
       inherited: 'Ereditato'
     },
+    tipovisu : {
+      simplelist: 'Lista Semplice',
+      taskProgress: 'Statistiche',
+      responsabili: 'Responsabili',
+    },
     proj: {
       newproj: 'Nuovo Progetto',
       newsubproj: 'Nuovo Sotto-Progetto',

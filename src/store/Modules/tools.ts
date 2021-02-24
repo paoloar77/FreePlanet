@@ -19,7 +19,7 @@ import {
   IParamDialog,
   IProject,
   ITodo,
-  Privacy
+  Privacy, TipoVisu
 } from '@src/model'
 import * as ApiTables from '@src/store/Modules/ApiTables'
 import translate from '@src/globalroutines/util'
@@ -444,6 +444,31 @@ export const tools = {
         id: 5,
         label: translation.enUs.privacy.inherited,
         value: Privacy.inherited
+      }
+    ]
+  },
+
+  selectTipoVisu: {
+    it: [
+      {
+        id: 1,
+        label: translation.it.privacy.inherited,
+        value: TipoVisu.inherited
+      },
+      {
+        id: 2,
+        label: translation.it.tipovisu.simplelist,
+        value: TipoVisu.simplelist
+      },
+      {
+        id: 3,
+        label: translation.it.tipovisu.taskProgress,
+        value: TipoVisu.taskProgress
+      },
+      {
+        id: 4,
+        label: translation.it.tipovisu.responsabili,
+        value: TipoVisu.responsabili
       }
     ]
   },
@@ -2587,6 +2612,11 @@ export const tools = {
     return isNaN(dayOfWeek) ? '' : myday[lang][dayOfWeek].substring(0, 3)
   },
 
+  isSunday(mydate) {
+    const dayOfWeek = new Date(mydate).getDay()
+    return dayOfWeek === 0
+  },
+
   getDateNowEvent() {
     return tools.addDays(tools.getDateNow(), -1)
   },
@@ -2650,8 +2680,7 @@ export const tools = {
 
   getprivacywritebytipoproj(tipoproj) {
     return Privacy.inherited
-  }
-  ,
+  },
 
   addRoute(myarr, values) {
     myarr.push(values)

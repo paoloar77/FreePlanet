@@ -6,6 +6,7 @@ import Global = WebAssembly.Global
 import { CalendarStore, GlobalStore, UserStore } from '@store'
 import { colors, Screen, Platform, date } from 'quasar'
 import { tools } from '@src/store/Modules/tools'
+import { shared_consts } from '@src/common/shared_vuejs'
 
 @Component({
 
@@ -21,10 +22,23 @@ export default class Report extends MixinBase {
     calendar: any
   }
 
+  public resourceHeight = 100
+
+  public valfilter: number = 0
+
+  public arrfilters = [
+    // { label: 'Responsabili', value: 1, ris: false },
+    { label: 'Attività', value: 2, ris: false }
+  ]
+
   public mounted() {
+    this.load()
+  }
+
+  public load() {
     const date_start = tools.addDays(new Date(tools.getTimestampsNow()), -90)
-    const date_end = tools.addDays(new Date(tools.getTimestampsNow()), 365)
-    UserStore.actions.reportload({ date_start, date_end })
+    const date_end = tools.addDays(new Date(tools.getTimestampsNow()), 30)
+    UserStore.actions.reportload({ date_start, date_end, filter: this.valfilter })
       .then((myris) => {
         if (!!myris) {
           console.log('myris', myris)
@@ -36,10 +50,12 @@ export default class Report extends MixinBase {
 
   public calendarNext() {
     this.$refs.calendar.next()
+    console.log('SelectedDate', this.selectedDate)
   }
 
   public calendarPrev() {
     this.$refs.calendar.prev()
+    console.log('SelectedDate', this.selectedDate)
   }
 
   public getEventDate(eventparam) {
@@ -68,41 +84,33 @@ export default class Report extends MixinBase {
     return (new Date(myevent.dateTimeEnd) >= datenow)
   }
 
-  public badgeStyles(eventparam, type, timeStartPos, timeDurationHeight) {
+  public badgeStyles(eventparam) {
     const s = { color: '', top: '', height: '', opacity: 1 }
 
     if (tools.isCssColor(eventparam.bgcolor)) {
       s['background-color'] = eventparam.bgcolor
       s.color = colors.luminosity(eventparam.bgcolor) > 0.5 ? 'black' : 'white'
     }
-    if (timeStartPos) {
-      s.top = timeStartPos(tools.getstrTime(eventparam.dateTimeStart)) + 'px'
-    }
-    if (timeDurationHeight) {
-      s.height = timeDurationHeight(this.func_tools.getMinutesDuration(eventparam.dateTimeStart, eventparam.dateTimeEnd)) + 'px'
-    }
 
-    if (!this.isEventEnabled(eventparam)) {
-      s.opacity = 0.5
-    }
+    // if (!this.isEventEnabled(eventparam)) {
+    //   s.opacity = 0.5
+    // }
 
     s['align-items'] = 'flex-start'
     return s
   }
 
   public getEvents(dt, objres) {
-    console.log('dt', dt, 'objres', objres)
     const eventsloc = []
 
     if (!!this.arrhour[objres.username]) {
       if (this.arrhour[objres.username].length > 0) {
         this.arrhour[objres.username].forEach((item) => {
           if (item) {
-            if (tools.getstrYYMMDDDate(item.date) === dt) {
-              if (eventsloc.length > 0) {
-                // check for overlapping times
-                eventsloc.push(item)
-              }
+            if (tools.getstrYYMMDDDate(item.date) === dt.date) {
+              // console.log('dt', dt, 'objres', objres, 'this.arrhour[objres.username]', this.arrhour[objres.username])
+              // console.log('Eccolo!', item)
+              eventsloc.push(item)
             }
           }
         })
@@ -124,6 +132,23 @@ export default class Report extends MixinBase {
       }
     }
     return arr
+  }
+
+  public refreshFilter() {
+
+    this.valfilter = 0
+    for (const filter of this.arrfilters) {
+      if (filter.ris)
+        this.valfilter += filter.value
+
+      if (filter.value === shared_consts.REPORT_FILT_ATTIVITA && filter.ris) {
+        this.resourceHeight = 120
+      } else {
+        this.resourceHeight = 60
+      }
+    }
+
+    this.load()
   }
 
 }

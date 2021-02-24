@@ -10,7 +10,7 @@ $heightdescr: 20px;
 .flex-container2 {
   flex-flow: row wrap;
   justify-content: space-between;
-  margin: 0px 10px 0px 10px;  // top right bottom left
+  // margin: 0px 10px 0px 10px;  // top right bottom left
 }
 
 // Set visibility: visible to the icon menu of pos-item-popover
@@ -79,7 +79,7 @@ $heightdescr: 20px;
 }
 
 .pos-go {
-  order: 1;
+  // order: 1;
 }
 
 
@@ -163,8 +163,10 @@ $heightdescr: 20px;
   padding-bottom: 4px;
   max-width: 36px;
   min-width: 32px;
-  flex: 1;
-  order: 1;
+  display: inline-block;
+  vertical-align: middle;
+  // flex: 1;
+  // order: 1;
 }
 
 .progrbar-item {
@@ -393,3 +395,13 @@ $heightdescr: 20px;
   flex: 1;
 }
 */
+
+
+.clResp{
+  font-weight: bold;
+  color: darkgreen;
+}
+.clViceResp{
+  font-weight: bold;
+  color: red;
+}

@@ -18,12 +18,12 @@
           <div :class="classTitleProjSelBread">
 
             <div v-if="canShow">
-            <q-breadcrumbs gutter="xs">
-              <q-breadcrumbs-el v-for="(crumb, index) in listacrumb"
-                                :key="index"
-                                :label="crumb.description"
-                                :to="getroutebyid(crumb.idelem)"/>
-            </q-breadcrumbs>
+              <q-breadcrumbs gutter="xs">
+                <q-breadcrumbs-el v-for="(crumb, index) in listacrumb"
+                                  :key="index"
+                                  :label="crumb.description"
+                                  :to="getroutebyid(crumb.idelem)"/>
+              </q-breadcrumbs>
             </div>
             <div v-else>
               Progetti:
@@ -106,20 +106,22 @@
             <!--<q-infinite-scroll :handler="loadMoreTodo" :offset="7">-->
             <!--<div class="container" v-dragula="projs_dacompletare(idProjAtt, gettipoProj)" drake="second"> -->
             <div class="container">
-              <div :id="tools.getmyid(myproj._id)" :index="index"
-                   v-for="(myproj, index) in projs_dacompletare(idProjAtt, gettipoProj)"
-                   :key="myproj._id" class="myitemdrag">
+              <q-list bordered>
+                <div :id="tools.getmyid(myproj._id)" :index="index"
+                     v-for="(myproj, index) in projs_dacompletare(idProjAtt, gettipoProj)"
+                     :key="myproj._id" class="myitemdrag">
 
-                <SingleProject ref="singleproject" @deleteItemproj="mydeleteitemproj(myproj._id)"
-                               @eventupdateproj="updateitemproj"
-                               @idsel="setidsel"
-                               @deselectAllRowsproj="deselectAllRowsproj"
-                               @deselectAllRowstodo="deselectAllRowstodo" @onEnd="onEndproj"
-                               :itemproject='myproj'>
+                  <SingleProject ref="singleproject" @deleteItemproj="mydeleteitemproj(myproj._id)"
+                                 @eventupdateproj="updateitemproj"
+                                 @idsel="setidsel"
+                                 @deselectAllRowsproj="deselectAllRowsproj"
+                                 @deselectAllRowstodo="deselectAllRowstodo" @onEnd="onEndproj"
+                                 :itemproject='myproj'>
 
-                </SingleProject>
+                  </SingleProject>
 
-              </div>
+                </div>
+              </q-list>
             </div>
           </div>
           <q-separator></q-separator>
@@ -215,6 +217,17 @@
                           rounded outlined v-model="itemselproj.viceRespUsername" :options="selectResp"
                           :label="$t('proj.viceRespUsername')" emit-value map-options
                           @input="modifyfieldproj('viceRespUsername')">
+                </q-select>
+              </div>
+            </div>
+            <div class="flex-container clMain">
+              <q-icon class="flex-item flex-icon" name="outlined_flag"/>
+              <div class="flex-item itemstatus">
+                <q-select style="min-width: 150px" :readonly="readonly_PanelPrivacySel" rounded outlined
+                          v-model="itemselproj.tipovisu"
+                          :options="selectTipoVisu"
+                          @input="modifyfieldproj('tipovisu')"
+                          :label="$t('proj.tipovisu')" emit-value map-options>
                 </q-select>
               </div>
             </div>

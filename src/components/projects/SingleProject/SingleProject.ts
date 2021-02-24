@@ -6,7 +6,7 @@ import { tools } from '../../../store/Modules/tools'
 import { toolsext } from '@src/store/Modules/toolsext'
 import { lists } from '../../../store/Modules/lists'
 
-import { IProject } from '../../../model/index'
+import { IProject, TipoVisu } from '../../../model/index'
 
 import { SubMenusProj } from '../SubMenusProj'
 import { CDate } from '../../CDate'
@@ -14,6 +14,7 @@ import { CDate } from '../../CDate'
 import { date } from 'quasar'
 import { GlobalStore } from '@store'
 import { RouteNames } from '@src/router/route-names'
+import { shared_consts } from '@src/common/shared_vuejs'
 
 @Component({
   components: { SubMenusProj, CDate },
@@ -49,6 +50,17 @@ export default class SingleProject extends Vue {
 
   get CanIModifyProject() {
     return Projects.getters.CanIModifyPanelPrivacy(this.itemproject)
+  }
+
+  get TipoVisu() {
+    return TipoVisu
+  }
+
+  get getTipovisuByProjParent() {
+    let myprojparent = Projects.getters.getRecordById(this.itemproject.id_parent)
+    if (!myprojparent)
+      myprojparent = this.itemproject
+    return Projects.getters.getTipoVisuProj(myprojparent)
   }
 
   @Prop({ required: true }) public itemproject: IProject
@@ -143,6 +155,11 @@ export default class SingleProject extends Vue {
     this.watchupdate('privacywrite')
   }
 
+  @Watch('itemproject.tipovisu')
+  public valueChanged_tipovisu() {
+    this.watchupdate('tipovisu')
+  }
+
   @Watch('itemproject.totalphases')
   public valueChangedtotalphases() {
     this.watchupdate('totalphases')
@@ -196,8 +213,8 @@ export default class SingleProject extends Vue {
 
   public updateClasses() {
     // this.classCompleted = 'completed-item'
-    this.classDescr = 'flex-item div_descr show donotdrag'
-    this.classDescrEdit = 'flex-item div_descr_edit donotdrag'
+    this.classDescr = ''
+    this.classDescrEdit = 'div_descr_edit donotdrag'
     if (!this.isProject()) {
       this.classDescr += ' titleLista-item'
       this.classDescrEdit += ' titleLista-item'
@@ -208,7 +225,7 @@ export default class SingleProject extends Vue {
 
     this.percProgress = 'percProgress'
 
-    this.classExpiring = 'flex-item data-item shadow-1 hide-if-small'
+    this.classExpiring = 'data-item shadow-1 hide-if-small'
     this.classExpiringEx = ''
 
     this.clButtPopover = this.sel ? 'pos-item-popover comp_selected' : 'pos-item-popover'
@@ -626,6 +643,20 @@ export default class SingleProject extends Vue {
 
         })
     */
+  }
+
+  public getResp() {
+    if (!!GlobalStore.state.resps)
+      return this.itemproject.respUsername ? GlobalStore.getters.getRespByUsername(this.itemproject.respUsername) : ''
+    else
+      return ''
+  }
+
+  public getViceResp() {
+    if (!!GlobalStore.state.resps)
+      return this.itemproject.viceRespUsername ? GlobalStore.getters.getRespByUsername(this.itemproject.viceRespUsername) : ''
+    else
+      return ''
   }
 
 }

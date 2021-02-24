@@ -540,6 +540,7 @@ const msg_it = {
       endwork_estimate: 'Data fine lavori stimata',
       privacyread: 'Chi lo puo vedere:',
       privacywrite: 'Chi lo puo modificare:',
+      tipovisu: 'Visualizzazione:',
       totalphases: 'Totale Fasi',
       themecolor: 'Tema Colore',
       themebgcolor: 'Tema Colore Sfondo',

@@ -17,11 +17,14 @@
       <br>
 
 
+      <!--
       <div class="row">
         <q-btn label="Crea Utenti Test" color="primary" @click="EseguiFunz('creaUtentiTest')"></q-btn>
         <br>
       </div>
-      <!--<div class="row">
+
+
+      <div class="row">
         <q-btn label="Passa i codici Telefoni sul campo cell" color="primary"
                @click="EseguiFunz('changeCellInt')"></q-btn>
         <br></div>
@@ -59,18 +62,18 @@
                  @click="EseguiFunz('delNaviNoStarted')"></q-btn>
           <br>
       </div>-->
+
+      <!--
       <div class="row">
         <q-btn label="Rigenera (Elim, Genera Graduat, Add Navi Temp" color="positive" size="lg"
                @click="EseguiFunz('rigeneraTutto')"></q-btn>
 
-        <!--<q-btn label="Crea ListaIngresso" color="positive" @click="EseguiFunz('creaLista')"></q-btn>-->
       </div>
       <br>
       <div class="row">
         <q-btn label="Elimina Navi Provvisorie" color="negative"
                @click="EseguiFunz('delNaviProvvisorie')"></q-btn>
 
-        <!--<q-btn label="Crea ListaIngresso" color="positive" @click="EseguiFunz('creaLista')"></q-btn>-->
       </div>
       <q-btn label="Genera Graduatoria" color="primary"
              @click="EseguiFunz('GeneraGraduatoria')"></q-btn>
@@ -100,16 +103,6 @@
                     :serv="false"
                     :type="tools.FieldType.number">
         </CMyFieldDb>
-        <!--<CMyFieldDb title="Riga Doni"
-                    mykey="rigadoni"
-                    :serv="false"
-                    :type="tools.FieldType.number">
-        </CMyFieldDb>
-        <CMyFieldDb title="Col Doni"
-                    mykey="coldoni"
-                    :serv="false"
-                    :type="tools.FieldType.number">
-        </CMyFieldDb>-->
         <CMyFieldDb title="Visu_TEST"
                     mykey="VISU_TEST"
                     :serv="false"
@@ -136,14 +129,6 @@
         <q-btn label="Visualizza Lista Nave" color="primary" @click="EseguiFunz('visuListaNave')"></q-btn>
 
       </div>
-      <!--<div class="row">
-        <q-btn label="Visualizza ListaIngresso" color="primary"
-               @click="EseguiFunz('visuListaIngresso')"></q-btn>
-        <br>
-        <q-btn label="Visualizza ListaIngresso Nuovi" color="primary"
-               @click="EseguiFunz('visuListaIngressoNuovi')"></q-btn>
-        <br>
-      </div>-->
 
       <q-btn label="Aggiorna Indice Graduatoria" color="primary"
              @click="EseguiFunz('AggiornaIndiceGraduatoria')"></q-btn>
@@ -179,13 +164,7 @@
                @click="EseguiFunz('mettiSognoePaypal')"></q-btn>
         <br>
       </div>
-      <!--<div class="row">
-        <q-btn label="AGGIUNGI NAVE PER UTENTI CHE NON CE L'HANNO (flag navinonpresenti)!" color="primary"
-               @click="EseguiFunz('addNavePerUtentiNaviNonPresenti')"></q-btn>
-        <br>
-      </div>-->
 
-      <!--
       <div class="row">
         <q-btn label="1) CONVERTI TUTTA LA STRUTTURA NEL NUOVO SISTEMA !" color="negative"
                @click="EseguiFunz('creaTessituraeConv')"></q-btn>
@@ -201,14 +180,8 @@
                @click="EseguiFunz('RendiVisibileIrecordNascosti')"></q-btn>
         <br>
       </div>
-      -->
       <br>
       <br>
-      <!--<div class="row">
-          <q-btn label="CHECK SE INSERIRE UTENTI IN Nave" color="primary"
-                 @click="EseguiFunz('checkInserimentiUtentiInNave')"></q-btn>
-          <br>
-      </div>-->
 
       <div class="row">
         <q-input v-model="riga" type="number" autofocus label="Riga" style="width: 50px;"></q-input>
@@ -223,6 +196,13 @@
                  style="width: 500px; height: 400px;"></q-input>
         <br>
       </div>
+      -->
+    </div>
+
+    <div class="row">
+      <q-btn label="Correggi Tabella Hours con userId" color="negative"
+             @click="EseguiFunz('CorreggiTabHours')"></q-btn>
+      <br>
     </div>
 
 

@@ -44,6 +44,7 @@ export interface IProject {
   actualphase?: number
   privacyread?: string
   privacywrite?: string
+  tipovisu?: number
   themecolor?: string
   themebgcolor?: string
   groupId?: string
@@ -64,6 +65,13 @@ export const Privacy = {
   mygroup: 'mygroup',
   onlyme: 'onlyme',
   inherited: 'inherited'
+}
+
+export const TipoVisu = {
+  inherited: 0,
+  simplelist: 1,
+  taskProgress: 2,
+  responsabili: 3
 }
 
 export const TypeProj = {

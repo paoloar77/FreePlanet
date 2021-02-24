@@ -39,6 +39,9 @@ export const shared_consts = {
   FILTER_HOURS_MYLIST: 65536,
   FILTER_HOURS_ALL: 131072,
 
+  REPORT_FILT_RESP: 1,
+  REPORT_FILT_ATTIVITA: 2,
+
   Permissions: {
     Admin: {
       value: 1,

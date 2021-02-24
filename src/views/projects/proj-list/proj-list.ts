@@ -1,7 +1,17 @@
 import Vue from 'vue'
 import { Component, Watch } from 'vue-property-decorator'
 
-import { IAction, IDrag, IGlobalState, IProject, IProjectsState, ITodo, Privacy, TypeProj } from '../../../model/index'
+import {
+  IAction,
+  IDrag,
+  IGlobalState,
+  IProject,
+  IProjectsState,
+  ITodo,
+  Privacy,
+  TipoVisu,
+  TypeProj
+} from '../../../model/index'
 import { SingleProject } from '../../../components/projects/SingleProject/index'
 import { CTodo } from '../../../components/todos/CTodo'
 
@@ -45,6 +55,10 @@ const namespaceGS: string = 'GlobalState'
 export default class ProjList extends Vue {
 
   public tabproj: string = 'lista'
+
+  get TipoVisu() {
+    return TipoVisu
+  }
 
   get classTitle() {
     let cl = 'flex-item categorytitle shadow-4'
@@ -321,6 +335,7 @@ export default class ProjList extends Vue {
   public selectStatus: any[] = tools.selectStatus[toolsext.getLocale()]
   public selectPhase: any[] = tools.selectPhase[toolsext.getLocale()]
   public selectPrivacy: any[] = tools.selectPrivacy[toolsext.getLocale()]
+  public selectTipoVisu: any[] = tools.selectTipoVisu[toolsext.getLocale()]
   public selectGroup: any[] = []
   public selectResp: any[] = []
   public selectWorkers: any[] = []
@@ -632,6 +647,7 @@ export default class ProjList extends Vue {
         id_parent: this.idProjAtt,
         privacyread: tools.getprivacyreadbytipoproj(tipoproj),
         privacywrite: tools.getprivacywritebytipoproj(tipoproj),
+        tipovisu: TipoVisu.inherited
       }
 
       if (projatt) {
@@ -647,6 +663,7 @@ export default class ProjList extends Vue {
         myobj.actualphase = projatt.actualphase
         myobj.privacyread = projatt.privacyread
         myobj.privacywrite = projatt.privacywrite
+        myobj.tipovisu = projatt.tipovisu
       }
     }
 

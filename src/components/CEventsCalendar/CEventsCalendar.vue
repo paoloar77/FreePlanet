@@ -471,6 +471,7 @@
                   :enable-themes="enableThemes === true"
 
           -->
+
           <q-calendar
             v-if="visuAllCal"
             ref="calendar"

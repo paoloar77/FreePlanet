@@ -1,5 +1,5 @@
 import { IProject, IProjectsState, IDrag, IMenuList, IAction } from 'model'
-import { Privacy } from '@src/model'
+import { Privacy, TipoVisu } from '@src/model'
 import { storeBuilder } from './Store/Store'
 
 import Api from '@api'
@@ -30,7 +30,7 @@ const stateglob: IProjectsState = {
 const listFieldsToChange: string [] = ['descr', 'respUsername', 'viceRespUsername', 'longdescr', 'hoursplanned', 'hoursleft', 'hoursworked', 'id_parent', 'statusproj',
   'category', 'expiring_at', 'priority', 'pos', 'groupId', 'enableExpiring', 'progressCalc', 'live_url', 'test_url',
   'begin_development', 'begin_test', 'actualphase', 'totalphases', 'hoursweeky_plannedtowork', 'endwork_estimate',
-  'privacyread', 'privacywrite', 'id_main_project', 'typeproj', 'favourite', 'themecolor', 'themebgcolor']
+  'privacyread', 'privacywrite', 'tipovisu', 'id_main_project', 'typeproj', 'favourite', 'themecolor', 'themebgcolor']
 
 const listFieldsUpdateCalculation: string [] = ['hoursplanned', 'hoursleft', 'hoursworked', 'progressCalc', 'endwork_estimate']
 
@@ -48,6 +48,19 @@ function getFirstInherited(proj, idparent, state) {
     proj = myprojtocheck
   }
   return myprojtocheck
+}
+
+function getFirstInheritedTipoVisu(proj, idparent, state) {
+  let tipovisuproj = null
+  while (!proj.tipovisu || proj.tipovisu <= 0) {
+    tipovisuproj = state.projects.find((rec) => rec._id === idparent)
+    if (!tipovisuproj)
+      return null
+
+    idparent = tipovisuproj.id_parent
+    proj = tipovisuproj
+  }
+  return tipovisuproj.tipovisu
 }
 
 function getarrByCategory(category: string) {
@@ -128,7 +141,8 @@ namespace Getters {
       themebgcolor: '',
       groupId: '',
       respUsername: '',
-      viceRespUsername: ''
+      viceRespUsername: '',
+      tipovisu: 0
     }
 
     return obj
@@ -236,6 +250,27 @@ namespace Getters {
 
   }, 'getifCanISeeProj')
 
+  const getTipoVisuProj = b.read((state: IProjectsState) => (proj: IProject): number => {
+    if ((proj === undefined) || (proj === null))
+      return TipoVisu.simplelist
+
+    if (!!UserStore.state) {
+
+      let tipovisuproj = proj
+      if (tipovisuproj.tipovisu === TipoVisu.inherited) {
+        tipovisuproj = getFirstInheritedTipoVisu(proj, proj.id_parent, state)
+        if (!tipovisuproj)
+          return TipoVisu.simplelist
+      }
+
+      return tipovisuproj.tipovisu
+
+    } else {
+      return TipoVisu.simplelist
+    }
+
+  }, 'getTipoVisuProj')
+
   const CanIModifyPanelPrivacy = b.read((state: IProjectsState) => (proj: IProject): boolean => {
     if ((proj === undefined) || (proj === null))
       return false
@@ -265,6 +300,9 @@ namespace Getters {
     },
     get CanIModifyPanelPrivacy() {
       return CanIModifyPanelPrivacy()
+    },
+    get getTipoVisuProj() {
+      return getTipoVisuProj()
     },
     get getRecordEmpty() {
       return getRecordEmpty()
@@ -449,6 +487,7 @@ namespace Actions {
     objproj.privacyread = myobj.privacyread
     objproj.privacywrite = myobj.privacywrite
     objproj.actualphase = myobj.actualphase
+    objproj.tipovisu = myobj.tipovisu
 
     let elemtochange: IProject = null
 

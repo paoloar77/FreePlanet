@@ -180,6 +180,11 @@ namespace Getters {
     return ris
   }, 't')
 
+  const getRespByUsername = b.read((state) => (username) => {
+    const rec = state.resps.find((rec) => rec.username === username)
+    return !!rec ? rec.name + ' ' + rec.surname : ''
+  }, 'getRespByUsername')
+
   const getListByTable = b.read((state) => (table) => {
     if (table === tools.TABEVENTS)
       return CalendarStore.state.eventlist
@@ -306,6 +311,10 @@ namespace Getters {
 
     get getListByTable() {
       return getListByTable()
+    },
+
+    get getRespByUsername() {
+      return getRespByUsername()
     },
 
     get getCmdClick() {
