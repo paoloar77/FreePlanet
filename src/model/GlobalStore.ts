@@ -379,6 +379,7 @@ export interface IParamsQuery {
   userId: string
   codeId?: string
   lk_tab?: string,
+  af_objId_tab?: string,
   lk_LF?: string,
   lk_FF?: string,
   lk_as?: string,

@@ -57,7 +57,7 @@ export default class CEventsCalendar extends MixinEvents {
   public $q
   public $t: any
   public calendarView = 'month'
-  public selectedDate = '2019-04-01'
+  public selectedDate = ''
   public tabeditor: string = 'details'
   public formDefault: IEvents = {
     title: '',
@@ -381,16 +381,21 @@ export default class CEventsCalendar extends MixinEvents {
   }
 
   public mounted() {
-    this.selectedDate = this.formatDate(tools.getDateNow())
     this.$root.$on('calendar:next', this.calendarNext)
     this.$root.$on('calendar:prev', this.calendarPrev)
     this.$root.$on('calendar:today', this.calendarToday)
+
+    this.SetToday()
     // CalendarStore.state.eventlist = events
     this.updateFormatters()
 
   }
 
   public beforeMount() {
+    console.log('mounted')
+    this.selectedDate = this.formatDate(tools.getDateNow())
+    console.log('this.selectedDate', this.selectedDate)
+
     CalendarStore.state.locale = toolsext.getLocale()
     this.updateFormatters()
   }
@@ -976,6 +981,7 @@ export default class CEventsCalendar extends MixinEvents {
 
   public getEvents(dt) {
     const eventsloc = []
+    console.log('dt', dt)
 
     for (let i = 0; i < CalendarStore.state.eventlist.length; ++i) {
       let added = false
@@ -984,11 +990,11 @@ export default class CEventsCalendar extends MixinEvents {
           // check for overlapping times
           const startTime = CalendarStore.state.eventlist[i].dateTimeStart
           const endTime = CalendarStore.state.eventlist[i].dateTimeEnd
-          for (let j = 0; j < eventsloc.length; ++j) {
-            const startTime2 = eventsloc[j].dateTimeStart
-            const endTime2 = eventsloc[j].dateTimeEnd
+          for (const item of eventsloc) {
+            const startTime2 = item.dateTimeStart
+            const endTime2 = item.dateTimeEnd
             if (date.isBetweenDates(startTime, startTime2, endTime2) || date.isBetweenDates(endTime, startTime2, endTime2)) {
-              eventsloc[j].side = 'left'
+              item.side = 'left'
               eventsloc.push(CalendarStore.state.eventlist[i])
               added = true
               break
@@ -1008,6 +1014,8 @@ export default class CEventsCalendar extends MixinEvents {
         }
       }
     }
+    if (eventsloc.length > 0)
+      console.log('eventsloc', eventsloc)
     return eventsloc
   }
 

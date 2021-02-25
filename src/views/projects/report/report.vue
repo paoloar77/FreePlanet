@@ -2,19 +2,36 @@
   <q-page>
     <div>
       <CTitleBanner title="Report"></CTitleBanner>
-      <div v-for="filter in arrfilters">
-        <q-toggle dark color="green" v-model="filter.ris" :label="filter.label"
-                  @input="refreshFilter"></q-toggle>
+      <div class="flex-container">
+        <div v-for="filter in arrfilters">
+          <q-toggle dark color="green" v-model="filter.ris" :label="filter.label"
+                    @input="refreshFilter(true)"></q-toggle>
+        </div>
+
+        <q-select v-model="myView" :options="optView" emit-value map-options style="max-width: 150px"></q-select>
       </div>
 
     </div>
 
+    <div class="row justify-center items-center">
+      <div class="items-lg-start row">
+        <q-btn flat dense icon="fas fa-chevron-left" @click="calendarPrev"/>
+        <q-separator vertical/>
+        <q-btn flat dense icon="fas fa-chevron-right" @click="calendarNext"/>
+      </div>
+      <div class="text-center"><span
+        class="q-mr-xl q-toolbar__title nowrap text-blue">{{ title_cal }}</span>
+      </div>
+    </div>
+
+
     <q-calendar
       v-model="selectedDate"
       ref="calendar"
-      view="week-scheduler"
+      :view="myView"
       :weekdays="[1,2,3,4,5,6,0]"
       animated
+      :day-height="resourceHeight"
       :resource-height="resourceHeight"
       :resource-width="60"
       transition-prev="slide-right"
@@ -23,16 +40,16 @@
       :locale="toolsext.getLocale()"
     >
       <!-- eslint-disable vue/no-unused-vars -->
-      <template #scheduler-resources-header>
+      <!--<template #scheduler-resources-header>
         <div class="row justify-center items-center">
           <q-btn flat icon="fas fa-chevron-left" @click="calendarPrev"/>
           <q-btn flat icon="fas fa-chevron-right" @click="calendarNext"/>
         </div>
 
-        <!--<div class="full-height row justify-center items-center">
+        <div class="full-height row justify-center items-center">
           <q-btn label="here"/>
-        </div>-->
-      </template>
+        </div>
+      </template>-->
 
       <template #scheduler-resource-day="{ timestamp, /* index, */ resource }">
         <template v-for="(event, index) in getEvents(timestamp, resource)">
@@ -41,7 +58,7 @@
               :key="index"
               class="flex justify-center text-h7"
             >
-              {{ event.totalhours }}
+              <q-chip dense color="primary" text-color="white" >{{ event.totalhours }}</q-chip>
             </p>
           </div>
           <div v-if="event.totalacchours > 0" class="row justify-center items-center">
@@ -49,7 +66,7 @@
               :key="index"
               class="flex justify-center text-h7 boldhigh text-blue"
             >
-              Tot: {{ event.totalacchours }}
+              <q-chip dense :color="event.totalacchours > 24 ? 'positive' : 'negative'" text-color="white">[{{ event.totalacchours }}]</q-chip>
             </p>
           </div>
           <div v-if="!!event.title">
@@ -66,8 +83,44 @@
         </template>
       </template>
 
+
+      <template #day="{ timestamp }">
+        <template v-for="(event, index) in getEvents(timestamp, myresource)">
+          <div v-if="event.totalhours > 0" class="centermydiv">
+            <p
+              :key="index"
+              class="flex justify-center text-h7"
+            >
+              <q-chip dense color="primary" text-color="white" >{{ event.totalhours }}</q-chip>
+            </p>
+          </div>
+          <div v-if="event.totalacchours > 0" class="row justify-center items-center">
+            <p
+              :key="index"
+              class="flex justify-center text-h7 boldhigh text-blue"
+            >
+              <q-chip dense :color="event.totalacchours > 24 ? 'positive' : 'negative'" text-color="white">[{{ event.totalacchours }}]</q-chip>
+            </p>
+          </div>
+          <div v-if="!!event.title">
+            <q-badge
+              :key="index"
+              class="my-event justify-center ellipsis"
+              :class="badgeClasses(event, 'body')"
+              :style="badgeStyles(event)"
+            >
+              <span class="ellipsis">{{ event.title }}</span>
+            </q-badge>
+          </div>
+
+        </template>
+      </template>
     </q-calendar>
+    <div v-if="myView === 'month'">
+      <CTitleBanner :title="'Ore Mensili: ' + getOreMensili"></CTitleBanner>
+
     </div>
+
   </q-page>
 </template>
 

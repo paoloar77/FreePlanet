@@ -84,7 +84,7 @@
           map-options
           :options="mycolumns"
           option-value="name"
-          style="min-width: 150px"
+          º
           @input="changeCol">
 
         </q-select>

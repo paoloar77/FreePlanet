@@ -29,10 +29,10 @@ export default class CGridTableRec extends Vue {
   @Prop({ required: false, default: 'Aggiungi' }) public labelBtnAddRow: string
   @Prop({ required: false, default: '' }) public noresultLabel: string
   @Prop({
-    required: false, default: function mydef() {
-      return true
+    required: false, default: function mydef(): object {
+      return {}
     }
-  }) public defaultnewrec: any
+  }) public defaultnewrec: object
   @Prop({ required: false, default: null }) public tablesList: ITableRec[]
   @Prop({ required: false, default: null }) public arrfilters: IFilter[]
   @Prop({ required: false, default: [] }) public filterdef: number[]
@@ -415,6 +415,7 @@ export default class CGridTableRec extends Vue {
 
     // mydata.data[mykey] = ''
 
+    console.log('mydata', mydata)
     const data = await GlobalStore.actions.saveTable(mydata)
 
     this.newRecord = data
@@ -436,6 +437,7 @@ export default class CGridTableRec extends Vue {
 
     // mydata.data[mykey] = ''
 
+    console.log('mydata', mydata)
     const data = await GlobalStore.actions.saveTable(mydata)
 
     this.serverData.push(data)

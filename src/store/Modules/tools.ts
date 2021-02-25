@@ -258,7 +258,22 @@ export const tools = {
       id: 50,
       label: '5',
       value: 5
-    }
+    },
+    {
+      id: 60,
+      label: '6',
+      value: 6
+    },
+    {
+      id: 70,
+      label: '7',
+      value: 7
+    },
+    {
+      id: 80,
+      label: '8',
+      value: 8
+    },
   ],
 
   SelectListNumPeople: [
@@ -4220,6 +4235,62 @@ export const tools = {
       return UserStore.state.isLogged
     else
       return false
+  },
+
+  formatDate(mydate: any) {
+    let d = void 0
+
+    if (mydate !== void 0) {
+      d = new Date(mydate)
+    } else {
+      d = new Date()
+    }
+    const month = '' + (d.getMonth() + 1)
+    const day = '' + d.getDate()
+    const year = d.getFullYear()
+
+    return [year, tools.padTime(month), tools.padTime(day)].join('-')
+  },
+
+  firstDayOfDate(mydate: any) {
+    let d = void 0
+
+    if (mydate !== void 0) {
+      d = new Date(mydate)
+    } else {
+      d = new Date()
+    }
+    const month = d.getMonth()
+    const day = 1
+    const year = d.getFullYear()
+
+    return new Date(year, month, day)
+  },
+
+  LastDayOfDate(mydate: any) {
+    let d = void 0
+
+    if (mydate !== void 0) {
+      d = new Date(mydate)
+    } else {
+      d = new Date()
+    }
+    let month = d.getMonth()
+    if (month === 11)
+      month = 0
+    else
+      month++
+    const year = d.getFullYear()
+
+    return new Date(year, month, 0)
+  },
+
+  formatTime(mydate) {
+    const d = mydate !== void 0 ? new Date(mydate) : new Date(),
+      hours = '' + d.getHours(),
+      minutes = '' + d.getMinutes()
+
+    return [tools.padTime(hours), tools.padTime(minutes)].join(':')
   }
 
 // getLocale() {

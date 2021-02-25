@@ -52,15 +52,27 @@ export default class CMyPopupEdit extends Vue {
     this.$emit('update:row', newval)
   }
 
-  public changevalRec(newval) {
+  public getrealval(newval) {
     if (this.col.fieldtype === tools.FieldType.hours) {
       newval = newval.value
     }
+  }
+
+  public changevalRec(newval) {
     console.log('this.row', this.row, 'this.col', this.col, 'newval', newval)
     console.log('this.row[this.col.name]', this.row[this.col.name])
     this.row[this.col.name] = newval
     console.log('changevalRec update:row', newval)
     this.$emit('update:row', this.row)
+  }
+
+  public changevalRecHours(newval) {
+    if (this.col.fieldtype === tools.FieldType.hours) {
+      newval = newval.value
+    }
+    this.changevalRec(newval)
+
+    this.myvalue = newval
   }
 
   public updatedata() {

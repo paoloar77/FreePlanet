@@ -15,7 +15,7 @@
                     :option-label="optlab"
                     @input="changeval"
                     :label="label"
-                    dense
+                    :dense="dense"
             >
             </q-select>
         </div>
@@ -23,7 +23,7 @@
             <q-select
                     rounded
                     outlined
-                    dense
+                    :dense="dense"
                     :input-class="myclass"
                     v-model="myvalue"
                     :options="options"

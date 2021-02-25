@@ -50,14 +50,25 @@
           </q-input>
         </div>
         <div v-else-if="col.fieldtype === tools.FieldType.hours">
+          <div class="row">
+            <q-input v-model="myvalue" type="number"
+                     autofocus
+                     @input="changevalRec"
+                     style="max-width: 100px;"
+                     :label="col.label"
+            >
 
-          <CMySelect label="Ore" :value.sync="myvalue"
-                     optval="value" optlab="label"
-                     :useinput="true"
-                     @changeval="changevalRec"
-                     :newvaluefunc="createHours"
-                     :options="tools.SelectHours">
-          </CMySelect>
+            </q-input>
+
+            <CMySelect label="Ore" :value.sync="myvalue"
+                       optval="value" optlab="label"
+                       :dense="false"
+                       :use-input="false"
+                       @changeval="changevalRecHours"
+                       style="max-width: 100px;"
+                       :options="tools.SelectHours">
+            </CMySelect>
+          </div>
 
           <!--<q-input v-model="myvalue" type="number"
                    autofocus

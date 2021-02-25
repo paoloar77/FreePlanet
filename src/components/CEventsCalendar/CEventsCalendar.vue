@@ -516,8 +516,8 @@
             dayPadding="35px 2px"
           >
 
-            <template #day="{ date }">
-              <template v-for="(event, index) in getEvents(date)">
+            <template #day="{ timestamp }">
+              <template v-for="(event, index) in getEvents(timestamp.date)">
                 <q-badge
                   :key="index"
                   style="width: 100%; cursor: pointer;"
@@ -539,9 +539,9 @@
               </template>
             </template>
 
-            <template #day-header="{ date }">
+            <template #day-header="{ timestamp }">
               <div class="row justify-center">
-                <template v-for="(event, index) in eventsMap[date]">
+                <template v-for="(event, index) in eventsMap[timestamp.date]">
                   <q-badge
                     :key="index"
                     class="q-ma-xs"
@@ -552,8 +552,8 @@
                 </template>
               </div>
             </template>
-            <template #day-body="{ date, timeStartPos, timeDurationHeight }">
-              <template v-for="(event, index) in getEvents(date)">
+            <template #day-body="{ timestamp, timeStartPos, timeDurationHeight }">
+              <template v-for="(event, index) in getEvents(timestamp.date)">
                 <div
                   :key="index"
                   :label="tools.getstrTime(event.dateTimeStart)"

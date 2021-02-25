@@ -37,6 +37,7 @@ export default class CHours extends MixinBase {
       lk_LF: 'userId',
       lk_FF: '_id',
       lk_as: 'user',
+      af_objId_tab: 'myId',
       lk_proj: {
         todoId: 1, userId: 1, descr: 1, date: 1, time_start: 1, time_end: 1, hours: 1,
         username: 1, name: 1, surname: 1
