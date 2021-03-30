@@ -72,7 +72,9 @@ export interface IMyPage {
   content?: string
   active?: boolean
   inmenu?: boolean
+  color?: string
   onlyif_logged?: boolean
+  only_residenti?: boolean
   submenu?: boolean
   l_par?: number,
   l_child?: number,
@@ -228,6 +230,7 @@ export interface IListRoutes {
   onlySocioResidente?: boolean
   onlyDepartment?: boolean
   onlyTutor?: boolean
+  color?: string
   onlyTraduttrici?: boolean
   extraclass?: string
   meta?: any

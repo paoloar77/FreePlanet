@@ -69,6 +69,7 @@ namespace Getters {
       _id: objectId(),
       userId: UserStore.state.my._id,
       descr: '',
+      note: '',
       priority: tools.Priority.PRIORITY_NORMAL,
       statustodo: tools.Status.OPENED,
       created_at: tools.getDateNow(),
@@ -264,7 +265,7 @@ namespace Actions {
     if (!static_data.functionality.ENABLE_PROJECTS_LOADING)
       return null
 
-    console.log('dbLoad', nametable, checkPending, 'userid=', UserStore.state.my._id)
+    // console.log('dbLoad', nametable, checkPending, 'userid=', UserStore.state.my._id)
 
     // if (UserStore.state.my._id === '') {
     //   return new Types.AxiosError(0, null, 0, '')

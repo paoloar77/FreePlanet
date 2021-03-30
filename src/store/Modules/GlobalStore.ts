@@ -572,8 +572,6 @@ namespace Actions {
     // console.log('saveSubscriptionToServer: ', newSub)
     // console.log('context', context)
 
-    console.log('saveNewSubscriptionToServer')
-
     let options = null
     let notreg = false
 
@@ -606,6 +604,9 @@ namespace Actions {
       .then((res) => {
         state.wasAlreadySubscribed = true
         state.wasAlreadySubOnDb = true
+
+        if (res)
+          console.log('saveNewSubscriptionToServer: OK')
 
         localStorage.setItem(tools.localStorage.wasAlreadySubOnDb, String(state.wasAlreadySubOnDb))
       })
@@ -672,7 +673,7 @@ namespace Actions {
   }
 
   async function loadAfterLogin(context) {
-    console.log('loadAfterLogin')
+    // console.log('loadAfterLogin')
     actions.clearDataAfterLoginOnlyIfActiveConnection()
 
     let isok = false
@@ -1226,6 +1227,8 @@ namespace Actions {
             materialIcon: page.icon,
             component: () => import('@/root/mypage/mypage.vue'),
             inmenu: page.inmenu,
+            onlySocioResidente: page.only_residenti,
+            color: page.color,
             infooter: page.infooter,
             onlyif_logged: page.onlyif_logged,
             level_child: page.l_child,

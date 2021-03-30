@@ -18,6 +18,7 @@ export interface IProject {
   id_main_project?: string
   id_parent?: string
   descr?: string
+  note?: string
   longdescr?: string
   priority?: number
   statusproj?: number
@@ -50,6 +51,8 @@ export interface IProject {
   groupId?: string
   respUsername?: string
   viceRespUsername?: string
+  vice2RespUsername?: string
+  view?: string
 }
 
 export interface IProjectsState {

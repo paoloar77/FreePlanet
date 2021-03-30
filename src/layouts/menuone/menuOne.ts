@@ -76,18 +76,23 @@ export default class MenuOne extends Vue {
   public getmymenuclass(elem: IListRoutes) {
     let menu = this.clBaseint
 
-    if (elem.onlyAdmin)
-      menu += ' isAdmin'
-    if (elem.onlyManager)
-      menu += ' isManager'
-    if (elem.onlySocioResidente)
-      menu += ' isSocioResidente'
-    if (elem.onlyDepartment)
-      menu += ' isDepartment'
-    if (elem.onlyTutor)
-      menu += ' isTutor'
-    if (elem.onlyTraduttrici)
-      menu += ' isTraduttrici'
+    if (elem.color) {
+      menu += ' ' + elem.color
+    } else {
+      if (elem.onlyAdmin)
+        menu += ' isAdmin'
+      if (elem.onlyManager)
+        menu += ' isManager'
+      if (elem.onlySocioResidente)
+        menu += ' isSocioResidente'
+      if (elem.onlyDepartment)
+        menu += ' isDepartment'
+      if (elem.onlyTutor)
+        menu += ' isTutor'
+      if (elem.onlyTraduttrici)
+        menu += ' isTraduttrici'
+
+    }
 
     if (elem.extraclass)
       menu += ' ' + elem.extraclass

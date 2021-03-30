@@ -27,10 +27,10 @@ const stateglob: IProjectsState = {
   visuLastCompleted: 10
 }
 
-const listFieldsToChange: string [] = ['descr', 'respUsername', 'viceRespUsername', 'longdescr', 'hoursplanned', 'hoursleft', 'hoursworked', 'id_parent', 'statusproj',
+const listFieldsToChange: string [] = ['descr', 'respUsername', 'viceRespUsername', 'vice2RespUsername', 'longdescr', 'hoursplanned', 'hoursleft', 'hoursworked', 'id_parent', 'statusproj',
   'category', 'expiring_at', 'priority', 'pos', 'groupId', 'enableExpiring', 'progressCalc', 'live_url', 'test_url',
   'begin_development', 'begin_test', 'actualphase', 'totalphases', 'hoursweeky_plannedtowork', 'endwork_estimate',
-  'privacyread', 'privacywrite', 'tipovisu', 'id_main_project', 'typeproj', 'favourite', 'themecolor', 'themebgcolor']
+  'privacyread', 'privacywrite', 'tipovisu', 'id_main_project', 'typeproj', 'favourite', 'themecolor', 'themebgcolor', 'view']
 
 const listFieldsUpdateCalculation: string [] = ['hoursplanned', 'hoursleft', 'hoursworked', 'progressCalc', 'endwork_estimate']
 
@@ -142,6 +142,7 @@ namespace Getters {
       groupId: '',
       respUsername: '',
       viceRespUsername: '',
+      vice2RespUsername: '',
       tipovisu: 0
     }
 
@@ -399,9 +400,9 @@ namespace Actions {
     //   return false  // Login not made
     // }
 
-    console.log('UserStore.state.my', UserStore.state.my)
+    // console.log('UserStore.state.my', UserStore.state.my)
 
-    console.log('dbLoad', nametable, checkPending, 'userid=', UserStore.state.my._id)
+    // console.log('dbLoad', nametable, checkPending, 'userid=', UserStore.state.my._id)
 
     const ris = await Api.SendReq('/projects/' + UserStore.state.my._id, 'GET', null)
       .then((res) => {

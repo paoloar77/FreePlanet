@@ -529,6 +529,7 @@ const msg_it = {
       newsubproj: 'Titolo Sotto-Progetto',
       insertbottom: 'Inserisci Nuovo Project',
       longdescr: 'Descrizione',
+      note: 'Note',
       hoursplanned: 'Ore Preventivate',
       hoursadded: 'Ore Aggiuntive',
       hoursworked: 'Ore Lavorate',
@@ -546,7 +547,8 @@ const msg_it = {
       themebgcolor: 'Tema Colore Sfondo',
       group: 'Gruppo',
       respUsername: 'Responsabile',
-      viceRespUsername: 'Vice Responsabile'
+      viceRespUsername: 'Vice Responsabile',
+      vice2RespUsername: 'Vice 2 Responsabile'
     },
     where: {
       code: 'Id',

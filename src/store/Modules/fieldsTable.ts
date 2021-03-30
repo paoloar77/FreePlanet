@@ -97,7 +97,7 @@ export const colmsg_templates = [
 
 export const colmypage = [
   AddCol({ name: 'title', label_trans: 'pages.title' }),
-  AddCol({ name: 'content', label_trans: 'pages.content', fieldtype: tools.FieldType.html }),
+  AddCol({ name: 'content', label_trans: 'pages.contentfield', fieldtype: tools.FieldType.html }),
   AddCol({ name: 'lang', label_trans: 'pages.lang' }),
   AddCol({ name: 'path', label_trans: 'pages.path' }),
   AddCol({ name: 'icon', label_trans: 'pages.icon' }),
@@ -105,7 +105,9 @@ export const colmypage = [
   AddCol({ name: 'keywords', label_trans: 'pages.keywords' }),
   AddCol({ name: 'description', label_trans: 'pages.description' }),
   AddCol({ name: 'heightimg', label_trans: 'pages.heightimg', fieldtype: tools.FieldType.number }),
+  AddCol({ name: 'color', label_trans: 'pages.color', fieldtype: tools.FieldType.string }),
   AddCol({ name: 'onlyif_logged', label_trans: 'pages.onlyif_logged', fieldtype: tools.FieldType.boolean }),
+  AddCol({ name: 'only_residenti', label_trans: 'pages.only_residenti', fieldtype: tools.FieldType.boolean }),
   AddCol({ name: 'imgback', label_trans: 'pages.imgback', fieldtype: tools.FieldType.string }),
   AddCol({ name: 'active', label_trans: 'pages.active', fieldtype: tools.FieldType.boolean }),
   AddCol({ name: 'inmenu', label_trans: 'pages.inmenu', fieldtype: tools.FieldType.boolean }),

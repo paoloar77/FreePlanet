@@ -413,6 +413,7 @@ export default class ProjList extends Vue {
     this.updateclasses()
   }
 
+
   @Watch('itemselproj._id')
   public changeidproj() {
     this.aggiornastat()
@@ -465,6 +466,17 @@ export default class ProjList extends Vue {
 
   public modifyfieldproj(field) {
     Projects.actions.modify({ myitem: this.itemselproj, field })
+      .then((ris) => {
+        console.log('ris', ris)
+        if (ris)
+          tools.showPositiveNotif(this.$q, 'Campo Aggiornato')
+        else
+          tools.showNegativeNotif(this.$q, 'Campo non Aggiornato!')
+      })
+  }
+
+  public modifyfieldprojBase(field) {
+    Projects.actions.modify({ myitem: this.itemproj, field })
       .then((ris) => {
         console.log('ris', ris)
         if (ris)
@@ -595,7 +607,7 @@ export default class ProjList extends Vue {
   }
 
   public async clickMenuProjList(action) {
-    // console.log('clickMenuProjList: ', action)
+    console.log('clickMenuProjList: ', action)
     if (action === lists.MenuAction.ADD_PROJECT) {
       const idnewelem = await this.addProject('inserisci qui...', this.gettipoProj)
       // console.log('idnewelem', idnewelem)
@@ -607,6 +619,18 @@ export default class ProjList extends Vue {
         elem.activeEdit()
       }
       // console.log('idnewelem', idnewelem, 'Elem Trovato', elem)
+    } else if (action === lists.MenuAction.SHOW_POSIZ) {
+
+      if (!!this.itemproj) {
+        if (this.itemproj.view !== 'posiz')
+          this.itemproj.view = 'posiz'
+        else
+          this.itemproj.view = ''
+
+        this.modifyfieldprojBase('view')
+
+        this.load()
+      }
     } else if (action === lists.MenuAction.PASTE) {
 
       const myaction: IAction = {
@@ -852,7 +876,6 @@ export default class ProjList extends Vue {
   public updateData() {
     ApiTables.waitAndRefreshData()
   }
-
 
   private updateindexProj() {
     // console.log('idProjAtt', this.idProjAtt)

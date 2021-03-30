@@ -1,8 +1,8 @@
 <template>
     <div>
         <q-parallax :src="getsrc" :height="tools.myheight_imgtitle(myheight, myheightmobile)">
-            <h1 class="text-white center_to_image title">{{title}}</h1>
-            <div v-if="legendinside" class="mylegendinside absolute-bottom custom-caption center_to_image" v-html="legendinside"></div>
+            <h1 class="text-white title" style="text-align: center" >{{title}}</h1>
+            <div v-if="legendinside" class="mylegendinside absolute-bottom custom-caption" style="text-align: center" v-html="legendinside"></div>
         </q-parallax>
         <div v-if="legend" class="mylegend" v-html="legend"></div>
     </div>

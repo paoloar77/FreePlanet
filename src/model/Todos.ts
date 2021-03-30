@@ -5,6 +5,7 @@ export interface ITodo {
   userId?: string
   category?: string
   descr?: string,
+  note?: string,
   priority?: number,
   statustodo?: number,
   created_at?: Date,

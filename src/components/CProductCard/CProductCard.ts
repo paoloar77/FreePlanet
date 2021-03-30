@@ -76,7 +76,7 @@ export default class CProductCard extends MixinBase {
   }
 
   public getnumstore() {
-    if (!!this.myproduct.storehouses)
+    if (this.myproduct.storehouses)
       return this.myproduct.storehouses.length
     else
       return 0

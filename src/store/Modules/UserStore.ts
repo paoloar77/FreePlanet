@@ -899,7 +899,8 @@ namespace Actions {
   }
 
   async function setGlobal(isLogged: boolean) {
-    console.log('setGlobal', isLogged)
+    // console.log('setGlobal', isLogged)
+
     try {
       // state.isLogged = true
       if (isLogged) {

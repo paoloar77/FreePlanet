@@ -392,9 +392,9 @@ export default class CEventsCalendar extends MixinEvents {
   }
 
   public beforeMount() {
-    console.log('mounted')
+    // console.log('mounted')
     this.selectedDate = this.formatDate(tools.getDateNow())
-    console.log('this.selectedDate', this.selectedDate)
+    // console.log('this.selectedDate', this.selectedDate)
 
     CalendarStore.state.locale = toolsext.getLocale()
     this.updateFormatters()
@@ -445,8 +445,8 @@ export default class CEventsCalendar extends MixinEvents {
     this.resetForm()
     this.contextDay = { ...day.scope }
 
-    this.eventForm.dateTimeStart = tools.getstrYYMMDDDateTime(day.scope.date + ' 21:00:00')
-    this.eventForm.dateTimeEnd = tools.getstrYYMMDDDateTime(day.scope.date + ' 22:00:00')
+    this.eventForm.dateTimeStart = tools.getstrYYMMDDDateTime(day.scope.timestamp.date + ' 21:00:00')
+    this.eventForm.dateTimeEnd = tools.getstrYYMMDDDateTime(day.scope.timestamp.date + ' 22:00:00')
 
     console.log('eventForm', this.eventForm)
 
@@ -981,7 +981,7 @@ export default class CEventsCalendar extends MixinEvents {
 
   public getEvents(dt) {
     const eventsloc = []
-    console.log('dt', dt)
+    // console.log('dt', dt)
 
     for (let i = 0; i < CalendarStore.state.eventlist.length; ++i) {
       let added = false
@@ -1014,8 +1014,8 @@ export default class CEventsCalendar extends MixinEvents {
         }
       }
     }
-    if (eventsloc.length > 0)
-      console.log('eventsloc', eventsloc)
+    // if (eventsloc.length > 0)
+      // console.log('eventsloc', eventsloc)
     return eventsloc
   }
 

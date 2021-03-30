@@ -96,7 +96,8 @@ export const shared_consts = {
     SEND_TO_ALL: 1,
     SEND_TO_SOCI: 2,
     SEND_TO_SOCIO_RESIDENTE: 3,
-    SEND_TO_NON_SOCI: 10
+    SEND_TO_NON_SOCI: 10,
+    SEND_TO_PAOLO: 20
   },
 
   TypeMsg_Actions: {
@@ -143,6 +144,11 @@ export const shared_consts = {
       id: 3,
       label: 'Solo ai NON Soci',
       value: 10
+    },
+    {
+      id: 4,
+      label: 'a Paolo (test)',
+      value: 20
     }
   ],
 

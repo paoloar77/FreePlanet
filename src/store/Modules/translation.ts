@@ -21,6 +21,7 @@ export const translation = {
     },
     task: {
       showtask: 'Mostra Task',
+      showposiz: 'Mostra Ordine',
     },
     action: {
       paste: 'Incolla'

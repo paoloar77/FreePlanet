@@ -11,7 +11,7 @@
           </q-btn>
         </div>
         <div class="col-6" style="text-align: right">
-          <span class="text-grey q-mr-xs">Totale:</span> <span
+          <span v-if="myTotalPrice" class="text-grey q-mr-xs">Totale:</span> <span
           class="text-subtitle1 q-mr-sm ">€ {{ myTotalPrice.toFixed(2) }}</span>
         </div>
       </div>

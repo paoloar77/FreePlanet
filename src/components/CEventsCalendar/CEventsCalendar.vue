@@ -690,7 +690,7 @@
                            :style="`background-color: ${event.bgcolor} !important; color: white !important;`"
                            ripple
                            rounded
-                           :label="event.title" :icon="event.icon"
+                           :label="getTitleEv(event)" :icon="event.icon"
                            :color="event.bgcolor" text-color="white" glossy>
 
                     </q-btn>

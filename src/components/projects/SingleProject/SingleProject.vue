@@ -27,6 +27,19 @@
         </div>-->
         <!--<div class="q-mx-xs"></div>-->
 
+
+        <q-item-label v-if="getTipoViewByProjParent === 'posiz'">
+          <div class="flex-item donotdrag">
+            <q-input
+              v-model="itemproject.pos"
+              type="number"
+              rounded outlined
+              dense
+              debounce="500"
+              style="max-width: 70px;"></q-input>
+          </div>
+        </q-item-label>
+
         <q-item-label>
           <div class="flex-item donotdrag">
             <q-input v-if="(sel && inEdit)" hide-underline type="textarea" ref="inputprojdescr"
@@ -50,8 +63,9 @@
         </q-item-label>
 
         <q-item-label v-if="getTipovisuByProjParent === TipoVisu.responsabili" caption lines="2">
-          <span v-if="getResp()">Responsabile: <span class="clResp">{{ getResp() }}</span><br></span>
-          <span v-if="getViceResp()">ViceResponsabile: <span class="clViceResp">{{ getViceResp() }}</span></span>
+          <span v-if="getResp()">Responsabile: <span class="clResp">{{ getResp() }}</span></span>
+          <span v-if="getViceResp()"><br>ViceResponsabile: <span class="clViceResp">{{ getViceResp() }}</span></span>
+          <span v-if="getVice2Resp()"><br>Vice 2 Responsabile: <span class="clVice2Resp">{{ getVice2Resp() }}</span></span>
         </q-item-label>
 
         <!--<div>

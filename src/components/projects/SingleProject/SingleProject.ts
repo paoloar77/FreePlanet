@@ -63,6 +63,13 @@ export default class SingleProject extends Vue {
     return Projects.getters.getTipoVisuProj(myprojparent)
   }
 
+  get getTipoViewByProjParent() {
+    const myprojparent = Projects.getters.getRecordById(this.itemproject.id_parent)
+    if (!myprojparent)
+      return ''
+    return myprojparent.view
+  }
+
   @Prop({ required: true }) public itemproject: IProject
 
   @Watch('itemproject.enableExpiring')
@@ -113,6 +120,11 @@ export default class SingleProject extends Vue {
   @Watch('itemproject.viceRespUsername')
   public valueChangedviceResp() {
     this.watchupdate('viceRespUsername')
+  }
+
+  @Watch('itemproject.vice2RespUsername')
+  public valueChangedvice2Resp() {
+    this.watchupdate('vice2RespUsername')
   }
 
   @Watch('itemproject.themebgcolor')
@@ -655,6 +667,13 @@ export default class SingleProject extends Vue {
   public getViceResp() {
     if (!!GlobalStore.state.resps)
       return this.itemproject.viceRespUsername ? GlobalStore.getters.getRespByUsername(this.itemproject.viceRespUsername) : ''
+    else
+      return ''
+  }
+
+  public getVice2Resp() {
+    if (!!GlobalStore.state.resps)
+      return this.itemproject.vice2RespUsername ? GlobalStore.getters.getRespByUsername(this.itemproject.vice2RespUsername) : ''
     else
       return ''
   }

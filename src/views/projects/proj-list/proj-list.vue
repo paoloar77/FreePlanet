@@ -174,6 +174,8 @@
               </div>
             </div>
 
+
+
             <div v-if="CanISeeProjectSel" class="flex-container clMain">
               <q-icon class="flex-item flex-icon" name="fas fa-sort-amount-up-alt"/>
               <div class="flex-item itemdescr">
@@ -217,6 +219,12 @@
                           rounded outlined v-model="itemselproj.viceRespUsername" :options="selectResp"
                           :label="$t('proj.viceRespUsername')" emit-value map-options
                           @input="modifyfieldproj('viceRespUsername')">
+                </q-select>
+                <q-select style="min-width: 200px"
+                          :readonly="readonly_PanelPrivacySel"
+                          rounded outlined v-model="itemselproj.vice2RespUsername" :options="selectResp"
+                          :label="$t('proj.vice2RespUsername')" emit-value map-options
+                          @input="modifyfieldproj('vice2RespUsername')">
                 </q-select>
               </div>
             </div>
@@ -262,7 +270,7 @@
             <div class="flex-container clMain">
               <q-icon class="flex-item flex-icon" name="border_color"/>
               <div class="flex-item itemdescr">
-                <q-icon size="md" :name="iconPriority" color="primary"/>
+                <!--<q-icon size="md" :name="iconPriority" color="primary"/>-->
                 <q-input
                   ref="input4"
                   v-model="itemtodosel.descr"
@@ -271,6 +279,25 @@
                   outlined
                   :readonly="readonly_PanelPrivacy"
                   @input="modifyfieldtodo('descr')"
+                  debounce="1000"
+                  autogrow
+                  style="flex: auto">
+
+                </q-input>
+              </div>
+            </div>
+
+            <div class="flex-container clMain">
+              <q-icon class="flex-item flex-icon" name="border_color"/>
+              <div class="flex-item itemdescr">
+                <!--<q-icon size="md" :name="iconPriority" color="primary"/>-->
+                <q-input
+                  ref="input4"
+                  v-model="itemtodosel.note"
+                  :label="$t('proj.note')"
+                  outlined
+                  :readonly="readonly_PanelPrivacy"
+                  @input="modifyfieldtodo('note')"
                   debounce="1000"
                   autogrow
                   style="flex: auto">

@@ -10,6 +10,7 @@ export const lists = {
     PROGRESS_BAR: 120,
     PRIORITY: 130,
     SHOW_TASK: 150,
+    SHOW_POSIZ: 155,
     EDIT: 160,
     ADD_PROJECT: 200,
     THEME: 210,

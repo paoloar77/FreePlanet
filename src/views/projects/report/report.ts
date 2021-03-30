@@ -23,12 +23,17 @@ export default class Report extends MixinBase {
     calendar: any
   }
 
-  public myView: string = 'month'
+  public myView: string = 'week-agenda'
   public myresource = { username: '' }
   public title: string = ''
+  public spinner_visible: boolean = false
 
-  public optView = [{ _id: 1, label: 'Settimanale', value: 'week-scheduler' },
-    { _id: 2, label: 'Mensile', value: 'month' }]
+  public optView = [
+    { _id: 1, label: 'Comunità', value: 'week-scheduler' },
+    { _id: 2, label: 'Giornalieri', value: 'day' },
+    { _id: 2, label: 'Settimanale', value: 'week-agenda' },
+    { _id: 3, label: 'Mensile', value: 'month' }
+    ]
 
   public resourceHeight = 60
 
@@ -77,8 +82,17 @@ export default class Report extends MixinBase {
   }
 
   public load() {
+    this.spinner_visible = true
     this.myresource.username = UserStore.state.my.username
-    const date_start = tools.addDays(new Date(tools.getTimestampsNow()), -90)
+    let ggindietro = 90
+    if (this.myView === 'week-agenda' || this.myView === 'week-scheduler') {
+      ggindietro = 60
+    } else if (this.myView === 'month') {
+      ggindietro = 90
+    } else if (this.myView === 'day') {
+      ggindietro = 28
+    }
+    const date_start = tools.addDays(new Date(tools.getTimestampsNow()), -ggindietro)
     const date_end = tools.addDays(new Date(tools.getTimestampsNow()), 30)
     UserStore.actions.reportload({ date_start, date_end, filter: this.valfilter })
       .then((myris) => {
@@ -86,6 +100,7 @@ export default class Report extends MixinBase {
           console.log('myris', myris)
           this.arrhour = myris.arrhour
           this.listaResidenti = myris.listaResidenti
+          this.spinner_visible = false
         }
       })
 
@@ -99,10 +114,15 @@ export default class Report extends MixinBase {
 
   public badgeClasses(eventparam, type) {
     const cssColor = tools.isCssColor(eventparam.bgcolor)
+    let mycol = eventparam.bgcolor
+    if (!tools.isCssColor(eventparam.bgcolor)) {
+      mycol = tools.colourNameToHex(mycol)
+    }
     const isHeader = type === 'header'
     return {
-      [`text-white bg-${eventparam.bgcolor}`]: !cssColor,
+      [`bg-${eventparam.bgcolor}`]: !cssColor,
       'full-width': !isHeader && (!eventparam.side || eventparam.side === 'full'),
+      'color': mycol,
       'left-side': !isHeader && eventparam.side === 'left',
       'right-side': !isHeader && eventparam.side === 'right'
     }
@@ -120,11 +140,18 @@ export default class Report extends MixinBase {
   public badgeStyles(eventparam) {
     const s = { color: '', top: '', height: '', opacity: 1 }
 
-    if (tools.isCssColor(eventparam.bgcolor)) {
-      s['background-color'] = eventparam.bgcolor
-      s.color = colors.luminosity(eventparam.bgcolor) > 0.5 ? 'black' : 'white'
+    let mycol = eventparam.bgcolor
+    if (!tools.isCssColor(eventparam.bgcolor)) {
+      mycol = tools.colourNameToHex(mycol)
     }
 
+    if (tools.isCssColor(mycol)) {
+      s['background-color'] = mycol
+      s.color = colors.luminosity(mycol) > 0.5 ? 'black' : 'white'
+    }
+
+    // console.log('bgcolor', s['background-color'])
+    // console.log('fore', s.color)
     // if (!this.isEventEnabled(eventparam)) {
     //   s.opacity = 0.5
     // }
@@ -171,7 +198,13 @@ export default class Report extends MixinBase {
 
     this.valfilter = 0
     for (const filter of this.arrfilters) {
-      if (filter.ris)
+
+      let myris = filter.ris
+      if (this.myView === 'day') {
+        myris = true
+      }
+
+      if (myris)
         this.valfilter += filter.value
 
       if (filter.value === shared_consts.REPORT_FILT_ATTIVITA && filter.ris) {

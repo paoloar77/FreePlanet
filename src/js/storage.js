@@ -7,7 +7,8 @@ export let idbKeyval = (() => {
     if (!db) {
       // console.log('CREO DB STORAGE JS !')
       db = new Promise((resolve, reject) => {
-        const openreq = indexedDB.open('mydb3', 11);
+        // console.log('open mydb3')
+        const openreq = indexedDB.open('mydb3', 12);
 
         openreq.onerror = () => {
           reject(openreq.error);

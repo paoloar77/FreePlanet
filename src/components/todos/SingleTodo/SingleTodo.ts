@@ -65,9 +65,14 @@ export default class SingleTodo extends Vue {
   //   this.watchupdate('priority')
   // }
 
-  @Watch('itemtodo.descr') public valueChanged5() {
+  @Watch('itemtodo.descr') public valueChangeddescr() {
     this.precDescr = this.itemtodo.descr
     this.watchupdate('descr')
+  }
+
+  @Watch('itemtodo.note') public valueChanged5() {
+    this.precDescr = this.itemtodo.note
+    this.watchupdate('note')
   }
 
   @Watch('itemtodo.hoursplanned') public valueChangedhoursplanned() {
