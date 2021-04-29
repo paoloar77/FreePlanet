@@ -71,6 +71,9 @@ export default class Header extends Vue {
   get isSocioResidente() {
     return UserStore.state.my.profile.socioresidente
   }
+  get isConsiglio() {
+    return UserStore.state.my.profile.consiglio
+  }
 
   get getcolormenu() {
     return this.isSocio ? 'green-7' : 'white'
@@ -379,7 +382,7 @@ export default class Header extends Vue {
       })
   }
 
-  get static_data(){
+  get static_data() {
     return static_data
   }
 
@@ -412,8 +415,8 @@ export default class Header extends Vue {
   }
 
   get getnumOrdersCart() {
-    // const arrorderscart = Products.state.orders.filter((rec) => rec.status < shared_consts.OrderStatus.RECEIVED)
-    const arrorderscart = Products.state.orders
+    const arrorderscart = Products.state.orders.filter((rec) => rec.status < shared_consts.OrderStatus.RECEIVED)
+    // const arrorderscart = Products.state.orders
     if (!!arrorderscart) {
       return arrorderscart.length
     }

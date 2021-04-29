@@ -34,6 +34,7 @@ export default class CMyPopupEdit extends Vue {
   public myvalueprec = 'false'
   public countryname = ''
   public visueditor: boolean = false
+  public showeditor: boolean = true
 
   get tools() {
     return tools

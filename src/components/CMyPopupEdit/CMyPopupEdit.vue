@@ -236,10 +236,12 @@
 
             <div v-if="col.fieldtype === tools.FieldType.html">
 
-              <CMyEditor v-if="visueditor" :value.sync="myvalue" :title="col.title" @keyup.enter.stop
-                         @showandsave="Savedb" @annulla="visueditor=false">
+              <!--<q-dialog v-model="showeditor">-->
+                <CMyEditor v-if="visueditor" :value.sync="myvalue" :title="col.title" @keyup.enter.stop
+                           @showandsave="Savedb" @annulla="visueditor=false">
 
-              </CMyEditor>
+                </CMyEditor>
+              <!--</q-dialog>-->
             </div>
             <q-popup-edit
               v-if="canEdit && col.fieldtype !== tools.FieldType.html"

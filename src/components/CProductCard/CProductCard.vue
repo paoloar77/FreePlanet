@@ -1,6 +1,6 @@
 <template>
   <q-card :class="getmycardcl" v-if="!!myproduct">
-    <img :src="`statics/` + myproduct.img" :alt="myproduct.name">
+    <q-img :src="`statics/` + myproduct.img" :alt="myproduct.name" :class="getclimg"></q-img>
 
     <q-card-section>
       <q-btn
@@ -20,7 +20,7 @@
       </div>
       <div v-if="complete" class="row items-center">
         <div class="text-title text-grey-9">
-          <span class="text-grey-7">{{ myproduct.description }}</span>
+          <span class="text-grey-7" v-html="myproduct.description"></span>
         </div>
       </div>
       <div>
@@ -43,7 +43,7 @@
 
       <div class="row q-mb-sm no-wrap items-center centeritems">
         <div class="text-price no-wrap">
-          € {{ myproduct.price.toFixed(2) }}
+          <span v-if="!!myproduct.price">€ {{ myproduct.price.toFixed(2) }}</span>
         </div>
       </div>
       <div class="row q-mb-sm no-wrap items-center centeritems">
@@ -82,8 +82,10 @@
       <q-btn icon="fas fa-cart-plus" color="primary" :disable="checkifCartDisable" rounded size="md"
              label="Aggiungi al Carrello" @click="addtoCart">
       </q-btn>
+      <!--
       <q-btn :icon="iconWhishlist(myproduct)" flat color="primary" rounded label="Lista Desideri">
       </q-btn>
+      -->
     </q-card-actions>
   </q-card>
 </template>

@@ -29,6 +29,9 @@
         <th v-if="showall">
           {{ $t('cal.selnumpeopleDinner') }}
         </th>
+        <th v-if="showall">
+          {{ $t('cal.selnumpeopleDinnerShared') }}
+        </th>
         <th>{{ $t('cal.peoplebooked') }}</th>
         </thead>
 
@@ -46,16 +49,20 @@
             </div>
           </td>
           <td v-if="showall">
-            <div class="text-center">{{ getNumParticipants(event, showall, '') }}</div>
+            <div class="text-center">{{ getNumParticipants(event, showall, tools.peopleWhere.participants) }}</div>
           </td>
           <td v-if="showall">
-            <div class="text-center">{{ getNumParticipants(event, showall, 'lunch') }}</div>
+            <div class="text-center">{{ getNumParticipants(event, showall, tools.peopleWhere.lunch) }}</div>
           </td>
           <td v-if="showall">
-            <div class="text-center">{{ getNumParticipants(event, showall, 'dinner') }}</div>
+            <div class="text-center">{{ getNumParticipants(event, showall, tools.peopleWhere.dinner) }}</div>
           </td>
+          <td v-if="showall">
+            <div class="text-center">{{ getNumParticipants(event, showall, tools.peopleWhere.dinnerShared) }}</div>
+          </td>
+
           <td class="text-center">
-            <q-btn v-if="getNumParticipants(event, showall) > 0"
+            <q-btn v-if="getNumParticipants(event, showall, tools.peopleWhere.participants) > 0"
                    dense
                    round
                    @click="showpeople = true; eventsel = event"
@@ -79,7 +86,7 @@
               <thead>
               <th>Data</th>
               <th>Messaggio</th>
-              <th>Num</th>
+              <th>Partec</th>
               <th>Azione</th>
               </thead>
 
@@ -96,13 +103,10 @@
                   {{ eventbook.msgbooking }}
                 </td>
                 <td class="text-center">
-                  {{ eventbook.numpeople }}
-                </td>
-                <td class="text-center">
-                  {{ eventbook.numpeopleLunch }}
-                </td>
-                <td class="text-center">
-                  {{ eventbook.numpeopleDinner }}
+                  <span v-if="eventbook.numpeople > 0">Partecipanti: {{ eventbook.numpeople }}<br></span>
+                  <span v-if="eventbook.numpeopleLunch > 0">Pranzo: {{ eventbook.numpeopleLunch }}<br></span>
+                  <span v-if="eventbook.numpeopleDinner > 0">Cena: {{ eventbook.numpeopleDinner }}<br></span>
+                  <span v-if="eventbook.numpeopleDinnerShared > 0">Cena Condivisa: {{ eventbook.numpeopleDinnerShared }}<br></span>
                 </td>
                 <td class="text-center">
                   <q-btn flat round color="red" icon="fas fa-trash-alt" size="sm"

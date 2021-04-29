@@ -36,6 +36,7 @@ export default class CheckOut extends MixinBase {
   public mycart: ICart = {}
   public myrec: any[]
   public note: string = ''
+  public statusnow: number = shared_consts.OrderStatus.NONE
 
   public conferma_carrello: boolean = false
   public conferma_ordine: boolean = false
@@ -48,6 +49,14 @@ export default class CheckOut extends MixinBase {
   get getItemsCart() {
     const cart = Products.getters.getCart()
     return cart.items || null
+  }
+
+  get getNumItems() {
+    const cart = Products.getters.getCart()
+    if (!!cart.items)
+      return cart.items.length || 0
+    else
+      return 0
   }
 
   get getCart() {
@@ -88,13 +97,20 @@ export default class CheckOut extends MixinBase {
     }
   }
 
-  public mounted() {
+  public async mounted() {
+    // Products.actions.loadCart()
+    this.load()
+  }
+
+  public async load() {
     this.mycart = this.getCart
     this.myrec = Object.keys(this.mycart)
     this.note = this.mycart.note
 
+    if (this.mycart)
+      this.statusnow = await Products.actions.UpdateStatusCart({ cart_id: this.mycart._id, status })
+
     console.log('myrec', this.myrec)
-    // Products.actions.loadCart()
   }
 
   public CanBeShipped() {
@@ -146,10 +162,13 @@ export default class CheckOut extends MixinBase {
       title: 'Ordine'
     }).onOk(async () => {
       const status = shared_consts.OrderStatus.CHECKOUT_SENT
-      const statusnow = await Products.actions.UpdateStatusCart({ cart_id: this.mycart._id, status })
+      this.statusnow = await Products.actions.UpdateStatusCart({ cart_id: this.mycart._id, status })
 
-      if (statusnow === status) {
+      if (this.statusnow === status) {
         tools.showPositiveNotif(this.$q, 'Ordine Confermato')
+        setTimeout(() => {
+          this.$router.push('/orderinfo')
+        }, 2000)
       }
       // this.change_field('status')
       // this.change_field('status')

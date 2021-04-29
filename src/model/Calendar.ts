@@ -26,6 +26,7 @@ export interface IEvents {
   nobookable?: boolean
   lunchAvailable?: boolean
   dinnerAvailable?: boolean
+  dinnerSharedAvailable?: boolean
   lunchType?: number
   dinnerType?: number
   lunchPrice?: number
@@ -45,6 +46,7 @@ export interface IBookedEvent {
   numpeople: number
   numpeopleLunch?: number
   numpeopleDinner?: number
+  numpeopleDinnerShared?: number
   infoevent: string
   msgbooking: string
   datebooked?: Date

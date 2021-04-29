@@ -1,5 +1,13 @@
 import Api from '@api'
-import { ISignupOptions, ISigninOptions, IUserState, IUserFields, IUserProfile, ICalcStat } from 'model'
+import {
+  ISignupOptions,
+  ISigninOptions,
+  IUserState,
+  IUserFields,
+  IUserProfile,
+  ICalcStat,
+  ISignupIscrizioneConacreisOptions
+} from 'model'
 import { ILinkReg, IResult, IIdToken, IToken } from 'model/other'
 import { storeBuilder } from './Store/Store'
 import router from '@router'
@@ -107,7 +115,7 @@ const state: IUserState = {
   isDepartment: false,
   isTutor: false,
   isZoomeri: false,
-  isTraduttrici: false,
+  isEditor: false,
   usersList: [],
   countusers: 0,
   lastparamquery: {}
@@ -345,7 +353,7 @@ namespace Mutations {
     mystate.isZoomeri = tools.isBitActive(mystate.my.perm, shared_consts.Permissions.Zoomeri.value)
     mystate.isDepartment = tools.isBitActive(mystate.my.perm, shared_consts.Permissions.Department.value)
     mystate.isTeacher = tools.isBitActive(mystate.my.perm, shared_consts.Permissions.Teacher.value)
-    mystate.isTraduttrici = tools.isBitActive(mystate.my.perm, shared_consts.Permissions.Traduttrici.value)
+    mystate.isEditor = tools.isBitActive(mystate.my.perm, shared_consts.Permissions.Editor.value)
 
     // console.log('authUser', 'state.isAdmin', mystate.isAdmin)
     // console.table(mystate)
@@ -764,6 +772,30 @@ namespace Actions {
       })
   }
 
+  async function iscrivitiConacreis(context, authData: ISignupIscrizioneConacreisOptions) {
+    console.log('iscrivitiConacreis')
+
+    // console.log("PASSW: " + authData.password);
+
+    Mutations.mutations.setServerCode(tools.CALLING)
+
+    authData.userId = UserStore.state.my._id
+
+    return Api.SendReq('/iscritti_conacreis', 'POST', authData)
+      .then((res) => {
+        if (res.status === 200) {
+          return { code: serv_constants.RIS_ISCRIZIONE_OK, msg: '' }
+        } else {
+          return { code: tools.ERR_GENERICO, msg: '' }
+        }
+      }).catch((error) => {
+        console.log('Err', error)
+        UserStore.mutations.setErrorCatch(error)
+        return { code: UserStore.getters.getServerCode, msg: UserStore.getters.getMsg }
+      })
+
+  }
+
   async function signin(context, authData: ISigninOptions) {
     // console.log('LOGIN signin')
 
@@ -791,7 +823,10 @@ namespace Actions {
     }
 
     const options = {
-      title: tools.translate('notification.title_subscribed', [{strin: 'sitename', strout: translate('ws.sitename')}]),
+      title: tools.translate('notification.title_subscribed', [{
+        strin: 'sitename',
+        strout: translate('ws.sitename')
+      }]),
       content: translate('notification.subscribed'),
       openUrl: '/'
     }
@@ -1068,6 +1103,7 @@ namespace Actions {
     resetpwd: b.dispatch(resetpwd),
     signin: b.dispatch(signin),
     signup: b.dispatch(signup),
+    iscrivitiConacreis: b.dispatch(iscrivitiConacreis),
     vreg: b.dispatch(vreg),
     unsubscribe: b.dispatch(unsubscribe),
     importemail: b.dispatch(importemail),

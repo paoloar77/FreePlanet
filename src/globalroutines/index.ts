@@ -2,10 +2,12 @@ import indexdb from './indexdb'
 import { GlobalStore } from '../store/Modules'
 
 export default async (context, cmd, table, data = null, id = '') => {
-  const descr = data !== null ? data.descr : ''
+  // const descr = data !== null ? data.descr : ''
   // console.log('globalroutines', cmd, table, descr, id)
-  return await indexdb(context, cmd, table, data, id)
+  return indexdb(context, cmd, table, data, id)
     .then((ris) => {
+        console.log('GlobalStore.state.connData', GlobalStore.state.connData)
+
         setTimeout(() => {
           GlobalStore.state.connData.uploading_indexeddb = 0
           GlobalStore.state.connData.downloading_indexeddb = 0

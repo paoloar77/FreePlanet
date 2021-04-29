@@ -40,6 +40,9 @@ export default class OrderInfo extends MixinBase {
   public conferma_ordine: boolean = false
 
   public taborders: string = 'incorso'
+  public filter: string = ''
+  public statusnow: number = 0
+  public arrnumstatus: any = []
   public columns = [
     {
       name: 'numorder',
@@ -47,6 +50,14 @@ export default class OrderInfo extends MixinBase {
       align: 'left',
       label: 'Numero Ordine',
       field: 'numorder',
+      sortable: true
+    },
+    {
+      name: 'nameSurname',
+      required: true,
+      align: 'left',
+      label: 'Nome',
+      field: 'nameSurname',
       sortable: true
     },
     {
@@ -90,6 +101,10 @@ export default class OrderInfo extends MixinBase {
     return Products.getters.getOrdersCart(this.taborders)
   }
 
+  get getAllOrdersCart() {
+    return Products.getters.getOrdersAllCart()
+  }
+
   public change_field(myorderid, fieldname) {
     if (this.myarrrec[myorderid][fieldname] !== this[fieldname]) {
       this.myarrrec[myorderid][fieldname] = this[fieldname]
@@ -102,12 +117,42 @@ export default class OrderInfo extends MixinBase {
       tools.saveFieldToServer(this, 'orderscart', myorderid, mydata, aggiorna)
     }
   }
-
-  public mounted() {
+  public updateorders() {
     this.myorderscart = this.getOrdersCart
     for (const ordercart of this.myorderscart) {
       this.myarrrec[ordercart._id] = Object.keys(ordercart)
     }
+
+    const allorders = this.getAllOrdersCart
+    for (const status of [
+      2,
+      3,
+      4,
+      6,
+      10
+    ]) {
+      this.arrnumstatus[status] = allorders.filter((rec) => (rec.status === status)).reduce((sum, item) => sum + 1, 0)
+    }
+
+  }
+
+  public mounted() {
+
+    this.updateorders()
+
+    console.log('arrnumstatus;')
+    console.log(this.arrnumstatus)
+
+    this.columns = [...this.columns,
+      {
+        name: 'comandi',
+        align: 'center',
+        required: false,
+        label: 'Comandi',
+        field: 'comandi',
+        sortable: false
+      }]
+
   }
 
   public CanBeShipped() {
@@ -145,5 +190,38 @@ export default class OrderInfo extends MixinBase {
   get nextstep() {
     return 0
   }
+
+  public clickFunz(order, status) {
+
+    if (status === shared_consts.OrderStatus.ORDER_CONFIRMED) {
+      // Conferma Ordine
+    }
+
+    const statusStr = shared_consts.getStatusStr(status)
+
+    this.$q.dialog({
+      message: 'Impostare l\'ordine n. ' + order.numorder + ' ' + statusStr + ' ?',
+      ok: {
+        label: this.$t('dialog.yes'),
+        push: true
+      },
+      cancel: {
+        label: this.$t('dialog.cancel')
+      },
+      title: 'Ordine'
+    }).onOk(async () => {
+
+      this.statusnow = await Products.actions.UpdateOrderStatus({ order_id: order._id, status })
+
+      if (this.statusnow === status) {
+        order.status = this.statusnow
+        this.updateorders()
+        tools.showPositiveNotif(this.$q, 'Ordine ' + statusStr)
+      }
+      // this.change_field('status')
+      // this.change_field('status')
+    })
+  }
+
 
 }

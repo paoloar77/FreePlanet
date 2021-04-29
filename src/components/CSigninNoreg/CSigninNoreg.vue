@@ -3,7 +3,7 @@
     <CSignIn :mythis="mythis"
              @loginOk="loginOk"
              @loginInCorso="loginInCorso"
-             :showregbutt="false"
+             :showregbutt="showregbutt"
              @checkErrors="checkErrors"
              @showNotif="showNotif">
     </CSignIn>

@@ -977,7 +977,6 @@ export default class ProjList extends Vue {
     if (this.arrfilterand)
       myarr = [...myarr, ...this.arrfilterand]
 
-    console.log('myarr', myarr)
     return myarr
   }
 

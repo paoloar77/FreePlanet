@@ -183,9 +183,10 @@
             <div v-if="isLogged && isAdmin" class="text-weight-bold text-user bg-red q-px-xs">Admin</div>
             <div v-if="isSocio" class="text-weight-bold text-user q-px-xs">Socio</div>
             <div v-if="isSocioResidente" class="text-weight-bold text-user q-px-xs bg-amber">Residente</div>
+            <div v-if="isConsiglio" class="text-weight-bold text-user q-px-xs bg-deep-orange-10">Consiglio</div>
             <div v-if="isManager" class="text-weight-bold text-user bg-blue q-px-xs">Segreteria</div>
             <div v-if="isTutor" class="text-weight-bold text-user q-px-xs">Tutor</div>
-            <div v-if="isTratuttrici" class="text-weight-bold text-user q-px-xs">Traduttrici</div>
+            <div v-if="isTratuttrici" class="text-weight-bold text-user q-px-xs">Editor</div>
           </div>
           <div v-if="!isLogged" class="text-user text-italic bg-red">
             {{ $t('user.loggati') }}
@@ -208,8 +209,9 @@
         </div>
         <div style="margin-top:120px;"></div>
         <div v-show="!isLogged">
+
           <div class="q-ma-md" style="">
-            <CSigninNoreg :showregbutt="static_data.functionality.SHOW_REG_BUTTON">
+            <CSigninNoreg :showregbutt="true">
 
             </CSigninNoreg>
           </div>

@@ -51,7 +51,7 @@ export default class Eventlist extends Vue {
       let add = true
 
       if (!this.showall) {
-        add = CalendarStore.getters.getNumParticipants(myevent, this.showall, 0) > 0
+        add = CalendarStore.getters.getNumParticipants(myevent, this.showall, tools.peopleWhere.participants) > 0
       }
 
       if (add) {
@@ -78,7 +78,7 @@ export default class Eventlist extends Vue {
       eventsloc.reverse()
     }
 
-    return eventsloc
+    return eventsloc.filter((rec) => rec.title !== '')
   }
 
   public getNumEvent() {
@@ -96,7 +96,7 @@ export default class Eventlist extends Vue {
       let add = true
 
       if (!this.showall) {
-        add = CalendarStore.getters.getNumParticipants(myevent, this.showall, 0) > 0
+        add = CalendarStore.getters.getNumParticipants(myevent, this.showall, tools.peopleWhere.participants) > 0
       }
 
       if (add) {

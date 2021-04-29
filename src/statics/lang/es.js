@@ -219,7 +219,7 @@ const msg_es = {
       nave_in_chiusura: 'Cierre Gift Chat',
       nave_partita: 'partió en',
       tutor: 'Tutor',
-      traduttrici: 'Traduttrici',
+      Editor: 'Editor',
       /*Cuando te conviertes en Mediador vienes contactado por un <strong>TUTOR</strong>, con él debes:<br><ol class="lista">' +
       '<li>Abrir tu <strong>Gift Chat</strong> (tu como propietario, y el Tutor ' +
       'como administrador) con este nombre:<br><strong>{nomenave}</strong></li>' +

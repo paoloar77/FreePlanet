@@ -78,76 +78,134 @@
       </div>
 
     </CTitleBanner>
-    <CTitleBanner class="q-pa-xs" :title="$t('pages.payment')" bgcolor="bg-primary" clcolor="text-white"
-                   myclass="myshad" :canopen="true">
-      <div class="row fa-border justify-center items-center">
 
-        <CMyFieldDb v-if="tools.isselectPayeer()"
-                    :title="$t('reg.payeer_id')"
-                    table="users"
-                    mykey="profile"
-                    myimg="statics/images/payeer.jpg"
-                    mysubkey="payeer_id"
-                    :type="tools.FieldType.string">
-        </CMyFieldDb>
-        <CMyFieldDb v-if="tools.isselectAdvCash()"
-                    :title="$t('reg.advcash_id')"
-                    table="users"
-                    mykey="profile"
-                    mysubkey="advcash_id"
-                    myimg="statics/images/advcash.jpg"
-                    :type="tools.FieldType.string">
-        </CMyFieldDb>
-        <CMyFieldDb v-if="tools.isselectRevolut()"
-                    :title="$t('reg.revolut')"
-                    table="users"
-                    mykey="profile"
-                    mysubkey="revolut"
-                    myimg="statics/images/revolut.jpg"
-                    :type="tools.FieldType.string">
-        </CMyFieldDb>
+    <CTitleBanner class="q-pa-xs" title="Informazioni su di te" bgcolor="bg-primary" clcolor="text-white"
+                  myclass="myshad" :canopen="true">
 
-        <CMyFieldDb v-if="tools.isselectPaypal()"
-                    :title="$t('reg.email_paypal')"
-                    table="users"
-                    mykey="profile"
-                    mysubkey="email_paypal"
-                    myimg="statics/images/paypal.jpg"
-                    :type="tools.FieldType.string">
-        </CMyFieldDb>
 
-        <CMyFieldDb v-if="tools.isselectPaypal()"
-                    :title="$t('reg.link_payment')"
-                    table="users"
-                    mykey="profile"
-                    mysubkey="link_payment"
-                    :type="tools.FieldType.string">
-        </CMyFieldDb>
-
-        <CMyFieldDb :title="$t('reg.country_pay')"
-                    table="users"
-                    mykey="profile"
-                    mysubkey="country_pay"
-                    :type="tools.FieldType.nationality">
-        </CMyFieldDb>
-        <CMyFieldDb :title="$t('reg.note_payment')"
-                    table="users"
-                    mykey="profile"
-                    mysubkey="note_payment"
-                    :type="tools.FieldType.string">
-        </CMyFieldDb>
-
+      <div class="column">
+        <div class="row">
+          <CMyFieldDb title="Motivazioni"
+                      table="users"
+                      mykey="profile"
+                      mysubkey="motivazioni"
+                      :type="tools.FieldType.string">
+          </CMyFieldDb>
+        </div>
+        <div class="row">
+          <CMyFieldDb title="Competenze e Professionalità"
+                      table="users"
+                      mykey="profile"
+                      mysubkey="competenze_professionalita"
+                      :type="tools.FieldType.string">
+          </CMyFieldDb>
+        </div>
+        <div class="row">
+          <CMyFieldDb title="Cosa potrei offrire?"
+                      table="users"
+                      mykey="profile"
+                      mysubkey="cosa_offrire"
+                      :type="tools.FieldType.string">
+          </CMyFieldDb>
+        </div>
+        <div class="row">
+          <CMyFieldDb title="Cosa vorrei ricevere?"
+                      table="users"
+                      mykey="profile"
+                      mysubkey="cosa_ricevere"
+                      :type="tools.FieldType.string">
+          </CMyFieldDb>
+        </div>
+        <div class="row">
+          <CMyFieldDb title="Altre Comunicazioni"
+                      table="users"
+                      mykey="profile"
+                      mysubkey="altre_comunicazioni"
+                      :type="tools.FieldType.string">
+          </CMyFieldDb>
+        </div>
+        <div class="row">
+          <CMyFieldDb title="Come ci hai conosciuto?"
+                      table="users"
+                      mykey="profile"
+                      mysubkey="come_ci_hai_conosciuto"
+                      :type="tools.FieldType.string">
+          </CMyFieldDb>
+        </div>
       </div>
-
-      <CMyFieldDb :title="$t('reg.paymenttype')"
-                  table="users"
-                  mykey="profile"
-                  mysubkey="paymenttypes"
-                  :type="tools.FieldType.multiselect"
-                  jointable="paymenttypes">
-      </CMyFieldDb>
-
     </CTitleBanner>
+        <!--
+        <CTitleBanner class="q-pa-xs" :title="$t('pages.payment')" bgcolor="bg-primary" clcolor="text-white"
+                       myclass="myshad" :canopen="true">
+          <div class="row fa-border justify-center items-center">
+
+            <CMyFieldDb v-if="tools.isselectPayeer()"
+                        :title="$t('reg.payeer_id')"
+                        table="users"
+                        mykey="profile"
+                        myimg="statics/images/payeer.jpg"
+                        mysubkey="payeer_id"
+                        :type="tools.FieldType.string">
+            </CMyFieldDb>
+            <CMyFieldDb v-if="tools.isselectAdvCash()"
+                        :title="$t('reg.advcash_id')"
+                        table="users"
+                        mykey="profile"
+                        mysubkey="advcash_id"
+                        myimg="statics/images/advcash.jpg"
+                        :type="tools.FieldType.string">
+            </CMyFieldDb>
+            <CMyFieldDb v-if="tools.isselectRevolut()"
+                        :title="$t('reg.revolut')"
+                        table="users"
+                        mykey="profile"
+                        mysubkey="revolut"
+                        myimg="statics/images/revolut.jpg"
+                        :type="tools.FieldType.string">
+            </CMyFieldDb>
+
+            <CMyFieldDb v-if="tools.isselectPaypal()"
+                        :title="$t('reg.email_paypal')"
+                        table="users"
+                        mykey="profile"
+                        mysubkey="email_paypal"
+                        myimg="statics/images/paypal.jpg"
+                        :type="tools.FieldType.string">
+            </CMyFieldDb>
+
+            <CMyFieldDb v-if="tools.isselectPaypal()"
+                        :title="$t('reg.link_payment')"
+                        table="users"
+                        mykey="profile"
+                        mysubkey="link_payment"
+                        :type="tools.FieldType.string">
+            </CMyFieldDb>
+
+            <CMyFieldDb :title="$t('reg.country_pay')"
+                        table="users"
+                        mykey="profile"
+                        mysubkey="country_pay"
+                        :type="tools.FieldType.nationality">
+            </CMyFieldDb>
+            <CMyFieldDb :title="$t('reg.note_payment')"
+                        table="users"
+                        mykey="profile"
+                        mysubkey="note_payment"
+                        :type="tools.FieldType.string">
+            </CMyFieldDb>
+
+          </div>
+
+          <CMyFieldDb :title="$t('reg.paymenttype')"
+                      table="users"
+                      mykey="profile"
+                      mysubkey="paymenttypes"
+                      :type="tools.FieldType.multiselect"
+                      jointable="paymenttypes">
+          </CMyFieldDb>
+
+        </CTitleBanner>
+        -->
 
     <br><br>
     <div class="text-center">

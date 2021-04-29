@@ -17,14 +17,15 @@ export let idbKeyval = (() => {
         openreq.onupgradeneeded = () => {
           // First time setup: create an empty object store
           for (let mytab of ApiTables.MainTables) {
-            openreq.result.createObjectStore(mytab, { keyPath: '_id' });
+            openreq.result.createObjectStore(mytab, { keyPath: 'BOMID', autoIncrement: true });
             for (let mymeth of ApiTables.allMethod) {
               const tab = mymeth + mytab
-              openreq.result.createObjectStore(tab, { keyPath: '_id' });
+              openreq.result.createObjectStore(tab, { keyPath: 'BOMID', autoIncrement: true });
             }
           }
           for (let mytab of ApiTables.OtherTables) {
-            openreq.result.createObjectStore(mytab, { keyPath: '_id' });
+            console.log('mytab', mytab);
+            openreq.result.createObjectStore(mytab, { keyPath: 'BOMID', autoIncrement: true });
           }
         };
 

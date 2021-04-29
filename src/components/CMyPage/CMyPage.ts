@@ -4,13 +4,10 @@ import { GlobalStore, UserStore } from '@store'
 
 import { Footer } from '../../components/Footer'
 
-// import VueScrollReveal from 'vue-scroll-reveal'
-import { tools } from '@src/store/Modules/tools'
-import { toolsext } from '@src/store/Modules/toolsext'
-import { Screen } from 'quasar'
 import { CImgTitle } from '../../components/CImgTitle/index'
 import { CTitle } from '../../components/CTitle/index'
 import MixinsMetaTags from '../../mixins/mixin-metatags'
+import { IMyPage } from '@src/model'
 
 @Component({
   name: 'CMyPage',
@@ -18,7 +15,8 @@ import MixinsMetaTags from '../../mixins/mixin-metatags'
   components: { Footer, CImgTitle, CTitle }
 })
 export default class CMyPage extends Vue {
-  @Prop({ required: true, default: '' }) public title: string
+  @Prop({ required: false, default: '' }) public title: string
+  @Prop({ required: false, default: '' }) public mypath: string
   @Prop({ required: false, default: '' }) public img: string
   @Prop({ required: false, default: '' }) public imgbackground: string
   @Prop({ required: false, default: '' }) public sizes: string
@@ -26,6 +24,7 @@ export default class CMyPage extends Vue {
   @Prop({ required: false, default: false }) public nofooter: boolean
   public $t
   public $q
+  public rec: IMyPage = null
 
   // public metaInfo() {
   //   return {
@@ -40,8 +39,10 @@ export default class CMyPage extends Vue {
   //   }
   // }
 
-  public mounted() {
+  public async mounted() {
     // console.log('CMYPage title=', this.title)
     // console.table(this.meta)
+    if (this.mypath !== '')
+      this.rec = await GlobalStore.actions.loadPage(this.mypath)
   }
 }

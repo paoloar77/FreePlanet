@@ -68,7 +68,6 @@ export default class CHours extends MixinBase {
     if (this.arrfilterand)
       myarr = [...myarr, ...this.arrfilterand]
 
-    console.log('myarr', myarr)
     return myarr
   }
 

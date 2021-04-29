@@ -53,14 +53,17 @@
                  :disable="$v.$error || iswaitingforRes">{{$t('login.enter')}}
           </q-btn>
         </div>
-        <div v-if="static_data.functionality.ENABLE_REGISTRATION && showregbutt" align="center" style="margin-top:10px;">
-          <q-btn flat rounded size="md" color="primary" to="/signup" :label="$t('reg.submit')">
-          </q-btn>
-        </div>
+
         <br>
 
         <div class="text-center" style="margin-bottom: 10px;">
           <a :href="getlinkforgetpwd()" style="color:gray;">{{$t('reg.forgetpassword')}}</a>
+        </div>
+
+        <div v-if="static_data.functionality.ENABLE_REGISTRATION && showregbutt" align="center" style="margin-top:10px;">
+          Se non sei ancora Registrato:<br>
+          <q-btn rounded size="md" color="primary" to="/signup" :label="$t('reg.submit')">
+          </q-btn>
         </div>
 
       </div>

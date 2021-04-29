@@ -73,11 +73,22 @@ namespace Getters {
     return state.cart
   }, 'getCart')
 
+  const getOrdersAllCart = b.read((stateparamf: IProductsState) => (): IOrderCart[] => {
+    return state.orders
+  }, 'getOrdersAllCart')
+
   const getOrdersCart = b.read((stateparamf: IProductsState) => (tipoord: string): IOrderCart[] => {
+    console.log('state.orders', state.orders)
     if (tipoord === 'incorso')
       return state.orders.filter((rec) => rec.status <= shared_consts.OrderStatus.CHECKOUT_SENT)
-    else
-      return state.orders.filter((rec) => rec.status < shared_consts.OrderStatus.RECEIVED && rec.status > shared_consts.OrderStatus.CHECKOUT_SENT)
+    else if (tipoord === 'confermati')
+      return state.orders.filter((rec) => rec.status === shared_consts.OrderStatus.ORDER_CONFIRMED)
+    else if (tipoord === 'pagati')
+      return state.orders.filter((rec) => rec.status === shared_consts.OrderStatus.PAYED)
+    else if (tipoord === 'completati')
+      return state.orders.filter((rec) => rec.status === shared_consts.OrderStatus.RECEIVED)
+    else if (tipoord === 'cancellati')
+      return state.orders.filter((rec) => rec.status === shared_consts.OrderStatus.CANCELED)
   }, 'getOrdersCart')
 
   const existProductInCart = b.read((stateparamf: IProductsState) => (idproduct): boolean => {
@@ -93,6 +104,7 @@ namespace Getters {
 
     const objproduct: IProduct = {
       // _id: tools.getDateNow().toISOString(),  // Create NEW
+      active: false,
       idProducer: '',
       idStorehouses: [],
       producer: null,
@@ -129,6 +141,9 @@ namespace Getters {
     },
     get getOrdersCart() {
       return getOrdersCart()
+    },
+    get getOrdersAllCart() {
+      return getOrdersAllCart()
     },
     get existProductInCart() {
       return existProductInCart()
@@ -365,12 +380,35 @@ namespace Actions {
     return ris
   }
 
+  async function UpdateOrderStatus(context, { order_id, status }) {
+
+    if (!static_data.functionality.ENABLE_ECOMMERCE)
+      return null
+
+    // console.log('addSubQtyToItem', 'userid=', UserStore.state.my._id, order)
+
+    let ris = null
+
+    ris = await Api.SendReq('/cart/' + UserStore.state.my._id + '/orderstatus', 'POST', { order_id, status })
+      .then((res) => {
+        return res.data.status
+      })
+      .catch((error) => {
+        console.log('error UpdateOrderStatus', error)
+        UserStore.mutations.setErrorCatch(error)
+        return new Types.AxiosError(serv_constants.RIS_CODE_ERR, null, tools.ERR_GENERICO, error)
+      })
+
+    return ris
+  }
+
   export const actions = {
     loadProduct: b.dispatch(loadProduct),
     loadProducts: b.dispatch(loadProducts),
     addToCart: b.dispatch(addToCart),
     addSubQtyToItem: b.dispatch(addSubQtyToItem),
     UpdateStatusCart: b.dispatch(UpdateStatusCart),
+    UpdateOrderStatus: b.dispatch(UpdateOrderStatus),
     removeFromCart: b.dispatch(removeFromCart),
     loadOrders: b.dispatch(loadOrders),
   }

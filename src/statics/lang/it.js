@@ -40,6 +40,7 @@ const msg_it = {
         eventlist: 'Le tue Prenotazioni',
         usereventlist: 'Prenotazioni Utenti',
         userlist: 'Lista Utenti',
+        iscritticonacreis: "Iscritti Conacreis",
         zoomlist: 'Calendario Zoom',
         extralist: 'Lista Extra',
         dbop: 'Db Operations',
@@ -186,6 +187,7 @@ const msg_it = {
         login: {
           facebook: 'Facebook'
         },
+        iscrizione_ok: 'Iscrizione Avvenuta Correttamente',
         email_verification: {
           title: 'Inizia la tua registrazione',
           introduce_email: 'inserisci la tua email',
@@ -247,7 +249,7 @@ const msg_it = {
       nave_in_chiusura: 'Chiusura Gift Chat',
       nave_partita: 'Partita il',
       tutor: 'Tutor',
-      traduttrici: 'Traduttrici',
+      Editor: 'Editor',
       zoomeri: 'Zoomeri',
 /*      sonomediatore: 'Quando diventi Meditore vieni contattato da un <strong>TUTOR</strong>, con lui devi:<br><ol class="lista">' +
       '<li>Aprire la tua <strong>Gift Chat</strong> (tu come proprietario e il Tutor ' +
@@ -324,6 +326,7 @@ const msg_it = {
     reg: {
       socio: 'Socio',
       socioresidente: 'Residente',
+      consiglio: 'Consiglio',
       volta: 'volta',
       volte: 'volte',
       registered: 'Registrato',
@@ -364,10 +367,11 @@ const msg_it = {
       made_gift: 'Dono',
       note: 'Note',
       incorso: 'Registrazione in corso...',
+      iscrizioneincorso: 'Iscrizione in corso...',
       richiesto: 'Campo Richiesto',
       email: 'Email',
       intcode_cell: 'Prefisso Int.',
-      cell: 'Cellulare Telegram',
+      cell: 'Cellulare',
       cellreg: 'Cellulare con cui ti eri registrato',
       nationality: 'Nazionalità',
       email_paypal: 'Email Paypal',
@@ -422,6 +426,16 @@ const msg_it = {
       resp: "Responsabile",
       viceResp: "Vice Rrsponsabile",
       userslist: "Lista Persone",
+      fiscalcode: "Codice Fiscale",
+      residency_address: "Indirizzo di Residenza",
+      residency_city: "Città di Residenza",
+      residency_province: "Provincia",
+      residency_zipcode: "CAP",
+      dateofbirth: "Data di Nascita",
+      newsletter_on: "Aggiungimi alla Newsletter",
+      accetta_carta_costituzionale_on: "Ho letto ed Approvo il Progetto",
+      iscriviti: "Iscriviti",
+
       err: {
         required: 'è richiesto',
         email: 'inserire una email valida',
@@ -442,6 +456,7 @@ const msg_it = {
         aportador_regalare_not_exist: 'Inserire l\'Username della persona che si vuole regalare l\'invitato',
         invitante_username_not_exist: 'Inserire l\'Username della persona che fa da invitante',
         sameaspassword: 'Le password devono essere identiche',
+        accetta_carta_costituzionale_on: 'Occorre accettare la sintesi della Carta Costituzionale',
       },
       tips: {
         email: 'inserisci la tua email',
@@ -470,7 +485,7 @@ const msg_it = {
       errato: "Username o password errata. Riprovare",
       subaccount: "Questo account è stato accorpato con il vostro Principale. Eseguire l'accesso utilizzando l'username (o email) del PRIMO account.",
       completato: 'Login effettuato!',
-      needlogin: 'E\' necessario effettuare il login prima di continuare'
+      needlogin: 'E\' necessario registrarsi al sito ed effettuare l\'Accesso con i propri dati'
     },
     reset: {
       title_reset_pwd: "Reimposta la tua Password",
@@ -594,8 +609,10 @@ const msg_it = {
       selnumpeople: 'Partecipanti',
       Lunch: 'Pranzo',
       Dinner: 'Cena',
+      DinnerShared: 'Cena Condivisa',
       selnumpeopleLunch: 'Persone a Pranzo',
       selnumpeopleDinner: 'Persone a Cena',
+      selnumpeopleDinnerShared: 'Persone a Cena Condivisa',
       selnumpeople_short: 'Num',
       msgbooking: 'Messaggio da inviare',
       showpdf: 'Vedi PDF',
@@ -640,6 +657,7 @@ const msg_it = {
       internal: 'Evento Interno',
       lunchAvailable: 'Disponibilità di Pranzare',
       dinnerAvailable: 'Disponibilità di Cenare',
+      dinnerSharedAvailable: 'Disponibilità di Cenare Condivisa',
       lunchType: 'Tipo di Pranzo',
       dinnerType: 'Tipo di Cena',
       lunchPrezzo: 'Contributo Pranzo',

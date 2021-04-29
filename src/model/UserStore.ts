@@ -123,7 +123,7 @@ export interface IUserState {
   isDepartment?: boolean
   isTutor?: boolean
   isZoomeri?: boolean
-  isTraduttrici?: boolean
+  isEditor?: boolean
   isTeacher?: boolean
   usersList?: IUserFields[]
   countusers?: number

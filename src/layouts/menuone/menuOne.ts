@@ -85,12 +85,14 @@ export default class MenuOne extends Vue {
         menu += ' isManager'
       if (elem.onlySocioResidente)
         menu += ' isSocioResidente'
+      if (elem.onlyConsiglio)
+        menu += ' isConsiglio'
       if (elem.onlyDepartment)
         menu += ' isDepartment'
       if (elem.onlyTutor)
         menu += ' isTutor'
-      if (elem.onlyTraduttrici)
-        menu += ' isTraduttrici'
+      if (elem.onlyEditor)
+        menu += ' isEditor'
 
     }
 

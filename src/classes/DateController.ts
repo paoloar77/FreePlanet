@@ -1,8 +1,8 @@
 import moment from 'moment'
-import 'moment/locale/fr'
-moment.locale('fr')
+import 'moment/locale/it'
+moment.locale('it')
 
-const monthsStrings = ['Janvier', 'Fevrier', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre']
+const monthsStrings = ['Gennaio', 'Febbraio', 'Marzo', 'Aprile', 'Maggio', 'Giugno', 'Luglio', 'Agosto', 'Settembre', 'Ottobre', 'Novembre', 'Dicembre']
 
 export class DateMoving {
   public date: moment.Moment

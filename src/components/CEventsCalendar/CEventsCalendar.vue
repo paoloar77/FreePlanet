@@ -1,6 +1,6 @@
 <template>
   <div class="landing">
-    <div v-if="!tools.IsLogged()">
+    <div v-if="!tools.IsLogged() && (!mysingleevent)">
       <div class="centermydiv">
         <q-banner class="bg-secondary text-white">
           Il Calendario sarà visibile solo dopo aver effettuato l'accesso
@@ -210,6 +210,8 @@
                             :label="$t('event.lunchAvailable')"></q-checkbox>
                 <q-checkbox class="myflex wrap" dense v-model="eventForm.dinnerAvailable"
                             :label="$t('event.dinnerAvailable')"></q-checkbox>
+                <q-checkbox class="myflex wrap" dense v-model="eventForm.dinnerSharedAvailable"
+                            :label="$t('event.dinnerSharedAvailable')"></q-checkbox>
                 <q-checkbox class="myflex wrap" dense v-model="eventForm.news"
                             :label="$t('event.news')"></q-checkbox>
                 <q-checkbox class="myflex wrap" dense v-model="eventForm.nobookable"
@@ -297,7 +299,7 @@
           <q-card-section class="inset-shadow">
             <q-img :src="getImgEvent(myevent)"
                    class="absolute-top"
-                   style="height: 150px;"
+                   style="height: 200px;"
                    :alt="myevent.title">
             </q-img>
             <div style="margin-top: 150px;">
@@ -350,11 +352,23 @@
                     <div v-if="myevent.dinnerAvailable" class="q-px-xs centermydiv" style="display: inline-flex; ">
                       <div style="display: inline-flex; " class="q-px-xs centermydiv">
                         <div class="itemprenota">{{ $t('cal.selnumpeopleDinner') }}</div>
-                        <div class="q-gutter-xs " style="min-width: 140px; margin-left: 10px;">
+                        <div class="q-gutter-xs " style="min-width: 180px; margin-left: 10px;">
                           <q-select
                             rounded outlined v-model="bookEventForm.numpeopleDinner"
                             :options="tools.SelectListNumPeople"
                             :label="$t('cal.Dinner')" emit-value map-options>
+                          </q-select>
+                        </div>
+                      </div>
+                    </div>
+                    <div v-if="myevent.dinnerSharedAvailable" class="q-px-xs centermydiv" style="display: inline-flex; ">
+                      <div style="display: inline-flex; " class="q-px-xs centermydiv">
+                        <div class="itemprenota">{{ $t('cal.selnumpeopleDinnerShared') }}</div>
+                        <div class="q-gutter-xs " style="min-width: 180px; margin-left: 10px;">
+                          <q-select
+                            rounded outlined v-model="bookEventForm.numpeopleDinnerShared"
+                            :options="tools.SelectListNumPeople"
+                            :label="$t('cal.DinnerShared')" emit-value map-options>
                           </q-select>
                         </div>
                       </div>

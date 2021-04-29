@@ -6,7 +6,7 @@
                 <div class="listaev__align_chips q-ma-md">
                     <img :src="getImgEvent(myevent)"
                          @click="selectEvent(myevent)"
-                         class="text-left padding_cell listaev__tdimg listaev__img cursor-pointer"
+                         class="text-left padding_cell listaev__tdimg listaev__singleevimg cursor-pointer"
                          :style="getStyleByEvent(myevent, true)"
                          :alt="myevent.title">
                     <q-chip dense v-if="isAlreadyBooked(myevent)" class="cltexth4 chipbooked shadow-5 q-mb-md"

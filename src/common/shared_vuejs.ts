@@ -67,9 +67,9 @@ export const shared_consts = {
       icon: 'fas fa-user-tie',
       color: 'fuchsia'
     },
-    Traduttrici: {
+    Editor: {
       value: 16,
-      label: 'dashboard.traduttrici',
+      label: 'dashboard.Editor',
       icon: 'fas fa-user-tie',
       color: 'orange'
     },
@@ -163,6 +163,14 @@ export const shared_consts = {
     CANCELED: 10
   },
 
+  OrderStatusView: [
+    2,
+    3,
+    4,
+    6,
+    10
+  ],
+
   OrderStatusStr: [
     {
       label: 'Nessuno',
@@ -173,7 +181,7 @@ export const shared_consts = {
       value: 1
     },
     {
-      label: 'Ordine Inviato',
+      label: 'Ordine in Lavorazione',
       value: 2
     },
     {

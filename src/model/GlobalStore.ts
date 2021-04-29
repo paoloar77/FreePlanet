@@ -69,16 +69,44 @@ export interface IMyPage {
   path?: string
   keywords?: string
   description?: string
+  img1?: string
   content?: string
+  video1?: string
+  img2?: string
+  content2?: string
+  video2?: string
+  img3?: string
+  content3?: string
+  video3?: string
+  content4?: string
   active?: boolean
   inmenu?: boolean
   color?: string
   onlyif_logged?: boolean
   only_residenti?: boolean
+  only_consiglio?: boolean
   submenu?: boolean
   l_par?: number,
   l_child?: number,
   infooter?: boolean
+}
+
+export interface ISites {
+  _id?: string
+  attiva?: boolean
+  idapp?: string
+  name?: string
+  adminemail?: string
+  manageremail?: string
+  replyTo?: string
+  host?: string
+  portapp?: string
+  dir?: string
+  email_from?: string
+  email_pwd?: string
+  telegram_key?: string
+  telegram_bot_name?: string
+  pathreg_add?: string
 }
 
 export interface INewsToSent {
@@ -228,10 +256,12 @@ export interface IListRoutes {
   onlyif_logged?: boolean
   onlyManager?: boolean
   onlySocioResidente?: boolean
+  onlyConsiglio?: boolean
+  onlyNotSoci?: boolean
   onlyDepartment?: boolean
   onlyTutor?: boolean
   color?: string
-  onlyTraduttrici?: boolean
+  onlyEditor?: boolean
   extraclass?: string
   meta?: any
   idelem?: string

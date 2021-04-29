@@ -56,7 +56,7 @@ export const tools = {
   TABBED_HOME: 't-home',
   TABBED_NAVE: 't-nave',
 
-  getprefCountries: ['it', 'si', 'us', 'es', 'pt', 'uk', 'fr', 'de', 'ch', 'br', 'sk'],
+  getprefCountries: ['it', 'es', 'us'],
 
   APORTADOR_NONE: '------',
 
@@ -138,6 +138,13 @@ export const tools = {
   WHAT_PROJECT: 2,
 
   languageid: 5,
+
+  peopleWhere: {
+    participants: 1,
+    lunch: 2,
+    dinner: 3,
+    dinnerShared: 4
+  },
 
   SERVKEY_VERS: 'vers',
 
@@ -273,6 +280,26 @@ export const tools = {
       id: 80,
       label: '8',
       value: 8
+    },
+    {
+      id: 90,
+      label: '9',
+      value: 9
+    },
+    {
+      id: 100,
+      label: '10',
+      value: 10
+    },
+    {
+      id: 110,
+      label: '11',
+      value: 11
+    },
+    {
+      id: 120,
+      label: '12',
+      value: 12
     },
   ],
 
@@ -1608,10 +1635,13 @@ export const tools = {
   visumenu(elem) {  // : IListRoutes
     let visu = ((elem.onlyAdmin && UserStore.state.isAdmin) || (elem.onlyManager && UserStore.state.isManager)
       || (elem.onlySocioResidente && UserStore.state.my.profile.socioresidente)
-      || (elem.onlyTutor && UserStore.state.isTutor) || (elem.onlyTraduttrici && UserStore.state.isTraduttrici)
+      || (elem.onlyConsiglio && UserStore.state.my.profile.consiglio)
+      || (elem.onlyNotSoci && !UserStore.state.my.profile.socio)
+      || (elem.onlyTutor && UserStore.state.isTutor)
+      || (elem.onlyEditor && UserStore.state.isEditor)
       || (elem.onlyDepartment && UserStore.state.isDepartment)
-      || ((!elem.onlyAdmin) && (!elem.onlyManager) && (!elem.onlyTutor) && (!elem.onlyTraduttrici) && (!elem.onlyDepartment)
-        && (!elem.onlySocioResidente))) && elem.active
+      || ((!elem.onlyAdmin) && (!elem.onlyManager) && (!elem.onlyTutor) && (!elem.onlyEditor) && (!elem.onlyDepartment)
+        && (!elem.onlySocioResidente) && (!elem.onlyConsiglio) && (!elem.onlyNotSoci))) && elem.active
 
     if (!tools.isLoggedToSystem()) {
       if (elem.onlyif_logged)
@@ -1997,7 +2027,7 @@ export const tools = {
   },
 
   showNeutralNotif(q: any, msg) {
-    tools.showNotif(q, msg, { color: 'info', icon: 'notifications' })
+    tools.showNotif(q, msg, { color: 'info', icon: 'notifications' }, 10000)
   },
 
   showNotif(q: any, msg, data ?: INotify | null, time?) {
@@ -2277,6 +2307,14 @@ export const tools = {
     return !!UserStore.state.my.profile ? UserStore.state.my.profile.socioresidente : false
   },
 
+  isConsiglio() {
+    return !!UserStore.state.my.profile ? UserStore.state.my.profile.consiglio : false
+  },
+
+  isSocio() {
+    return !!UserStore.state.my.profile ? UserStore.state.my.profile.socio : false
+  },
+
   isResp() {
     return UserStore.state.my.profile.resplist
   },
@@ -2301,14 +2339,23 @@ export const tools = {
     return UserStore.state.isZoomeri
   },
 
-  isTraduttrici() {
-    return UserStore.state.isTraduttrici
+  isEditor() {
+    return UserStore.state.isEditor
   },
 
   getstrDate(mytimestamp) {
     // console.log('getstrDate', mytimestamp)
     if (!!mytimestamp)
       return date.formatDate(mytimestamp, 'DD/MM/YYYY')
+    else
+      return ''
+  },
+
+  getstrDateLong(mytimestamp) {
+    // console.log('getstrDate', mytimestamp)
+    const dayofweek = this.getDayOfWeek(mytimestamp)
+    if (!!mytimestamp)
+      return dayofweek + ' ' + date.formatDate(mytimestamp, 'DD/MM/YYYY')
     else
       return ''
   },
@@ -2406,18 +2453,18 @@ export const tools = {
     // is same day?
     if (tools.getstrDate(myevent.dateTimeStart) === tools.getstrDate(myevent.dateTimeEnd)) {
       if (withhtml) {
-        mystr += `<span class="cal__where-content">${tools.getstrDate(myevent.dateTimeStart)}</span>
+        mystr += `<span class="cal__where-content">${tools.getstrDateLong(myevent.dateTimeStart)}</span>
                     <span class="cal__hours-content">${mythis.$t('cal.starttime')} ${tools.getstrTime(myevent.dateTimeStart)}
                     ${mythis.$t('cal.endtime')} ${tools.getstrTime(myevent.dateTimeEnd)}`
       } else {
-        mystr = `${tools.getstrDate(myevent.dateTimeStart)}
+        mystr = `${tools.getstrDateLong(myevent.dateTimeStart)}
                  ${mythis.$t('cal.starttime')} ${tools.getstrTime(myevent.dateTimeStart)}
                  ${mythis.$t('cal.endtime')} ${tools.getstrTime(myevent.dateTimeEnd)}`
       }
     } else {
-      mystr = `<span class="cal__where-content">${tools.getstrDate(myevent.dateTimeStart)}</span>
+      mystr = `<span class="cal__where-content">${tools.getstrDateLong(myevent.dateTimeStart)}</span>
                  <span class="cal__hours-content">${mythis.$t('cal.starttime')} ${tools.getstrTime(myevent.dateTimeStart)} </span>
-                  ${mythis.$t('cal.enddate')} ${tools.getstrDate(myevent.dateTimeEnd)}
+                  ${mythis.$t('cal.enddate')} ${tools.getstrDateLong(myevent.dateTimeEnd)}
                   <span class="cal__hours-content">${mythis.$t('cal.endtime')} ${tools.getstrTime(myevent.dateTimeEnd)} </span>`
     }
 
@@ -2550,6 +2597,8 @@ export const tools = {
       return null
     }
 
+    console.log('mystrdate', mystrdate)
+
     const pattern = /(\d{2})\/(\d{2})\/(\d{4})/
     const strdate = mystrdate.replace(pattern, '$3-$2-$1')
     let mydate = null
@@ -2616,10 +2665,10 @@ export const tools = {
     return false
   },
 
-  getDayOfWeek(date) {
-    const dayOfWeek = new Date(date).getDay()
+  getDayOfWeek(mydate) {
+    const dayOfWeek = new Date(mydate).getDay()
 
-    let lang = this.getLocale()
+    const mylang = this.getLocale()
 
     const myday = {
       it: ['Domenica', 'Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato'],
@@ -2631,7 +2680,7 @@ export const tools = {
       si: ['Nedelja', 'Ponedeljek', 'Torek', 'Sreda', 'četrtek', 'Petek', 'Sobota'],
     }
 
-    return isNaN(dayOfWeek) ? '' : myday[lang][dayOfWeek].substring(0, 3)
+    return isNaN(dayOfWeek) ? '' : myday[mylang][dayOfWeek].substring(0, 3)
   },
 
   isSunday(mydate) {
@@ -3216,8 +3265,10 @@ export const tools = {
     try {
       if (riscode === tools.OK) {
         tools.showNotif(mythis.$q, mythis.$t('login.completato'), { color: 'positive', icon: 'check' })
+        console.log('mythis.$router.name', mythis.$router.name)
         if (ispageLogin) {
-          mythis.$router.push('/')
+          if (mythis.$router.name !== '/')
+            mythis.$router.push('/')
         }
       } else if (riscode === serv_constants.RIS_CODE_LOGIN_ERR) {
 
@@ -3307,6 +3358,12 @@ export const tools = {
     } else if (riscode === tools.OK) {
       mythis.$router.push('/regok')
       tools.showNotif(mythis.$q, mythis.$t('components.authentication.email_verification.link_sent', { botname: mythis.$t('ws.botname') }), {
+        color: 'green',
+        textColor: 'black'
+      })
+    } else if (riscode === serv_constants.RIS_ISCRIZIONE_OK) {
+      mythis.$router.push('/')
+      tools.showNotif(mythis.$q, mythis.$t('components.authentication.iscrizione_ok', { botname: mythis.$t('ws.botname') }), {
         color: 'green',
         textColor: 'black'
       })

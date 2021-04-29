@@ -15,7 +15,7 @@
           class="text-subtitle1 q-mr-sm ">€ {{ myTotalPrice }}</span>
         </div>
 
-        <q-input v-model="note" style="max-width: 400px;" label="Note aggiuntive:"
+        <q-input v-if="getNumItems > 0" v-model="note" style="max-width: 400px;" label="Scrivi qui per eventuali note o chiarimenti:"
                  filled dense
                  debounce="1000"
                  autogrow
@@ -26,7 +26,7 @@
       </div>
 
       <q-stepper-navigation>
-        <q-btn rounded icon="fas fa-shopping-cart" color="green" label="Completa l'Ordine" class="q-mb-sm"
+        <q-btn v-if="statusnow < shared_consts.OrderStatus.CHECKOUT_SENT" rounded icon="fas fa-shopping-cart" color="green" label="Completa l'Ordine" class="q-mb-sm"
                :disabled="myTotalQty < 1"
                @click="completeOrder"></q-btn>
       </q-stepper-navigation>

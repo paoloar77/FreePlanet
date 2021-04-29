@@ -769,6 +769,38 @@ namespace Actions {
       })
   }
 
+  async function loadPage(context, path: string) {
+
+    path = path.substring(1)
+    const mypage = GlobalStore.getters.getPage('/' + path)
+
+    // Controlla se l'ho già caricato
+    if (!!mypage && !!mypage.content) {
+      return mypage
+    }
+
+    console.log('loadPage', path)
+
+    return await Api.SendReq('/getpage', 'POST', { path })
+      .then((res) => {
+        // console.table(res)
+        if (res) {
+          const index = GlobalStore.state.mypage.findIndex((rec) => rec.path === path)
+          if (index >= 0) {
+            GlobalStore.state.mypage[index] = res.data.mypage
+          }
+          return res.data.mypage
+        } else {
+          return null
+        }
+      })
+      .catch((error) => {
+        console.log('error loadTable', error)
+        UserStore.mutations.setErrorCatch(error)
+        return null
+      })
+  }
+
   async function saveTable(context, mydata: object) {
     // console.log('saveTable', mydata)
 
@@ -1228,11 +1260,13 @@ namespace Actions {
             component: () => import('@/root/mypage/mypage.vue'),
             inmenu: page.inmenu,
             onlySocioResidente: page.only_residenti,
+            onlyConsiglio: page.only_consiglio,
             color: page.color,
             infooter: page.infooter,
             onlyif_logged: page.onlyif_logged,
             level_child: page.l_child,
-            level_parent: page.l_par
+            level_parent: page.l_par,
+            submenu: page.submenu
           })
         }
       }
@@ -1316,6 +1350,7 @@ namespace Actions {
     askFunz: b.dispatch(askFunz),
     sendPushNotif: b.dispatch(sendPushNotif),
     loadTable: b.dispatch(loadTable),
+    loadPage: b.dispatch(loadPage),
     saveTable: b.dispatch(saveTable),
     DeleteRec: b.dispatch(DeleteRec),
     DeleteFile: b.dispatch(DeleteFile),

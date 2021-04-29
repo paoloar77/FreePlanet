@@ -97,7 +97,19 @@ export const colmsg_templates = [
 
 export const colmypage = [
   AddCol({ name: 'title', label_trans: 'pages.title' }),
+  AddCol({ name: 'img1', label_trans: 'pages.img1' }),
   AddCol({ name: 'content', label_trans: 'pages.contentfield', fieldtype: tools.FieldType.html }),
+  AddCol({ name: 'video1', label_trans: 'pages.video1' }),
+  AddCol({ name: 'ratio1', label_trans: 'pages.ratio1' }),
+  AddCol({ name: 'img2', label_trans: 'pages.img2' }),
+  AddCol({ name: 'content2', label_trans: 'pages.content2', fieldtype: tools.FieldType.html }),
+  AddCol({ name: 'video2', label_trans: 'pages.video2' }),
+  AddCol({ name: 'ratio2', label_trans: 'pages.ratio2' }),
+  AddCol({ name: 'img3', label_trans: 'pages.img3' }),
+  AddCol({ name: 'content3', label_trans: 'pages.content3', fieldtype: tools.FieldType.html }),
+  AddCol({ name: 'video3', label_trans: 'pages.video3' }),
+  AddCol({ name: 'ratio3', label_trans: 'pages.ratio3' }),
+  AddCol({ name: 'content4', label_trans: 'pages.content4', fieldtype: tools.FieldType.html }),
   AddCol({ name: 'lang', label_trans: 'pages.lang' }),
   AddCol({ name: 'path', label_trans: 'pages.path' }),
   AddCol({ name: 'icon', label_trans: 'pages.icon' }),
@@ -108,6 +120,7 @@ export const colmypage = [
   AddCol({ name: 'color', label_trans: 'pages.color', fieldtype: tools.FieldType.string }),
   AddCol({ name: 'onlyif_logged', label_trans: 'pages.onlyif_logged', fieldtype: tools.FieldType.boolean }),
   AddCol({ name: 'only_residenti', label_trans: 'pages.only_residenti', fieldtype: tools.FieldType.boolean }),
+  AddCol({ name: 'only_consiglio', label_trans: 'pages.only_consiglio', fieldtype: tools.FieldType.boolean }),
   AddCol({ name: 'imgback', label_trans: 'pages.imgback', fieldtype: tools.FieldType.string }),
   AddCol({ name: 'active', label_trans: 'pages.active', fieldtype: tools.FieldType.boolean }),
   AddCol({ name: 'inmenu', label_trans: 'pages.inmenu', fieldtype: tools.FieldType.boolean }),
@@ -205,8 +218,8 @@ export const colTableHours = [
   // AddCol({ name: 'todoId', label_trans: 'hours.todoId' }),
   AddCol({ name: 'date', label_trans: 'hours.date', fieldtype: tools.FieldType.onlydate }),
   AddCol({ name: 'hours', label_trans: 'hours.hours', fieldtype: tools.FieldType.hours }),
-  AddCol({ name: 'time_start', label_trans: 'hours.time_start', fieldtype: tools.FieldType.number }),
-  AddCol({ name: 'time_end', label_trans: 'hours.time_end', fieldtype: tools.FieldType.number }),
+  // AddCol({ name: 'time_start', label_trans: 'hours.time_start', fieldtype: tools.FieldType.number }),
+  // AddCol({ name: 'time_end', label_trans: 'hours.time_end', fieldtype: tools.FieldType.number }),
   AddCol({ name: 'descr', label_trans: 'hours.note' }),
   AddCol({ name: 'username', label_trans: 'reg.username_short', notShowInNewRec: true }),
   AddCol(DeleteRec),
@@ -247,10 +260,56 @@ export const colTableStorehouse = [
   AddCol(DuplicateRec)
 ]
 
+export const colTableSites = [
+  AddCol({ name: 'active', label_trans: 'sites.active', fieldtype: tools.FieldType.boolean }),
+  AddCol({ name: 'idapp', label_trans: 'sites.idapp', fieldtype: tools.FieldType.string }),
+  AddCol({ name: 'name', label_trans: 'sites.name', fieldtype: tools.FieldType.string }),
+  AddCol({ name: 'adminemail', label_trans: 'sites.adminemail', fieldtype: tools.FieldType.string }),
+  AddCol({ name: 'manageremail', label_trans: 'sites.manageremail', fieldtype: tools.FieldType.string }),
+  AddCol({ name: 'replyTo', label_trans: 'sites.replyTo', fieldtype: tools.FieldType.string }),
+  AddCol({ name: 'host', label_trans: 'sites.host', fieldtype: tools.FieldType.string }),
+  AddCol({ name: 'portapp', label_trans: 'sites.portapp', fieldtype: tools.FieldType.string }),
+  AddCol({ name: 'dir', label_trans: 'sites.dir', fieldtype: tools.FieldType.string }),
+  AddCol({ name: 'email_from', label_trans: 'sites.email_from', fieldtype: tools.FieldType.string }),
+  AddCol({ name: 'email_pwd', label_trans: 'sites.email_pwd', fieldtype: tools.FieldType.string }),
+  AddCol({ name: 'telegram_key', label_trans: 'sites.telegram_key', fieldtype: tools.FieldType.string }),
+  AddCol({ name: 'telegram_bot_name', label_trans: 'sites.telegram_bot_name', fieldtype: tools.FieldType.string }),
+  AddCol({ name: 'pathreg_add', label_trans: 'sites.pathreg_add', fieldtype: tools.FieldType.string }),
+  AddCol(DeleteRec),
+  AddCol(DuplicateRec)
+]
+
+export const colTableIscrittiConacreis = [
+  AddCol({ name: 'name', label_trans: 'reg.name', fieldtype: tools.FieldType.string }),
+  AddCol({ name: 'surname', label_trans: 'reg.surname', fieldtype: tools.FieldType.string }),
+  AddCol({ name: 'email', label_trans: 'reg.email', fieldtype: tools.FieldType.string }),
+  AddCol({ name: 'fiscalcode', label_trans: 'reg.fiscalcode', fieldtype: tools.FieldType.string }),
+  AddCol({ name: 'residency_address', label_trans: 'reg.residency_address', fieldtype: tools.FieldType.string }),
+  AddCol({ name: 'residency_city', label_trans: 'reg.residency_city', fieldtype: tools.FieldType.string }),
+  AddCol({ name: 'residency_province', label_trans: 'reg.residency_province', fieldtype: tools.FieldType.string }),
+  AddCol({ name: 'residency_country', label_trans: 'reg.residency_country', fieldtype: tools.FieldType.string }),
+  AddCol({ name: 'residency_zipcode', label_trans: 'reg.residency_zipcode', fieldtype: tools.FieldType.string }),
+  AddCol({ name: 'dateofbirth', label_trans: 'reg.dateofbirth', fieldtype: tools.FieldType.onlydate }),
+  AddCol({ name: 'cell_phone', label_trans: 'reg.cell_phone', fieldtype: tools.FieldType.string }),
+  AddCol({ name: 'newsletter_on', label_trans: 'reg.newsletter_on', fieldtype: tools.FieldType.boolean }),
+  AddCol({ name: 'iscrizione_compilata', label_trans: 'reg.iscrizione_compilata', fieldtype: tools.FieldType.boolean }),
+  AddCol({ name: 'dateofreg', label_trans: 'reg.dateofreg', fieldtype: tools.FieldType.onlydate }),
+  AddCol({ name: 'codiceConacreis', label_trans: 'reg.codiceConacreis', fieldtype: tools.FieldType.string }),
+  AddCol({ name: 'annoTesseramento', label_trans: 'reg.annoTesseramento', fieldtype: tools.FieldType.number }),
+  AddCol({ name: 'motivazioni', label_trans: 'reg.motivazioni', fieldtype: tools.FieldType.string }),
+  AddCol({ name: 'competenze_professionalita', label_trans: 'reg.competenze_professionalita', fieldtype: tools.FieldType.string }),
+  AddCol({ name: 'cosa_potrei_offrire', label_trans: 'reg.cosa_potrei_offrire', fieldtype: tools.FieldType.string }),
+  AddCol({ name: 'cosa_vorrei_ricevere', label_trans: 'reg.cosa_vorrei_ricevere', fieldtype: tools.FieldType.string }),
+  AddCol({ name: 'altre_comunicazioni', label_trans: 'reg.altre_comunicazioni', fieldtype: tools.FieldType.string }),
+  AddCol({ name: 'come_ci_hai_conosciuto', label_trans: 'reg.come_ci_hai_conosciuto', fieldtype: tools.FieldType.string }),
+  AddCol({ name: 'note', label_trans: 'reg.note', fieldtype: tools.FieldType.string })
+]
+
 export const colTableProducts = [
+  AddCol({ name: 'active', label_trans: 'products.active', fieldtype: tools.FieldType.boolean }),
   AddCol({ name: 'code', label_trans: 'products.code' }),
   AddCol({ name: 'name', label_trans: 'products.name' }),
-  AddCol({ name: 'description', label_trans: 'products.description' }),
+  AddCol({ name: 'description', label_trans: 'products.description', fieldtype: tools.FieldType.html }),
   AddCol({ name: 'icon', label_trans: 'products.icon' }),
   AddCol({ name: 'img', label_trans: 'products.img' }),
   // AddCol({ name: 'idProducer', label_trans: 'products.idProducer' }),
@@ -592,7 +651,7 @@ export const fieldsTable = {
 
   getTableJoinByName(table) {
     if (table === 'permissions')
-      return [shared_consts.Permissions.Admin, shared_consts.Permissions.Manager, shared_consts.Permissions.Teacher, shared_consts.Permissions.Tutor, shared_consts.Permissions.Traduttrici, shared_consts.Permissions.Zoomeri, shared_consts.Permissions.Department]
+      return [shared_consts.Permissions.Admin, shared_consts.Permissions.Manager, shared_consts.Permissions.Teacher, shared_consts.Permissions.Tutor, shared_consts.Permissions.Editor, shared_consts.Permissions.Zoomeri, shared_consts.Permissions.Department]
     else if (table === 'accepted')
       return [shared_consts.Accepted.CHECK_READ_GUIDELINES, shared_consts.Accepted.CHECK_SEE_VIDEO_PRINCIPI]
     else if (table === 'fieldstype')
@@ -841,16 +900,15 @@ export const fieldsTable = {
   colTableUsersCNM: [
     // AddCol({ name: '_id', label_trans: 'reg.id' }),
     AddCol({ name: 'ind_order', label_trans: 'reg.ind_order' }),
-    AddCol({ name: 'sospeso', label_trans: 'reg.sospeso', fieldtype: tools.FieldType.boolean }),
-    AddCol({ name: 'deleted', label_trans: 'reg.deleted', fieldtype: tools.FieldType.boolean }),
+    // AddCol({ name: 'sospeso', label_trans: 'reg.sospeso', fieldtype: tools.FieldType.boolean }),
     AddCol({ name: 'username', label_trans: 'reg.username_short' }),
     AddCol({ name: 'name', label_trans: 'reg.name' }),
     AddCol({ name: 'surname', label_trans: 'reg.surname' }),
     AddCol({ name: 'email', label_trans: 'reg.email' }),
-    AddCol({ name: 'made_gift', label_trans: 'reg.made_gift', fieldtype: tools.FieldType.boolean }),
+    AddCol({ name: 'verified_email', label_trans: 'reg.verified_email', fieldtype: tools.FieldType.boolean }),
+    // AddCol({ name: 'made_gift', label_trans: 'reg.made_gift', fieldtype: tools.FieldType.boolean }),
     AddCol({ name: 'note', label_trans: 'reg.note' }),
     // AddCol({ name: 'aportador_solidario', label_trans: 'reg.aportador_solidario' }),
-    AddCol({ name: 'verified_email', label_trans: 'reg.verified_email', fieldtype: tools.FieldType.boolean }),
     AddCol({
       name: 'profile.resplist',
       field: 'profile',
@@ -872,24 +930,9 @@ export const fieldsTable = {
       label_trans: 'reg.special_req',
       fieldtype: tools.FieldType.boolean
     }),
-    AddCol({
-      name: 'profile.saw_and_accepted',
-      field: 'profile',
-      subfield: 'saw_and_accepted',
-      label_trans: 'reg.saw_and_accepted',
-      fieldtype: tools.FieldType.binary,
-      jointable: 'accepted'
-    }),
     AddCol({ name: 'profile.my_dream', field: 'profile', subfield: 'my_dream', label_trans: 'reg.my_dream' }),
     AddCol({ name: 'lang', field: 'lang', label_trans: 'reg.lang' }),
     AddCol({ name: 'profile.nationality', field: 'profile', subfield: 'nationality', label_trans: 'reg.nationality' }),
-    AddCol({
-      name: 'profile.intcode_cell',
-      field: 'profile',
-      subfield: 'intcode_cell',
-      label_trans: 'reg.intcode_cell'
-    }),
-    AddCol({ name: 'profile.iso2_cell', field: 'profile', subfield: 'iso2_cell', label_trans: 'reg.iso2_cell' }),
     AddCol({ name: 'profile.cell', field: 'profile', subfield: 'cell', label_trans: 'reg.cell' }),
     AddCol({
       name: 'profile.email_paypal',
@@ -897,7 +940,7 @@ export const fieldsTable = {
       subfield: 'email_paypal',
       label_trans: 'reg.email_paypal'
     }),
-    AddCol({
+    /*AddCol({
       name: 'profile.payeer_id',
       field: 'profile',
       subfield: 'payeer_id',
@@ -914,14 +957,9 @@ export const fieldsTable = {
       field: 'profile',
       subfield: 'revolut',
       label_trans: 'revolut'
-    }),
+    }), */
     AddCol({ name: 'profile.teleg_id', field: 'profile', subfield: 'teleg_id', label_trans: 'reg.teleg_id' }),
-    AddCol({
-      name: 'profile.teleg_id_old',
-      field: 'profile',
-      subfield: 'teleg_id_old',
-      label_trans: 'reg.teleg_id_old'
-    }),
+
     AddCol({
       name: 'profile.teleg_checkcode',
       field: 'profile',
@@ -949,13 +987,20 @@ export const fieldsTable = {
       label_trans: 'reg.socioresidente',
       fieldtype: tools.FieldType.boolean
     }),
-    AddCol({ name: 'profile.chisei', field: 'profile', subfield: 'chisei', label_trans: 'reg.chisei' }),
     AddCol({
-      name: 'profile.iltuoimpegno',
+      name: 'profile.consiglio',
       field: 'profile',
-      subfield: 'iltuoimpegno',
-      label_trans: 'reg.iltuoimpegno'
+      subfield: 'consiglio',
+      label_trans: 'reg.consiglio',
+      fieldtype: tools.FieldType.boolean
     }),
+    AddCol({ name: 'profile.chisei', field: 'profile', subfield: 'chisei', label_trans: 'reg.chisei' }),
+    AddCol({ name: 'profile.motivazioni', field: 'profile', subfield: 'motivazioni', label_trans: 'reg.motivazioni' }),
+    AddCol({ name: 'profile.competenze_professionalita', field: 'profile', subfield: 'competenze_professionalita', label_trans: 'reg.competenze_professionalita' }),
+    AddCol({ name: 'profile.cosa_offrire', field: 'profile', subfield: 'cosa_offrire', label_trans: 'reg.cosa_offrire' }),
+    AddCol({ name: 'profile.cosa_ricevere', field: 'profile', subfield: 'cosa_ricevere', label_trans: 'reg.cosa_ricevere' }),
+    AddCol({ name: 'profile.altre_comunicazioni', field: 'profile', subfield: 'altre_comunicazioni', label_trans: 'reg.altre_comunicazioni' }),
+    AddCol({ name: 'profile.come_ci_hai_conosciuto', field: 'profile', subfield: 'come_ci_hai_conosciuto', label_trans: 'reg.come_ci_hai_conosciuto' }),
     AddCol({
       name: 'profile.come_aiutare',
       field: 'profile',
@@ -976,6 +1021,7 @@ export const fieldsTable = {
     // AddCol({ name: 'idapp', label_trans: 'reg.idapp', fieldtype: tools.FieldType.string }),
     AddCol({ name: 'perm', label_trans: 'reg.perm', fieldtype: tools.FieldType.binary, jointable: 'permissions' }),
     AddCol({ name: 'ipaddr', label_trans: 'reg.ipaddr' }),
+    AddCol({ name: 'deleted', label_trans: 'reg.deleted', fieldtype: tools.FieldType.boolean }),
     AddCol(DeleteRec),
     AddCol(DuplicateRec)
   ],

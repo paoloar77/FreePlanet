@@ -76,6 +76,7 @@ export default class CEventsCalendar extends MixinEvents {
     numpeople: 1,
     numpeopleLunch: 0,
     numpeopleDinner: 0,
+    numpeopleDinnerShared: 0,
     datebooked: tools.getDateNow(),
     booked: false,
     modified: false
@@ -347,6 +348,7 @@ export default class CEventsCalendar extends MixinEvents {
     return (this.bookEventpage.bookedevent.numpeople !== this.bookEventForm.numpeople) ||
       (this.bookEventpage.bookedevent.numpeopleLunch !== this.bookEventForm.numpeopleLunch) ||
       (this.bookEventpage.bookedevent.numpeopleDinner !== this.bookEventForm.numpeopleDinner) ||
+      (this.bookEventpage.bookedevent.numpeopleDinnerShared !== this.bookEventForm.numpeopleDinnerShared) ||
       (this.bookEventpage.bookedevent.msgbooking !== this.bookEventForm.msgbooking) ||
       (this.bookEventpage.bookedevent.booked !== this.bookEventForm.booked)
   }
@@ -470,6 +472,7 @@ export default class CEventsCalendar extends MixinEvents {
       this.bookEventForm.numpeople = 1
       this.bookEventForm.numpeopleLunch = 0
       this.bookEventForm.numpeopleDinner = 0
+      this.bookEventForm.numpeopleDinnerShared = 0
       this.bookEventForm.booked = true
       this.bookEventpage.state = EState.Creating
 
@@ -696,6 +699,7 @@ export default class CEventsCalendar extends MixinEvents {
       this.bookEventForm.numpeople = bookedevent.numpeople
       this.bookEventForm.numpeopleLunch = bookedevent.numpeopleLunch
       this.bookEventForm.numpeopleDinner = bookedevent.numpeopleDinner
+      this.bookEventForm.numpeopleDinnerShared = bookedevent.numpeopleDinnerShared
       this.bookEventForm.infoevent = bookedevent.infoevent
       this.bookEventForm.msgbooking = bookedevent.msgbooking
       this.bookEventForm.booked = bookedevent.booked
@@ -750,6 +754,7 @@ export default class CEventsCalendar extends MixinEvents {
         numpeople: self.bookEventForm.numpeople,
         numpeopleLunch: self.bookEventForm.numpeopleLunch,
         numpeopleDinner: self.bookEventForm.numpeopleDinner,
+        numpeopleDinnerShared: self.bookEventForm.numpeopleDinnerShared,
         infoevent: tools.gettextevent(self, myevent),
         msgbooking: self.bookEventForm.msgbooking,
         booked: self.bookEventForm.booked,
@@ -758,6 +763,7 @@ export default class CEventsCalendar extends MixinEvents {
       }
 
       this.BookEvent(data).then((ris) => {
+        console.log('ris uscita di BookEvent', ris)
         if (ris)
           tools.showPositiveNotif(self.$q, self.$t('cal.booked') + ' ' + self.$t('cal.event') + ' "' + myevent.title + '"')
         else

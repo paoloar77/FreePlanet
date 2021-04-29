@@ -110,7 +110,6 @@ export default class CProductCard extends MixinBase {
     return !this.order.idStorehouse
   }
 
-
   @Watch('code')
   public codechanged(value) {
     console.log('change code')
@@ -124,7 +123,8 @@ export default class CProductCard extends MixinBase {
     } else {
       this.myproduct = this.product
     }
-    // console.log('this.myproduct', this.myproduct)
+
+    console.log('this.myproduct', this.myproduct, 'this.product', this.product)
 
     if (!!this.myproduct) {
       if (this.myproduct.storehouses.length === 1) {
@@ -139,6 +139,10 @@ export default class CProductCard extends MixinBase {
 
   get getmycardcl() {
     return (this.complete) ? 'my-card-big' : 'my-card'
+  }
+
+  get getclimg() {
+    return (this.complete) ? 'myimgtitle centermydiv' : 'centermydiv'
   }
 
 

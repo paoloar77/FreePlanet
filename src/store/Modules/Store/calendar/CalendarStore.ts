@@ -54,12 +54,24 @@ namespace Getters {
     return mystate.bookedevent.find((bookedevent) => (bookedevent.id_bookedevent === myevent._id) && (bookedevent.userId === UserStore.state.my._id) && ((isconfirmed && bookedevent.booked) || (!isconfirmed)))
   }, 'findEventBooked')
 
-  const getNumParticipants = b.read((mystate: ICalendarState) => (myevent: IEvents, showall, tipo) => {
-    const myarr = mystate.bookedevent.filter((bookedevent) => (bookedevent.id_bookedevent === myevent._id) && (bookedevent.booked) && (showall || (!showall && bookedevent.userId === UserStore.state.my._id) ) && ((tipo === '') || ((tipo === 'lunch' && bookedevent.numpeopleLunch) || (tipo === 'dinner' && bookedevent.numpeopleDinner) )))
-    if (myarr)
-      return myarr.reduce((sum, bookedevent) => sum + bookedevent.numpeople, 0)
-    else
+  const getNumParticipants = b.read((mystate: ICalendarState) => (myevent: IEvents, showall, tipo = 0): number => {
+    const myarr = mystate.bookedevent.filter((bookedevent) => (bookedevent.id_bookedevent === myevent._id) && (bookedevent.booked) && (showall || (!showall && bookedevent.userId === UserStore.state.my._id) ) && ( ((tipo === tools.peopleWhere.participants) && bookedevent.numpeople) || ((tipo === tools.peopleWhere.lunch && bookedevent.numpeopleLunch) || (tipo === tools.peopleWhere.dinner && bookedevent.numpeopleDinner) || (tipo === tools.peopleWhere.dinnerShared && bookedevent.numpeopleDinnerShared) )))
+    if (myarr.length > 0) {
+      let ris = null
+      if (tipo === tools.peopleWhere.participants) {
+        ris = myarr.reduce((sum, bookedevent) => sum + bookedevent.numpeople, 0)
+      }else if (tipo === tools.peopleWhere.lunch) {
+        ris = myarr.reduce((sum, bookedevent) => sum + bookedevent.numpeopleLunch, 0)
+      }else if (tipo === tools.peopleWhere.dinner) {
+        ris = myarr.reduce((sum, bookedevent) => sum + bookedevent.numpeopleDinner, 0)
+      }else if (tipo === tools.peopleWhere.dinnerShared) {
+        ris = myarr.reduce((sum, bookedevent) => sum + bookedevent.numpeopleDinnerShared, 0)
+      }
+
+      return ris
+    } else {
       return 0
+    }
   }, 'getNumParticipants')
 
   const getEventsBookedByIdEvent = b.read((mystate: ICalendarState) => (idevent, showall) => {
@@ -67,8 +79,7 @@ namespace Getters {
   }, 'getEventsBookedByIdEvent')
 
   const getWhereRec = b.read((mystate: ICalendarState) => (wherecode) => {
-    const whererec = mystate.wheres.find((mywhere) => mywhere.code === wherecode)
-    return (whererec)
+    return mystate.wheres.find((mywhere) => mywhere.code === wherecode)
 
   }, 'getWhereRec')
 
@@ -159,6 +170,7 @@ namespace Actions {
       numpeople: bookevent.numpeople,
       numpeopleLunch: bookevent.numpeopleLunch,
       numpeopleDinner: bookevent.numpeopleDinner,
+      numpeopleDinnerShared: bookevent.numpeopleDinnerShared,
       msgbooking: bookevent.msgbooking,
       datebooked: bookevent.datebooked,
       userId: UserStore.state.my._id,
@@ -172,9 +184,10 @@ namespace Actions {
 
     const param = getparambyevent(bookevent)
 
-    return await Api.SendReq('/booking', 'POST', param)
+    return Api.SendReq('/booking', 'POST', param)
       .then((res) => {
         if (res.status === 200) {
+          console.log('datares', res.data);
           if (res.data.code === serv_constants.RIS_CODE_OK) {
             bookevent._id = res.data.id
             if (bookevent.modified) {

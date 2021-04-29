@@ -35,7 +35,7 @@ export const func_tools = {
       // timeZone: 'UTC'
     })
     try {
-      console.log('mydate', mydate, DateFormatter)
+      // console.log('mydate', mydate, DateFormatter)
       if (DateFormatter) {
         const date1 = new Date(mydate)
         return DateFormatter.format(date1)

@@ -156,7 +156,7 @@
               <CMySelect label="Ore" :value.sync="myvalue"
                          optval="_id" optlab="label"
                          :useinput="false"
-                         :options="tools.SelectHours">
+                     o    :options="tools.SelectHours">
               </CMySelect>
             </div>
             <div v-else-if="type === tools.FieldType.binary">

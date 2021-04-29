@@ -96,6 +96,10 @@ export default class MixinUsers extends Vue {
     return UserStore.state.my.surname
   }
 
+  get myCell() {
+    return UserStore.state.my.profile.cell
+  }
+
   get Verificato() {
     return UserStore.state.my.verified_email
   }

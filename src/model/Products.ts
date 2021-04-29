@@ -1,5 +1,6 @@
 export interface IProduct {
   _id?: any
+  active?: boolean
   idProducer?: string,
   idStorehouses?: string[],
   producer?: IProducer,
@@ -111,9 +112,11 @@ export interface IOrderCart {
   totalPrice?: number
   department?: string
   items?: IBaseOrder[]
+  nameSurname?: string
   status?: number
   note?: string
   modify_at?: Date
+  completed_at?: Date
 }
 
 export interface IShareWithUs {

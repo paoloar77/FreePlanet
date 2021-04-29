@@ -6,7 +6,7 @@ import { serv_constants } from '@src/store/Modules/serv_constants'
 import { tools } from '@src/store/Modules/tools'
 import { toolsext } from '@src/store/Modules/toolsext'
 
-export const OtherTables = ['categories', 'config', 'swmsg']
+export const OtherTables = ['config', 'swmsg']
 // export const MainTables = ['todos', 'projects']
 export const MainTables = []
 export const allMethod = ['sync_post_', 'sync_patch_', 'delete_', 'hide_']
