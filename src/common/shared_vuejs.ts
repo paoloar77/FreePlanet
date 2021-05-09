@@ -42,6 +42,12 @@ export const shared_consts = {
   REPORT_FILT_RESP: 1,
   REPORT_FILT_ATTIVITA: 2,
 
+  CashType: {
+    None: 0,
+    Incoming: 1,
+    Outcoming: 2,
+  },
+
   Permissions: {
     Admin: {
       value: 1,

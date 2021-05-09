@@ -303,6 +303,29 @@ export const tools = {
     },
   ],
 
+  SelectMetodiPagamento: [
+    {
+      id: 0,
+      label: '[Nessuno]',
+      value: 0
+    },
+    {
+      id: 1,
+      label: 'Bonifico Bancario',
+      value: 1
+    },
+    {
+      id: 2,
+      label: 'Paypal',
+      value: 2
+    },
+    {
+      id: 3,
+      label: 'In Contanti alla CNM',
+      value: 3
+    },
+  ],
+
   SelectListNumPeople: [
     {
       id: 0,
@@ -333,7 +356,32 @@ export const tools = {
       id: 5,
       label: '5',
       value: 5
-    }
+    },
+    {
+      id: 6,
+      label: '6',
+      value: 6
+    },
+    {
+      id: 7,
+      label: '7',
+      value: 7
+    },
+    {
+      id: 8,
+      label: '8',
+      value: 8
+    },
+    {
+      id: 9,
+      label: '9',
+      value: 9
+    },
+    {
+      id: 10,
+      label: '10',
+      value: 10
+    },
   ]
   ,
 
@@ -2560,20 +2608,17 @@ export const tools = {
       return date.formatDate(mytimestamp, 'DD/MM/YYYY') + ' ' + mythis.$t('cal.starttime') + ' ' + date.formatDate(mytimestamp, 'HH:mm')
     else
       return ''
-  }
-  ,
+  },
   getstrMMMDate(mytimestamp) {
     // console.log('getstrDate', mytimestamp)
     if (!!mytimestamp)
       return date.formatDate(mytimestamp, 'DD MMM YYYY')
     else
       return ''
-  }
-  ,
+  },
   getstrYYMMDDDate(mytimestamp) {
     return date.formatDate(mytimestamp, 'YYYY-MM-DD')
-  }
-  ,
+  },
   getstrYYMMDDDateTime(mytimestamp) {
     return date.formatDate(mytimestamp, 'YYYY-MM-DD HH:mm')
   },
@@ -2609,8 +2654,7 @@ export const tools = {
     }
     // console.log('mystrdate', mystrdate, strdate, mydate)
     return mydate
-  }
-  ,
+  },
 
   capitalize(value) {
     if (!value) {
@@ -2618,8 +2662,7 @@ export const tools = {
     }
     value = value.toString()
     return value.charAt(0).toUpperCase() + value.slice(1)
-  }
-  ,
+  },
 
   firstchars(value, numchars = 200) {
     if (!value) {
@@ -2693,12 +2736,10 @@ export const tools = {
   },
   getDateNull() {
     return new Date(0)
-  }
-  ,
+  },
   getTimeNow() {
     return new Date().getTime()
-  }
-  ,
+  },
   getTimestampsNow() {
     return new Date().valueOf()
   },
@@ -2709,8 +2750,7 @@ export const tools = {
 
   isMainProject(idproj) {
     return idproj === process.env.PROJECT_ID_MAIN
-  }
-  ,
+  },
 
   getUrlByTipoProj(tipoproj, name ?: string) {
     if (!!name)
@@ -3857,7 +3897,12 @@ export const tools = {
     return '<a href="' + mylink + '" target="_blank">' + text + '</a>'
   },
 
-  getNationsByNationality(nat, code) {
+  getNationsByNationality(nat) {
+    if (!nat)
+      return ''
+
+    nat = nat.toUpperCase()
+
     if (nat === 'IT') {
       return 'Italy'
     } else if (nat === 'SI') {

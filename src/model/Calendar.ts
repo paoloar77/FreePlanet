@@ -32,6 +32,7 @@ export interface IEvents {
   lunchPrice?: number
   dinnerPrice?: number
   internal?: boolean
+  note?: string
   news?: boolean
   canceled?: boolean
   deleted?: boolean

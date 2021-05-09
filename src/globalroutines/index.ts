@@ -6,7 +6,7 @@ export default async (context, cmd, table, data = null, id = '') => {
   // console.log('globalroutines', cmd, table, descr, id)
   return indexdb(context, cmd, table, data, id)
     .then((ris) => {
-        console.log('GlobalStore.state.connData', GlobalStore.state.connData)
+        // console.log('GlobalStore.state.connData', GlobalStore.state.connData)
 
         setTimeout(() => {
           GlobalStore.state.connData.uploading_indexeddb = 0

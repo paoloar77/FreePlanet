@@ -6,6 +6,14 @@
 
         <div class="q-gutter-xs">
 
+          <p class="q-ml-md text-center">
+            Leggi
+            <span class="underline"> <router-link to="/il-nostro-progetto" custom v-slot="{ navigate }">
+            <span class="footer_link" @click="navigate" @keypress.enter="navigate" role="link">Il Nostro Progetto</span>
+            </router-link></span>
+          </p>
+
+
           <q-input
             v-model="signup.name"
             rounded outlined
@@ -92,7 +100,7 @@
             :error="$v.signup.residency_city.$error"
             maxlength="60"
             debounce="1000"
-            :error-message="errorMsg('residency_address', $v.signup.residency_city)"
+            :error-message="errorMsg('residency_city', $v.signup.residency_city)"
             :label="$t('reg.residency_city')">
 
             <template v-slot:prepend>
@@ -108,7 +116,7 @@
             :error="$v.signup.residency_province.$error"
             maxlength="3"
             debounce="1000"
-            :error-message="errorMsg('residency_address', $v.signup.residency_province)"
+            :error-message="errorMsg('residency_province', $v.signup.residency_province)"
             :label="$t('reg.residency_province')">
 
             <template v-slot:prepend>
@@ -134,28 +142,6 @@
           </q-input>
 
           <q-input
-            v-model="signup.dateofbirth"
-            debounce="1000"
-            @blur="$v.signup.dateofbirth.$touch"
-            :error="$v.signup.dateofbirth.$error"
-            :error-message="errorMsg('dateofbirth', $v.signup.dateofbirth)"
-            stack-label
-            :label="$t('reg.dateofbirth')"
-            rounded
-            type="date"
-            mask="date"
-            fill-mask
-            outlined>
-          </q-input>
-
-          <!--<CDate :mydate="signup.dateofbirth" @input="setDateOfBirth(arguments[0])"
-                 :rounded="true" :outlined="true"
-                 :dense="false"
-                 :label="$t('reg.dateofbirth')">
-          </CDate>-->
-
-
-          <q-input
             v-model="countryname"
             :readonly="true"
             rounded outlined
@@ -175,7 +161,7 @@
 
           </q-input>
 
-          <!--<div v-if="!tools.isMobile()"><br></div>-->
+          <br>
 
           <vue-tel-input
             v-model="signup.cell_phone"
@@ -187,12 +173,92 @@
             wrapperClasses="clCellCode">
           </vue-tel-input>
 
-          <p class="q-ml-md text-center">
-            Leggi
-            <span class="underline"> <router-link to="/il-nostro-progetto" custom v-slot="{ navigate }">
-          <span class="footer_link" @click="navigate" @keypress.enter="navigate" role="link">Il Nostro Progetto</span>
-        </router-link></span>
-          </p>
+          <br>
+
+          <q-input
+            v-model="signup.dateofbirth"
+            debounce="1000"
+            @blur="$v.signup.dateofbirth.$touch"
+            :error="$v.signup.dateofbirth.$error"
+            :error-message="errorMsg('dateofbirth', $v.signup.dateofbirth)"
+            stack-label
+            :label="$t('reg.dateofbirth')"
+            rounded
+            type="date"
+            mask="date"
+            fill-mask
+            outlined>
+          </q-input>
+
+          <q-input
+            v-model="signup.born_city"
+            rounded outlined
+            @blur="$v.signup.born_city.$touch"
+            :error="$v.signup.born_city.$error"
+            maxlength="60"
+            debounce="1000"
+            :error-message="errorMsg('born_city', $v.signup.born_city)"
+            :label="$t('reg.born_city')">
+
+            <template v-slot:prepend>
+              <q-icon name="person"/>
+            </template>
+
+          </q-input>
+
+          <q-input
+            v-model="signup.born_province"
+            rounded outlined
+            @blur="$v.signup.born_province.$touch"
+            :error="$v.signup.born_province.$error"
+            maxlength="3"
+            debounce="1000"
+            :error-message="errorMsg('born_province', $v.signup.born_province)"
+            :label="$t('reg.born_province')">
+
+            <template v-slot:prepend>
+              <q-icon name="person"/>
+            </template>
+
+          </q-input>
+
+          <!--<CDate :mydate="signup.dateofbirth" @input="setDateOfBirth(arguments[0])"
+                 :rounded="true" :outlined="true"
+                 :dense="false"
+                 :label="$t('reg.dateofbirth')">
+          </CDate>-->
+
+
+          <q-input
+            v-model="countryborn"
+            :readonly="true"
+            rounded outlined
+
+            debounce="1000"
+            :label="$t('reg.nationality_born')">
+
+            <template v-slot:prepend>
+              <vue-country-code
+                @onSelect="selectcountryborn"
+                :preferredCountries="tools.getprefCountries"
+                :dropdownOptions="{ disabledDialCode: true }"
+              >
+
+              </vue-country-code>
+            </template>
+
+          </q-input>
+
+          <br>
+
+          <!--<div v-if="!tools.isMobile()"><br></div>-->
+
+
+          <q-select
+            rounded outlined v-model="signup.metodo_pagamento"
+            :options="tools.SelectMetodiPagamento"
+            :label="$t('reg.metodopagamento')" emit-value map-options>
+          </q-select>
 
           <q-checkbox
             v-model="signup.accetta_carta_costituzionale_on"

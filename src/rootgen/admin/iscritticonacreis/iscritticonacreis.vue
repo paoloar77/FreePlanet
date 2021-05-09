@@ -9,7 +9,19 @@
 
         <div class="q-ma-sm q-gutter-sm q-pa-xs">
             <CTitleBanner title="Iscritti Conacreis"></CTitleBanner>
-            <CGridTableRec prop_mytable="iscritticonacreis"
+
+          <q-btn
+            rounded
+            dense
+            color="primary"
+            size="md"
+            label="Copia questa Lista negli appunti"
+
+            @click="exportLista()">
+          </q-btn>
+
+
+          <CGridTableRec prop_mytable="iscritticonacreis"
                            prop_mytitle="Iscritti Conacreis"
                            :prop_mycolumns="getcolIscrittiConacreis"
                            prop_colkey="name"

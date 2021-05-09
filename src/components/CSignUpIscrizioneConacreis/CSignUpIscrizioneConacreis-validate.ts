@@ -37,7 +37,16 @@ export const validations = {
     dateofbirth: {
       required
     },
-    cell_phone: {
+    born_city: {
+      required
+    },
+    born_province: {
+      required
+    },
+    born_country: {
+      required
+    },
+    metodo_pagamento: {
       required
     },
     terms: {

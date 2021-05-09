@@ -26,10 +26,17 @@ export interface ISignupIscrizioneConacreisOptions {
   residency_country?: string
   residency_zipcode?: string
   dateofbirth?: Date
+  dateofreg?: Date
+  dateofapproved?: Date
+  born_city?: string
+  born_province?: string
+  born_country?: string
   cell_phone?: string
   newsletter_on?: boolean
   accetta_carta_costituzionale_on?: boolean
+  metodo_pagamento?: number
   iscrizione_compilata?: boolean
+  codiceConacreis?: string
   annoTesseramento?: number
   motivazioni?: string
   competenze_professionalita?: string

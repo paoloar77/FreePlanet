@@ -10,6 +10,7 @@ import { Getter } from 'vuex-class'
 import { lists } from '@src/store/Modules/lists'
 import MixinUsers from '@src/mixins/mixin-users'
 import MixinOperator from '@src/mixins/mixin-operator'
+import MixinEvents from '@src/mixins/mixin-events'
 
 const namespace = 'CalendarModule'
 
@@ -18,10 +19,11 @@ const namespace = 'CalendarModule'
   name: 'EventList',
   components: { CTitle, CMyPage }
 })
-export default class Eventlist extends Vue {
+export default class Eventlist extends MixinEvents {
   public $t: any
   public $q
   public showpeople: boolean = false
+  public shownote: boolean = false
   public eventsel: IEvents = null
   public showPrev = false
   public numrec = 0
@@ -152,6 +154,10 @@ export default class Eventlist extends Vue {
 
   public mounted() {
     this.getNumEvent()
+  }
+
+  public change_rec(eventparam) {
+    this.UpdateDbByFields(this, eventparam)
   }
 
 }

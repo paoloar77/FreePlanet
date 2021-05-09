@@ -290,19 +290,34 @@ export const colTableIscrittiConacreis = [
   AddCol({ name: 'residency_country', label_trans: 'reg.residency_country', fieldtype: tools.FieldType.string }),
   AddCol({ name: 'residency_zipcode', label_trans: 'reg.residency_zipcode', fieldtype: tools.FieldType.string }),
   AddCol({ name: 'dateofbirth', label_trans: 'reg.dateofbirth', fieldtype: tools.FieldType.onlydate }),
+  AddCol({ name: 'born_city', label_trans: 'reg.born_city', fieldtype: tools.FieldType.string }),
+  AddCol({ name: 'born_province', label_trans: 'reg.born_province', fieldtype: tools.FieldType.string }),
+  AddCol({ name: 'born_country', label_trans: 'reg.born_country', fieldtype: tools.FieldType.string }),
   AddCol({ name: 'cell_phone', label_trans: 'reg.cell_phone', fieldtype: tools.FieldType.string }),
   AddCol({ name: 'newsletter_on', label_trans: 'reg.newsletter_on', fieldtype: tools.FieldType.boolean }),
   AddCol({ name: 'iscrizione_compilata', label_trans: 'reg.iscrizione_compilata', fieldtype: tools.FieldType.boolean }),
+  AddCol({ name: 'metodo_pagamento', label_trans: 'reg.metodo_pagamento', fieldtype: tools.FieldType.number }),
   AddCol({ name: 'dateofreg', label_trans: 'reg.dateofreg', fieldtype: tools.FieldType.onlydate }),
+  AddCol({ name: 'dateofapproved', label_trans: 'reg.dateofapproved', fieldtype: tools.FieldType.onlydate }),
   AddCol({ name: 'codiceConacreis', label_trans: 'reg.codiceConacreis', fieldtype: tools.FieldType.string }),
   AddCol({ name: 'annoTesseramento', label_trans: 'reg.annoTesseramento', fieldtype: tools.FieldType.number }),
   AddCol({ name: 'motivazioni', label_trans: 'reg.motivazioni', fieldtype: tools.FieldType.string }),
-  AddCol({ name: 'competenze_professionalita', label_trans: 'reg.competenze_professionalita', fieldtype: tools.FieldType.string }),
+  AddCol({
+    name: 'competenze_professionalita',
+    label_trans: 'reg.competenze_professionalita',
+    fieldtype: tools.FieldType.string
+  }),
   AddCol({ name: 'cosa_potrei_offrire', label_trans: 'reg.cosa_potrei_offrire', fieldtype: tools.FieldType.string }),
   AddCol({ name: 'cosa_vorrei_ricevere', label_trans: 'reg.cosa_vorrei_ricevere', fieldtype: tools.FieldType.string }),
   AddCol({ name: 'altre_comunicazioni', label_trans: 'reg.altre_comunicazioni', fieldtype: tools.FieldType.string }),
-  AddCol({ name: 'come_ci_hai_conosciuto', label_trans: 'reg.come_ci_hai_conosciuto', fieldtype: tools.FieldType.string }),
-  AddCol({ name: 'note', label_trans: 'reg.note', fieldtype: tools.FieldType.string })
+  AddCol({
+    name: 'come_ci_hai_conosciuto',
+    label_trans: 'reg.come_ci_hai_conosciuto',
+    fieldtype: tools.FieldType.string
+  }),
+  AddCol({ name: 'note', label_trans: 'reg.note', fieldtype: tools.FieldType.string }),
+  AddCol(DeleteRec),
+  AddCol(DuplicateRec)
 ]
 
 export const colTableProducts = [
@@ -543,6 +558,7 @@ const colTableEvents = [
   AddCol({ name: 'infoextra', label_trans: 'event.infoextra' }),
   AddCol({ name: 'linkpage', label_trans: 'event.linkpage' }),
   AddCol({ name: 'linkpdf', label_trans: 'event.linkpdf' }),
+  AddCol({ name: 'note', label_trans: 'event.note' }),
   AddCol({ name: 'nobookable', label_trans: 'event.nobookable', fieldtype: tools.FieldType.boolean }),
   AddCol({ name: 'internal', label_trans: 'event.internal', fieldtype: tools.FieldType.boolean }),
   AddCol({ name: 'news', label_trans: 'event.news', fieldtype: tools.FieldType.boolean }),
@@ -994,13 +1010,37 @@ export const fieldsTable = {
       label_trans: 'reg.consiglio',
       fieldtype: tools.FieldType.boolean
     }),
-    AddCol({ name: 'profile.chisei', field: 'profile', subfield: 'chisei', label_trans: 'reg.chisei' }),
     AddCol({ name: 'profile.motivazioni', field: 'profile', subfield: 'motivazioni', label_trans: 'reg.motivazioni' }),
-    AddCol({ name: 'profile.competenze_professionalita', field: 'profile', subfield: 'competenze_professionalita', label_trans: 'reg.competenze_professionalita' }),
-    AddCol({ name: 'profile.cosa_offrire', field: 'profile', subfield: 'cosa_offrire', label_trans: 'reg.cosa_offrire' }),
-    AddCol({ name: 'profile.cosa_ricevere', field: 'profile', subfield: 'cosa_ricevere', label_trans: 'reg.cosa_ricevere' }),
-    AddCol({ name: 'profile.altre_comunicazioni', field: 'profile', subfield: 'altre_comunicazioni', label_trans: 'reg.altre_comunicazioni' }),
-    AddCol({ name: 'profile.come_ci_hai_conosciuto', field: 'profile', subfield: 'come_ci_hai_conosciuto', label_trans: 'reg.come_ci_hai_conosciuto' }),
+    AddCol({
+      name: 'profile.competenze_professionalita',
+      field: 'profile',
+      subfield: 'competenze_professionalita',
+      label_trans: 'reg.competenze_professionalita'
+    }),
+    AddCol({
+      name: 'profile.cosa_offrire',
+      field: 'profile',
+      subfield: 'cosa_offrire',
+      label_trans: 'reg.cosa_offrire'
+    }),
+    AddCol({
+      name: 'profile.cosa_ricevere',
+      field: 'profile',
+      subfield: 'cosa_ricevere',
+      label_trans: 'reg.cosa_ricevere'
+    }),
+    AddCol({
+      name: 'profile.altre_comunicazioni',
+      field: 'profile',
+      subfield: 'altre_comunicazioni',
+      label_trans: 'reg.altre_comunicazioni'
+    }),
+    AddCol({
+      name: 'profile.come_ci_hai_conosciuto',
+      field: 'profile',
+      subfield: 'come_ci_hai_conosciuto',
+      label_trans: 'reg.come_ci_hai_conosciuto'
+    }),
     AddCol({
       name: 'profile.come_aiutare',
       field: 'profile',
@@ -1057,6 +1097,20 @@ export const fieldsTable = {
     AddCol({ name: 'col_h', label_trans: 'reg.col_h', fieldtype: tools.FieldType.number }),
     AddCol(DeleteRec),
     AddCol(DuplicateRec)
+  ],
+
+  colTableCash:
+    [],
+
+  colTableCashCategory: [
+    AddCol({ name: 'descr', label_trans: 'pages.description' }),
+    AddCol({ name: 'notes', label_trans: 'reg.note' })
+  ],
+
+  colTableSubCashCategory: [
+    AddCol({ name: 'idCashCategory', label_trans: 'Category.idCashCategory', fieldtype: tools.FieldType.select, jointable: 'cashcategory' }),
+    AddCol({ name: 'descr', label_trans: 'pages.description' }),
+    AddCol({ name: 'notes', label_trans: 'reg.note' })
   ],
 
   tablesList: [

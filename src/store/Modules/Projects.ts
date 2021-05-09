@@ -93,6 +93,8 @@ function getproj(projects, idproj, tipoproj: string) {
     ris = projects.filter((proj) => (proj.id_parent === idproj) && (proj.userId === UserStore.state.my._id) && (proj.privacyread !== Privacy.onlyme))
   else if (tipoproj === RouteNames.projectsall)
     ris = projects.filter((proj) => (proj.id_parent === idproj) && (proj.userId !== UserStore.state.my._id))
+  else
+    ris = projects.filter((proj) => (proj.id_parent === idproj))
 
   if (ris)
     ris = ris.sort((a, b) => a.pos - b.pos)

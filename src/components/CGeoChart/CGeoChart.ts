@@ -52,7 +52,7 @@ export default class CGeoChart extends Vue {
 
     for (const rec of this.mydata) {
       alldata = []
-      alldata.push(tools.getNationsByNationality(rec._id, true))
+      alldata.push(tools.getNationsByNationality(rec._id))
       alldata.push(rec.count)
 
       this.mydatafixed.push(alldata)

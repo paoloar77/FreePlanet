@@ -55,6 +55,9 @@ const namespaceGS: string = 'GlobalState'
 export default class ProjList extends Vue {
 
   public tabproj: string = 'lista'
+  public shownewsubproj: boolean = false
+
+  public newSubProj: string = ''
 
   get TipoVisu() {
     return TipoVisu
@@ -361,11 +364,21 @@ export default class ProjList extends Vue {
       } else if (cmd === 'stat') {
         this.tabproj = 'stat'
       } else if (cmd === 'nuovo') {
-        this.clickMenuProjList(lists.MenuAction.ADD_PROJECT)
+
       }
 
       GlobalStore.state.clickcmd = ''
     }
+
+  }
+
+  public async insertSubProj() {
+    console.log('insertSubProj', this.newSubProj)
+
+    const idnewelem = await this.addProject(this.newSubProj, this.gettipoProj)
+    this.newSubProj = ''
+
+    this.shownewsubproj = false
 
   }
 
@@ -412,7 +425,6 @@ export default class ProjList extends Vue {
   public change_group() {
     this.updateclasses()
   }
-
 
   @Watch('itemselproj._id')
   public changeidproj() {
@@ -609,15 +621,7 @@ export default class ProjList extends Vue {
   public async clickMenuProjList(action) {
     console.log('clickMenuProjList: ', action)
     if (action === lists.MenuAction.ADD_PROJECT) {
-      const idnewelem = await this.addProject('inserisci qui...', this.gettipoProj)
-      // console.log('idnewelem', idnewelem)
-      // get element by id
-      const elem = this.getCompProjectById(idnewelem)
-
-      if (!!elem) {
-        // @ts-ignore
-        elem.activeEdit()
-      }
+      this.shownewsubproj = true
       // console.log('idnewelem', idnewelem, 'Elem Trovato', elem)
     } else if (action === lists.MenuAction.SHOW_POSIZ) {
 
@@ -877,6 +881,12 @@ export default class ProjList extends Vue {
     ApiTables.waitAndRefreshData()
   }
 
+  public getCreatedBy(item) {
+
+    console.log('item.userid', item.userid)
+    return UserStore.getters.getNameSurnameByUserId(item.userid)
+  }
+
   private updateindexProj() {
     // console.log('idProjAtt', this.idProjAtt)
     this.itemproj = Projects.getters.getRecordById(this.idProjAtt)
@@ -1004,6 +1014,7 @@ export default class ProjList extends Vue {
 
     return myrec
   }
+
 
 
 }

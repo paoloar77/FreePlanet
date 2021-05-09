@@ -55,7 +55,7 @@ namespace Getters {
   }, 'findEventBooked')
 
   const getNumParticipants = b.read((mystate: ICalendarState) => (myevent: IEvents, showall, tipo = 0): number => {
-    const myarr = mystate.bookedevent.filter((bookedevent) => (bookedevent.id_bookedevent === myevent._id) && (bookedevent.booked) && (showall || (!showall && bookedevent.userId === UserStore.state.my._id) ) && ( ((tipo === tools.peopleWhere.participants) && bookedevent.numpeople) || ((tipo === tools.peopleWhere.lunch && bookedevent.numpeopleLunch) || (tipo === tools.peopleWhere.dinner && bookedevent.numpeopleDinner) || (tipo === tools.peopleWhere.dinnerShared && bookedevent.numpeopleDinnerShared) )))
+    const myarr = mystate.bookedevent.filter((bookedevent) => (bookedevent.id_bookedevent === myevent._id) && (bookedevent.booked) && (showall || (!showall && bookedevent.userId === UserStore.state.my._id) ) && ( ((tipo === tools.peopleWhere.participants) && bookedevent.numpeople > 0) || ((tipo === tools.peopleWhere.lunch && bookedevent.numpeopleLunch > 0) || (tipo === tools.peopleWhere.dinner && bookedevent.numpeopleDinner > 0) || (tipo === tools.peopleWhere.dinnerShared && bookedevent.numpeopleDinnerShared > 0) )))
     if (myarr.length > 0) {
       let ris = null
       if (tipo === tools.peopleWhere.participants) {

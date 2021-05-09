@@ -1,6 +1,34 @@
 <template>
   <q-page>
     <div class="panel">
+
+      <q-dialog v-model="shownewsubproj">
+        <q-card :style="`min-width: `+ tools.myheight_dialog() + `px;`">
+          <q-toolbar class="bg-primary text-white">
+            <q-toolbar-title>
+              Nuovo
+            </q-toolbar-title>
+            <q-btn flat round color="white" icon="close" v-close-popup></q-btn>
+          </q-toolbar>
+          <q-card-section class="inset-shadow">
+            <q-input color="blue-12" v-model="newSubProj" label="Inserisci il Nuovo sotto Progetto:"
+                     style="margin-left: 6px;"
+                     autofocus
+                     :after="[{icon: 'arrow_forward', content: true, handler () {}}]">
+              <template v-slot:prepend>
+                <q-icon name="add"/>
+              </template>
+            </q-input>
+          </q-card-section>
+          <q-card-actions align="center">
+            <q-btn rounded color="primary" v-close-popup label="Aggiungi"
+                   @click="insertSubProj()"></q-btn>
+            <q-btn flat rounded color="negative" v-close-popup label="Annulla"></q-btn>
+          </q-card-actions>
+        </q-card>
+
+      </q-dialog>
+
       <div>
         <div class="flex-container clMain">
 
@@ -175,7 +203,6 @@
             </div>
 
 
-
             <div v-if="CanISeeProjectSel" class="flex-container clMain">
               <q-icon class="flex-item flex-icon" name="fas fa-sort-amount-up-alt"/>
               <div class="flex-item itemdescr">
@@ -258,6 +285,13 @@
                           :label="$t('proj.privacywrite')" emit-value map-options
                           @input="modifyfieldproj('privacywrite')">
                 </q-select>
+              </div>
+            </div>
+            <div v-if="CanISeeProjectSel" class="flex-container clMain">
+              <q-icon class="flex-item flex-icon" name="edit"/>
+              <div class="flex-item itemstatus">
+
+                {{ $t('proj.createdby') }} {{ getCreatedBy(itemselproj) }}
               </div>
             </div>
 

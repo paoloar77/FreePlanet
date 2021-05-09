@@ -1144,7 +1144,7 @@ namespace Actions {
 
     CalendarStore.state.editable = false
 
-    return await Api.SendReq('/loadsite/' + myuserid + '/' + process.env.APP_ID + '/' + showall, 'GET', null)
+    return await Api.SendReq('/loadsite/' + myuserid + '/' + process.env.APP_ID, 'GET', null)
       .then((res) => {
         // console.log('____________________________  res', res)
         if (res.status === 200) {

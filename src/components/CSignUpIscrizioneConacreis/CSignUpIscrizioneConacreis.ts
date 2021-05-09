@@ -39,6 +39,7 @@ export default class CSignUpIscrizioneConacreis extends MixinUsers {
   public $q
   public $t: any
   public countryname: string = ''
+  public countryborn: string = ''
   public iamadult: boolean = false
 
   public duplicate_email: boolean = false
@@ -51,7 +52,7 @@ export default class CSignUpIscrizioneConacreis extends MixinUsers {
   }
 
   public created() {
-    if (!!this.getMyUsername()) {
+    if (!!this.getMyUsername() && (!UserStore.state.my.profile.socio)) {
       this.signup.name = UserStore.state.my.name
       this.signup.surname = this.mySurname.toString()
       this.signup.email = this.Email
@@ -185,5 +186,12 @@ export default class CSignUpIscrizioneConacreis extends MixinUsers {
     this.signup.residency_country = iso2
     this.countryname = name
   }
+
+  public selectcountryborn({ name, iso2, dialCode }) {
+    // console.log(name, iso2, dialCode)
+    this.signup.born_country = iso2
+    this.countryborn = name
+  }
+
 
 }

@@ -63,16 +63,46 @@
 
           <td class="text-center">
             <q-btn v-if="getNumParticipants(event, showall, tools.peopleWhere.participants) > 0"
+                   flat
                    dense
-                   round
+                   color="positive"
+                   rounded
+                   icon="fas fa-user-check"
                    @click="showpeople = true; eventsel = event"
-                   aria-label="Menu">
-              <q-icon name="info"/>
+                   >
+            </q-btn>
+            <q-btn dense
+                   flat
+                   rounded
+                   :color="!!event.note ? 'positive' : 'dark'"
+                   icon="fas fa-pencil-alt"
+                   @click="shownote = true; eventsel = event"
+                   >
             </q-btn>
           </td>
         </tr>
         </tbody>
       </q-markup-table>
+      <q-dialog v-model="shownote">
+        <q-card v-if="eventsel" :style="`min-width: ` + tools.myheight_dialog() + `px;`">
+          <q-toolbar class="bg-primary text-white">
+            <q-toolbar-title>
+              Note: {{ eventsel.title }}
+            </q-toolbar-title>
+            <q-btn flat round color="white" icon="close" v-close-popup></q-btn>
+          </q-toolbar>
+          <q-card-section class="q-pa-xs inset-shadow">
+            <q-input v-model="eventsel.note" style="min-height: 50px; " label="Note:"
+                     filled dense
+                     autogrow
+                     type="textarea" debounce="500"
+                     input-class="myinput-area"
+                     @input="change_rec(eventsel)">
+            </q-input>
+
+          </q-card-section>
+        </q-card>
+      </q-dialog>
       <q-dialog v-model="showpeople">
         <q-card v-if="eventsel" :style="`min-width: ` + tools.myheight_dialog() + `px;`">
           <q-toolbar class="bg-primary text-white">
