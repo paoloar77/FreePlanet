@@ -44,6 +44,7 @@
       <div class="row q-mb-sm no-wrap items-center centeritems">
         <div class="text-price no-wrap">
           <span v-if="!!myproduct.price">€ {{ myproduct.price.toFixed(2) }}</span>
+          <span v-if="!!myproduct.after_price">{{ myproduct.after_price }}</span>
         </div>
       </div>
       <div class="row q-mb-sm no-wrap items-center centeritems">

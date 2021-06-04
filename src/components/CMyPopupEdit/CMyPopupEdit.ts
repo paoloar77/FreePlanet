@@ -211,7 +211,7 @@ export default class CMyPopupEdit extends Vue {
       else
         return fieldsTable.getMultiValueByTable(col, val)
     } else {
-      if (val === undefined)
+      if (val === undefined || val === null)
         return '[]'
       else if (val === '') {
         return '[]'

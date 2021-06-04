@@ -87,6 +87,7 @@
                 <span :class="props.row.status">{{ shared_consts.getStatusStr(props.row.status) }}</span>
               </q-td>
               <q-td key="comandi" :props="props">
+                Bottone:
                 <div v-if="tools.isManager()" class="q-pa-sm">
 
                   <q-btn-dropdown rounded dense label="Azioni">

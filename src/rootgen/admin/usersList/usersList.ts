@@ -16,7 +16,7 @@ export default class UsersList extends Vue {
   public arrfilterand = []
 
   public mounted() {
-    if (tools.appid() === '7')
+    if (tools.appid() === tools.IDAPP_AYNI) {
       this.arrfilterand = [
         {
           label: 'Attivi',
@@ -64,6 +64,7 @@ export default class UsersList extends Vue {
         }
       ]
 
+    }
   }
 
   get db_fieldsTable() {

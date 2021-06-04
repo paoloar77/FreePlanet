@@ -258,6 +258,8 @@ export default class CGridTableRec extends Vue {
     const myfilter = this.myfilter
     const myfilterand = this.myfilterand
 
+    this.savefilter()
+
     if (!this.mytable)
       return
 
@@ -718,6 +720,11 @@ export default class CGridTableRec extends Vue {
 
   get visButtRow() {
     return this.labelBtnAddRow !== this.addRow
+  }
+
+  public savefilter() {
+    // console.log('Close')
+    this.$emit('savefilter', this.myfilterand)
   }
 
 }

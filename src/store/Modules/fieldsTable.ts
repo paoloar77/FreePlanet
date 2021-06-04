@@ -97,6 +97,7 @@ export const colmsg_templates = [
 
 export const colmypage = [
   AddCol({ name: 'title', label_trans: 'pages.title' }),
+  AddCol({ name: 'path', label_trans: 'pages.path' }),
   AddCol({ name: 'img1', label_trans: 'pages.img1' }),
   AddCol({ name: 'content', label_trans: 'pages.contentfield', fieldtype: tools.FieldType.html }),
   AddCol({ name: 'video1', label_trans: 'pages.video1' }),
@@ -111,7 +112,6 @@ export const colmypage = [
   AddCol({ name: 'ratio3', label_trans: 'pages.ratio3' }),
   AddCol({ name: 'content4', label_trans: 'pages.content4', fieldtype: tools.FieldType.html }),
   AddCol({ name: 'lang', label_trans: 'pages.lang' }),
-  AddCol({ name: 'path', label_trans: 'pages.path' }),
   AddCol({ name: 'icon', label_trans: 'pages.icon' }),
   AddCol({ name: 'order', label_trans: 'pages.order', fieldtype: tools.FieldType.number }),
   AddCol({ name: 'keywords', label_trans: 'pages.keywords' }),
@@ -128,6 +128,7 @@ export const colmypage = [
   AddCol({ name: 'l_par', label_trans: 'pages.l_par', fieldtype: tools.FieldType.number }),
   AddCol({ name: 'l_child', label_trans: 'pages.l_child', fieldtype: tools.FieldType.number }),
   AddCol({ name: 'infooter', label_trans: 'pages.infooter', fieldtype: tools.FieldType.boolean }),
+  AddCol({ name: 'internalpage', label_trans: 'pages.internalpage', fieldtype: tools.FieldType.boolean }),
   AddCol(DeleteRec),
   AddCol(DuplicateRec)
 ]
@@ -280,8 +281,15 @@ export const colTableSites = [
 ]
 
 export const colTableIscrittiConacreis = [
+  AddCol({ name: 'annoTesseramento', label_trans: 'reg.annoTesseramento', fieldtype: tools.FieldType.number }),
+  AddCol({ name: 'numTesseraInterna', label_trans: 'reg.numTesseraInterna', fieldtype: tools.FieldType.number }),
+  AddCol({ name: 'codiceConacreis', label_trans: 'reg.codiceConacreis', fieldtype: tools.FieldType.string }),
+  AddCol({ name: 'metodo_pagamento', label_trans: 'reg.metodo_pagamento', fieldtype: tools.FieldType.select, jointable: 'metodo_pagamento' }),
+  AddCol({ name: 'ha_pagato', label_trans: 'reg.ha_pagato', fieldtype: tools.FieldType.boolean }),
   AddCol({ name: 'name', label_trans: 'reg.name', fieldtype: tools.FieldType.string }),
   AddCol({ name: 'surname', label_trans: 'reg.surname', fieldtype: tools.FieldType.string }),
+  AddCol({ name: 'dateofreg', label_trans: 'reg.dateofreg', fieldtype: tools.FieldType.onlydate }),
+  AddCol({ name: 'dateofapproved', label_trans: 'reg.dateofapproved', fieldtype: tools.FieldType.onlydate }),
   AddCol({ name: 'email', label_trans: 'reg.email', fieldtype: tools.FieldType.string }),
   AddCol({ name: 'fiscalcode', label_trans: 'reg.fiscalcode', fieldtype: tools.FieldType.string }),
   AddCol({ name: 'residency_address', label_trans: 'reg.residency_address', fieldtype: tools.FieldType.string }),
@@ -294,14 +302,9 @@ export const colTableIscrittiConacreis = [
   AddCol({ name: 'born_province', label_trans: 'reg.born_province', fieldtype: tools.FieldType.string }),
   AddCol({ name: 'born_country', label_trans: 'reg.born_country', fieldtype: tools.FieldType.string }),
   AddCol({ name: 'cell_phone', label_trans: 'reg.cell_phone', fieldtype: tools.FieldType.string }),
-  AddCol({ name: 'newsletter_on', label_trans: 'reg.newsletter_on', fieldtype: tools.FieldType.boolean }),
   AddCol({ name: 'iscrizione_compilata', label_trans: 'reg.iscrizione_compilata', fieldtype: tools.FieldType.boolean }),
-  AddCol({ name: 'metodo_pagamento', label_trans: 'reg.metodo_pagamento', fieldtype: tools.FieldType.number }),
-  AddCol({ name: 'dateofreg', label_trans: 'reg.dateofreg', fieldtype: tools.FieldType.onlydate }),
-  AddCol({ name: 'dateofapproved', label_trans: 'reg.dateofapproved', fieldtype: tools.FieldType.onlydate }),
-  AddCol({ name: 'codiceConacreis', label_trans: 'reg.codiceConacreis', fieldtype: tools.FieldType.string }),
-  AddCol({ name: 'annoTesseramento', label_trans: 'reg.annoTesseramento', fieldtype: tools.FieldType.number }),
   AddCol({ name: 'motivazioni', label_trans: 'reg.motivazioni', fieldtype: tools.FieldType.string }),
+  AddCol({ name: 'newsletter_on', label_trans: 'reg.newsletter_on', fieldtype: tools.FieldType.boolean }),
   AddCol({
     name: 'competenze_professionalita',
     label_trans: 'reg.competenze_professionalita',
@@ -349,6 +352,7 @@ export const colTableProducts = [
   // AddCol({ name: 'department', label_trans: 'products.department' }),
   AddCol({ name: 'category', label_trans: 'products.category' }),
   AddCol({ name: 'price', label_trans: 'products.price', fieldtype: tools.FieldType.number }),
+  AddCol({ name: 'after_price', label_trans: 'products.after_price' }),
   AddCol({ name: 'color', label_trans: 'products.color' }),
   AddCol({ name: 'size', label_trans: 'products.size' }),
   AddCol({ name: 'quantityAvailable', label_trans: 'products.quantityAvailable', fieldtype: tools.FieldType.number }),
@@ -555,12 +559,33 @@ const colTableEvents = [
     fieldtype: tools.FieldType.select,
     jointable: 'operators'
   }),
+  AddCol({
+    name: 'teacher3',
+    label_trans: 'event.teacher3',
+    fieldtype: tools.FieldType.select,
+    jointable: 'operators'
+  }),
+  AddCol({
+    name: 'teacher4',
+    label_trans: 'event.teacher4',
+    fieldtype: tools.FieldType.select,
+    jointable: 'operators'
+  }),
   AddCol({ name: 'infoextra', label_trans: 'event.infoextra' }),
   AddCol({ name: 'linkpage', label_trans: 'event.linkpage' }),
+  AddCol({ name: 'facebook', label_trans: 'event.facebook' }),
   AddCol({ name: 'linkpdf', label_trans: 'event.linkpdf' }),
   AddCol({ name: 'note', label_trans: 'event.note' }),
   AddCol({ name: 'nobookable', label_trans: 'event.nobookable', fieldtype: tools.FieldType.boolean }),
   AddCol({ name: 'internal', label_trans: 'event.internal', fieldtype: tools.FieldType.boolean }),
+
+  AddCol({
+    name: 'pagefooter',
+    label_trans: 'event.pagefooter',
+    fieldtype: tools.FieldType.multiselect,
+    jointable: 'internalpage'
+  }),
+
   AddCol({ name: 'news', label_trans: 'event.news', fieldtype: tools.FieldType.boolean }),
   AddCol({ name: 'canceled', label_trans: 'event.canceled', fieldtype: tools.FieldType.boolean }),
   AddCol({ name: 'deleted', label_trans: 'event.deleted', fieldtype: tools.FieldType.boolean }),
@@ -672,6 +697,8 @@ export const fieldsTable = {
       return [shared_consts.Accepted.CHECK_READ_GUIDELINES, shared_consts.Accepted.CHECK_SEE_VIDEO_PRINCIPI]
     else if (table === 'fieldstype')
       return tools.FieldTypeArr
+    else if (table === 'metodo_pagamento')
+      return tools.SelectMetodiPagamento
     else
       return GlobalStore.getters.getListByTable(table)
 
@@ -1122,6 +1149,13 @@ export const fieldsTable = {
       collabel: (rec) => rec.name + ' ' + rec.surname
     },
     {
+      value: 'internalpages',
+      label: 'Pagine Interne',
+      columns: colmypage,
+      colkey: 'path',
+      collabel: 'title'
+    },
+    {
       value: 'products',
       label: 'Prodotti',
       columns: colTableProducts,
@@ -1290,6 +1324,13 @@ export const fieldsTable = {
     {
       value: 'fieldstype',
       label: 'Tipi di Campi',
+      colkey: 'value',
+      collabel: 'label',
+      noshow: true,
+    },
+    {
+      value: 'metodo_pagamento',
+      label: 'Metodi di Pagamento',
       colkey: 'value',
       collabel: 'label',
       noshow: true,

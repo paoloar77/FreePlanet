@@ -2732,7 +2732,7 @@ export const tools = {
   },
 
   getDateNowEvent() {
-    return tools.addDays(tools.getDateNow(), -1)
+    return tools.addMinutes(tools.getDateNow(), -60 * 4)
   },
   getDateNull() {
     return new Date(0)

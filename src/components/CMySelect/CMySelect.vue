@@ -2,6 +2,7 @@
     <div class="text-center">
         <div v-if="useinput">
             <q-select
+                    :multiple="multiple"
                     rounded
                     outlined
                     :input-class="myclass"
@@ -21,6 +22,7 @@
         </div>
         <div v-else>
             <q-select
+                    :multiple="multiple"
                     rounded
                     outlined
                     :dense="dense"

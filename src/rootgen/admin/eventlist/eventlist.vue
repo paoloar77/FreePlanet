@@ -46,6 +46,8 @@
           <td v-if="!tools.isMobile()">
             <div class="text-center">{{ getTeacherByUsername(event.teacher) }}
               <span v-if="isValidUsername(event.teacher2)"> - {{ getTeacherByUsername(event.teacher2) }}</span>
+              <span v-if="isValidUsername(event.teacher3)"> - {{ getTeacherByUsername(event.teacher3) }}</span>
+              <span v-if="isValidUsername(event.teacher4)"> - {{ getTeacherByUsername(event.teacher4) }}</span>
             </div>
           </td>
           <td v-if="showall">

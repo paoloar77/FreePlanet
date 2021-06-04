@@ -18,6 +18,7 @@ export default class CMyEditor extends Vue {
   @Prop({ required: false, default: '' }) public title
   @Prop({ required: true }) public value
   @Prop({ required: false, default: '' }) public myclass
+  @Prop({ required: false, default: true }) public showButtons
 
   public myvalue = ''
   public mycolor = ''

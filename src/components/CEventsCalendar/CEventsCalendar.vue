@@ -1,14 +1,14 @@
 <template>
   <div class="landing">
-    <div v-if="!tools.IsLogged() && (!mysingleevent)">
+    <!-- <div v-if="!tools.IsLogged() && (!mysingleevent)">
       <div class="centermydiv">
         <q-banner class="bg-secondary text-white">
           Il Calendario sarà visibile solo dopo aver effettuato l'accesso
         </q-banner>
 
       </div>
-    </div>
-    <div v-else>
+    </div>-->
+    <div>
       <!-- display an myevent -->
       <q-dialog v-model="displayEvent">
         <q-card v-if="myevent" :style="`min-width: ` + tools.myheight_dialog() + `px;`">
@@ -65,6 +65,8 @@
                 <!--<span class="cal__teacher-content">{{myevent.teacher}}</span>-->
                 <CMyTeacher :username="myevent.teacher"></CMyTeacher>
                 <CMyTeacher :username="myevent.teacher2"></CMyTeacher>
+                <CMyTeacher :username="myevent.teacher3"></CMyTeacher>
+                <CMyTeacher :username="myevent.teacher4"></CMyTeacher>
               </div>
               <div v-if="myevent.wherecode" class="cal__where">
                 <!--<span v-if="tools.isMobile()"><br/></span>-->
@@ -110,7 +112,7 @@
       </q-dialog>
       <!-- id_bookedeventadd/edit an myevent -->
 
-      <q-dialog v-model="addEvent" no-backdrop-dismiss>
+      <q-dialog v-model="addEvent" no-backdrop-dismiss persistent>
         <q-card v-if="addEvent" :style="`min-width: `+ tools.myheight_dialog() + `px;`">
           <q-toolbar class="bg-primary text-white">
             <q-toolbar-title>
@@ -129,15 +131,20 @@
                          :options="getDisciplines" :useinput="false">
               </CMySelect>
 
-              <q-input color="grey-1" v-model="eventForm.short_tit" autofocus
-                       :input-style="`background-color: ${eventForm.bgcolor} !important; color: white !important; font-weight: bold; `"
-                       borderless rounded dense :label="$t('event.short_tit')"
-              ></q-input>
+              <div>
+                <q-input color="grey-1" v-model="eventForm.short_tit" autofocus
+                         debounce="1000"
+                         :input-style="`background-color: ${eventForm.bgcolor} !important; color: white !important; font-weight: bold; `"
+                         borderless rounded dense :label="$t('event.short_tit')"
+                ></q-input>
 
-              <q-input color="grey-1" v-model="eventForm.title" autofocus
-                       :input-style="`background-color: ${eventForm.bgcolor} !important; color: white !important; font-weight: bold; `"
-                       borderless rounded dense :label="$t('event.title')"
-                       :rules="[v => v && v.length > 0 || $t('event.notempty')]"></q-input>
+                <q-input color="grey-1" v-model="eventForm.title" autofocus
+                         debounce="1000"
+                         :input-style="`background-color: ${eventForm.bgcolor} !important; color: white !important; font-weight: bold; `"
+                         borderless rounded dense :label="$t('event.title')"
+                         :rules="[v => v && v.length > 0 || $t('event.notempty')]"></q-input>
+
+              </div>
 
 
               <q-tabs
@@ -149,134 +156,157 @@
                 align="justify"
                 narrow-indicator
               >
-                <q-tab name="details" label="Descrizione"/>
-                <q-tab name="container" label="Contenuto"/>
+                <q-tab name="details" label="Descrizione Breve" icon="fas fa-pencil-alt"/>
+                <q-tab name="container" label="Dettaglio Pagina" icon="fas fa-book"/>
+                <q-tab name="settings" label="Impostazioni" icon="fas fa-calendar-day"/>
               </q-tabs>
 
 
               <q-tab-panels v-model="tabeditor" animated>
                 <q-tab-panel name="details">
-                  <CMyEditor :value.sync="eventForm.details">
+                  <div class="q-gutter-sm myflex">
+
+                    <q-input class="myflex" dense v-model="eventForm.img"
+                             :label="$t('event.img')"></q-input>
+                    <q-input class="myflex" dense v-model="eventForm.img_small"
+                             :label="$t('event.img_small')"></q-input>
+                  </div>
+
+                  <div class="q-gutter-sm myflex">
+
+                    <q-input
+                      class="myflex"
+                      :style="`background-color: ${eventForm.bgcolor} !important; color: white !important;`"
+                      filled
+                      color="white"
+                      dense
+                      :label="$t('event.bgcolor')"
+                      v-model="eventForm.bgcolor">
+                      <template #append>
+                        <q-icon name="colorize" class="cursor-pointer" color="white">
+                          <q-popup-proxy>
+                            <q-color format-model="hex" v-model="eventForm.bgcolor"></q-color>
+                          </q-popup-proxy>
+                        </q-icon>
+                      </template>
+                    </q-input>
+                    <q-input class="myflex" dense v-model="eventForm.icon"
+                             :label="$t('event.icon')"></q-input>
+                  </div>
+
+                  <CMyEditor :value.sync="eventForm.details" :showButtons="false">
 
                   </CMyEditor>
                 </q-tab-panel>
                 <q-tab-panel name="container">
-                  <CMyEditor :value.sync="eventForm.bodytext">
+                  <CMyEditor :value.sync="eventForm.bodytext" :showButtons="false">
 
                   </CMyEditor>
                 </q-tab-panel>
 
+                <q-tab-panel name="settings" class="q-gutter-sm">
+                  <!--<q-checkbox v-model="eventForm.allday" :label="$t('cal.alldayevent')"></q-checkbox>-->
+
+
+                  <div class="q-gutter-sm row myflex">
+                    <CDateTime
+                      :value.sync="eventForm.dateTimeStart"
+                      :label="$t('cal.eventstartdatetime')"
+                      :readonly="false">
+                    </CDateTime>
+                    <CDateTime
+                      :value.sync="eventForm.dateTimeEnd"
+                      :label="$t('cal.enterEndDateTime')"
+                      :readonly="false">
+                    </CDateTime>
+                    <q-input dense v-model="eventForm.infoextra" :label="$t('cal.infoextra')"></q-input>
+                  </div>
+
+                  <div class="q-gutter-sm myflex">
+
+                    <CMySelect myclass="myflex" :label="$t('cal.teacher') + ' 1°'"
+                               :value.sync="eventForm.teacher"
+                               optval="username" :optlab="(item) => item.name + ' ' + item.surname"
+                               :options="getTeachersArr" :useinput="false">
+                    </CMySelect>
+                    <CMySelect myclass="myflex" :label="$t('cal.teacher') + ' 2°'"
+                               :value.sync="eventForm.teacher2"
+                               optval="username" :optlab="(item) => item.name + ' ' + item.surname"
+                               :options="getTeachersArr" :useinput="false">
+                    </CMySelect>
+                    <CMySelect myclass="myflex" :label="$t('cal.teacher') + ' 3°'"
+                               :value.sync="eventForm.teacher3"
+                               optval="username" :optlab="(item) => item.name + ' ' + item.surname"
+                               :options="getTeachersArr" :useinput="false">
+                    </CMySelect>
+                    <CMySelect myclass="myflex" :label="$t('cal.teacher') + ' 4°'"
+                               :value.sync="eventForm.teacher4"
+                               optval="username" :optlab="(item) => item.name + ' ' + item.surname"
+                               :options="getTeachersArr" :useinput="false">
+                    </CMySelect>
+                    <CMySelect :label="$t('cal.where')" :value.sync="eventForm.wherecode" optval="code"
+                               optlab="placename"
+                               :options="getWhereArr" :useinput="false">
+                    </CMySelect>
+                  </div>
+
+                  <div class="q-gutter-sm myflex wrap">
+                    <q-checkbox class="myflex wrap" dense v-model="eventForm.internal"
+                                :label="$t('event.internal')"></q-checkbox>
+                    <q-checkbox class="myflex wrap" dense v-model="eventForm.lunchAvailable"
+                                :label="$t('event.lunchAvailable')"></q-checkbox>
+                    <q-checkbox class="myflex wrap" dense v-model="eventForm.dinnerAvailable"
+                                :label="$t('event.dinnerAvailable')"></q-checkbox>
+                    <q-checkbox class="myflex wrap" dense v-model="eventForm.dinnerSharedAvailable"
+                                :label="$t('event.dinnerSharedAvailable')"></q-checkbox>
+                    <q-checkbox class="myflex wrap" dense v-model="eventForm.news"
+                                :label="$t('event.news')"></q-checkbox>
+                    <q-checkbox class="myflex wrap" dense v-model="eventForm.nobookable"
+                                :label="$t('event.nobookable')"></q-checkbox>
+                    <q-checkbox class="myflex wrap" dense v-model="eventForm.canceled"
+                                :label="$t('event.canceled')"></q-checkbox>
+                  </div>
+
+                  <div class="q-gutter-sm row items-start">
+
+                  </div>
+
+
+                  <div class="q-gutter-sm myflex">
+
+                    <CMySelect :label="$t('event.contribtype')" :value.sync="eventForm.contribtype"
+                               optval="_id" optlab="label"
+                               :useinput="false"
+                               :newvaluefunc="createContribType" :options="getContribTypeArr">
+                    </CMySelect>
+
+                    <div v-if="isShowPrice(eventForm)">
+                      <q-input dense type="number" v-model="eventForm.price"
+                               :label="$t('event.price')"></q-input>
+                      <q-input dense v-model="eventForm.infoafterprice"
+                               :label="$t('event.infoafterprice')"></q-input>
+                    </div>
+                  </div>
+
+                  <div class="q-gutter-sm myflex">
+
+                    <CMySelect myclass="myflex" :label="$t('event.pagefooter') + ' 1°'"
+                               :value.sync="eventForm.pagefooter"
+                               style="min-width: 300px;"
+                               :multiple="true"
+                               optval="path" optlab="title"
+                               :options="getInternalPagesArr" :useinput="false">
+                    </CMySelect>
+                    <br>
+                    <q-input class="myflex" dense v-model="eventForm.linkpage"
+                             :label="$t('event.linkpage')"></q-input>
+                    <q-input class="myflex" dense v-model="eventForm.linkpdf"
+                             :label="$t('event.linkpdf')"></q-input>
+                    <q-input class="myflex" dense v-model="eventForm.facebook"
+                             :label="$t('event.facebook')"></q-input>
+                  </div>
+                </q-tab-panel>
               </q-tab-panels>
-
-
-              <!--<q-checkbox v-model="eventForm.allday" :label="$t('cal.alldayevent')"></q-checkbox>-->
-
-              <div class="q-gutter-sm row myflex">
-                <CDateTime
-                  :value.sync="eventForm.dateTimeStart"
-                  :label="$t('cal.eventstartdatetime')"
-                  :readonly="false">
-                </CDateTime>
-                <CDateTime
-                  :value.sync="eventForm.dateTimeEnd"
-                  :label="$t('cal.enterEndDateTime')"
-                  :readonly="false">
-                </CDateTime>
-                <q-input dense v-model="eventForm.infoextra" :label="$t('cal.infoextra')"></q-input>
-              </div>
-
-              <div class="q-gutter-sm myflex">
-
-                <CMySelect myclass="myflex" :label="$t('cal.teacher') + ' 1°'"
-                           :value.sync="eventForm.teacher"
-                           optval="username" :optlab="(item) => item.name + ' ' + item.surname"
-                           :options="getTeachersArr" :useinput="false">
-                </CMySelect>
-                <CMySelect myclass="myflex" :label="$t('cal.teacher') + ' 2°'"
-                           :value.sync="eventForm.teacher2"
-                           optval="username" :optlab="(item) => item.name + ' ' + item.surname"
-                           :options="getTeachersArr" :useinput="false">
-                </CMySelect>
-              </div>
-
-              <div class="q-gutter-sm myflex wrap">
-                <CMySelect :label="$t('cal.where')" :value.sync="eventForm.wherecode" optval="code"
-                           optlab="placename"
-                           :options="getWhereArr" :useinput="false">
-                </CMySelect>
-                <q-checkbox class="myflex wrap" dense v-model="eventForm.internal"
-                            :label="$t('event.internal')"></q-checkbox>
-                <q-checkbox class="myflex wrap" dense v-model="eventForm.lunchAvailable"
-                            :label="$t('event.lunchAvailable')"></q-checkbox>
-                <q-checkbox class="myflex wrap" dense v-model="eventForm.dinnerAvailable"
-                            :label="$t('event.dinnerAvailable')"></q-checkbox>
-                <q-checkbox class="myflex wrap" dense v-model="eventForm.dinnerSharedAvailable"
-                            :label="$t('event.dinnerSharedAvailable')"></q-checkbox>
-                <q-checkbox class="myflex wrap" dense v-model="eventForm.news"
-                            :label="$t('event.news')"></q-checkbox>
-                <q-checkbox class="myflex wrap" dense v-model="eventForm.nobookable"
-                            :label="$t('event.nobookable')"></q-checkbox>
-                <q-checkbox class="myflex wrap" dense v-model="eventForm.canceled"
-                            :label="$t('event.canceled')"></q-checkbox>
-              </div>
-
-              <div class="q-gutter-sm row items-start">
-
-              </div>
-
-              <div class="q-gutter-sm myflex">
-
-                <q-input class="myflex" dense v-model="eventForm.img"
-                         :label="$t('event.img')"></q-input>
-                <q-input class="myflex" dense v-model="eventForm.img_small"
-                         :label="$t('event.img_small')"></q-input>
-
-              </div>
-
-              <div class="q-gutter-sm myflex">
-
-                <q-input
-                  class="myflex"
-                  :style="`background-color: ${eventForm.bgcolor} !important; color: white !important;`"
-                  filled
-                  color="white"
-                  dense
-                  :label="$t('event.bgcolor')"
-                  v-model="eventForm.bgcolor">
-                  <template #append>
-                    <q-icon name="colorize" class="cursor-pointer" color="white">
-                      <q-popup-proxy>
-                        <q-color format-model="hex" v-model="eventForm.bgcolor"></q-color>
-                      </q-popup-proxy>
-                    </q-icon>
-                  </template>
-                </q-input>
-                <q-input class="myflex" dense v-model="eventForm.icon"
-                         :label="$t('event.icon')"></q-input>
-              </div>
-
-              <div class="q-gutter-sm myflex">
-
-                <CMySelect :label="$t('event.contribtype')" :value.sync="eventForm.contribtype"
-                           optval="_id" optlab="label"
-                           :useinput="false"
-                           :newvaluefunc="createContribType" :options="getContribTypeArr">
-                </CMySelect>
-
-                <div v-if="isShowPrice(eventForm)">
-                  <q-input dense type="number" v-model="eventForm.price"
-                           :label="$t('event.price')"></q-input>
-                  <q-input dense v-model="eventForm.infoafterprice"
-                           :label="$t('event.infoafterprice')"></q-input>
-                </div>
-              </div>
-
-              <div class="q-gutter-sm myflex">
-                <q-input class="myflex" dense v-model="eventForm.linkpage"
-                         :label="$t('event.linkpage')"></q-input>
-                <q-input class="myflex" dense v-model="eventForm.linkpdf"
-                         :label="$t('event.linkpdf')"></q-input>
-              </div>
 
             </q-form>
           </q-card-section>
@@ -361,7 +391,8 @@
                         </div>
                       </div>
                     </div>
-                    <div v-if="myevent.dinnerSharedAvailable" class="q-px-xs centermydiv" style="display: inline-flex; ">
+                    <div v-if="myevent.dinnerSharedAvailable" class="q-px-xs centermydiv"
+                         style="display: inline-flex; ">
                       <div style="display: inline-flex; " class="q-px-xs centermydiv">
                         <div class="itemprenota">{{ $t('cal.selnumpeopleDinnerShared') }}</div>
                         <div class="q-gutter-xs " style="min-width: 180px; margin-left: 10px;">
@@ -374,7 +405,7 @@
                       </div>
                     </div>
 
-                    <q-input v-model="bookEventForm.msgbooking" :label="$t('cal.msgbooking')+':'"
+                    <q-input v-model="bookEventForm.msgbooking" :label="$t('cal.writemsg')+':'"
                              type="textarea" debounce="500"
                              input-class="myinput-area"
                     >
@@ -398,7 +429,7 @@
                    @click="tools.CancelBookingEvent(mythis, myevent, bookEventForm._id, true)"></q-btn>
             <q-btn v-if="checkseinviaMsg" flat :label="$t('dialog.sendonlymsg')" color="primary"
                    @click="sendMsg(myevent)"></q-btn>
-            <q-btn v-else flat :label="getTitleBtnBooking" color="primary" @click="saveBookEvent(myevent)"
+            <q-btn v-else :label="getTitleBtnBooking" color="primary" @click="saveBookEvent(myevent)"
                    :disable="!(bookEventpage.state === EState.Creating || hasModifiedBooking)"></q-btn>
 
 
@@ -438,7 +469,7 @@
               <div class="q-pa-xs">
                 <q-card class="text-white windowcol">
                   <q-card-section>
-                    <q-input v-model="askInfoForm.message" :label="$t('cal.msgbooking')+':'"
+                    <q-input v-model="askInfoForm.message" :label="$t('cal.writemsg')+':'"
                              autofocus debounce="500" type="textarea"
                              input-class="myinput-area">
                     </q-input>
@@ -637,6 +668,10 @@
           <p class="text-subtitle1 text-red bg-amber text-center ">LISTA PROSSIMI <span
             v-if="showfirstN > 0">{{ showfirstN }}</span>
             EVENTI:</p>
+
+          <q-toggle v-model="showPrev" :val="lists.MenuAction.SHOW_PREV_REC"
+                    :label="$t('grid.showprevedit')"></q-toggle>
+
           <q-markup-table wrap-cells bordered separator="horizontal" class="listaev__table">
             <tbody>
             <tr v-for="(event, index) in getEventList()" class="listaev listaev__table">
@@ -688,7 +723,7 @@
 
                 </div>
 
-                <div class="listaev__date listaev__align_center_mobile">
+                <div class="listaev__date listaev__align_center_mobile text-center">
                   <span v-html="tools.getstrDateTimeEvent(mythis, event, true)"></span>
                 </div>
 
@@ -696,15 +731,20 @@
 
                   <div style="margin: 10px;"></div>
 
-                  <div class="">
+                  <div v-if="event.internal">
+                    <q-chip color="blue" text-color="white">Evento Interno:</q-chip>
+                  </div>
+
+                  <div class="text-center">
                     <!-- Se c'è un link, allora -->
                     <q-btn size="md" type="a"
+                           class="text-center boldhigh"
                            :to="`/event/${event.typol}/${event._id}`"
                            target="_blank"
                            :style="`background-color: ${event.bgcolor} !important; color: white !important;`"
                            ripple
                            rounded
-                           :label="getTitleEv(event)" :icon="event.icon"
+                           :label="getTitleEv(event)"
                            :color="event.bgcolor" text-color="white" glossy>
 
                     </q-btn>
@@ -729,6 +769,8 @@
 
                     <CMyTeacher :username="event.teacher"></CMyTeacher>
                     <CMyTeacher :username="event.teacher2"></CMyTeacher>
+                    <CMyTeacher :username="event.teacher3"></CMyTeacher>
+                    <CMyTeacher :username="event.teacher4"></CMyTeacher>
 
                     <span v-if="event.wherecode" class="">
                                         <span v-if="tools.isMobile()"><br/></span>
@@ -764,7 +806,7 @@
                   </div>
 
 
-                  <div class="row justify-end">
+                  <div class="row centeritems">
                     <q-btn v-if="event.linkpdf" size="md" type="a"
                            :href="`../../statics/` + event.linkpdf"
                            target="_blank" rounded color="primary" icon="info"
@@ -772,21 +814,21 @@
                            :label="$t('cal.showpdf')">
 
                     </q-btn>
-                    <q-btn v-if="event.bodytext" rounded outline
+                    <q-btn rounded
                            class="q-ma-sm"
                            color="primary"
                            :to="`/event/${event.typol}/${event._id}`"
-                           :label="$t('event.showpage')">
+                           :label="$t('event.openpage')">
                     </q-btn>
                     <q-btn rounded outline class="q-ma-sm"
                            color="primary" @click="askForInfoEventMenu(event)"
                            :label="$t('event.askinfo')">
                     </q-btn>
-                    <q-btn rounded outline class="q-ma-sm"
+                    <!--<q-btn rounded outline class="q-ma-sm"
                            v-if="!event.nobookable && !isAlreadyBooked(event) && static_data.functionality.BOOKING_EVENTS"
                            color="primary" @click="addBookEventMenu(event)"
                            :label="$t('cal.booking')" :disable="!isEventEnabled(event)">
-                    </q-btn>
+                    </q-btn>-->
                     <q-btn rounded outline class="q-ma-sm"
                            v-if="!event.nobookable && isAlreadyBooked(event) && static_data.functionality.BOOKING_EVENTS"
                            text-color="red"

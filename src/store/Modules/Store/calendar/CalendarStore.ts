@@ -19,6 +19,7 @@ const state: ICalendarState = {
   eventlist: [],
   bookedevent: [],
   operators: [],
+  internalpages: [],
   wheres: [],
   contribtype: [],
   // ---------------

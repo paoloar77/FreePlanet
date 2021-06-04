@@ -38,7 +38,7 @@
           </q-editor>
         </form>
       </q-card-section>
-      <q-card-actions align="center">
+      <q-card-actions v-if="showButtons" align="center">
         <q-btn flat :label="$t('dialog.ok')" color="primary" @click="saveval"></q-btn>
         <q-btn flat :label="$t('dialog.cancel')" color="primary" v-close-popup @click="annulla"></q-btn>
       </q-card-actions>

@@ -52,6 +52,10 @@ export interface ITeachUname {
   username?: string
 }
 
+export interface IInternalPage {
+  path?: string
+}
+
 export interface IResp {
   _id?: string
   username?: string
@@ -89,6 +93,7 @@ export interface IMyPage {
   l_par?: number,
   l_child?: number,
   infooter?: boolean
+  internalpage?: boolean
 }
 
 export interface ISites {

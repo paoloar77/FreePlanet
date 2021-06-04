@@ -190,6 +190,8 @@ namespace Getters {
       return CalendarStore.state.eventlist
     else if (table === 'operators')
       return CalendarStore.state.operators
+    else if (table === 'internalpages')
+      return CalendarStore.state.internalpages
     else if (table === 'wheres')
       return CalendarStore.state.wheres
     else if (table === 'contribtype')
@@ -1144,13 +1146,14 @@ namespace Actions {
 
     CalendarStore.state.editable = false
 
-    return await Api.SendReq('/loadsite/' + myuserid + '/' + process.env.APP_ID, 'GET', null)
+    return await Api.SendReq('/loadsite/' + myuserid + '/' + process.env.APP_ID + '/' + process.env.APP_VERSION, 'GET', null)
       .then((res) => {
         // console.log('____________________________  res', res)
         if (res.status === 200) {
           CalendarStore.state.bookedevent = (res.data.bookedevent) ? res.data.bookedevent : []
           CalendarStore.state.eventlist = (res.data.eventlist) ? res.data.eventlist : []
           CalendarStore.state.operators = (res.data.operators) ? res.data.operators : []
+          CalendarStore.state.internalpages = (res.data.internalpages) ? res.data.internalpages : []
           CalendarStore.state.wheres = (res.data.wheres) ? res.data.wheres : []
           CalendarStore.state.contribtype = (res.data.contribtype) ? res.data.contribtype : []
           GlobalStore.state.settings = (res.data.settings) ? [...res.data.settings] : []

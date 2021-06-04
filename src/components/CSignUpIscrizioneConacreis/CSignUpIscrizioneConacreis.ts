@@ -144,6 +144,7 @@ export default class CSignUpIscrizioneConacreis extends MixinUsers {
     this.signup.residency_address = tools.CapitalizeAllWords(this.signup.residency_address)
     this.signup.residency_city = tools.CapitalizeAllWords(this.signup.residency_city)
     this.signup.residency_province = this.signup.residency_province.toUpperCase()
+    this.signup.born_province = this.signup.born_province.toUpperCase()
 
     this.duplicate_email = false
     this.duplicate_username = false
@@ -183,13 +184,13 @@ export default class CSignUpIscrizioneConacreis extends MixinUsers {
 
   public selectcountry({ name, iso2, dialCode }) {
     // console.log(name, iso2, dialCode)
-    this.signup.residency_country = iso2
+    this.signup.residency_country = name
     this.countryname = name
   }
 
   public selectcountryborn({ name, iso2, dialCode }) {
     // console.log(name, iso2, dialCode)
-    this.signup.born_country = iso2
+    this.signup.born_country = name
     this.countryborn = name
   }
 

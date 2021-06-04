@@ -40,6 +40,7 @@ function createOrderByProduct(product: IProduct, order: IOrder): IOrder {
     idProducer: product.idProducer,
     status: shared_consts.OrderStatus.IN_CART,
     price: product.price,
+    after_price: product.after_price,
     color: product.color,
     size: product.size,
     weight: product.weight,

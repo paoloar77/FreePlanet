@@ -232,6 +232,7 @@
             </div>
             <div v-else>
               {{ visuValByType(myvalue, col, row) }}
+
             </div>
 
             <div v-if="col.fieldtype === tools.FieldType.html">

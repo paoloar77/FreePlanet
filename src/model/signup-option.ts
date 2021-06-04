@@ -36,8 +36,10 @@ export interface ISignupIscrizioneConacreisOptions {
   accetta_carta_costituzionale_on?: boolean
   metodo_pagamento?: number
   iscrizione_compilata?: boolean
+  ha_pagato?: boolean
   codiceConacreis?: string
   annoTesseramento?: number
+  numTesseraInterna?: number
   motivazioni?: string
   competenze_professionalita?: string
   cosa_potrei_offrire?: string

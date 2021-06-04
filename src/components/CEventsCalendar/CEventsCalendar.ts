@@ -59,6 +59,7 @@ export default class CEventsCalendar extends MixinEvents {
   public calendarView = 'month'
   public selectedDate = ''
   public tabeditor: string = 'details'
+  public showPrev: boolean = false
   public formDefault: IEvents = {
     title: '',
     details: '',
@@ -134,6 +135,10 @@ export default class CEventsCalendar extends MixinEvents {
 
   get mythis() {
     return this
+  }
+
+  get lists() {
+    return lists
   }
 
   set mythis(aa) {
@@ -893,6 +898,10 @@ export default class CEventsCalendar extends MixinEvents {
 
   get getTeachersArr() {
     return CalendarStore.state.operators
+  }
+
+  get getInternalPagesArr() {
+    return CalendarStore.state.internalpages
   }
 
   get getWhereArr() {

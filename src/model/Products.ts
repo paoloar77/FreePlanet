@@ -11,6 +11,7 @@ export interface IProduct {
   department?: string,
   category?: string,
   price?: number,
+  after_price?: string,
   color?: string,
   size?: string,
   quantityAvailable?: number,
@@ -36,6 +37,7 @@ export interface IOrder {
   idProducer?: string
   idStorehouse?: string
   price?: number
+  after_price?: string
   color?: string
   size?: string
   quantity?: number

@@ -574,6 +574,7 @@ const msg_pt = {
       contribtype: 'Tipo Contributo',
       price: 'Contributo',
       askinfo: 'Chiedi Info',
+      openpage: 'Apri Pagina',
       showpage: 'Vedi Pagina',
       infoafterprice: 'Note dopo la Quota',
       teacher: 'Insegnante',  // teacherid
