@@ -1,19 +1,23 @@
 import Vue from 'vue'
-import { Watch } from 'vue-property-decorator'
+import { Prop, Watch } from 'vue-property-decorator'
 import { GlobalStore } from '../../store/Modules'
-import Component from 'vue-class-component'
 import { static_data } from '../../db/static_data'
 import { tools } from '../../store/Modules/tools'
 import { IListRoutes } from '@src/model'
 import { UserStore } from '@modules'
 
 export default class MenuOne extends Vue {
+  @Prop({ required: false, default: 'my-menu' }) public clBase: any
 
   @Watch('$route.path')
   private modifroute() {
     Object.keys(this.getmenu).forEach((parentName) => {
       this.setParentVisibilityBasedOnRoute(this.getmenu[parentName])
     })
+  }
+
+  get clBaseint(){
+    return this.clBase
   }
 
   // get currentRoutePath() {
@@ -30,6 +34,10 @@ export default class MenuOne extends Vue {
 
   get mythis() {
     return this
+  }
+
+  set mythis(my) {
+    //
   }
 
   get getmenu() {
@@ -52,7 +60,7 @@ export default class MenuOne extends Vue {
     return text
   }
 
-  get static_data(){
+  get static_data() {
     return static_data
   }
 
@@ -66,12 +74,27 @@ export default class MenuOne extends Vue {
   }
 
   public getmymenuclass(elem: IListRoutes) {
-    let menu = 'my-menu'
+    let menu = this.clBaseint
 
-    if (elem.onlyAdmin)
-      menu += ' isAdmin'
-    if (elem.onlyManager)
-      menu += ' isManager'
+    if (elem.color) {
+      menu += ' ' + elem.color
+    } else {
+      if (elem.onlyAdmin)
+        menu += ' isAdmin'
+      if (elem.onlyManager)
+        menu += ' isManager'
+      if (elem.onlySocioResidente)
+        menu += ' isSocioResidente'
+      if (elem.onlyConsiglio)
+        menu += ' isConsiglio'
+      if (elem.onlyDepartment)
+        menu += ' isDepartment'
+      if (elem.onlyTutor)
+        menu += ' isTutor'
+      if (elem.onlyEditor)
+        menu += ' isEditor'
+
+    }
 
     if (elem.extraclass)
       menu += ' ' + elem.extraclass

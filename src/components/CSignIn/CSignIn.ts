@@ -1,22 +1,19 @@
 import Vue from 'vue'
 import { GlobalStore } from '@store'
 import { UserStore } from '../../store/Modules'
-import { Component, Prop, Watch } from 'vue-property-decorator'
+import { Component, Prop } from 'vue-property-decorator'
 import { serv_constants } from '../../store/Modules/serv_constants'
 import { tools } from '../../store/Modules/tools'
 import { toolsext } from '@src/store/Modules/toolsext'
 
 import { ISigninOptions, IUserState } from 'model'
-import { TSignin, validations } from './CSignIn-validate'
+import { validations } from './CSignIn-validate'
 
 import { validationMixin } from 'vuelidate'
 
 import { Logo } from '../logo'
 
-import router from '@router'
-
-import globalroutines from '../../globalroutines/index'
-import { ICategory } from '../../model'
+import { static_data } from '../../db/static_data'
 
 // import {Loading, QSpinnerFacebook, QSpinnerGears} from 'quasar'
 
@@ -28,7 +25,8 @@ import { ICategory } from '../../model'
 })
 
 export default class CSignIn extends Vue {
-  @Prop({ required: true }) public mythis: any
+  @Prop({required: true}) public showregbutt: boolean
+
   public $v
   public loading: boolean
   public $t: any
@@ -37,6 +35,10 @@ export default class CSignIn extends Vue {
   public signin: ISigninOptions = {
     username: process.env.TEST_USERNAME || '',
     password: process.env.TEST_PASSWORD || ''
+  }
+
+  get static_data() {
+    return static_data
   }
 
   public created() {
@@ -105,6 +107,8 @@ export default class CSignIn extends Vue {
 
   public submit() {
     // console.log('submit LOGIN')
+
+    this.signin.username = tools.removespaces(this.signin.username)
 
     this.$v.signin.$touch()
 

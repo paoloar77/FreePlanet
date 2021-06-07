@@ -57,8 +57,9 @@ export default class CEventsCalendar extends MixinEvents {
   public $q
   public $t: any
   public calendarView = 'month'
-  public selectedDate = '2019-04-01'
+  public selectedDate = ''
   public tabeditor: string = 'details'
+  public showPrev: boolean = false
   public formDefault: IEvents = {
     title: '',
     details: '',
@@ -74,6 +75,9 @@ export default class CEventsCalendar extends MixinEvents {
     msgbooking: '',
     infoevent: '',
     numpeople: 1,
+    numpeopleLunch: 0,
+    numpeopleDinner: 0,
+    numpeopleDinnerShared: 0,
     datebooked: tools.getDateNow(),
     booked: false,
     modified: false
@@ -129,29 +133,19 @@ export default class CEventsCalendar extends MixinEvents {
   public draggedEvent = null
   public ignoreNextSwipe = false
 
-  public resources = [
-    {
-      label: 'John'
-    },
-    {
-      label: 'Mary'
-    },
-    {
-      label: 'Susan'
-    },
-    {
-      label: 'Olivia'
-    },
-    {
-      label: 'Board Room'
-    },
-    {
-      label: 'Room-1'
-    },
-    {
-      label: 'Room-2'
-    }
-  ]
+  get mythis() {
+    return this
+  }
+
+  get lists() {
+    return lists
+  }
+
+  set mythis(aa) {
+
+  }
+
+  public resources = []
 
   // public eventdata =
   //   [
@@ -273,7 +267,7 @@ export default class CEventsCalendar extends MixinEvents {
   }
 
   get dayHeight() {
-    if (Screen.height < 400)
+    if (Screen.height < 410)
       return 80
     else if (Screen.height < 500)
       return 100
@@ -357,6 +351,9 @@ export default class CEventsCalendar extends MixinEvents {
 
   get hasModifiedBooking() {
     return (this.bookEventpage.bookedevent.numpeople !== this.bookEventForm.numpeople) ||
+      (this.bookEventpage.bookedevent.numpeopleLunch !== this.bookEventForm.numpeopleLunch) ||
+      (this.bookEventpage.bookedevent.numpeopleDinner !== this.bookEventForm.numpeopleDinner) ||
+      (this.bookEventpage.bookedevent.numpeopleDinnerShared !== this.bookEventForm.numpeopleDinnerShared) ||
       (this.bookEventpage.bookedevent.msgbooking !== this.bookEventForm.msgbooking) ||
       (this.bookEventpage.bookedevent.booked !== this.bookEventForm.booked)
   }
@@ -391,16 +388,21 @@ export default class CEventsCalendar extends MixinEvents {
   }
 
   public mounted() {
-    this.selectedDate = this.formatDate(tools.getDateNow())
     this.$root.$on('calendar:next', this.calendarNext)
     this.$root.$on('calendar:prev', this.calendarPrev)
     this.$root.$on('calendar:today', this.calendarToday)
+
+    this.SetToday()
     // CalendarStore.state.eventlist = events
     this.updateFormatters()
 
   }
 
   public beforeMount() {
+    // console.log('mounted')
+    this.selectedDate = this.formatDate(tools.getDateNow())
+    // console.log('this.selectedDate', this.selectedDate)
+
     CalendarStore.state.locale = toolsext.getLocale()
     this.updateFormatters()
   }
@@ -442,16 +444,18 @@ export default class CEventsCalendar extends MixinEvents {
     this.eventForm = { ...this.formDefault }
   }
 
-  public addEventMenu(day, type) {
-    // console.log('addeventmenu editable = ', this.editable)
+  public addEventMenu(day) {
+    console.log('addeventmenu', day)
     if (this.calendarView === 'scheduler' || this.calendarView === 'week-scheduler' || this.calendarView === 'month-scheduler' || !this.editable) {
       return
     }
     this.resetForm()
-    this.contextDay = { ...day }
+    this.contextDay = { ...day.scope }
 
-    this.eventForm.dateTimeStart = tools.getstrYYMMDDDateTime(day.date + ' 21:00:00')
-    this.eventForm.dateTimeEnd = tools.getstrYYMMDDDateTime(day.date + ' 22:00:00')
+    this.eventForm.dateTimeStart = tools.getstrYYMMDDDateTime(day.scope.timestamp.date + ' 21:00:00')
+    this.eventForm.dateTimeEnd = tools.getstrYYMMDDDateTime(day.scope.timestamp.date + ' 22:00:00')
+
+    console.log('eventForm', this.eventForm)
 
     this.addEvent = true // show dialog
   }
@@ -459,7 +463,7 @@ export default class CEventsCalendar extends MixinEvents {
   public addBookEventMenu(eventparam) {
     if (!UserStore.state.isLogged || !UserStore.state.my.verified_email) {
       // Visu right Toolbar to make SignIn
-      GlobalStore.state.RightDrawerOpen = true
+      GlobalStore.state.rightDrawerOpen = true
       tools.showNeutralNotif(this.$q, this.$t('login.needlogin'))
       tools.scrollToTop()
       // window.scrollTo(0, 0)
@@ -471,6 +475,9 @@ export default class CEventsCalendar extends MixinEvents {
       this.myevent = eventparam
       this.bookEventForm.msgbooking = ''
       this.bookEventForm.numpeople = 1
+      this.bookEventForm.numpeopleLunch = 0
+      this.bookEventForm.numpeopleDinner = 0
+      this.bookEventForm.numpeopleDinnerShared = 0
       this.bookEventForm.booked = true
       this.bookEventpage.state = EState.Creating
 
@@ -482,7 +489,7 @@ export default class CEventsCalendar extends MixinEvents {
   public askForInfoEventMenu(eventparam) {
     if (!UserStore.state.isLogged || !UserStore.state.my.verified_email) {
       // Visu right Toolbar to make SignIn
-      GlobalStore.state.RightDrawerOpen = true
+      GlobalStore.state.rightDrawerOpen = true
 
       tools.showNeutralNotif(this.$q, this.$t('login.needlogin'))
       tools.scrollToTop()
@@ -695,6 +702,9 @@ export default class CEventsCalendar extends MixinEvents {
     if (bookedevent) {
       this.bookEventForm._id = bookedevent._id
       this.bookEventForm.numpeople = bookedevent.numpeople
+      this.bookEventForm.numpeopleLunch = bookedevent.numpeopleLunch
+      this.bookEventForm.numpeopleDinner = bookedevent.numpeopleDinner
+      this.bookEventForm.numpeopleDinnerShared = bookedevent.numpeopleDinnerShared
       this.bookEventForm.infoevent = bookedevent.infoevent
       this.bookEventForm.msgbooking = bookedevent.msgbooking
       this.bookEventForm.booked = bookedevent.booked
@@ -747,6 +757,9 @@ export default class CEventsCalendar extends MixinEvents {
         userId: UserStore.state.my._id,
         id_bookedevent: myevent._id,
         numpeople: self.bookEventForm.numpeople,
+        numpeopleLunch: self.bookEventForm.numpeopleLunch,
+        numpeopleDinner: self.bookEventForm.numpeopleDinner,
+        numpeopleDinnerShared: self.bookEventForm.numpeopleDinnerShared,
         infoevent: tools.gettextevent(self, myevent),
         msgbooking: self.bookEventForm.msgbooking,
         booked: self.bookEventForm.booked,
@@ -755,6 +768,7 @@ export default class CEventsCalendar extends MixinEvents {
       }
 
       this.BookEvent(data).then((ris) => {
+        console.log('ris uscita di BookEvent', ris)
         if (ris)
           tools.showPositiveNotif(self.$q, self.$t('cal.booked') + ' ' + self.$t('cal.event') + ' "' + myevent.title + '"')
         else
@@ -886,6 +900,10 @@ export default class CEventsCalendar extends MixinEvents {
     return CalendarStore.state.operators
   }
 
+  get getInternalPagesArr() {
+    return CalendarStore.state.internalpages
+  }
+
   get getWhereArr() {
     return CalendarStore.state.wheres
   }
@@ -978,6 +996,7 @@ export default class CEventsCalendar extends MixinEvents {
 
   public getEvents(dt) {
     const eventsloc = []
+    // console.log('dt', dt)
 
     for (let i = 0; i < CalendarStore.state.eventlist.length; ++i) {
       let added = false
@@ -986,11 +1005,11 @@ export default class CEventsCalendar extends MixinEvents {
           // check for overlapping times
           const startTime = CalendarStore.state.eventlist[i].dateTimeStart
           const endTime = CalendarStore.state.eventlist[i].dateTimeEnd
-          for (let j = 0; j < eventsloc.length; ++j) {
-            const startTime2 = eventsloc[j].dateTimeStart
-            const endTime2 = eventsloc[j].dateTimeEnd
+          for (const item of eventsloc) {
+            const startTime2 = item.dateTimeStart
+            const endTime2 = item.dateTimeEnd
             if (date.isBetweenDates(startTime, startTime2, endTime2) || date.isBetweenDates(endTime, startTime2, endTime2)) {
-              eventsloc[j].side = 'left'
+              item.side = 'left'
               eventsloc.push(CalendarStore.state.eventlist[i])
               added = true
               break
@@ -1010,6 +1029,8 @@ export default class CEventsCalendar extends MixinEvents {
         }
       }
     }
+    // if (eventsloc.length > 0)
+      // console.log('eventsloc', eventsloc)
     return eventsloc
   }
 

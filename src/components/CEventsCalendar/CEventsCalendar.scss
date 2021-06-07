@@ -272,7 +272,7 @@ $graytext: #555;
   position: absolute;
   margin-top: -10px;
   overflow: hidden;
-  z-index: 9999;
+  z-index: 1000;
   box-sizing: border-box;
   right: 0;
   @media (max-width: 400px) {
@@ -296,4 +296,8 @@ $graytext: #555;
   @media (max-width: 400px) {
     flex-flow: column;
   }
+}
+.itemprenota{
+  align-self: center;
+  color: blue;
 }

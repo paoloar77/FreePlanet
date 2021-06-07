@@ -9,7 +9,7 @@ $heightBtn: 100%;
 }
 
 
-.flex-container, .flex-container_col{
+.flex-container, .flex-container_col {
   background-color: rgb(250, 250, 250);
   padding: 2px 4px 2px 4px;
   margin: 2px;
@@ -19,10 +19,30 @@ $heightBtn: 100%;
   justify-content: space-between;
 }
 
+.q-tab-panel {
+  padding: 8px;
+}
+
 .flex-container_col {
   flex-direction: column;
 }
 
+@media (max-width: 600px) {
+  .flex-item {
+    padding: 1px;
+    margin: 1px;
+  }
+
+  .flex-container {
+    margin: 0;
+    padding: 0;
+  }
+
+  .q-tab-panel {
+    padding: 4px;
+  }
+
+}
 
 .mycard {
   visibility: hidden;
@@ -38,11 +58,11 @@ $heightBtn: 100%;
   transition: all .4s;
 }
 
-.titlePriority, .titleCompleted{
+.titlePriority, .titleCompleted {
   border-width: 0px 0px 1px 0px;
   border-style: solid;
   border-color: #ccc;
-  color:white;
+  color: white;
 }
 
 .titleCompleted {
@@ -62,7 +82,6 @@ $heightBtn: 100%;
 }
 
 
-
 .myitemdrag-enter, .myitemdrag-leave-active {
   opacity: 0;
 }
@@ -76,8 +95,8 @@ $heightBtn: 100%;
 }
 
 
-.categorytitle{
-  color:blue;
+.categorytitle {
+  color: blue;
   background-color: lightblue;
   font-size: 1.25rem !important;
   font-weight: bold;
@@ -85,7 +104,7 @@ $heightBtn: 100%;
   flex: 1;
 }
 
-.projecttitle{
+.projecttitle {
   color: white;
   // color:blue;
   background-color: rgba(65, 152, 239, 0.6);
@@ -95,20 +114,20 @@ $heightBtn: 100%;
   flex: 1;
 }
 
-.itemdescr{
+.itemdescr {
   font-size: 1rem;
   flex: 1;
 }
 
-.itemstatus{
+.itemstatus {
   flex: 1;
   padding: 2px;
 }
 
-.itemdata{
+.itemdata {
   font-size: 1rem;
   flex: 1;
-  padding: 2px;
+  padding: 1px;
 }
 
 .progress-item {
@@ -126,7 +145,7 @@ $heightBtn: 100%;
   height: 10px;
 }
 
-.flex-icon{
+.flex-icon {
   padding: 3px;
   font-size: 1.5rem;
 }
@@ -155,7 +174,7 @@ $heightBtn: 100%;
   }
 }
 
-.divdrag{
+.divdrag {
   animation: fadeIn 0.2s ease-in 1 forwards;
   min-height: 50px;
   background-color: #9f9f9f;

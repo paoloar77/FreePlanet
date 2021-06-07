@@ -1,0 +1,34 @@
+.my-card-stat {
+  width: 100%;
+  max-width: 200px;
+  min-width: 120px;
+  padding: 1rem 1rem;
+  @media (max-width: 718px) {
+    // PER VERSIONE MOBILE
+    max-width: 150px;
+    padding: 0;
+  }
+
+  box-shadow: none;
+}
+
+.my-card-small-stat {
+  width: 100%;
+  max-width: 60px;
+  min-width: 40px;
+  @media (max-width: 718px) {
+    // PER VERSIONE MOBILE
+    max-width: 50px;
+    min-width: 40px;
+  }
+
+  box-shadow: none;
+}
+
+
+.text-h5-short {
+  line-height: 1.25rem !important;
+  @media (max-width: 718px) {
+    line-height: 1rem !important;
+  }
+}

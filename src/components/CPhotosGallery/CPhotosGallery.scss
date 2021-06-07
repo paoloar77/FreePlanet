@@ -1,0 +1,168 @@
+$grayshadow: #555;
+$textcol: #eeefe1;
+$textcol_scuro: darkblue;
+
+p {
+  margin: 0 0 1.25rem;
+  //text-shadow: .125rem .125rem .25rem $grayshadow;
+}
+
+h4 {
+  font-size: 1.25rem;
+}
+
+.landing > section {
+  /*
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  //padding: 0 16px
+  */
+}
+
+.subtitle {
+
+  text-align: center;
+  font-size: 0.85rem;
+}
+
+.landing > section.padding {
+  padding: 5.62rem 1rem;
+}
+
+.landing > section > div {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.landing__footer .doc-link {
+  color: $textcol;
+}
+
+.landing__footer .doc-link:hover {
+  opacity: .8
+}
+
+.gallery:before {
+  content: "";
+  position: fixed;
+  top: 0;
+  height: 100vh;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: -1;
+  //background: #000 url(../../statics/images/cover.jpg) 50%;
+
+  background-size: cover
+}
+
+.carousel_slide {
+
+}
+
+.gallery {
+  background-size: cover;
+  background-position: center center;
+
+  margin: auto;
+  width: 100%;
+  height: 100%;
+  max-width: 800px;
+}
+
+.gallery2{
+  margin: auto;
+  max-width: 800px;
+}
+
+.btn-start {
+  margin: 3.125rem;
+}
+
+.shadow {
+  //color: white;
+  text-shadow: 0.125rem 0.125rem 0.25rem $grayshadow;
+}
+
+.shadow-max {
+  //color: white;
+  text-shadow: .25rem .25rem .5rem $grayshadow;
+}
+
+@media (max-width: 2000px) {
+  .q-carousel {
+    height: 800px !important;
+  }
+}
+
+@media (max-width: 1000px) {
+  .q-carousel {
+    height: 800px !important;
+  }
+}
+
+@media (max-width: 800px) {
+  .q-carousel {
+    height: 600px !important;
+  }
+}
+
+@media (max-width: 718px) {
+  // PER VERSIONE MOBILE
+
+  .gallery2 {
+    max-height: 80vh;
+  }
+
+  .text-h1 {
+    font-size: 3rem;
+    line-height: 3.05rem;
+    margin-bottom: 1.5rem
+  }
+
+  .text-subtitle1 {
+    font-size: 1.25rem;
+  }
+  .text-vers {
+    font-size: 0.6rem;
+  }
+
+}
+
+@media (max-width: 600px) {
+  .q-carousel {
+    height: 450px !important;
+  }
+}
+
+@media (max-width: 400px) {
+  .q-carousel {
+    height: 300px !important;
+  }
+}
+
+.allunga0 {
+  height: 300px !important;
+}
+.allunga1 {
+  height: 400px !important;
+}
+.allunga2 {
+  height: 500px !important;
+}
+.allunga3 {
+  height: 600px !important;
+}
+
+
+.custom-caption {
+  text-align: center;
+  padding: .75rem;
+  color: $textcol;
+  background-color: rgba(0, 0, 0, .3);
+}

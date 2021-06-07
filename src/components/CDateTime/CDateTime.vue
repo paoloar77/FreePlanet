@@ -8,7 +8,7 @@
                  borderless
                  :label="label"
                  :bg-color="bgcolor"
-                 :disable="disable"
+                 :readonly="true"
                  :dense="dense"
                  mask="####-##-## ##:##"
                  debounce="500"
@@ -31,7 +31,7 @@
             <template v-slot:control>
                 <div style="">
                     <div class="self-center full-width no-outline" :style="mystyle" tabindex="0">
-                        {{ tools.getstrDateTime(myvalue) }}
+                        {{ getstrDate(myvalue) }}
                     </div>
                 </div>
             </template>
@@ -41,14 +41,14 @@
 
                         <q-scroller
                                 v-model="myvalue"
-                                view="date-time"
+                                :view="view"
                                 :locale="toolsext.getLocale()"
                                 :rounded-borders="true"
                                 border-color="#2196f3"
                                 bar-color="#2196f3"
                                 text-color="white"
                                 color="primary"
-                                minute-interval="5"
+                                :minute-interval="minuteinterval"
                                 inner-text-color="primary"
                                 inner-color="white"
                                 :style="scrollerPopupStyle280"

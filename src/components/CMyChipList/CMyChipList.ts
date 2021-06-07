@@ -35,52 +35,84 @@ export default class CMyChipList extends Vue {
     this.myarrvalues = []
 
     // console.table(this.options)
-    this.options.forEach((rec, index) => {
-      if (this.type === tools.FieldType.multiselect) {
-        if (this.value.includes(rec[this.optval])) {
-          const mydata = {
-            label: null,
-            value: rec[this.optval],
-            // myris = mylist.filter((myrec) => arrval.includes(myrec[key]))
-            valbool: true,
-            icon: '',
-            color: tools.getColorByIndexBest(index)
+    if (this.options) {
+      this.options.forEach((rec, index) => {
+        if (this.type === tools.FieldType.multiselect) {
+          if (!!this.value) {
+            if (this.value.includes(rec[this.optval])) {
+              const mydata = {
+                label: null,
+                value: rec[this.optval],
+                // myris = mylist.filter((myrec) => arrval.includes(myrec[key]))
+                valbool: true,
+                icon: '',
+                color: tools.getColorByIndexBest(index)
+              }
+
+              if (tools.isObject(this.optlab)) {
+                mydata.label = this.options.filter((myrec) => myrec[this.optval] === mydata.value).map(this.optlab)
+                if (mydata.label)
+                  mydata.label = mydata.label[0]
+              } else {
+                mydata.label = rec[this.optlab]
+              }
+
+              if (this.opticon)
+                mydata.icon = rec[this.opticon]
+              if (this.optcolor)
+                mydata.color = rec[this.optcolor]
+
+              this.myarrvalues.push(mydata)
+            }
+          }
+        } else if (this.type === tools.FieldType.select) {
+          if (this.value === rec[this.optval]) {
+            const mydata = {
+              label: null,
+              value: this.value,
+              valbool: true,
+              icon: '',
+              color: tools.getColorByIndexBest(index)
+            }
+
+            // console.log('mydata', mydata, 'optlab', this.optlab, 'value', this.value)
+
+            if (tools.isObject(this.optlab)) {
+              mydata.label = this.options.filter((myrec) => myrec[this.optval] === mydata.value).map(this.optlab)
+              if (mydata.label)
+                mydata.label = mydata.label[0]
+            } else {
+              mydata.label = rec[this.optlab]
+            }
+
+            if (this.opticon)
+              mydata.icon = rec[this.opticon]
+            if (this.optcolor)
+              mydata.color = rec[this.optcolor]
+
+            this.myarrvalues.push(mydata)
           }
 
-          if (tools.isObject(this.optlab)) {
-            mydata.label = this.options.filter((myrec) => myrec[this.optval] === mydata.value).map(this.optlab)
-            if (mydata.label)
-              mydata.label = mydata.label[0]
-          } else {
-            mydata.label = rec[this.optlab]
+        } else {
+          if (tools.isBitActive(this.value, rec[this.optval])) {
+            const mydata = {
+              label: this.$t(rec[this.optlab]),
+              value: rec[this.optval],
+              valbool: tools.isBitActive(this.value, rec[this.optval]),
+              icon: '',
+              color: tools.getColorByIndexBest(index)
+            }
+
+            if (this.opticon)
+              mydata.icon = rec[this.opticon]
+            if (this.optcolor)
+              mydata.color = rec[this.optcolor]
+
+            this.myarrvalues.push(mydata)
           }
-
-          if (this.opticon)
-            mydata.icon = rec[this.opticon]
-          if (this.optcolor)
-            mydata.color = rec[this.optcolor]
-
-          this.myarrvalues.push(mydata)
         }
-      } else {
-        if (tools.isBitActive(this.value, rec[this.optval])) {
-          const mydata = {
-            label: this.$t(rec[this.optlab]),
-            value: rec[this.optval],
-            valbool: tools.isBitActive(this.value, rec[this.optval]),
-            icon: '',
-            color: tools.getColorByIndexBest(index)
-          }
-
-          if (this.opticon)
-            mydata.icon = rec[this.opticon]
-          if (this.optcolor)
-            mydata.color = rec[this.optcolor]
-
-          this.myarrvalues.push(mydata)
-        }
-      }
-    })
+      })
+    }
 
     if (this.myarrvalues.length === 0)
       this.myarrvalues.push({ label: this.$t('otherpages.manage.nessuno'), color: 'gray' })

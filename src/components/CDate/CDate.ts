@@ -16,6 +16,9 @@ export default class CDate extends Vue {
   @Prop({ required: false, default: false }) public readonly!: boolean
   @Prop({ required: false, default: false }) public disable!: boolean
   @Prop({ required: false, default: '' }) public color!: string
+  @Prop({ required: false, default: false }) public rounded!: boolean
+  @Prop({ required: false, default: false }) public outlined!: boolean
+  @Prop({ required: false, default: true }) public dense!: boolean
 
   public mystyleicon: string = 'font-size: 1.5rem;'
 
@@ -41,7 +44,7 @@ export default class CDate extends Vue {
     const datavalida = tools.convertstrtoDate(value)
     if (!!datavalida) {
       this.valueInternal = datavalida
-      console.log('EMIT: changedate', datavalida)
+      console.log('EMIT: changedate', datavalida.toString())
       this.$emit('input', this.getDate())
     } else {
       console.log('   DATA NON VALIDAAAAAAAAAAAAA ', value, datavalida)
@@ -50,7 +53,9 @@ export default class CDate extends Vue {
   }
 
   get getdatestring() {
-    return tools.getstrDate(this.valueInternal)
+    const mydate = tools.getstrDate(this.valueInternal)
+    console.log('getdatestring', mydate)
+    return mydate
   }
   get getdateyymmddstring() {
     return tools.getstrYYMMDDDate(this.valueInternal)

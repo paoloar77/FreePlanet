@@ -27,6 +27,6 @@ export default class CTesseraElettronica extends Vue {
   }
 
   get rightDrawerOpen() {
-    return GlobalStore.state.RightDrawerOpen
+    return GlobalStore.state.rightDrawerOpen
   }
 }

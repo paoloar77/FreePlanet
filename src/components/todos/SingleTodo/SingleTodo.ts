@@ -65,25 +65,34 @@ export default class SingleTodo extends Vue {
   //   this.watchupdate('priority')
   // }
 
-  @Watch('itemtodo.descr') public valueChanged5() {
+  @Watch('itemtodo.descr') public valueChangeddescr() {
     this.precDescr = this.itemtodo.descr
     this.watchupdate('descr')
   }
 
+  @Watch('itemtodo.note') public valueChanged5() {
+    this.precDescr = this.itemtodo.note
+    this.watchupdate('note')
+  }
+
   @Watch('itemtodo.hoursplanned') public valueChangedhoursplanned() {
-    console.log('itemtodo.hoursplanned', this.itemtodo.hoursplanned)
+    // console.log('itemtodo.hoursplanned', this.itemtodo.hoursplanned)
     this.watchupdate('hoursplanned')
   }
+  @Watch('itemtodo.pos') public valueChangedpos() {
+    // console.log('itemtodo.hoursplanned', this.itemtodo.hoursplanned)
+    this.watchupdate('pos')
+  }
   @Watch('itemtodo.statustodo') public valueChangedstatus() {
-    console.log('itemtodo.statustodo', this.itemtodo.statustodo)
+    // console.log('itemtodo.statustodo', this.itemtodo.statustodo)
     this.watchupdate('statustodo')
   }
   @Watch('itemtodo.completed_at') public valueChangedcompleted_at() {
-    console.log('itemtodo.completed_at', this.itemtodo.completed_at)
+    // console.log('itemtodo.completed_at', this.itemtodo.completed_at)
     this.watchupdate('completed_at')
   }
   @Watch('itemtodo.hoursworked') public valueChangedhoursworked() {
-    console.log('itemtodo.hoursworked', this.itemtodo.hoursworked)
+    // console.log('itemtodo.hoursworked', this.itemtodo.hoursworked)
     this.watchupdate('hoursworked')
   }
   @Watch('itemtodo.start_date') public valueChangedstart_date() {
@@ -102,11 +111,15 @@ export default class SingleTodo extends Vue {
     this.watchupdate('phase')
   }
 
+  @Watch('itemtodo.assignedToUsers') public valueChangeassignedToUsers() {
+    this.watchupdate('assignedToUsers')
+  }
+
   @Watch('itemtodo.progress') public valueChanged6() {
-    console.log('itemtodo.progress')
+    // console.log('itemtodo.progress')
     this.updateClasses()
 
-    console.log('this.percentageProgress', this.percentageProgress, 'this.itemtodo.progress', this.itemtodo.progress)
+    // console.log('this.percentageProgress', this.percentageProgress, 'this.itemtodo.progress', this.itemtodo.progress)
     this.watchupdate('progress')
   }
 
@@ -221,12 +234,12 @@ export default class SingleTodo extends Vue {
       this.$emit('deselectAllRowsproj', null, false, false)
       this.$emit('deselectAllRowstodo', this.itemtodo, true)
 
-      if (!this.sel) {
-        this.selectRiga()
-      } else {
-        this.$emit('deselectAllRowsproj', null, false, false, true)
-        this.deselectRiga()
-      }
+      // if (!this.sel) {
+      this.selectRiga()
+      // } else {
+      //   this.$emit('deselectAllRowsproj', null, false, false, true)
+      //   this.deselectRiga()
+      // }
     }
   }
 
@@ -239,7 +252,7 @@ export default class SingleTodo extends Vue {
   }
 
   public deselectRiga() {
-    console.log('DeselectRiga', this.itemtodo.descr)
+    // console.log('DeselectRiga', this.itemtodo.descr)
     this.sel = false
     this.classRow = ''
     this.inEdit = false
@@ -298,7 +311,7 @@ export default class SingleTodo extends Vue {
       }
 
       if (!!theField) {
-        console.log('FOCUS TODO', theField)
+        // console.log('FOCUS TODO', theField)
         theField.focus()
       }
       // console.log('focus()')
@@ -320,7 +333,7 @@ export default class SingleTodo extends Vue {
   }
 
   public keyDownRow(e) {
-    console.log('keyDownRow')
+    // console.log('keyDownRow')
     // Delete Key or Backspage
     if (((e.keyCode === 8) || (e.keyCode === 46)) && (this.precDescr === '') && !e.shiftKey) {
       e.preventDefault()
@@ -335,7 +348,7 @@ export default class SingleTodo extends Vue {
   }
 
   public keyDownArea(e) {
-    console.log('keyDownArea')
+    // console.log('keyDownArea')
 /*
     if ((e.key === 'ArrowUp') && !e.shiftKey) {
       e.key = 'Tab'
@@ -376,7 +389,7 @@ export default class SingleTodo extends Vue {
     if (e.key === 'Escape') {
       this.deselectRiga()
       // this.faiFocus('insertTask', true)
-      console.log('LOAD this.precDescr', this.precDescr)
+      // console.log('LOAD this.precDescr', this.precDescr)
       this.precDescr = this.itemtodo.descr
     }
 
@@ -388,9 +401,9 @@ export default class SingleTodo extends Vue {
     }
 
     this.itemtodo.descr = this.precDescr
-    console.log('updateTodo', this.precDescr, this.itemtodo.descr)
-    console.log('itemtodo', this.itemtodo)
-    console.log('Prec:', this.itemtodoPrec)
+    // console.log('updateTodo', this.precDescr, this.itemtodo.descr)
+    // console.log('itemtodo', this.itemtodo)
+    // console.log('Prec:', this.itemtodoPrec)
 
     this.watchupdate('descr')
     this.inEdit = false
@@ -426,7 +439,7 @@ export default class SingleTodo extends Vue {
 
   public updatedata(field: string) {
     // const myitem = tools.jsonCopy(this.itemtodo)
-    console.log('calling this.$emit(eventupdate)', this.itemtodo)
+    // console.log('calling this.$emit(eventupdate)', this.itemtodo)
     this.$emit('eventupdate', { myitem: this.itemtodo, field } )
   }
 
@@ -462,13 +475,13 @@ export default class SingleTodo extends Vue {
   }
 
   public activeEdit() {
-    console.log('Attiva Edit')
+    // console.log('Attiva Edit')
     this.attivaEdit = true
     this.editTodo()
   }
 
   public async clickMenu(action) {
-    console.log('click menu: ', action)
+    // console.log('click menu: ', action)
     if (action === lists.MenuAction.DELETE) {
       return await this.askConfirmDelete()
     } else if (action === lists.MenuAction.TOGGLE_EXPIRING) {

@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { Component } from 'vue-property-decorator'
+import { Component, Prop } from 'vue-property-decorator'
 import { tools } from '@src/store/Modules/tools'
 import { toolsext } from '@src/store/Modules/toolsext'
 
@@ -7,11 +7,13 @@ import { toolsext } from '@src/store/Modules/toolsext'
   name: 'Logo'
 })
 export default class Logo extends Vue {
+  @Prop({ required: false, default: '' }) public mystyle: boolean
+
   get logoimg() {
     return '../../' + tools.getimglogo()
   }
 
   get logoalt() {
-    return this.$t('msg.myAppName')
+    return this.$t('ws.sitename')
   }
 }

@@ -2,6 +2,7 @@
     <div class="text-center">
         <div v-if="useinput">
             <q-select
+                    :multiple="multiple"
                     rounded
                     outlined
                     :input-class="myclass"
@@ -15,15 +16,16 @@
                     :option-label="optlab"
                     @input="changeval"
                     :label="label"
-                    dense
+                    :dense="dense"
             >
             </q-select>
         </div>
         <div v-else>
             <q-select
+                    :multiple="multiple"
                     rounded
                     outlined
-                    dense
+                    :dense="dense"
                     :input-class="myclass"
                     v-model="myvalue"
                     :options="options"

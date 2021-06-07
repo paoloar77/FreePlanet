@@ -3,7 +3,7 @@ import { Component, Prop, Watch } from 'vue-property-decorator'
 
 import { tools } from '../../store/Modules/tools'
 import { toolsext } from '@src/store/Modules/toolsext'
-import { IOperators } from '../../model/GlobalStore'
+import { IOperators } from '../../model'
 
 @Component({
   name: 'CCard',

@@ -15,7 +15,13 @@ export default class CMySelect extends Vue {
   @Prop({ required: true, default: '' }) public optlab
   @Prop({ required: true, default: '' }) public optval
   @Prop({ required: false, default: true }) public useinput: boolean
-  @Prop({ required: false, default: null }) public newvaluefunc
+  @Prop({ required: false, default: true }) public dense: boolean
+  @Prop({ required: false, default: false }) public multiple: boolean
+  @Prop({
+    required: false, default: function mydef(): object {
+      return {}
+    }
+  }) public newvaluefunc: object
   @Prop({ required: false, default: null }) public funcgetvaluebyid
   @Prop({ required: true }) public options
 
@@ -26,7 +32,9 @@ export default class CMySelect extends Vue {
   }
 
   public changeval(newval) {
+    console.log('changeval', newval)
     this.$emit('update:value', newval)
+    this.$emit('changeval', newval)
   }
 
   public mounted() {

@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { GlobalStore, UserStore, MessageStore } from '../store/Modules'
+import { GlobalStore, UserStore, MessageStore, Products } from '../store/Modules'
 
 import Component from 'vue-class-component'
 import { func_tools } from '../store/Modules/toolsext'
@@ -9,7 +9,7 @@ import { IMessage } from '@src/model'
 // You can declare a mixin as the same style as components.
 @Component
 export default class MixinUsers extends Vue {
-  public mythis() {
+  get mythis() {
     return this
   }
 
@@ -48,6 +48,17 @@ export default class MixinUsers extends Vue {
     }
   }
 
+  get getnumItemsCart() {
+    const arrcart = Products.state.cart
+    if (!!arrcart) {
+      if (!!arrcart.items) {
+        const total = arrcart.items.reduce((sum, item) => sum + item.order.quantity, 0)
+        return total
+      }
+    }
+    return 0
+  }
+
   public getImgByMsg(msg: IMessage) {
     return `statics/` + UserStore.getters.getImgByUsername(this.getUsernameChatByMsg(msg))
   }
@@ -55,6 +66,17 @@ export default class MixinUsers extends Vue {
   get getMyImg() {
     const ris = UserStore.getters.getImgByUsername(UserStore.state.my.username)
     return (ris !== '') ? 'statics/' + ris : ''
+  }
+
+  get getMyImgforIcon() {
+    const ris = UserStore.getters.getImgByUsername(UserStore.state.my.username)
+    return (ris !== '') ? 'img:statics/' + ris : 'fas fa-user'
+  }
+
+  get getIconCart() {
+    const iconcart = 'fas fa-shopping-cart'
+
+    return iconcart
   }
 
   get MenuCollapse() {
@@ -74,8 +96,16 @@ export default class MixinUsers extends Vue {
     return UserStore.state.my.surname
   }
 
+  get myCell() {
+    return UserStore.state.my.profile.cell
+  }
+
   get Verificato() {
     return UserStore.state.my.verified_email
+  }
+
+  get MadeGift() {
+    return UserStore.state.my.made_gift
   }
 
   get Email() {

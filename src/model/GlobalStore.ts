@@ -1,6 +1,8 @@
 import { IAction } from '@src/model/Projects'
 import { Component } from 'vue-router/types/router'
 import { lists } from '@src/store/Modules/lists'
+import { IPaymentType } from '@src/model/UserStore'
+import { ICart, IDepartment, IProducer, IProduct, IShareWithUs, IStorehouse } from '@src/model/Products'
 
 export interface IPost {
   title: string
@@ -15,6 +17,7 @@ export interface IConnData {
 
 export interface ICfgServer {
   chiave: string
+  idapp: string
   userId: string
   valore: string
 }
@@ -49,21 +52,66 @@ export interface ITeachUname {
   username?: string
 }
 
+export interface IInternalPage {
+  path?: string
+}
+
+export interface IResp {
+  _id?: string
+  username?: string
+  name?: string
+  surname?: string
+}
+
 export interface IMyPage {
   _id?: string
   author_username?: string
+  lang?: string
   title?: string
   icon?: string
+  order?: number
   path?: string
   keywords?: string
   description?: string
+  img1?: string
   content?: string
+  video1?: string
+  img2?: string
+  content2?: string
+  video2?: string
+  img3?: string
+  content3?: string
+  video3?: string
+  content4?: string
   active?: boolean
   inmenu?: boolean
+  color?: string
+  onlyif_logged?: boolean
+  only_residenti?: boolean
+  only_consiglio?: boolean
   submenu?: boolean
   l_par?: number,
   l_child?: number,
   infooter?: boolean
+  internalpage?: boolean
+}
+
+export interface ISites {
+  _id?: string
+  attiva?: boolean
+  idapp?: string
+  name?: string
+  adminemail?: string
+  manageremail?: string
+  replyTo?: string
+  host?: string
+  portapp?: string
+  dir?: string
+  email_from?: string
+  email_pwd?: string
+  telegram_key?: string
+  telegram_bot_name?: string
+  pathreg_add?: string
 }
 
 export interface INewsToSent {
@@ -80,6 +128,21 @@ export interface INewsToSent {
   starting_job?: boolean
   finish_job?: boolean
   error_job?: string
+}
+
+export interface ICalZoom {
+  lang?: string
+  title?: string
+  typeconf?: string
+  date_start?: string
+  date_end?: Date
+  id_conf_zoom?: number
+  note?: string
+}
+
+export interface IGroup {
+  _id?: any
+  descr?: string
 }
 
 export interface IMailinglist {
@@ -133,10 +196,12 @@ export interface IGlobalState {
   mobileMode: boolean
   menuCollapse: boolean
   leftDrawerOpen: boolean
-  RightDrawerOpen: boolean
+  rightDrawerOpen: boolean
+  rightCartOpen: boolean
   category: string
   stateConnection: string
   networkDataReceived: boolean
+  clickcmd?: string
   cfgServer: ICfgServer[]
   testp1: ITestp1
   connData: IConnData
@@ -148,11 +213,21 @@ export interface IGlobalState {
   serv_settings: ISettings[],
   settings: ISettings[],
   disciplines: IDiscipline[],
+  paymenttypes: IPaymentType[],
   newstosent: INewsToSent[],
+  gallery: IGallery[],
   mypage: IMyPage[],
   templemail: ITemplEmail[],
   opzemail: ISettings[],
   mailinglist: IMailinglist[],
+  calzoom: ICalZoom[],
+  producers: IProducer[],
+  storehouses: IStorehouse[],
+  departments: IDepartment[],
+  sharewithus: IShareWithUs[],
+  groups: IGroup[],
+  resps: IResp[],
+  workers: IResp[],
   autoplaydisc: number
 }
 
@@ -169,21 +244,34 @@ export interface IMenuList {
 }
 
 export interface IListRoutes {
+  active?: boolean
+  order: number
   path: string
   name: string
+  lang?: string
   materialIcon?: string
   component?: Component
   reqauth?: boolean
+  isseparator?: boolean
   inmenu?: boolean
   solotitle?: boolean
   infooter?: boolean
   submenu?: boolean
   onlyAdmin?: boolean
+  onlyif_logged?: boolean
   onlyManager?: boolean
+  onlySocioResidente?: boolean
+  onlyConsiglio?: boolean
+  onlyNotSoci?: boolean
+  onlyDepartment?: boolean
+  onlyTutor?: boolean
+  color?: string
+  onlyEditor?: boolean
   extraclass?: string
   meta?: any
   idelem?: string
   urlroute?: string
+  img?: string
   // ------------------------
   faIcon?: string
   text?: string
@@ -258,19 +346,25 @@ export interface ITimeLineMain {
   body: ITimeLineEntry[]
 }
 
+export interface IImgGallery {
+  _id?: string
+  imagefile: string
+  order?: number
+  alt?: string
+  description?: string
+}
+
 export interface IGallery {
-  title: string
-  subtitle?: IAllLang
-  img: string
-  width?: number
-  height?: number
-  ingallery?: boolean
-  inexibitions?: boolean
+  _id?: string
+  author_username?: string
+  title?: string
+  directory?: string
+  list?: IImgGallery[]
 }
 
 export interface IColl {
   title: IAllLang
-  date: string
+  date?: string
   subtitle?: IAllLang
   img: string
   img2?: string
@@ -278,6 +372,8 @@ export interface IColl {
   linkagg_type?: number
   width?: number
   height?: number
+  ingallery?: boolean
+  inexibitions?: boolean
 }
 
 export interface ICollaborations {
@@ -293,14 +389,21 @@ export interface IParamDialog {
 
 export interface IFunctionality {
   PWA?: boolean
+  ENABLE_REGISTRATION?: boolean
+  SHOW_REG_BUTTON?: boolean
+  SHOW_PROFILE?: boolean
   SHOW_USER_MENU?: boolean
   SHOW_IF_IS_SERVER_CONNECTION?: boolean
   ENABLE_TODOS_LOADING?: boolean
   ENABLE_PROJECTS_LOADING?: boolean
+  ENABLE_ECOMMERCE?: boolean
   SHOW_NEWSLETTER?: boolean
   SHOW_ONLY_POLICY?: boolean
   SHOW_MESSAGES?: boolean
   BOOKING_EVENTS?: boolean
+  ENABLE_REG_AYNI?: boolean
+  ENABLE_REG_SIP?: boolean
+  ENABLE_REG_CNM?: boolean
 }
 
 export interface IParamsQuery {
@@ -308,8 +411,18 @@ export interface IParamsQuery {
   startRow: number
   endRow: number
   filter: string
+  filterand: string
   sortBy: any
   descending: number
+  userId: string
+  codeId?: string
+  lk_tab?: string,
+  af_objId_tab?: string,
+  lk_LF?: string,
+  lk_FF?: string,
+  lk_as?: string,
+  lk_proj?: string,
+  lk_col2?: string,
 }
 
 export interface IColGridTable {
@@ -332,6 +445,7 @@ export interface IColGridTable {
   jointable?: string
   resultjoin?: string[]
   visuonlyEditVal?: boolean
+  notShowInNewRec?: boolean
 }
 
 export interface ITableRec {
@@ -343,6 +457,13 @@ export interface ITableRec {
   colicon?: string
   onlyAdmin?: boolean
   noshow: boolean
+}
+
+export interface IFilter {
+  label: string
+  value: string
+  hide?: boolean
+  default?: boolean
 }
 
 export interface IDataPass {
@@ -366,5 +487,13 @@ export const DefaultNewsState: INewsState = {
   totemail: 0,
   totsubscribed: 0,
   totunsubscribed: 0,
-  totsentlastid: 0,
+  totsentlastid: 0
+}
+
+export interface IPagination {
+  sortBy: string,
+  descending: boolean
+  rowsNumber: number
+  page: number,
+  rowsPerPage: number // specifying this determines pagination is server-side
 }

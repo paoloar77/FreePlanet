@@ -16,7 +16,7 @@ import { CalendarStore } from '../../store/Modules'
   components: { CMyTeacher }
 })
 
-export default class CCardDiscipline extends Vue {
+export default class CCardDiscipline extends MixinBase {
   @Prop({ required: true }) public discipline: IDiscipline
   @Prop({ required: false, default: '' }) public mystyle: string
   @Prop({ required: false, default: false }) public autoplay: boolean

@@ -6,3 +6,17 @@
   max-width: 250px;
   min-width: 200px;
 }
+
+.tdclass, .trclass{
+  height: 20px !important;
+}
+
+.q-table td {
+  padding-left: 1px;
+  padding-right: 2px;
+  padding-top: 0;
+  padding-bottom: 0;
+  &__title {
+    font-size: 1rem;
+  }
+}

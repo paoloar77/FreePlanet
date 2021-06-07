@@ -40,7 +40,7 @@ export default class CProgress extends Vue {
 
   get getdescr() {
     if (!!this.descr) {
-      return this.descr + ' : '
+      return this.descr + ': '
     }
   }
 

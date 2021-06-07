@@ -5,7 +5,7 @@ import drawer from '../../layouts/drawer/drawer.vue'
 import messagePopover from '../../layouts/toolbar/messagePopover/messagePopover.vue'
 import { CSignIn } from '../../components/CSignIn'
 
-import { GlobalStore, UserStore } from '@modules'
+import { GlobalStore, Products, UserStore } from '@modules'
 // import { StateConnection } from '../../model'
 import { Prop, Watch } from 'vue-property-decorator'
 import { tools } from '../../store/Modules/tools'
@@ -13,22 +13,25 @@ import { toolsext } from '@src/store/Modules/toolsext'
 
 import Quasar, { Screen } from 'quasar'
 import { static_data } from '../../db/static_data'
-import globalroutines from '../../globalroutines'
 
 import MixinUsers from '../../mixins/mixin-users'
 import { CMyAvatar } from '../CMyAvatar'
+import { CSigninNoreg } from '../CSigninNoreg'
+import { CMyCart } from '@components'
+import { shared_consts } from '@src/common/shared_vuejs'
 
 @Component({
   name: 'Header',
   mixins: [MixinUsers],
   components: {
     drawer,
-    messagePopover, CSignIn, CMyAvatar
+    messagePopover, CSigninNoreg, CMyAvatar, CMyCart
   }
 })
 
 export default class Header extends Vue {
   @Prop({ required: false, default: '' }) public extraContent: string
+  @Prop({ required: false, default: '' }) public clBase: string
   public $t
   public $v
   public $q
@@ -40,6 +43,7 @@ export default class Header extends Vue {
   public clCloudUpload: string = ''
   public clCloudDownload: string = ''
   public clCloudUp_Indexeddb: string = ''
+  public tabcmd: string = ''
   public clCloudDown_Indexeddb: string = 'clIndexeddbsend'
   public photo = ''
   public visuimg: boolean = true
@@ -58,6 +62,33 @@ export default class Header extends Vue {
 
   get isManager() {
     return UserStore.state.isManager
+  }
+
+  get isSocio() {
+    return UserStore.state.my.profile.socio
+  }
+
+  get isSocioResidente() {
+    return UserStore.state.my.profile.socioresidente
+  }
+  get isConsiglio() {
+    return UserStore.state.my.profile.consiglio
+  }
+
+  get getcolormenu() {
+    return this.isSocio ? 'green-7' : 'white'
+  }
+
+  get isTutor() {
+    return UserStore.state.isTutor
+  }
+
+  get isZoomeri() {
+    return UserStore.state.isZoomeri
+  }
+
+  get isTratuttrici() {
+    return UserStore.state.isTratuttrici
   }
 
   get conndata_changed() {
@@ -106,11 +137,25 @@ export default class Header extends Vue {
   }
 
   get rightDrawerOpen() {
-    return GlobalStore.state.RightDrawerOpen
+    return GlobalStore.state.rightDrawerOpen
   }
 
   set rightDrawerOpen(value) {
-    GlobalStore.state.RightDrawerOpen = value
+    GlobalStore.state.rightDrawerOpen = value
+
+    if (GlobalStore.state.rightDrawerOpen)
+      GlobalStore.state.rightCartOpen = false
+  }
+
+  get rightCartOpen() {
+    return GlobalStore.state.rightCartOpen
+  }
+
+  set rightCartOpen(value) {
+    GlobalStore.state.rightCartOpen = value
+
+    if (GlobalStore.state.rightCartOpen)
+      GlobalStore.state.rightDrawerOpen = false
   }
 
   get lang() {
@@ -132,6 +177,11 @@ export default class Header extends Vue {
     this.setshortlang(mylangtopass)
 
     this.setLangAtt(mylangtopass)
+
+    UserStore.actions.setLangServer()
+
+    // Update Server
+
   }
 
   @Watch('GlobalStore.state.stateConnection', { immediate: true, deep: true })
@@ -168,11 +218,12 @@ export default class Header extends Vue {
       // console.log('SSSSSSSS: ', value, oldValue)
 
       const color = (value === 'online') ? 'positive' : 'warning'
+      const statoconn = this.$t('connection.conn') + ' ' +  ((value === 'online') ? this.$t('connection.online') : this.$t('connection.offline'))
 
       if (this.static_data.functionality.SHOW_IF_IS_SERVER_CONNECTION) {
 
         if (!!oldValue) {
-          tools.showNotif(this.$q, this.$t('connection') + ` disc__value}`, {
+          tools.showNotif(this.$q, statoconn, {
             color,
             icon: 'wifi'
           })
@@ -236,8 +287,7 @@ export default class Header extends Vue {
       })
     })
 
-    // this.$q.lang.set(mylang)
-
+    GlobalStore.actions.addDynamicPages()
   }
 
   public beforeMount() {
@@ -308,7 +358,7 @@ export default class Header extends Vue {
   }
 
   get getappname() {
-    return tools.getappname(this)
+    return tools.getsuffisso() + tools.getappname(this, tools.isMobile())
   }
 
   public toggleanimation() {
@@ -332,7 +382,7 @@ export default class Header extends Vue {
       })
   }
 
-  get static_data(){
+  get static_data() {
     return static_data
   }
 
@@ -340,32 +390,54 @@ export default class Header extends Vue {
     return UserStore.state.isLogged
   }
 
-  get isVerified() {
+  get isEmailVerified() {
     return UserStore.state.my.verified_email
   }
 
-  public loginOk() {
-    tools.loginOk(this, false)
-  }
-
-  public loginInCorso() {
-    tools.loginInCorso(this)
-  }
-
-  public checkErrors(riscode) {
-    tools.SignIncheckErrors(this, riscode)
-  }
-
-  public showNotif(msgcode) {
-    tools.showNotif(this.$q, this.$t(msgcode))
-  }
-
-  public mythis() {
+  get mythis() {
     return this
   }
 
   public clickregister() {
     this.rightDrawerOpen = false
     this.$router.replace('/signup')
+  }
+
+  get getnumItemsCart() {
+    const arrcart = Products.state.cart
+    if (!!arrcart) {
+      if (!!arrcart.items) {
+        const total = arrcart.items.reduce((sum, item) => sum + item.order.quantity, 0)
+        return total
+      }
+    }
+    return 0
+  }
+
+  get getnumOrdersCart() {
+    const arrorderscart = Products.state.orders.filter((rec) => rec.status < shared_consts.OrderStatus.RECEIVED)
+    // const arrorderscart = Products.state.orders
+    if (!!arrorderscart) {
+      return arrorderscart.length
+    }
+    return 0
+  }
+
+  get getcart() {
+    return Products.state.cart
+  }
+
+  get getClassColorHeader() {
+    if (tools.isTest())
+      return 'bg-warning'
+    else if (tools.isDebug())
+      return 'bg-info'
+    else
+      return 'bg-primary'
+  }
+
+  public changecmd(value) {
+    console.log('changecmd', value)
+    GlobalStore.mutations.changeCmdClick(value)
   }
 }

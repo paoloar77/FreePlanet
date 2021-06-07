@@ -67,7 +67,7 @@ async function readfromIndexDbToState(context, table) {
 
       } else {
         const arrris = tools.setArrayMainByTable(table, reccat)
-        // console.log('************  ARRAYS SALVATI IN MEMORIA ', table, arrris)
+        console.log('************  ARRAYS SALVATI IN MEMORIA ', table, arrris)
 
       }
 
@@ -89,41 +89,46 @@ function testfunc2() {
 
 export default async (context, cmd, table, datakey = null, id = '') => {
 
-  // console.log('TABLE', table, 'cmd', cmd)
-  if (cmd === 'loadapp') {
-    // ****** LOAD APP AL CARICAMENTO ! *******
-    return saveConfigIndexDb(context)
+  try {
+    // console.log('TABLE', table, 'cmd', cmd)
+    if (cmd === 'loadapp') {
+      // ****** LOAD APP AL CARICAMENTO ! *******
+      return saveConfigIndexDb(context)
 
-  } else if (cmd === 'write') {
-    if (GlobalStore) {
-      GlobalStore.state.connData.uploading_indexeddb = 1
+    } else if (cmd === 'write') {
+      if (GlobalStore) {
+        GlobalStore.state.connData.uploading_indexeddb = 1
+      }
+      return await storage.setdata(table, datakey)
+    } else if (cmd === 'updatefromIndexedDbToState') {
+      return await readfromIndexDbToState(context, table)
+    } else if (cmd === 'readall') {
+      if (GlobalStore) {
+        GlobalStore.state.connData.downloading_indexeddb = 1
+        console.log('getalldata table', table)
+      }
+      return await storage.getalldata(table)
+    } else if (cmd === 'count') {
+      return await storage.count(table)
+    } else if (cmd === 'read') {
+      if (GlobalStore) {
+        GlobalStore.state.connData.downloading_indexeddb = 1
+      }
+      return await storage.getdata(table, id)
+    } else if (cmd === 'delete') {
+      if (GlobalStore) {
+        GlobalStore.state.connData.uploading_indexeddb = 1
+      }
+      return await storage.deletedata(table, id)
+    } else if (cmd === 'clearalldata') {
+      if (GlobalStore) {
+        GlobalStore.state.connData.uploading_indexeddb = 1
+      }
+      return await storage.clearalldata(table)
+    } else if (cmd === 'log') {
+      consolelogpao(table)
     }
-    return await storage.setdata(table, datakey)
-  } else if (cmd === 'updatefromIndexedDbToState') {
-    return await readfromIndexDbToState(context, table)
-  } else if (cmd === 'readall') {
-    if (GlobalStore) {
-      GlobalStore.state.connData.downloading_indexeddb = 1
-    }
-    return await storage.getalldata(table)
-  } else if (cmd === 'count') {
-    return await storage.count(table)
-  } else if (cmd === 'read') {
-    if (GlobalStore) {
-      GlobalStore.state.connData.downloading_indexeddb = 1
-    }
-    return await storage.getdata(table, id)
-  } else if (cmd === 'delete') {
-    if (GlobalStore) {
-      GlobalStore.state.connData.uploading_indexeddb = 1
-    }
-    return await storage.deletedata(table, id)
-  } else if (cmd === 'clearalldata') {
-    if (GlobalStore) {
-      GlobalStore.state.connData.uploading_indexeddb = 1
-    }
-    return await storage.clearalldata(table)
-  } else if (cmd === 'log') {
-    consolelogpao(table)
+  } catch (e) {
+    console.error('error INDEXdb', e);
   }
 }

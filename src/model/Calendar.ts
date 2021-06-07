@@ -1,4 +1,4 @@
-import { IOperators } from '@src/model/GlobalStore'
+import { IInternalPage, IMyPage, IOperators } from '@src/model/GlobalStore'
 
 export interface IEvents {
   _id?: any
@@ -20,11 +20,24 @@ export interface IEvents {
   infoafterprice?: string
   teacher?: string
   teacher2?: string
+  teacher3?: string
+  teacher4?: string
   infoextra?: string
   linkpage?: string
+  pagefooter?: IInternalPage[]
   linkpdf?: string
   nobookable?: boolean
+  lunchAvailable?: boolean
+  dinnerAvailable?: boolean
+  dinnerSharedAvailable?: boolean
+  lunchType?: number
+  dinnerType?: number
+  lunchPrice?: number
+  dinnerPrice?: number
+  internal?: boolean
+  note?: string
   news?: boolean
+  facebook?: string
   canceled?: boolean
   deleted?: boolean
   dupId?: any
@@ -36,6 +49,9 @@ export interface IBookedEvent {
   userId: string
   id_bookedevent?: any
   numpeople: number
+  numpeopleLunch?: number
+  numpeopleDinner?: number
+  numpeopleDinnerShared?: number
   infoevent: string
   msgbooking: string
   datebooked?: Date
@@ -70,6 +86,7 @@ export interface ICalendarState {
   eventlist: IEvents[]
   bookedevent: IBookedEvent[]
   operators: IOperators[]
+  internalpages: IMyPage[]
   wheres: IWheres[]
   contribtype: IContribtype[]
   // ---------------

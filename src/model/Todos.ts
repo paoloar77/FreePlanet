@@ -5,6 +5,7 @@ export interface ITodo {
   userId?: string
   category?: string
   descr?: string,
+  note?: string,
   priority?: number,
   statustodo?: number,
   created_at?: Date,
@@ -12,7 +13,6 @@ export interface ITodo {
   completed_at?: Date,
   expiring_at?: Date,
   enableExpiring?: boolean,
-  id_prev?: string,
   modified?: boolean,
   pos?: number,
   order?: number,
@@ -25,6 +25,7 @@ export interface ITodo {
   start_date?: Date
   themecolor?: string
   themebgcolor?: string
+  assignedToUsers?: string[]
 }
 
 export interface IParamTodo {
@@ -56,4 +57,15 @@ export interface ITodosState {
   testpao: string
   insidePending: boolean
   visuLastCompleted: number
+}
+
+export interface IHours {
+  _id?: any,
+  userId?: string
+  descr?: string,
+  todoId?: string,
+  date?: Date,
+  time_start: number
+  time_end: number
+  hours: number
 }

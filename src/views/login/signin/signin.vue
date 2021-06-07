@@ -1,11 +1,9 @@
 <template>
     <q-page padding class="signin">
-        <CSignIn :mythis="mythis"
-                 @loginOk="loginOk"
-                 @loginInCorso="loginInCorso"
-                 @checkErrors="checkErrors"
-                 @showNotif="showNotif">
-        </CSignIn>
+      <CSigninNoreg :showregbutt="true">
+
+      </CSigninNoreg>
+
     </q-page>
 </template>
 

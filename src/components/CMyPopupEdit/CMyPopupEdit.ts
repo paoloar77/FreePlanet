@@ -6,14 +6,16 @@ import { toolsext } from '@src/store/Modules/toolsext'
 import { IColGridTable } from '../../model'
 import { fieldsTable } from '../../store/Modules/fieldsTable'
 import { CMyChipList } from '../CMyChipList'
+import { CDate } from '../CDate'
 import { CDateTime } from '../CDateTime'
 import { CMyToggleList } from '../CMyToggleList'
 import { CMySelect } from '../CMySelect'
 import { CMyEditor } from '../CMyEditor'
+import { CGallery } from '../CGallery'
 
 @Component({
   name: 'CMyPopupEdit',
-  components: {CMyChipList, CDateTime, CMyToggleList, CMySelect, CMyEditor}
+  components: { CMyChipList, CDateTime, CDate, CMyToggleList, CMySelect, CMyEditor, CGallery }
 })
 
 export default class CMyPopupEdit extends Vue {
@@ -23,21 +25,63 @@ export default class CMyPopupEdit extends Vue {
   @Prop({ required: false, default: '' }) public field
   @Prop({ required: false, default: '' }) public subfield
   @Prop({ required: false, default: false }) public showall
+  @Prop({ required: false, default: 'row' }) public view
+  @Prop({ required: false, default: '5' }) public minuteinterval
+  @Prop({ required: false, default: false }) public disable
+  @Prop({ required: false, default: false }) public visulabel
 
   public myvalue = ''
+  public myvalueprec = 'false'
+  public countryname = ''
+  public visueditor: boolean = false
+  public showeditor: boolean = true
 
   get tools() {
     return tools
   }
 
+  get isviewfield() {
+    return this.view === 'field'
+  }
+
   get db_fieldsTable() {
     return fieldsTable
   }
+
   public changeval(newval) {
+    console.log('changeval update:row', newval)
     this.$emit('update:row', newval)
   }
 
+  public getrealval(newval) {
+    if (this.col.fieldtype === tools.FieldType.hours) {
+      newval = newval.value
+    }
+  }
+
+  public changevalRec(newval) {
+    console.log('this.row', this.row, 'this.col', this.col, 'newval', newval)
+    console.log('this.row[this.col.name]', this.row[this.col.name])
+    this.row[this.col.name] = newval
+    console.log('changevalRec update:row', newval)
+    this.$emit('update:row', this.row)
+  }
+
+  public changevalRecHours(newval) {
+    if (this.col.fieldtype === tools.FieldType.hours) {
+      newval = newval.value
+    }
+    this.changevalRec(newval)
+
+    this.myvalue = newval
+  }
+
+  public updatedata() {
+    this.mounted()
+  }
+
   public mounted() {
+    // console.log('mounted')
     if ((this.subfield !== '') && (this.subfield !== '')) {
       if (this.row[this.field] === undefined) {
         this.row[this.field] = {}
@@ -51,6 +95,10 @@ export default class CMyPopupEdit extends Vue {
       else
         this.myvalue = this.row
     }
+
+    this.myvalueprec = this.myvalue
+
+    // console.log('this.myvalueprec', this.myvalueprec)
   }
 
   public OpenEdit() {
@@ -58,9 +106,29 @@ export default class CMyPopupEdit extends Vue {
     this.$emit('show')
   }
 
+  public getval() {
+    let myval = 'false'
+
+    if ((this.subfield !== '') && (this.subfield !== '')) {
+      if (this.row[this.field] === undefined) {
+        this.row[this.field] = {}
+        myval = ''
+      } else {
+        myval = this.row[this.field][this.subfield]
+      }
+    } else {
+      if (this.field !== '')
+        myval = this.row[this.field]
+      else
+        myval = this.row
+    }
+
+    return myval
+  }
+
   public SaveValueInt(newVal, valinitial) {
 
-    // console.log('SaveValueInt', newVal)
+    // console.log('SaveValueInt', newVal, valinitial)
 
     // Update value in table memory
     if (this.subfield !== '') {
@@ -77,11 +145,26 @@ export default class CMyPopupEdit extends Vue {
     this.$emit('save', newVal, valinitial)
   }
 
+  public annulla(val) {
+    this.$emit('annulla', true)
+  }
+
   public Savedb(newVal, valinitial) {
+
+    if (this.col.fieldtype === tools.FieldType.boolean) {
+      // console.log('this.myvalue', this.myvalue, newVal, this.myvalueprec)
+      if (this.myvalueprec === undefined) {
+        newVal = true
+        this.myvalueprec = this.myvalue
+        this.myvalue = newVal
+      }
+      // console.log('DOPO this.myvalue', this.myvalue, newVal, this.myvalueprec)
+    }
 
     // console.log('Savedb', newVal)
 
     this.$emit('showandsave', this.row, this.col, newVal, valinitial)
+    this.visueditor = false
   }
 
   public visuValByType(val, col: IColGridTable, row) {
@@ -104,6 +187,12 @@ export default class CMyPopupEdit extends Vue {
       } else {
         return tools.getstrDateTime(val)
       }
+    } else if (col.fieldtype === tools.FieldType.onlydate) {
+      if (val === undefined) {
+        return '[]'
+      } else {
+        return tools.getstrDate(val)
+      }
     } else if (col.fieldtype === tools.FieldType.boolean) {
       return (val) ? this.$t('dialog.yes') : this.$t('dialog.no')
     } else if (col.fieldtype === tools.FieldType.binary) {
@@ -122,7 +211,7 @@ export default class CMyPopupEdit extends Vue {
       else
         return fieldsTable.getMultiValueByTable(col, val)
     } else {
-      if (val === undefined)
+      if (val === undefined || val === null)
         return '[]'
       else if (val === '') {
         return '[]'
@@ -144,10 +233,14 @@ export default class CMyPopupEdit extends Vue {
     }
   }
 
+  public visInNewRec(col) {
+    return !col.notShowInNewRec
+  }
+
   public getclassCol(col) {
     if (col) {
-      let mycl = (col.disable) ? '' : 'colmodif'
-      mycl += (col.fieldtype === tools.FieldType.date) ? ' coldate flex flex-container' : ''
+      let mycl = (col.disable || this.isviewfield) ? '' : 'colmodif'
+      mycl += ((col.fieldtype === tools.FieldType.date) || (col.fieldtype === tools.FieldType.onlydate)) ? ' coldate flex flex-container' : ''
 
       return mycl
     } else {
@@ -158,4 +251,21 @@ export default class CMyPopupEdit extends Vue {
   public changeCol() {
 
   }
+
+  public selectcountry({ name, iso2, dialCode }) {
+    // console.log(name, iso2, dialCode)
+    this.myvalueprec = this.myvalue
+    this.myvalue = iso2
+    this.countryname = name
+  }
+
+  public intcode_change(coderec) {
+    this.myvalueprec = this.myvalue
+    this.myvalue = '+' + coderec.dialCode
+  }
+
+  public createHours(value) {
+
+  }
+
 }

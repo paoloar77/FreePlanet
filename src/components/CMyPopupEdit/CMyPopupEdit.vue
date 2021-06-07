@@ -1,153 +1,380 @@
 <template>
-    <div :class="getclassCol(col)">
-        <div v-if="col.fieldtype === tools.FieldType.date">
-            <CDateTime
-                    :label="col.label"
-                    class="cursor-pointer"
-                    :valueDate="myvalue"
-                    :readonly="false"
-                    :dense="true"
-                    :canEdit="canEdit"
-                    @savetoclose="SaveValueInt"
-                    @show="OpenEdit">
-            </CDateTime>
+  <div :class="getclassCol(col)">
+    <div v-if="visulabel" class="flex">
+      <div v-if="visInNewRec(col)" style="flex-grow: 1;">
+        <div v-if="col.fieldtype === tools.FieldType.string">
+          <q-input v-model="myvalue"
+                   autogrow
+                   @keyup.enter.stop
+                   @input="changevalRec"
+                   autofocus
+                   :label="col.label">
+          </q-input>
         </div>
+        <div v-else-if="col.fieldtype === tools.FieldType.date">
+          <CDateTime
+            :label="col.label"
+            class="cursor-pointer"
+            :valueDate="myvalue"
+            :readonly="false"
+            :minuteinterval="minuteinterval"
+            :dense="true"
+            @input="changevalRec"
+            canEdit="true"
+            @savetoclose="SaveValueInt"
+            @show="OpenEdit">
+          </CDateTime>
+        </div>
+        <div v-else-if="col.fieldtype === tools.FieldType.onlydate">
+          <CDateTime
+            :label="col.label"
+            class="cursor-pointer"
+            :valueDate="myvalue"
+            :readonly="false"
+            :minuteinterval="minuteinterval"
+            :dense="true"
+            @input="changevalRec"
+            canEdit="true"
+            @savetoclose="SaveValueInt"
+            @show="OpenEdit"
+            view="date">
+          </CDateTime>
+        </div>
+        <div v-else-if="col.fieldtype === tools.FieldType.number">
+          <q-input v-model="myvalue" type="number"
+                   autofocus
+                   @input="changevalRec"
+                   :label="col.label"
+          >
+
+          </q-input>
+        </div>
+        <div v-else-if="col.fieldtype === tools.FieldType.hours">
+          <div class="row">
+            <q-input v-model="myvalue" type="number"
+                     autofocus
+                     @input="changevalRec"
+                     style="max-width: 100px;"
+                     :label="col.label"
+            >
+
+            </q-input>
+
+            <CMySelect label="Ore" :value.sync="myvalue"
+                       optval="value" optlab="label"
+                       :dense="false"
+                       :use-input="false"
+                       @changeval="changevalRecHours"
+                       style="max-width: 100px;"
+                       :options="tools.SelectHours">
+            </CMySelect>
+          </div>
+
+          <!--<q-input v-model="myvalue" type="number"
+                   autofocus
+                   @input="changevalRec"
+                   :label="col.label">
+          </q-input>
+          -->
+
+        </div>
+        <div v-else-if="col.fieldtype === tools.FieldType.listimages">
+          <CGallery :gall="row" :listimages="myvalue" :edit="isviewfield"
+                    @showandsave="Savedb"
+                    @input="changevalRec"
+          >
+
+          </CGallery>
+        </div>
+        <div v-else-if="col.fieldtype === tools.FieldType.image">
+          <CGallery :gall="row" :listimages="myvalue" :edit="isviewfield"
+                    @input="changevalRec"
+                    @showandsave="Savedb">
+
+          </CGallery>
+        </div>
+        <div v-if="col.fieldtype === tools.FieldType.binary">
+          <CMyChipList
+            :type="tools.FieldType.binary"
+            :value="myvalue"
+            @input="changevalRec"
+            :options="db_fieldsTable.getTableJoinByName(col.jointable)"
+            :optval="db_fieldsTable.getKeyByTable(col.jointable)"
+            :optlab="db_fieldsTable.getLabelByTable(col.jointable)"
+            :opticon="db_fieldsTable.getIconByTable(col.jointable)"></CMyChipList>
+        </div>
+        <!-- Show Value -->
+        <div v-else-if="col.fieldtype === tools.FieldType.multiselect">
+          <CMyChipList
+            @input="changevalRec"
+            :type="tools.FieldType.multiselect"
+            :value="myvalue"
+            :options="db_fieldsTable.getTableJoinByName(col.jointable)"
+            :optval="db_fieldsTable.getKeyByTable(col.jointable)"
+            :optlab="db_fieldsTable.getLabelByTable(col.jointable)"
+            :opticon="db_fieldsTable.getIconByTable(col.jointable)"></CMyChipList>
+        </div>
+        <div v-else-if="col.fieldtype === tools.FieldType.select">
+          <CMyChipList
+            @input="changevalRec"
+            myclass="text-center"
+            :type="tools.FieldType.select"
+            :value="myvalue"
+            :options="db_fieldsTable.getTableJoinByName(col.jointable)"
+            :optval="db_fieldsTable.getKeyByTable(col.jointable)"
+            :optlab="db_fieldsTable.getLabelByTable(col.jointable)"
+            :opticon="db_fieldsTable.getIconByTable(col.jointable)"></CMyChipList>
+        </div>
+        <div v-else-if="col.fieldtype === tools.FieldType.boolean">
+          <q-toggle dark color="green" v-model="myvalue" :label="col.title"
+                    :disable="disable && col.name !== 'profile.saw_zoom_presentation'"
+                    @input="changevalRec"></q-toggle>
+        </div>
+        <div v-else-if="col.fieldtype === tools.FieldType.html">
+          <div v-html="visuValByType(myvalue, col, row)" @click="visueditor = true">
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <div v-else>
+      <div v-if="col.fieldtype === tools.FieldType.listimages">
+        <CGallery :gall="row" :listimages="myvalue" :edit="isviewfield"
+                  @showandsave="Savedb">
+
+        </CGallery>
+      </div>
+      <div v-else-if="col.fieldtype === tools.FieldType.image">
+        <CGallery :gall="row" :listimages="myvalue" :edit="isviewfield"
+                  @showandsave="Savedb">
+
+        </CGallery>
+      </div>
+      <div v-else-if="col.fieldtype === tools.FieldType.nationality">
+        <div>
+          {{ myvalue }}
+        </div>
+      </div>
+      <div v-else-if="col.fieldtype === tools.FieldType.intcode">
+        <div>
+          {{ myvalue }}
+        </div>
+      </div>
+      <div v-else>
+        <!-- Edit Value -->
+        <span v-if="col.fieldtype === tools.FieldType.date">
+                <CDateTime
+                  :label="col.label"
+                  class="cursor-pointer"
+                  :valueDate="myvalue"
+                  :readonly="false"
+                  :minuteinterval="minuteinterval"
+                  :dense="true"
+                  :canEdit="canEdit"
+                  @savetoclose="SaveValueInt"
+                  @show="OpenEdit">
+                </CDateTime>
+            </span>
+        <span v-else-if="col.fieldtype === tools.FieldType.onlydate">
+                <CDateTime
+                  :label="col.label"
+                  class="cursor-pointer"
+                  :valueDate="myvalue"
+                  :readonly="false"
+                  :minuteinterval="minuteinterval"
+                  :dense="true"
+                  :canEdit="canEdit"
+                  @savetoclose="SaveValueInt"
+                  @show="OpenEdit"
+                  view="date">
+                </CDateTime>
+            </span>
         <div v-else>
+          <div>
             <div v-if="col.fieldtype === tools.FieldType.binary">
-                <CMyChipList
-                        :type="tools.FieldType.binary"
-                        :value="myvalue"
-                        :options="db_fieldsTable.getTableJoinByName(col.jointable)"
-                        :optval="db_fieldsTable.getKeyByTable(col.jointable)"
-                        :optlab="db_fieldsTable.getLabelByTable(col.jointable)"
-                        :opticon="db_fieldsTable.getIconByTable(col.jointable)"></CMyChipList>
+              <CMyChipList
+                :type="tools.FieldType.binary"
+                :value="myvalue"
+                :options="db_fieldsTable.getTableJoinByName(col.jointable)"
+                :optval="db_fieldsTable.getKeyByTable(col.jointable)"
+                :optlab="db_fieldsTable.getLabelByTable(col.jointable)"
+                :opticon="db_fieldsTable.getIconByTable(col.jointable)"></CMyChipList>
             </div>
             <!-- Show Value -->
             <div v-else-if="col.fieldtype === tools.FieldType.multiselect">
-                <CMyChipList
-                        :type="tools.FieldType.multiselect"
-                        :value="myvalue"
-                        :options="db_fieldsTable.getTableJoinByName(col.jointable)"
-                        :optval="db_fieldsTable.getKeyByTable(col.jointable)"
-                        :optlab="db_fieldsTable.getLabelByTable(col.jointable)"
-                        :opticon="db_fieldsTable.getIconByTable(col.jointable)"></CMyChipList>
+              <CMyChipList
+                :type="tools.FieldType.multiselect"
+                :value="myvalue"
+                :options="db_fieldsTable.getTableJoinByName(col.jointable)"
+                :optval="db_fieldsTable.getKeyByTable(col.jointable)"
+                :optlab="db_fieldsTable.getLabelByTable(col.jointable)"
+                :opticon="db_fieldsTable.getIconByTable(col.jointable)"></CMyChipList>
+            </div>
+            <div v-else-if="col.fieldtype === tools.FieldType.select">
+              <CMyChipList
+                myclass="text-center"
+                :type="tools.FieldType.select"
+                :value="myvalue"
+                :options="db_fieldsTable.getTableJoinByName(col.jointable)"
+                :optval="db_fieldsTable.getKeyByTable(col.jointable)"
+                :optlab="db_fieldsTable.getLabelByTable(col.jointable)"
+                :opticon="db_fieldsTable.getIconByTable(col.jointable)"></CMyChipList>
             </div>
             <div v-else-if="col.fieldtype === tools.FieldType.boolean">
-                <q-toggle dark color="green" v-model="myvalue" :label="col.title"
-                          @input="Savedb"></q-toggle>
+              <q-toggle dark color="green" v-model="myvalue" :label="col.title"
+                        :disable="disable && col.name !== 'profile.saw_zoom_presentation'"
+                        @input="Savedb"></q-toggle>
             </div>
             <div v-else-if="col.fieldtype === tools.FieldType.html">
-                <div v-html="visuValByType(myvalue, col, row)">
+              <div v-html="visuValByType(myvalue, col, row)" @click="visueditor = true">
 
-                </div>
+              </div>
             </div>
             <div v-else>
-                {{ visuValByType(myvalue, col, row) }}
+              {{ visuValByType(myvalue, col, row) }}
+
             </div>
 
-            <!--<q-select v-model="myvalue"-->
-            <!--rounded-->
-            <!--outlined-->
-            <!--dense-->
-            <!--:options="db_fieldsTable.getTableJoinByName(col.jointable)"-->
-            <!--:display-value="db_fieldsTable.getLabelByTable(col.jointable)"-->
-            <!--emit-value-->
-            <!--@input="SaveValueInt"-->
-            <!--&gt;-->
-            <!--</q-select>-->
+            <div v-if="col.fieldtype === tools.FieldType.html">
 
-            <!-- Edit Value -->
+              <!--<q-dialog v-model="showeditor">-->
+                <CMyEditor v-if="visueditor" :value.sync="myvalue" :title="col.title" @keyup.enter.stop
+                           @showandsave="Savedb" @annulla="visueditor=false">
+
+                </CMyEditor>
+              <!--</q-dialog>-->
+            </div>
             <q-popup-edit
-                    v-if="canEdit"
-                    v-model="myvalue"
-                    :disable="col.disable"
-                    :title="col.title"
-                    buttons
-                    @save="SaveValueInt"
-                    @show="OpenEdit">
+              v-if="canEdit && col.fieldtype !== tools.FieldType.html"
+              v-model="myvalue"
+              :disable="col.disable"
+              :title="col.title"
+              buttons
+              persistent
+              @save="SaveValueInt"
+              @show="OpenEdit">
 
-                <div v-if="col.fieldtype === tools.FieldType.boolean">
-                    <q-checkbox v-model="myvalue" :label="col.title">
-                    </q-checkbox>
-                    {{ visuValByType(myvalue, col, row) }}
-                </div>
-                <div v-else-if="col.fieldtype === tools.FieldType.string">
-                    <q-input v-model="myvalue"
-                             autogrow
-                             @keyup.enter.stop
-                             autofocus>
+              <div v-if="col.fieldtype === tools.FieldType.boolean">
+                <q-checkbox v-model="myvalue" :label="col.title">
+                </q-checkbox>
+                {{ visuValByType(myvalue, col, row) }}
+              </div>
+              <div v-else-if="col.fieldtype === tools.FieldType.string">
+                <q-input v-model="myvalue"
+                         autogrow
+                         @keyup.enter.stop
+                         autofocus>
 
-                    </q-input>
-                </div>
-                <div v-else-if="col.fieldtype === tools.FieldType.password">
-                    <q-input v-model="myvalue"
-                             type="password"
-                             @keyup.enter.stop
-                             autofocus>
+                </q-input>
+              </div>
+              <div v-else-if="col.fieldtype === tools.FieldType.password">
+                <q-input v-model="myvalue"
+                         type="password"
+                         @keyup.enter.stop
+                         autofocus>
 
-                    </q-input>
-                </div>
-                <div v-else-if="col.fieldtype === tools.FieldType.number">
-                    <q-input v-model="myvalue" type="number"
-                             autofocus>
+                </q-input>
+              </div>
+              <div v-else-if="col.fieldtype === tools.FieldType.number">
+                <q-input v-model="myvalue" type="number"
+                         autofocus>
 
-                    </q-input>
-                </div>
-                <div v-else-if="col.fieldtype === tools.FieldType.binary">
-                    <CMyToggleList :label="col.title"
-                                   :options="db_fieldsTable.getTableJoinByName(col.jointable)"
-                                   :value.sync="myvalue"
-                                   :optval="db_fieldsTable.getKeyByTable(col.jointable)"
-                                   :optlab="db_fieldsTable.getLabelByTable(col.jointable)">
-                    </CMyToggleList>
-                </div>
-                <div v-else-if="col.fieldtype === tools.FieldType.html">
-                    <CMyEditor :value.sync="myvalue" :title="col.title" @keyup.enter.stop>
+                </q-input>
+              </div>
+              <div v-else-if="col.fieldtype === tools.FieldType.hours">
+                <q-input v-model="myvalue" type="number"
+                         autofocus>
 
-                    </CMyEditor>
-                    <!--<q-input v-model="myvalue"-->
-                             <!--autofocus-->
-                             <!--@keyup.enter.stop-->
-                             <!--type="textarea"></q-input>-->
-                </div>
-                <div v-else-if="col.fieldtype === tools.FieldType.select">
-                    <CMySelect :label="col.title"
+                </q-input>
+              </div>
+              <div v-else-if="col.fieldtype === tools.FieldType.binary">
+                <CMyToggleList :label="col.title"
+                               :options="db_fieldsTable.getTableJoinByName(col.jointable)"
                                :value.sync="myvalue"
                                :optval="db_fieldsTable.getKeyByTable(col.jointable)"
-                               :optlab="db_fieldsTable.getLabelByTable(col.jointable)"
-                               :options="db_fieldsTable.getTableJoinByName(col.jointable)"
-                               :useinput="false">
-                    </CMySelect>
-                </div>
-                <div v-else-if="col.fieldtype === tools.FieldType.multiselect">
-                    <q-select
-                            v-model="myvalue"
-                            rounded
-                            outlined
-                            multiple
-                            dense
-                            options-dense
-                            :display-value="db_fieldsTable.getTitleByTable(col.jointable)"
-                            emit-value
-                            map-options
-                            :options="db_fieldsTable.getTableJoinByName(col.jointable)"
-                            :option-label="db_fieldsTable.getLabelByTable(col.jointable)"
-                            :option-value="db_fieldsTable.getKeyByTable(col.jointable)"
-                            style="min-width: 150px"
-                            @input="changeCol">
+                               :optlab="db_fieldsTable.getLabelByTable(col.jointable)">
+                </CMyToggleList>
+              </div>
+              <div v-else-if="col.fieldtype === tools.FieldType.select">
+                <CMySelect :label="col.title"
+                           :value.sync="myvalue"
+                           :optval="db_fieldsTable.getKeyByTable(col.jointable)"
+                           :optlab="db_fieldsTable.getLabelByTable(col.jointable)"
+                           :options="db_fieldsTable.getTableJoinByName(col.jointable)"
+                           :useinput="false">
+                </CMySelect>
+              </div>
+              <div v-else-if="col.fieldtype === tools.FieldType.nationality">
+                <div class="justify-center q-gutter-sm clgutter q-mt-sm">
+                  <q-input
+                    v-model="countryname"
+                    :readonly="true"
+                    rounded dense
+                    debounce="1000"
+                  >
 
-                    </q-select>
-                </div>
+                    <template v-slot:prepend>
+                      <div style="font-size: 1rem;">
+                        <vue-country-code
+                          :defaultCountry="myvalue"
+                          :disabledFetchingCountry="true"
+                          @onSelect="selectcountry"
+                          :preferredCountries="tools.getprefCountries"
+                          :dropdownOptions="{ disabledDialCode: true }">
 
+                        </vue-country-code>
+                      </div>
+                    </template>
+                  </q-input>
+                  <div style="height: 180px;">
+
+                  </div>
+                </div>
+              </div>
+              <div v-else-if="col.fieldtype === tools.FieldType.intcode">
+
+                <vue-tel-input
+                  @country-changed="intcode_change"
+                  v-model="myvalue"
+                  :placeholder="$t('reg.cell')"
+                  :enabledCountryCode="true"
+                  inputClasses="clCell"
+                  wrapperClasses="clCellCode">
+                </vue-tel-input>
+
+              </div>
+              <div v-else-if="col.fieldtype === tools.FieldType.multiselect">
+                <div>join: {{ col.jointable }}</div>
+
+                <q-select
+                  v-model="myvalue"
+                  rounded
+                  outlined
+                  multiple
+                  dense
+                  options-dense
+                  :display-value="db_fieldsTable.getTitleByTable(col.jointable)"
+                  emit-value
+                  map-options
+                  :options="db_fieldsTable.getTableJoinByName(col.jointable)"
+                  :option-label="db_fieldsTable.getLabelByTable(col.jointable)"
+                  :option-value="db_fieldsTable.getKeyByTable(col.jointable)"
+                  style="min-width: 150px"
+                  @input="changeCol">
+
+                </q-select>
+              </div>
             </q-popup-edit>
+          </div>
         </div>
+      </div>
     </div>
-
+  </div>
 </template>
 
 <script lang="ts" src="./CMyPopupEdit.ts">
 </script>
 
 <style lang="scss" scoped>
-    @import './CMyPopupEdit.scss';
+@import './CMyPopupEdit.scss';
 </style>

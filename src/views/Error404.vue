@@ -12,8 +12,8 @@
             <i class="on-left">keyboard_arrow_left</i>
             Go back
           </button>
-          <router-link to="/">
-            <button class="grey push small">
+          <router-link to="/" custom v-slot="{ navigate }">
+            <button class="grey push small" @click="navigate" @keypress.enter="navigate" role="link">
               Go home
               <i class="on-right">home</i>
             </button>

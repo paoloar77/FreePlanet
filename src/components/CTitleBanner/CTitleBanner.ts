@@ -24,8 +24,40 @@ import { Screen } from 'quasar'
   name: 'CTitleBanner'
 })
 export default class CTitleBanner extends Vue {
-  @Prop({ required: true}) public title: string
+  @Prop({ required: true }) public title: string
   @Prop({ required: false, default: 'bg-primary' }) public bgcolor: string
-  @Prop({ required: false, default: 'primary' }) public color: string
+  @Prop({ required: false, default: 'text-white' }) public clcolor: string
+  @Prop({ required: false, default: '' }) public mystyle: string
+  @Prop({ required: false, default: '' }) public myclass: string
+  @Prop({ required: false, default: '' }) public myclasstext: string
+  @Prop({ required: false, default: '' }) public icon: string
+  @Prop({ required: false, default: true }) public visible: boolean
+  @Prop({ required: false, default: false }) public canopen: boolean
+  @Prop({ required: false, default: '' }) public imgpreview: string
 
+  public myvisible: boolean = false
+
+  public created() {
+    this.myvisible = this.visible
+  }
+
+  get iconopen() {
+    if (!this.myvisible)
+      return 'fas fa-chevron-down q-icon q-expansion-item__toggle-icon q-focusable '
+    else
+      return 'fas fa-chevron-down q-icon q-expansion-item__toggle-icon q-focusable rotate-180'
+  }
+
+  public apri() {
+    this.myvisible = !this.myvisible
+    if (this.myvisible)
+      this.$emit('apri')
+  }
+
+  get getclass(){
+    if (this.myvisible)
+      return 'isvisibile'
+    else
+      return 'nonvisibile glossy'
+  }
 }

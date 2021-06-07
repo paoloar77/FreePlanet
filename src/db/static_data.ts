@@ -9,7 +9,7 @@ import {
   IProject,
   ITodo,
   Privacy,
-  IPerson,
+  IUserProfile,
   IFunctionality,
   IPreloadImages
 } from '../model/index'

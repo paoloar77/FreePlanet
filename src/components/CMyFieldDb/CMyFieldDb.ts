@@ -9,31 +9,64 @@ import MixinBase from '../../mixins/mixin-base'
 import { fieldsTable } from '../../store/Modules/fieldsTable'
 import { IColGridTable } from '../../model'
 import { CMySelect } from '../CMySelect'
+import { GlobalStore, UserStore } from '../../store/Modules'
+import { CMyChipList } from '../CMyChipList'
+import { CMyToggleList } from '../CMyToggleList'
+import translate from '@src/globalroutines/util'
+import { CDateTime } from '../CDateTime'
 
 @Component({
   name: 'CMyFieldDb',
-  components: { CMyEditor, CMySelect }
+  components: { CMyEditor, CMySelect, CMyChipList, CMyToggleList, CDateTime }
 })
 
 export default class CMyFieldDb extends MixinBase {
   @Prop({ required: true }) public title
   @Prop({ required: true }) public mykey: string
+  @Prop({ required: false, default: '' }) public mysubkey: string
   @Prop({ required: true }) public type: number
   @Prop({ required: false, default: false }) public serv: boolean
   @Prop({ required: false, default: false }) public disable: boolean
   @Prop({ required: false, default: '' }) public jointable: string
+  @Prop({ required: false, default: 'settings' }) public table: string
+  @Prop({ required: false, default: '' }) public myimg: string
+  @Prop({ required: false, default: '' }) public id: string
+  @Prop({ required: false, default: '' }) public idmain: string
 
   public $t
   public myvalue = ''
   public col: IColGridTable = { name: 'test' }
   public canEdit: boolean = true
+  public countryname = ''
 
   public created() {
-    this.myvalue = this.getValDb(this.mykey, this.serv)
+    this.crea()
+  }
+
+  public crea() {
+
+    this.myvalue = this.getValDb(this.mykey, this.serv, '', this.table, this.mysubkey, this.id, this.idmain)
     this.col.jointable = this.jointable
     this.col.fieldtype = this.type
     this.col.label = this.title
-    // console.log('created', this.myvalue)
+
+    // console.log('CMyFieldDb crea', this.myvalue)
+  }
+
+  @Watch('id')
+  public idchanged(value) {
+    this.crea()
+  }
+
+  public getclassCol(col) {
+    if (col) {
+      let mycl = (this.disable || col.disable) ? '' : 'colmodif '
+      mycl += ((col.fieldtype === tools.FieldType.date) || (col.fieldtype === tools.FieldType.onlydate)) ? ' coldate flex flex-container ' : ''
+
+      return mycl
+    } else {
+      return ''
+    }
   }
 
   public visuValByType(val) {
@@ -42,6 +75,12 @@ export default class CMyFieldDb extends MixinBase {
         return '[]'
       } else {
         return tools.getstrDateTime(val)
+      }
+    } else if (this.col.fieldtype === tools.FieldType.onlydate) {
+      if (val === undefined) {
+        return '[]'
+      } else {
+        return tools.getstrDate(val)
       }
     } else if (this.col.fieldtype === tools.FieldType.boolean) {
       return (val) ? this.$t('dialog.yes') : this.$t('dialog.no')
@@ -60,6 +99,11 @@ export default class CMyFieldDb extends MixinBase {
         return '[---]'
       else
         return fieldsTable.getMultiValueByTable(this.col, val)
+    } else if (this.col.fieldtype === tools.FieldType.multioption) {
+      if (val === undefined)
+        return '[---]'
+      else
+        return fieldsTable.getMultiValueByTable(this.col, val)
     } else if (this.col.fieldtype === tools.FieldType.password) {
       if (val === undefined)
         return '[---]'
@@ -67,9 +111,9 @@ export default class CMyFieldDb extends MixinBase {
         return '***************'
     } else {
       if (val === undefined)
-        return '-'
+        return ' <span class="text-grey">(' + translate('reg.select') + ')</span> '
       else if (val === '') {
-        return '-'
+        return ' <span class="text-grey">(' + translate('reg.select') + ')</span> '
       } else {
         let mystr = tools.firstchars(val, 5000)
         if (val) {
@@ -95,7 +139,26 @@ export default class CMyFieldDb extends MixinBase {
 
   public savefield(value, initialval) {
     this.myvalue = value
-    this.setValDb(this.mykey, this.myvalue, this.type, this.serv)
+    this.setValDb(this.mykey, this.myvalue, this.type, this.serv, this.table, this.mysubkey, this.id)
+  }
+
+  public savefieldboolean(value) {
+    if (this.myvalue === undefined)
+      this.myvalue = 'true'
+    else
+      this.myvalue = value
+
+    this.setValDb(this.mykey, this.myvalue, this.type, this.serv, this.table, this.mysubkey, this.id)
+  }
+
+  public selectcountry({ name, iso2, dialCode }) {
+    // console.log(name, iso2, dialCode)
+    this.myvalue = iso2
+    this.countryname = name
+  }
+
+  public intcode_change(coderec) {
+    this.myvalue = '+' + coderec.dialCode
   }
 
 }

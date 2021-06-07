@@ -13,6 +13,7 @@ import { UserStore } from '@store'
 
 import { Getter } from 'vuex-class'
 import { SingleTodo } from '../SingleTodo'
+import { costanti } from '@src/store/Modules/costanti'
 
 const namespace: string = 'Todos'
 
@@ -91,27 +92,29 @@ export default class CTodo extends Vue {
   }
 
   public created() {
-    const $service = this.$dragula.$service
-    tools.dragula_option($service, this.dragname)
+    if (costanti.DRAGULA) {
+      const service = this.$dragula.$service
+      tools.dragula_option(service, this.dragname)
 
-    $service.eventBus.$on('dragend', (args) => {
-      // console.log('args', args)
-      if (args.name === this.dragname) {
-        const itemdragend: IDrag = {
-          category: this.categoryAtt,
-          newIndex: this.getElementIndex(args.el),
-          oldIndex: this.getElementOldIndex(args.el)
+      service.eventBus.$on('dragend', (args) => {
+        // console.log('args', args)
+        if (args.name === this.dragname) {
+          const itemdragend: IDrag = {
+            category: this.categoryAtt,
+            newIndex: this.getElementIndex(args.el),
+            oldIndex: this.getElementOldIndex(args.el)
+          }
+          this.onEndtodo(itemdragend)
         }
-        this.onEndtodo(itemdragend)
-      }
-    })
+      })
 
-    $service.eventBus.$on('drag', (el, source) => {
-      this.scrollable = false
-    })
-    $service.eventBus.$on('drop', (el, source) => {
-      this.scrollable = true
-    })
+      service.eventBus.$on('drag', (el, source) => {
+        this.scrollable = false
+      })
+      service.eventBus.$on('drop', (el, source) => {
+        this.scrollable = true
+      })
+    }
 
     this.load()
   }
@@ -167,8 +170,7 @@ export default class CTodo extends Vue {
     // empty the field
     if (atfirst) {
       this.todotop = ''
-    }
-    else {
+    } else {
       this.todobottom = ''
     }
 
@@ -188,7 +190,13 @@ export default class CTodo extends Vue {
     //
     // await Todos.actions.swapElems(itemdragend)
 
-    await Todos.actions.modify({ myitem, field })
+    Todos.actions.modify({ myitem, field })
+      .then((ris) => {
+        if (ris)
+          tools.showPositiveNotif(this.$q, 'Campo Aggiornato')
+        else
+          tools.showNegativeNotif(this.$q, 'Campo non Aggiornato!')
+      })
 
   }
 

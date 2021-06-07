@@ -10,8 +10,19 @@
   line-height: 3rem;
   text-shadow: .25rem .25rem .5rem black;
   letter-spacing: .00937em;
+  opacity: 0.9;
 }
 
+@media (max-width: 718px) {
+  // PER VERSIONE MOBILE
+  .titletext {
+    color: white;
+    font-size: 2rem;
+    font-weight: 500;
+    line-height: 2rem;
+    text-shadow: .25rem .25rem .5rem black;
+  }
+}
 
 .q-img__content > div{
   background: rgba(0,0,0,0.17) !important;

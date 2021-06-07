@@ -18,6 +18,7 @@ export interface IProject {
   id_main_project?: string
   id_parent?: string
   descr?: string
+  note?: string
   longdescr?: string
   priority?: number
   statusproj?: number
@@ -26,7 +27,6 @@ export interface IProject {
   completed_at?: Date
   expiring_at?: Date
   enableExpiring?: boolean
-  id_prev?: string
   modified?: boolean
   favourite?: number
   pos?: number
@@ -45,8 +45,14 @@ export interface IProject {
   actualphase?: number
   privacyread?: string
   privacywrite?: string
+  tipovisu?: number
   themecolor?: string
   themebgcolor?: string
+  groupId?: string
+  respUsername?: string
+  viceRespUsername?: string
+  vice2RespUsername?: string
+  view?: string
 }
 
 export interface IProjectsState {
@@ -60,7 +66,15 @@ export const Privacy = {
   all: 'all',
   friends: 'friends',
   mygroup: 'mygroup',
-  onlyme: 'onlyme'
+  onlyme: 'onlyme',
+  inherited: 'inherited'
+}
+
+export const TipoVisu = {
+  inherited: 0,
+  simplelist: 1,
+  taskProgress: 2,
+  responsabili: 3
 }
 
 export const TypeProj = {

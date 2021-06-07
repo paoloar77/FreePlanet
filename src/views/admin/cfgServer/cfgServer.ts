@@ -25,11 +25,12 @@ export default class CfgServer extends Vue {
       field: 'chiave',
       sortable: true
     },
+    { name: 'idapp', label: 'idapp', field: 'idapp', sortable: true },
     { name: 'userid', label: 'UserId', field: 'userid', sortable: false },
     { name: 'valore', label: 'Valore', field: 'valore', sortable: false }
   ]
 
-  public colVisib: ['chiave', 'userid', 'valore']
+  public colVisib: ['chiave', 'idapp', 'userid', 'valore']
   public separator: 'horizontal'
   public filter: string = ''
   public selected: any[] = []
@@ -57,8 +58,10 @@ export default class CfgServer extends Vue {
     const mydata = {
       chiave: this.keysel,
       userId: this.userIdsel,
-      valore: newVal
+      valore: newVal,
+      idapp: process.env.APP_ID
     }
+
     // Save on Server
     GlobalStore.actions.saveCfgServerKey(mydata)
   }

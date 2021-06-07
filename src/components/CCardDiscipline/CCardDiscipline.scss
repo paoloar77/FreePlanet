@@ -31,30 +31,11 @@ $grayshadow: #555;
   border-radius: 30px;
 }
 
-.my-card-shadow {
-  width: 100%;
-  max-width: 350px;
-  min-width: 300px;
-  padding-bottom: 20px;
-  margin-left: 0;
-  margin-right: 0;
-  margin-top: 1rem;
-  margin-bottom: 1rem;
-  border-radius: 30px;
-
-  transition: transform .2s ease-out;
-}
-
 .yes_shadow {
   -webkit-box-shadow: 0 0 24px 0 rgba(0, 0, 0, 0.16);
   box-shadow: 0 0 24px 0 rgba(0, 0, 0, 0.16);
 }
 
-
-.my-card-shadow:hover {
-  transition: transform .2s ease-in;
-  transform: scale(1.03);
-}
 
 .disc {
   text-align: center !important;

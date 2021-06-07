@@ -1,0 +1,21 @@
+.requisiti_on, .requisiti_off, .requisiti_off_ko{
+  margin: 4px;
+  border-radius: 3rem;
+  padding-left: 14px;
+  padding-right: 14px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
+.requisiti_on {
+  border: solid 3px #49b502;
+}
+
+.requisiti_off {
+  border: solid 3px #ef0901;
+}
+
+.requisiti_off_ko {
+  border: solid 3px blue;
+}
+

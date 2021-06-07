@@ -35,14 +35,14 @@ export default class Testp1 extends Vue {
     console.log('DOPO this.paramcategory', this.paramcategory)
   }
 
-  created() {
+  public created() {
     this.mioobj = {
-      arr1: [{chiave: 'key1', userId: 'ALL', valore: 'val1'}],
-      arr2: [{chiave: 'key2', userId: 'ALL', valore: 'val2'}]
+      arr1: [{chiave: 'key1', idapp: '9', userId: 'ALL', valore: 'val1'}],
+      arr2: [{chiave: 'key2', idapp: '9', userId: 'ALL', valore: 'val2'}]
     }
   }
 
-  get getarr1 () {
+  get getarr1() {
     // return this.mioobj.arr1
     return this.mioobj['arr1']
   }
@@ -59,36 +59,35 @@ export default class Testp1 extends Vue {
     return GlobalStore.getters.testpao1_getter_array(GlobalStore.state.testp1.contatore)
   }
 
-
-  TestBtnCambioaParamPassing () {
+  public TestBtnCambioaParamPassing () {
     this.paramcategory += 's'
   }
 
-  TestBtn() {
+  public TestBtn() {
     GlobalStore.state.testp1.contatore++
   }
 
-  TestBtn2() {
-    GlobalStore.state.testp1.mioarray.push({chiave: 'pippo2', userId: UserStore.state.my._id, valore: GlobalStore.state.testp1.contatore.toString() })
+  public TestBtn2() {
+    GlobalStore.state.testp1.mioarray.push({chiave: 'pippo2', idapp: process.env.APP_ID, userId: UserStore.state.my._id, valore: GlobalStore.state.testp1.contatore.toString() })
   }
 
-  TestBtnModify() {
+  public TestBtnModify() {
     // GlobalStore.state.testp1.mioarray[GlobalStore.state.testp1.mioarray.length - 1] = GlobalStore.state.testp1.mioarray[GlobalStore.state.testp1.mioarray.length - 1] + 1
-    GlobalStore.mutations.setPaoArray({chiave: 'pippo', userId: UserStore.state.my._id, valore: '20' } )
+    GlobalStore.mutations.setPaoArray({chiave: 'pippo', idapp: process.env.APP_ID, userId: UserStore.state.my._id, valore: '20' } )
 
   }
 
-  TestBtnCambiaTutto() {
+  public TestBtnCambiaTutto() {
     // GlobalStore.state.testp1.mioarray[GlobalStore.state.testp1.mioarray.length - 1] = GlobalStore.state.testp1.mioarray[GlobalStore.state.testp1.mioarray.length - 1] + 1
-    GlobalStore.mutations.NewArray([{chiave: 'nuovorec1', userId: UserStore.state.my._id, valore: '1' }, {chiave: 'nuovorec2', userId: UserStore.state.my._id, valore: '2' }] )
+    GlobalStore.mutations.NewArray([{chiave: 'nuovorec1', idapp: process.env.APP_ID, userId: UserStore.state.my._id, valore: '1' }, {chiave: 'nuovorec2', idapp: process.env.APP_ID, userId: UserStore.state.my._id, valore: '2' }] )
 
   }
 
-  TestBtnAction() {
+  public TestBtnAction() {
     GlobalStore.actions.prova()
   }
 
-  TestBtnDelete() {
+  public TestBtnDelete() {
     // GlobalStore.state.testp1.mioarray[GlobalStore.state.testp1.mioarray.length - 1] = GlobalStore.state.testp1.mioarray[GlobalStore.state.testp1.mioarray.length - 1] + 1
     GlobalStore.mutations.setPaoArray_Delete()
   }

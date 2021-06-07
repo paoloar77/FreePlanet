@@ -1,11 +1,11 @@
 import Vue from 'vue'
-import { Component, Prop } from 'vue-property-decorator'
+import { Component, Prop, Watch } from 'vue-property-decorator'
 
 import { GlobalStore, UserStore } from '../../store/Modules/index'
 import { tools } from '../../store/Modules/tools'
 
 import { shared_consts } from '../../common/shared_vuejs'
-import { ICategory, IColGridTable, ITableRec } from '../../model'
+import { ICategory, IColGridTable, IFilter, ITableRec, IPagination } from '../../model'
 import { CTodo } from '../todos/CTodo'
 import { SingleProject } from '../projects/SingleProject'
 import { lists } from '../../store/Modules/lists'
@@ -13,23 +13,43 @@ import { IParamsQuery } from '../../model/GlobalStore'
 import { fieldsTable } from '../../store/Modules/fieldsTable'
 import { CMyPopupEdit } from '../CMyPopupEdit'
 import { CTitleBanner } from '../CTitleBanner'
+import { CMyDashboard } from '../CMyDashboard'
 
 @Component({
-  components: { CMyPopupEdit, CTitleBanner }
+  components: { CMyPopupEdit, CTitleBanner, CMyDashboard }
 })
 export default class CGridTableRec extends Vue {
+  private addRow: string = 'Aggiungi'
   @Prop({ required: true }) public prop_mytitle: string
   @Prop({ required: false }) public prop_mytable: string
   @Prop({ required: false, default: null }) public prop_mycolumns: any[]
   @Prop({ required: false, default: '' }) public prop_colkey: string
+  @Prop({ required: false, default: '' }) public prop_codeId: string
   @Prop({ required: false, default: '' }) public nodataLabel: string
+  @Prop({ required: false, default: 'Aggiungi' }) public labelBtnAddRow: string
   @Prop({ required: false, default: '' }) public noresultLabel: string
+  @Prop({
+    required: false, default: function mydef(): object {
+      return {}
+    }
+  }) public defaultnewrec: object
   @Prop({ required: false, default: null }) public tablesList: ITableRec[]
+  @Prop({ required: false, default: null }) public arrfilters: IFilter[]
+  @Prop({ required: false, default: [] }) public filterdef: number[]
+  @Prop({ required: false, default: {} }) public extraparams: any
+  @Prop({
+    required: false,
+    default: { sortBy: '', descending: false, page: 1, rowsNumber: 10, rowsPerPage: 10 }
+  }) public pagination: IPagination
+
+  public newRecordBool: boolean = false
+  public newRecord: any = {}
+  public savenewRec: boolean = false
 
   public mytable: string
   public mytitle: string
   public mycolumns: any[]
-  public colkey: string
+  public colkey: string = ''
   public search: string = ''
 
   public tablesel: string = ''
@@ -37,13 +57,6 @@ export default class CGridTableRec extends Vue {
   public $q
   public $t
   public loading: boolean = false
-  public pagination: {
-    sortBy: string,
-    descending: boolean
-    rowsNumber: number
-    page: number,
-    rowsPerPage: number // specifying this determines pagination is server-side
-  } = { sortBy: '', descending: false, page: 1, rowsNumber: 10, rowsPerPage: 10 }
 
   public serverData: any [] = []
   public spinner_visible: boolean = false
@@ -53,8 +66,9 @@ export default class CGridTableRec extends Vue {
   public valPrec: string = ''
 
   public separator: 'horizontal'
-  public myfilter = undefined
-  public rowsel: any
+  public myfilter: any = ''
+  public myfilterand = []
+  public rowsel: any = {}
   public dark: boolean = true
   public canEdit: boolean = false
 
@@ -66,7 +80,44 @@ export default class CGridTableRec extends Vue {
   public rowclicksel: any = null
   public colclicksel: any = null
 
-  public selected: any = []
+  public selected = []
+
+  @Watch('prop_codeId')
+  public changeprop_codeId() {
+    this.refresh()
+  }
+
+  get isAdmin() {
+    return UserStore.state.isAdmin
+  }
+
+  get isManager() {
+    return UserStore.state.isManager
+  }
+
+  get isSocioResidente() {
+    return UserStore.state.my.profile.socioresidente
+  }
+
+  get isTutor() {
+    return UserStore.state.isTutor
+  }
+
+  get isZoomeri() {
+    return UserStore.state.isZoomeri
+  }
+
+  get isTratuttrici() {
+    return UserStore.state.isTratuttrici
+  }
+
+  get disabilita() {
+    if ((this.mytable === 'users') && (this.isTutor)) {
+      return true
+    }
+
+    return false
+  }
 
   get lists() {
     return lists
@@ -79,7 +130,7 @@ export default class CGridTableRec extends Vue {
   }
 
   public selItem(item, col: IColGridTable) {
-    console.log('selItem', item)
+    // console.log('selItem', item)
     this.rowsel = item
     this.idsel = item._id
     this.colsel = col
@@ -87,7 +138,7 @@ export default class CGridTableRec extends Vue {
 
   public undoVal() {
     console.log('undoVal', 'colsel', this.colsel, 'valprec', this.valPrec, 'this.colkey', this.colkey, 'this.selected', this.rowsel)
-    console.table(this.serverData)
+    // console.table(this.serverData)
     if (this.colsel) {
       if (this.colsel.subfield !== '') {
         if (this.rowsel[this.colsel.field] === undefined)
@@ -118,6 +169,16 @@ export default class CGridTableRec extends Vue {
     this.colsel = col
     this.idsel = row._id
     this.SaveValue(newval, valinitial)
+
+    // this.rowclicksel = null
+  }
+
+  public annulla(val) {
+    console.log('annulla')
+    GlobalStore.actions.DeleteRec({ table: this.mytable, id: this.newRecord._id })
+      .then((ris) => {
+        return true
+      })
   }
 
   public SaveValue(newVal, valinitial) {
@@ -142,9 +203,9 @@ export default class CGridTableRec extends Vue {
 
     if (this.colsel.subfield !== '') {
       if (mydata.fieldsvalue[this.colsel.field] === undefined) {
-        mydata.fieldsvalue[this.colsel.field] = {}
+        mydata.fieldsvalue[this.colsel.field + '.' + this.colsel.subfield] = newVal
       }
-      mydata.fieldsvalue[this.colsel.field][this.colsel.subfield] = newVal
+      // mydata.fieldsvalue[this.colsel.field][this.colsel.subfield] = newVal
     } else {
       mydata.fieldsvalue[this.colsel.field] = newVal
     }
@@ -152,9 +213,15 @@ export default class CGridTableRec extends Vue {
     this.valPrec = valinitial
 
     this.saveFieldValue(mydata)
+
+  }
+
+  public beforeMount() {
+    console.log('beforeMount')
   }
 
   public created() {
+    console.log('created')
     // this.serverData = this.mylist.slice() // [{ chiave: 'chiave1', valore: 'valore 1' }]
 
     this.mytable = this.prop_mytable
@@ -186,9 +253,12 @@ export default class CGridTableRec extends Vue {
   }
 
   public onRequest(props) {
-    console.log('onRequest', 'myfilter = ', this.myfilter)
+    // console.log('onRequest', 'myfilter = ', this.myfilter)
     const { page, rowsPerPage, rowsNumber, sortBy, descending } = props.pagination
     const myfilter = this.myfilter
+    const myfilterand = this.myfilterand
+
+    this.savefilter()
 
     if (!this.mytable)
       return
@@ -206,12 +276,12 @@ export default class CGridTableRec extends Vue {
     const startRow = (page - 1) * rowsPerPage
     const endRow = startRow + fetchCount
 
-    console.log('startRow', startRow)
+    // console.log('startRow', startRow, 'endRow', endRow)
 
     this.serverData = []
 
     // fetch data from "server"
-    this.fetchFromServer(startRow, endRow, myfilter, sortBy, descending).then((ris) => {
+    this.fetchFromServer(startRow, endRow, myfilter, myfilterand, sortBy, descending).then((ris) => {
 
       this.pagination.rowsNumber = this.getRowsNumberCount(myfilter)
 
@@ -225,13 +295,15 @@ export default class CGridTableRec extends Vue {
         this.serverData = [...this.returnedData]
       }
 
-      console.log('this.serverData', this.serverData)
+      // console.log('this.serverData', this.serverData)
 
       // don't forget to update local pagination object
       this.pagination.page = page
       this.pagination.rowsPerPage = rowsPerPage
       this.pagination.sortBy = sortBy
       this.pagination.descending = descending
+
+      // console.log('this.pagination', this.pagination)
 
       // ...and turn of loading indicator
       this.loading = false
@@ -241,7 +313,7 @@ export default class CGridTableRec extends Vue {
 
   // emulate ajax call
   // SELECT * FROM ... WHERE...LIMIT...
-  public async fetchFromServer(startRow, endRow, myfilter, sortBy, descending) {
+  public async fetchFromServer(startRow, endRow, myfilter, myfilterand, sortBy, descending) {
 
     let myobj = null
     if (sortBy) {
@@ -252,14 +324,19 @@ export default class CGridTableRec extends Vue {
         myobj[sortBy] = 1
     }
 
-    const params: IParamsQuery = {
+    let params: IParamsQuery = {
       table: this.mytable,
       startRow,
       endRow,
       filter: myfilter,
+      filterand: myfilterand,
       sortBy: myobj,
-      descending
+      descending,
+      userId: UserStore.state.my._id,
+      codeId: this.prop_codeId
     }
+
+    params = { ...params, ...this.extraparams }
 
     const data = await GlobalStore.actions.loadTable(params)
 
@@ -327,6 +404,27 @@ export default class CGridTableRec extends Vue {
     return this.returnedCount
   }
 
+  public async createNewRecordDialog() {
+
+    const mydata = {
+      table: this.mytable,
+      data: {}
+    }
+
+    mydata.data = this.defaultnewrec
+
+    // const mykey = fieldsTable.getKeyByTable(this.mytable)
+
+    // mydata.data[mykey] = ''
+
+    console.log('mydata', mydata)
+    const data = await GlobalStore.actions.saveTable(mydata)
+
+    this.newRecord = data
+    this.newRecordBool = true
+
+  }
+
   public async createNewRecord() {
     this.loading = true
 
@@ -335,10 +433,13 @@ export default class CGridTableRec extends Vue {
       data: {}
     }
 
+    mydata.data = this.defaultnewrec
+
     // const mykey = fieldsTable.getKeyByTable(this.mytable)
 
     // mydata.data[mykey] = ''
 
+    console.log('mydata', mydata)
     const data = await GlobalStore.actions.saveTable(mydata)
 
     this.serverData.push(data)
@@ -348,7 +449,7 @@ export default class CGridTableRec extends Vue {
   }
 
   public saveFieldValue(mydata) {
-    console.log('saveFieldValue', mydata)
+    // console.log('saveFieldValue', mydata)
 
     // Save on Server
     GlobalStore.actions.saveFieldValue(mydata).then((esito) => {
@@ -362,11 +463,14 @@ export default class CGridTableRec extends Vue {
   }
 
   public mounted() {
+    console.log('GridTable mounted', this.tablesel)
 
     if (!!this.tablesList) {
       this.canEdit = tools.getCookie(tools.CAN_EDIT, this.canEdit) === 'true'
       this.tablesel = tools.getCookie('tablesel', this.tablesel)
     }
+    this.myfilterand = this.filterdef
+    console.log('this.tablesel', this.tablesel)
 
     if (this.tablesel === '') {
       if (!!this.tablesList)
@@ -375,6 +479,8 @@ export default class CGridTableRec extends Vue {
         this.tablesel = this.mytable
     }
 
+    console.log('2) this.tablesel', this.tablesel)
+
     this.changeTable(false)
 
   }
@@ -382,7 +488,9 @@ export default class CGridTableRec extends Vue {
   public refresh() {
     this.serverData = []
 
-    console.log('refresh')
+    this.search = this.search.trim()
+
+    // console.log('refresh')
     // console.log('this.search', this.search)
     if (!!this.search && this.search !== '')
       this.myfilter = this.search
@@ -398,6 +506,7 @@ export default class CGridTableRec extends Vue {
     this.onRequest({
       pagination: this.pagination
     })
+    this.rowclicksel = null
   }
 
   public clickFunz(item, col: IColGridTable) {
@@ -432,7 +541,10 @@ export default class CGridTableRec extends Vue {
   }
 
   public changeCol(newval) {
-    tools.setCookie(this.mytable, this.colVisib.join('|'))
+    console.log('changecol', this.mytable)
+    if (!!this.mytable) {
+      tools.setCookie(this.mytable, this.colVisib.join('|'))
+    }
   }
 
   public changeTable(mysel) {
@@ -455,7 +567,7 @@ export default class CGridTableRec extends Vue {
       }
     }
 
-    console.log('this.tablesel', this.tablesel, 'mytab', mytab)
+    // console.log('this.tablesel', this.tablesel, 'mytab', mytab)
 
     if (mytab) {
       this.mytitle = mytab.label
@@ -479,7 +591,9 @@ export default class CGridTableRec extends Vue {
       this.mytable = mytab.value
     }
 
-    tools.setCookie('tablesel', this.tablesel)
+    if (!!this.tablesList) {
+      tools.setCookie('tablesel', this.tablesel)
+    }
 
     this.updatedcol()
 
@@ -511,13 +625,18 @@ export default class CGridTableRec extends Vue {
   }
 
   public changefuncAct(newval) {
-    tools.setCookie(tools.CAN_EDIT, newval)
+    if (!this.disabilita) {
+      tools.setCookie(tools.CAN_EDIT, newval)
+    }
   }
 
   public clickrowcol(row, col) {
     if (!this.canEdit) {
-      if (this.rowclicksel) {
+      if (!this.selected[0]) {
+        const uguali = this.rowclicksel._id === row._id
+        console.log('id', this.rowclicksel._id, 'id2', row._id)
         this.rowclicksel = null
+        this.colclicksel = null
       } else {
         this.rowclicksel = row
         this.colclicksel = col
@@ -531,4 +650,81 @@ export default class CGridTableRec extends Vue {
     else
       return ''
   }
+
+  public getSelectedString() {
+    return this.selected.length === 0 ? '' : `${this.selected.length} record${this.selected.length > 1 ? 's' : ''} selected of ${this.serverData.length}`
+  }
+
+  public selectionclick(details) {
+    // console.log('selectionclick this.selected', this.selected, 'details', details)
+    if (details.added) {
+      this.rowclicksel = details.rows[0]
+      this.colclicksel = details.keys[0]
+    } else {
+      this.rowclicksel = null
+      this.colclicksel = null
+    }
+
+    // console.log('this.rowclicksel', this.rowclicksel)
+  }
+
+  get getusernamesel() {
+    try {
+      if (this.rowclicksel) {
+        return this.rowclicksel.username
+      }
+    } catch (e) {
+      return ''
+    }
+  }
+
+  @Watch('myfilterand')
+  public changemyfilterand() {
+    this.refresh()
+  }
+
+  public async saveNewRecord() {
+    console.log('saveNewRecord')
+    this.savenewRec = true
+    const mydata = {
+      table: this.mytable,
+      data: {}
+    }
+
+    mydata.data = this.newRecord
+
+    const data = await GlobalStore.actions.saveTable(mydata)
+      .then((ris) => {
+        if (ris) {
+          // console.log('ris', ris)
+          this.newRecordBool = false
+          this.refresh()
+        }
+      })
+  }
+
+  public hidewindow() {
+    console.log('hidewindow')
+    if (!this.savenewRec) {
+      this.annulla(0)
+    }
+  }
+
+  get isfinishLoading() {
+    return GlobalStore.state.finishLoading
+  }
+
+  get getlabelAddRow() {
+    return this.labelBtnAddRow
+  }
+
+  get visButtRow() {
+    return this.labelBtnAddRow !== this.addRow
+  }
+
+  public savefilter() {
+    // console.log('Close')
+    this.$emit('savefilter', this.myfilterand)
+  }
+
 }

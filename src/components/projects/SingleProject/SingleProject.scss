@@ -1,5 +1,4 @@
 
-
 $colcompleted: #a2a2a2;
 $heightitem: 32px;
 $heightothers: 32px;
@@ -11,7 +10,7 @@ $heightdescr: 20px;
 .flex-container2 {
   flex-flow: row wrap;
   justify-content: space-between;
-  margin: 0px 10px 0px 10px;  // top right bottom left
+  // margin: 0px 10px 0px 10px;  // top right bottom left
 }
 
 // Set visibility: visible to the icon menu of pos-item-popover
@@ -56,24 +55,31 @@ $heightdescr: 20px;
 }
 
 .pos-item {
-  max-width: 24px;
-  min-width: 26px;
-  margin-left: 1px;
-  margin-right: 1px;
+  // max-width: 24px;
+  // min-width: 26px;
   padding-left: 1px;
   padding-right: 1px;
-  margin: 0px;
-  padding-top: 0px;
-  padding-bottom: 0px;
+  margin: 0;
+  padding-top: 0;
+  padding-bottom: 0;
   //height: $heightitem;
   line-height: $heightitem;
   min-height: $heightitem;
   text-align: center;
+  vertical-align: middle;
   // background-color: #ff4081;
   font-size: 1rem;
-  order: 2;
-  flex: 1;
+  // order: 1;
+  // flex: 1;
 
+}
+
+.pos-group {
+  order: 1;
+}
+
+.pos-go {
+  // order: 1;
 }
 
 
@@ -92,8 +98,8 @@ $heightdescr: 20px;
 
 
 .pos-item-popover{
-  max-width: 24px;
-  min-width: 24px;
+  // max-width: 24px;
+  // min-width: 24px;
   padding: 0px;
   text-align: center;
   vertical-align: middle;
@@ -157,8 +163,10 @@ $heightdescr: 20px;
   padding-bottom: 4px;
   max-width: 36px;
   min-width: 32px;
-  flex: 1;
-  order: 1;
+  display: inline-block;
+  vertical-align: middle;
+  // flex: 1;
+  // order: 1;
 }
 
 .progrbar-item {
@@ -247,6 +255,7 @@ $heightdescr: 20px;
   font-size: 1rem;
   display: table;
   flex: 1;
+  order: 1;
   height:  $heightitem;
   vertical-align: middle;
 }
@@ -388,3 +397,15 @@ $heightdescr: 20px;
 */
 
 
+.clResp{
+  font-weight: bold;
+  color: darkgreen;
+}
+.clViceResp{
+  font-weight: bold;
+  color: red;
+}
+.clVice2Resp{
+  font-weight: bold;
+  color: darkblue;
+}

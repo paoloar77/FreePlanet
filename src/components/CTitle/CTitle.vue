@@ -4,7 +4,7 @@
                :style="tools.styles_imgtitle(sizes)">
 
             <div class="absolute-bottom text-body1 text-center" :style="styleadd">
-                <h1 class="titletext">{{headtitle}}</h1>
+                <h1 class="titletext" v-html="headtitle"></h1>
             </div>
         </q-img>
 

@@ -7,7 +7,7 @@ const VALIDATE_USER_URL = process.env.MONGODB_HOST + '/users/'
 
 export function registereduser(userName: string) {
 
-  let onSuccess = (res: AxiosResponse) => {
+  const onSuccess = (res: AxiosResponse) => {
     return res.status !== PayloadMessageTypes.statusfound
   }
 

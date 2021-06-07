@@ -1,5 +1,13 @@
 import Api from '@api'
-import { ISignupOptions, ISigninOptions, IUserState, IUserFields } from 'model'
+import {
+  ISignupOptions,
+  ISigninOptions,
+  IUserState,
+  IUserFields,
+  IUserProfile,
+  ICalcStat,
+  ISignupIscrizioneConacreisOptions
+} from 'model'
 import { ILinkReg, IResult, IIdToken, IToken } from 'model/other'
 import { storeBuilder } from './Store/Store'
 import router from '@router'
@@ -17,10 +25,16 @@ import translate from './../../globalroutines/util'
 import * as Types from '@src/store/Api/ApiTypes'
 import { ICalendarState, ICfgServer } from '@src/model'
 import { shared_consts } from '../../common/shared_vuejs'
+import { IDataPass } from '@src/model/GlobalStore'
 
 const bcrypt = require('bcryptjs')
 
-const DefaultUser: IUserFields = {
+export const DefaultCalc: ICalcStat = {
+  numinvitati: 0,
+  numinvitati_attivi: 0,
+}
+
+export const DefaultUser: IUserFields = {
   _id: '',
   email: '',
   username: '',
@@ -29,9 +43,62 @@ const DefaultUser: IUserFields = {
   password: '',
   tokens: [],
   verified_email: false,
+  aportador_solidario: '',
+  made_gift: false,
   profile: {
-    img: ''
+    img: '',
+    teleg_id: 0,
+    saw_zoom_presentation: false,
+    ask_zoom_partecipato: false,
+    saw_and_accepted: false,
+    qualified: false,
+    qualified_2invitati: false,
+    socio: false,
+    socioresidente: false,
+    myshares: [],
+  },
+  downline: [],
+  calcstat: DefaultCalc,
+  dashboard: null,
+  mydownline: null,
+  cart: {
+    userId: '',
+    items: [],
+    totalPrice: 0,
+    department: '',
+    totalQty: 0,
+    note: '',
   }
+}
+
+export const DefaultProfile: IUserProfile = {
+  img: '',
+  nationality: '',
+  intcode_cell: '',
+  cell: process.env.TEST_CELL || '',
+  dateofbirth: new Date(),
+  sex: 0,
+  country_pay: '',
+  email_paypal: '',
+  payeer_id: '',
+  advcash_id: '',
+  revolut: '',
+  link_payment: '',
+  note_payment: '',
+  username_telegram: '',
+  teleg_id: 0,
+  teleg_checkcode: 0,
+  my_dream: '',
+  manage_telegram: false,
+  saw_zoom_presentation: false,
+  ask_zoom_partecipato: false,
+  saw_and_accepted: false,
+  socio: false,
+  socioresidente: false,
+  myshares: [],
+  paymenttypes: [],
+  qualified: false,
+  qualified_2invitati: false,
 }
 
 // State
@@ -45,9 +112,13 @@ const state: IUserState = {
   isLogged: false,
   isAdmin: false,
   isManager: false,
+  isDepartment: false,
+  isTutor: false,
+  isZoomeri: false,
+  isEditor: false,
   usersList: [],
-  permissionsList: [],
-  countusers: 0
+  countusers: 0,
+  lastparamquery: {}
 }
 
 const b = storeBuilder.module<IUserState>('UserModule', state)
@@ -59,13 +130,23 @@ namespace Getters {
 
   const isUserInvalid = b.read((mystate) => {
     try {
-      const ris = (mystate.my._id === undefined) || (mystate.my._id.trim() === '') || (mystate.my.tokens[0] === undefined)
+      // const ris = (mystate.my._id === undefined) || (mystate.my._id.trim() === '') || (mystate.my.tokens[0] === undefined)
+      const ris = (mystate.my._id === undefined) || (mystate.my._id.trim() === '')
       // console.log('state._id', state._id, 'ris', ris)
       return ris
     } catch (e) {
       return true
     }
   }, 'isUserInvalid')
+
+  const isTokenInvalid = b.read((mystate) => {
+    try {
+      const ris = (mystate.my.tokens.length <= 0)
+      return ris
+    } catch (e) {
+      return true
+    }
+  }, 'isTokenInvalid')
 
   const lang = b.read((mystate) => {
     if (state.lang !== '') {
@@ -87,13 +168,31 @@ namespace Getters {
   //   }
   // }, 'tok')
 
+  const VistoZoom = b.read((mystate) => {
+    if (state.my && state.my.profile) {
+      return (state.my.profile.saw_zoom_presentation)
+    }
+    return false
+  }, 'VistoZoom')
+
+  const DiceDiAverPartecipato = b.read((mystate) => {
+    if (mystate.my && mystate.my.profile) {
+      return (mystate.my.profile.ask_zoom_partecipato)
+    }
+    return false
+  }, 'DiceDiAverPartecipato')
+
   const isServerError = b.read((mystate) => {
-    return (state.servercode === tools.ERR_SERVERFETCH)
+    return (mystate.servercode === tools.ERR_SERVERFETCH)
   }, 'isServerError')
 
   const getServerCode = b.read((mystate) => {
-    return state.servercode
+    return mystate.servercode
   }, 'getServerCode')
+
+  const getMsg = b.read((mystate) => {
+    return mystate.msg
+  }, 'getMsg')
 
   const getNameSurnameByUserId = b.read((mystate: IUserState) => (userId: string) => {
     const user = UserStore.getters.getUserByUserId(userId)
@@ -143,6 +242,12 @@ namespace Getters {
     return mystate.usersList.find((item) => item.username === username)
   }, 'getUserByUsername')
 
+  const getPaymenttypeById = b.read((mystate: IUserState) => (id) => {
+    const ctrec = mystate.my.profile.paymenttypes.find((mycontr) => mycontr.key === id)
+    return (ctrec) ? ctrec.label : ''
+
+  }, 'getPaymenttypeById')
+
   const getImgByUsername = b.read((mystate: IUserState) => (username): string => {
     if (username === '')
       return ''
@@ -155,10 +260,27 @@ namespace Getters {
       return ''
     }
   }, 'getImgByUsername')
+  const getRefLink = b.read((mystate: IUserState) => (username: string): string => {
+    // console.log('myrec', myrec)
+
+    if (username === '')
+      username = mystate.my.username
+    return tools.getUrlSite() + '/signup/' + username
+
+  }, 'getRefLink')
+
+  const isVerificato = b.read((mystate: IUserState) => {
+    const teleg_ok = mystate.my.profile.teleg_id > 0 && mystate.my.verified_email
+
+    return teleg_ok
+  }, 'isVerificato')
 
   export const getters = {
     get isUserInvalid() {
       return isUserInvalid()
+    },
+    get isTokenInvalid() {
+      return isTokenInvalid()
     },
     get lang() {
       return lang()
@@ -169,8 +291,17 @@ namespace Getters {
     get isServerError() {
       return isServerError()
     },
+    get VistoZoom() {
+      return VistoZoom()
+    },
+    get DiceDiAverPartecipato() {
+      return DiceDiAverPartecipato()
+    },
     get getServerCode() {
       return getServerCode()
+    },
+    get getMsg() {
+      return getMsg()
     },
     get IsMyFriend() {
       return IsMyFriend()
@@ -196,6 +327,15 @@ namespace Getters {
     get getUsersList() {
       return getUsersList()
     },
+    get getRefLink() {
+      return getRefLink()
+    },
+    get getPaymenttypeById() {
+      return getPaymenttypeById()
+    },
+    get isVerificato() {
+      return isVerificato()
+    },
   }
 
 }
@@ -203,10 +343,17 @@ namespace Getters {
 namespace Mutations {
   function authUser(mystate: IUserState, data: IUserFields) {
     mystate.my = { ...data }
+    if (!mystate.my.profile) {
+      mystate.my.profile = DefaultProfile
+    }
 
     mystate.isAdmin = tools.isBitActive(mystate.my.perm, shared_consts.Permissions.Admin.value)
     mystate.isManager = tools.isBitActive(mystate.my.perm, shared_consts.Permissions.Manager.value)
+    mystate.isTutor = tools.isBitActive(mystate.my.perm, shared_consts.Permissions.Tutor.value)
+    mystate.isZoomeri = tools.isBitActive(mystate.my.perm, shared_consts.Permissions.Zoomeri.value)
+    mystate.isDepartment = tools.isBitActive(mystate.my.perm, shared_consts.Permissions.Department.value)
     mystate.isTeacher = tools.isBitActive(mystate.my.perm, shared_consts.Permissions.Teacher.value)
+    mystate.isEditor = tools.isBitActive(mystate.my.perm, shared_consts.Permissions.Editor.value)
 
     // console.log('authUser', 'state.isAdmin', mystate.isAdmin)
     // console.table(mystate)
@@ -229,6 +376,30 @@ namespace Mutations {
 
   function setpassword(mystate: IUserState, newstr: string) {
     mystate.my.password = newstr
+  }
+
+  function updateLocalStorage(mystate: IUserState, myuser: IUserFields) {
+    const now = tools.getDateNow()
+    // const expirationDate = new Date(now.getTime() + myres.data.expiresIn * 1000);
+    const expirationDate = new Date(now.getTime() * 1000)
+    localStorage.setItem(tools.localStorage.lang, state.lang)
+    localStorage.setItem(tools.localStorage.userId, myuser._id)
+    localStorage.setItem(tools.localStorage.username, myuser.username)
+    localStorage.setItem(tools.localStorage.name, myuser.name)
+    localStorage.setItem(tools.localStorage.surname, myuser.surname)
+    localStorage.setItem(tools.localStorage.perm, String(myuser.perm) || '')
+    if (myuser.profile !== undefined)
+      localStorage.setItem(tools.localStorage.img, (!!myuser.profile.img) ? String(myuser.profile.img) || '' : '')
+    else
+      localStorage.setItem(tools.localStorage.img, '')
+    localStorage.setItem(tools.localStorage.token, state.x_auth_token)
+    localStorage.setItem(tools.localStorage.expirationDate, expirationDate.toString())
+    localStorage.setItem(tools.localStorage.isLogged, String(true))
+    localStorage.setItem(tools.localStorage.verified_email, String(myuser.verified_email))
+    localStorage.setItem(tools.localStorage.teleg_id, String(myuser.profile.teleg_id))
+    localStorage.setItem(tools.localStorage.made_gift, String(myuser.made_gift))
+    localStorage.setItem(tools.localStorage.wasAlreadySubOnDb, String(GlobalStore.state.wasAlreadySubOnDb))
+
   }
 
   function setusersList(mystate: IUserState, usersList: IUserFields[]) {
@@ -259,6 +430,11 @@ namespace Mutations {
     mystate.servercode = num
   }
 
+  function setDiceDiAverPartecipato(mystate: IUserState, partecipato: boolean) {
+    console.log('setDiceDiAverPartecipato', partecipato)
+    mystate.my.profile.ask_zoom_partecipato = partecipato
+  }
+
   function setResStatus(mystate: IUserState, status: number) {
     mystate.resStatus = status
   }
@@ -280,18 +456,17 @@ namespace Mutations {
   }
 
   function clearAuthData(mystate: IUserState) {
-    mystate.my._id = ''
-    mystate.my.username = ''
-    mystate.my.name = ''
-    mystate.my.surname = ''
-    resetArrToken(mystate.my.tokens)
-    mystate.my.verified_email = false
+    mystate.my = DefaultUser
+    // resetArrToken(mystate.my.tokens)
+
     mystate.categorySel = 'personal'
 
     mystate.servercode = 0
     mystate.resStatus = 0
     mystate.isLogged = false
     mystate.x_auth_token = ''
+
+    return true
   }
 
   function setErrorCatch(mystate: IUserState, axerr: Types.AxiosError) {
@@ -299,6 +474,7 @@ namespace Mutations {
       if (mystate.servercode !== tools.ERR_SERVERFETCH) {
         mystate.servercode = axerr.getCode()
       }
+      mystate.msg = axerr.getMsg()
       console.log('Err catch: (servercode:', axerr.getCode(), axerr.getMsgError(), ')')
     } catch (e) {
       console.log('Err catch:', axerr)
@@ -325,6 +501,7 @@ namespace Mutations {
   }
 
   export const mutations = {
+    updateLocalStorage: b.commit(updateLocalStorage),
     authUser: b.commit(authUser),
     setpassword: b.commit(setpassword),
     setemail: b.commit(setemail),
@@ -334,6 +511,7 @@ namespace Mutations {
     setResStatus: b.commit(setResStatus),
     setAuth: b.commit(setAuth),
     clearAuthData: b.commit(clearAuthData),
+    setDiceDiAverPartecipato: b.commit(setDiceDiAverPartecipato),
     setErrorCatch: b.commit(setErrorCatch),
     getMsgError: b.commit(getMsgError),
     setusersList: b.commit(setusersList)
@@ -353,32 +531,51 @@ namespace Actions {
     }
   }
 
-  async function resetpwd(context, paramquery: IUserState) {
+  async function resetpwd(context, paramquery) {
 
-    const usertosend = {
-      email: paramquery.my.email,
-      password: paramquery.my.password,
-      tokenforgot: paramquery.tokenforgot
-    }
-    console.log(usertosend)
+    const mydata = { ...paramquery }
 
-    Mutations.mutations.setServerCode(tools.CALLING)
+    return bcrypt.hash(mydata.password, bcrypt.genSaltSync(12))
+      .then((hashedPassword: string) => {
+        mydata.repeatPassword = ''
+        mydata.password = String(hashedPassword)
 
-    return await Api.SendReq('/updatepwd', 'POST', usertosend, true)
-      .then((res) => {
-        return { code: res.data.code, msg: res.data.msg }
-      })
-      .catch((error: Types.AxiosError) => {
-        UserStore.mutations.setErrorCatch(error)
-        return { code: UserStore.getters.getServerCode, msg: error.getMsgError() }
+        return Api.SendReq('/updatepwd', 'POST', mydata, true)
+          .then((res) => {
+            return { code: res.data.code, msg: res.data.msg }
+          })
+          .catch((error: Types.AxiosError) => {
+            UserStore.mutations.setErrorCatch(error)
+            return { code: UserStore.getters.getServerCode, msg: error.getMsgError() }
+          })
       })
 
   }
 
-  async function requestpwd(context, paramquery: IUserState) {
+  async function setLangServer(context) {
+
+    const mydata = {
+      username: state.my.username,
+      lang: state.lang
+    }
+
+    return Api.SendReq(`/setlang`, 'PATCH', { data: mydata })
+      .then((res) => {
+        if (res) {
+          return (res.data.code === serv_constants.RIS_CODE_OK)
+        } else
+          return false
+      })
+      .catch((error) => {
+        return false
+      })
+  }
+
+
+  async function requestpwd(context, paramquery) {
 
     const usertosend = {
-      email: paramquery.my.email
+      email: paramquery.email
     }
     console.log(usertosend)
 
@@ -444,7 +641,27 @@ namespace Actions {
         // mutations.setServerCode(myres);
         return res
       }).catch((error) => {
-        return { numtot: 0, numadded: 0, numalreadyexisted: 0}
+        return { numtot: 0, numadded: 0, numalreadyexisted: 0 }
+      })
+  }
+
+  async function importExtraList(context, paramquery) {
+
+    return await Api.SendReq('/users/import_extralist', 'POST', paramquery)
+      .then((res) => {
+        return res
+      }).catch((error) => {
+        return { numtot: 0, numadded: 0, numalreadyexisted: 0 }
+      })
+  }
+
+  async function execDbOp(context, paramquery) {
+
+    return await Api.SendReq('/users/dbop', 'POST', paramquery)
+      .then((res) => {
+        return res.data
+      }).catch((error) => {
+        return false
       })
   }
 
@@ -452,7 +669,18 @@ namespace Actions {
 
     return await Api.SendReq('/news/load', 'POST', paramquery)
       .then((res) => {
-        console.log('res', res)
+        // console.log('res', res)
+        return res.data
+      }).catch((error) => {
+        return null
+      })
+  }
+
+  async function reportload(context, paramquery) {
+
+    return await Api.SendReq('/report/load', 'POST', paramquery)
+      .then((res) => {
+        // console.log('res', res)
         return res.data
       }).catch((error) => {
         return null
@@ -463,7 +691,7 @@ namespace Actions {
 
     return await Api.SendReq('/news/setactivate', 'POST', paramquery)
       .then((res) => {
-        console.log('res', res)
+        // console.log('res', res)
         return res.data
       }).catch((error) => {
         return null
@@ -480,25 +708,29 @@ namespace Actions {
 
     return bcrypt.hash(authData.password, bcrypt.genSaltSync(12))
       .then((hashedPassword: string) => {
-        const usertosend = {
-          lang: mylang,
-          email: authData.email,
-          password: String(hashedPassword),
-          username: authData.username,
-          name: authData.name,
-          surname: authData.surname
-        }
+        /*
+                const usertosend = {
+                  lang: mylang,
+                  email: authData.email,
+                  password: String(hashedPassword),
+                  username: authData.username,
+                  name: authData.name,
+                  surname: authData.surname
+                }
+                console.log(usertosend)
 
-        console.log(usertosend)
+        */
+        authData.lang = mylang
+        authData.password = String(hashedPassword)
 
         Mutations.mutations.setServerCode(tools.CALLING)
 
-        return Api.SendReq('/users', 'POST', usertosend)
+        return Api.SendReq('/users', 'POST', authData)
           .then((res) => {
 
             const newuser = res.data
 
-            console.log('newuser', newuser)
+            // console.log('newuser', newuser)
 
             Mutations.mutations.setServerCode(res.status)
 
@@ -527,16 +759,41 @@ namespace Actions {
               // dispatch('storeUser', authData);
               // dispatch('setLogoutTimer', myres.data.expiresIn);
 
-              return tools.OK
+              return { code: tools.OK, msg: '' }
             } else {
-              return tools.ERR_GENERICO
+              return { code: tools.ERR_GENERICO, msg: '' }
             }
           })
           .catch((error) => {
+            console.log('Err', error)
             UserStore.mutations.setErrorCatch(error)
-            return UserStore.getters.getServerCode
+            return { code: UserStore.getters.getServerCode, msg: UserStore.getters.getMsg }
           })
       })
+  }
+
+  async function iscrivitiConacreis(context, authData: ISignupIscrizioneConacreisOptions) {
+    console.log('iscrivitiConacreis')
+
+    // console.log("PASSW: " + authData.password);
+
+    Mutations.mutations.setServerCode(tools.CALLING)
+
+    authData.userId = UserStore.state.my._id
+
+    return Api.SendReq('/iscritti_conacreis', 'POST', authData)
+      .then((res) => {
+        if (res.status === 200) {
+          return { code: serv_constants.RIS_ISCRIZIONE_OK, msg: '' }
+        } else {
+          return { code: tools.ERR_GENERICO, msg: '' }
+        }
+      }).catch((error) => {
+        console.log('Err', error)
+        UserStore.mutations.setErrorCatch(error)
+        return { code: UserStore.getters.getServerCode, msg: UserStore.getters.getMsg }
+      })
+
   }
 
   async function signin(context, authData: ISigninOptions) {
@@ -551,7 +808,7 @@ namespace Actions {
         if ('serviceWorker' in navigator) {
           sub = await navigator.serviceWorker.ready
             .then((swreg) => {
-              console.log('swreg')
+              // console.log('swreg')
               sub = swreg.pushManager.getSubscription()
               return sub
             })
@@ -566,14 +823,17 @@ namespace Actions {
     }
 
     const options = {
-      title: translate('notification.title_subscribed'),
+      title: tools.translate('notification.title_subscribed', [{
+        strin: 'sitename',
+        strout: translate('ws.sitename')
+      }]),
       content: translate('notification.subscribed'),
       openUrl: '/'
     }
 
     const usertosend = {
-      username: authData.username,
-      password: authData.password,
+      username: authData.username.trim(),
+      password: authData.password.trim(),
       lang: state.lang,
       subs: sub,
       options
@@ -605,28 +865,13 @@ namespace Actions {
 
           const myuser: IUserFields = res.data.usertosend
           if (myuser) {
-            console.table(myuser)
+            // console.table(myuser)
 
             Mutations.mutations.authUser(myuser)
 
-            const now = tools.getDateNow()
-            // const expirationDate = new Date(now.getTime() + myres.data.expiresIn * 1000);
-            const expirationDate = new Date(now.getTime() * 1000)
-            localStorage.setItem(tools.localStorage.lang, state.lang)
-            localStorage.setItem(tools.localStorage.userId, myuser._id)
-            localStorage.setItem(tools.localStorage.username, myuser.username)
-            localStorage.setItem(tools.localStorage.name, myuser.name)
-            localStorage.setItem(tools.localStorage.surname, myuser.surname)
-            localStorage.setItem(tools.localStorage.perm, String(myuser.perm) || '')
-            if (myuser.profile !== undefined)
-              localStorage.setItem(tools.localStorage.img, (!!myuser.profile.img) ? String(myuser.profile.img) || '' : '')
-            else
-              localStorage.setItem(tools.localStorage.img, '')
-            localStorage.setItem(tools.localStorage.token, state.x_auth_token)
-            localStorage.setItem(tools.localStorage.expirationDate, expirationDate.toString())
-            localStorage.setItem(tools.localStorage.isLogged, String(true))
-            localStorage.setItem(tools.localStorage.verified_email, String(myuser.verified_email))
-            localStorage.setItem(tools.localStorage.wasAlreadySubOnDb, String(GlobalStore.state.wasAlreadySubOnDb))
+            Mutations.mutations.updateLocalStorage(myuser)
+
+            GlobalStore.actions.loadSite()
 
           }
         }
@@ -663,6 +908,8 @@ namespace Actions {
     localStorage.removeItem(tools.localStorage.isLogged)
     // localStorage.removeItem(rescodes.localStorage.leftDrawerOpen)
     localStorage.removeItem(tools.localStorage.verified_email)
+    localStorage.removeItem(tools.localStorage.teleg_id)
+    localStorage.removeItem(tools.localStorage.made_gift)
     localStorage.removeItem(tools.localStorage.categorySel)
     localStorage.removeItem(tools.localStorage.wasAlreadySubOnDb)
 
@@ -675,7 +922,7 @@ namespace Actions {
       .then((res) => {
         console.log(res)
       }).then(() => {
-        Mutations.mutations.clearAuthData()
+        return Mutations.mutations.clearAuthData()
       }).catch((error) => {
         UserStore.mutations.setErrorCatch(error)
         return UserStore.getters.getServerCode
@@ -687,7 +934,8 @@ namespace Actions {
   }
 
   async function setGlobal(isLogged: boolean) {
-    console.log('setGlobal')
+    // console.log('setGlobal', isLogged)
+
     try {
       // state.isLogged = true
       if (isLogged) {
@@ -697,11 +945,12 @@ namespace Actions {
         GlobalStore.mutations.setCategorySel(localStorage.getItem(tools.localStorage.categorySel))
 
         GlobalStore.actions.checkUpdates()
+
       }
 
-      const p3 = await GlobalStore.actions.loadAfterLogin()
+      const isok = await GlobalStore.actions.loadAfterLogin()
 
-      state.isLogged = isLogged
+      state.isLogged = isok && isLogged
 
       if (static_data.functionality.ENABLE_TODOS_LOADING)
         await Todos.actions.dbLoad({ checkPending: true })
@@ -709,7 +958,7 @@ namespace Actions {
       if (static_data.functionality.ENABLE_PROJECTS_LOADING)
         await Projects.actions.dbLoad({ checkPending: true, onlyiffirsttime: true })
 
-      console.log('add routes')
+      // console.log('add routes')
 
       GlobalStore.actions.addDynamicPages()
 
@@ -739,6 +988,7 @@ namespace Actions {
 
       const token = localStorage.getItem(tools.localStorage.token)
       if (token) {
+
         const expirationDateStr = localStorage.getItem(tools.localStorage.expirationDate)
         const expirationDate = new Date(String(expirationDateStr))
         const now = tools.getDateNow()
@@ -748,8 +998,10 @@ namespace Actions {
           const name = String(localStorage.getItem(tools.localStorage.name))
           const surname = String(localStorage.getItem(tools.localStorage.surname))
           const verified_email = localStorage.getItem(tools.localStorage.verified_email) === 'true'
+          const made_gift = localStorage.getItem(tools.localStorage.made_gift) === 'true'
           const perm = parseInt(localStorage.getItem(tools.localStorage.perm), 10)
           const img = String(localStorage.getItem(tools.localStorage.img))
+          const teleg_id = parseInt(localStorage.getItem(tools.localStorage.teleg_id), 10)
 
           GlobalStore.state.wasAlreadySubOnDb = localStorage.getItem(tools.localStorage.wasAlreadySubOnDb) === 'true'
 
@@ -763,8 +1015,9 @@ namespace Actions {
             name,
             surname,
             verified_email,
+            made_gift,
             perm,
-            profile: { img }
+            profile: { img, teleg_id }
           })
 
           isLogged = true
@@ -780,6 +1033,51 @@ namespace Actions {
       console.error('ERR autologin ', e.message)
       return false
     }
+  }
+
+  async function getDashboard(context, paramquery) {
+
+    if (paramquery === null)
+      paramquery = state.lastparamquery
+    else
+      state.lastparamquery = paramquery
+
+    return await Api.SendReq('/dashboard', 'POST', paramquery)
+      .then((res) => {
+        if (res.status === 200) {
+          state.my.dashboard = res.data.dashboard
+          state.my.dashboard.myself = (res.data.dashboard.myself === undefined) ? DefaultUser : res.data.dashboard.myself
+          state.my.dashboard.aportador = (res.data.dashboard.aportador === undefined) ? DefaultUser : res.data.dashboard.aportador
+          state.my.dashboard.numpeople_aportador = (res.data.dashboard.numpeople_aportador === undefined) ? 0 : res.data.dashboard.numpeople_aportador
+
+          return state.my.dashboard
+        }
+      }).catch((error) => {
+        return {
+          aportador: {},
+        }
+      })
+  }
+
+  async function getDownline(context, paramquery) {
+
+    if (paramquery === null)
+      paramquery = state.lastparamquery
+    else
+      state.lastparamquery = paramquery
+
+    return await Api.SendReq('/dashboard/downline', 'POST', paramquery)
+      .then((res) => {
+        if (res.status === 200) {
+          state.my.mydownline = res.data.downline
+
+          return state.my.mydownline
+        }
+      }).catch((error) => {
+        return {
+          downline: []
+        }
+      })
   }
 
   /*
@@ -805,11 +1103,18 @@ namespace Actions {
     resetpwd: b.dispatch(resetpwd),
     signin: b.dispatch(signin),
     signup: b.dispatch(signup),
+    iscrivitiConacreis: b.dispatch(iscrivitiConacreis),
     vreg: b.dispatch(vreg),
     unsubscribe: b.dispatch(unsubscribe),
     importemail: b.dispatch(importemail),
+    importExtraList: b.dispatch(importExtraList),
+    execDbOp: b.dispatch(execDbOp),
+    setLangServer: b.dispatch(setLangServer),
     newsletterload: b.dispatch(newsletterload),
+    reportload: b.dispatch(reportload),
     newsletter_setactivate: b.dispatch(newsletter_setactivate),
+    getDashboard: b.dispatch(getDashboard),
+    getDownline: b.dispatch(getDownline)
   }
 
 }

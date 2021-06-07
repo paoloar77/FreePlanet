@@ -32,7 +32,7 @@ const state: ITodosState = {
   visuLastCompleted: 10
 }
 
-const listFieldsToChange: string [] = ['descr', 'statustodo', 'category', 'expiring_at', 'priority', 'id_prev', 'pos', 'enableExpiring', 'progress', 'phase', 'assigned_to_userId', 'hoursplanned', 'hoursworked', 'start_date', 'completed_at', 'themecolor', 'themebgcolor']
+const listFieldsToChange: string [] = ['descr', 'statustodo', 'category', 'expiring_at', 'priority', 'pos', 'enableExpiring', 'progress', 'phase', 'assigned_to_userId', 'hoursplanned', 'hoursworked', 'start_date', 'completed_at', 'themecolor', 'themebgcolor', 'assignedToUsers']
 
 const b = storeBuilder.module<ITodosState>('Todos', state)
 const stateGetter = b.state()
@@ -69,6 +69,7 @@ namespace Getters {
       _id: objectId(),
       userId: UserStore.state.my._id,
       descr: '',
+      note: '',
       priority: tools.Priority.PRIORITY_NORMAL,
       statustodo: tools.Status.OPENED,
       created_at: tools.getDateNow(),
@@ -77,7 +78,6 @@ namespace Getters {
       category: '',
       expiring_at: tomorrow,
       enableExpiring: false,
-      id_prev: '',
       pos: 0,
       modified: false,
       progress: 0,
@@ -88,7 +88,8 @@ namespace Getters {
       hoursworked: 0,
       start_date: tools.getDateNull(),
       themecolor: 'blue',
-      themebgcolor: 'white'
+      themebgcolor: 'white',
+      assignedToUsers: []
     }
     // return this.copy(objtodo)
     return objtodo
@@ -104,13 +105,16 @@ namespace Getters {
       arrout = []
     }
 
+    if (arrout)
+      arrout = arrout.sort((a, b) => a.pos - b.pos)
+
     // return tools.mapSort(arrout)
     return arrout
   }, 'items_dacompletare')
 
   const todos_completati = b.read((stateparam: ITodosState) => (cat: string): ITodo[] => {
     const indcat = getindexbycategory(cat)
-    console.log('todos_completati', cat, 'indcat=', indcat, 'state.categories=', state.categories)
+    // console.log('todos_completati', cat, 'indcat=', indcat, 'state.categories=', state.categories)
     if (stateparam.todos[indcat]) {
       let arrout = []
       if (stateparam.showtype === costanti.ShowTypeTask.SHOW_LAST_N_COMPLETED) {   // Show only the first N completed
@@ -126,7 +130,10 @@ namespace Getters {
         arrout = []
       }
 
-      console.log('arrout', arrout)
+      if (arrout)
+        arrout = arrout.sort((a, b) => a.pos - b.pos)
+
+      // console.log('arrout', arrout)
 
       return arrout
       // return tools.mapSort(arrout)
@@ -228,7 +235,7 @@ namespace Mutations {
 
     console.log('stateparam.categories', stateparam.categories)
     console.log('myitemdest', myitemdest)
-    console.log('indcat', indcat, 'indcatdest', indcatdest, 'indorig', indorig)
+    // console.log('indcat', indcat, 'indcatdest', indcatdest, 'indorig', indorig)
 
     if (indcatdest === -1) {
       stateparam.categories.push(myitemdest.category)
@@ -258,7 +265,7 @@ namespace Actions {
     if (!static_data.functionality.ENABLE_PROJECTS_LOADING)
       return null
 
-    console.log('dbLoad', nametable, checkPending, 'userid=', UserStore.state.my._id)
+    // console.log('dbLoad', nametable, checkPending, 'userid=', UserStore.state.my._id)
 
     // if (UserStore.state.my._id === '') {
     //   return new Types.AxiosError(0, null, 0, '')
@@ -282,7 +289,7 @@ namespace Actions {
 
         // console.log('ARRAY TODOS = ', state.todos)
         if (process.env.DEBUG === '1') {
-          console.log('dbLoad', 'state.todos', state.todos, 'state.categories', state.categories)
+          // console.log('dbLoad', 'state.todos', state.todos, 'state.categories', state.categories)
         }
 
         return res
@@ -298,6 +305,24 @@ namespace Actions {
     return ris
   }
 
+  async function calculateHoursTodo(context, { todoId }) {
+
+    let ris = null
+
+    ris = await Api.SendReq('/todos/calc/' + todoId, 'GET', null)
+      .then((res) => {
+        if (res.data.rec) {  // console.log('RISULTANTE CATEGORIES DAL SERVER = ', res.data.categories)
+          return res.data.rec
+        }
+        return null
+      })
+      .catch((error) => {
+        console.log('error calculateHoursTodo', error)
+      })
+
+    return ris
+  }
+
   async function deleteItemtodo(context, { cat, idobj }) {
     console.log('deleteItemtodo: KEY = ', idobj)
 
@@ -309,15 +334,18 @@ namespace Actions {
       console.log('myobjtrov', myobjtrov.descr)
 
       if (!!myobjtrov) {
+        /*
         const myobjnext = tools.getElemPrevById(myarr, myobjtrov._id)
 
         if (!!myobjnext) {
-          myobjnext.id_prev = myobjtrov.id_prev
+          myobjnext.pos = myobjtrov.pos + 1
           myobjnext.modified = true
-          await modify(context, { myitem: myobjnext, field: 'id_prev' })
+          await modify(context, { myitem: myobjnext, field: 'pos' })
         }
 
-        ApiTables.table_DeleteRecord(nametable, myobjtrov, idobj)
+         */
+
+        ApiTables.table_HideRecord(nametable, myobjtrov, idobj)
       }
     }
   }
@@ -336,13 +364,13 @@ namespace Actions {
     if (atfirst) {
       console.log('INSERT AT THE TOP')
       elemtochange = tools.getFirstList(myarr)
-      objtodo.id_prev = ApiTables.LIST_START
+      objtodo.pos = 10
     } else {
       console.log('INSERT AT THE BOTTOM')
       // INSERT AT THE BOTTOM , so GET LAST ITEM
       const lastelem = tools.getLastListNotCompleted(nametable, objtodo.category, this.tipoProj)
 
-      objtodo.id_prev = (!!lastelem) ? lastelem._id : ApiTables.LIST_START
+      objtodo.pos = (!!lastelem) ? lastelem.pos + 10 : 10
     }
     objtodo.modified = false
 
@@ -353,9 +381,9 @@ namespace Actions {
     let field = ''
     if (atfirst) {    // update also the last elem
       if (!!elemtochange) {
-        elemtochange.id_prev = id
+        elemtochange.pos = objtodo.pos
         console.log('elemtochange', elemtochange)
-        field = 'id_prev'
+        field = 'pos'
 
         // Modify the other record
         await modify(context, { myitem: elemtochange, field })
@@ -411,7 +439,7 @@ namespace Actions {
   }
 
   async function modify(context, { myitem, field }) {
-    return await ApiTables.table_ModifyRecord(nametable, myitem, listFieldsToChange, field)
+    return ApiTables.table_ModifyRecord(nametable, myitem, listFieldsToChange, field)
   }
 
   async function swapElems(context, itemdragend: IDrag) {
@@ -444,7 +472,7 @@ namespace Actions {
         if (!!dest_obj) {
           dest_obj.category = action._id
           dest_obj.modified = true
-          dest_obj.id_prev = null
+          dest_obj.pos = 1
 
           GlobalStore.state.lastaction.type = 0
 
@@ -456,6 +484,7 @@ namespace Actions {
 
   export const actions = {
     dbLoad: b.dispatch(dbLoad),
+    calculateHoursTodo: b.dispatch(calculateHoursTodo),
     swapElems: b.dispatch(swapElems),
     deleteItemtodo: b.dispatch(deleteItemtodo),
     dbInsert: b.dispatch(dbInsert),

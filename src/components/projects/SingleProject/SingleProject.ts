@@ -6,7 +6,7 @@ import { tools } from '../../../store/Modules/tools'
 import { toolsext } from '@src/store/Modules/toolsext'
 import { lists } from '../../../store/Modules/lists'
 
-import { IProject } from '../../../model/index'
+import { IProject, TipoVisu } from '../../../model/index'
 
 import { SubMenusProj } from '../SubMenusProj'
 import { CDate } from '../../CDate'
@@ -14,6 +14,7 @@ import { CDate } from '../../CDate'
 import { date } from 'quasar'
 import { GlobalStore } from '@store'
 import { RouteNames } from '@src/router/route-names'
+import { shared_consts } from '@src/common/shared_vuejs'
 
 @Component({
   components: { SubMenusProj, CDate },
@@ -51,6 +52,24 @@ export default class SingleProject extends Vue {
     return Projects.getters.CanIModifyPanelPrivacy(this.itemproject)
   }
 
+  get TipoVisu() {
+    return TipoVisu
+  }
+
+  get getTipovisuByProjParent() {
+    let myprojparent = Projects.getters.getRecordById(this.itemproject.id_parent)
+    if (!myprojparent)
+      myprojparent = this.itemproject
+    return Projects.getters.getTipoVisuProj(myprojparent)
+  }
+
+  get getTipoViewByProjParent() {
+    const myprojparent = Projects.getters.getRecordById(this.itemproject.id_parent)
+    if (!myprojparent)
+      return ''
+    return myprojparent.view
+  }
+
   @Prop({ required: true }) public itemproject: IProject
 
   @Watch('itemproject.enableExpiring')
@@ -81,6 +100,31 @@ export default class SingleProject extends Vue {
   @Watch('itemproject.themecolor')
   public valueChangedthemecolor() {
     this.watchupdate('themecolor')
+  }
+
+  @Watch('itemproject.pos')
+  public valueChangedpos() {
+    this.watchupdate('pos')
+  }
+
+  @Watch('itemproject.groupId')
+  public valueChangedgroupId() {
+    this.watchupdate('groupId')
+  }
+
+  @Watch('itemproject.respUsername')
+  public valueChangedresp() {
+    this.watchupdate('respUsername')
+  }
+
+  @Watch('itemproject.viceRespUsername')
+  public valueChangedviceResp() {
+    this.watchupdate('viceRespUsername')
+  }
+
+  @Watch('itemproject.vice2RespUsername')
+  public valueChangedvice2Resp() {
+    this.watchupdate('vice2RespUsername')
   }
 
   @Watch('itemproject.themebgcolor')
@@ -123,6 +167,11 @@ export default class SingleProject extends Vue {
     this.watchupdate('privacywrite')
   }
 
+  @Watch('itemproject.tipovisu')
+  public valueChanged_tipovisu() {
+    this.watchupdate('tipovisu')
+  }
+
   @Watch('itemproject.totalphases')
   public valueChangedtotalphases() {
     this.watchupdate('totalphases')
@@ -130,7 +179,7 @@ export default class SingleProject extends Vue {
 
   @Watch('itemproject.progressCalc')
   public valueChanged6() {
-    console.log('itemproject.progressCalc')
+    // console.log('itemproject.progressCalc')
     this.updateClasses()
 
     // console.log('this.percentageProgress', this.percentageProgress, 'this.itemproject.progressCalc', this.itemproject.progressCalc)
@@ -169,15 +218,15 @@ export default class SingleProject extends Vue {
   }
 
   public watchupdate(field = '') {
-    console.log('watchupdate PROJ', field)
+    // console.log('watchupdate PROJ', field)
     this.$emit('eventupdateproj', { myitem: this.itemproject, field })
     this.updateicon()
   }
 
   public updateClasses() {
     // this.classCompleted = 'completed-item'
-    this.classDescr = 'flex-item div_descr show donotdrag'
-    this.classDescrEdit = 'flex-item div_descr_edit donotdrag'
+    this.classDescr = ''
+    this.classDescrEdit = 'div_descr_edit donotdrag'
     if (!this.isProject()) {
       this.classDescr += ' titleLista-item'
       this.classDescrEdit += ' titleLista-item'
@@ -188,7 +237,7 @@ export default class SingleProject extends Vue {
 
     this.percProgress = 'percProgress'
 
-    this.classExpiring = 'flex-item data-item shadow-1 hide-if-small'
+    this.classExpiring = 'data-item shadow-1 hide-if-small'
     this.classExpiringEx = ''
 
     this.clButtPopover = this.sel ? 'pos-item-popover comp_selected' : 'pos-item-popover'
@@ -231,7 +280,7 @@ export default class SingleProject extends Vue {
   }
 
   public clickRiga(clickmenu: boolean = false) {
-    console.log('CLICK RIGA PROJ ************')
+    // console.log('CLICK RIGA PROJ ************')
 
     // if (!this.sel) {
 
@@ -240,12 +289,12 @@ export default class SingleProject extends Vue {
       this.$emit('deselectAllRowstodo', null, false)
       this.$emit('deselectAllRowsproj', this.itemproject, true)
 
-      if (!this.sel) {
-        this.selectRiga()
-      } else {
-        this.$emit('deselectAllRowsproj', null, false, false, true)
-        this.deselectRiga()
-      }
+      // if (!this.sel) {
+      this.selectRiga()
+      // } else {
+      //   this.$emit('deselectAllRowsproj', null, false, false, true)
+      //   this.deselectRiga()
+      // }
     }
   }
 
@@ -287,7 +336,7 @@ export default class SingleProject extends Vue {
   }
 
   public activeEdit() {
-    console.log('Attiva Edit')
+    // console.log('Attiva Edit')
     this.attivaEdit = true
     this.editProject()
   }
@@ -297,7 +346,11 @@ export default class SingleProject extends Vue {
   }
 
   get tipoProj() {
-    return this.$route.name
+    const myarr = this.$route.name.split('.')
+    if (myarr)
+      return myarr[1]
+    else
+      return this.$route.name
   }
 
   get getrouteto() {
@@ -342,7 +395,7 @@ export default class SingleProject extends Vue {
       }
 
       // console.log('focus()')
-    }, 400)
+    }, 100)
   }
 
   public getFocus(e) {
@@ -379,7 +432,9 @@ export default class SingleProject extends Vue {
   }
 
   public keyDownArea(e) {
-    console.log('keyDownArea')
+    // console.log('keyDownArea', e.keyCode, 'key', e.key)
+    // console.log('precDescr', this.precDescr)
+    // console.log('shiftKey', e.shiftKey)
     /*
         if ((e.key === 'ArrowUp') && !e.shiftKey) {
           e.key = 'Tab'
@@ -405,6 +460,7 @@ export default class SingleProject extends Vue {
     }
 
     if (((e.key === 'Enter') || (e.key === 'Tab')) && !e.shiftKey) {
+      // console.log('   updateTodo...')
       this.updateTodo()
 
       if ((e.key === 'Tab') && !e.shiftKey) {
@@ -427,14 +483,17 @@ export default class SingleProject extends Vue {
   }
 
   public updateTodo() {
+    // console.log('this.itemproject.descr', this.itemproject.descr)
+    // console.log('precDescr', this.precDescr)
+
     if (this.itemproject.descr === this.precDescr) {
       return
     }
 
     this.itemproject.descr = this.precDescr
-    console.log('updateTodo', this.precDescr, this.itemproject.descr)
-    console.log('itemproject', this.itemproject)
-    console.log('Prec:', this.itemprojectPrec)
+    // console.log('updateTodo', this.precDescr, this.itemproject.descr)
+    // console.log('itemproject', this.itemproject)
+    // console.log('Prec:', this.itemprojectPrec)
 
     this.watchupdate('descr')
     this.inEdit = false
@@ -467,7 +526,7 @@ export default class SingleProject extends Vue {
 
   public updatedata(field: string) {
     // const myitem = tools.jsonCopy(this.itemproject)
-    console.log('calling this.$emit(eventupdateproj)', this.itemproject)
+    // console.log('calling this.$emit(eventupdateproj)', this.itemproject)
     this.$emit('eventupdateproj', { myitem: this.itemproject, field })
   }
 
@@ -497,7 +556,7 @@ export default class SingleProject extends Vue {
   }
 
   public async clickMenu(action) {
-    console.log('click menu: ', action)
+    // console.log('click menu: ', action)
     if (action === lists.MenuAction.DELETE) {
       return await this.askConfirmDelete()
     } else if (action === lists.MenuAction.TOGGLE_EXPIRING) {
@@ -596,6 +655,27 @@ export default class SingleProject extends Vue {
 
         })
     */
+  }
+
+  public getResp() {
+    if (!!GlobalStore.state.resps)
+      return this.itemproject.respUsername ? GlobalStore.getters.getRespByUsername(this.itemproject.respUsername) : ''
+    else
+      return ''
+  }
+
+  public getViceResp() {
+    if (!!GlobalStore.state.resps)
+      return this.itemproject.viceRespUsername ? GlobalStore.getters.getRespByUsername(this.itemproject.viceRespUsername) : ''
+    else
+      return ''
+  }
+
+  public getVice2Resp() {
+    if (!!GlobalStore.state.resps)
+      return this.itemproject.vice2RespUsername ? GlobalStore.getters.getRespByUsername(this.itemproject.vice2RespUsername) : ''
+    else
+      return ''
   }
 
 }

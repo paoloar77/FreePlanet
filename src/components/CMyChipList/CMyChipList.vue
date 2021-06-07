@@ -1,10 +1,16 @@
 <template>
-    <div class="clchip">
+    <div class="row clchip">
         <div v-for="(rec, index) in myarrvalues">
-            <q-chip dense
+          <q-chip v-if="rec.icon"
+                    dense
                     :color="rec.color"
                     text-color="white"
                     :icon="rec.icon">
+                {{rec.label}}
+            </q-chip>
+            <q-chip dense
+                    :color="rec.color"
+                    text-color="white">
                 {{rec.label}}
             </q-chip>
         </div>

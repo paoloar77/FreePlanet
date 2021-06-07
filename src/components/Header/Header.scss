@@ -7,7 +7,14 @@
   font-weight: 350;
 }
 
+.q-toolbar__title{
+  padding: 0 12px;
+}
+
 @media screen and (max-width: 600px) {
+  .q-toolbar__title{
+    padding: 0;
+  }
   .layout-padding {
     padding: 1.5em .5em;
   }
@@ -206,9 +213,6 @@ canvas {
   display: none !important;
 }
 
-.underline {
-  text-decoration: underline;
-}
 
 .toolbar {
   min-height: 43px;
@@ -224,10 +228,6 @@ canvas {
 }
 
 .fa-facebook:before {
-  content: url('../../statics/icons/flag_it.svg');
-}
-
-.fa-flag-it:before {
   content: url('../../statics/icons/flag_it.svg');
 }
 
@@ -296,8 +296,22 @@ canvas {
   margin-bottom: 5px;
 }
 
+.text-cart {
+  font-size: 1.15rem;
+  text-shadow: .05rem .05rem .15rem #fff;
+  background-color: limegreen;
+  border-radius: 1rem !important;
+  text-align: center;
+  margin: 1px;
+  margin-bottom: 5px;
+}
+
 .roundimg  {
   border-radius: 50% !important;
   color: red;
   background-color: red;
+}
+
+.titlesite {
+  font-size: 1rem;
 }

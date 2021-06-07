@@ -28,8 +28,12 @@ export default class CTitle extends Vue {
   }
 
   get getaltimg() {
-    const filefull = tools.getimgFullpathbysize(this.imgbackground)
-    return tools.getaltimg(filefull.path, filefull.file, this.headtitle)
+    if (this.headtitle) {
+      return this.headtitle
+    } else {
+      const filefull = tools.getimgFullpathbysize(this.imgbackground)
+      return tools.getaltimg(filefull.path, filefull.file, this.headtitle)
+    }
   }
 
 }

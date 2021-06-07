@@ -30,4 +30,17 @@ export default class CImgText extends Vue {
   @Prop({ required: false, default: '' }) public style1: string
   @Prop({ required: false, default: 'image' }) public alt1: string
   @Prop({ required: false, default: 'image' }) public alt2: string
+
+  get clrowcol() {
+    let mycl = 'row'
+    if (tools.isMobile())
+      mycl = 'column'
+
+    return mycl
+  }
+
+  get myclass() {
+
+    return this.clrowcol + ' items-start q-col-gutter-xs imgtext '
+  }
 }

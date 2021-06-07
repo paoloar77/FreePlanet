@@ -6,6 +6,8 @@ import { translation } from './translation'
 import Quasar, { colors, date, Screen } from 'quasar'
 import { scroll } from 'quasar'
 
+import { copyToClipboard } from 'quasar'
+
 const { getScrollTarget, setScrollPosition } = scroll
 
 import {
@@ -17,14 +19,14 @@ import {
   IParamDialog,
   IProject,
   ITodo,
-  Privacy
+  Privacy, TipoVisu
 } from '@src/model'
 import * as ApiTables from '@src/store/Modules/ApiTables'
 import translate from '@src/globalroutines/util'
 import { RouteNames } from '@src/router/route-names'
 
 import { lists } from './lists'
-import { static_data } from '@src/db/static_data'
+import { preloadedimages, static_data } from '@src/db/static_data'
 import { IColl, ITimeLineEntry, ITimeLineMain } from '@src/model/GlobalStore'
 import { func_tools } from '@src/store/Modules/toolsext'
 import { serv_constants } from '@src/store/Modules/serv_constants'
@@ -32,9 +34,13 @@ import { shared_consts } from '@src/common/shared_vuejs'
 
 import { dom } from 'quasar'
 
+const printf = require('util').format
+
 const { height, width } = dom
 
 import Cookies from 'js-cookie'
+import { forEachComment } from 'tslint'
+import messages from '@src/statics/i18n'
 
 const TokenKey = 'Admin-Token'
 
@@ -46,6 +52,35 @@ export interface INotify {
 
 export const tools = {
   CAN_EDIT: 'q-ce',
+  TABBED_DASHBOARD: 't-db',
+  TABBED_HOME: 't-home',
+  TABBED_NAVE: 't-nave',
+
+  getprefCountries: ['it', 'es', 'us'],
+
+  APORTADOR_NONE: '------',
+
+  TYPECONF_ZOOM: 'zoom',
+  TYPECONF_JITSI: 'jitsi',
+
+  APORTADOR_SOLIDARIO: 'apsol',
+
+  IDAPP_AYNI: '7',
+  IDAPP_SIP: '9',
+  IDAPP_CNM: '10',
+
+  TipoMsg: {
+    SEND_LINK_CHAT_DONATORI: 1,
+    SEND_MSG: 2,
+    SEND_MSG_SINGOLO: 3,
+    SEND_TO_ALL: 10,
+    SEND_MSG_EFFETTUA_IL_DONO: 1000,
+    SEND_MSG_SOLLECITO_DONATORI_NO_DONO: 1005,
+    SEND_MSG_A_MEDIATORI: 1010,
+    SEND_MSG_A_SOGNATORE: 1020,
+    SEND_MSG_A_UTENTE_SOSTITUITO: 1030,
+    SEND_MSG_DONO_RICEVUTO_CORRETTAMENTE: 1040
+  },
 
   listBestColor: [
     'blue',
@@ -64,12 +99,21 @@ export const tools = {
     'yellow'
   ],
 
+  TABUSER: 'users',
+  TABNAVI: 'navi',
+  TABLISTAINGRESSO: 'listaingressos',
+  TABGRADUATORIA: 'graduatorias',
   TABEVENTS: 'myevents',
+  TABEXTRALIST: 'extralist',
   TABNEWSLETTER: 'newstosent',
+  TABGALLERY: 'gallery',
   TABMAILINGLIST: 'mailinglist',
   TABMYPAGE: 'mypage',
+  TABCALZOOM: 'calzoom',
+  TABGROUPS: 'groups',
   TABTEMPLEMAIL: 'templemail',
   TABOPZEMAIL: 'opzemail',
+  TABSHAREWITHUS: 'sharewithus',
 
   MAX_CHARACTERS: 60,
   projects: 'projects',
@@ -80,8 +124,6 @@ export const tools = {
   ERR_GENERICO: -1,
   ERR_SERVERFETCH: -2,
   ERR_AUTHENTICATION: -5,
-  DUPLICATE_EMAIL_ID: 11000,
-  DUPLICATE_USERNAME_ID: 11100,
 
   NOFIELD: 'nofield',
 
@@ -97,10 +139,19 @@ export const tools = {
 
   languageid: 5,
 
+  peopleWhere: {
+    participants: 1,
+    lunch: 2,
+    dinner: 3,
+    dinnerShared: 4
+  },
+
   SERVKEY_VERS: 'vers',
 
   localStorage: {
+    teleg_id: 'ti',
     verified_email: 'vf',
+    made_gift: 'mg',
     wasAlreadySubOnDb: 'sb',
     categorySel: 'cs',
     isLogged: 'ilog',
@@ -139,6 +190,14 @@ export const tools = {
     typeinrec: 128,
     multiselect: 256,
     password: 512,
+    listimages: 1024,
+    exact: 2048,
+    image: 3000,
+    nationality: 4096,
+    intcode: 5000,
+    multioption: 6000,
+    onlydate: 7000,
+    hours: 8000
   },
 
   FieldTypeArr: [
@@ -151,7 +210,128 @@ export const tools = {
     { label: 'Number', value: 64 }
   ],
 
+  SelectHours: [
+    {
+      id: 0,
+      label: '0',
+      value: 0
+    },
+    {
+      id: 5,
+      label: '0.5',
+      value: 0.5
+    },
+    {
+      id: 10,
+      label: '1',
+      value: 1
+    },
+    {
+      id: 15,
+      label: '1.5',
+      value: 1.5
+    },
+    {
+      id: 20,
+      label: '2',
+      value: 2
+    },
+    {
+      id: 25,
+      label: '2.5',
+      value: 2.5
+    },
+    {
+      id: 30,
+      label: '3',
+      value: 3
+    },
+    {
+      id: 35,
+      label: '3.5',
+      value: 3.5
+    },
+    {
+      id: 40,
+      label: '4',
+      value: 4
+    },
+    {
+      id: 45,
+      label: '4.5',
+      value: 4.5
+    },
+    {
+      id: 50,
+      label: '5',
+      value: 5
+    },
+    {
+      id: 60,
+      label: '6',
+      value: 6
+    },
+    {
+      id: 70,
+      label: '7',
+      value: 7
+    },
+    {
+      id: 80,
+      label: '8',
+      value: 8
+    },
+    {
+      id: 90,
+      label: '9',
+      value: 9
+    },
+    {
+      id: 100,
+      label: '10',
+      value: 10
+    },
+    {
+      id: 110,
+      label: '11',
+      value: 11
+    },
+    {
+      id: 120,
+      label: '12',
+      value: 12
+    },
+  ],
+
+  SelectMetodiPagamento: [
+    {
+      id: 0,
+      label: '[Nessuno]',
+      value: 0
+    },
+    {
+      id: 1,
+      label: 'Bonifico Bancario',
+      value: 1
+    },
+    {
+      id: 2,
+      label: 'Paypal',
+      value: 2
+    },
+    {
+      id: 3,
+      label: 'In Contanti alla CNM',
+      value: 3
+    },
+  ],
+
   SelectListNumPeople: [
+    {
+      id: 0,
+      label: '0',
+      value: 0
+    },
     {
       id: 1,
       label: '1',
@@ -176,7 +356,32 @@ export const tools = {
       id: 5,
       label: '5',
       value: 5
-    }
+    },
+    {
+      id: 6,
+      label: '6',
+      value: 6
+    },
+    {
+      id: 7,
+      label: '7',
+      value: 7
+    },
+    {
+      id: 8,
+      label: '8',
+      value: 8
+    },
+    {
+      id: 9,
+      label: '9',
+      value: 9
+    },
+    {
+      id: 10,
+      label: '10',
+      value: 10
+    },
   ]
   ,
 
@@ -270,6 +475,11 @@ export const tools = {
         id: 4,
         label: translation.it.privacy.onlyme,
         value: Privacy.onlyme
+      },
+      {
+        id: 5,
+        label: translation.it.privacy.inherited,
+        value: Privacy.inherited
       }
     ],
     es: [
@@ -292,6 +502,11 @@ export const tools = {
         id: 4,
         label: translation.es.privacy.onlyme,
         value: Privacy.onlyme
+      },
+      {
+        id: 5,
+        label: translation.es.privacy.inherited,
+        value: Privacy.inherited
       }
     ],
     enUs: [
@@ -314,6 +529,36 @@ export const tools = {
         id: 4,
         label: translation.enUs.privacy.onlyme,
         value: Privacy.onlyme
+      },
+      {
+        id: 5,
+        label: translation.enUs.privacy.inherited,
+        value: Privacy.inherited
+      }
+    ]
+  },
+
+  selectTipoVisu: {
+    it: [
+      {
+        id: 1,
+        label: translation.it.privacy.inherited,
+        value: TipoVisu.inherited
+      },
+      {
+        id: 2,
+        label: translation.it.tipovisu.simplelist,
+        value: TipoVisu.simplelist
+      },
+      {
+        id: 3,
+        label: translation.it.tipovisu.taskProgress,
+        value: TipoVisu.taskProgress
+      },
+      {
+        id: 4,
+        label: translation.it.tipovisu.responsabili,
+        value: TipoVisu.responsabili
       }
     ]
   },
@@ -830,6 +1075,13 @@ export const tools = {
         label: translation.it.task.showtask,
         value: 150,  // SHOW_TASK
         icon: 'rowing'
+      },
+      {
+        id: 15,
+        disable: false,
+        label: translation.it.task.showposiz,
+        value: 155,  // SHOW_POSIZ
+        icon: 'rowing'
       }
     ],
     es:
@@ -1024,11 +1276,9 @@ export const tools = {
 
     if (priority === tools.Priority.PRIORITY_HIGH) {
       cl = 'high_priority'
-    }
-    else if (priority === tools.Priority.PRIORITY_NORMAL) {
+    } else if (priority === tools.Priority.PRIORITY_NORMAL) {
       cl = 'medium_priority'
-    }
-    else if (priority === tools.Priority.PRIORITY_LOW) {
+    } else if (priority === tools.Priority.PRIORITY_LOW) {
       cl = 'low_priority'
     }
 
@@ -1068,12 +1318,12 @@ export const tools = {
   ,
 
   logelem(mystr, elem) {
-    console.log(mystr, 'elem [', elem._id, '] ', elem.descr, ' Pr(', tools.getPriorityByInd(elem.priority), ') [', elem.id_prev, '] modif=', elem.modified)
+    console.log(mystr, 'elem [', elem._id, '] ', elem.descr, 'pos', elem.pos, ' Pr(', tools.getPriorityByInd(elem.priority), ')  modif=', elem.modified)
   }
   ,
 
   getelemprojstr(elem) {
-    return 'elem [id= ' + elem._id + '] ' + elem.descr + ' [id_prev= ' + elem.id_prev + '] '
+    return elem.descr + ' [id= ' + elem._id + '] ' + 'pos: ' + elem.pos + ']\n'
   }
   ,
 
@@ -1093,7 +1343,7 @@ export const tools = {
   ,
 
   getstrelem(elem) {
-    return 'elem [' + elem._id + '] ' + elem.descr + ' Pr(' + tools.getPriorityByInd(elem.priority) + ') [ID_PREV=' + elem.id_prev + '] modif=' + elem.modified + ' '
+    return 'elem [' + elem._id + '] ' + elem.descr + ' Pr(' + tools.getPriorityByInd(elem.priority) + ') modif=' + elem.modified + ' '
   }
   ,
 
@@ -1103,7 +1353,7 @@ export const tools = {
   ) {
     let mystr = '\n'
     myarr.forEach((item) => {
-      mystr += '[' + item.pos + '] ' + item.descr + ' Pr(' + tools.getPriorityByInd(item.priority) + ') [' + item.id_prev + '] modif=' + item.modified + '\n'
+      mystr += '[' + item.pos + '] ' + item.descr + ' Pr(' + tools.getPriorityByInd(item.priority) + ')' + ' modif=' + item.modified + '\n'
       // mystr += '[' + item.pos + '] ' + item.descr + '\n'
     })
 
@@ -1130,7 +1380,7 @@ export const tools = {
 
   getItemLS(item) {
     let ris = localStorage.getItem(item)
-    if ((ris == null) || (ris === '') || (ris === 'null')) {
+    if ((ris == null) || (ris === '') || (ris === 'null') || !ris) {
       ris = ''
     }
 
@@ -1150,24 +1400,27 @@ export const tools = {
   }
   ,
 
-  update_idprev(myarr, indelemchange, indelemId) {
+  /* update_idprev(myarr, indelemchange, indelemId) {
     if (tools.isOkIndex(myarr, indelemchange)) {
-      const id_prev = (indelemId >= 0) ? myarr[indelemId]._id : ApiTables.LIST_START
-      console.log('update_idprev [', indelemchange, ']', '[id_prev=', id_prev, ']')
-      if (myarr[indelemchange].id_prev !== id_prev) {
+      // const id_prev = (indelemId >= 0) ? myarr[indelemId]._id : ApiTables.LIST_START
+      const id_prevnew = myarr[indelemchange].id_prevnew
+      console.log('update_idprev [', indelemchange, ']', myarr[indelemchange].descr, '[id_prev=', myarr[indelemchange].id_prev, ']', '[id_prevnew=', id_prevnew, ']')
+      if (myarr[indelemchange].id_prev !== id_prevnew) {
         // tools.notifyarraychanged(myarr)
         // myarr[indelemchange].modified = true
         // console.log('update_idprev Index=', indelemchange, 'indtoget', indelemId, tools.getstrelem(myarr[indelemchange]))
-        console.log('   MODIFICATO! ', myarr[indelemchange].descr, ' PRIMA:', myarr[indelemchange].id_prev, 'DOPO: ', id_prev)
-        myarr[indelemchange].id_prev = id_prev
+        console.log('   MODIFICATO! ', myarr[indelemchange].descr, ' PRIMA:', myarr[indelemchange].id_prev, 'DOPO: ', id_prevnew)
+        myarr[indelemchange].id_prev = id_prevnew
         return myarr[indelemchange]
       }
     }
     return null
-  }
-  ,
+  }, */
+
 
   async swapGeneralElem(nametable, myarr, itemdragend, listFieldsToChange) {
+
+    const arrprec = [...myarr]
 
     if (itemdragend.field === 'priority') {
       // get last elem priority
@@ -1187,15 +1440,16 @@ export const tools = {
     if (tools.isOkIndex(myarr, itemdragend.newIndex) && tools.isOkIndex(myarr, itemdragend.oldIndex)) {
 
       console.log('***  SPLICE!')
-      // console.log('   PRIMA!', tools.logga_arrproj(myarr))
+      console.log('   PRIMA!', tools.logga_arrproj(myarr))
       myarr.splice(itemdragend.newIndex, 0, myarr.splice(itemdragend.oldIndex, 1)[0])
-      // console.log('   DOPO!', tools.logga_arrproj(myarr))
+      console.log('   DOPO!', tools.logga_arrproj(myarr))
 
       // Ora inverti gli indici
       const indold = itemdragend.oldIndex
       itemdragend.oldIndex = itemdragend.newIndex
       itemdragend.newIndex = indold
 
+      /*
       if (nametable === 'todos') {
         if (itemdragend.field !== 'priority') {
           const precind = itemdragend.newIndex - 1
@@ -1225,26 +1479,76 @@ export const tools = {
 
           }
         }
+      } */
+
+      let status = 0
+
+      // const arr = lists.selectPriority[toolsext.getLocale()]
+      // for (const priority of arr) {
+      for (let i = 0; i < myarr.length; ++i) {
+        if (nametable === 'todos') {
+          status = myarr[i].statustodo
+        } else if (nametable === 'projects') {
+          status = myarr[i].statusproj
+        }
+        if (status !== tools.Status.COMPLETED) {
+          myarr[i].pos = i
+
+          const findelem = arrprec.find((rec) => rec._id === myarr[i]._id)
+
+          if (findelem !== myarr[i].pos) {
+            myarr[i].modified = true
+            await ApiTables.table_ModifyRecord(nametable, myarr[i], listFieldsToChange, 'pos')
+          }
+        }
+
       }
+      for (let i = 0; i < myarr.length; ++i) {
+        if (nametable === 'todos') {
+          status = myarr[i].statustodo
+        } else if (nametable === 'projects') {
+          status = myarr[i].statusproj
+        }
+        // (myarr[i].priority === priority.value)
+        if ((status === tools.Status.COMPLETED)) {
+          myarr[i].pos = 1000 + i
 
-      // Update the id_prev property
-      const elem1 = tools.update_idprev(myarr, itemdragend.newIndex, itemdragend.newIndex - 1)       // 0, -1
-      const elem2 = tools.update_idprev(myarr, itemdragend.newIndex + 1, itemdragend.newIndex)   // 1, 0
-      const elem3 = tools.update_idprev(myarr, itemdragend.oldIndex, itemdragend.oldIndex - 1)       // 1, 0
-      const elem4 = tools.update_idprev(myarr, itemdragend.oldIndex + 1, itemdragend.oldIndex)   // 2, 1
+          const findelem = arrprec.find((rec) => rec._id === myarr[i]._id)
 
-      await
-        ApiTables.table_ModifyRecord(nametable, elem1, listFieldsToChange, 'id_prev')
-      await
-        ApiTables.table_ModifyRecord(nametable, elem2, listFieldsToChange, 'id_prev')
-      await
-        ApiTables.table_ModifyRecord(nametable, elem3, listFieldsToChange, 'id_prev')
-      await
-        ApiTables.table_ModifyRecord(nametable, elem4, listFieldsToChange, 'id_prev')
+          if (findelem !== myarr[i].pos) {
+            myarr[i].modified = true
+            await ApiTables.table_ModifyRecord(nametable, myarr[i], listFieldsToChange, 'pos')
+          }
+        }
+
+      }
+      // }
+
+      /*
+
+       console.table(myarr)
+
+       // Update the id_prev property
+       const elem1 = tools.update_idprev(myarr, itemdragend.newIndex, itemdragend.newIndex - 1)       // 0, -1
+       const elem2 = tools.update_idprev(myarr, itemdragend.newIndex + 1, itemdragend.newIndex)   // 1, 0
+       const elem3 = tools.update_idprev(myarr, itemdragend.oldIndex, itemdragend.oldIndex - 1)       // 1, 0
+       const elem4 = tools.update_idprev(myarr, itemdragend.oldIndex + 1, itemdragend.oldIndex)   // 2, 1
+
+       await
+       ApiTables.table_ModifyRecord(nametable, elem1, listFieldsToChange, 'id_prev')
+       await
+       ApiTables.table_ModifyRecord(nametable, elem2, listFieldsToChange, 'id_prev')
+       await
+       ApiTables.table_ModifyRecord(nametable, elem3, listFieldsToChange, 'id_prev')
+       await
+       ApiTables.table_ModifyRecord(nametable, elem4, listFieldsToChange, 'id_prev')
+
+
+       */
 
       tools.notifyarraychanged(myarr)
 
-      console.log('arr FINALE', tools.logga_arrproj(myarr))
+      // console.log('arr FINALE', tools.logga_arrproj(myarr))
 
       // Update the records:
     }
@@ -1270,8 +1574,8 @@ export const tools = {
     if (myarr === undefined)
       return null
     return myarr.find((elem) => elem.id_prev === id)
-  }
-  ,
+  },
+
 
   getLastFirstElemPriority(myarr, priority: number, atfirst: boolean, escludiId: string) {
     if (myarr === null) {
@@ -1302,8 +1606,7 @@ export const tools = {
     } else {
       if (priority === tools.Priority.PRIORITY_LOW) {
         return myarr.length - 1
-      }
-      else if (priority === tools.Priority.PRIORITY_HIGH) {
+      } else if (priority === tools.Priority.PRIORITY_HIGH) {
         return 0
       }
     }
@@ -1332,8 +1635,7 @@ export const tools = {
       Projects.state.projects = tools.jsonCopy(myarr)
       return Projects.state.projects
     }
-  }
-  ,
+  },
 
   getmyid(id) {
     return 'row' + id
@@ -1358,8 +1660,7 @@ export const tools = {
   getElemByIndex(myarr, index) {
     if (index >= 0 && index < myarr.length) {
       return myarr[index]
-    }
-    else {
+    } else {
       return null
     }
   }
@@ -1380,13 +1681,30 @@ export const tools = {
   },
 
   visumenu(elem) {  // : IListRoutes
-    return (elem.onlyAdmin && UserStore.state.isAdmin) || (elem.onlyManager && UserStore.state.isManager)
-      || ((!elem.onlyAdmin) && (!elem.onlyManager))
+    let visu = ((elem.onlyAdmin && UserStore.state.isAdmin) || (elem.onlyManager && UserStore.state.isManager)
+      || (elem.onlySocioResidente && UserStore.state.my.profile.socioresidente)
+      || (elem.onlyConsiglio && UserStore.state.my.profile.consiglio)
+      || (elem.onlyNotSoci && !UserStore.state.my.profile.socio)
+      || (elem.onlyTutor && UserStore.state.isTutor)
+      || (elem.onlyEditor && UserStore.state.isEditor)
+      || (elem.onlyDepartment && UserStore.state.isDepartment)
+      || ((!elem.onlyAdmin) && (!elem.onlyManager) && (!elem.onlyTutor) && (!elem.onlyEditor) && (!elem.onlyDepartment)
+        && (!elem.onlySocioResidente) && (!elem.onlyConsiglio) && (!elem.onlyNotSoci))) && elem.active
+
+    if (!tools.isLoggedToSystem()) {
+      if (elem.onlyif_logged)
+        visu = false
+    }
+
+    if (elem.meta && elem.meta.requiresAuth) {
+      visu = visu && tools.isLoggedToSystem()
+    }
+    return visu
   },
 
   executefunc(myself: any, table, func: number, par: IParamDialog) {
     if (func === lists.MenuAction.DELETE) {
-      console.log('param1', par.param1)
+      // console.log('param1', par.param1)
       CalendarStore.actions.CancelBookingEvent({
         ideventbook: par.param1,
         notify: par.param2 === true ? '1' : '0'
@@ -1399,7 +1717,7 @@ export const tools = {
           tools.showNegativeNotif(myself.$q, myself.$t('cal.cancelederrorbooking'))
       })
     } else if (func === lists.MenuAction.DELETE_EVENT) {
-      console.log('param1', par.param1, 'id', par.param1._id)
+      // console.log('param1', par.param1, 'id', par.param1._id)
       CalendarStore.actions.CancelEvent({ id: par.param1._id }).then((ris) => {
         if (ris) {
           // Remove this record from my list
@@ -1408,8 +1726,173 @@ export const tools = {
         } else
           tools.showNegativeNotif(myself.$q, myself.$t('cal.cancelederrorevent'))
       })
+    } else if (func === lists.MenuAction.DELETE_EXTRALIST) {
+      // console.log('param1', par.param1, 'id', par.param1._id)
+      GlobalStore.actions.DeleteRec({ table: tools.TABEXTRALIST, id: par.param1._id }).then((ris) => {
+        if (ris) {
+          myself.update_username()
+          tools.showPositiveNotif(myself.$q, myself.$t('reg.cancella_invitato') + ' "' + par.param1.name + ' ' + par.param1.surname + '"')
+        } else
+          tools.showNegativeNotif(myself.$q, myself.$t('db.recfailed'))
+      })
+    } else if (func === lists.MenuAction.DELETE_USERLIST) {
+      // console.log('param1', par.param1, 'id', par.param1._id)
+      GlobalStore.actions.DeleteRec({ table: tools.TABUSER, id: par.param1._id }).then((ris) => {
+        if (ris) {
+          myself.update_username()
+          tools.showPositiveNotif(myself.$q, myself.$t('reg.cancella_invitato') + ' "' + par.param1.name + ' ' + par.param1.surname + '"')
+        } else
+          tools.showNegativeNotif(myself.$q, myself.$t('db.recfailed'))
+      })
+    } else if (func === lists.MenuAction.ZOOM_GIA_PARTECIPATO) {
+      // console.log('param1', par.param1, 'id', par.param1._id)
+      const mydatatosave = {
+        id: par.param1._id,
+        ind_order: par.param1.ind_order,
+        myfunc: func,
+        data: par.param2,
+        username: par.param2.username,
+        notifBot: null
+      }
+
+      // if (par.param2.notifBot)
+      //  mydatatosave.notifBot = { un: par.param2.notifBot, txt: par.param3 }
+
+      // myself.EseguiCallServer()
+
+      GlobalStore.actions.callFunz({ mydata: mydatatosave }).then((ris) => {
+        if (ris) {
+          myself.Callback(func)
+          tools.showPositiveNotif(myself.$q, par.param3)
+        } else
+          tools.showNegativeNotif(myself.$q, myself.$t('db.recfailed'))
+      })
+    } else if (func === lists.MenuAction.REGALA_INVITATO) {
+      // console.log('param1', par.param1, 'id', par.param1._id)
+      let mydatatosave = {
+        id: null,
+        username: '',
+        table: '',
+        fieldsvalue: {},
+        notifBot: {}
+      }
+
+      if (!!par.param1.invitante_username) {
+        mydatatosave = {
+          id: par.param1._id,
+          username: par.param1.username,
+          table: tools.TABLISTAINGRESSO,
+          fieldsvalue: { invitante_username: par.param2.aportador_solidario },
+          notifBot: null
+        }
+      } else {
+        mydatatosave = {
+          id: par.param1._id,
+          username: '',
+          table: tools.TABUSER,
+          fieldsvalue: { aportador_solidario: par.param2.aportador_solidario },
+          notifBot: null
+        }
+      }
+
+      console.log('** par.param1', par.param1)
+      console.log('** id', par.param1._id)
+
+      if (par.param3) {
+        mydatatosave.notifBot = { un: par.param2.aportador_solidario, txt: par.param3 }
+      }
+
+      GlobalStore.actions.saveFieldValue(mydatatosave).then((ris) => {
+        console.log('ris saveFieldValue', ris)
+        if (ris) {
+          tools.showPositiveNotif(myself.$q, myself.$t('reg.invitato_regalato') + ' "' + par.param1.name + ' ' + par.param1.surname + '"')
+          myself.update_username()
+        } else
+          tools.showNegativeNotif(myself.$q, myself.$t('db.recfailed'))
+      })
+    } else if (func === lists.MenuAction.REGALA_INVITANTE) {
+      // console.log('param1', par.param1, 'id', par.param1._id)
+      const mydatatosave = {
+        id: par.param1,
+        table: tools.TABLISTAINGRESSO,
+        fieldsvalue: { invitante_username: par.param2.invitante_username, ind_order_ingr: par.param2.ind_order_ingr },
+        notifBot: null
+      }
+
+      if (par.param3) {
+        mydatatosave.notifBot = { un: par.param2.invitante_username, txt: par.param3 }
+      }
+
+      GlobalStore.actions.saveFieldValue(mydatatosave).then((ris) => {
+        console.log('ris saveFieldValue', ris)
+        if (ris) {
+          tools.showPositiveNotif(myself.$q, myself.$t('reg.invitante_regalato') + ' "' + par.param2.name + ' ' + par.param2.surname + '"')
+          myself.update_username()
+        } else
+          tools.showNegativeNotif(myself.$q, myself.$t('db.recfailed'))
+      })
+    } else if ((func === lists.MenuAction.AGGIUNGI_NUOVO_IMBARCO) || (func === lists.MenuAction.CANCELLA_IMBARCO)) {
+      const mydatatosave = {
+        username: par.param1.username,
+        invitante_username: '',
+        ind_order: -1,
+        num_tess: 0,
+        myfunc: func,
+        data: par.param2,
+        notifBot: null
+      }
+
+      if (func === lists.MenuAction.CANCELLA_IMBARCO) {
+        mydatatosave.ind_order = par.param1.ind_order
+        mydatatosave.num_tess = par.param1.num_tess
+        mydatatosave.data.id = par.param2.rec._id
+      }
+      if (func === lists.MenuAction.AGGIUNGI_NUOVO_IMBARCO) {
+        mydatatosave.invitante_username = par.param1.invitante_username
+      }
+
+      myself.loading = true
+
+      mydatatosave.notifBot = { un: par.param2, txt: par.param3 }
+
+      GlobalStore.actions.callFunz({ mydata: mydatatosave }).then((ris) => {
+        myself.loading = false
+        if (ris) {
+          myself.update_username()
+          if (func === lists.MenuAction.AGGIUNGI_NUOVO_IMBARCO)
+            tools.showPositiveNotif(myself.$q, myself.$t('steps.sei_stato_aggiunto'))
+          else if (func === lists.MenuAction.CANCELLA_IMBARCO)
+            tools.showPositiveNotif(myself.$q, myself.$t('event.deleted'))
+        } else
+          tools.showNegativeNotif(myself.$q, myself.$t('db.recfailed'))
+      })
+    } else if (func === lists.MenuAction.SOSTITUISCI) {
+      // console.log('param1', par.param1, 'id', par.param1._id)
+      const mydatatosave = {
+        id: par.param1._id,
+        ind_order: par.param1.ind_order,
+        myfunc: func,
+        data: par.param2,
+        username: par.param2.username,
+        notifBot: null,
+        inviaemail: par.param2.inviaemail,
+      }
+
+      if (par.param2.notifBot)
+        mydatatosave.notifBot = { un: par.param2.notifBot, txt: par.param3 }
+
+      myself.EseguiCallServer()
+
+      GlobalStore.actions.callFunz({ mydata: mydatatosave }).then((ris) => {
+        if (ris) {
+          myself.update_nave()
+          myself.Callback()
+          tools.showPositiveNotif(myself.$q, par.param3 + '\n' + ' e inviato messaggio per aprire la Gift Chat!')
+        } else
+          tools.showNegativeNotif(myself.$q, myself.$t('db.recfailed'))
+      })
     } else if (func === lists.MenuAction.DELETE_RECTABLE) {
-      console.log('param1', par.param1)
+      // console.log('param1', par.param1)
       GlobalStore.actions.DeleteRec({ table, id: par.param1 }).then((ris) => {
         if (ris) {
           myself.ActionAfterYes(func, par.param2, null)
@@ -1418,7 +1901,7 @@ export const tools = {
           tools.showNegativeNotif(myself.$q, myself.$t('db.recdelfailed'))
       })
     } else if (func === lists.MenuAction.DUPLICATE_RECTABLE) {
-      console.log('param1', par.param1)
+      // console.log('param1', par.param1)
       GlobalStore.actions.DuplicateRec({ table, id: par.param1 }).then((ris) => {
         if (ris) {
           myself.ActionAfterYes(func, par.param2, ris.data)
@@ -1426,12 +1909,145 @@ export const tools = {
         } else
           tools.showNegativeNotif(myself.$q, myself.$t('db.recdupfailed'))
       })
+    } else if (func === lists.MenuAction.INVIA_MSG_A_DONATORI) {
+      // console.log('param1', par.param1)
+      GlobalStore.actions.InviaMsgADonatori({
+        msgobj: par.param1,
+        navemediatore: par.param2,
+        tipomsg: par.param1.tipomsg
+      }).then((ris) => {
+        if (ris) {
+          if (par.param1.inviareale)
+            tools.showPositiveNotif(myself.$q, myself.$t('dashboard.msg_donatori_ok'))
+          tools.askConfirm(myself.$q, '', ris.strout, translate('dialog.yes'), translate('dialog.no'), this, '', 0, 0, {})
+        } else
+          tools.showNegativeNotif(myself.$q, myself.$t('db.recfailed'))
+      })
+    } else if (func === lists.MenuAction.INVIA_MSG_A_FLOTTA) {
+      // console.log('param1', par.param1)
+      myself.loading = true
+      GlobalStore.actions.InviaMsgAFlotta({
+        flotta: par.param1,
+        inviareale: par.param2.inviareale,
+        inviaemail: par.param2.inviaemail,
+        tipomsg: par.param3
+      }).then((ris) => {
+        myself.loading = false
+        if (ris) {
+          if (par.param1.inviareale)
+            tools.showPositiveNotif(myself.$q, myself.$t('dashboard.msg_donatori_ok'))
+          tools.askConfirm(myself.$q, '', ris.strout, translate('dialog.yes'), translate('dialog.no'), this, '', 0, 0, {})
+          myself.Callback()
+        } else
+          tools.showNegativeNotif(myself.$q, myself.$t('db.recfailed'))
+      })
+    } else if (func === lists.MenuAction.INVIA_MSG_A_SINGOLO) {
+      // console.log('param1', par.param1)
+      GlobalStore.actions.InviaMsgADonatori({
+        msgobj: par.param1,
+        navemediatore: par.param2,
+        tipomsg: par.param1.tipomsg
+      })
+        .then((ris) => {
+          if (ris) {
+            tools.showPositiveNotif(myself.$q, myself.$t('cal.sendmsg_sent'))
+          } else
+            tools.showNegativeNotif(myself.$q, myself.$t('db.recfailed'))
+        })
+    } else if (func === lists.MenuAction.DONO_INVIATO) {
+      const mydatatosave = {
+        id: par.param1._id,
+        table: tools.TABNAVI,
+        fieldsvalue: {
+          date_made_gift: par.param1.date_made_gift,
+          riga: par.param1.riga,
+          col: par.param1.col,
+          commento_al_sognatore: par.param1.commento_al_sognatore
+        },
+        notifBot: null
+      }
+
+      if (par.param3) {
+        mydatatosave.notifBot = { un: par.param2, txt: par.param3 }
+      }
+
+      GlobalStore.actions.saveFieldValue(mydatatosave).then((ris) => {
+        if (ris) {
+          myself.ActionAfterYes(func, par.param1, par.param2)
+          tools.showPositiveNotif(myself.$q, myself.$t('dashboard.fatto_dono'))
+        } else
+          tools.showNegativeNotif(myself.$q, myself.$t('db.recfailed'))
+      })
+    } else if (func === lists.MenuAction.DONO_RICEVUTO) {
+      let mydatatosave = {
+        id: par.param1._id,
+        table: tools.TABNAVI,
+        fieldsvalue: {},
+        unset: null,
+        notifBot: null,
+        tipomsg: tools.TipoMsg.SEND_MSG_DONO_RICEVUTO_CORRETTAMENTE
+      }
+
+      if (!!par.param1.date_made_gift) {
+        mydatatosave.fieldsvalue = {
+          made_gift: par.param1.made_gift,
+          riga: par.param1.riga,
+          col: par.param1.col,
+          date_made_gift: par.param1.date_made_gift
+        }
+      } else {
+        mydatatosave.fieldsvalue = { made_gift: par.param1.made_gift, riga: par.param1.riga, col: par.param1.col }
+      }
+
+      if (!!par.param1.annulla) {
+        if (par.param1.annulla) {
+          mydatatosave.fieldsvalue = { made_gift: false, riga: par.param1.riga, col: par.param1.col }
+          mydatatosave.unset = { date_made_gift: 1, received_gift: 1 }
+        }
+      }
+
+      if (par.param3) {
+        mydatatosave.notifBot = { un: par.param2, txt: par.param3 }
+      }
+
+      GlobalStore.actions.saveFieldValue(mydatatosave).then((ris) => {
+        if (ris) {
+          myself.ActionAfterYes(func, par.param1, par.param2)
+          let msg = myself.$t('dashboard.ricevuto_dono_ok')
+          if (!!par.param1.annulla) {
+            if (par.param1.annulla)
+              msg = 'Dono Annullato'
+          }
+          tools.showPositiveNotif(myself.$q, msg)
+        } else
+          tools.showNegativeNotif(myself.$q, myself.$t('db.recfailed'))
+      })
     }
+  },
+
+  async saveFieldToServer(myself: any, table, id, mydata, notif = true) {
+    const mydatatosave = {
+      id,
+      table,
+      fieldsvalue: mydata,
+      notifBot: null
+    }
+
+    GlobalStore.actions.saveFieldValue(mydatatosave).then((ris) => {
+      if (ris) {
+        if (notif)
+          tools.showPositiveNotif(myself.$q, myself.$t('db.recupdated'))
+      } else {
+        tools.showNegativeNotif(myself.$q, myself.$t('db.recfailed'))
+      }
+    })
+
   },
 
   async askConfirm($q: any, mytitle, mytext, ok, cancel, myself: any, table, funcok: number, funccancel: number, par: IParamDialog) {
     return $q.dialog({
       message: mytext,
+      html: true,
       ok: {
         label: ok,
         push: true
@@ -1440,11 +2056,11 @@ export const tools = {
       cancel: true,
       persistent: false
     }).onOk(() => {
-      console.log('OK')
+      // console.log('OK')
       tools.executefunc(myself, table, funcok, par)
       return true
     }).onCancel(() => {
-      console.log('CANCEL')
+      // console.log('CANCEL')
       tools.executefunc(myself, table, funccancel, par)
       return false
     })
@@ -1455,15 +2071,14 @@ export const tools = {
   },
 
   showNegativeNotif(q: any, msg) {
-    tools.showNotif(q, msg, { color: 'negative', icon: 'notifications' })
+    tools.showNotif(q, msg, { color: 'negative', icon: 'notifications' }, 10000)
   },
 
   showNeutralNotif(q: any, msg) {
-    tools.showNotif(q, msg, { color: 'info', icon: 'notifications' })
+    tools.showNotif(q, msg, { color: 'info', icon: 'notifications' }, 10000)
   },
 
-  showNotif(q: any, msg, data ?: INotify | null
-  ) {
+  showNotif(q: any, msg, data ?: INotify | null, time?) {
     let myicon = data ? data.icon : 'ion-add'
     if (!myicon) {
       myicon = 'ion-add'
@@ -1473,11 +2088,12 @@ export const tools = {
       mycolor = 'primary'
     }
     q.notify({
+      // group: '',
       message: msg,
       icon: myicon,
       classes: 'my-notif-class',
       color: mycolor,
-      timeout: 3000
+      timeout: time || 4000
     })
   }
   ,
@@ -1505,16 +2121,21 @@ export const tools = {
   ,
 
   checkLangPassed(mylang) {
-    // console.log('checkLangPassed')
+    // console.log('checkLangPassed ', mylang)
 
     const mybrowserLang = Quasar.lang.isoName
 
     if (mylang !== '') {
-      if ((mylang.toLowerCase() === 'enus') || (mylang.toLowerCase() === 'en-us')) {
+      if ((mylang.toLowerCase() === 'enus') || (mylang.toLowerCase() === 'en-us') || (mylang.toLowerCase() === 'uk')
+        || (mylang.toLowerCase() === 'uk-uk') || (mylang.toLowerCase() === 'en-uk') || (mylang.toLowerCase() === 'en-gb')
+        || (mylang.toLowerCase() === 'gb-gb')) {
         mylang = 'enUs'
       }
       if ((mylang.toLowerCase() === 'es') || (mylang.toLowerCase() === 'es-es') || (mylang.toLowerCase() === 'eses')) {
         mylang = 'es'
+      }
+      if ((mylang.toLowerCase() === 'pt') || (mylang.toLowerCase() === 'pt-pt') || (mylang.toLowerCase() === 'ptpt')) {
+        mylang = 'pt'
       }
       if ((mylang.toLowerCase() === 'fr') || (mylang.toLowerCase() === 'fr-fr') || (mylang.toLowerCase() === 'frfr')) {
         mylang = 'fr'
@@ -1522,10 +2143,14 @@ export const tools = {
       if ((mylang.toLowerCase() === 'it') || (mylang.toLowerCase() === 'it-it') || (mylang.toLowerCase() === 'itit')) {
         mylang = 'it'
       }
+      if ((mylang.toLowerCase() === 'si') || (mylang.toLowerCase() === 'si-si') || (mylang.toLowerCase() === 'sisi')) {
+        mylang = 'si'
+      }
 
       if (!(static_data.arrLangUsed.includes(mylang))) {
-        console.log('non incluso ', mylang)
-        mylang = static_data.arrLangUsed[0]
+        // console.log('non incluso ', mylang)
+        // mylang = static_data.arrLangUsed[0]
+        mylang = 'it'
 
         // Metti come default
         UserStore.mutations.setlang(mylang)
@@ -1534,6 +2159,7 @@ export const tools = {
 
     if (!mylang) {
       mylang = process.env.LANG_DEFAULT
+      console.log('LANG DEFAULT: ', mylang)
     }
 
     if (toolsext.getLocale(true) === '') {
@@ -1543,6 +2169,10 @@ export const tools = {
     // console.log('mylang calc : ', mylang)
 
     return mylang
+  },
+
+  getlang() {
+    return toolsext.getLocale()
   },
 
   getimglogo() {
@@ -1721,10 +2351,83 @@ export const tools = {
     return UserStore.state.isManager
   },
 
+  isSocioResidente() {
+    return !!UserStore.state.my.profile ? UserStore.state.my.profile.socioresidente : false
+  },
+
+  isConsiglio() {
+    return !!UserStore.state.my.profile ? UserStore.state.my.profile.consiglio : false
+  },
+
+  isSocio() {
+    return !!UserStore.state.my.profile ? UserStore.state.my.profile.socio : false
+  },
+
+  isResp() {
+    return UserStore.state.my.profile.resplist
+  },
+
+  isWorkers() {
+    return UserStore.state.my.profile.workerslist
+  },
+
+  isDepartment() {
+    return UserStore.state.isDepartment
+  },
+
+  isAdmin() {
+    return UserStore.state.isAdmin
+  },
+
+  isTutor() {
+    return UserStore.state.isTutor
+  },
+
+  isZoomeri() {
+    return UserStore.state.isZoomeri
+  },
+
+  isEditor() {
+    return UserStore.state.isEditor
+  },
+
   getstrDate(mytimestamp) {
     // console.log('getstrDate', mytimestamp)
     if (!!mytimestamp)
       return date.formatDate(mytimestamp, 'DD/MM/YYYY')
+    else
+      return ''
+  },
+
+  getstrDateLong(mytimestamp) {
+    // console.log('getstrDate', mytimestamp)
+    const dayofweek = this.getDayOfWeek(mytimestamp)
+    if (!!mytimestamp)
+      return dayofweek + ' ' + date.formatDate(mytimestamp, 'DD/MM/YYYY')
+    else
+      return ''
+  },
+
+  getstrshortDate(mytimestamp) {
+    // console.log('getstrDate', mytimestamp)
+    if (!!mytimestamp)
+      return date.formatDate(mytimestamp, 'DD/MM')
+    else
+      return ''
+  },
+
+  getstrshortDateTime(mytimestamp) {
+    // console.log('getstrDate', mytimestamp)
+    if (!!mytimestamp)
+      return date.formatDate(mytimestamp, 'DD/MM HH:mm')
+    else
+      return ''
+  },
+
+  getstrshortDayDateTime(mytimestamp) {
+    // console.log('getstrDate', mytimestamp)
+    if (!!mytimestamp)
+      return date.formatDate(mytimestamp, 'DD HH:mm')
     else
       return ''
   },
@@ -1798,25 +2501,25 @@ export const tools = {
     // is same day?
     if (tools.getstrDate(myevent.dateTimeStart) === tools.getstrDate(myevent.dateTimeEnd)) {
       if (withhtml) {
-        mystr += `<span class="cal__where-content">${tools.getstrDate(myevent.dateTimeStart)}</span>
-                    <span class="cal__hours-content">${mythis.$t('cal.starttime')} ${ tools.getstrTime(myevent.dateTimeStart) }
-                    ${ mythis.$t('cal.endtime')} ${ tools.getstrTime(myevent.dateTimeEnd) }`
+        mystr += `<span class="cal__where-content">${tools.getstrDateLong(myevent.dateTimeStart)}</span>
+                    <span class="cal__hours-content">${mythis.$t('cal.starttime')} ${tools.getstrTime(myevent.dateTimeStart)}
+                    ${mythis.$t('cal.endtime')} ${tools.getstrTime(myevent.dateTimeEnd)}`
       } else {
-        mystr = `${tools.getstrDate(myevent.dateTimeStart)}
-                 ${mythis.$t('cal.starttime')} ${ tools.getstrTime(myevent.dateTimeStart) }          
-                 ${ mythis.$t('cal.endtime')} ${ tools.getstrTime(myevent.dateTimeEnd) }`
+        mystr = `${tools.getstrDateLong(myevent.dateTimeStart)}
+                 ${mythis.$t('cal.starttime')} ${tools.getstrTime(myevent.dateTimeStart)}
+                 ${mythis.$t('cal.endtime')} ${tools.getstrTime(myevent.dateTimeEnd)}`
       }
     } else {
-      mystr = `<span class="cal__where-content">${tools.getstrDate(myevent.dateTimeStart)}</span>
-                 <span class="cal__hours-content">${mythis.$t('cal.starttime')} ${ tools.getstrTime(myevent.dateTimeStart) } </span>
-                  ${ mythis.$t('cal.enddate')} ${tools.getstrDate(myevent.dateTimeEnd)}
-                  <span class="cal__hours-content">${ mythis.$t('cal.endtime')} ${ tools.getstrTime(myevent.dateTimeEnd) } </span>`
+      mystr = `<span class="cal__where-content">${tools.getstrDateLong(myevent.dateTimeStart)}</span>
+                 <span class="cal__hours-content">${mythis.$t('cal.starttime')} ${tools.getstrTime(myevent.dateTimeStart)} </span>
+                  ${mythis.$t('cal.enddate')} ${tools.getstrDateLong(myevent.dateTimeEnd)}
+                  <span class="cal__hours-content">${mythis.$t('cal.endtime')} ${tools.getstrTime(myevent.dateTimeEnd)} </span>`
     }
 
     if (myevent.infoextra) {
       mystr += `<span class="cal__hours">
                   <span class="cal__hours-title">${mythis.$t('cal.hours')}: </span>
-                  <span class="cal__hours-content">${ myevent.infoextra }  </span>
+                  <span class="cal__hours-content">${myevent.infoextra}  </span>
               </span>
             </span>`
     }
@@ -1828,9 +2531,9 @@ export const tools = {
     // is same day?
     if (tools.getstrShortDate(myevent.dateTimeStart) === tools.getstrShortDate(myevent.dateTimeEnd)) {
       mystr = `${tools.getstrShortDate(myevent.dateTimeStart)}
-                 - ${ tools.getstrTime(myevent.dateTimeStart) }`
+                 - ${tools.getstrTime(myevent.dateTimeStart)}`
     } else {
-      mystr = `${tools.getstrVeryVeryShortDate(myevent.dateTimeStart)} - ${ tools.getstrShortDate(myevent.dateTimeEnd) }`
+      mystr = `${tools.getstrVeryVeryShortDate(myevent.dateTimeStart)} - ${tools.getstrShortDate(myevent.dateTimeEnd)}`
 
     }
 
@@ -1842,9 +2545,9 @@ export const tools = {
     // is same day?
     if (tools.getstrShortDate(myevent.dateTimeStart) === tools.getstrShortDate(myevent.dateTimeEnd)) {
       mystr = `${tools.getstrVeryShortDate(myevent.dateTimeStart)}
-                 h. ${ tools.getstrTime(myevent.dateTimeStart) }`
+                 h. ${tools.getstrTime(myevent.dateTimeStart)}`
     } else {
-      mystr = `${tools.getstrVeryShortDate(myevent.dateTimeStart)} - ${ tools.getstrVeryShortDate(myevent.dateTimeEnd) }`
+      mystr = `${tools.getstrVeryShortDate(myevent.dateTimeStart)} - ${tools.getstrVeryShortDate(myevent.dateTimeEnd)}`
 
     }
 
@@ -1883,26 +2586,39 @@ export const tools = {
       return ''
   },
 
+  getstrDateMonthTimeShort(mytimestamp) {
+    // console.log('getstrDate', mytimestamp)
+    if (!!mytimestamp)
+      return date.formatDate(mytimestamp, 'DD MMM HH:mm')
+    else
+      return ''
+  },
+
+  getstrDateMonthWeekTimeShort(mytimestamp) {
+    // console.log('getstrDate', mytimestamp)
+    if (!!mytimestamp)
+      return this.getDayOfWeek(mytimestamp) + ' ' + date.formatDate(mytimestamp, 'DD MMM - HH:mm')
+    else
+      return ''
+  },
+
   getstrDateEmailTime(mythis, mytimestamp) {
     // console.log('getstrDate', mytimestamp)
     if (!!mytimestamp)
       return date.formatDate(mytimestamp, 'DD/MM/YYYY') + ' ' + mythis.$t('cal.starttime') + ' ' + date.formatDate(mytimestamp, 'HH:mm')
     else
       return ''
-  }
-  ,
+  },
   getstrMMMDate(mytimestamp) {
     // console.log('getstrDate', mytimestamp)
     if (!!mytimestamp)
       return date.formatDate(mytimestamp, 'DD MMM YYYY')
     else
       return ''
-  }
-  ,
+  },
   getstrYYMMDDDate(mytimestamp) {
     return date.formatDate(mytimestamp, 'YYYY-MM-DD')
-  }
-  ,
+  },
   getstrYYMMDDDateTime(mytimestamp) {
     return date.formatDate(mytimestamp, 'YYYY-MM-DD HH:mm')
   },
@@ -1911,11 +2627,22 @@ export const tools = {
     return date.formatDate(mytimestamp, 'YYYY-MM-DD HH:mm:ss')
   },
 
+  gettimestampstrDate(mydatestr) {
+    if (!!mydatestr) {
+      const mydate = new Date(mydatestr)
+      if (!!mydate)
+        return mydate.getTime()
+    }
+    return 0
+  },
+
 // mystrdate "26.04.2013"
   convertstrtoDate(mystrdate: string) {
     if (mystrdate.length < 10) {
       return null
     }
+
+    console.log('mystrdate', mystrdate)
 
     const pattern = /(\d{2})\/(\d{2})\/(\d{4})/
     const strdate = mystrdate.replace(pattern, '$3-$2-$1')
@@ -1927,8 +2654,7 @@ export const tools = {
     }
     // console.log('mystrdate', mystrdate, strdate, mydate)
     return mydate
-  }
-  ,
+  },
 
   capitalize(value) {
     if (!value) {
@@ -1936,8 +2662,7 @@ export const tools = {
     }
     value = value.toString()
     return value.charAt(0).toUpperCase() + value.slice(1)
-  }
-  ,
+  },
 
   firstchars(value, numchars = 200) {
     if (!value) {
@@ -1954,21 +2679,67 @@ export const tools = {
   }
   ,
 
+  firstchars_onedot(value, numchars = 200) {
+    if (!value) {
+      return ''
+    }
+    try {
+      let mycar = value.substring(0, numchars)
+      if (value.length > numchars)
+        mycar += '.'
+      return mycar
+    } catch (e) {
+      return value
+    }
+  },
+
   getDateNow() {
     const mydate = new Date()
     return mydate
   },
+
+  isDateArrived(mydate) {
+    const datenow = tools.getDateNow()
+    const diff = date.getDateDiff(datenow, mydate)
+    // console.log('diff = ' + diff)
+    if (diff >= -1) {
+      return true
+    }
+    return false
+  },
+
+  getDayOfWeek(mydate) {
+    const dayOfWeek = new Date(mydate).getDay()
+
+    const mylang = this.getLocale()
+
+    const myday = {
+      it: ['Domenica', 'Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato'],
+      enUs: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+      fr: ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'],
+      es: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+      pt: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
+      de: ['Sonntag', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag'],
+      si: ['Nedelja', 'Ponedeljek', 'Torek', 'Sreda', 'četrtek', 'Petek', 'Sobota'],
+    }
+
+    return isNaN(dayOfWeek) ? '' : myday[mylang][dayOfWeek].substring(0, 3)
+  },
+
+  isSunday(mydate) {
+    const dayOfWeek = new Date(mydate).getDay()
+    return dayOfWeek === 0
+  },
+
   getDateNowEvent() {
-    return tools.addDays(tools.getDateNow(), -1)
+    return tools.addMinutes(tools.getDateNow(), -60 * 4)
   },
   getDateNull() {
     return new Date(0)
-  }
-  ,
+  },
   getTimeNow() {
     return new Date().getTime()
-  }
-  ,
+  },
   getTimestampsNow() {
     return new Date().valueOf()
   },
@@ -1979,8 +2750,7 @@ export const tools = {
 
   isMainProject(idproj) {
     return idproj === process.env.PROJECT_ID_MAIN
-  }
-  ,
+  },
 
   getUrlByTipoProj(tipoproj, name ?: string) {
     if (!!name)
@@ -2013,16 +2783,15 @@ export const tools = {
 
   getprivacyreadbytipoproj(tipoproj) {
     if (tipoproj === RouteNames.myprojects)
-      return Privacy.onlyme
+      return Privacy.inherited
     else
       return Privacy.all
   }
   ,
 
   getprivacywritebytipoproj(tipoproj) {
-    return Privacy.onlyme
-  }
-  ,
+    return Privacy.inherited
+  },
 
   addRoute(myarr, values) {
     myarr.push(values)
@@ -2103,15 +2872,16 @@ export const tools = {
   }
   ,
 
-  askfornotification() {
-    tools.showNotif(this.$q, this.$t('notification.waitingconfirm'), { color: 'positive', icon: 'notifications' })
+  askfornotification(mythis) {
+    console.log('askfornotification')
+    tools.showNotif(mythis.$q, mythis.$t('notification.waitingconfirm'), { color: 'positive', icon: 'notifications' })
 
     Notification.requestPermission((result) => {
       console.log('User Choice', result)
       if (result === 'granted') {
-        tools.showNotif(this.$q, this.$t('notification.confirmed'), { color: 'positive', icon: 'notifications' })
+        tools.showNotif(mythis.$q, mythis.$t('notification.confirmed'), { color: 'positive', icon: 'notifications' })
       } else {
-        tools.showNotif(this.$q, this.$t('notification.denied'), { color: 'negative', icon: 'notifications' })
+        tools.showNotif(mythis.$q, mythis.$t('notification.denied'), { color: 'negative', icon: 'notifications' })
 
         // displayConfirmNotification();
       }
@@ -2120,29 +2890,25 @@ export const tools = {
   }
   ,
 
-  heightgallery() {
-    return tools.heightGallVal().toString() + 'px'
-  }
-  ,
+  heightgallery(coeff) {
+    // console.log('heightgallery')
+    return tools.heightGallVal(coeff).toString() + 'px'
+  },
 
-  heightGallVal() {
+  heightGallVal(coeff = 1.33) {
     let maxh2 = 0
 
-    if (Screen.width < 400) {
-      maxh2 = 350
-    } else if (Screen.width < 600) {
-      maxh2 = 400
-    } else if (Screen.width < 700) {
-      maxh2 = 450
-    } else if (Screen.width < 800) {
-      maxh2 = 550
-    } else if (Screen.width < 1000) {
-      maxh2 = 650
-    } else if (Screen.width < 1200) {
-      maxh2 = 700
-    } else {
-      maxh2 = 750
-    }
+    let myw = Screen.width
+    if (!this.isMobile())
+      if (GlobalStore.state.leftDrawerOpen)
+        myw -= 300
+    if (!this.isMobile())
+      if (GlobalStore.state.rightDrawerOpen)
+        myw -= 300
+
+    maxh2 = (myw / coeff) + 20
+    if (maxh2 > 500)
+      maxh2 = 500
 
     return maxh2
   }
@@ -2186,12 +2952,20 @@ export const tools = {
   ,
 
   myheight_dialog() {
-    if (Screen.width < 400) {
+    if (Screen.width < 410) {
       return '337'
     } else if (Screen.width < 600) {
-      return '400'
+      return '450'
+    } else if (Screen.width < 800) {
+      return '550'
+    } else if (Screen.width < 900) {
+      return '700'
+    } else if (Screen.width < 1000) {
+      return '800'
+    } else if (Screen.width < 1100) {
+      return '900'
     } else {
-      return '500'
+      return Screen.width - 200
     }
   },
 
@@ -2199,7 +2973,7 @@ export const tools = {
     if (!!sized) {
       return sized
     } else {
-      if (Screen.width < 400) {
+      if (Screen.width < 410) {
         return 'max-height: 250px'
       } else {
         return 'max-height: 350px'
@@ -2236,7 +3010,7 @@ export const tools = {
   ,
 
   maxwidth_imgtitle() {
-    if (Screen.width < 400) {
+    if (Screen.width < 410) {
       return 'max-width: 250px'
     } else {
       return 'max-width: 350px'
@@ -2245,12 +3019,12 @@ export const tools = {
   ,
 
   isMobile() {
-    return (Screen.width < 400)
+    return (Screen.width < 450)
   }
   ,
 
   mywidth_imgtitle() {
-    if (Screen.width < 400) {
+    if (Screen.width < 450) {
       return '250'
     } else if (Screen.width < 600) {
       return '350'
@@ -2266,7 +3040,7 @@ export const tools = {
   ,
 
   showthumbnails() {
-    if (Screen.width < 400) {
+    if (Screen.width < 410) {
       return false
     } else if (Screen.width < 600) {
       return true
@@ -2332,8 +3106,7 @@ export const tools = {
     else {
       return data.subtitle[static_data.arrLangUsed[0]]
     }
-  }
-  ,
+  },
   gettitlecoll(data: IColl) {
     if (data.title[toolsext.getLocale()])
       return data.title[toolsext.getLocale()]
@@ -2363,8 +3136,7 @@ export const tools = {
       return data.link_text[static_data.arrLangUsed[0]]
     }
 
-  }
-  ,
+  },
 
   getlinkurl(data: ITimeLineEntry) {
     if (data.link_url_lang) {
@@ -2404,7 +3176,7 @@ export const tools = {
     const myimage = dir + file
     // console.log('includes = ', static_data.preLoadImages.map((a) => a.imgname).includes(myimage), myimage)
     let ris = ''
-    if (this.isMobile() && (static_data.preLoadImages.map((a) => a.imgname).includes(myimage))) {
+    if (this.isMobile() && (preloadedimages().map((a) => a.imgname).includes(myimage))) {
       ris = dir + 'mobile/' + file
     } else {
       ris = myimage
@@ -2425,6 +3197,8 @@ export const tools = {
   },
 
   getimgFullpathbysize(fileimg: string) {
+    if (!fileimg)
+      return { path: '', file: fileimg }
     const ind = fileimg.lastIndexOf('/')
     if (ind > 0) {
       return { path: fileimg.substring(0, ind + 1), file: fileimg.substring(ind + 1) }
@@ -2451,32 +3225,41 @@ export const tools = {
     return '"' + myevent.title + '" (' + tools.getstrDateEmailTime(mythis, myevent.dateTimeStart) + ')'
   },
 
+  getlangforQuasar(mylang) {
+    if (mylang === 'enUs')
+      return 'en-us'
+    else
+      return mylang
+  },
+
   setLangAtt(mylang) {
     console.log('setLangAtt =', mylang)
     // console.log('PRIMA this.$q.lang.isoName', this.$q.lang.isoName)
 
     // dynamic import, so loading on demand only
-    import(`quasar/lang/${mylang}`).then((lang) => {
+    import(`quasar/lang/${this.getlangforQuasar(mylang)}`).then((lang) => {
       console.log('   Import dinamically lang =', lang)
-      Quasar.lang.set(lang.default)
+      Quasar.lang.set(this.getlangforQuasar(lang.default))
       import(`../../statics/i18n`).then(() => {
         console.log('   *** MY LANG DOPO=', Quasar.lang.isoName)
       })
     })
 
+    GlobalStore.actions.addDynamicPages()
+
     // this.$q.lang.set(mylang)
 
-  }
-  ,
-  getappname(mythis) {
+  },
+
+  getappname(mythis, short) {
     if (mythis === undefined)
       return ''
     if (mythis.$t === undefined)
       return ''
-    if (Screen.width < 400) {
-      return mythis.$t('msg.myAppNameShort')
+    if (short) {
+      return mythis.$t('ws.siteshortname')
     } else {
-      return mythis.$t('msg.myAppName')
+      return mythis.$t('ws.sitename')
     }
   },
 
@@ -2504,20 +3287,28 @@ export const tools = {
     // console.log('loginInCorso')
 
     let msg = mythis.$t('login.incorso')
-    if (process.env.DEBUG) {
-      msg += ' ' + process.env.MONGODB_HOST
-    }
+    // if (process.env.DEBUG) {
+    //   msg += ' ' + process.env.MONGODB_HOST
+    // }
     mythis.$q.loading.show({ message: msg })
   }
   ,
+
+  getUrlSite() {
+    const url = window.location.href
+    const arr = url.split('/')
+    return arr[0] + '//' + arr[2]
+  },
 
   SignIncheckErrors(mythis, riscode, ispageLogin ?: boolean) {
     // console.log('SignIncheckErrors: ', riscode)
     try {
       if (riscode === tools.OK) {
         tools.showNotif(mythis.$q, mythis.$t('login.completato'), { color: 'positive', icon: 'check' })
+        console.log('mythis.$router.name', mythis.$router.name)
         if (ispageLogin) {
-          mythis.$router.push('/')
+          if (mythis.$router.name !== '/')
+            mythis.$router.push('/')
         }
       } else if (riscode === serv_constants.RIS_CODE_LOGIN_ERR) {
 
@@ -2528,13 +3319,33 @@ export const tools = {
           }, 3000)
         }).then(() => {
           setTimeout(() => {
-            console.log('HIDE...')
+            // console.log('HIDE...')
             mythis.$q.loading.hide()
           }, 500)
           tools.showNotif(mythis.$q, mythis.$t('login.errato'), { color: 'negative', icon: 'notifications' })
           mythis.iswaitingforRes = false
           if (ispageLogin) {
-            GlobalStore.state.RightDrawerOpen = true
+            GlobalStore.state.rightDrawerOpen = true
+            // mythis.$router.push('/signin')
+          }
+        })
+
+      } else if (riscode === serv_constants.RIS_CODE_LOGIN_ERR_SUBACCOUNT) {
+
+        // Wait N seconds to avoid calling many times...
+        return new Promise((resolve, reject) => {
+          setTimeout(() => {
+            resolve('anything')
+          }, 1000)
+        }).then(() => {
+          setTimeout(() => {
+            // console.log('HIDE...')
+            mythis.$q.loading.hide()
+          }, 500)
+          tools.showNotif(mythis.$q, mythis.$t('login.subaccount'), { color: 'negative', icon: 'notifications' })
+          mythis.iswaitingforRes = false
+          if (ispageLogin) {
+            GlobalStore.state.rightDrawerOpen = true
             // mythis.$router.push('/signin')
           }
         })
@@ -2558,14 +3369,26 @@ export const tools = {
     } finally {
       // ...
     }
-  }
-  ,
+  },
 
-  SignUpcheckErrors(mythis, riscode: number) {
+  SignUpcheckErrors(mythis, riscode: number, msg: string) {
     console.log('SignUpcheckErrors', riscode)
-    if (riscode === tools.DUPLICATE_EMAIL_ID) {
+    let endload = true
+
+    if (riscode === serv_constants.RIS_CODE_EMAIL_ALREADY_EXIST) {
       tools.showNotif(mythis.$q, mythis.$t('reg.err.duplicate_email'))
-    } else if (riscode === tools.DUPLICATE_USERNAME_ID) {
+    } else if (riscode === serv_constants.RIS_CODE_USER_ALREADY_EXIST) {
+      tools.showNegativeNotif(mythis.$q, mythis.$t('reg.err.user_already_exist'))
+    } else if (riscode === serv_constants.RIS_CODE_USER_EXTRALIST_NOTFOUND) {
+
+      tools.showNegativeNotif(mythis.$q, mythis.$t('reg.err.user_extralist_not_found') + ' ' + msg)
+    } else if (riscode === serv_constants.RIS_CODE_USER_NOT_THIS_APORTADOR) {
+
+      tools.showNegativeNotif(mythis.$q, mythis.$t('reg.err.user_not_this_aportador') + ' ' + msg)
+
+    } else if (riscode === serv_constants.RIS_CODE_USERNAME_NOT_VALID) {
+      tools.showNotif(mythis.$q, mythis.$t('reg.err.username_not_valid'))
+    } else if (riscode === serv_constants.RIS_CODE_USERNAME_ALREADY_EXIST) {
       tools.showNotif(mythis.$q, mythis.$t('reg.err.duplicate_username'))
     } else if (riscode === tools.ERR_SERVERFETCH) {
       tools.showNotif(mythis.$q, mythis.$t('fetch.errore_server'))
@@ -2573,37 +3396,46 @@ export const tools = {
       const msg = mythis.$t('fetch.errore_generico') + UserStore.mutations.getMsgError(riscode)
       tools.showNotif(mythis.$q, msg)
     } else if (riscode === tools.OK) {
-      mythis.$router.push('/signin')
-      tools.showNotif(mythis.$q, mythis.$t('components.authentication.email_verification.link_sent'), {
-        color: 'info',
+      mythis.$router.push('/regok')
+      tools.showNotif(mythis.$q, mythis.$t('components.authentication.email_verification.link_sent', { botname: mythis.$t('ws.botname') }), {
+        color: 'green',
+        textColor: 'black'
+      })
+    } else if (riscode === serv_constants.RIS_ISCRIZIONE_OK) {
+      mythis.$router.push('/')
+      tools.showNotif(mythis.$q, mythis.$t('components.authentication.iscrizione_ok', { botname: mythis.$t('ws.botname') }), {
+        color: 'green',
         textColor: 'black'
       })
     } else {
       tools.showNotif(mythis.$q, 'Errore num ' + riscode)
     }
 
-  }
-  ,
+    return endload
+  },
   isCssColor(color) {
     return !!color && !!color.match(/^(#|(rgb|hsl)a?\()/)
-  }
-  ,
+  },
   displayClasses(eventparam) {
     return {
       // [`bg-${eventparam.bgcolor}`]: !tools.isCssColor(eventparam.bgcolor),
       'text-white': !tools.isCssColor(eventparam.bgcolor)
     }
-  }
-  ,
+  },
   displayStyles(eventparam) {
     const s = { color: '' }
-    if (tools.isCssColor(eventparam.bgcolor)) {
+
+    let mycol = eventparam.bgcolor
+    if (!tools.isCssColor(eventparam.bgcolor)) {
+      mycol = this.colourNameToHex(mycol)
+    }
+
+    if (tools.isCssColor(mycol)) {
       // s['background-color'] = eventparam.bgcolor
-      s.color = colors.luminosity(eventparam.bgcolor) > 0.5 ? 'black' : 'white'
+      s.color = colors.luminosity(mycol) > 0.5 ? 'black' : 'white'
     }
     return s
-  }
-  ,
+  },
   CancelBookingEvent(mythis, eventparam: IEvents, bookeventid: string, notify: boolean) {
     console.log('CancelBookingEvent ', eventparam)
     tools.askConfirm(mythis.$q, translate('cal.titlebooking'), translate('cal.cancelbooking') + ' ' + tools.gettextevent(mythis, eventparam) + '?', translate('dialog.yes'), translate('dialog.no'), mythis, '', lists.MenuAction.DELETE, 0, {
@@ -2611,39 +3443,46 @@ export const tools = {
       param2: notify,
       param3: eventparam.title
     })
-  }
-  ,
+  },
   CancelEvent(mythis, eventparam: IEvents) {
     console.log('CancelEvent ', eventparam)
     tools.askConfirm(mythis.$q, translate('cal.event'), translate('cal.cancelevent') + ' ' + tools.gettextevent(mythis, eventparam) + '?', translate('dialog.yes'), translate('dialog.no'), mythis, '', lists.MenuAction.DELETE_EVENT, 0, {
       param1: eventparam,
       param2: true
     })
-  }
-  ,
+  },
+  AskGiaPartecipatoZoom(mythis, user) {
+    console.log('AskGiaPartecipatoZoom', user.username)
+    tools.askConfirm(mythis.$q, translate('steps.zoom_gia_partecipato'), translate('steps.zoom_gia_partecipato'), translate('dialog.yes'), translate('dialog.no'), mythis, '', lists.MenuAction.ZOOM_GIA_PARTECIPATO, 0, {
+      param1: user,
+      param2: user,
+      param3: 'Confermato',
+    })
+  },
   ActionRecTable(mythis, action, table, id, item, askaction) {
-    console.log('ActionRecTable', id)
+    // console.log('ActionRecTable', id)
     return tools.askConfirm(mythis.$q, 'Action', translate(askaction) + '?', translate('dialog.yes'), translate('dialog.no'), mythis, table, action, 0, {
       param1: id,
       param2: item
     })
-  }
-  ,
+  },
 
-  async createNewRecord(mythis, table, data) {
+  async createNewRecord(mythis, table, data, withnotif = true) {
 
     const mydata = {
       table,
-      data,
+      data
     }
 
     return await
       GlobalStore.actions.saveTable(mydata)
         .then((record) => {
-          if (record) {
-            tools.showPositiveNotif(mythis.$q, mythis.$t('db.recupdated'))
-          } else {
-            tools.showNegativeNotif(mythis.$q, mythis.$t('db.recfailed'))
+          if (withnotif) {
+            if (record) {
+              tools.showPositiveNotif(mythis.$q, mythis.$t('db.recupdated'))
+            } else {
+              tools.showNegativeNotif(mythis.$q, mythis.$t('db.recfailed'))
+            }
           }
           return record
         })
@@ -2652,31 +3491,36 @@ export const tools = {
     // return height()
     return mythis.$q.screen.height
   },
-  getwidth(mythis) {
+  getwidth(mythis, withright = false, withleft = true) {
     // return height()
     let myw = mythis.$q.screen.width
-    if (GlobalStore.state.leftDrawerOpen)
-      myw -= 300
-    // if (GlobalStore.state.RightDrawerOpen)
-    //   myw -= 300
+    if (withleft) {
+      if (GlobalStore.state.leftDrawerOpen)
+        myw -= 300
+    }
+
+    if (withright)
+      if (GlobalStore.state.rightDrawerOpen)
+        myw -= 300
     return myw
 
   },
 
   getwidthscale(mythis, mywidth, maxwidth) {
     if (this.isMobile()) {
-      if (mywidth > this.getwidth(mythis) - 20)
-        mywidth = this.getwidth(mythis) - 20
+      // if (mywidth > this.getwidth(mythis) - 20)
+      mywidth = this.getwidth(mythis, false, false) - 32
 
+      // console.log('mywidth', mywidth)
       return mywidth
     } else {
       // console.log('this.getwidth(mythis) = ', this.getwidth(mythis))
-      let myw = mywidth + ((this.getwidth(mythis) - mywidth) * 0.6)
+      let myw = mywidth + ((this.getwidth(mythis, true) - mywidth) * 0.6)
       // console.log('myw1 = ', myw)
       if (myw > maxwidth)
         myw = maxwidth
-      if (myw > this.getwidth(mythis) - 20)
-        myw = this.getwidth(mythis) - 20
+      if (myw > this.getwidth(mythis) - 24)
+        myw = this.getwidth(mythis) - 24
 
       // console.log('myw = ', myw)
       return myw
@@ -2684,6 +3528,7 @@ export const tools = {
   },
 
   getheightbywidth(mythis, mywidth, myheight, maxwidth) {
+    // console.log('getheightbywidth')
     const myw = this.getwidthscale(mythis, mywidth, maxwidth)
     return myw * (myheight / mywidth)
   },
@@ -2700,13 +3545,20 @@ export const tools = {
 
   isBitActive(bit, whattofind) {
     if (whattofind > 0)
+      // tslint:disable-next-line:no-bitwise
       return ((bit & whattofind) === whattofind)
     else
       return false
   },
 
   SetBit(myval, bit) {
-    myval = myval | bit
+    // tslint:disable-next-line:no-bitwise
+    myval |= bit
+    return myval
+  },
+  UnSetBit(myval, bit) {
+    // tslint:disable-next-line:no-bitwise
+    myval &= ~bit
     return myval
   },
   getUnique(arr, comp) {
@@ -2731,7 +3583,7 @@ export const tools = {
   },
   getCookie(mytok, def?) {
     const ris = Cookies.get(mytok)
-    console.log('getCookie', ris)
+    // console.log('getCookie', ris)
     if (!!ris) {
       return ris
     } else {
@@ -2801,10 +3653,16 @@ export const tools = {
     else
       return ''
   },
+  getsuffisso() {
+    if (tools.isTest())
+      return 'TEST: '
+    else
+      return ''
+  },
   metafunc(mythis) {
     return {
-      title: mythis.$t('msg.myAppName'),
-      titleTemplate: (title) => `${mythis.mymeta.title} - ${mythis.$t('msg.myAppName')}`,
+      title: mythis.$t('ws.sitename'),
+      titleTemplate: (title) => `${tools.getsuffisso()} ${mythis.mymeta.title} - ${mythis.$t('ws.sitename')}`,
       meta: {
         keywords: {
           name: 'keywords',
@@ -2819,13 +3677,886 @@ export const tools = {
     }
   },
   isObject(anything) {
-    //Object.create(null) instanceof Object → false
+    // Object.create(null) instanceof Object → false
     return Object(anything) === anything
   },
   isDebug() {
     return process.env.DEV
   },
 
+  isTest() {
+    return process.env.ISTEST === '1'
+  },
+
+  geturlupload() {
+    return process.env.MONGODB_HOST + '/upload'
+  },
+  getheaders() {
+    return [{ name: 'x-auth', value: UserStore.state.x_auth_token }]
+  },
+
+  getextfile(filename) {
+    return filename.split('.').pop().toLowerCase()
+  },
+
+  getelembylang(arr) {
+    const mylang = toolsext.getLocale()
+    for (const elem in arr) {
+      if (arr[elem][mylang])
+        return arr[elem][mylang]
+    }
+  },
+  isChristmasHoliday() {
+    const now = new Date()
+    return ((now.getMonth() === 11 && now.getDate() > 20) || (now.getMonth() === 0 && now.getDate() < 8))
+  },
+
+  CapitalizeAllWords(str) {
+    const splitStr = str.toLowerCase().split(' ')
+    for (let i = 0; i < splitStr.length; i++) {
+      // You do not need to check if i is larger than splitStr length, as your for does that for you
+      // Assign it back to the array
+      splitStr[i] = splitStr[i].charAt(0).toUpperCase() + splitStr[i].substring(1)
+    }
+    // Directly return the joined string
+    return splitStr.join(' ')
+  },
+
+  getValDb(keystr, serv, def?, table?, subkey?, id?, idmain?) {
+    if (table === 'users') {
+      if (keystr === 'profile') {
+        return UserStore.state.my.profile[subkey]
+      } else {
+        return UserStore.state.my[keystr]
+      }
+    } else if (table === 'todos') {
+      // console.log('id', id, 'idmain', idmain)
+      const indcat = Todos.state.categories.indexOf(idmain)
+      console.log('indcat', indcat)
+      if (indcat >= 0) {
+        const myrec = Todos.state.todos[indcat].find((rec) => rec._id === id)
+        console.log('myrec', myrec)
+        let ris = null
+        if (myrec) {
+          ris = myrec[keystr]
+        }
+        console.log('ris', ris)
+        return ris
+      }
+
+      return ''
+    } else {
+      const ris = GlobalStore.getters.getValueSettingsByKey(keystr, serv)
+
+      if (ris === '')
+        if (def !== undefined)
+          return def
+        else
+          return ''
+      else
+        return ris
+    }
+
+  },
+
+  getkey(youtube, title, isnum) {
+    let mykey = 'MP4'
+    if (youtube)
+      mykey = 'YT'
+
+    if (isnum) {
+      mykey += '_NUM'
+    } else {
+      if (title)
+        mykey += '_TITLE_'
+      else
+        mykey += '_VIDEO_'
+    }
+
+    return mykey
+  },
+
+  heightgallvideo() {
+    const h = this.heightgallery(this.getValDb('YT_W', false) / this.getValDb('YT_H', false))
+    return h
+  },
+
+  getvideourl(index, youtube) {
+    const myvideo = this.getValDb(this.getkey(youtube, false, false) + index, false)
+    if (myvideo)
+      if (youtube)
+        return myvideo
+      else
+        return this.getpath(myvideo)
+    else
+      return ''
+  },
+
+  getvideonum(youtube) {
+    return this.getValDb(this.getkey(youtube, false, true), false)
+  },
+
+  getvideomp4yt(index) {
+    return [{ src: 'https://www.youtube.com/embed/' + this.getvideourl(index, true), type: 'video/mp4' }
+    ]
+  },
+  getvideomp4src(index) {
+    return [{ src: this.getvideourl(index, false), type: 'video/mp4' }
+    ]
+  },
+
+  getvideoyt(index) {
+    return 'https://www.youtube.com/embed/' + this.getvideourl(index, true)
+  },
+
+  getvideobyidyoutube(key) {
+    return 'https://www.youtube.com/embed/' + key
+  },
+
+  getpath(myvideo) {
+    return 'statics/video/' + func_tools.getLocale() + '/' + myvideo
+  },
+  mygetarrValDb(keystr, serv) {
+    const myval = GlobalStore.getters.getValueSettingsByKey(keystr, serv)
+    // console.log('AA: myval', myval)
+    try {
+      if (myval) {
+        // console.log('   Entro')
+        const myrec = JSON.parse(myval)
+        // console.log('*************** getarrValDb')
+        // console.table(myrec)
+        return myrec
+      } else {
+        // console.log('NO MYVAL')
+        return []
+      }
+    } catch (e) {
+      console.log('Errore: ', e)
+      return []
+    }
+  },
+
+  getvideotitle(index, youtube) {
+
+    const mykey = this.getkey(youtube, true, false) + index
+    const ris = this.mygetarrValDb(mykey, false)
+
+    return this.getelembylang(ris)
+  },
+
+  getvideoposter(index) {
+    return ''
+  },
+  clone(obj) {
+    if (null === obj || 'object' !== typeof obj) return obj
+    const copy = obj.constructor()
+    for (const attr in obj) {
+      if (obj.hasOwnProperty(attr)) copy[attr] = obj[attr]
+    }
+    return copy
+  },
+
+  geticon(langin) {
+    if (langin === '')
+      return ''
+    try {
+      const lang = langin.toUpperCase()
+
+      const arrlang = ['IT', 'ES', 'PT', 'BR', 'US', 'GB', 'UK', 'DE', 'FR', 'SI', 'MD', 'IE', 'KE', 'AU', 'ML', 'DO',
+        'NG', 'SK', 'CH', 'CM', 'CO', 'CG', 'PE', 'MS', 'SM', 'HR', 'RO', 'VE', 'CL', 'PL', 'EG', 'AR', 'MX', 'SN', 'PK', 'AT', 'NP',
+        'CU', 'MA', 'PH', 'BA', 'UA', 'BE', 'NL', 'CI', 'BF']
+
+      const flag = arrlang.find((mylang) => mylang === lang)
+      if (!!flag) {
+        return 'fa-flag-' + flag.toLowerCase()
+      }
+
+      return ''
+
+    } catch (e) {
+      return ''
+    }
+  },
+
+  removespaces(mystr) {
+    return mystr.replace(/\s+/g, '')
+  },
+
+  copyStringToClipboard(mythis, mystr, show) {
+    copyToClipboard(mystr).then(() => {
+      let msg = mythis.$t('dialog.copyclipboard')
+      if (show)
+        msg += ' \'' + mystr + '\''
+
+      tools.showNotif(mythis.$q, msg)
+    })
+
+  },
+
+  getlinkhref(mylink, text) {
+    return '<a href="' + mylink + '" target="_blank">' + text + '</a>'
+  },
+
+  getNationsByNationality(nat) {
+    if (!nat)
+      return ''
+
+    nat = nat.toUpperCase()
+
+    if (nat === 'IT') {
+      return 'Italy'
+    } else if (nat === 'SI') {
+      return 'Slovenia'
+    } else if (nat === 'SK') {
+      return 'Slovakia'
+    } else if (nat === 'NG') {
+      return 'Nigeria'
+    } else if (nat === 'MD') {
+      return 'Moldova'
+    } else if (nat === 'ES') {
+      return 'Spain'
+    } else if (nat === 'DE') {
+      return 'Germany'
+    } else if (nat === 'FR') {
+      return 'France'
+    } else if (nat === 'US') {
+      return 'United States'
+    } else if (nat === 'CA') {
+      return 'Canada'
+    } else if (nat === 'MA') {
+      return 'Morocco'
+    } else if (nat === 'LT') {
+      return 'Lithuania'
+    } else if (nat === 'HR') {
+      return 'Croatia'
+    } else if (nat === 'HU') {
+      return 'Hungary'
+    } else if (nat === 'CH') {
+      return 'Switzerland'
+    } else if (nat === 'CM') {
+      return 'Cameroon'
+    } else if (nat === 'CO') {
+      return 'Colombia'
+    } else if (nat === 'PE') {
+      return 'Peru'
+    } else if (nat === 'PL') {
+      return 'Poland'
+    } else if (nat === 'SM') {
+      return 'San Marino'
+    } else if (nat === 'PT') {
+      return 'Portugal'
+    } else if ((nat === 'UK') || (nat === 'GB')) {
+      return 'United Kingdom'
+    } else if (nat === 'UA') {
+      return 'Ukraine'
+    } else if (nat === 'RO') {
+      return 'Romania'
+    } else if (nat === 'VE') {
+      return 'Venezuela'
+    } else if (nat === 'CL') {
+      return 'Chile'
+    } else if (nat === 'PL') {
+      return 'Poland'
+    } else if (nat === 'EG') {
+      return 'Egypt'
+    } else if (nat === 'BR') {
+      return 'Brazil'
+    } else if (nat === 'CG') {
+      return 'Congo'
+    } else if (nat === 'AR') {
+      return 'Argentina'
+    } else if (nat === 'MX') {
+      return 'Mexico'
+    } else if (nat === 'SN') {
+      return 'Senegal'
+    } else if (nat === 'PK') {
+      return 'Pakistan'
+    } else if (nat === 'AT') {
+      return 'Austria'
+    } else if (nat === 'NP') {
+      return 'Nepal'
+    } else if (nat === 'CU') {
+      return 'Cuba'
+    } else if (nat === 'MA') {
+      return 'Morocco'
+    } else if (nat === 'PH') {
+      return 'Philippines'
+    } else if (nat === 'BA') {
+      return 'Bosnia and Herzegovina'
+    } else if (nat === 'BE') {
+      return 'Belgium'
+    } else if (nat === 'NL') {
+      return 'Netherlands'
+    } else if (nat === 'MS') {
+      return 'Montserrat'
+    } else if (nat === 'CI') {
+      return 'Cote d\'Ivoire'
+    } else if (nat === 'BF') {
+      return 'Burkina Faso'
+    } else if (nat === 'IE') {
+      return 'Ireland'
+    } else if (nat === 'KE') {
+      return 'Kenya'
+    } else if (nat === 'AU') {
+      return 'Australia'
+    } else if (nat === 'ML') {
+      return 'Mali'
+    } else if (nat === 'DO') {
+      return 'Dominican Republic'
+    }
+  },
+
+  getGroupById(myid) {
+    const group = GlobalStore.state.groups.find((rec) => rec._id === myid)
+    if (group) {
+      return group.descr
+    }
+    return ''
+  },
+
+  getLinkZoom() {
+    let id = ''
+    if (GlobalStore.state.calzoom.length > 0) {
+      id = GlobalStore.state.calzoom.slice(-1)[0].id_conf_zoom.toString()
+    } else {
+      id = '6668882000'
+    }
+    return 'https://zoom.us/j/' + id
+  },
+
+  myprintf(val, params: any[]) {
+
+    params.forEach((par) => {
+      val = val.replace('{' + par.strin + '}', par.strout)
+    })
+    return val
+  },
+
+  translate(params, options?) {
+    const msg = params.split('.')
+    const lang = toolsext.getLocale()
+
+    const stringa = messages[lang]
+
+    let ris = stringa
+    if (!!ris) {
+      msg.forEach((param) => {
+        ris = ris[param]
+      })
+
+      if (!!options) {
+        ris = this.myprintf(ris, options)
+      }
+
+    } else {
+      console.log('ERRORE IN TRANSLATE! ', params, ' NON ESISTE!')
+      return params
+    }
+
+    return ris
+  },
+
+  isSel2Metodi(user) {
+    if (user.profile.paymenttypes) {
+      return user.profile.paymenttypes.length > 1
+    }
+    return false
+
+  },
+
+  getnumrequisiti(user) {
+    let req = 0
+
+    req += user.verified_email ? 1 : 0
+    req += user.profile.teleg_id > 0 ? 1 : 0
+    req += this.isBitActive(user.profile.saw_and_accepted, shared_consts.Accepted.CHECK_READ_GUIDELINES.value) ? 1 : 0
+    req += this.isBitActive(user.profile.saw_and_accepted, shared_consts.Accepted.CHECK_SEE_VIDEO_PRINCIPI.value) ? 1 : 0
+    // req += user.profile.saw_zoom_presentation ? 1 : 0
+    // if (!!user.profile.my_dream)
+    //   req += user.profile.my_dream.length >= 10 ? 1 : 0
+    req += this.isSel2Metodi(user) ? 1 : 0
+
+    return req
+  },
+
+  Is7ReqOk(user) {
+    return this.getnumrequisiti(user) === 7
+  },
+
+  getRiganave(riga) {
+    let ris = riga - 3
+    if (ris <= 1)
+      ris = 1
+
+    return ris
+  },
+
+  getColnave(col) {
+    let ris = Math.ceil(col / (2 * 4))
+    if (ris <= 1)
+      ris = 1
+    return ris
+  },
+
+  getrigacolstr(mianave) {
+    return this.getRiganave(mianave.riga) + '.' + this.getColnave(mianave.col)
+  },
+
+  getlastnavestr(lastnave) {
+    return lastnave.riga + '.' + lastnave.col
+  },
+
+  getmaxcol(riga) {
+
+    return Math.pow(2, riga - 1)
+  },
+
+  getrigaNaveByPosiz(riga) {
+    let ris = riga + 3
+    if (ris <= 1)
+      ris = 1
+    return ris
+
+  },
+
+  getcolNaveByPosiz(col) {
+    let ris = Math.ceil(col * Math.pow(2, 3))
+    if (ris <= 1)
+      ris = 1
+    return ris
+  },
+
+  getfirstnaveSognatore(riga, col) {
+    const myriga = this.getrigaNaveByPosiz(riga)
+    const mycol = this.getcolNaveByPosiz(col)
+
+    // console.log(`${riga}.${col} => ${myriga}.${mycol}`)
+    return { riga: myriga, col: mycol }
+  },
+
+  getnumnavi_finoa(naveorig, navedest, lastnave) {
+    let contaattuale = 0
+    let contatot = 0
+
+    const indrigaattuale = lastnave.riga
+    const indcolattuale = lastnave.col
+
+    if (navedest.riga < indrigaattuale) {
+      return { perc: 100, totale: 0, contaattuale: 0 }
+    }
+
+    for (let indriga = naveorig.riga; indriga <= navedest.riga; indriga++) {
+
+      let startcol = 0
+      if (indriga === naveorig.riga) {
+        startcol = naveorig.col
+      }
+      let endcol = this.getmaxcol(indriga)
+      if (indriga === navedest.riga) {
+        endcol = navedest.col
+      }
+
+      if (indriga <= navedest.riga) {
+        contatot += (endcol - startcol)
+      }
+
+      if (indriga < indrigaattuale) {
+        contaattuale += (endcol - startcol)
+      } else if (indriga === indrigaattuale) {
+        contaattuale += indcolattuale
+      }
+    }
+
+    let perc = 0
+    if (contatot > 0)
+      perc = (contaattuale / contatot) * 100
+
+    if (perc > 100)
+      perc = 100
+
+    // console.log('naveorig', naveorig.riga, '.', naveorig.col, 'dest', navedest.riga, ',', navedest.col)
+    // console.log('lastnave', lastnave.riga, '.', lastnave.col)
+    // console.log('contaattuale', contaattuale, 'contatot', contatot, 'perc', perc)
+
+    return { perc, totale: contatot, contaattuale }
+  },
+
+  sito_online(pertutti) {
+
+    let ris = true
+    const online = this.getValDb('SITO_ONLINE', false, true)
+    ris = UserStore.state.isAdmin && !pertutti ? true : online
+    // console.log('isadmin', UserStore.state.isAdmin)
+    return ris
+  },
+
+  getsize() {
+    if (this.isMobile()) {
+      return '0.85rem'
+    } else {
+      return '1rem'
+    }
+  },
+
+  getsizesmall() {
+    if (this.isMobile()) {
+      return '0.75rem'
+    } else {
+      return '0.85rem'
+    }
+  },
+
+  convertiTagHTMLPerBOT(msg) {
+
+    msg = msg.replace(/<strong>/g, '<b>')
+    msg = msg.replace(/<\/strong>/g, '</b>')
+
+    return msg
+  },
+
+  getlinkstd(link) {
+    let mylink = link
+    if (!!link) {
+      if (!link.startsWith('http')) {
+        mylink = 'https://' + link
+      }
+    }
+
+    return mylink
+  },
+
+  isselectPaypal() {
+    if (UserStore.state.my.profile) {
+      if (UserStore.state.my.profile.paymenttypes) {
+        if (UserStore.state.my.profile.paymenttypes.includes('paypal')) {
+          return true
+        }
+      }
+
+      return false
+    }
+  },
+
+  isselectPayeer() {
+    if (UserStore.state.my.profile) {
+      if (UserStore.state.my.profile.paymenttypes) {
+        if (UserStore.state.my.profile.paymenttypes.includes('payeer')) {
+          return true
+        }
+      }
+
+      return false
+    }
+  },
+
+  isselectRevolut() {
+    if (UserStore.state.my.profile) {
+      if (UserStore.state.my.profile.paymenttypes) {
+        if (UserStore.state.my.profile.paymenttypes.includes('revolut')) {
+          return true
+        }
+      }
+
+      return false
+    }
+  },
+
+  isselectAdvCash() {
+    if (UserStore.state.my.profile) {
+      if (UserStore.state.my.profile.paymenttypes) {
+        if (UserStore.state.my.profile.paymenttypes.includes('advcash')) {
+          return true
+        }
+      }
+
+      return false
+    }
+  },
+
+  getGroupList() {
+
+    // console.log('GlobalStore.state.groups', GlobalStore.state.groups)
+    const mylist = {
+      it: [],
+      es: [],
+      enUs: []
+    }
+
+    let myrec = {}
+
+    for (const mygroup of GlobalStore.state.groups) {
+      myrec = {
+        id: mygroup._id,
+        label: mygroup.descr,
+        value: mygroup._id
+      }
+      mylist.it.push(myrec)
+
+    }
+
+    return mylist
+  },
+
+  getRespList() {
+
+    // console.log('GlobalStore.state.groups', GlobalStore.state.groups)
+    const mylist = {
+      it: [],
+      es: [],
+      enUs: []
+    }
+
+    let myrec = {}
+
+    for (const myresp of GlobalStore.state.resps) {
+      myrec = {
+        id: myresp._id,
+        label: myresp.name + ' ' + myresp.surname,
+        value: myresp.username
+      }
+      mylist.it.push(myrec)
+
+    }
+
+    return mylist
+  },
+
+  getWorkersList() {
+
+    // console.log('GlobalStore.state.groups', GlobalStore.state.groups)
+    const mylist = {
+      it: [],
+      es: [],
+      enUs: []
+    }
+
+    let myrec = {}
+
+    for (const myresp of GlobalStore.state.workers) {
+      myrec = {
+        id: myresp._id,
+        label: myresp.name + ' ' + myresp.surname,
+        value: myresp.username
+      }
+      mylist.it.push(myrec)
+
+    }
+
+    return mylist
+  },
+
+  IsLogged() {
+    if (!!UserStore)
+      return UserStore.state.isLogged
+    else
+      return false
+  },
+
+  formatDate(mydate: any) {
+    let d = void 0
+
+    if (mydate !== void 0) {
+      d = new Date(mydate)
+    } else {
+      d = new Date()
+    }
+    const month = '' + (d.getMonth() + 1)
+    const day = '' + d.getDate()
+    const year = d.getFullYear()
+
+    return [year, tools.padTime(month), tools.padTime(day)].join('-')
+  },
+
+  firstDayOfDate(mydate: any) {
+    let d = void 0
+
+    if (mydate !== void 0) {
+      d = new Date(mydate)
+    } else {
+      d = new Date()
+    }
+    const month = d.getMonth()
+    const day = 1
+    const year = d.getFullYear()
+
+    return new Date(year, month, day)
+  },
+
+  LastDayOfDate(mydate: any) {
+    let d = void 0
+
+    if (mydate !== void 0) {
+      d = new Date(mydate)
+    } else {
+      d = new Date()
+    }
+    let month = d.getMonth()
+    if (month === 11)
+      month = 0
+    else
+      month++
+    const year = d.getFullYear()
+
+    return new Date(year, month, 0)
+  },
+
+  formatTime(mydate) {
+    const d = mydate !== void 0 ? new Date(mydate) : new Date(),
+      hours = '' + d.getHours(),
+      minutes = '' + d.getMinutes()
+
+    return [tools.padTime(hours), tools.padTime(minutes)].join(':')
+  },
+  colourNameToHex(colour) {
+    const colours = {
+      'aliceblue': '#f0f8ff',
+      'antiquewhite': '#faebd7',
+      'aqua': '#00ffff',
+      'aquamarine': '#7fffd4',
+      'azure': '#f0ffff',
+      'beige': '#f5f5dc',
+      'bisque': '#ffe4c4',
+      'black': '#000000',
+      'blanchedalmond': '#ffebcd',
+      'blue': '#0000ff',
+      'blueviolet': '#8a2be2',
+      'brown': '#a52a2a',
+      'burlywood': '#deb887',
+      'cadetblue': '#5f9ea0',
+      'chartreuse': '#7fff00',
+      'chocolate': '#d2691e',
+      'coral': '#ff7f50',
+      'cornflowerblue': '#6495ed',
+      'cornsilk': '#fff8dc',
+      'crimson': '#dc143c',
+      'cyan': '#00ffff',
+      'darkblue': '#00008b',
+      'darkcyan': '#008b8b',
+      'darkgoldenrod': '#b8860b',
+      'darkgray': '#a9a9a9',
+      'darkgreen': '#006400',
+      'darkkhaki': '#bdb76b',
+      'darkmagenta': '#8b008b',
+      'darkolivegreen': '#556b2f',
+      'darkorange': '#ff8c00',
+      'darkorchid': '#9932cc',
+      'darkred': '#8b0000',
+      'darksalmon': '#e9967a',
+      'darkseagreen': '#8fbc8f',
+      'darkslateblue': '#483d8b',
+      'darkslategray': '#2f4f4f',
+      'darkturquoise': '#00ced1',
+      'darkviolet': '#9400d3',
+      'deeppink': '#ff1493',
+      'deepskyblue': '#00bfff',
+      'dimgray': '#696969',
+      'dodgerblue': '#1e90ff',
+      'firebrick': '#b22222',
+      'floralwhite': '#fffaf0',
+      'forestgreen': '#228b22',
+      'fuchsia': '#ff00ff',
+      'gainsboro': '#dcdcdc',
+      'ghostwhite': '#f8f8ff',
+      'gold': '#ffd700',
+      'goldenrod': '#daa520',
+      'gray': '#808080',
+      'green': '#008000',
+      'greenyellow': '#adff2f',
+      'honeydew': '#f0fff0',
+      'hotpink': '#ff69b4',
+      'indianred ': '#cd5c5c',
+      'indigo': '#4b0082',
+      'ivory': '#fffff0',
+      'khaki': '#f0e68c',
+      'lavender': '#e6e6fa',
+      'lavenderblush': '#fff0f5',
+      'lawngreen': '#7cfc00',
+      'lemonchiffon': '#fffacd',
+      'lightblue': '#add8e6',
+      'lightcoral': '#f08080',
+      'lightcyan': '#e0ffff',
+      'lightgoldenrodyellow': '#fafad2',
+      'lightgrey': '#d3d3d3',
+      'lightgreen': '#90ee90',
+      'lightpink': '#ffb6c1',
+      'lightsalmon': '#ffa07a',
+      'lightseagreen': '#20b2aa',
+      'lightskyblue': '#87cefa',
+      'lightslategray': '#778899',
+      'lightsteelblue': '#b0c4de',
+      'lightyellow': '#ffffe0',
+      'lime': '#00ff00',
+      'limegreen': '#32cd32',
+      'linen': '#faf0e6',
+      'magenta': '#ff00ff',
+      'maroon': '#800000',
+      'mediumaquamarine': '#66cdaa',
+      'mediumblue': '#0000cd',
+      'mediumorchid': '#ba55d3',
+      'mediumpurple': '#9370d8',
+      'mediumseagreen': '#3cb371',
+      'mediumslateblue': '#7b68ee',
+      'mediumspringgreen': '#00fa9a',
+      'mediumturquoise': '#48d1cc',
+      'mediumvioletred': '#c71585',
+      'midnightblue': '#191970',
+      'mintcream': '#f5fffa',
+      'mistyrose': '#ffe4e1',
+      'moccasin': '#ffe4b5',
+      'navajowhite': '#ffdead',
+      'navy': '#000080',
+      'oldlace': '#fdf5e6',
+      'olive': '#808000',
+      'olivedrab': '#6b8e23',
+      'orange': '#ffa500',
+      'orangered': '#ff4500',
+      'orchid': '#da70d6',
+      'palegoldenrod': '#eee8aa',
+      'palegreen': '#98fb98',
+      'paleturquoise': '#afeeee',
+      'palevioletred': '#d87093',
+      'papayawhip': '#ffefd5',
+      'peachpuff': '#ffdab9',
+      'peru': '#cd853f',
+      'pink': '#ffc0cb',
+      'plum': '#dda0dd',
+      'powderblue': '#b0e0e6',
+      'purple': '#800080',
+      'rebeccapurple': '#663399',
+      'red': '#ff0000',
+      'rosybrown': '#bc8f8f',
+      'royalblue': '#4169e1',
+      'saddlebrown': '#8b4513',
+      'salmon': '#fa8072',
+      'sandybrown': '#f4a460',
+      'seagreen': '#2e8b57',
+      'seashell': '#fff5ee',
+      'sienna': '#a0522d',
+      'silver': '#c0c0c0',
+      'skyblue': '#87ceeb',
+      'slateblue': '#6a5acd',
+      'slategray': '#708090',
+      'snow': '#fffafa',
+      'springgreen': '#00ff7f',
+      'steelblue': '#4682b4',
+      'tan': '#d2b48c',
+      'teal': '#008080',
+      'thistle': '#d8bfd8',
+      'tomato': '#ff6347',
+      'turquoise': '#40e0d0',
+      'violet': '#ee82ee',
+      'wheat': '#f5deb3',
+      'white': '#ffffff',
+      'whitesmoke': '#f5f5f5',
+      'yellow': '#ffff00',
+      'yellowgreen': '#9acd32'
+    }
+
+    if (typeof colours[colour.toLowerCase()] != 'undefined')
+      return colours[colour.toLowerCase()]
+
+    return false
+  }
 
 // getLocale() {
   //   if (navigator.languages && navigator.languages.length > 0) {
